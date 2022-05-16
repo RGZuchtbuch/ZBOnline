@@ -1,0 +1,30 @@
+@startuml
+'https://plantuml.com/component-diagram
+
+node "Client" {
+    [Browser]
+}
+
+node "Zuchtbuch Online" {
+
+
+    component Apache/PHP {
+        () HTTPS
+        [API]
+        [SPA]
+    }
+
+    () SQL
+
+    database MySQL
+
+}
+
+Browser -d-> HTTPS
+SPA <-u- HTTPS
+API <-u- HTTPS
+API -d-> SQL
+MySQL <-u- SQL
+
+
+@enduml
