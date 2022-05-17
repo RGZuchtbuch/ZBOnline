@@ -19564,7 +19564,7 @@ var app = (function () {
             return initialIndex;
         };
         /**
-         * @param itemIndex Index of the list item
+         * @param itemIndex GetIndex of the list item
          * @param isEnabled Sets the list item to enabled or disabled.
          */
         MDCListFoundation.prototype.setEnabled = function (itemIndex, isEnabled) {
@@ -20601,7 +20601,7 @@ var app = (function () {
         };
         /**
          * Selects the list item at `index` within the menu.
-         * @param index Index of list item within the menu.
+         * @param index GetIndex of list item within the menu.
          */
         MDCMenuFoundation.prototype.setSelectedIndex = function (index) {
             this.validatedIndex(index);
@@ -20619,7 +20619,7 @@ var app = (function () {
         };
         /**
          * Sets the enabled state to isEnabled for the menu item at the given index.
-         * @param index Index of the menu item
+         * @param index GetIndex of the menu item
          * @param isEnabled The desired enabled state of the menu item.
          */
         MDCMenuFoundation.prototype.setEnabled = function (index, isEnabled) {

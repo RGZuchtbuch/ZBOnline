@@ -1,0 +1,37 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+start
+:Slim Authenticate;
+if( known api ? ) then (yes)
+    :Slim create Handler;
+    if( is authorized ? ) then (yes)
+        :Handler verify arguments;
+        :Handler create Query;
+        :Query execute;
+        if( is successful ) then (true)
+            :Handler writeResponse;
+        else
+            :Throw Internal Error exception;
+        endif
+
+    else (no)
+        :Throw Not Authorized Exception;
+
+
+    endif
+
+else
+    :Throw Unknown api Exception;
+endif
+
+if( exception ? ) then (yes)
+    :Slim respond with exception;
+else
+    :Slim handler exceptions;
+    :Slim respond;
+endif
+stop
+
+
+@enduml
