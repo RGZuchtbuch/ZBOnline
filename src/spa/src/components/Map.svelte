@@ -4,10 +4,9 @@
     let districts = [{ x:-50, y:0, r:50 }, { x:50, y:-50, r:50 }, { x:50, y:100, r:75 }];
 
 </script>
-Map !!
 {#await promise}
     loading...
-{:then districgts}
+{:then ddistricts}
     <div class='container'>
         <img width=480 height=640 src='/assets/de.svg' />
         <svg width=480 height=640 viewbox='-100, -100, 200, 200'>

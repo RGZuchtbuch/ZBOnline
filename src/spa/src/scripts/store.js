@@ -18,4 +18,4 @@ const tester = {
     //admin: {}
 }
 
-export const user = writable( tester );
+export const user = writable( null );

@@ -11,7 +11,7 @@
 
 <style>
     fieldset {
-        @apply border rounded border-gray-600
+        @apply border rounded border-gray-600 p-2 bg-gray-100
     }
 
     fieldset legend {

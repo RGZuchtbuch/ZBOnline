@@ -20,23 +20,22 @@ class Token
 
         $issuer = 'RG Zuchtbuch Online';
         $issued = new DateTimeImmutable();
-        $expire = $issued->modify('+1440 minutes');
+        $expires = $issued->modify('+1440 minutes');
 
         $payload = [
             'iss'   => $issuer,
             'iat'   => $issued->getTimestamp(),
-            'nbf'   => $issued->getTimestamp(),
-            'exp'   => $expire->getTimestamp(),
-            'user'  => $user
+//            'nbf'   => $issued->getTimestamp(),
+            'exp'   => $expires->getTimestamp(),
+            'user'  => (array) $user
         ];
-
 
         return JWT::encode( $payload, Token::$secret, Token::$alg );
     }
 
     public static function decode( string $token ) : array {
         $payload = (array) JWT::decode( $token, new Key( Token::$secret, Token::$alg ) );
-        print_r( $payload );
+        $payload['user'] = (array) $payload['user'];
         return $payload;
     }
 

@@ -1,4 +1,108 @@
+
 const delay = 250;
+
+
+let cache = {
+    promises: {} // url -> promise, time
+};
+
+let token = null;
+
+/**
+ * clears item from cache if older than cacheTimout
+ */
+setInterval(  () => {
+    let now = new Date().getTime(); // in ms
+    const toDelete = []; // collecte old, avoiding deleting while iterating
+    for( const url in cache ) { // check per url->promise and collect before delete
+        let promise = cache[ url ];
+        const time = promise.time;
+        if( time < now - settings.cache.TIMEOUT ) {
+            toDelete.push( url );
+        }
+    }
+    for( const url of toDelete ) { // delete collected from cache
+        console.log( 'Cache delete', url );
+        delete cache[ url ];
+    }
+}, settings.cache.TIMEOUT )
+
+function getHeaders() {
+    let headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+    }
+    if( token ) {
+        headers[ 'Authorization'] = 'Bearer '+token;
+    }
+    return headers;
+}
+
+async function get( url ) {
+    let cached = cache[ url ];
+    let now = new Date().getTime(); // in ms
+    if( cached && cached.time > now-settings.cache.TIMEOUT ) { // fresh enough
+        console.log('Cache', url );
+        return cached.promise;
+    } else {
+        let options = {
+            method: 'GET',
+            headers: getHeaders()
+        }
+        console.log('Get', url);
+        let promise = fetch(url, options).then( response => {
+            console.log('Response ', response);
+            if( response.ok ) {
+                return response.json();
+            } else {
+                throw new Error( 'Status '+response.status );
+            }
+        });
+        cache[url] = {promise: promise, time: now};
+        return promise;
+    }
+}
+
+async function post( url, data ) {
+    let options = {
+        method: 'POST',
+        headers: getHeaders(),
+        body: JSON.stringify( data ),
+    }
+    console.log( 'POST', url, data );
+    return fetch( url, options ).then( response => response.json() );
+}
+
+
+
+
+
+
+export default {
+    getToken: ( email, password ) => {
+        console.log('api getToken', email);
+        const promise = post('/api/token', {email: email, password: password});
+        promise.then(data => {
+            console.log('Store Token', data);
+            token = data.token;
+        });
+        return promise;
+    },
+    getUser: ( id ) => {
+        console.log( 'api getUser', id );
+        return get( '/api/user/'+id );
+    },
+    getUserResults: ( id ) => {
+        console.log( 'api getUserResults', id );
+        return get( '/api/breeder/'+id+'/results' );
+    },
+    getModeratorDistricts: ( id ) => {
+        console.log( 'api getModeratorDistricts', id );
+        return get( '/api/moderator/'+id+'/districts' );
+    }
+}
+
+/// temp ****************************************
 
 export function getBreed( breedId ) {
     console.log( 'api getBreed', breedId );
@@ -40,15 +144,6 @@ export function getBreedDistrictsResults( breedId, year ) {
 }
 
 
-export function getBreeder( breederId ) {
-    console.log( 'api getBreeder', breederId );
-    return new Promise( ( resolve ) => {
-        setTimeout( () => {
-            console.log( 'Timedout' );
-            resolve( { id:10, name:'Eelco'})
-        }, delay );
-    })
-}
 
 export function getBreederBreeds( breederId ) {
     console.log( 'api getBreederBreeds', breederId );
@@ -255,9 +350,12 @@ export function getColorMap(year, colorId ) {
 
 }
 
+/*
 export default {
+
+    getToken, getUser,
     getBreed, getBreedBreeders, getBreedResults, getBreedDistrictsResults,
-    getBreeder, getBreederBreeds, getBreederPairs, getBreederResults,
+    getBreederBreeds, getBreederPairs, getBreederResults,
     getColor,
     getDistricts, getDistrict, getDistrictBreeders, getDistrictResults,
     getPair,
@@ -265,3 +363,6 @@ export default {
     getSectionMap, getBreedMap, getColorMap,
     getSectionTrend, getBreedTrend, getColorTrend
 }
+
+
+ */

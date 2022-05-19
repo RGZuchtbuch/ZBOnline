@@ -3,21 +3,68 @@
 namespace App\Queries;
 
 use PDO;
+use PDOStatement;
 
 class Query
 {
     private static PDO $pdo;
 
-    private string $host = 'localhost'; // TODO move to config file, ignored
-    private string $database = 'zbo';
+    private static string $host = 'localhost'; // TODO move to config file, ignored
+    private static string $database = 'zbo';
 
-    private string $user = 'zbo';
-    private string $password = 'zbo';
+    private static string $user = 'zbo'; // should be in config file with token secret
+    private static string $password = 'zbo';
 
-    private function getPdo() {
+
+
+    public static function prepare( string $sql ) {
+        $pdo = Query::getPdo();
+        return $pdo->prepare( $sql );
+    }
+
+    /**
+     * @param PDOStatement $stmt
+     * @param array $args
+     * @return array|null
+     */
+    public static function get( PDOStatement  & $stmt, array & $args = [] ): ? array {
+        if( $stmt->execute( $args ) ) {
+            $data = $stmt->fetch();
+            if( $data ) { // could be false
+                return $data;
+            }
+        }
+        return null;
+    }
+
+    public static function getArray( PDOStatement  & $stmt, array & $args = [] ) : array { // array of objects, could be empty
+        if( $stmt->execute( $args ) ) {
+            return $stmt->fetchAll();
+        }
+        return [];
+    }
+
+    public static function insert( PDOStatement & $stmt, array & $args ) : ? int { // returns new id
+        return $stmt->execute( $args ) ? Query::getPdo()->lastInsertId() : null;
+    }
+
+    public static function update( PDOStatement & $stmt, array & $args ) : bool {
+        return $stmt->execute( $args );
+    }
+
+    public static function delete( PDOStatement & $stmt, array & $args ) : bool {
+        return $stmt->execute( $args );
+    }
+
+//*** private ****
+    private static function getPdo() {
         if( ! isset( Query::$pdo ) ) {
-            $driver = 'mysql:host='.$this->host.';dbname='.$this->database.';charset=utf8';
-            Query::$pdo = new PDO( $driver, $this->user, $this->password);
+            $config = require( './config.php' ); // get credentials
+            Query::$pdo = new PDO(
+                'mysql:host='.$config['db' ]['host'].';dbname='.$config['db' ]['name'].';charset=utf8',
+                $config['db' ]['user'],
+                $config['db' ]['password']
+            );
             Query::$pdo->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
             Query::$pdo->setAttribute( PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC );
             Query::$pdo->setAttribute( PDO::ATTR_EMULATE_PREPARES, false ); // get text and numbers instead of always text as result
@@ -25,45 +72,4 @@ class Query
         }
         return Query::$pdo;
     }
-
-    public function get( string & $sql, array & $args ) : ? array { // object or null
-        $pdo = Query::getPdo();
-        $stmt = $pdo->prepare( $sql );
-        if( $stmt->execute( $args ) ) {
-            $data = $stmt->fetch();
-            if( $data ) {
-                return $data;
-            }
-        }
-        return null;
-    }
-
-    public function getArray( string & $sql, array & $args ) : array { // array of objects, could be empty
-        $pdo = Query::getPdo();
-        $stmt = $pdo->prepare( $sql );
-        if( $stmt->execute( $args ) ) {
-            return $stmt->fetchAll();
-        }
-        return [];
-    }
-
-    public function insert( string & $sql, array & $args ) : ? int { // returns new id
-        $pdo = Query::getPdo();
-        $stmt = $pdo->prepare( $sql );
-        return $stmt->execute( $args ) ? $pdo->lastInsertId() : null;
-    }
-
-    public function update( string & $sql, array & $args ) : bool {
-        $pdo = Query::getPdo();
-        $stmt = $pdo->prepare( $sql );
-        return $stmt->execute( $args );
-    }
-
-    public function delete( string & $sql, array & $args ) : bool {
-        $pdo = Query::getPdo();
-        $stmt = $pdo->prepare( $sql );
-        return $stmt->execute( $args );
-    }
-
-
 }

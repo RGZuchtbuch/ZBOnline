@@ -1,28 +1,26 @@
 <?php
+
 namespace App\Routes;
 
 use App\Queries;
-use App\Utils\Token;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpNotFoundException;
 
-class GetToken extends Route
-{
+class GetPage extends Route {
 
     public function preAuthorized( ? array & $requester, array & $args ) : bool {
         return true;
     }
 
-    public function process( Request $request, Response $response, array $args ) : Response {
-        $data = $this->getData( $request );
-        $user = Queries\User::login( $data['email'], $data['password'] );
+    public function process(Request $request, Response $response, array $args): Response
+    {
+        $id = $args['id' ];
+        $page = Queries\Page::get( $id );
 
-//        if( ! $user ) throw new HttpNotFoundException( $request, "Unknown user for credentials" );
+        if (!$page) throw new HttpNotFoundException($request, "Unknown page for credentials");
 
-        $this->result['token'] = Token::encode( $user );
-        $this->result['user'] = $user;
-
+        $this->result['page'] = $page;
         return $response;
     }
 

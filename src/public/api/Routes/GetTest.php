@@ -19,7 +19,7 @@ class GetTest extends Route
     public function process(Request $request, Response $response, array $args): Response
     {
         $data = $this->getData($request);
-        $query = new Queries\Authenticate();
+        $query = new Queries\User();
         $user = $query->execute($data['email'], $data['password']);
         if (!$user) throw new HttpNotFoundException($request, "Unknown user for credentials");
 

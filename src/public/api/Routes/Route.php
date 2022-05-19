@@ -9,17 +9,30 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 abstract class Route
 {
     protected ? array $requester = null;
+    protected array $result = [];
 
     public function __invoke( Request $request, Response $response, array $args ) : Response {
-        $this->requester = $this->getPayload( $request );
-        print_r( $this->requester );
+        $this->requester = $this->getRequester( $request );
 
-        if( ! $this->isAuthorized() ) throw new \Slim\Exception\HttpUnauthorizedException( $request, "Not Authorized for call");
+        if( ! $this->preAuthorized( $this->requester, $args ) ) throw new \Slim\Exception\HttpUnauthorizedException( $request, "Not Authorized for call");
 
-        return $this->process($request, $response, $args);
+
+        $response = $this->process($request, $response, $args);
+
+        if( ! $this->postAuthorized( $this->requester, $args,  $this->result ) ) throw new \Slim\Exception\HttpUnauthorizedException( $request, "Not Authorized for call");
+
+        $response->getBody()->write( json_encode( $this->result ) );
+        return $response;
     }
 
-    public function isAuthorized( Request $request ) : bool {
+
+
+    public function preAuthorized( ? array & $requester, array & $args ) : bool {
+        return true;
+    }
+
+
+    public function postAuthorized( ? array & $requester, array & $args, array & $result ) : bool {
         return true;
     }
 
@@ -31,22 +44,21 @@ abstract class Route
         return json_decode( $request->getBody(), true );
     }
 
-    protected function write( Response $response, $data ) {
-
-        $response->getBody()->write( json_encode( [ 'data'=>$data ] ) ); // room for meta data
-    }
-
-    private function getPayload( Request $request ) : ? array {
+    private function getRequester(Request $request ) : ? array {
         $token = $this->getToken( $request );
-        return Token::decode( $token );
+        if( $token ) {
+            $payload = Token::decode( $token );
+            if( $payload ) return $payload[ 'user' ];
+        }
+        return null; // not token
     }
 
     protected function getToken( Request $request ) : ? string {
         $authorization = $request->getHeaderLine( 'Authorization' );
 
-        if( ! empty( $authorization ) ) {
+        if( $authorization && !empty( $authorization ) ) {
             $header = trim($authorization);
-            if (preg_match('/Bearer\s(\S+)/', $header, $matches)) {
+            if (preg_match('/Bearer\s(\S+)/', $header, $matches )) {
                 return $matches[1];
             }
         }
