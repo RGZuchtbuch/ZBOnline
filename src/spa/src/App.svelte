@@ -198,6 +198,7 @@
     {currentUser}
 </div>
 
+
 <style global>
 	@tailwind base;
 	@tailwind components;
