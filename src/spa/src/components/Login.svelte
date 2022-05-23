@@ -21,8 +21,9 @@
             console.log('Login data', data.user );
             user.set( data.user );
             console.log( 'Stored user', $user );
-            router.goto( '/' );
-        })
+        }).catch( e => {
+            console.log('Error');
+        } );
         console.log( 'Submit' );
     }
 
@@ -31,10 +32,10 @@
 
 <Box legend='Anmelden beim Zuchtbuch Online'>
     <form>
-        <div class='flex flex-row'>
+        <div class='flex flex-col'>
             <Textfield bind:value={credentials.email} label='eMail'/>
             <Textfield type='password' bind:value={credentials.password} label='Passwort'/>
-            <IconButton class='material-icons' on:click={submit} >login</IconButton>
+            <IconButton class='material-icons self-end' on:click={submit} title='Komm ist dein Zuchtbuch'>login</IconButton>
         </div>
     </form>
 </Box>

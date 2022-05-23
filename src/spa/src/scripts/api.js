@@ -53,8 +53,10 @@ async function get( url ) {
         let promise = fetch(url, options).then( response => {
             console.log('Response ', response);
             if( response.ok ) {
+                console.log( 'ger ok');
                 return response.json();
             } else {
+                console.log( 'ger error');
                 throw new Error( 'Status '+response.status );
             }
         });
@@ -70,7 +72,9 @@ async function post( url, data ) {
         body: JSON.stringify( data ),
     }
     console.log( 'POST', url, data );
-    return fetch( url, options ).then( response => response.json() );
+    return fetch( url, options )
+        .then( response => response.json() )
+        .catch( e => { throw new Error('Oeps') } );
 }
 
 
@@ -99,6 +103,15 @@ export default {
     getModeratorDistricts: ( id ) => {
         console.log( 'api getModeratorDistricts', id );
         return get( '/api/moderator/'+id+'/districts' );
+    },
+    getSections: ( root ) => {
+        console.log( 'api getSections' );
+        return new Promise( ( resolve ) => {
+            setTimeout( () => {
+                console.log( 'Timedout' );
+                resolve( { id:1, name:'Geflügel', children:[ {id:2,name:'Groß- und Wassergeflügel'}, {id:3,name:'Hühner', children:[{ id:4,name:'Hühner'},{ id:5,name:'Zwerghühner'},{ id:6,name:'Legewachteln'}]} ] });
+            }, delay );
+        })
     }
 }
 
@@ -235,15 +248,7 @@ export function getPair( pairId ) {
     })
 }
 
-export function getSections( root ) {
-    console.log( 'api getSections' );
-    return new Promise( ( resolve ) => {
-        setTimeout( () => {
-            console.log( 'Timedout' );
-            resolve( { id:1, name:'Geflügel', children:[ {id:2,name:'Groß- und Wassergeflügel'}, {id:3,name:'Hühner', children:[{ id:4,name:'Hühner'},{ id:5,name:'Zwerghühner'},{ id:6,name:'Legewachteln'}]} ] });
-        }, delay );
-    })
-}
+
 
 export function getSection( sectionId ) {
     console.log( 'api getSection', sectionId );
