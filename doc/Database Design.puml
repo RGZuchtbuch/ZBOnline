@@ -1,0 +1,54 @@
+@startuml
+
+class User #FFFFAA
+class Breeder #FFFFAA
+class Moderator #FFFFAA
+class Admin #FFFFAA
+class Club #AAFFFF
+class District #AAFFFF
+class Section #AAFFAA
+class Breed #AAFFAA
+class Color #AAFFAA
+class Result #AAAAFF
+class Pair #FFAAFF
+class Parent #FFAAFF
+class Lay #FFAAFF
+class Brood #FFAAFF
+class Show #FFAAFF
+
+class Pages
+
+
+User <-l- Breeder : is
+User <-d- Moderator : is
+User <-u- Admin : is
+
+Moderator -l-> District : moderates
+
+Parent --> Animal : is
+
+Breed -r-> Section : of
+Color -r-> Breed : of
+
+
+
+Pair <-r- "0..1" Result : of
+Pair <-l- "*" Parent : in
+Pair <-d- "*"  Lay
+Pair <-d- "*" Brood
+Pair <-d- "*" Show
+Pair <-l- "*" Animal : offspring
+
+Result -> Breeder : of
+Result -> District : of
+Result -u-> Breed
+Result -u-> Color
+
+
+Breeder --> Club : member
+Club --> District
+
+
+Section -> Section
+District -> District
+@enduml

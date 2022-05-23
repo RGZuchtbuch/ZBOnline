@@ -202,16 +202,35 @@
 
             <Route path='/breeder/*' let:meta>
                 <Flyer>
-                    <Breeder promise={api.getUser( currentUser.id )} />
-                    <Results promise={api.getUserResults( currentUser.id )} />
+                    {#if currentUser}
+                        <Breeder promise={api.getUser( currentUser.id )} />
+                        <Results promise={api.getUserResults( currentUser.id )} />
+                    {:else}
+                        Not logged in !
+                    {/if}
                 </Flyer>
 
             </Route>
 
             <Route path='/moderator/*' let:meta>
                 <Flyer>
-                    <Breeder promise={api.getUser( currentUser.id )} />
-                    <Districts promise={api.getModeratorDistricts( currentUser.id )} />
+                    {#if currentUser}
+                        <Breeder promise={api.getUser( currentUser.id )} />
+                     <Districts promise={api.getModeratorDistricts( currentUser.id )} />
+                    {:else}
+                    Not logged in !
+                    {/if}
+                </Flyer>
+
+            </Route>
+
+            <Route path='/admin/*' let:meta>
+                <Flyer>
+                    {#if currentUser}
+                        Admin
+                    {:else}
+                        Not logged in !
+                    {/if}
                 </Flyer>
 
             </Route>
@@ -246,20 +265,6 @@
         background-color: rgb(30, 100, 30);
         font-size: 1.25rem;
         padding: 0.5rem;
-    }
-
-    .container {
-        grid-area: main;
-        display: grid;
-        grid-template-rows: 1;
-        grid-template-columns: 1;
-
-    }
-
-    /* use :global since the Route element may be in another component */
-    .container > :global(*) {
-        grid-row: 1;
-        grid-column: 1;
     }
 
 </style>
