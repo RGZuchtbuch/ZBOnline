@@ -6,7 +6,7 @@ use App\Queries;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
-class GetSections extends Route
+class GetDistricts extends Route
 {
     public function preAuthorized(?array &$requester, array &$args): bool
     {
@@ -16,9 +16,9 @@ class GetSections extends Route
     public function process(Request $request, Response $response, array $args): Response
     {
         $rootId = $args['id'];
-        $sections = Queries\Section::getTree( $rootId );
-        $root = $this->toTree( $sections );
-        $this->result['sections'] = $root;
+        $districts = Queries\District::getTree( $rootId );
+        $root = $this->toTree( $rootId, $districts );
+        $this->result['district'] = $root;
         return $response;
     }
 

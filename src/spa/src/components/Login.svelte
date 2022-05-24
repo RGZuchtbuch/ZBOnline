@@ -21,21 +21,18 @@
 
     function submit( event ) {
         event.preventDefault();
-        api.getToken( credentials.email, credentials.password ).then( data => {
-            console.log('Login data', data.user );
-            if( data && data.user ) {
+        api.getToken( credentials.email, credentials.password )
+            .then( data => {
+                console.log( 'Success', data );
                 user.set(data.user);
                 message = 'Wilkommen';
                 history.back();
-            } else {
+            } )
+            .catch( error =>{
+                console.log('Error', error );
                 message = 'Anmelding Fehlgeschlagen !';
                 user.set( null );
-            }
-            console.log( 'Stored user', $user );
-        }).catch( e => {
-            console.log('Error');
-        } );
-        console.log( 'Submit' );
+            });
     }
 
     console.log( 'Login' );

@@ -64,4 +64,20 @@ abstract class Route
         }
         return null;
     }
+
+    protected function & toTree( int $rootId, & $array, $idName='id', $parentName='parent', $childrenName='children' ) : array {
+        $values = []; // for lookup table
+        foreach( $array as & $value ) { // lookup table by id
+            $id = $value[ $idName ];
+            $values[ $id ] = & $value;
+        }
+        foreach( $array as & $child ) { // build tree
+            $parentId = $child[ $parentName ];
+            if( isset( $parentId ) ) { // not root
+                $values[$parentId][$childrenName][] = & $child;
+            }
+        }
+        return $values[ $rootId ];
+    }
+
 }

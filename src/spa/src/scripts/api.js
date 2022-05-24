@@ -27,6 +27,10 @@ setInterval(  () => {
     }
 }, settings.cache.TIMEOUT )
 
+function clear( url ) {
+    delete cache[ url ];
+}
+
 function getHeaders() {
     let headers = {
         'Accept': 'application/json',
@@ -69,7 +73,7 @@ async function post( url, data ) {
         headers: getHeaders(),
         body: JSON.stringify( data ),
     }
-    console.log( 'POST', url, data );
+    console.log( 'POST', url );
     return fetch( url, options )
         .then( response => {
             if( response.ok ) {
@@ -77,7 +81,7 @@ async function post( url, data ) {
             } else {
                 throw { response:response };
             }
-        } )
+        } );
 }
 
 async function put( url, data ) {
@@ -121,12 +125,7 @@ async function del( url ) {
 export default {
     getToken: ( email, password ) => {
         console.log('api getToken', email);
-        const promise = post('/api/token', {email: email, password: password});
-        promise.then(data => {
-            console.log('Store Token', data);
-            token = data.token;
-        });
-        return promise;
+        return post('/api/token', {email: email, password: password});
     },
     getUser: ( id ) => {
         console.log( 'api getUser', id );
@@ -155,6 +154,35 @@ export default {
     getColor: ( colorId ) => {
         console.log( 'api getColor', colorId );
         return get( 'api/color/'+colorId );
+    },
+    getDistricts: ( districtId ) => {
+        console.log( 'api getDistrict');
+        return get( 'api/districts/'+districtId );
+    },
+    getDistrict: ( districtId ) => {
+        console.log( 'api getDistrict', districtId );
+        return get( 'api/district/'+districtId );
+    },
+
+    newDistrict: ( parentId ) => {
+        console.log( 'api newDistrict' );
+        return new Promise( ( resolve ) => {
+            // TODO, remember to delete cache for parent district
+            clear( 'api/district/'+parentId );
+            resolve( { district: { id:0, parent:parentId, name:null, short:null, coordinates:null, children:[] } } );
+        })
+    },
+    postDistrict: ( district ) => { // insert
+        console.log( 'api postDistrict' );
+        return post( 'api/district', district );
+    },
+    putDistrict: ( district ) => { // updating
+        console.log( 'api postDistrict' );
+        return put( 'api/district/'+districtId, district );
+    },
+    deleteDistrict: ( districtId ) => {
+        console.log( 'api deleteDistrict' );
+        return del( 'api/district/'+districtId );
     },
 
 
@@ -216,27 +244,6 @@ export default {
             setTimeout( () => {
                 console.log( 'Timedout' );
                 resolve([ { id:1, pairs:5, breeders:3, year:2020, henns:18, layed:160, eggs:100, fertilized:0.5, hatched:0.4, displayed:24, showed:95 } ] );
-            }, delay );
-        })
-    },
-
-
-    getDistricts: () => {
-        console.log( 'api getDistrict');
-        return new Promise( ( resolve ) => {
-            setTimeout( () => {
-                console.log( 'Timedout' );
-                resolve( [ {id:1, name:'Grafschaft'}, {id:2, name:'Oldenburg'} ] );
-            }, delay );
-        })
-    },
-
-    getDistrict: ( districtId ) => {
-        console.log( 'api getDistrict', districtId );
-        return new Promise( ( resolve ) => {
-            setTimeout( () => {
-                console.log( 'Timedout' );
-                resolve( {id:1,name:'a' } );
             }, delay );
         })
     },

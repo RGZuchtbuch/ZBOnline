@@ -47,16 +47,6 @@
         console.log( currentUser );
     });
 
-    function goto( path ) {
-        return () => {
-            router.goto(path);
-        }
-    }
-/*
-
-
- */
-
 </script>
 
 
@@ -170,25 +160,41 @@
 
                 <Route path='/moderator/*' let:meta>
                     <Flyer>
-                        {#if currentUser}
-                            <Moderator/>
-                        {:else}
-                        Not logged in !
-                        {/if}
+                        <Moderator/>
                     </Flyer>
 
                 </Route>
 
                 <Route path='/admin/*' let:meta>
                     <Flyer>
-                        {#if currentUser}
-                            <Admin/>
-                        {:else}
-                            Not logged in !
-                        {/if}
+                        <Admin/>
                     </Flyer>
 
                 </Route>
+
+                <Route path='/district/new' let:meta>
+                    <Flyer>
+                        new distric here
+
+                    </Flyer>
+
+                </Route>
+
+                <Route path='/district/:id/*' let:meta>
+                    <Flyer>
+                        <Route path='/' let:meta>
+                            <District promise={api.getDistrict(meta.params.id)} />
+                        </Route>
+                        <Route path='/new' let:meta>
+                            <District promise={api.newDistrict(meta.params.id)} />
+                        </Route>
+
+
+
+                    </Flyer>
+
+                </Route>
+
 
                 <Route path='/login'>
                     <Flyer>
