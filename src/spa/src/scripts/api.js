@@ -52,12 +52,9 @@ async function get( url ) {
         console.log('Get', url);
         let promise = fetch(url, options)
             .then( response => {
-                console.log('Response ', response);
                 if( response.ok ) {
-                    console.log( 'get ok');
                     return response.json();
                 } else {
-                    console.log( 'ger error');
                     throw { response:response };
                 }
             });
@@ -74,8 +71,46 @@ async function post( url, data ) {
     }
     console.log( 'POST', url, data );
     return fetch( url, options )
-        .then( response => response.json() )
-        .catch( e => { throw new Error('Oeps') } );
+        .then( response => {
+            if( response.ok ) {
+                return response.json();
+            } else {
+                throw { response:response };
+            }
+        } )
+}
+
+async function put( url, data ) {
+    let options = {
+        method: 'PUT',
+        headers: getHeaders(),
+        body: JSON.stringify( data ),
+    }
+    console.log( 'PUT', url, data );
+    return fetch( url, options )
+        .then( response => {
+            if( response.ok ) {
+                return response.json();
+            } else {
+                throw { response:response };
+            }
+        } )
+}
+
+async function del( url ) {
+    let options = {
+        method: 'DELETE',
+        headers: getHeaders()
+    }
+    console.log('DELETE', url);
+    return fetch(url, options)
+        .then( response => {
+            if( response.ok ) {
+                return response.json();
+            } else {
+                throw { response:response };
+            }
+        });
 }
 
 
