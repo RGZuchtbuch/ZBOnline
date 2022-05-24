@@ -1,5 +1,7 @@
 <script>
     import { active, meta, router, Route } from 'tinro';
+    import Box from '../components/Box.svelte';
+
     const route = meta();
 
     console.log( 'Breed' );
@@ -9,13 +11,22 @@
 
 {#await promise}
     loading...
-{:then breed}
-    <ul>
-        <li>{breed.name} ({breed.id}) </li>
+{:then data}
+    <Box legend={'Rasse : '+data.breed.name}>
+        <div class='flex flex-row'>
+            <div class='grow'>
+                {data.breed.name} ({data.breed.id})
+            </div>
+            <Box legend='Farben'>
+                <ul class='w-48 h-32 overflow-y-auto'>
+                    {#each data.breed.colors as color }
+                        <li> → <a href='{route.match}/color/{color.id}'>{color.name}</a></li>
+                    {/each}
+                </ul>
+            </Box>
+        </div>
 
-    </ul>
-    <a href='{route.match}/colors/10'>To color</a>
-    <a href='{route.match}/results/trend'>To trend</a>
+    </Box>
 {:catch error}
-    Oeps
+    Rasse nicht gefunden: ({ error.response.status })
 {/await}

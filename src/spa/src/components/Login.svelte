@@ -9,9 +9,13 @@
 
     import Box from './Box.svelte';
 
+
+
     let credentials = {
         email: 'eelco.jannink@gmail.com', password: 'eelco' // TODO
     }
+
+    let message = '';
 
     const route = meta();
 
@@ -19,7 +23,14 @@
         event.preventDefault();
         api.getToken( credentials.email, credentials.password ).then( data => {
             console.log('Login data', data.user );
-            user.set( data.user );
+            if( data && data.user ) {
+                user.set(data.user);
+                message = 'Wilkommen';
+                history.back();
+            } else {
+                message = 'Anmelding Fehlgeschlagen !';
+                user.set( null );
+            }
             console.log( 'Stored user', $user );
         }).catch( e => {
             console.log('Error');
@@ -35,7 +46,10 @@
         <div class='flex flex-col'>
             <Textfield bind:value={credentials.email} label='eMail'/>
             <Textfield type='password' bind:value={credentials.password} label='Passwort'/>
-            <IconButton class='material-icons self-end' on:click={submit} title='Komm ist dein Zuchtbuch'>login</IconButton>
+            <div class='flex flex-row justify-between items-center'>
+                <span>{message}</span>
+                <IconButton class='material-icons self-end' on:click={submit} title='Komm ist dein Zuchtbuch'>login</IconButton>
+            </div>
         </div>
     </form>
 </Box>

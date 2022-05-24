@@ -10,14 +10,13 @@
 
 {#await promise}
     loading...
-{:then section}
-    <Box legend='Rassen der {section.name}'>
-        <div class='flex flex-row'>
-            <div>Section <a href='{route.match}/breeds'>breeds</a></div>
-            <div>Section <a href='{route.match}/results/trend'>Trend</a></div>
-            <div>Section <a href='{route.match}/results/map'>Karte</a></div>
-            <div>Section <a href='{route.match}/results/table'>Tabelle</a></div>
-        </div>
+{:then data}
+    <Box legend='Rassen der {data.section.name}'>
+        <ul class='w-128 flex flex-col'>
+            {#each data.section.breeds as breed }
+                <li class='pl-8'> → <a href='/#/standard/breed/{breed.id}'>{breed.name}</a></li>
+            {/each}
+        </ul>
     </Box>
 {:catch error}
     oeps

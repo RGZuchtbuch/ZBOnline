@@ -3,6 +3,6 @@
 
 </script>
 
-<Box legend='Breeder'>
-    <div class='w-128'>Breeder stuff</div>
+<Box legend='Admin'>
+    <div class='w-128'>Admin stuff</div>
 </Box>

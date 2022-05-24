@@ -1,5 +1,5 @@
 <script>
-    import { active, meta, router, Route } from 'tinro';
+    import Box from '../components/Box.svelte';
 
     export let promise;
 
@@ -9,15 +9,6 @@
 
 </script>
 
-{#await promise}
-    loading moderator page...
-{:then data}
-    {#if data && data.user}
-        <ul>
-            <li>{data.user.name} ({data.user.id}) </li>
-
-        </ul>
-    {/if}
-{:catch error}
-    Oeps {error}
-{/await}
+<Box legend='Obmann'>
+    <div class='w-128'>Obmann stuff</div>
+</Box>

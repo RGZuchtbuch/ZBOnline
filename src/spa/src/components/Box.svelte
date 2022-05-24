@@ -1,17 +1,23 @@
 <script>
 
     export let legend='';
+    export let href=null;
 
 </script>
 
 <fieldset>
-    <legend>{legend}</legend>
+    <legend>
+        {legend}
+        {#if href }
+            <a href={href}> ← </a>
+        {/if}
+    </legend>
     <slot></slot>
 </fieldset>
 
 <style>
     fieldset {
-        @apply border rounded border-gray-600 p-2 bg-gray-100
+        @apply border rounded border-gray-600 p-2 bg-gray-50
     }
 
     fieldset legend {
