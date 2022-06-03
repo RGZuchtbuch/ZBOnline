@@ -11,6 +11,6 @@ class UserResults
             FROM result
             WHERE result.id=:userId
         ' );
-        return Query::getArray( $stmt, $args );
+        return Query::selectArray( $stmt, $args );
     }
 }

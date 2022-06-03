@@ -10,7 +10,7 @@ class Section
         $stmt = Query::prepare( '
             SELECT * FROM std_section WHERE id=:id
         ' );
-        return Query::get( $stmt, $args );
+        return Query::select( $stmt, $args );
     }
 
     public static function getChildren( int $parentId ) : array {
@@ -18,7 +18,7 @@ class Section
         $stmt = Query::prepare( '
             SELECT * FROM section WHERE parent=:parentId ORDER BY name
         ' );
-        return Query::getArray( $stmt, $args );
+        return Query::selectArray( $stmt, $args );
     }
 
     public static function getTree(int $parent ) : array {
@@ -32,7 +32,7 @@ class Section
             )
             SELECT * FROM parent ORDER BY name
         ' );
-        return Query::getArray( $stmt, $args );
+        return Query::selectArray( $stmt, $args );
     }
 
     public static function getBreeds( int $sectionId ) : array {
@@ -42,7 +42,7 @@ class Section
             FROM std_breed
             WHERE section=:sectionId OR subsection = :subsectionId
         ' );
-        return Query::getArray( $stmt, $args );
+        return Query::selectArray( $stmt, $args );
     }
 
 }

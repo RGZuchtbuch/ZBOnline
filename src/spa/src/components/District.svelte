@@ -3,6 +3,7 @@
     import { active, meta, router, Route } from 'tinro';
     import api from '../scripts/api.js';
     import Box from './Box.svelte';
+    import IconButton from '@smui/icon-button';
     import TextField from '@smui/textfield';
     import Select, { Option } from '@smui/select';
     import {user} from "../scripts/store";
@@ -34,11 +35,24 @@
 
     function save() {
         disabled = true;
+        let promise = null
         if( district.id === 0 ) {
-            api.postDistrict( district );
+            promise = api.postDistrict( district );
         } else {
-            api.putDistrict( district );
+            promise = api.putDistrict( district );
         }
+        promise.then( response => {
+            //district.id = response.id;
+            console.log( 'district saved');
+        }).catch( response => {
+            disabled = false;
+            console.log( 'district not saved', response.status );
+        });
+    }
+
+    function toParent() {
+        console.log( 'to parent ', district.parent );
+
     }
 
     let currentUser = null;
@@ -53,20 +67,36 @@
 
 {#if district }
     <Box legend='District {district.name}'>
-        <div class='flex flex-row'>
-            {#if disabled}
-                <div on:click={edit}>edit</div>
-            {:else}
-                <div on:click={save}>save</div>
-            {/if}
-        </div>
-        <div class='flex flex-row'>
-            <TextField bind:value={district.name} label='Name' {disabled} style='width:24em'> </TextField>
-            <TextField bind:value={district.short} label='Abk.' {disabled} style='width:8em'> </TextField>
-        </div>
-        <div class='flex flex-row'>
-            <TextField bind:value={district.coordinates} label='Coordinates (Lat, Lon)' {disabled} style='width:32em'> </TextField>
-        </div>
+        <form>
+            <div class='flex flex-row justify-between'>
+                <div>
+                    {#if district.parent}
+                        <a href={'/#/district/'+district.parent}>
+                            <IconButton class='material-icons self-end' on:click={toParent} title='Zurück'>trending_up</IconButton>
+                        </a>
+                    {/if}
+                </div>
+                <div>
+                    {#if disabled}
+                        <IconButton class='material-icons self-end' on:click={edit} title='Aendern'>edit</IconButton>
+                    {:else}
+                        <IconButton class='material-icons self-end' on:click={save} title='Speichern'>done</IconButton>
+                    {/if}
+                </div>
+            </div>
+
+
+            <div class='flex flex-row'>
+                <TextField bind:value={district.name} label='Name' {disabled} style='width:24em'> </TextField>
+                <TextField bind:value={district.short} label='Abk.' {disabled} style='width:8em'> </TextField>
+            </div>
+            <div class='flex flex-row'>
+                <TextField bind:value={district.fullname} label='Name komplett' {disabled} style='width:24em'> </TextField>
+            </div>
+            <div class='flex flex-row'>
+                <TextField bind:value={district.coordinates} label='Coordinates (Lat, Lon)' {disabled} style='width:32em'> </TextField>
+            </div>
+        </form>
 
         <Box legend='Verbände'>
             <div class='flex flex-row'>
@@ -85,3 +115,6 @@
 {:else}
     Oeps for district
 {/if}
+
+<style>
+</style>

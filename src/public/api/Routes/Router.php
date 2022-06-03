@@ -21,6 +21,7 @@ class Router {
 
 
         $app->post( '/district', new PostDistrict() );
+        $app->put( '/district/{id}', new PutDistrict() );
         $app->post( '/token', new PostToken() );
 
 

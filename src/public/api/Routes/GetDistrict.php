@@ -16,7 +16,7 @@ class GetDistrict extends Route
     public function process(Request $request, Response $response, array $args): Response
     {
         $districtId = $args['id'];
-        $district = Queries\District::get( $districtId );
+        $district = Queries\District::read( $districtId );
         if( isset( $district ) ) {
             $district['children'] = Queries\District::getChildren( $districtId );
         }

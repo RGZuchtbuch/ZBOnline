@@ -5,21 +5,31 @@ namespace App\Queries;
 class District
 {
 
-    public static function get( int $id ) : ? array {
+    public static function read( int $id ) : ? array {
         $args = [ 'id'=>$id ];
         $stmt = Query::prepare( '
             SELECT * FROM district WHERE id=:id
         ' );
-        return Query::get( $stmt, $args );
+        return Query::select( $stmt, $args );
     }
 
-    public static function post( int $parentId, string $name, string $short, string $coordinates ) : int {
-        $args = [ 'parentId'=>$parentId, 'name'=>$name, 'short'=>$short, 'coordinates'=>$coordinates ];
+    public static function create( int $parentId, string $name, string $fullname, string $short, string $coordinates ) : int {
+        $args = [ 'parentId'=>$parentId, 'name'=>$name, 'fullname'=>$fullname, 'short'=>$short, 'coordinates'=>$coordinates ];
         $stmt = Query::prepare( '
-            INSERT INTO district ( parent, name, short, coordinates )
-            VALUES ( :parentId, :name, :short, :coordinates )
+            INSERT INTO district ( parent, name, fullname, short, coordinates )
+            VALUES ( :parentId, :name, :fullname, :short, :coordinates )
         ');
         return Query::insert( $stmt, $args );
+    }
+
+    public static function update( int $id, string $name, string $fullname, string $short, string $coordinates ) : int {
+        $args = [ 'id'=>$id, 'name'=>$name, 'fullname'=>$fullname, 'short'=>$short, 'coordinates'=>$coordinates ];
+        $stmt = Query::prepare( '
+            UPDATE district 
+            SET name=:name, fullname=:fullname, short=:short, coordinates=:coordinates
+            WHERE id=:id            
+        ');
+        return Query::update( $stmt, $args );
     }
 
 
@@ -28,7 +38,7 @@ class District
         $stmt = Query::prepare( '
             SELECT * FROM district WHERE parent=:parentId ORDER BY name
         ' );
-        return Query::getArray( $stmt, $args );
+        return Query::selectArray( $stmt, $args );
     }
 
     public static function getTree(int $parent ) : array {
@@ -42,7 +52,7 @@ class District
             )
             SELECT * FROM parent ORDER BY name
         ' );
-        return Query::getArray( $stmt, $args );
+        return Query::selectArray( $stmt, $args );
     }
 
 }

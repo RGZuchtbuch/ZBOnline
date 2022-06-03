@@ -12,6 +12,6 @@ class ModeratorDistricts
             LEFT JOIN moderator ON moderator.district=district.id
             WHERE moderator.id=:moderatorId
         ' );
-        return Query::getArray( $stmt, $args );
+        return Query::selectArray( $stmt, $args );
     }
 }

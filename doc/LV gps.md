@@ -47,7 +47,7 @@ SL
 49.316259642905905, 6.967772885296397
 
 Sächsischer Rassegeflügelzüchter Verband
-SV
+SR
 50.900981295988345, 13.236054309876273
 
 Rassegeflügelzüchter Sachsen-Anhalt

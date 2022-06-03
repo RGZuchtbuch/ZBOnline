@@ -27,7 +27,7 @@ class Query
      * @param array $args
      * @return array|null
      */
-    public static function get( PDOStatement  & $stmt, array & $args = [] ): ? array {
+    public static function select( PDOStatement  & $stmt, array & $args = [] ): ? array {
         if( $stmt->execute( $args ) ) {
             $data = $stmt->fetch();
             if( $data ) { // could be false
@@ -37,7 +37,7 @@ class Query
         return null;
     }
 
-    public static function getArray( PDOStatement  & $stmt, array & $args = [] ) : array { // array of objects, could be empty
+    public static function selectArray(PDOStatement & $stmt, array & $args = [] ) : array { // array of objects, could be empty
         if( $stmt->execute( $args ) ) {
             return $stmt->fetchAll();
         }

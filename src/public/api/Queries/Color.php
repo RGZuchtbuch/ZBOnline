@@ -10,7 +10,7 @@ class Color
         $stmt = Query::prepare( '
             SELECT * FROM std_color WHERE id=:id
         ' );
-        return Query::get( $stmt, $args );
+        return Query::select( $stmt, $args );
     }
 
 }

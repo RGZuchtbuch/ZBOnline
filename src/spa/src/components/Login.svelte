@@ -45,7 +45,7 @@
             <Textfield type='password' bind:value={credentials.password} label='Passwort'/>
             <div class='flex flex-row justify-between items-center'>
                 <span>{message}</span>
-                <IconButton class='material-icons self-end' on:click={submit} title='Komm ist dein Zuchtbuch'>login</IconButton>
+                <IconButton class='material-icons self-end' on:click={submit} title='Komm herein'>login</IconButton>
             </div>
         </div>
     </form>

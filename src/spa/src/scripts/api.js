@@ -8,115 +8,6 @@ let cache = {
 
 let token = null;
 
-/**
- * clears item from cache if older than cacheTimout
- */
-setInterval(  () => {
-    let now = new Date().getTime(); // in ms
-    const toDelete = []; // collecte old, avoiding deleting while iterating
-    for( const url in cache ) { // check per url->promise and collect before delete
-        let promise = cache[ url ];
-        const time = promise.time;
-        if( time < now - settings.cache.TIMEOUT ) {
-            toDelete.push( url );
-        }
-    }
-    for( const url of toDelete ) { // delete collected from cache
-        console.log( 'Cache delete', url );
-        delete cache[ url ];
-    }
-}, settings.cache.TIMEOUT )
-
-function clear( url ) {
-    delete cache[ url ];
-}
-
-function getHeaders() {
-    let headers = {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-    }
-    if( token ) {
-        headers[ 'Authorization'] = 'Bearer '+token;
-    }
-    return headers;
-}
-
-async function get( url ) {
-    let cached = cache[ url ];
-    let now = new Date().getTime(); // in ms
-    if( cached && cached.time > now-settings.cache.TIMEOUT ) { // fresh enough
-        console.log('Cache', url );
-        return cached.promise;
-    } else {
-        let options = {
-            method: 'GET',
-            headers: getHeaders()
-        }
-        console.log('Get', url);
-        let promise = fetch(url, options)
-            .then( response => {
-                if( response.ok ) {
-                    return response.json();
-                } else {
-                    throw { response:response };
-                }
-            });
-        cache[url] = {promise: promise, time: now};
-        return promise;
-    }
-}
-
-async function post( url, data ) {
-    let options = {
-        method: 'POST',
-        headers: getHeaders(),
-        body: JSON.stringify( data ),
-    }
-    console.log( 'POST', url );
-    return fetch( url, options )
-        .then( response => {
-            if( response.ok ) {
-                return response.json();
-            } else {
-                throw { response:response };
-            }
-        } );
-}
-
-async function put( url, data ) {
-    let options = {
-        method: 'PUT',
-        headers: getHeaders(),
-        body: JSON.stringify( data ),
-    }
-    console.log( 'PUT', url, data );
-    return fetch( url, options )
-        .then( response => {
-            if( response.ok ) {
-                return response.json();
-            } else {
-                throw { response:response };
-            }
-        } )
-}
-
-async function del( url ) {
-    let options = {
-        method: 'DELETE',
-        headers: getHeaders()
-    }
-    console.log('DELETE', url);
-    return fetch(url, options)
-        .then( response => {
-            if( response.ok ) {
-                return response.json();
-            } else {
-                throw { response:response };
-            }
-        });
-}
-
 
 
 
@@ -169,7 +60,7 @@ export default {
         return new Promise( ( resolve ) => {
             // TODO, remember to delete cache for parent district
             clear( 'api/district/'+parentId );
-            resolve( { district: { id:0, parent:parentId, name:null, short:null, coordinates:null, children:[] } } );
+            resolve( { district: { id:0, parent:parentId, name:null, fullname:null, short:null, coordinates:null, children:[] } } );
         })
     },
     postDistrict: ( district ) => { // insert
@@ -178,7 +69,7 @@ export default {
     },
     putDistrict: ( district ) => { // updating
         console.log( 'api postDistrict' );
-        return put( 'api/district/'+districtId, district );
+        return put( 'api/district/'+district.id, district );
     },
     deleteDistrict: ( districtId ) => {
         console.log( 'api deleteDistrict' );
@@ -374,3 +265,112 @@ export default {
 
     }
 }
+
+
+/**
+ * clears item from cache if older than cacheTimout
+ */
+setInterval(  () => {
+    let now = new Date().getTime(); // in ms
+    const toDelete = []; // collecte old, avoiding deleting while iterating
+    for( const url in cache ) { // check per url->promise and collect before delete
+        let promise = cache[ url ];
+        const time = promise.time;
+        if( time < now - settings.cache.TIMEOUT ) {
+            toDelete.push( url );
+        }
+    }
+    for( const url of toDelete ) { // delete collected from cache
+        console.log( 'Cache delete', url );
+        delete cache[ url ];
+    }
+}, settings.cache.TIMEOUT )
+
+function clear( url ) {
+    delete cache[ url ];
+}
+
+function getHeaders() {
+    let headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+    }
+    if( token ) {
+        headers[ 'Authorization'] = 'Bearer '+token;
+    }
+    return headers;
+}
+
+async function get( url ) {
+    let cached = cache[ url ];
+    let now = new Date().getTime(); // in ms
+    if( cached && cached.time > now-settings.cache.TIMEOUT ) { // fresh enough
+        console.log('Cache', url );
+        return cached.promise;
+    } else {
+        let options = {
+            method: 'GET',
+            headers: getHeaders()
+        }
+        console.log('Get', url);
+        let promise = fetch(url, options)
+            .then( response => {
+                if( response.ok ) {
+                    return response.json();
+                }
+                throw response;
+            });
+        cache[url] = {promise: promise, time: now};
+        return promise;
+    }
+}
+
+async function post( url, data ) {
+    let options = {
+        method: 'POST',
+        headers: getHeaders(),
+        body: JSON.stringify( data ),
+    }
+    console.log( 'POST', url );
+    return fetch( url, options )
+        .then( response => {
+            console.log( 'POST', response );
+            if( response.ok ) {
+                console.log( '  POST', 'ok' );
+                return response.json();
+            }
+            throw response;
+        } );
+}
+
+async function put( url, data ) {
+    let options = {
+        method: 'PUT',
+        headers: getHeaders(),
+        body: JSON.stringify( data ),
+    }
+    console.log( 'PUT', url, data );
+    return fetch( url, options )
+        .then( response => {
+            if( response.ok ) {
+                return response.json();
+            }
+            throw response;
+        })
+}
+
+async function del( url ) {
+    let options = {
+        method: 'DELETE',
+        headers: getHeaders()
+    }
+    console.log('DELETE', url);
+    return fetch(url, options)
+        .then( response => {
+            if( response.ok ) {
+                return response.json();
+            }
+            throw response;
+        });
+}
+

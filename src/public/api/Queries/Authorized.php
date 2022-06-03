@@ -13,7 +13,7 @@ class Authorized {
                 LEFT JOIN admin ON admin.id=:requesterId1
                 WHERE user.id=:userId1 AND ( :userId2=:requesterId2 OR moderator.id=:requesterId3 OR admin.id=:requesterId4 )
             ' );
-            $user = Query::get( $stmt, $args );
+            $user = Query::select( $stmt, $args );
             return isset( $user );
         }
         return false;

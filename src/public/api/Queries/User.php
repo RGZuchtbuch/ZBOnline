@@ -11,7 +11,7 @@ class User
             FROM user
             WHERE user.id=:userId
         ' );
-        return Query::get( $stmt, $args );
+        return Query::select( $stmt, $args );
     }
 
     public static function login( string $email, string $password ) : ? array {
@@ -32,7 +32,7 @@ class User
     private static function getVerifiedUser(string $email, string $password ) : ? array {
         $args = [ 'email'=>$email ];
         $stmt = Query::prepare( 'SELECT id, name, hash, email, district FROM user WHERE email=:email' );
-        $user = Query::get( $stmt, $args );
+        $user = Query::select( $stmt, $args );
 
         if( $user && password_verify( $password, $user['hash'] ) ) {
             unset( $user['hash'] );
@@ -44,14 +44,14 @@ class User
     private static function getModerator( int $id ) : array {
         $args = [ 'id'=>$id ];
         $stmt = Query::prepare( 'SELECT district FROM moderator WHERE id=:id' );
-        $districts = Query::getArray( $stmt, $args );
+        $districts = Query::selectArray( $stmt, $args );
         return array_column( $districts, 'district' ); // only list of district id's needed
     }
 
     private static function isAdmin( int $id ) : bool {
         $args = [ 'id'=>$id ];
         $stmt = Query::prepare( 'SELECT id FROM admin WHERE id=:id' );
-        return Query::get($stmt, $args ) != null;
+        return Query::select($stmt, $args ) != null;
 
     }
 }

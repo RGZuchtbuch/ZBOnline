@@ -10,7 +10,7 @@ class Breed
         $stmt = Query::prepare( '
             SELECT * FROM std_breed WHERE id=:id
         ' );
-        return Query::get( $stmt, $args );
+        return Query::select( $stmt, $args );
     }
 
     public static function getColors( int $breedId ) : array {
@@ -18,7 +18,7 @@ class Breed
         $stmt = Query::prepare( '
             SELECT * FROM std_color WHERE breed=:breedId
         ' );
-        return Query::getArray( $stmt, $args );
+        return Query::selectArray( $stmt, $args );
     }
 
 }
