@@ -5,7 +5,7 @@ namespace App\Queries;
 class District
 {
 
-    public static function read( int $id ) : ? array {
+    public static function get(int $id ) : ? array {
         $args = [ 'id'=>$id ];
         $stmt = Query::prepare( '
             SELECT * FROM district WHERE id=:id
@@ -37,6 +37,17 @@ class District
         $args = [ 'parentId'=>$parentId ];
         $stmt = Query::prepare( '
             SELECT * FROM district WHERE parent=:parentId ORDER BY name
+        ' );
+        return Query::selectArray( $stmt, $args );
+    }
+
+    public static function getModerators( int $districtId ) : array {
+        $args = [ 'districtId'=>$districtId ];
+        $stmt = Query::prepare( '
+            SELECT user.id, user.name FROM moderator
+            LEFT JOIN user ON user.id = moderator.id
+            WHERE moderator.district=:districtId
+            ORDER BY name
         ' );
         return Query::selectArray( $stmt, $args );
     }

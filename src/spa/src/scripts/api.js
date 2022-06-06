@@ -18,6 +18,11 @@ export default {
         console.log('api getToken', email);
         return post('/api/token', {email: email, password: password});
     },
+    user: {
+        get: (id) => {
+            return get( '/api/user/'+id );
+        },
+    },
     getUser: ( id ) => {
         console.log( 'api getUser', id );
         return get( '/api/user/'+id );
@@ -46,9 +51,20 @@ export default {
         console.log( 'api getColor', colorId );
         return get( 'api/color/'+colorId );
     },
+    district: {
+        get: ( districtId ) => {
+            console.log( 'api getDistrict', districtId );
+            return get( 'api/district/'+districtId );
+        },
+        tree: {
+            get: (parentId) => {
+                return get('api/district/' + districtId+'/tree');
+            },
+        }
+    },
     getDistricts: ( districtId ) => {
         console.log( 'api getDistrict');
-        return get( 'api/districts/'+districtId );
+        return get( 'api/district/'+districtId+'/tree' );
     },
     getDistrict: ( districtId ) => {
         console.log( 'api getDistrict', districtId );
@@ -75,6 +91,45 @@ export default {
         console.log( 'api deleteDistrict' );
         return del( 'api/district/'+districtId );
     },
+
+    moderator: {
+        new: (districtId) => {
+            console.log('api new moderator');
+            let moderatorPromise = Promise.resolve({moderator: {id: 0, district: districtId}});
+            let districtPromise = get('api/district/' + districtId);
+            ;
+            let candidatesPromise = get('/api/users');
+
+            return Promise.all([moderatorPromise, districtPromise, candidatesPromise])
+                .then(responses => {
+                    let moderator = responses[0].moderator;
+                    moderator.district = responses[1].district;
+                    moderator.users = responses[2].users;
+                    clear('api/district/' + districtId);
+                    return {moderator: moderator};
+                })
+
+            /*            return new Promise((resolve) => {
+                            // TODO, remember to delete cache for parent district
+                            clear('api/district/' + districtId);
+                            resolve({moderator: {id: 0, moderator: 0}});
+                        })
+            */
+        },
+        post: ( districtId, moderatorId ) => {
+            let data = { user:moderatorId, district:districtId };
+            clear('api/district/' + districtId);
+            return post('api/moderator', data );
+        },
+        delete: ( districtId, moderatorId ) => {
+            let data = { user:moderatorId, district:districtId };
+            clear('api/district/' + districtId);
+            return del('api/moderator', data );
+        },
+
+    },
+
+
 
 
 
@@ -359,12 +414,13 @@ async function put( url, data ) {
         })
 }
 
-async function del( url ) {
+async function del( url, data ) {
     let options = {
         method: 'DELETE',
-        headers: getHeaders()
+        headers: getHeaders(),
+        body: JSON.stringify( data ),
     }
-    console.log('DELETE', url);
+    console.log('DELETE', url, data );
     return fetch(url, options)
         .then( response => {
             if( response.ok ) {

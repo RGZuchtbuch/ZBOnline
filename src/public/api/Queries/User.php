@@ -14,10 +14,19 @@ class User
         return Query::select( $stmt, $args );
     }
 
+    public static function getAll() : ? array {
+        $stmt = Query::prepare( '
+            SELECT user.id, name, email, user.district 
+            FROM user
+        ' );
+        return Query::selectArray( $stmt );
+    }
+
+
     public static function login( string $email, string $password ) : ? array {
         $user = User::getVerifiedUser( $email, $password );
         if( $user ) {
-            $user['moderator'] = User::getModerator( $user['id'] );
+            $user['moderator'] = User::getModerator( $user['id'] ); // array
             $user['isAdmin'] = User::isAdmin( $user['id'] );
             return $user;
         }

@@ -6,7 +6,7 @@ use App\Queries;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
-class PostDistrict extends Route
+class PostModerator extends Route
 {
     public function preAuthorized( ? array &$requester, array &$args): bool
     {
@@ -15,8 +15,8 @@ class PostDistrict extends Route
 
     public function process(Request $request, Response $response, array $args): Response
     {
-        $district = $this->getData( $request );
-        $id = Queries\District::create( $district['parent'], $district['name'], $district['fullname'], $district['short'], $district['coordinates'] );
+        $moderator = $this->getData( $request );
+        $id = Queries\Moderator::create( $moderator['user'], $moderator['district'] );
         $this->result['id'] = $id;
         return $response;
     }

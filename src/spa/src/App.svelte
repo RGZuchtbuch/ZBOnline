@@ -8,9 +8,9 @@
 
 	import { user } from './scripts/store.js'
 
-    import Admin from './pages/Admin.svelte';
-    import Breeder from './pages/Breeder.svelte';
-    import Moderator from './pages/Moderator.svelte';
+    import AdminRole from './pages/Admin.svelte';
+    import BreederRole from './pages/Breeder.svelte';
+    import ModeratorRole from './pages/Moderator.svelte';
     import Page from './pages/Page.svelte';
     import Standard from './pages/Standard.svelte';
 
@@ -26,6 +26,7 @@
     import District from './components/District.svelte';
     import Districts from './components/Districts.svelte';
     import Login from './components/Login.svelte';
+    import Moderator from './components/Moderator.svelte';
     import Pair from './components/Pair.svelte';
     import Pairs from './components/Pairs.svelte';
     import Map from './components/Map.svelte';
@@ -59,7 +60,9 @@
             <li><a href="/#/standard">Standard</a></li> -
             <li><a href="/#/results">Leistungen</a></li> -
             <li><a href="/#/breeder">Mein Zuchtbuch</a></li> -
-            <li><a href="/#/moderator">Obmann</a></li> -
+            {#if currentUser && currentUser.moderator.length > 0}
+                <li><a href="/#/moderator">Obmann</a></li> -
+            {/if}
             <li><a href="/#/admin">Admin</a></li> ---
             <li><a href="/#/login">Anmelden</a></li>
             {#if currentUser}{currentUser.name}{/if}
@@ -150,7 +153,7 @@
                 <Route path='/breeder/*' let:meta>
                     <Flyer>
                         {#if currentUser}
-                            <Breeder promise={api.getUser( currentUser.id )} />
+                            <BreederRole promise={api.getUser( currentUser.id )} />
                         {:else}
                             Not logged in !
                         {/if}
@@ -159,15 +162,16 @@
                 </Route>
 
                 <Route path='/moderator/*' let:meta>
-                    <Flyer>
-                        <Moderator/>
-                    </Flyer>
-
+                    {#if currentUser.moderator.length > 0}
+                        <Flyer>
+                            <ModeratorRole/>
+                        </Flyer>
+                    {/if}
                 </Route>
 
                 <Route path='/admin/*' let:meta>
                     <Flyer>
-                        <Admin/>
+                        <AdminRole/>
                     </Flyer>
 
                 </Route>
@@ -188,7 +192,9 @@
                         <Route path='/new' let:meta>
                             <District promise={api.newDistrict(meta.params.id)} />
                         </Route>
-
+                        <Route path='/moderator/new' let:meta>
+                            <Moderator promise={ api.moderator.new(meta.params.id) } />
+                        </Route>
 
 
                     </Flyer>

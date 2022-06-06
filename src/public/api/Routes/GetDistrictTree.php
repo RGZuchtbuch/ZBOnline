@@ -6,7 +6,7 @@ use App\Queries;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
-class GetDistricts extends Route
+class GetDistrictTree extends Route
 {
     public function preAuthorized(?array &$requester, array &$args): bool
     {

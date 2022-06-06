@@ -55,6 +55,15 @@
 
     }
 
+    function deleteModerator( districtId, moderatorId ) {
+        return (event) => {
+            console.log( 'Delete ', districtId, moderatorId );
+            api.moderator.delete( districtId, moderatorId );
+            console.log( 'Reload' );
+            history.go(0); // TODO
+        }
+    }
+
     let currentUser = null;
     user.subscribe( value => {
         currentUser = value;
@@ -71,11 +80,11 @@
             <div class='flex flex-row justify-between'>
                 <div>
                     {#if district.parent}
-                        <a href={'/#/district/'+district.parent}>
-                            <IconButton class='material-icons self-end' on:click={toParent} title='Zurück'>trending_up</IconButton>
-                        </a>
+                        Unter
+                        <a href={'/#/district/'+district.parent.id}> {district.parent.name } </a>
                     {/if}
                 </div>
+
                 <div>
                     {#if disabled}
                         <IconButton class='material-icons self-end' on:click={edit} title='Aendern'>edit</IconButton>
@@ -98,16 +107,34 @@
             </div>
         </form>
 
+        <Box legend='Moderatoren'>
+            <div class='flex flex-col'>
+                {#if currentUser && currentUser.isAdmin && ! disabled }
+                    <div><a href={'/#/district/'+district.id+'/moderator/new'}>+</a></div>
+                {/if}
+
+                <div class='grow flex flex-col'>
+                    {#each district.moderators as moderator}
+                        <div class='nowrap'>→ {moderator.name}</div>
+                        {#if currentUser && currentUser.isAdmin && ! disabled }
+                            <div on:click={deleteModerator( district.id, moderator.id )}> - </div>
+                        {/if}
+                    {/each}
+                </div>
+            </div>
+        </Box>
+
         <Box legend='Verbände'>
-            <div class='flex flex-row'>
+            <div class='flex flex-col'>
+                {#if currentUser && currentUser.isAdmin && ! disabled }
+                    <div><a href={'/#/district/'+district.id+'/new'}>+</a></div>
+                {/if}
+
                 <div class='grow flex flex-col'>
                     {#each district.children as district}
                         <div class='nowrap'>→ <a href={'/district/'+district.id}>{district.name} ({district.short})</a></div>
                     {/each}
                 </div>
-                {#if currentUser && currentUser.isAdmin && ! disabled }
-                    <div><a href={'/#/district/'+district.id+'/new'}>+</a></div>
-                {/if}
             </div>
         </Box>
 
