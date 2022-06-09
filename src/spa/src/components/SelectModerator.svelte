@@ -41,15 +41,16 @@
         if( moderator.id === 0 ) {
             let data = {id:selected.id, district:moderator.district.id}
             console.log('save new', data );
+
             api.moderator.post( moderator.district.id, selected.id )
                 .then(response => {
-                    console.log('moderator saved');
-                    history.back();
+                    console.log('moderator saved', response.id);
                 })
                 .catch(response => {
                     disabled = false;
                     console.log('moderator not saved', response.status);
                 });
+            router.goto( '/district/'+moderator.district.id );
         }
     }
 

@@ -17,10 +17,10 @@
 
 <style>
     fieldset {
-        @apply border rounded border-gray-600 p-2 bg-gray-50
+        @apply border rounded border-gray-600 px-2 bg-gray-50
     }
 
     fieldset legend {
-        @apply ml-4 px-2 pb-2 text-xl  ;
+        @apply ml-4 text-xl;
     }
 </style>

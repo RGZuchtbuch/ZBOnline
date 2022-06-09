@@ -20,22 +20,22 @@
         {#if data.district }
             <ul class='w-full'>
                 <li>
-                    → <a href='/#/district/{data.district.id}'>{data.district.name}</a> {data.district.children ? '('+data.district.children.length+')' : ''}
+                    1 → <a href='/#/district/{data.district.id}'>{data.district.name}</a> {data.district.children ? '('+data.district.children.length+')' : ''}
                 </li>
                 {#if data.district.children}
                     {#each data.district.children as district}
                         <li class='pl-4'>
-                            → <a href='/#/district/{district.id}'>{district.name}</a> {district.children ? '('+district.children.length+')' : ''}
+                            2 → <a href='/#/district/{district.id}'>{district.name}</a> {district.children ? '('+district.children.length+')' : ''}
                         </li>
                         {#if district.children}
                             {#each district.children as district}
                                 <li class='pl-8'>
-                                    → <a href='/#/district/{district.id}'>{district.name}</a> {district.children ? '('+district.children.length+')' : ''}
+                                    3 → <a href='/#/district/{district.id}'>{district.name}</a> {district.children ? '('+district.children.length+')' : ''}
                                 </li>
                                 {#if district.children}
                                     {#each district.children as district}
                                         <li class='pl-12'>
-                                            → <a href='/#/district/{district.id}'>{district.name}</a> {district.children ? '('+district.children.length+')' : ''}
+                                            4 → <a href='/#/district/{district.id}'>{district.name}</a> {district.children ? '('+district.children.length+')' : ''}
                                         </li>
                                     {/each}
                                 {/if}

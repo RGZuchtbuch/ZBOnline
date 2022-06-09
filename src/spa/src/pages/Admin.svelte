@@ -18,10 +18,6 @@
 <Box legend='Admin'>
     <div class='w-128'>Admin stuff</div>
     <Route path='/'>
-        <Districts promise={api.getDistricts(1)} legend='Verbände und Vereine'/>
-    </Route>
-    <Route path='/district/:districtId' let:meta>
-        ??
-        <District promise={api.getDistrict(meta.params.districtId)} />
+        <Districts promise={api.district.tree(1)} legend='Verbände und Vereine'/>
     </Route>
 </Box>

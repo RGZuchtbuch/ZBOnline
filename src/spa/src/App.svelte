@@ -26,7 +26,7 @@
     import District from './components/District.svelte';
     import Districts from './components/Districts.svelte';
     import Login from './components/Login.svelte';
-    import Moderator from './components/Moderator.svelte';
+    import SelectModerator from './components/SelectModerator.svelte';
     import Pair from './components/Pair.svelte';
     import Pairs from './components/Pairs.svelte';
     import Map from './components/Map.svelte';
@@ -176,24 +176,16 @@
 
                 </Route>
 
-                <Route path='/district/new' let:meta>
-                    <Flyer>
-                        new distric here
-
-                    </Flyer>
-
-                </Route>
-
-                <Route path='/district/:id/*' let:meta>
+                <Route path='/district/:districtId/*' let:meta>
                     <Flyer>
                         <Route path='/' let:meta>
-                            <District promise={api.getDistrict(meta.params.id)} />
+                            <District promise={api.district.get(meta.params.districtId)} />
                         </Route>
                         <Route path='/new' let:meta>
-                            <District promise={api.newDistrict(meta.params.id)} />
+                            <District promise={api.district.new(meta.params.districtId)} />
                         </Route>
                         <Route path='/moderator/new' let:meta>
-                            <Moderator promise={ api.moderator.new(meta.params.id) } />
+                            <SelectModerator promise={ api.moderator.new(meta.params.districtId) } />
                         </Route>
 
 

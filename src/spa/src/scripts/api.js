@@ -56,29 +56,20 @@ export default {
             console.log( 'api getDistrict', districtId );
             return get( 'api/district/'+districtId );
         },
-        tree: {
-            get: (parentId) => {
-                return get('api/district/' + districtId+'/tree');
-            },
+        new: ( parentId ) => {
+            console.log( 'api newDistrict' );
+            return new Promise( ( resolve ) => {
+                // TODO, remember to delete cache for parent district
+                clear( 'api/district/'+parentId );
+                resolve( { district: { id:0, parent:parentId, name:null, fullname:null, short:null, coordinates:null, children:[], moderators:[] } } );
+            })
+        },
+        tree: (parentId) => {
+            return get('api/district/'+parentId+'/tree');
         }
     },
-    getDistricts: ( districtId ) => {
-        console.log( 'api getDistrict');
-        return get( 'api/district/'+districtId+'/tree' );
-    },
-    getDistrict: ( districtId ) => {
-        console.log( 'api getDistrict', districtId );
-        return get( 'api/district/'+districtId );
-    },
 
-    newDistrict: ( parentId ) => {
-        console.log( 'api newDistrict' );
-        return new Promise( ( resolve ) => {
-            // TODO, remember to delete cache for parent district
-            clear( 'api/district/'+parentId );
-            resolve( { district: { id:0, parent:parentId, name:null, fullname:null, short:null, coordinates:null, children:[] } } );
-        })
-    },
+
     postDistrict: ( district ) => { // insert
         console.log( 'api postDistrict' );
         return post( 'api/district', district );
@@ -89,15 +80,14 @@ export default {
     },
     deleteDistrict: ( districtId ) => {
         console.log( 'api deleteDistrict' );
-        return del( 'api/district/'+districtId );
+        //return del( 'api/district/'+districtId ); // TODO delete or better disable !
     },
 
     moderator: {
         new: (districtId) => {
             console.log('api new moderator');
             let moderatorPromise = Promise.resolve({moderator: {id: 0, district: districtId}});
-            let districtPromise = get('api/district/' + districtId);
-            ;
+            let districtPromise = get('api/district/' + districtId);            ;
             let candidatesPromise = get('/api/users');
 
             return Promise.all([moderatorPromise, districtPromise, candidatesPromise])
@@ -336,12 +326,18 @@ setInterval(  () => {
         }
     }
     for( const url of toDelete ) { // delete collected from cache
-        console.log( 'Cache delete', url );
+        console.log( 'Auto clear cache for ', url );
         delete cache[ url ];
     }
 }, settings.cache.TIMEOUT )
 
 function clear( url ) {
+    let promise = cache[ url ];
+    if( promise ) {
+        console.log( 'Clearing cache for ', url );
+    } else {
+        console.log( 'NOT Clearing cache for', url );
+    }
     delete cache[ url ];
 }
 
@@ -367,7 +363,7 @@ async function get( url ) {
             method: 'GET',
             headers: getHeaders()
         }
-        console.log('Get', url);
+        //console.log('Get', url);
         let promise = fetch(url, options)
             .then( response => {
                 if( response.ok ) {
@@ -389,7 +385,7 @@ async function post( url, data ) {
     console.log( 'POST', url );
     return fetch( url, options )
         .then( response => {
-            console.log( 'POST', response );
+            //console.log( 'POST', response );
             if( response.ok ) {
                 console.log( '  POST', 'ok' );
                 return response.json();

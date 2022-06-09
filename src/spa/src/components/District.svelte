@@ -55,12 +55,32 @@
 
     }
 
-    function deleteModerator( districtId, moderatorId ) {
+    function deleteDistrict( district ) {
+        console.log('prep del');
         return (event) => {
-            console.log( 'Delete ', districtId, moderatorId );
-            api.moderator.delete( districtId, moderatorId );
-            console.log( 'Reload' );
-            history.go(0); // TODO
+            console.log( 'Delete ', district.id );
+            api.district.delete( district.id )
+                .then( response => {
+                    router.goto( '/district/'+district.parent);
+                })
+                .catch( error => {
+                    console.log( 'Error deleting district');
+                });
+        }
+    }
+
+    function deleteModerator( moderator ) {
+        console.log('prep del');
+        let district = moderator.district;
+        return (event) => {
+            console.log( 'Delete ', district.id, moderator.id );
+            api.moderator.delete( district.id, moderator.id )
+                .then( response => {
+                    router.goto( '/district/'+district.id);
+                })
+                .catch( error => {
+                    console.log( 'Error deleting moderator');
+                });
         }
     }
 
@@ -80,7 +100,7 @@
             <div class='flex flex-row justify-between'>
                 <div>
                     {#if district.parent}
-                        Unter
+                        Im
                         <a href={'/#/district/'+district.parent.id}> {district.parent.name } </a>
                     {/if}
                 </div>
@@ -109,32 +129,43 @@
 
         <Box legend='Moderatoren'>
             <div class='flex flex-col'>
-                {#if currentUser && currentUser.isAdmin && ! disabled }
-                    <div><a href={'/#/district/'+district.id+'/moderator/new'}>+</a></div>
-                {/if}
+                <div class='flex flex-row justify-between bar text-xs' >
+                    <div>&nbsp;</div>
+                    {#if currentUser && currentUser.isAdmin && ! disabled }
+                        <a class='border rounded bg-green-800 text-xs text-white' href={'/#/district/'+district.id+'/moderator/new'}>&#65291;</a>
+                    {/if}
+                </div>
 
-                <div class='grow flex flex-col'>
-                    {#each district.moderators as moderator}
+
+                {#each district.moderators as moderator}
+                    <div class='flex flex-row justify-between'>
                         <div class='nowrap'>→ {moderator.name}</div>
                         {#if currentUser && currentUser.isAdmin && ! disabled }
-                            <div on:click={deleteModerator( district.id, moderator.id )}> - </div>
+                            <div on:click={deleteModerator( moderator )} class='border rounded bg-red-800 text-xs text-white'> &#65293; </div>
                         {/if}
-                    {/each}
-                </div>
+                    </div>
+                {/each}
             </div>
         </Box>
 
-        <Box legend='Verbände'>
+        <Box legend='Verbände/Vereine'>
             <div class='flex flex-col'>
-                {#if currentUser && currentUser.isAdmin && ! disabled }
-                    <div><a href={'/#/district/'+district.id+'/new'}>+</a></div>
-                {/if}
 
-                <div class='grow flex flex-col'>
-                    {#each district.children as district}
-                        <div class='nowrap'>→ <a href={'/district/'+district.id}>{district.name} ({district.short})</a></div>
-                    {/each}
+                <div class='flex flex-row justify-between bar text-xs' >
+                    <div>&nbsp;</div>
+                    {#if currentUser && currentUser.isAdmin && ! disabled }
+                        <a class='border rounded bg-green-800 text-white' href={'/#/district/'+district.id+'/new'}>&#65291;</a>
+                    {/if}
                 </div>
+
+                {#each district.children as district}
+                    <div class='grow flex flex-rol justify-between'>
+                        <div class='nowrap'>→ <a href={'/district/'+district.id}>{district.name} ({district.short})</a></div>
+                        {#if currentUser && currentUser.isAdmin && ! disabled }
+                            <div on:click={deleteDistrict( district )}> &#65293; </div>
+                        {/if}
+                    </div>
+                {/each}
             </div>
         </Box>
 
@@ -144,4 +175,7 @@
 {/if}
 
 <style>
+    .bar {
+        margin-top: -1em;
+    }
 </style>
