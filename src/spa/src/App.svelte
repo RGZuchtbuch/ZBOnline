@@ -51,26 +51,37 @@
 </script>
 
 
-<div id="app" class='h-full justify-self-center  border w-full'>
+<div id="app" class='flex flex-col justify-self-center border w-full h-full bg-gray-50 relative'>
 
-    <nav class='flex flex-row gap-x-4'>
-        RG Zuchtbuch :
+    <div class='flex flex-row gap-x-4 text-sm justify-between'>
         <ul class='flex flex-row gap-x-4'>
+            RG Zuchtbuch :
             <li><a href="/#/" use:active>Das Zuchtbuch</a></li> -
             <li><a href="/#/standard">Standard</a></li> -
             <li><a href="/#/results">Leistungen</a></li> -
-            <li><a href="/#/breeder">Mein Zuchtbuch</a></li> -
+            {#if currentUser}
+                <li><a href="/#/breeder">Mein Zuchtbuch</a></li> -
+            {/if}
             {#if currentUser && currentUser.moderator.length > 0}
                 <li><a href="/#/moderator">Obmann</a></li> -
             {/if}
-            <li><a href="/#/admin">Admin</a></li> ---
-            <li><a href="/#/login">Anmelden</a></li>
-            {#if currentUser}{currentUser.name}{/if}
+            {#if currentUser && currentUser.isAdmin > 0}
+                <li><a href="/#/admin">Admin</a></li> ---
+            {/if}
         </ul>
-    </nav>
+        <ul>
+            <li>
+                {#if currentUser}
+                    <a href='/#/'>Abmelden </a>{currentUser.name}
+                {:else}
+                    <a href='/#/login'>Anmelden</a>
+                {/if}
+            </li>
+        </ul>
+    </div>
 
 
-    <div class='flex flex-row border'>
+    <div class='flex flex-row border grow overflow-y-auto'>
         <div class='flex flex-col w-48'>
             <Route path='/*'>
                 <Flyer>
@@ -93,7 +104,7 @@
 
         </div>
 
-        <div class='grow border'>
+        <div class='grow border h-full border-yellow-600 relative overflow-y-auto'>
 
             <Container>
                 <Route path='/'>
@@ -151,18 +162,15 @@
                 </Route>
 
                 <Route path='/breeder/*' let:meta>
-                    <Flyer>
-                        {#if currentUser}
+                    {#if currentUser}
+                        <Flyer>
                             <BreederRole promise={api.getUser( currentUser.id )} />
-                        {:else}
-                            Not logged in !
-                        {/if}
-                    </Flyer>
-
+                        </Flyer>
+                    {/if}
                 </Route>
 
                 <Route path='/moderator/*' let:meta>
-                    {#if currentUser.moderator.length > 0}
+                    {#if currentUser && currentUser.moderator.length > 0}
                         <Flyer>
                             <ModeratorRole/>
                         </Flyer>
@@ -170,10 +178,11 @@
                 </Route>
 
                 <Route path='/admin/*' let:meta>
-                    <Flyer>
-                        <AdminRole/>
-                    </Flyer>
-
+                    {#if currentUser && currentUser.isAdmin}
+                        <Flyer>
+                            <AdminRole/>
+                        </Flyer>
+                    {/if}
                 </Route>
 
                 <Route path='/district/:districtId/*' let:meta>

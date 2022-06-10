@@ -63,7 +63,7 @@ class District
             )
             SELECT * FROM parent ORDER BY name
         ' );
-        return Query::selectArray( $stmt, $args );
+        return Query::selectTree( $stmt, $args );
     }
 
 }

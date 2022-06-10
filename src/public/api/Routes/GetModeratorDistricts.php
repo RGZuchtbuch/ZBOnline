@@ -9,14 +9,14 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 class GetModeratorDistricts extends Route {
 
     public function preAuthorized( ? array & $requester, array & $args ) : bool {
-        $user = Queries\Authorized::get( $requester, $args['id'] );
-        return isset( $user );
+        //$user = Queries\Authorized::get( $requester, $args['id'] );
+        return true;
     }
 
     public function process(Request $request, Response $response, array $args): Response
     {
         $id = $args['id' ];
-        $districts = Queries\ModeratorDistricts::get( $id );
+        $districts = Queries\Moderator::getDistricts( $id );
         $this->result['districts'] = $districts;
         return $response;
     }

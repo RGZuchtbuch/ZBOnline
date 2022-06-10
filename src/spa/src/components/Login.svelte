@@ -21,7 +21,7 @@
 
     function submit( event ) {
         event.preventDefault();
-        api.getToken( credentials.email, credentials.password )
+        api.user.token( credentials.email, credentials.password )
             .then( data => {
                 console.log( 'Success', data );
                 user.set(data.user);

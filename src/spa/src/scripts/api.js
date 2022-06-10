@@ -14,13 +14,12 @@ let token = null;
 
 
 export default {
-    getToken: ( email, password ) => {
-        console.log('api getToken', email);
-        return post('/api/token', {email: email, password: password});
-    },
     user: {
         get: (id) => {
             return get( '/api/user/'+id );
+        },
+        token: ( email, password ) => {
+            return post('/api/token', {email: email, password: password});
         },
     },
     getUser: ( id ) => {
@@ -64,25 +63,23 @@ export default {
                 resolve( { district: { id:0, parent:parentId, name:null, fullname:null, short:null, coordinates:null, children:[], moderators:[] } } );
             })
         },
+        post: ( district ) => { // insert
+            console.log( 'api postDistrict' );
+            return post( 'api/district', district );
+        },
+        put: ( district ) => { // updating
+            console.log( 'api postDistrict' );
+            return put( 'api/district/'+district.id, district );
+        },
+        delete: ( districtId ) => {
+            console.log( 'api deleteDistrict' );
+            //return del( 'api/district/'+districtId ); // TODO delete or better disable !
+        },
+
         tree: (parentId) => {
             return get('api/district/'+parentId+'/tree');
         }
     },
-
-
-    postDistrict: ( district ) => { // insert
-        console.log( 'api postDistrict' );
-        return post( 'api/district', district );
-    },
-    putDistrict: ( district ) => { // updating
-        console.log( 'api postDistrict' );
-        return put( 'api/district/'+district.id, district );
-    },
-    deleteDistrict: ( districtId ) => {
-        console.log( 'api deleteDistrict' );
-        //return del( 'api/district/'+districtId ); // TODO delete or better disable !
-    },
-
     moderator: {
         new: (districtId) => {
             console.log('api new moderator');
@@ -98,13 +95,6 @@ export default {
                     clear('api/district/' + districtId);
                     return {moderator: moderator};
                 })
-
-            /*            return new Promise((resolve) => {
-                            // TODO, remember to delete cache for parent district
-                            clear('api/district/' + districtId);
-                            resolve({moderator: {id: 0, moderator: 0}});
-                        })
-            */
         },
         post: ( districtId, moderatorId ) => {
             let data = { user:moderatorId, district:districtId };
@@ -117,6 +107,9 @@ export default {
             return del('api/moderator', data );
         },
 
+        districts: ( moderatorId ) => {
+            return get( 'api/moderator/'+moderatorId+'/districts');
+        }
     },
 
 

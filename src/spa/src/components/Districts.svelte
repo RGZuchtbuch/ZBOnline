@@ -5,25 +5,28 @@
 
     const route = meta();
 
-    console.log('Districts', route);
-
     export let promise;
     export let legend = '';
+
+    let districts = null;
+    promise.then( response => {
+        districts = response.districts;
+        console.log( 'Districts', districts );
+    })
 
 </script>
 
 <Box legend={legend}>
-    {#await promise}
-
+    {#if ! districts}
         <div class='w-full'>Loading Districts...</div>
-    {:then data}
-        {#if data.district }
+    {:else}
+        {#each districts as district}
             <ul class='w-full'>
                 <li>
-                    1 → <a href='/#/district/{data.district.id}'>{data.district.name}</a> {data.district.children ? '('+data.district.children.length+')' : ''}
+                    1 → <a href='/#/district/{district.id}'>{district.name}</a> {district.children ? '('+district.children.length+')' : ''}
                 </li>
-                {#if data.district.children}
-                    {#each data.district.children as district}
+                {#if district.children}
+                    {#each district.children as district}
                         <li class='pl-4'>
                             2 → <a href='/#/district/{district.id}'>{district.name}</a> {district.children ? '('+district.children.length+')' : ''}
                         </li>
@@ -44,11 +47,8 @@
                     {/each}
                 {/if}
             </ul>
-        {/if}
-
-    {:catch error}
-        error in districts
-    {/await}
+        {/each}
+    {/if}
 </Box>
 <style>
 

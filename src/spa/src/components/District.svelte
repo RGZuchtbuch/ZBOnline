@@ -37,9 +37,9 @@
         disabled = true;
         let promise = null
         if( district.id === 0 ) {
-            promise = api.postDistrict( district );
+            promise = api.district.post( district );
         } else {
-            promise = api.putDistrict( district );
+            promise = api.district.put( district );
         }
         promise.then( response => {
             //district.id = response.id;
@@ -70,8 +70,7 @@
     }
 
     function deleteModerator( moderator ) {
-        console.log('prep del');
-        let district = moderator.district;
+        console.log('prep del', moderator);
         return (event) => {
             console.log( 'Delete ', district.id, moderator.id );
             api.moderator.delete( district.id, moderator.id )
@@ -127,12 +126,14 @@
             </div>
         </form>
 
-        <Box legend='Moderatoren'>
+        <Box legend='Obmänner'>
             <div class='flex flex-col'>
-                <div class='flex flex-row justify-between bar text-xs' >
+                <div class='flex flex-row justify-between bar text-s' >
                     <div>&nbsp;</div>
                     {#if currentUser && currentUser.isAdmin && ! disabled }
-                        <a class='border rounded bg-green-800 text-xs text-white' href={'/#/district/'+district.id+'/moderator/new'}>&#65291;</a>
+                        <a href={'/#/district/'+district.id+'/moderator/new'}>
+                            <img class='w-4 h-4' src='assets/add.png' alt='Neu'>
+                        </a>
                     {/if}
                 </div>
 
@@ -141,7 +142,9 @@
                     <div class='flex flex-row justify-between'>
                         <div class='nowrap'>→ {moderator.name}</div>
                         {#if currentUser && currentUser.isAdmin && ! disabled }
-                            <div on:click={deleteModerator( moderator )} class='border rounded bg-red-800 text-xs text-white'> &#65293; </div>
+                            <div class='cursor-pointer' on:click={deleteModerator( moderator )}>
+                                <img class='w-4 h-4' src='assets/delete.png' alt='Entfernen'>
+                            </div>
                         {/if}
                     </div>
                 {/each}
@@ -151,10 +154,12 @@
         <Box legend='Verbände/Vereine'>
             <div class='flex flex-col'>
 
-                <div class='flex flex-row justify-between bar text-xs' >
+                <div class='flex flex-row justify-between bar text-m' >
                     <div>&nbsp;</div>
                     {#if currentUser && currentUser.isAdmin && ! disabled }
-                        <a class='border rounded bg-green-800 text-white' href={'/#/district/'+district.id+'/new'}>&#65291;</a>
+                        <a href={'/#/district/'+district.id+'/new'}>
+                            <img class='w-4 h-4' src='assets/add.png' alt='Neu'>
+                        </a>
                     {/if}
                 </div>
 
@@ -162,7 +167,9 @@
                     <div class='grow flex flex-rol justify-between'>
                         <div class='nowrap'>→ <a href={'/district/'+district.id}>{district.name} ({district.short})</a></div>
                         {#if currentUser && currentUser.isAdmin && ! disabled }
-                            <div on:click={deleteDistrict( district )}> &#65293; </div>
+                            <div class='cursor-pointer' on:click={deleteDistrict( district )}>
+                                <img class='w-4 h-4' src='assets/delete.png' alt='Entfernen'>
+                            </div>
                         {/if}
                     </div>
                 {/each}
@@ -176,6 +183,6 @@
 
 <style>
     .bar {
-        margin-top: -1em;
+        margin-top: -.5em;
     }
 </style>

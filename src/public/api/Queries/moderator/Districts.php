@@ -2,7 +2,7 @@
 
 namespace App\Queries;
 
-class ModeratorDistricts
+class Districts
 {
     public static function get( int $id ) : ? array {
         $args = [ 'moderatorId'=>$id ];

@@ -17,8 +17,8 @@ class GetDistrictTree extends Route
     {
         $rootId = $args['id'];
         $districts = Queries\District::getTree( $rootId );
-        $root = $this->toTree( $rootId, $districts );
-        $this->result['district'] = $root;
+//        $root = $this->toTree( $rootId, $districts );
+        $this->result['districts'] = $districts;
         return $response;
     }
 

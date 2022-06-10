@@ -2,7 +2,7 @@
 
 </script>
 
-<div>
+<div class='h-full border'>
     <slot></slot>
 </div>
 
@@ -16,6 +16,6 @@
     div > :global(*) {
         grid-row: 1;
         grid-column: 1;
-        margin: auto;
+        margin: 1em auto;
     }
 </style>

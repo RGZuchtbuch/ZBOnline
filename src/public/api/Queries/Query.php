@@ -44,6 +44,28 @@ class Query
         return [];
     }
 
+    public static function selectTree(PDOStatement & $stmt, array & $args = [] ) : array { // array of objects, could be empty
+        if( $stmt->execute( $args ) ) {
+            $values = $stmt->fetchAll();
+            $results = [];
+            foreach( $values as & $value ) {
+                $parentId = $value['parent'];
+                $match = false;
+                foreach ($values as & $parent) {
+                    if ( $parent['id'] === $parentId ) {
+                        $match = true;
+                        if( ! isset( $parent['children'] ) ) $parent['children'] = [];
+                        $parent['children'][] = & $value;
+                        break; // done looking
+                    }
+                }
+                if( ! $match ) $results[] = & $value;
+            }
+            return $results;
+        }
+        return [];
+    }
+
     public static function insert( PDOStatement & $stmt, array & $args ) : ? int { // returns new id
         return $stmt->execute( $args ) ? Query::getPdo()->lastInsertId() : null;
     }
@@ -55,6 +77,9 @@ class Query
     public static function delete( PDOStatement & $stmt, array & $args ) : bool {
         return $stmt->execute( $args );
     }
+
+//*** protected ****
+
 
 //*** private ****
     private static function getPdo() {

@@ -17,7 +17,5 @@
 
 <Box legend='Admin'>
     <div class='w-128'>Admin stuff</div>
-    <Route path='/'>
-        <Districts promise={api.district.tree(1)} legend='Verbände und Vereine'/>
-    </Route>
+    <Districts promise={api.district.tree(1)} legend='Verbände und Vereine'/>
 </Box>

@@ -16,7 +16,7 @@ class Router {
         $app->get( '/district/{id}/tree', new GetDistrictTree() );
 //      $app->get( '/district/{id}/users', new GetDistrictUsers() );
 
-//        $app->get( '/moderator/{id}/districts', new GetModeratorDistricts() );
+        $app->get( '/moderator/{id}/districts', new GetModeratorDistricts() );
         $app->get( '/page/{id}', new GetPage() );
 
         $app->get( '/section/{id}', new GetSection() );
