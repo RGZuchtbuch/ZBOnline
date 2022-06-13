@@ -9,19 +9,17 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 abstract class Route
 {
     protected ? array $requester = null;
-    protected array $result = [];
 
     public function __invoke( Request $request, Response $response, array $args ) : Response {
         $this->requester = $this->getRequester( $request );
 
         if( ! $this->preAuthorized( $this->requester, $args ) ) throw new \Slim\Exception\HttpUnauthorizedException( $request, "Not Authorized for call");
 
+        $data = $this->process($request, $args);
 
-        $response = $this->process($request, $response, $args);
+//        if( ! $this->postAuthorized( $this->requester, $args,  $this->result ) ) throw new \Slim\Exception\HttpUnauthorizedException( $request, "Not Authorized for call");
 
-        if( ! $this->postAuthorized( $this->requester, $args,  $this->result ) ) throw new \Slim\Exception\HttpUnauthorizedException( $request, "Not Authorized for call");
-
-        $response->getBody()->write( json_encode( $this->result ) );
+        $response->getBody()->write( json_encode( $data ) );
         return $response;
     }
 
@@ -36,7 +34,7 @@ abstract class Route
         return true;
     }
 
-    public function process( Request $request, Response $response, array $args ) : Response {
+    public function process( Request $request, array $args ) : mixed {
         throw new \Slim\Exception\HttpInternalServerErrorException( $request, "Oops, this route is not processing yet" );
     }
 

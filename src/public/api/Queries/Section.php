@@ -32,7 +32,7 @@ class Section
             )
             SELECT * FROM parent ORDER BY name
         ' );
-        return Query::selectArray( $stmt, $args );
+        return Query::selectTree( $stmt, $args );
     }
 
     public static function getBreeds( int $sectionId ) : array {

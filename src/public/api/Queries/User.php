@@ -4,10 +4,10 @@ namespace App\Queries;
 
 class User
 {
-    public static function get( int $id ) : ? array {
-        $args = [ 'userId'=>$id ];
+    public static function get( int $userId ) : ? array {
+        $args = [ 'userId'=>$userId ];
         $stmt = Query::prepare( '
-            SELECT user.id, name, email, user.district 
+            SELECT user.id, name, email, user.district, user.club
             FROM user
             WHERE user.id=:userId
         ' );
@@ -32,6 +32,28 @@ class User
         }
         return null;
 
+    }
+
+    public static function getResults( int $userId ) {
+        $args = [ 'userId'=>$userId ];
+        $stmt = Query::prepare( '
+            SELECT COUNT(*) AS count, breeder, year, result.breed, color, std_breed.name AS breedName, std_color.name AS colorName,
+                SUM( lay_dames ) AS lay_dames, 
+                SUM( lay_dames * lay_eggs ) / SUM( lay_dames ) AS lay_eggs, 
+                SUM( lay_dames * lay_weight ) / SUM( lay_dames ) AS lay_weight,
+                SUM( brood_eggs ) AS brood_eggs,
+                SUM( brood_fertile ) AS brood_fertile,
+                SUM( brood_hatched ) AS brood_hatched,
+                SUM( show_animals ) AS show_animals,
+                SUM( show_animals * show_score ) / SUM( show_animals ) AS show_score
+            FROM result
+            LEFT JOIN std_breed ON std_breed.id = result.breed
+            LEFT JOIN std_color ON std_color.id = result.color
+            WHERE breeder=:userId
+            GROUP BY year, breed, color
+            ORDER BY year, breed, color   
+        ' );
+        return Query::selectArray( $stmt, $args );
     }
 
 

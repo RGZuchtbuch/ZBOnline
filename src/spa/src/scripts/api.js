@@ -22,6 +22,14 @@ export default {
             return post('/api/token', {email: email, password: password});
         },
     },
+    breeder: {
+        get: (id) => {
+            return get( 'api/breeder/'+id );
+        },
+        getResults: (id) => {
+            return get( 'api/breeder/'+id+'/results' );
+        }
+    },
     getUser: ( id ) => {
         console.log( 'api getUser', id );
         return get( '/api/user/'+id );
@@ -78,6 +86,10 @@ export default {
 
         tree: (parentId) => {
             return get('api/district/'+parentId+'/tree');
+        },
+
+        breeders: (districtId) => {
+            return get( 'api/district/'+districtId+'/breeders');
         }
     },
     moderator: {

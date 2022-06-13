@@ -14,16 +14,16 @@ class PostToken extends Route
         return true;
     }
 
-    public function process( Request $request, Response $response, array $args ) : Response {
+    public function process( Request $request, array $args ) : mixed
+    {
         $data = $this->getData( $request );
         $user = Queries\User::login( $data['email'], $data['password'] );
 
         if( ! $user ) throw new HttpNotFoundException( $request, "Unknown user for credentials" );
 
-        $this->result['token'] = Token::encode( $user );
-        $this->result['user'] = $user;
+        $token = Token::encode( $user );
 
-        return $response;
+        return ['token'=>$token, 'user'=>$user ];
     }
 
     public function postAuthorized( ? array & $requester, array & $args, array & $result ) : bool {

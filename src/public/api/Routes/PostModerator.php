@@ -13,12 +13,10 @@ class PostModerator extends Route
         return true; //isset( $requester['isAdmin'] ) && $requester['isAdmin'];
     }
 
-    public function process(Request $request, Response $response, array $args): Response
+    public function process(Request $request, array $args) : mixed
     {
         $moderator = $this->getData( $request );
-        $id = Queries\Moderator::create( $moderator['user'], $moderator['district'] );
-        $this->result['id'] = $id;
-        return $response;
+        return Queries\Moderator::create( $moderator['user'], $moderator['district'] );
     }
 
 }

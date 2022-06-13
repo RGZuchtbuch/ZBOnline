@@ -49,15 +49,16 @@ RG Zuchtbuch kennt vier unterschiedliche Gebraucher
   * Kann Meldungen und Leistungen drucken
 
 * Obmann: 
-  * Kann seine Mitglieder verwalten
-  * Gebt Meldungen für Mitglieder eigeben
-  * Kann Leistungen auf LV, KV ebene eingeben (ohne Meldung). Geht über unterliegende Meldungen oder Leistungen
-  * Kann Abstammungsnachweise für die ZB Schau eingeben und ausrechnen lassen.
-  * Kann jahresberichte ausdrucken für einen Bezirk
-    * Meldungen ( per stamm )
-    * Abstammungsnachweise
-    * Leistungen ( per rasse, farbe )
-    * Züchter liste für Stallplaketten
+  * Wählt den zu bearbeiten Bezirk (wenn mehrere)
+    * Kann die Bezirks Mitglieder verwalten
+    * Gebt Meldungen für Mitglieder eigeben
+    * Kann Leistungen auf LV, KV ebene eingeben (ohne Meldung). Geht über unterliegende Meldungen oder Leistungen
+    * Kann Abstammungsnachweise für die ZB Schau eingeben und ausrechnen lassen.
+    * Kann jahresberichte ausdrucken für einen Bezirk
+      * Meldungen ( per stamm )
+      * Abstammungsnachweise
+      * Leistungen ( per rasse, farbe )
+      * Züchter liste für Stallplaketten
     
 * Admin:
   * verwaltet Bezirken ( LV, KV, OV )

@@ -13,18 +13,12 @@ class GetPage extends Route {
         return true;
     }
 
-    public function process(Request $request, Response $response, array $args): Response
+    public function process(Request $request, array $args) : mixed
     {
         $id = $args['id' ];
         $page = Queries\Page::get( $id );
-
-        if (!$page) throw new HttpNotFoundException($request, "Unknown page for credentials");
-
-        $this->result['page'] = $page;
-        return $response;
+        if( ! $page ) throw new HttpNotFoundException($request, "Unknown page for credentials");
+        return $page;
     }
 
-    public function postAuthorized( ? array & $requester, array & $args, array & $result ) : bool {
-        return true;
-    }
 }

@@ -23,7 +23,7 @@
         event.preventDefault();
         api.user.token( credentials.email, credentials.password )
             .then( data => {
-                console.log( 'Success', data );
+                console.log( 'Logged in', data );
                 user.set(data.user);
                 message = 'Wilkommen';
                 history.back();

@@ -32,6 +32,15 @@ class District
         return Query::update( $stmt, $args );
     }
 
+    public static function getBreeders( int $districtId ) : array {
+        $args = [ 'districtId'=>$districtId ];
+        $stmt = Query::prepare( '
+            SELECT user.id, user.name, user.district FROM user
+            WHERE user.district = :districtId
+            ORDER BY name
+        ' );
+        return Query::selectArray( $stmt, $args );
+    }
 
     public static function getChildren( int $parentId ) : array {
         $args = [ 'parentId'=>$parentId ];

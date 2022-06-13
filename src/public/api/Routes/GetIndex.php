@@ -9,7 +9,8 @@ class GetIndex extends Route
 
 
 
-    public function process( Request $request, Response $response, $args ) : Response {
+    public function process( Request $request, $args ) : mixed
+    {
         $this->write( $response,  "Api docs todo");
         return $response;
     }

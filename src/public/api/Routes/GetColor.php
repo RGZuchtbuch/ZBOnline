@@ -5,6 +5,7 @@ namespace App\Routes;
 use App\Queries;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Exception\HttpNotFoundException;
 
 class GetColor extends Route
 {
@@ -13,11 +14,11 @@ class GetColor extends Route
         return true;
     }
 
-    public function process(Request $request, Response $response, array $args): Response
+    public function process(Request $request, array $args) : mixed
     {
         $id = $args['id'];
         $color = Queries\Color::get( $id );
-        $this->result['color'] = $color;
-        return $response;
+        if( ! $color) throw new HttpNotFoundException($request, "User not found");
+        return $color;
     }
 }

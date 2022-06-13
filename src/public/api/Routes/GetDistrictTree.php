@@ -13,13 +13,10 @@ class GetDistrictTree extends Route
         return true;
     }
 
-    public function process(Request $request, Response $response, array $args): Response
+    public function process(Request $request, array $args) : mixed
     {
         $rootId = $args['id'];
-        $districts = Queries\District::getTree( $rootId );
-//        $root = $this->toTree( $rootId, $districts );
-        $this->result['districts'] = $districts;
-        return $response;
+        return Queries\District::getTree( $rootId );
     }
 
 }

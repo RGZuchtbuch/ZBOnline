@@ -10,7 +10,7 @@
 
     import AdminRole from './pages/Admin.svelte';
     import BreederRole from './pages/Breeder.svelte';
-    import ModeratorRole from './pages/Moderator.svelte';
+    import Moderator from './pages/Moderator.svelte';
     import Page from './pages/Page.svelte';
     import Standard from './pages/Standard.svelte';
 
@@ -63,7 +63,7 @@
                 <li><a href="/#/breeder">Mein Zuchtbuch</a></li> -
             {/if}
             {#if currentUser && currentUser.moderator.length > 0}
-                <li><a href="/#/moderator">Obmann</a></li> -
+                <li><a href="/#/obmann">Obmann</a></li> -
             {/if}
             {#if currentUser && currentUser.isAdmin > 0}
                 <li><a href="/#/admin">Admin</a></li> ---
@@ -82,34 +82,19 @@
 
 
     <div class='flex flex-row border grow overflow-y-auto'>
-        <div class='flex flex-col w-48'>
-            <Route path='/*'>
-                <Flyer>
-                    Home submenu
-                </Flyer>
-                <Container>
-                    <Route path='/standard/*'>
-                        <Flyer>
-                            Standard
-                        </Flyer>
-                    </Route>
-                    <Route path='/login/*'>
-                        <Flyer>
-                            Login
-                        </Flyer>
-                    </Route>
-                </Container>
-            </Route>
-
-
-        </div>
 
         <div class='grow border h-full border-yellow-600 relative overflow-y-auto'>
 
             <Container>
                 <Route path='/'>
                     <Flyer>
-                        <Page/>
+                        <Page pageId={1}/>
+                    </Flyer>
+                </Route>
+
+                <Route path='/seite/:pageId' let:meta>
+                    <Flyer>
+                        <Page pageId={meta.params.pageId}/>
                     </Flyer>
                 </Route>
 
@@ -119,63 +104,21 @@
                     </Flyer>
                 </Route>
 
-                <Route path='/results/*' let:meta>
-                    <Flyer>
-                        <ResultsFilter />
-                        <Route path='/trend/*' let:meta>
-                            <div class='container'>
-                                <Route path='/:type/district/:districtId/section/:sectionId' let:meta>
-                                    <Trend promise={api.getSectionTrend(meta.params.districtId, meta.params.sectionId)} type={meta.params.type} />
-                                </Route>
-                                <Route path='/:type/district/:districtId/breed/:breedIdId' let:meta>
-                                    <Trend promise={api.getBreedTrend(meta.params.districtId, meta.params.sectionId)} type={meta.params.type} />
-                                </Route>
-                                <Route path='/:type/district/:districtId/color/:colorId' let:meta>
-                                    <Trend promise={api.getColorTrend(meta.params.districtId, meta.params.sectionId)} type={meta.params.type} />
-                                </Route>
-                            </div>
-                        </Route>
-                        <Route path='/map/*' let:meta>
-                            <div class='container'>
-                                <Route path='/:type/year/:year/section/:sectionId' let:meta>
-                                    <Flyer>
-                                        <Map promise={api.getSectionMap(meta.year, meta.sectionId )} />
-                                    </Flyer>
-                                </Route>
-                                <Route path='/:type/year/:year/breed/:breedId' let:meta>
-                                    <Flyer>
-                                        <Map promise={api.getBreedMap(meta.year, meta.breedId )} />
-                                    </Flyer>
-                                </Route>
-                                <Route path='/:type/year/:year/color/:colorId' let:meta>
-                                    <Flyer>
-                                        <Map promise={api.getColorMap(meta.year, meta.colorId )} />
-                                    </Flyer>
-                                </Route>
-                            </div>
-                        </Route>
-                        <Route path='/table' let:meta>
-                            <div>Table over the years desc</div>
-                            <Results promise={api.getSectionResults(meta.params.sectionId)} />
-                        </Route>
-                    </Flyer>
-                </Route>
-
-                <Route path='/breeder/*' let:meta>
-                    {#if currentUser}
+                 {#if currentUser}
+                    <Route path='/breeder/*' let:meta>
                         <Flyer>
                             <BreederRole promise={api.getUser( currentUser.id )} />
                         </Flyer>
-                    {/if}
-                </Route>
+                    </Route>
+                {/if}
 
-                <Route path='/moderator/*' let:meta>
-                    {#if currentUser && currentUser.moderator.length > 0}
+                {#if currentUser && currentUser.moderator.length > 0}
+                    <Route path='/obmann/*' let:meta>
                         <Flyer>
-                            <ModeratorRole/>
+                            <Moderator />
                         </Flyer>
-                    {/if}
-                </Route>
+                    </Route>
+                {/if}
 
                 <Route path='/admin/*' let:meta>
                     {#if currentUser && currentUser.isAdmin}

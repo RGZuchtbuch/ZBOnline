@@ -13,12 +13,10 @@ class GetUserResults extends Route {
         return isset( $user );
     }
 
-    public function process(Request $request, Response $response, array $args): Response
+    public function process(Request $request, array $args) : mixed
     {
         $id = $args['id' ];
-        $userResults = Queries\UserResults::get( $id );
-        $this->result['results'] = $userResults;
-        return $response;
+        return Queries\UserResults::get( $id );
     }
 
 }

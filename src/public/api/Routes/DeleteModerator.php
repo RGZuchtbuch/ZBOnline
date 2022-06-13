@@ -13,12 +13,10 @@ class DeleteModerator extends Route
         return true; //isset( $requester['isAdmin'] ) && $requester['isAdmin'];
     }
 
-    public function process(Request $request, Response $response, array $args): Response
+    public function process(Request $request, array $args) : mixed
     {
         $moderator = $this->getData( $request );
-        $success = Queries\Moderator::delete( $moderator[ 'user' ], $moderator[ 'district' ] );
-        $this->result['success'] = $success;
-        return $response;
+        return Queries\Moderator::delete( $moderator[ 'user' ], $moderator[ 'district' ] );
     }
 
 }

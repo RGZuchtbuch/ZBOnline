@@ -14,12 +14,10 @@ class PutDistrict extends Route
         return true; //isset( $requester['isAdmin'] ) && $requester['isAdmin'];
     }
 
-    public function process(Request $request, Response $response, array $args): Response
+    public function process(Request $request, array $args) : mixed
     {
         $district = $this->getData( $request );
-        $id = Queries\District::update( $district['id'], $district['name'], $district['fullname'], $district['short'], $district['coordinates'] );
-        $this->result['id'] = $id;
-        return $response;
+        return Queries\District::update( $district['id'], $district['name'], $district['fullname'], $district['short'], $district['coordinates'] );
     }
 
 }

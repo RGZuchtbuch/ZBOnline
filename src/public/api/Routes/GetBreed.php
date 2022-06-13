@@ -14,14 +14,12 @@ class GetBreed extends Route
         return true;
     }
 
-    public function process(Request $request, Response $response, array $args): Response
+    public function process(Request $request, array $args) : mixed
     {
         $id = $args['id'];
         $breed = Queries\Breed::get( $id );
-        if( ! isset( $breed ) ) throw new HttpNotFoundException( $request, 'Breed not found' );
+        if( ! $breed ) throw new HttpNotFoundException( $request, 'Breed not found' );
         $breed['colors'] = Queries\Breed::getColors( $id );
-
-        $this->result['breed'] = $breed;
-        return $response;
+        return $breed;
     }
 }
