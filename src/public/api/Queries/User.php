@@ -56,6 +56,25 @@ class User
         return Query::selectArray( $stmt, $args );
     }
 
+    public static function getYears( int $userId ) {
+        $args = [ 'userId'=>$userId ];
+        $stmt = Query::prepare( '
+            SELECT COUNT(*) AS count, breeder, year,
+                SUM( lay_dames ) AS lay_dames, 
+                SUM( lay_dames * lay_eggs ) / SUM( lay_dames ) AS lay_eggs, 
+                SUM( lay_dames * lay_weight ) / SUM( lay_dames ) AS lay_weight,
+                SUM( brood_eggs ) AS brood_eggs,
+                SUM( brood_fertile ) AS brood_fertile,
+                SUM( brood_hatched ) AS brood_hatched,
+                SUM( show_animals ) AS show_animals,
+                SUM( show_animals * show_score ) / SUM( show_animals ) AS show_score
+            FROM result
+            WHERE breeder=:userId
+            GROUP BY year
+            ORDER BY year   
+        ' );
+        return Query::selectArray( $stmt, $args );
+    }
 
 
 

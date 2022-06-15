@@ -9,12 +9,43 @@ class District #AAFFFF
 class Section #AAFFAA
 class Breed #AAFFAA
 class Color #AAFFAA
-class Result #AAAAFF
-class Pair #FFAAFF
-class Parent #FFAAFF
+class Animal {
+    country
+    year
+    ring
+    score
+}
+
+class Result #AAAAFF {
+    year
+    lay_dames
+    lay_eggs
+    lay_weight
+    brood_eggs
+    brood_fertile
+    brood_hatched
+    show_animals
+    show_score
+    show
+}
+class Pair #FFAAFF {
+    name
+    paired:date
+}
+class Parent #FFAAFF {
+
+}
 class Lay #FFAAFF
-class Brood #FFAAFF
-class Show #FFAAFF
+class Brood #FFAAFF {
+    start:date
+    eggs
+    fertile
+    hatched
+}
+class Show #FFAAFF {
+    animals
+    scores
+}
 
 class Pages
 
@@ -31,13 +62,12 @@ Breed -r-> Section : of
 Color -r-> Breed : of
 
 
-
-Pair <-r- "0..1" Result : of
+Pair -r-> "1" Result : with
 Pair <-l- "*" Parent : in
 Pair <-d- "*"  Lay
 Pair <-d- "*" Brood
 Pair <-d- "*" Show
-Pair <-l- "*" Animal : offspring
+Pair <-l- "*" Animal : child of
 
 Result -> Breeder : of
 Result -> District : of

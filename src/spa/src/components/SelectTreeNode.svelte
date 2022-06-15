@@ -14,17 +14,22 @@
     }
 </script>
 
-{#each children as node}
-    <div on:click={onClick(node)} class:selectable>→ {node.name}</div>
-    {#if node.children}
-        <div class='ml-2'>
+<ul>
+    {#each children as node}
+        <li on:click={onClick(node)} class:selectable nowrap>→ {node.name}</li>
+        {#if node.children}
             <svelte:self children={node.children} {onSelect}/>
-        </div>
-    {/if}
-{/each}
+        {/if}
+    {/each}
+</ul>
 
 <style>
     .selectable {
-        @apply cursor-pointer;
+        @apply cursor-pointer whitespace-nowrap;
     }
+
+    ul {
+        @apply ml-2;
+    }
+    li {}
 </style>

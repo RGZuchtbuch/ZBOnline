@@ -26,21 +26,15 @@ export default {
         get: (id) => {
             return get( 'api/breeder/'+id );
         },
+        getPairs: (id) => {
+            return null; // get( 'api/breeder/'+id+'/pairs' );
+        },
         getResults: (id) => {
             return get( 'api/breeder/'+id+'/results' );
-        }
-    },
-    getUser: ( id ) => {
-        console.log( 'api getUser', id );
-        return get( '/api/user/'+id );
-    },
-    getUserResults: ( id ) => {
-        console.log( 'api getUserResults', id );
-        return get( '/api/breeder/'+id+'/results' );
-    },
-    getModeratorDistricts: ( id ) => {
-        console.log( 'api getModeratorDistricts', id );
-        return get( '/api/moderator/'+id+'/districts' );
+        },
+        getYears: (id) => {
+            return get( 'api/breeder/'+id+'/years' );
+        },
     },
     getSections: ( rootId ) => {
         console.log( 'api getSections' );
@@ -68,7 +62,7 @@ export default {
             return new Promise( ( resolve ) => {
                 // TODO, remember to delete cache for parent district
                 clear( 'api/district/'+parentId );
-                resolve( { district: { id:0, parent:parentId, name:null, fullname:null, short:null, coordinates:null, children:[], moderators:[] } } );
+                resolve( { id:0, parent:parentId, name:null, fullname:null, short:null, coordinates:null, children:[], moderators:[] } );
             })
         },
         post: ( district ) => { // insert
@@ -101,12 +95,12 @@ export default {
 
             return Promise.all([moderatorPromise, districtPromise, candidatesPromise])
                 .then(responses => {
-                    let moderator = responses[0].moderator;
+                    let moderator = responses[0];
                     moderator.district = responses[1].district;
                     moderator.users = responses[2].users;
                     clear('api/district/' + districtId);
-                    return {moderator: moderator};
-                })
+                    return moderator;
+                });
         },
         post: ( districtId, moderatorId ) => {
             let data = { user:moderatorId, district:districtId };
@@ -124,196 +118,38 @@ export default {
         }
     },
 
-
-
-
-
-
-
-    getBreedBreeders: ( breedId ) => {
-        console.log( 'api getBreedBreeders', breedId );
-        return new Promise( ( resolve ) => {
-            setTimeout( () => {
-                console.log( 'Timedout' );
-                resolve( [ { id:1, name:'Eelco'}, { id:2, name:'Maike'} ] );
-            }, delay );
-        })
-    },
-    getBreedResults: ( breedId ) => {
-        console.log( 'api getBreedResultss', breedId );
-        return new Promise( ( resolve ) => {
-            setTimeout( () => {
-                console.log( 'Timedout' );
-                resolve([ { id:1, pairs:5, breeders:3, year:2020, henns:18, layed:160, eggs:100, fertilized:0.5, hatched:0.4, displayed:24, showed:95 } ] );
-            }, delay );
-        })
-    },
-
-    getBreedDistrictsResults: ( breedId, year ) => {
-        console.log( 'api getBreedDistrictsResults', breedId, year );
-        return new Promise( ( resolve ) => {
-            setTimeout( () => {
-                console.log( 'Timedout' );
-                resolve([ { id:1, pairs:5, breeders:3, year:2020, henns:18, layed:160, eggs:100, fertilized:0.5, hatched:0.4, displayed:24, showed:95 }, { id:2, pairs:5, breeders:3, year:2021, henns:18, layed:160, eggs:100, fertilized:0.5, hatched:0.4, displayed:24, showed:95 } ] );
-            }, delay );
-        })
+    pair: {
+        'new': ( breederId ) => {
+            console.log( 'api new Pair for ', breederId );
+            let breederPromise = get( 'api/breeder/'+breederId );
+            let pairPromise = Promise.resolve( {
+                breeder: { id:breederId, name:null },
+                district:null ,
+                breed: null, color:null,
+                year:2022, name: null, paired:null, group:1,
+                parents: [
+                    { sex:'1.0', country:'D', ring:null, score:null, parent_pair:null },
+                    { sex:'0.1', country:'D', ring:null, score:null, parent_pair:null },
+                    { sex:'0.1', country:'D', ring:null, score:null, parent_pair:null },
+                    { sex:'0.1', country:'D', ring:null, score:null, parent_pair:null },
+                ],
+                lay: { start:null, until:null, eggs:null },
+                broods: [ {start:null, eggs:null, fertile:null, hatched:null }, {start:null, eggs:null, fertile:null, hatched:null }, {start:null, eggs:null, fertile:null, hatched:null } ],
+                scores: { p89:null, p90:null, p91:null, p92:null, p93:null, p94:null, p95:null, p96:null, p97:null},
+            });
+            return Promise.all( [ pairPromise, breederPromise ] )
+                .then( responses => {
+                    let pair = responses[0];
+                    pair.breeder = responses[1];
+                    // clear caches
+                    return pair;
+                });
+        },
     },
 
-    getBreederBreeds: ( breederId ) => {
-        console.log( 'api getBreederBreeds', breederId );
-        return new Promise( ( resolve ) => {
-            setTimeout( () => {
-                console.log( 'Timedout' );
-                resolve()
-            }, delay );
-        })
-    },
 
-    getBreederPairs:( breederId ) => {
-        console.log( 'api getBreederPairs', breederId );
-        return new Promise( ( resolve ) => {
-            setTimeout( () => {
-                console.log( 'Timedout' );
-                resolve( [ {id:1, name:'a'},{id:2, name:'b'},{id:3, name:'c'} ]);
-            }, delay );
-        })
-    },
 
-    getBreederResults:( breederId ) => {
-        console.log( 'api getBreederResults', breederId );
-        return new Promise( ( resolve ) => {
-            setTimeout( () => {
-                console.log( 'Timedout' );
-                resolve([ { id:1, pairs:5, breeders:3, year:2020, henns:18, layed:160, eggs:100, fertilized:0.5, hatched:0.4, displayed:24, showed:95 } ] );
-            }, delay );
-        })
-    },
 
-    getDistrictBreeders:( districtId ) => {
-        console.log( 'api getDistrictBreeders', districtId );
-        return new Promise( ( resolve ) => {
-            setTimeout( () => {
-                console.log( 'Timedout' );
-                resolve()
-            }, delay );
-        })
-    },
-
-    getDistrictResults: ( districtId, year ) => {
-        console.log( 'api getDistrictYearResults', districtId, year );
-        return new Promise( ( resolve ) => {
-            setTimeout( () => {
-                console.log( 'Timedout' );
-                resolve()
-            }, delay );
-        })
-    },
-
-    getPair: ( pairId ) => {
-        console.log( 'api getPair', pairId );
-        return new Promise( ( resolve ) => {
-            setTimeout( () => {
-                console.log( 'Timedout' );
-                resolve( { id:1, code:'C3', year:2020, breeder:{ id:1, name:'Eelco', number:1054} } );
-            }, 500 );
-        })
-    },
-
-    getSectionBreeds: ( sectionId ) => {
-        console.log( 'api getSectionBreeds', sectionId );
-        return new Promise( ( resolve ) => {
-            setTimeout( () => {
-                console.log( 'Timedout' );
-                resolve( [ {id:1, name:'Bielie'}, {id:2, name:'Wellie'} ] );
-            }, delay );
-        })
-    },
-
-    getSectionResults: ( sectionId, year ) => {
-        console.log( 'api getSectionResults', sectionId, year );
-        return new Promise( ( resolve ) => {
-            setTimeout( () => {
-                console.log( 'Timedout' );
-                resolve( [ { id:1, pairs:5, breeders:3, year:2020, henns:18, layed:160, eggs:100, fertilized:0.5, hatched:0.4, displayed:24, showed:95 }, { id:2, pairs:5, breeders:3, year:2021, henns:18, layed:160, eggs:100, fertilized:0.5, hatched:0.4, displayed:24, showed:95 } ] );
-            }, delay );
-        })
-    },
-
-    getSectionDistrictsResults: ( sectionId, year ) => {
-        console.log( 'api getSectionResults', sectionId, year );
-        return new Promise( ( resolve ) => {
-            setTimeout( () => {
-                console.log( 'Timedout' );
-                resolve( [ { id:1, pairs:5, breeders:3, year:2020, henns:18, layed:160, eggs:100, fertilized:0.5, hatched:0.4, displayed:24, showed:95 }, { id:2, pairs:5, breeders:3, year:2021, henns:18, layed:160, eggs:100, fertilized:0.5, hatched:0.4, displayed:24, showed:95 } ] );
-            }, delay );
-        })
-    },
-
-    getSectionTrend: ( districtId, sectionId ) => {
-        console.log( 'api getDistrictsSectionResultsResults', districtId, sectionId );
-        return new Promise( ( resolve ) => {
-            setTimeout( () => {
-                console.log( 'Timedout' );
-                resolve( [ { id:1, year:2020, laying:160, fertilization: 0.9, hatching:0.8, showing:94}, { id:1, year:2021, laying:160, fertilization: 0.9, hatching:0.8, showing:94} ] );
-            }, delay );
-        })
-
-    },
-
-    getBreedTrend: ( districtId, breedId ) => {
-        console.log( 'api getBreedTrend', districtId, breedId );
-        return new Promise( ( resolve ) => {
-            setTimeout( () => {
-                console.log( 'Timedout' );
-                resolve( [ { id:1, year:2020, laying:160, fertilization: 0.9, hatching:0.8, showing:94}, { id:1, year:2021, laying:160, fertilization: 0.9, hatching:0.8, showing:94} ] );
-            }, delay );
-        })
-
-    },
-
-    getColorTrend: ( districtId, colorId ) => {
-        console.log( 'api getColorTrend', districtId, colorId );
-        return new Promise( ( resolve ) => {
-            setTimeout( () => {
-                console.log( 'Timedout' );
-                resolve( [ { id:1, year:2020, laying:160, fertilization: 0.9, hatching:0.8, showing:94}, { id:1, year:2021, laying:160, fertilization: 0.9, hatching:0.8, showing:94} ] );
-            }, delay );
-        })
-
-    },
-
-    getSectionMap: (year, sectionId ) => {
-        console.log( 'api getSectionMap', year, sectionId );
-        return new Promise( ( resolve ) => {
-            setTimeout( () => {
-                console.log( 'Timedout' );
-                resolve( [ { id:1, year:2020, laying:160, fertilization: 0.9, hatching:0.8, showing:94}, { id:1, year:2020, laying:160, fertilization: 0.9, hatching:0.8, showing:94} ] );
-            }, delay );
-        })
-
-    },
-
-    getBreedMap: (year, breedId ) => {
-        console.log( 'api getBreedMap', year, breedId );
-        return new Promise( ( resolve ) => {
-            setTimeout( () => {
-                console.log( 'Timedout' );
-                resolve( [ { id:1, year:2020, laying:160, fertilization: 0.9, hatching:0.8, showing:94}, { id:1, year:2020, laying:160, fertilization: 0.9, hatching:0.8, showing:94} ] );
-            }, delay );
-        })
-
-    },
-
-    getColorMap: (year, colorId ) => {
-        console.log( 'api getColorMap', year, colorId );
-        return new Promise( ( resolve ) => {
-            setTimeout( () => {
-                console.log( 'Timedout' );
-                resolve( [ { id:1, year:2020, laying:160, fertilization: 0.9, hatching:0.8, showing:94}, { id:1, year:2020, laying:160, fertilization: 0.9, hatching:0.8, showing:94} ] );
-            }, delay );
-        })
-
-    }
 }
 
 

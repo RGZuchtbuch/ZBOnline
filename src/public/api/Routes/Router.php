@@ -23,6 +23,7 @@ class Router {
 
         $app->get( '/breeder/{id}', new GetBreeder() );
         $app->get( '/breeder/{id}/results', new GetBreederResults() );
+        $app->get( '/breeder/{id}/years', new GetBreederYears() );
         $app->get( '/breeders', new GetBreeders() );
 
 

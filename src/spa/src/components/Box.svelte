@@ -21,6 +21,6 @@
     }
 
     fieldset legend {
-        @apply ml-4 text-xl;
+        @apply px-1 pb-2 text-sm font-bold;
     }
 </style>
