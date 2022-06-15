@@ -47,8 +47,10 @@ class District
         $stmt = Query::prepare( '
             SELECT * FROM district WHERE parent=:parentId ORDER BY name
         ' );
+
         return Query::selectArray( $stmt, $args );
     }
+
 
     public static function getModerators( int $districtId ) : array {
         $args = [ 'districtId'=>$districtId ];
