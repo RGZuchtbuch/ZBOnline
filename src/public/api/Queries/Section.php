@@ -16,21 +16,21 @@ class Section
     public static function getChildren( int $parentId ) : array {
         $args = [ 'parentId'=>$parentId ];
         $stmt = Query::prepare( '
-            SELECT * FROM section WHERE parent=:parentId ORDER BY name
+            SELECT * FROM std_section WHERE parent=:parentId ORDER BY name
         ' );
         return Query::selectArray( $stmt, $args );
     }
 
-    public static function getTree(int $parent ) : array {
-        $args = [ 'parent'=>$parent ];
+    public static function getTree(int $parentId ) : array {
+        $args = [ 'parentId'=>$parentId ];
         $stmt = Query::prepare( '
             WITH RECURSIVE parent AS (
-                SELECT * FROM std_section WHERE id=:parent
+                SELECT * FROM std_section WHERE id=:parentId ORDER BY name
                 UNION ALL
                 SELECT child.* FROM parent, std_section child
-					 WHERE child.parent = parent.id 
+			    WHERE child.parent = parent.id ORDER BY child.name
             )
-            SELECT * FROM parent ORDER BY name
+            SELECT * FROM parent
         ' );
         return Query::selectTree( $stmt, $args );
     }
@@ -41,6 +41,7 @@ class Section
             SELECT std_breed.* 
             FROM std_breed
             WHERE section=:sectionId OR subsection = :subsectionId
+            ORDER BY name
         ' );
         return Query::selectArray( $stmt, $args );
     }

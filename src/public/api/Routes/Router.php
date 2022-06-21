@@ -9,6 +9,7 @@ class Router {
     public static function registerRoutes( App $app ) {
         $app->get( '/', new GetIndex() );
         $app->get( '/breed/{id}', new GetBreed() );
+        $app->get( '/breed/{id}/colors', new GetBreedColors() );
         $app->get( '/color/{id}', new GetColor() );
 
         $app->get( '/district/{id}', new GetDistrict() );
@@ -20,6 +21,8 @@ class Router {
 
         $app->get( '/section/{id}', new GetSection() );
         $app->get( '/section/{id}/tree', new GetSectionTree() );
+        $app->get( '/section/{id}/children', new GetSectionChildren() );
+        $app->get( '/section/{id}/breeds', new GetSectionBreeds() );
 
         $app->get( '/breeder/{id}', new GetBreeder() );
         $app->get( '/breeder/{id}/results', new GetBreederResults() );

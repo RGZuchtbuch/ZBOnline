@@ -38,14 +38,13 @@
     import Flyer from "./components/Flyer.svelte";
 
 	console.log( 'start' )
-	console.log( 'User', $user );
 
-    router.mode.hash();
+    router.mode.hash(); // using '#'
 
     let currentUser = null;
     user.subscribe( value => {
         currentUser = value;
-        console.log( currentUser );
+        console.log( 'Current user', currentUser );
     });
 
 </script>
@@ -128,24 +127,6 @@
                     {/if}
                 </Route>
 
-                <Route path='/district/:districtId/*' let:meta>
-                    <Flyer>
-                        <Route path='/' let:meta>
-                            <District promise={api.district.get(meta.params.districtId)} />
-                        </Route>
-                        <Route path='/new' let:meta>
-                            <District promise={api.district.new(meta.params.districtId)} />
-                        </Route>
-                        <Route path='/moderator/new' let:meta>
-                            <SelectModerator promise={ api.moderator.new(meta.params.districtId) } />
-                        </Route>
-
-
-                    </Flyer>
-
-                </Route>
-
-
                 <Route path='/login'>
                     <Flyer>
                         <Login />
@@ -174,6 +155,22 @@
 
     li > a, a:visited {
         color:inherit;
+    }
+
+    h1 {
+        @apply text-2xl font-bold text-amber-800;
+    }
+    h2 {
+        @apply text-xl font-bold text-amber-800;
+    }
+    h3 {
+        @apply text-lg font-bold text-amber-800;
+    }
+    h4 {
+        @apply font-bold text-red-400;
+    }
+    hr {
+        @apply border border-gray-600 mt-2;
     }
 
 </style>

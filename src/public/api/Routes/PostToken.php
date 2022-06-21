@@ -21,9 +21,7 @@ class PostToken extends Route
 
         if( ! $user ) throw new HttpNotFoundException( $request, "Unknown user for credentials" );
 
-        $token = Token::encode( $user );
-
-        return ['token'=>$token, 'user'=>$user ];
+        return Token::encode( $user );
     }
 
     public function postAuthorized( ? array & $requester, array & $args, array & $result ) : bool {

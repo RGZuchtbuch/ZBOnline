@@ -1,3 +1,6 @@
+import jwt_decode from 'jwt-decode';
+import { user } from '../scripts/store.js'
+
 
 const delay = 250;
 
@@ -6,11 +9,11 @@ let cache = {
     promises: {} // url -> promise, time
 };
 
-let token = null;
+let token = window.sessionStorage.getItem( 'token' );
 
-
-
-
+if( token ) {
+    user.set(jwt_decode(token).user); // user or null
+}
 
 
 export default {
@@ -18,40 +21,34 @@ export default {
         get: (id) => {
             return get( '/api/user/'+id );
         },
-        token: ( email, password ) => {
-            return post('/api/token', {email: email, password: password});
+        authorize: (email, password ) => {
+            return post('/api/token', {email: email, password: password}).then( response => {
+                if( response ) {
+                    token = response;
+                    window.sessionStorage.setItem( 'token', token );
+                    return jwt_decode( token ).user;
+                }
+                return null;
+            });
         },
     },
+
+    breed: {
+        get: (id) => get( 'api/breed/'+id ),
+        getColors: ( breedId ) => get( `api/breed/${breedId}/colors`),
+    },
+
     breeder: {
-        get: (id) => {
-            return get( 'api/breeder/'+id );
-        },
-        getPairs: (id) => {
-            return null; // get( 'api/breeder/'+id+'/pairs' );
-        },
-        getResults: (id) => {
-            return get( 'api/breeder/'+id+'/results' );
-        },
-        getYears: (id) => {
-            return get( 'api/breeder/'+id+'/years' );
-        },
+        get: (id) => get( 'api/breeder/'+id ),
+        getPairs: (id) => null, // get( 'api/breeder/'+id+'/pairs' );
+        getResults: (id) => get( 'api/breeder/'+id+'/results' ),
+        getYears: (id) => get( 'api/breeder/'+id+'/years' ),
     },
-    getSections: ( rootId ) => {
-        console.log( 'api getSections' );
-        return get( '/api/sections/'+rootId );
+
+    color: {
+        get: ( id ) => get( 'api/color/'+id ),
     },
-    getSection: ( sectionId ) => {
-        console.log( 'api getSection', sectionId );
-        return get( 'api/section/'+sectionId );
-    },
-    getBreed: ( breedId ) => {
-        console.log( 'api getBreed', breedId );
-        return get( 'api/breed/'+breedId );
-    },
-    getColor: ( colorId ) => {
-        console.log( 'api getColor', colorId );
-        return get( 'api/color/'+colorId );
-    },
+
     district: {
         get: ( districtId ) => {
             console.log( 'api getDistrict', districtId );
@@ -119,37 +116,53 @@ export default {
     },
 
     pair: {
-        'new': ( breederId ) => {
-            console.log( 'api new Pair for ', breederId );
-            let breederPromise = get( 'api/breeder/'+breederId );
-            let pairPromise = Promise.resolve( {
-                breeder: { id:breederId, name:null },
-                district:null ,
-                breed: null, color:null,
-                year:2022, name: null, paired:null, group:1,
-                parents: [
-                    { sex:'1.0', country:'D', ring:null, score:null, parent_pair:null },
-                    { sex:'0.1', country:'D', ring:null, score:null, parent_pair:null },
-                    { sex:'0.1', country:'D', ring:null, score:null, parent_pair:null },
-                    { sex:'0.1', country:'D', ring:null, score:null, parent_pair:null },
-                ],
-                lay: { start:null, until:null, eggs:null },
-                broods: [ {start:null, eggs:null, fertile:null, hatched:null }, {start:null, eggs:null, fertile:null, hatched:null }, {start:null, eggs:null, fertile:null, hatched:null } ],
-                scores: { p89:null, p90:null, p91:null, p92:null, p93:null, p94:null, p95:null, p96:null, p97:null},
-            });
-            return Promise.all( [ pairPromise, breederPromise ] )
-                .then( responses => {
-                    let pair = responses[0];
-                    pair.breeder = responses[1];
-                    // clear caches
-                    return pair;
+        'get': ( breederId, pairId ) => {
+            if( pairId === 'new' ) {
+                console.log('api new Pair for ', breederId);
+                let breederPromise = get('api/breeder/' + breederId);
+                let pairPromise = Promise.resolve({
+                    breeder: {id: breederId, name: null},
+                    district: null,
+                    section:null, breed: null, color: null,
+                    year: 2022, name: null, paired: null, group: 1,
+                    parents: [
+                        {sex: '1.0', country: 'D', year:null, ring: null, score: null, parents: { id:null, breeder:null, year:2021, name:null }},
+                        {sex: '0.1', country: 'D', year:null, ring: null, score: null, parents: { id:null, breeder:null, year:2021, name:null }},
+                    ],
+                    lay: {start: null, until: null, eggs: null},
+                    broods: [
+                        {start: null, eggs: null, fertile: null, hatched: null},
+                        {start: null, eggs: null, fertile: null, hatched: null}
+                    ],
+                    show: {
+                        scores: { 89: null, 90: null, 91: null, 92: null, 93: null, 94: null, 95: null, 96: null, 97: null }
+                    },
+                    remarks: null,
+                    result: {
+                        lay:   { dames:null, eggs:null },
+                        brood: { eggs:null, fertile:null, hatched:null },
+                        show:  { count:null, score:null }
+                    }
                 });
+                return Promise.all([pairPromise, breederPromise])
+                    .then(responses => {
+                        let pair = responses[0];
+                        pair.breeder = responses[1];
+                        // clear caches
+                        return pair;
+                    });
+            } else {
+                return get( 'api/pair/'+pairId );
+            }
         },
     },
 
-
-
-
+    section: {
+        get: ( id ) => get( 'api/section/'+id ),
+        getChildren: ( parentId ) => get( 'api/section/'+parentId+'/children'),
+        getTree: ( parentId ) => get( 'api/section/'+parentId+'/tree'),
+        getBreeds: ( sectionId ) => get( 'api/section/'+sectionId+'/breeds'),
+    },
 }
 
 
@@ -266,4 +279,6 @@ async function del( url, data ) {
             throw response;
         });
 }
+
+
 

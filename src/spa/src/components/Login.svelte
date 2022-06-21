@@ -21,10 +21,9 @@
 
     function submit( event ) {
         event.preventDefault();
-        api.user.token( credentials.email, credentials.password )
-            .then( data => {
-                console.log( 'Logged in', data );
-                user.set(data.user);
+        api.user.authorize( credentials.email, credentials.password )
+            .then( auth => {
+                user.set( auth );
                 message = 'Wilkommen';
                 history.back();
             } )
