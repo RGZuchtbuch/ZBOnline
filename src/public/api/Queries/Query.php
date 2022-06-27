@@ -49,7 +49,7 @@ class Query
             $values = $stmt->fetchAll();
             $results = [];
             foreach( $values as & $value ) {
-                $parentId = $value['parent'];
+                $parentId = $value['parentId'];
                 $match = false;
                 foreach ($values as & $parent) {
                     if ( $parent['id'] === $parentId ) {

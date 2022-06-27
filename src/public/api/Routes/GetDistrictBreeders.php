@@ -15,5 +15,5 @@ class GetDistrictBreeders extends Route {
     public function process(Request $request, array $args) : mixed
     {
         $districtId = $args['id'];
-        return Queries\District::getBreeders( $districtId );
+        return  Queries\District::getBreeders( $districtId );
     }}

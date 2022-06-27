@@ -16,7 +16,7 @@ class Section
     public static function getChildren( int $parentId ) : array {
         $args = [ 'parentId'=>$parentId ];
         $stmt = Query::prepare( '
-            SELECT * FROM std_section WHERE parent=:parentId ORDER BY name
+            SELECT * FROM std_section WHERE parentId=:parentId ORDER BY name
         ' );
         return Query::selectArray( $stmt, $args );
     }
@@ -28,7 +28,7 @@ class Section
                 SELECT * FROM std_section WHERE id=:parentId ORDER BY name
                 UNION ALL
                 SELECT child.* FROM parent, std_section child
-			    WHERE child.parent = parent.id ORDER BY child.name
+			    WHERE child.parentId = parent.id ORDER BY child.name
             )
             SELECT * FROM parent
         ' );
@@ -40,7 +40,7 @@ class Section
         $stmt = Query::prepare( '
             SELECT std_breed.* 
             FROM std_breed
-            WHERE section=:sectionId OR subsection = :subsectionId
+            WHERE sectionId=:sectionId OR subsectionId = :subsectionId
             ORDER BY name
         ' );
         return Query::selectArray( $stmt, $args );

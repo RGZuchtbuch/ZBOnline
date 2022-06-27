@@ -10,6 +10,12 @@ class Router {
         $app->get( '/', new GetIndex() );
         $app->get( '/breed/{id}', new GetBreed() );
         $app->get( '/breed/{id}/colors', new GetBreedColors() );
+
+        $app->get( '/breeder/{id}', new GetBreeder() );
+        $app->get( '/breeder/{id}/results', new GetBreederResults() );
+        $app->get( '/breeder/{id}/years', new GetBreederYears() );
+        $app->get( '/breeders', new GetBreeders() );
+
         $app->get( '/color/{id}', new GetColor() );
 
         $app->get( '/district/{id}', new GetDistrict() );
@@ -24,16 +30,15 @@ class Router {
         $app->get( '/section/{id}/children', new GetSectionChildren() );
         $app->get( '/section/{id}/breeds', new GetSectionBreeds() );
 
-        $app->get( '/breeder/{id}', new GetBreeder() );
-        $app->get( '/breeder/{id}/results', new GetBreederResults() );
-        $app->get( '/breeder/{id}/years', new GetBreederYears() );
-        $app->get( '/breeders', new GetBreeders() );
 
 
         $app->post( '/district', new PostDistrict() );
         $app->put( '/district/{id}', new PutDistrict() );
         $app->post( '/moderator', new PostModerator() );
         $app->delete( '/moderator', new DeleteModerator() );
+
+        $app->post( '/pair/{id}', new PostPair() );
+        $app->put( '/pair/{id}', new PutPair() );
 
         $app->post( '/token', new PostToken() );
 

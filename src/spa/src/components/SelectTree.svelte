@@ -1,17 +1,39 @@
 <script>
-    import Box from '../components/Box.svelte';
-    import SelectTreeNode from '../components/SelectTreeNode.svelte';
+    export let children;
+    export let onSelect = null;
+    export let link = '';
 
-    export let root;
-    export let onSelect = null
+    let selectable = onSelect;
 
+
+    function onClick( node ) {
+        return ( event ) => {
+            console.log('Clicked', node.name);
+            if( onSelect ) {
+                onSelect( node );
+            }
+        }
+    }
 </script>
 
+<ul>
+    {#each children as node}
+        <li class:selectable nowrap>
+            → <a href={link+node.id}>{node.name}</a>
+        </li>
+        {#if node.children}
+            <svelte:self children={node.children} {onSelect} link={link}/>
+        {/if}
+    {/each}
+</ul>
 
-<Box legend={root.name}>
-    <div class='flex flex-col'>
-        {#each root.children as node}
-            <SelectTreeNode node={node} onSelect={onSelect}/>
-        {/each}
-    </div>
-</Box>
+<style>
+    .selectable {
+        @apply cursor-pointer whitespace-nowrap;
+    }
+
+    ul {
+        @apply ml-2;
+    }
+    li {}
+</style>

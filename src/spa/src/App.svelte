@@ -34,6 +34,8 @@
     import Result from './components/Result.svelte';
     import ResultsFilter from './components/ResultsFilter.svelte';
 
+    import Accordion, {AccordionItem} from './components/Accordion.svelte';
+
 
     import Flyer from "./components/Flyer.svelte";
 
@@ -50,7 +52,7 @@
 </script>
 
 
-<div id="app" class='flex flex-col justify-self-center border w-full h-full bg-gray-50 relative'>
+<div id="app" class='w-full h-full flex flex-col justify-self-center border  bg-gray-50 relative'>
 
     <div class='flex flex-row gap-x-4 text-sm justify-between'>
         <ul class='flex flex-row gap-x-4'>
@@ -139,6 +141,7 @@
 </div>
 
 
+
 <style global>
 	@tailwind base;
 	@tailwind components;
@@ -167,10 +170,14 @@
         @apply text-lg font-bold text-amber-800;
     }
     h4 {
-        @apply font-bold text-red-400;
+        @apply font-bold text-amber-800;
     }
     hr {
         @apply border border-gray-600 mt-2;
+    }
+
+    input:disabled {
+        @apply bg-gray-50;
     }
 
 </style>

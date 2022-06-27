@@ -16,7 +16,7 @@ class Breed
     public static function getColors( int $breedId ) : array {
         $args = [ 'breedId'=>$breedId ];
         $stmt = Query::prepare( '
-            SELECT * FROM std_color WHERE breed=:breedId ORDER BY name
+            SELECT * FROM std_color WHERE breedId=:breedId ORDER BY name
         ' );
         return Query::selectArray( $stmt, $args );
     }

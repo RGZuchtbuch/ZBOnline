@@ -16,7 +16,7 @@ class District
     public static function create( int $parentId, string $name, string $fullname, string $short, string $coordinates ) : int {
         $args = [ 'parentId'=>$parentId, 'name'=>$name, 'fullname'=>$fullname, 'short'=>$short, 'coordinates'=>$coordinates ];
         $stmt = Query::prepare( '
-            INSERT INTO district ( parent, name, fullname, short, coordinates )
+            INSERT INTO district ( parentId, name, fullname, short, coordinates )
             VALUES ( :parentId, :name, :fullname, :short, :coordinates )
         ');
         return Query::insert( $stmt, $args );
@@ -35,8 +35,8 @@ class District
     public static function getBreeders( int $districtId ) : array {
         $args = [ 'districtId'=>$districtId ];
         $stmt = Query::prepare( '
-            SELECT user.id, user.name, user.district FROM user
-            WHERE user.district = :districtId
+            SELECT user.id, user.name, user.districtId FROM user
+            WHERE user.districtId = :districtId
             ORDER BY name
         ' );
         return Query::selectArray( $stmt, $args );
@@ -45,7 +45,7 @@ class District
     public static function getChildren( int $parentId ) : array {
         $args = [ 'parentId'=>$parentId ];
         $stmt = Query::prepare( '
-            SELECT * FROM district WHERE parent=:parentId ORDER BY name
+            SELECT * FROM district WHERE parentId=:parentId ORDER BY name
         ' );
 
         return Query::selectArray( $stmt, $args );
@@ -55,22 +55,24 @@ class District
     public static function getModerators( int $districtId ) : array {
         $args = [ 'districtId'=>$districtId ];
         $stmt = Query::prepare( '
-            SELECT user.id, user.name FROM moderator
-            LEFT JOIN user ON user.id = moderator.id
-            WHERE moderator.district=:districtId
+            SELECT user.id, user.name 
+            FROM moderator
+            LEFT JOIN user ON user.id = moderator.userId
+            WHERE moderator.districtId=:districtId
             ORDER BY name
         ' );
         return Query::selectArray( $stmt, $args );
     }
 
-    public static function getTree(int $parent ) : array {
-        $args = [ 'parent'=>$parent ];
+    public static function getTree(int $parentId ) : array {
+        $args = [ 'parentId'=>$parentId ];
         $stmt = Query::prepare( '
             WITH RECURSIVE parent AS (
-                SELECT * FROM district WHERE id=:parent
+                SELECT * FROM district WHERE id=:parentId
                 UNION ALL
-                SELECT child.* FROM parent, district child
-					 WHERE child.parent = parent.id 
+                SELECT child.* 
+                FROM parent, district child
+				WHERE child.parentId = parent.id 
             )
             SELECT * FROM parent ORDER BY name
         ' );

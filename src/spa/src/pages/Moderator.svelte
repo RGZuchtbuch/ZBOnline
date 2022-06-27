@@ -1,134 +1,118 @@
 <script>
-    import { scale } from 'svelte/transition';
-    import { active, meta, router, Route } from 'tinro';
+    import { meta, Route } from 'tinro';
     import {user} from "../scripts/store";
     import api from '../scripts/api.js';
     import Box from '../components/Box.svelte';
+
+    import Accordion, {AccordionItem} from '../components/Accordion.svelte';
+    import Breeder from '../components/Breeder.svelte';
+    import Breeders from '../components/Breeders.svelte';
+    import Districts from '../components/Districts.svelte';
     import Pair from '../components/Pair.svelte';
+    import Pairs from '../components/Pairs.svelte';
+    import Results from '../components/Results.svelte';
 
-    import SelectTreeNode from '../components/SelectTreeNode.svelte';
 
-    let currentUser = null;
-    user.subscribe( value => {
-        currentUser = value;
-        console.log( 'User', currentUser );
-    });
+//    let meta = meta();
+    $: console.log( 'Match', meta().match );
 
-    console.log( 'Obmann' );
+    console.log( 'Obmann', $user.name );
 
-    function redirectWhenSingle( moderates ) {
-        if( moderates.length === 1 ) {
-            router.goto('/#/obmann/verband'+moderates[0].id);
-            return true;
-        }
-        return false;
-    }
+    let district = null;
+    let breeder = null;
 
-    function onDistrictSelect( district ) {
-        console.log( 'District selected', district );
-        router.goto( '/obmann/verband/'+district.id );
-    }
-
-    function onBreederSelect( breeder ) {
-        console.log( 'Breeder selected', breeder );
-        router.goto( '/obmann/verband/'+breeder.district+'/zuechter/'+breeder.id );
+    function getDistrict( id ) {
+        api.district.get( id )
+            .then( data => {
+                district = data;
+                console.log( 'Load', district )
+            })
     }
 
 </script>
 
 <div class=''>
-    <h2 class='text-center'>Obmann {currentUser.name}</h2>
+    <h2 class='text-center'>Obmann {$user.name}</h2>
 
     <div class='flex flex-row justify-between border gap-2'>
-        <div class='w-48'>
-            <Box legend='Obmann'>
-                {#if ! redirectWhenSingle( currentUser.moderator ) }
+        <div class='w-48 border border-r-gray-400'>
+
+            <Accordion>
+                <AccordionItem label={'Obmann menu'} selected>
                     <div><a href={'/#/obmann'}>Verbände</a></div>
-                {/if}
+                </AccordionItem>
+
+                <Route path='/verband/:districtId/*' let:meta>
+                    {#await api.district.get( meta.params.districtId ) then district }
+                        <AccordionItem label={'Verband '+district.short}>
+                            <div><a href={'/#'+meta.match+'/zuechter'}>Züchter</a></div>
+                            <div><a href={'/#'+meta.match+'/stämme'}>Stämme</a></div>
+                            <div><a href={'/#'+meta.match+'/leistungen'}>Leistungen</a></div>
+                            <div><a href={'/#'+meta.match+'/berichte'}>Berichte</a></div>
+                        </AccordionItem>
+
+                        <Route path='/zuechter/:breederId/*' let:meta>
+                            {#await api.breeder.get( meta.params.breederId ) then breeder }
+                                <AccordionItem label={'Züchter '+breeder.name}>
+                                    <div><a href={'/#'+meta.match+'/'}>Zuchterdaten</a></div>
+                                    <div><a href={'/#'+meta.match+'/meldung/neu'}>Stamm Melden</a></div>
+                                    <div><a href={'/#'+meta.match+'/meldungen'}>Stämme</a></div>
+                                    <div><a href={'/#'+meta.match+'/leistungen'}>Leistungen</a></div>
+                                </AccordionItem>
+                            {/await}
+                        </Route>
+                    {/await}
+                </Route>
+            </Accordion>
+        </div>
+
+
+        <div class='w-192 h-full'>
+            <Box legend='Arbeitsfläche'>
+                <Route path='/' let:meta>
+                    <Districts promise={api.moderator.districts( $user.id )} legend='Verwalte einer deiner Verbände' link='/#/obmann/verband/' />
+                </Route>
+                <Route path='/verbände' let:meta>
+                    {#await api.moderator.districts( $user.id ) then districts}
+                        <Districts {districts} legend='Verwalte einer deiner Verbände' link='/#/obmann/verband/' />
+                    {/await}
+                </Route>
 
                 <Route path='/verband/:districtId/*' let:meta>
                     {#await api.district.get( meta.params.districtId) then district}
-                        <div>
-
-                        <ul class='children'>
-                            <li>{district.short}</li>
-                            <br>
-                            <li><a href={'/#/obmann/verband/'+meta.params.districtId}>Züchter</a>
-                                <Route path='/zuechter/:breederId/*' let:meta>
-                                    <div class='w-32'>
-                                        <Box legend='Züchter'>
-                                            {#await api.breeder.get(meta.params.breederId) then breeder}
-                                                {breeder.name}
-                                                <ul>
-                                                    <li><a href={'/#/obmann/verband/'+breeder.district.id+'/zuechter/'+breeder.id}>Zuchterdaten</a></li>
-
-                                                    <li><a href={'/#/obmann/verband/'+breeder.district.id+'/zuechter/'+breeder.id+'/meldung/new'}>Melden</a></li>
-                                                    <li><a href={'/#/obmann/verband/'+breeder.district.id+'/zuechter/'+breeder.id+'/meldungen'}>Meldungen</a></li>
-                                                </ul>
-                                            {/await}
-
-                                        </Box>
-                                    </div>
-                                </Route>
-
-                            </li>
-                            <li><a href={'/#/obmann/verband/'+meta.params.districtId+'/meldungen'}>Meldungen</a></li>
-                            <li><a href={'/#/obmann/verband/'+meta.params.districtId+'/zuechter'}>Leistungen</a></li>
-                            <li><a href={'/#/obmann/verband/'+meta.params.districtId+'/zuechter'}>Berichte</a></li>
-                        </ul>
-                        </div>
-                    {/await}
-                </Route>
-            </Box>
-        </div>
-
-        <Route path='/_verband/:districtId/zuechter/:breederId/*' let:meta>
-            <div transition:scale >
-                <div class='w-32'>
-                <Box legend='Züchteer'>
-                    {#await api.breeder.get(meta.params.breederId) then breeder}
-                        {breeder.name}
-                        <ul>
-                            <li><a href={'/#/obmann/verband/'+breeder.district.id+'/zuechter/'+breeder.id}>Zuchterdaten</a></li>
-
-                            <li><a href={'/#/obmann/verband/'+breeder.district.id+'/zuechter/'+breeder.id+'/meldung/new'}>Melden</a></li>
-                            <li><a href={'/#/obmann/verband/'+breeder.district.id+'/zuechter/'+breeder.id+'/meldungen'}>Meldungen</a></li>
-                        </ul>
-                    {/await}
-
-                </Box>
-                </div>
-            </div>
-        </Route>
-
-        <div class='w-160'>
-            <Box legend='Arbeitsfläche'>
-                <Route path='/' let:meta>
-                    <div>Welcher Verband möchtest du verwalten :</div>
-                    {#await api.moderator.districts( currentUser.id ) then districts}
-                        <SelectTreeNode children={districts} onSelect={onDistrictSelect} link={'/#/obmann/verband/'}/>
-                    {/await}
-                </Route>
-
-                <Route path='/verband/:districtId/*' let:meta>
-                    <Route path='/' let:meta>
-                        <div>Welcher Züchter möchtest du verwalten :</div>
-                        {#await api.district.breeders( meta.params.districtId) then breeders}
-                            <SelectTreeNode children={breeders} onSelect={onBreederSelect} link={'/#/obmann/verband/'+meta.params.districtId+'/zuechter/'}/>
-                        {/await}
-                    </Route>
-
-                    <Route path='/zuechter/:breederId/*' let:meta>
-                        <Route path='/meldung/:pairId' let:meta>
-                            <Pair promise={api.pair.get( meta.params.breederId, meta.params.pairId )} />
+                        <Route path='/' let:meta>
+                            {#await api.district.getBreeders( district.id ) then breeders}
+                                <Breeders breeders={breeders} legend={'Züchter im Verband '+district.name} link={'/#'+meta.match+'/zuechter/'} />
+                            {/await}
                         </Route>
-                    </Route>
+                        <Route path='/zuechter' let:meta>
+                            {#await api.district.getBreeders( district.id ) then breeders}
+                                <Breeders breeders={breeders} legend={'Züchter im Verband '+district.name} link={'/#'+meta.match+'/'} />
+                            {/await}
+                        </Route>
+
+                        <Route path='/zuechter/:breederId/*' firstmatch let:meta>
+                            <Route path='/' let:meta>
+                                {#await api.breeder.get( meta.params.breederId ) then breeder}
+                                    <Breeder promise={api.breeder.get( meta.params.breederId )} {breeder}/>
+                                {/await}
+                            </Route>
+                            <Route path='/meldung/neu' let:meta>
+                                <Pair promise={api.pair.new( meta.params.breederId )} />
+                            </Route>
+                            <Route path='/meldung/:pairId' let:meta>
+                                <Pair promise={api.pair.get( meta.params.pairId )} />
+                            </Route>
+                            <Route path='/meldungen' let:meta>
+                                <Pairs promise={api.breeder.getPairs( meta.params.breederId )} />
+                            </Route>
+                        </Route>
+                    {/await}
                 </Route>
 
             </Box>
         </div>
 
-        <div></div>
     </div>
 </div>
 

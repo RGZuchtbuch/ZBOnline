@@ -79,7 +79,7 @@ export default {
             return get('api/district/'+parentId+'/tree');
         },
 
-        breeders: (districtId) => {
+        getBreeders: (districtId) => {
             return get( 'api/district/'+districtId+'/breeders');
         }
     },
@@ -116,45 +116,72 @@ export default {
     },
 
     pair: {
-        'get': ( breederId, pairId ) => {
-            if( pairId === 'new' ) {
-                console.log('api new Pair for ', breederId);
-                let breederPromise = get('api/breeder/' + breederId);
-                let pairPromise = Promise.resolve({
-                    breeder: {id: breederId, name: null},
-                    district: null,
-                    section:null, breed: null, color: null,
-                    year: 2022, name: null, paired: null, group: 1,
-                    parents: [
-                        {sex: '1.0', country: 'D', year:null, ring: null, score: null, parents: { id:null, breeder:null, year:2021, name:null }},
-                        {sex: '0.1', country: 'D', year:null, ring: null, score: null, parents: { id:null, breeder:null, year:2021, name:null }},
-                    ],
-                    lay: {start: null, until: null, eggs: null},
-                    broods: [
-                        {start: null, eggs: null, fertile: null, hatched: null},
-                        {start: null, eggs: null, fertile: null, hatched: null}
-                    ],
-                    show: {
-                        scores: { 89: null, 90: null, 91: null, 92: null, 93: null, 94: null, 95: null, 96: null, 97: null }
+        'new': (breederId) => {
+            console.log('api new Pair for ', breederId);
+            let breederPromise = get('api/breeder/' + breederId);
+            let pairPromise = Promise.resolve({
+                id: 0,
+                breederId: breederId,
+                year: 2022, name: 'Test', group: 1, paired: null,
+                breed: { sectionId: 4, breedId: 1024, colorId: 8543 },
+                parents: [
+                    {
+                        sex: '1.0',
+                        ring: {country: 'D', year: new Date().getFullYear(), code: 'AA 000'},
+                        score: null,
+                        parents: {id: null, breeder: null, year: 2021, name: null}
                     },
-                    remarks: null,
-                    result: {
-                        lay:   { dames:null, eggs:null },
-                        brood: { eggs:null, fertile:null, hatched:null },
-                        show:  { count:null, score:null }
+                    {
+                        sex: '0.1',
+                        ring: {country: 'D', year: new Date().getFullYear(), code: 'AZ 999'},
+                        score: null,
+                        parents: {id: null, breeder: null, year: 2021, name: null}
+                    },
+                ],
+                lay: {start: '2022-01-01', until: '2022-04-01', eggs: 50},
+                broods: [
+                    {
+                        start: null,
+                        eggs: null,
+                        fertile: null,
+                        hatched: null,
+                        ringed: null,
+                        chicks: [{country: 'D', year: new Date().getFullYear(), code: 'AA 100'}, {
+                            country: 'D',
+                            year: new Date().getFullYear(),
+                            code: 'AA 101'
+                        }]
+                    },
+                    {
+                        start: null,
+                        eggs: null,
+                        fertile: null,
+                        hatched: null,
+                        ringed: null,
+                        chicks: [{country: 'D', year: new Date().getFullYear(), code: 'AA 100'}, {
+                            country: 'D',
+                            year: new Date().getFullYear(),
+                            code: 'AA 101'
+                        }]
                     }
+                ],
+                show: {
+                    scores: {89: null, 90: null, 91: null, 92: null, 93: null, 94: null, 95: null, 96: null, 97: null}
+                },
+                notes: null,
+                //result must be deducted.
+            });
+            return Promise.all([pairPromise, breederPromise])
+                .then(responses => {
+                    let pair = responses[0];
+                    pair.breeder = responses[1];
+                    // clear caches
+                    return pair;
                 });
-                return Promise.all([pairPromise, breederPromise])
-                    .then(responses => {
-                        let pair = responses[0];
-                        pair.breeder = responses[1];
-                        // clear caches
-                        return pair;
-                    });
-            } else {
-                return get( 'api/pair/'+pairId );
-            }
         },
+        get: (id) => get('api/pair/' + id),
+        post: (pair) => post( 'api/pair/'+pair.id, pair ),
+        put: (pair) => put( 'api/pair/'+pair.id, pair ),
     },
 
     section: {

@@ -8,7 +8,7 @@ class Moderator
     public static function getAll(int $districtId ) : ? array {
         $args = [ 'districtId'=>$districtId ];
         $stmt = Query::prepare( '
-            SELECT * FROM moderator WHERE district=:districtId
+            SELECT * FROM moderator WHERE districtId=:districtId
         ' );
         return Query::selectArray( $stmt, $args );
     }
@@ -16,7 +16,7 @@ class Moderator
     public static function create( int $userId, int $districtId ) : int {
         $args = [ 'userId'=>$userId, 'districtId'=>$districtId ];
         $stmt = Query::prepare( '
-            INSERT INTO moderator ( id, district )
+            INSERT INTO moderator ( userId, districtId )
             VALUES ( :userId, :districtId )
         ');
         return Query::insert( $stmt, $args );
@@ -26,7 +26,7 @@ class Moderator
         $args = [ 'userId'=>$userId, 'districtId'=>$districtId ];
         $stmt = Query::prepare( '
             DELETE FROM moderator
-            WHERE id=:userId AND district=:districtId
+            WHERE userId=:userId AND districtId=:districtId
         ');
         return Query::delete( $stmt, $args );
     }
@@ -38,12 +38,12 @@ class Moderator
             WITH RECURSIVE parent AS (
                 SELECT district.* 
                     FROM district
-                    LEFT JOIN moderator ON moderator.district = district.id
-                    WHERE moderator.id = :moderatorId
+                    LEFT JOIN moderator ON moderator.districtId = district.id
+                    WHERE moderator.userId = :moderatorId
                 UNION ALL
                 SELECT child.* 
                     FROM parent, district child
-                    WHERE child.parent = parent.id 
+                    WHERE child.parentId = parent.id 
             )
             SELECT DISTINCT * 
                 FROM parent 
@@ -54,19 +54,3 @@ class Moderator
 
 
 }
-/*
-     protected function & toTree( int $rootId, & $array, $idName='id', $parentName='parent', $childrenName='children' ) : array {
-        $values = []; // for lookup table
-        foreach( $array as & $value ) { // lookup table by id
-            $id = $value[ $idName ];
-            $values[ $id ] = & $value;
-        }
-        foreach( $array as & $child ) { // build tree
-            $parentId = $child[ $parentName ];
-            if( isset( $parentId ) ) { // not root
-                $values[$parentId][$childrenName][] = & $child;
-            }
-        }
-        return $values[ $rootId ];
-    }
- */

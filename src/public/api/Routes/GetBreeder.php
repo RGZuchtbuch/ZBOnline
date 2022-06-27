@@ -19,8 +19,8 @@ class GetBreeder extends Route {
         $id = $args['id' ];
         $user = Queries\User::get( $id );
         if( ! $user) throw new HttpNotFoundException($request, "User not found");
-        $user[ 'district' ] = Queries\District::get( $user['district'] );
-        $user[ 'club' ] = Queries\District::get( $user['club'] );
+        $user[ 'district' ] = Queries\District::get( $user['districtId'] );
+        $user[ 'club' ] = Queries\District::get( $user['clubId'] );
         return $user;
     }
 
