@@ -3,9 +3,6 @@
     import { active, meta, router, Route } from 'tinro';
     import api from '../scripts/api.js';
     import Box from './Box.svelte';
-    import IconButton from '@smui/icon-button';
-    import TextField from '@smui/textfield';
-    import Select, { Option } from '@smui/select';
     import {user} from "../scripts/store";
 
     const route = meta();
@@ -106,23 +103,23 @@
 
                 <div>
                     {#if disabled}
-                        <IconButton class='material-icons self-end' on:click={edit} title='Aendern'>edit</IconButton>
+                        <ib class='material-icons self-end' on:click={edit} title='Aendern'>edit</ib>
                     {:else}
-                        <IconButton class='material-icons self-end' on:click={save} title='Speichern'>done</IconButton>
+                        <ib class='material-icons self-end' on:click={save} title='Speichern'>done</ib>
                     {/if}
                 </div>
             </div>
 
 
             <div class='flex flex-row'>
-                <TextField bind:value={district.name} label='Name' {disabled} style='width:24em'> </TextField>
-                <TextField bind:value={district.short} label='Abk.' {disabled} style='width:8em'> </TextField>
+                <aa bind:value={district.name} label='Name' {disabled} style='width:24em'> </aa>
+                <aa bind:value={district.short} label='Abk.' {disabled} style='width:8em'> </aa>
             </div>
             <div class='flex flex-row'>
-                <TextField bind:value={district.fullname} label='Name komplett' {disabled} style='width:24em'> </TextField>
+                <aa bind:value={district.fullname} label='Name komplett' {disabled} style='width:24em'> </aa>
             </div>
             <div class='flex flex-row'>
-                <TextField bind:value={district.coordinates} label='Coordinates (Lat, Lon)' {disabled} style='width:32em'> </TextField>
+                <aa bind:value={district.coordinates} label='Coordinates (Lat, Lon)' {disabled} style='width:32em'> </aa>
             </div>
         </form>
 
