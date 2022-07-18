@@ -1,5 +1,5 @@
 <script>
-    import InputShortYear from './InputShortYear.svelte';
+    import InputYear from './InputYear.svelte';
 
     export let value = '';
     export let disabled = true;
@@ -18,10 +18,12 @@
 
     function onYear( event ) {
         value.year = ring.year;
+        value = value;
     }
 
     function onCode( event ) {
         value.code = format( ring.code );
+        value = value;
     }
 
     function format( code ) {
@@ -30,13 +32,15 @@
 </script>
 
 <div class="'flex flex-row gap-1">
-<select class={'w-10 '+className} bind:value={ring.country} on:input={onYear} {disabled}>
-    {#each countries as country} <option value={country}>{country}</option>{/each}
+<select class={'w-10 '+className} bind:value={value.country} {disabled}>
+    {#each countries as country}
+        <option value={country}>{country}</option>
+    {/each}
 </select>
 
-<InputShortYear class={'w-10 '+className} bind:value={ring.year} {disabled}/>
+<InputYear class={'w-10 '+className} bind:value={value.year} {disabled}/>{value.year}l
 
-<input class={'w-16 '+className} type='text' maxlength='8' bind:value={ring.code} on:input={onCode} placeholder='AZ 999' {disabled}>
+<input class={'w-16 '+className} type='text' maxlength='8' bind:value={value.code} on:input={onCode} placeholder='AZ 999' {disabled}>
 </div>
 
 

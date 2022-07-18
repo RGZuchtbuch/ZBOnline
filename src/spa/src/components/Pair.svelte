@@ -195,7 +195,7 @@
 
             <InputBreed bind:breed={breed} disabled={disabled}/>
 
-            <InputParents parents={pair.parents} disabled={disabled || !validPair(pair, breed)}/>
+            <InputParents bind:parents={parents} disabled={disabled || !validPair(pair, breed)}/> {parents.length}: {pair.parents.length}
 
             {#if breed.sectionId!==5 }
                 <InputLay bind:lay={pair.lay} {disabled}/>

@@ -46,7 +46,7 @@
                     {#await api.district.get( meta.params.districtId ) then district }
                         <AccordionItem label={'Verband '+district.short}>
                             <div><a href={'/#'+meta.match+'/zuechter'}>Züchter</a></div>
-                            <div><a href={'/#'+meta.match+'/stämme'}>Stämme</a></div>
+                            <div><a href={'/#'+meta.match+'/stämme'}>Meldungen</a></div>
                             <div><a href={'/#'+meta.match+'/leistungen'}>Leistungen</a></div>
                             <div><a href={'/#'+meta.match+'/berichte'}>Berichte</a></div>
                         </AccordionItem>
@@ -55,8 +55,7 @@
                             {#await api.breeder.get( meta.params.breederId ) then breeder }
                                 <AccordionItem label={'Züchter '+breeder.name}>
                                     <div><a href={'/#'+meta.match+'/'}>Zuchterdaten</a></div>
-                                    <div><a href={'/#'+meta.match+'/meldung/neu'}>Stamm Melden</a></div>
-                                    <div><a href={'/#'+meta.match+'/meldungen'}>Stämme</a></div>
+                                    <div><a href={'/#'+meta.match+'/meldungen'}>Meldungen</a></div>
                                     <div><a href={'/#'+meta.match+'/leistungen'}>Leistungen</a></div>
                                 </AccordionItem>
                             {/await}
@@ -67,8 +66,10 @@
         </div>
 
 
-        <div class='w-192 h-full'>
+        <div class='w-192 h-full flex flex-col'>
+            <img class='absolute self-end -mt-4 -mr-4 w-16 h-32 border rounded-full -scale-x-100' src='assets/breeder.jpg'>
             <Box legend='Arbeitsfläche'>
+
                 <Route path='/' let:meta>
                     <Districts promise={api.moderator.districts( $user.id )} legend='Verwalte einer deiner Verbände' link='/#/obmann/verband/' />
                 </Route>

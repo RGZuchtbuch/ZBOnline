@@ -1,7 +1,7 @@
 <script>
     import { onMount } from 'svelte';
 
-    export let year;
+    export let value;
     export let label;
     export let earlier = 250;
     export let ahead = 1;
@@ -13,7 +13,7 @@
     const now = new Date().getFullYear();
 
     let inputElement;
-    let value = year; // internal year
+    let year = value; // internal year
     let error;
 
     const on = {
@@ -21,35 +21,30 @@
         blur: () => focus = false,
     }
 
-    function check( value ) {
-        value = Number( value );
+    function check( year ) {
+        year = Number( year );
         const now = new Date().getFullYear();
-        if( value >= 0 && value <= now+1 ) {
-            if( value < 100 ) {
+        if( year >= 0 && year <= now+ahead ) {
+            if( year < 100 ) { // short
                 const centuries = Math.floor( now / 100 );
-                if( value + centuries * 100 > now+ahead ) {
-                    value += (centuries-ahead) * 100;
+                if( year + centuries * 100 > now+ahead ) {
+                    year += (centuries-ahead) * 100;
                 } else {
-                    value += centuries * 100;
+                    year += centuries * 100;
                 }
                 error = null;
-                year = value;
-                return value;
             } else if( value >= now-earlier && value <= new Date().getFullYear()+ahead ) {
                 error = null;
-                year = value;
-                return value;
             }
+            value = year;
+        } else {
+            error = 'Invalid year';
         }
-        error = 'Invalid year';
-        return null;
     }
 
     function hasFocus() {
         return document.activeElement=inputElement;
     }
-
-
 
     $: check(value);
 
@@ -57,11 +52,10 @@
         if( focus ) inputElement.focus();
     })
 </script>
-{classname}
+
 <div class='main'>
     <div class='header'>
-        <div class='label'>{label}</div>
-        <div class='info' title={(now-earlier)+'-'+(now+ahead)}>&#8505</div>
+        <div class='label' title={(now-earlier)+'-'+(now+ahead)}>{label}</div>
     </div>
     <input id='value' type='text' style:width={short?'2em':'3em'} bind:value={value} class:error bind:this={inputElement} on:focus={on.focus} on:blur={on.blur} >
     {#if error && ! focus }<span class='error'>{error}</span>{/if}
@@ -90,18 +84,8 @@
         font-weight: 400;
         color: rgb(128 128 128);
     }
-    div.info {
-        font-size: 0.4rem;
-        line-height: 0.4rem;
-        font-weight: 400;
-        color: #0F3;
-        vertical-align: top;
-        cursor: none;
-    }
 
     input {
-        display: block;
-        border: none;
         border-bottom: 1px solid rgb(0 255 0);
         padding: 0.2rem;
         text-align: right;

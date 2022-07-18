@@ -24,12 +24,12 @@
         api.user.authorize( credentials.email, credentials.password )
             .then( auth => {
                 user.set( auth );
-                message = 'Wilkommen';
+                message = 'Willkommen';
                 history.back();
             } )
             .catch( error =>{
                 console.log('Error', error );
-                message = 'Anmelding Fehlgeschlagen !';
+                message = 'Anmeldung Fehlgeschlagen !';
                 user.set( null );
             });
     }

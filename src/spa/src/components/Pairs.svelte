@@ -1,4 +1,5 @@
 <script>
+    import { onMount } from 'svelte';
     import {active, meta, router, Route} from 'tinro';
     import dic from '../scripts/dic.js';
     import SelectTree from './SelectTree.svelte';
@@ -9,7 +10,13 @@
     export let legend = '';
     export let link='';
 
-    let districts = null;
+    let pairs = null;
+
+    onMount( () => {
+        promise.then( data => {
+            pairs = data;
+        });
+    });
 
     promise.then( data => {
         districts = data;

@@ -72,6 +72,7 @@
 
 </script>
 
+<h4>Rasse [{sectionId}.{breedId}.{colorId})</h4>
 <div class='w-full flex flex-row p-2 gap-2'>
     <div class='flex flex-col border border-b-red-600'>
         <div class='text-xs text-gray-600'>Sparte {sectionId?'['+sectionId+']':'x'}</div>

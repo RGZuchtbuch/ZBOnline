@@ -1,6 +1,6 @@
 // https://dev.to/matebek/simplest-way-to-set-up-svelte-with-tailwind-css-41bn
 module.exports = {
-  content: ['../backend/public/index.html', './src/**/*.svelte'],
+  content: ['../public/index.html', './src/**/*.svelte'],
   theme: {
     extend: {
       spacing: {
