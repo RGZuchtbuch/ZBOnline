@@ -12,6 +12,7 @@ class Router {
         $app->get( '/breed/{id}/colors', new GetBreedColors() );
 
         $app->get( '/breeder/{id}', new GetBreeder() );
+        $app->get( '/breeder/{id}/reports', new GetBreederReports() );
         $app->get( '/breeder/{id}/results', new GetBreederResults() );
         $app->get( '/breeder/{id}/years', new GetBreederYears() );
         $app->get( '/breeders', new GetBreeders() );
@@ -37,8 +38,10 @@ class Router {
         $app->post( '/moderator', new PostModerator() );
         $app->delete( '/moderator', new DeleteModerator() );
 
-        $app->post( '/pair/{id}', new PostPair() );
-        $app->put( '/pair/{id}', new PutPair() );
+        $app->get( '/report/{id}', new GetPair() );
+        $app->post( '/report/{id}', new PostPair() );
+        $app->put( '/report/{id}', new PutPair() );
+//        $app->del( '/report/{id}', new DeletePair() );
 
         $app->post( '/token', new PostToken() );
 

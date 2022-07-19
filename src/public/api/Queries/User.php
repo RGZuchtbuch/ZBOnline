@@ -34,6 +34,10 @@ class User
 
     }
 
+    public static function getReports( int $userId ) {
+		return []; // TODO
+	}
+	
     public static function getResults( int $userId ) {
         $args = [ 'userId'=>$userId ];
         $stmt = Query::prepare( '
