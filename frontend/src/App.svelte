@@ -12,7 +12,7 @@
 </script>
 
 <div class='w-full h-full border flex flex-col'>
-    <img class='absolute w-32' src='../public/assets/bdrg_logo_r.png'>
+    <img class='absolute w-32' src='../assets/bdrg_logo_r.png'>
 
     <div class='text-center'>
         Das Rassegeflügel Zuchtbuch. Schönheit und Leisting kombinieren.
@@ -61,7 +61,7 @@
                                         <Report promise={api.report.get(meta.params.reportId) } />
                                     </Route>
                                     <Route path='/edit' let:meta>
-                                        <ReportEdit promise={api.report.get(meta.params.reportId) } />
+                                        todo
                                     </Route>
                                 </Route>
                             </Route>

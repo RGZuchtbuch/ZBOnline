@@ -2,6 +2,7 @@
 
     export let value;
     export let label;
+    export let error = '';
     export let name;
     export let disabled = false;
     export let readonly = false;
@@ -13,10 +14,17 @@
     let classname = '';
     export { classname as class }
 
-    let error = true;
+    let invalid = false;
+
     let on = {
         focus: () => {},
         blur: () => {},
+    }
+
+    $: validate( value );
+
+    function validate( value ) {
+        invalid = ! value.match( pattern );
     }
 
 </script>
@@ -29,8 +37,8 @@
         on:focus={on.focus}
         on:blur={on.blur}
     >
-    {#if error && ! disabled}
-        <span class:error>Tada</span>
+    {#if invalid && ! disabled}
+        <span class:invalid>{error}</span>
     {/if}
 </div>
 

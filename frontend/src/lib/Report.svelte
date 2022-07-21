@@ -5,6 +5,7 @@
     import InputNumber from './input/Number.svelte';
     import InputSelect from './input/Select.svelte';
     import InputText   from './input/Text.svelte';
+    import InputComposition from './input/Composition.svelte';
 
     export let promise;
     export let legend = '';
@@ -14,10 +15,12 @@
 
     let disabled = false;
 
-    const groups = [{ value:'I', name:'I' }, { value:'II', name:'II' }, { value:'III', name:'III' }];
-    const sections = [{ value:1, name:'Groß u. Wassergeflügel' }, { value:2, name:'Hühner' }, { value:3, name:'Tauben' }, { value:4, name:'Ziergeflügel' }];
-    let breeds = [];
-    let colors = [];
+    const groups = ['I', 'II', 'III' ];
+    const sections = [{ id:1, name:'Groß u. Wassergeflügel' }, { id:2, name:'Hühner' }, { id:3, name:'Tauben' }, { id:4, name:'Ziergeflügel' }];
+    let breeds = [{ id:1000, name:'Bielefelder Zwergkennhuhn' }, { id:1024, name:'Zwerg Welsumer' }];
+    let colors = [{ id:1, name:'kennsperber' }, { id:2, name:'silber-kennsperber' }];
+
+    let composition = { sires:1, dames:1 };
 
     onMount( () => {
         if( promise ) promise.then( data => {
@@ -38,24 +41,45 @@
             <div>Stamm</div>
             <div class='flex flex-row gap-x-1'>
                 <InputText class='w-32' label='Züchter' value='Eelco Jannink' readonly {disabled}/>
-                <InputNumber class='w-16' label='Jahr' bind:value={report.year} {disabled}/>
-                <InputText class='w-16' label='Name' bind:value={report.name} {disabled}/>
-                <InputSelect class='w-12' label='Gruppe' options={groups} bind:value={report.group} {disabled}/>
-                <InputDate class='w24' label='Anpaarung' bind:value={report.paired} {disabled}/>
+                <InputNumber class='w-16' label='Jahr' bind:value={report.year} min='1850' max='2030' {disabled}/>
+                <InputText class='w-16' label='Name' bind:value={report.name} {disabled} required/>
+                <InputSelect class='w-12' label='Grppe' options={groups} bind:value={report.group} placeholder='?' {disabled} required>
+                    {#each groups as group}
+                        <option value={group}>{group}</option>
+                    {/each}
+                </InputSelect>
             </div>
         </div>
 
         <div class='flex flex-col my-2'>
             <div>Rasse</div>
             <div class='flex flex-row gap-x-1'>
-                <InputSelect class='w-48' label='Sparte' options={sections} bind:value={report.section} {disabled}/>
-                <InputSelect class='w-48' label='Rasse' options={breeds} bind:value={report.breed} {disabled}/>
-                <InputSelect class='w-48' label='Farbe' options={colors} bind:value={report.color} {disabled}/>
+                <InputSelect class='w-48' label='Sparte' options={sections} bind:value={report.sectionId} {disabled} required>
+                    {#each sections as section }
+                        <option value={section.id}>{section.name}</option>
+                    {/each}
+                </InputSelect>
+                <InputSelect class='w-48' label='Rasse' options={breeds} bind:value={report.breedId} {disabled} required>
+                    {#each breeds as breed }
+                        <option value={breed.id}>{breed.name}</option>
+                    {/each}
+
+                </InputSelect>
+                <InputSelect class='w-48' label='Farbe' options={colors} bind:value={report.colorId} {disabled} required >
+                    {#each colors as color }
+                        <option value={color.id}>{color.name}</option>
+                    {/each}
+                </InputSelect>
             </div>
         </div>
 
         <div class='flex flex-col my-2'>
             <div>Abstammung</div>
+            <div class='flex flex-row> gap-x-1'>
+                <InputComposition class='w-12' label='Stamm' bind:sires={composition.sires} bind:dames={composition.dames} error='z.B. 1.2' {disabled} required/>
+                <InputDate class='w-24' label='Anpaarung' bind:value={report.paired} {disabled}/>
+            </div>
+
             <div class='flex flex-row'>
                 <div class='flex flex-col p-1'>
                     <div class='label'>Sex</div>

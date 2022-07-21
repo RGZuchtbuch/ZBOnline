@@ -3,6 +3,7 @@
     export let value;
     export let options = [];
     export let label;
+    export let error = '!';
     export let name;
     export let disabled = false;
     export let readonly = false;
@@ -11,37 +12,41 @@
     let classname = '';
     export { classname as class }
 
-    let error = true;
+    let invalid = false;
+
     let on = {
         focus: () => {},
         blur: () => {},
+    }
+
+    $: validate( value )
+
+    function validate() {
+        invalid = required ? value===null : false;
     }
 
 </script>
 
 <div class='input {classname} flex flex-col gap-0'>
     {#if label}
-        <label class='label' for='input'>{label}</label>
+        <label class='label' for='input'>{label} {value}</label>
     {/if}
 
-    <select class='data' class:error id='input'
+    <select class='data' class:invalid  id='input'
             bind:value={value}
             {name}
-            {disabled} {readonly}
-            {required}
+            {disabled} {readonly} {required}
             on:focus={on.focus}
             on:blur={on.blur}
     >
-        {#each options as { value, name }, i}
-            <option value={value}>{name}</option>
-        {/each}
+            <option value={null} hidden></option>
+            <slot></slot>
     </select>
 
-    {#if error && ! disabled}
-        <span class:error>Tada</span>
+    {#if invalid && ! disabled}
+        <span class:invalid>{error}</span>
     {/if}
 </div>
 
 <style>
-
 </style>

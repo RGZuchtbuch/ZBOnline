@@ -16,21 +16,38 @@ h2 {
 
 .label {
     font-size: 0.7rem;
-    line-height: 0.7rem;
+    line-height: 0.9rem;
     @apply pl-1 text-gray-600;
 }
 
-.input > .data, .input > .data > option {
-    @apply px-1 border-b border-gray-600;
+input, select, option {
+    @apply h-8 rounded;
+}
+
+
+input:read-only {
+    background-color: rgba(0, 0, 0, 0);
+}
+input:disabled, select:disabled {
+    background-color: rgba(0, 0, 0, 0);
+    @apply border-gray-600;
+}
+input:enabled, select:enabled {
+    background-color: white;
+    @apply border-green-600;
+}
+
+.input > .data {
+    @apply px-1 border-b;
 
 }
-.input > input.error, .input > select.error {
+.input > input.invalid, .input > select.invalid {
     @apply border-red-600;
 }
 
-.input > span.error {
-    font-size: 0.7rem;
-    line-height: 0.7rem;
+.input > span.invalid {
+    font-size: 0.6rem;
+    line-height: 0.6rem;
     @apply pl-1 text-red-600;
 }
 
