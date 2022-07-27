@@ -18,9 +18,6 @@ if( token ) {
 
 export default {
     user: {
-        get: (id) => {
-            return get( '/api/user/'+id );
-        },
         authorize: (email, password ) => {
             return post('/api/token', {email: email, password: password}).then( response => {
                 if( response ) {

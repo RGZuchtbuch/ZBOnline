@@ -17,5 +17,13 @@ Backend
 This is a re-engineering project based on the prototype:  
 https://kv-emsland-grafschaftbentheim.de/zuchtbuch/
 
+Some info on EU Rings found:
+https://www.kleindierliefhebbers.nl/57-organisatie/ringenbureau
+countries = [ 'A', 'B', 'BIH', 'CH', 'CZ', 'D', 'DR', 'E', 'F', 'NPA', 'H', 'I', 'YU', 'HR', 'NF', 'NL-H', 'P', 'SK', 'SLO' ];
+
+2020 NL-H13 12345
+
+ 
+
 
 

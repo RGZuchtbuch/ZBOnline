@@ -10,10 +10,12 @@
     export let minlength = 0;
     export let required = false;
     export let pattern = null;
+    export let spellcheck = true;
 
     let classname = '';
     export { classname as class }
 
+    value = value.toString();
     let invalid = false;
 
     let on = {
@@ -33,9 +35,12 @@
     {#if label}
         <label class='label' for='input'>{label}</label>
     {/if}
-    <input class='data' class:error id='input' type='text' {name} bind:value={value} {minlength} {maxlength} {required} {disabled} {readonly} {pattern}
-        on:focus={on.focus}
-        on:blur={on.blur}
+    <input class='data' class:error id='input' type='text' {name} bind:value={value}
+           {minlength} {maxlength}
+           {required} {disabled} {readonly} {pattern}
+            on:focus={on.focus}
+            on:blur={on.blur}
+           {spellcheck}
     >
     {#if invalid && ! disabled}
         <span class:invalid>{error}</span>

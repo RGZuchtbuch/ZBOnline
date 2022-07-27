@@ -58,10 +58,9 @@
                                 </Route>
                                 <Route path='/:reportId/*' let:meta>
                                     <Route path='/' let:meta>
+
                                         <Report promise={api.report.get(meta.params.reportId) } />
-                                    </Route>
-                                    <Route path='/edit' let:meta>
-                                        todo
+
                                     </Route>
                                 </Route>
                             </Route>

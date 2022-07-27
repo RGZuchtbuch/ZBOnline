@@ -17,11 +17,11 @@ class GetBreeder extends Route {
     public function process(Request $request, array $args) : mixed
     {
         $id = $args['id' ];
-        $user = Queries\User::get( $id );
-        if( ! $user) throw new HttpNotFoundException($request, "User not found");
-        $user[ 'district' ] = Queries\District::get( $user['districtId'] );
-        $user[ 'club' ] = Queries\District::get( $user['clubId'] );
-        return $user;
+        $breeder = Queries\Breeder::get( $id );
+        if( ! $breeder) throw new HttpNotFoundException($request, "breeder not found");
+        $breeder[ 'district' ] = Queries\District::get( $breeder['districtId'] );
+        $breeder[ 'club' ] = Queries\District::get( $breeder['clubId'] );
+        return $breeder;
     }
 
 }
