@@ -9,12 +9,14 @@
     export let required = false;
     export let min = settings.date.min;
     export let max = settings.date.max;
-    export let error = min.getFullYear()+' - '+max.getFullYear();
+    export let error = new Date( min ).getFullYear() + ' - ' + new Date( max ).getFullYear();
+    console.log('Min', min );
 
     let classname = '';
     export { classname as class }
 
-    let input = value;
+    let input = toGermanDate( value );
+    let date = null;
     let invalid = false;
 
     let on = {
@@ -22,23 +24,35 @@
         blur: () => {},
     }
 
-    $: validate( input );
+    $: validate( input, min, max );
+    $: console.log( 'input changed', input );
+    $: console.log( 'min changed', min );
+    $: console.log( 'max changed', max );
 
-
-
-    function validate() {
-        const date = getValidDate( input, min, max );
+    function toGermanDate( date ) {
         if( date ) {
-            value = input;
+            date = new Date(date);
+            return date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
+        }
+        return null;
+    }
+
+    function validate( input, min, max ) {
+        console.log( 'Date', label, input, min, max );
+        const oldDate = date;
+        date = getValidDate( input, min, max ); // null or valid
+        if( date !== value ) {
+            value = date;
             invalid = false;
         } else {
+            value = null;
             invalid = required || ! ( input === '' || input === null );
         }
     }
 
 </script>
 
-<div class='input {classname} flex flex-col gap-0'>
+<div class='input {classname} flex flex-col gap-0' title='Datum : 31.1.2021'>
     {#if label}
         <label class='label' for='input'>{label}</label>
     {/if}
@@ -50,7 +64,6 @@
            on:blur={on.blur}
     >
         <span class='invalid'>
-            &nbsp;
             {#if invalid && ! disabled}
                 {error}
             {/if}

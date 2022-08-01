@@ -1,4 +1,5 @@
 <script>
+    import InputButton from '../input/Button.svelte';
     import InputDate from '../input/Date.svelte';
     import InputNumber from '../input/Number.svelte';
     import InputRing from '../input/Ring.svelte';
@@ -10,7 +11,7 @@
 
     function addParent() {
         console.log( 'Add Parent' );
-        report.parents = [...report.parents, { sex:'0.1', ring:'D 22 AZ 999', score:null }];
+        report.parents = [...report.parents, { id:Date.now(), sex:'0.1', ring:'D 22 AZ 999', score:null }];
     }
 
     function removeParent( index ) {
@@ -42,10 +43,10 @@
     </div>
 
     <div class='flex flex-col gap-y-1'>
-        {#each report.parents as parent, i}
+        {#each report.parents as parent, i (parent.id)}
             <div class='flex flex-row gap-x-1'>
-                <InputText class='w-8' label={i===0 ? '#' : null} value={i} readonly />
-                <Select class='w-16' label={i===0 ? 'Sex' : null} bind:value={parent.sex} {disabled} required>
+                <InputNumber class='w-8' label={i===0 ? '#' : null} value={i} readonly />
+                <Select class='w-16' label={i===0 ? 'Sex' : null} bind:value={parent.sex} title='Hahn (1.0) oder Henne (0.1)' {disabled} required>
                     {#each ['1.0', '0.1'] as sex }
                         <option value={sex}>{sex}</option>
                     {/each}
@@ -56,7 +57,7 @@
                 <div class='grow'>
                     <InputText class='grow' label={i===0 ? 'Stamm Leistungen' : null} value='Todo 160 49, 90% 80%, 94.1'/>
                 </div>
-                <input type='button' on:click={removeParent(i)} value='X'>
+                <InputButton class='w-8' on:click={removeParent(i)} label={i===0 ? 'Entf' : null} value='X' />
             </div>
         {/each}
         <div class='rounded border bg-gray-500 text-center text-white cursor-pointer' on:click={addParent}>Elterntier zufügen</div>

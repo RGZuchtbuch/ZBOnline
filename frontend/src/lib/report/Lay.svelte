@@ -1,5 +1,5 @@
 <script>
-    import { getValidDate } from '../../js/util.js'
+    import { getProduction, getValidDate } from '../../js/util.js'
 
     import InputDate from '../input/Date.svelte';
     import InputNumber from '../input/Number.svelte';
@@ -13,10 +13,11 @@
     let dames = null;
     let days = null
     let production = null;
+    let minEnd = report.lay.start;
 
     $: setDames( report.parents );
     $: setDays( report.lay.start, report.lay.end );
-    $: setProduction( dames, days, report.lay.eggs );
+    $: setProduction( days, report.lay.eggs, dames );
 
     function setDames( parents ) {
         console.log( 'Counting dames' );
@@ -28,21 +29,24 @@
     }
 
     function setDays( start, end ) {
-        console.log( 'set days', start, end );
+        const startDate = new Date( start );
+        const endDate = new Date( end );
         days = null;
-        if( start !== null && end !== null ) {
-            const from = getValidDate( start, settings.date.min, settings.date.max );
-            const to = getValidDate( end, settings.date.min, settings.date.max );
-            console.log('set days', start, end, from, to);
-            if (!isNaN(from.getFullYear()) && !isNaN(to.getFullYear())) {
-                days = 1 + Math.floor((to - from) / 86400000);
-                console.log('Days ok', days)
-            }
+        console.log('set days', start, end);
+        if( startDate && endDate ) {
+            const dif = 1 + Math.floor((endDate - startDate) / 86400000);
+            days = dif > 0 ? dif : null;
+            console.log('Days ok', days)
         }
     }
-    function setProduction( dames, days, eggs ) {
-        production = eggs * 274 / days / dames;
+
+    function setProduction( days, eggs, dames ) {
+        production = null;
+        if( days && eggs && dames ) {
+            production = Math.round( getProduction(days, eggs, dames) ); //eggs * 274 / days / dames;
+        }
     }
+
 
 
 
@@ -52,14 +56,13 @@
     <div>Legeleistung</div>
 
     <div class='flex flex-row gap-x-1'>
-        <InputNumber class='w-16' label='# Hennen' value={dames} readonly/>
-        <InputDate class='w-24' label={'Gesammelt ab'} bind:value={report.lay.start} {disabled} />
-        <InputDate class='w-24' label={'Gesammelt bis'} bind:value={report.lay.end} {disabled} />
-        <InputNumber class='w-16' label='Tagen' value={days} readonly/>
+        <InputDate class='w-24' label={'Gesammelt ab'} bind:value={report.lay.start} {disabled}/>
+        <InputDate class='w-24' label={'Gesammelt bis'} bind:value={report.lay.end} min={report.lay.start} {disabled}/>
+        <InputNumber class='w-16' label='Tagen' value={days} readonly disabled/>
         <InputNumber class='w-16' label={'Eierzahl'} bind:value={report.lay.eggs} min=0 max={(report.parents.length-1)*365} {disabled} />
-        <InputNumber class='w-16' label='Eier / Jahr' value={production} readonly />
+        <InputNumber class='w-16' label='# Hennen' value={dames} disabled readonly/>
+        <InputNumber class='w-16' label='Eier / Jahr' value={production} disabled readonly />
     </div>
-
 </div>
 
 <style>

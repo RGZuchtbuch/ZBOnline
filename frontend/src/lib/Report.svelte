@@ -27,9 +27,9 @@
         if( promise ) promise.then( data => {
             console.log( 'Report', data );
             report = data;
-            report.parents = [ { sex:'1.0', ring:'D13 AZ 999', score:94.2 }, { sex:'0.1', ring:'D13 AZ 999', score:94.2 } ];
-            report.lay = { start:null, end:null, eggs:null };
-            report.broods = [];
+            report.parents = [ { id:1, sex:'1.0', ring:'D13 AZ 999', score:94.2 }, { id:2, sex:'0.1', ring:'D13 NY 10', score:94.1 } ];
+            report.lay = { start:'01.01.20', end:null, eggs:null };
+            report.broods = [];//[{ id:1, start:null, eggs:null, fertile:null, hatched:null },{ id:2, start:null, eggs:null, fertile:null, hatched:null }];
         }).catch( error => {
             console.error( 'Error', error );
         });

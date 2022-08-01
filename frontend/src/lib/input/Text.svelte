@@ -3,7 +3,7 @@
     export let value;
     export let label;
     export let error = '';
-    export let name;
+    export let name = null;
     export let disabled = false;
     export let readonly = false;
     export let maxlength = 524288;
@@ -35,7 +35,7 @@
     {#if label}
         <label class='label' for='input'>{label}</label>
     {/if}
-    <input class='data' class:error id='input' type='text' {name} bind:value={value}
+    <input class='data' class:invalid id='input' type='text' {name} bind:value={value}
            {minlength} {maxlength}
            {required} {disabled} {readonly} {pattern}
             on:focus={on.focus}

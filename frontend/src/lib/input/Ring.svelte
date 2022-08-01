@@ -51,7 +51,7 @@
 
 </script>
 
-<div class='input {classname} flex flex-col gap-0'>
+<div class='input {classname} flex flex-col gap-0' title='Land Jahr Buchstaben Nummer : D 20 AZ 999'>
     {#if label}
         <label class='label' for='input'>{label}</label>
     {/if}

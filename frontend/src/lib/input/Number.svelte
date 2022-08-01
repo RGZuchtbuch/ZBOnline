@@ -5,8 +5,8 @@
     export let name;
     export let disabled = false;
     export let readonly = false;
-    export let max = Number.MAX_VALUE;
-    export let min = Number.MIN_VALUE;
+    export let min = Number.MIN_SAFE_INTEGER;
+    export let max = Number.MAX_SAFE_INTEGER;
     export let step = 1;
     export let error = '!'
     export let required = false;
@@ -21,18 +21,19 @@
         blur: () => {},
     }
 
-    $: validate( value );
+    $: validate( value, min, max );
 
-    function validate( value ) { // using component value
+    function validate( value, min, max ) { // using component value
+        console.log( 'Number', value );
         invalid = ! (( value >= min && value <= max ) || (! required && value === null )) ;
     }
 </script>
 
 <div class='input {classname} flex flex-col gap-0'>
     {#if label}
-        <label class='label' for='input'>{label}</label>
+        <label class='label text-left' for='input'>{label}</label>
     {/if}
-    <input class='data text-right' class:invalid id='input' type='number' {name}
+    <input class='data' class:invalid id='input' type='number' {name}
            bind:value={value}
            {min} {max} {step}
            {disabled} {readonly} {required}
@@ -45,5 +46,8 @@
 </div>
 
 <style>
+    input {
+        @apply text-right;
+    }
 
 </style>
