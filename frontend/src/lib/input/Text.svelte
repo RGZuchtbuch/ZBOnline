@@ -15,7 +15,7 @@
     let classname = '';
     export { classname as class }
 
-    value = value.toString();
+    value = value ? value.toString() : null;
     let invalid = false;
 
     let on = {
@@ -26,7 +26,7 @@
     $: validate( value );
 
     function validate( value ) {
-        invalid = ! value.match( pattern );
+        invalid = pattern ? ! value.match( pattern ) : false;
     }
 
 </script>

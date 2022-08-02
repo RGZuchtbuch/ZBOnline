@@ -10,9 +10,10 @@
     import InputRing from './input/Ring.svelte';
     import Select from './select/Select.svelte';
     import ReportBreed from './report/Breed.svelte';
-    import ReportParents from './report/Parents.svelte';
-    import ReportLay from './report/Lay.svelte';
     import ReportBroods from './report/Broods.svelte';
+    import ReportLay from './report/Lay.svelte';
+    import ReportParents from './report/Parents.svelte';
+    import ReportShow from './report/Show.svelte';
 
     export let promise;
     export let legend = '';
@@ -30,6 +31,7 @@
             report.parents = [ { id:1, sex:'1.0', ring:'D13 AZ 999', score:94.2 }, { id:2, sex:'0.1', ring:'D13 NY 10', score:94.1 } ];
             report.lay = { start:'01.01.20', end:null, eggs:null };
             report.broods = [];//[{ id:1, start:null, eggs:null, fertile:null, hatched:null },{ id:2, start:null, eggs:null, fertile:null, hatched:null }];
+            report.show = { p89:null, p90:null, p91:null, p92:null, p93:null, p94:null, p95:null, p96:null, p97:null };
         }).catch( error => {
             console.error( 'Error', error );
         });
@@ -65,6 +67,8 @@
         <ReportLay bind:report={report} {disabled}/>
 
         <ReportBroods bind:report={report} {disabled} />
+
+        <ReportShow bind:report={report} {disabled} />
 
 
         <div>

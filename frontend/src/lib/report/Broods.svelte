@@ -1,4 +1,6 @@
 <script>
+    import { printPct } from '../../js/util.js'
+
     import InputButton from '../input/Button.svelte';
     import InputDate from '../input/Date.svelte';
     import InputNumber from '../input/Number.svelte';
@@ -36,6 +38,8 @@
                 <InputNumber class='w-16' label={i===0 ? 'Eingelegt' : null } bind:value={brood.eggs} min=1 max={99999} {disabled} />
                 <InputNumber class='w-16' label={i===0 ? 'Befruchtet' : null } bind:value={brood.fertile} min=0 max={brood.eggs} error={0+' - '+brood.eggs} {disabled} />
                 <InputNumber class='w-16' label={i===0 ? 'Geschlüpft' : null } bind:value={brood.hatched} min=0 max={brood.fertile} error={0+' - '+brood.fertile} {disabled} />
+                <InputText class='w-16' label='Befruchtung' value={printPct( brood.fertile / brood.eggs )} readonly />
+                <InputText class='w-16' label='Schlupf' value={printPct( brood.hatched / brood.eggs )} readonly />
                 <InputButton class='w-8' on:click={removeBrood(i)} label={i===0 ? 'Entf' : null} value='X' readonly />
             </div>
 

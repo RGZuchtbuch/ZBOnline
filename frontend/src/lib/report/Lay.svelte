@@ -58,10 +58,10 @@
     <div class='flex flex-row gap-x-1'>
         <InputDate class='w-24' label={'Gesammelt ab'} bind:value={report.lay.start} {disabled}/>
         <InputDate class='w-24' label={'Gesammelt bis'} bind:value={report.lay.end} min={report.lay.start} {disabled}/>
-        <InputNumber class='w-16' label='Tagen' value={days} readonly disabled/>
-        <InputNumber class='w-16' label={'Eierzahl'} bind:value={report.lay.eggs} min=0 max={(report.parents.length-1)*365} {disabled} />
-        <InputNumber class='w-16' label='# Hennen' value={dames} disabled readonly/>
-        <InputNumber class='w-16' label='Eier / Jahr' value={production} disabled readonly />
+        <InputNumber class='w-16' label='Tagen' value={days} readonly/>
+        <InputNumber class='w-16' label={'Eierzahl'} bind:value={report.lay.eggs} min=0 max={days * dames} {disabled} />
+        <InputNumber class='w-16' label='# Hennen' value={dames} readonly/>
+        <InputText class='w-16' label='Eier / Jahr' value={production} readonly />
     </div>
 </div>
 

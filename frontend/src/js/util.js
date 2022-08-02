@@ -51,3 +51,15 @@ export function getProduction( days, eggs, dames ) {
     }
     return null;
 }
+
+export function printDate( date ) {
+    if( date ) {
+        date = new Date(date);
+        return date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
+    }
+    return null;
+}
+
+export function printPct( value, decimals = 0 ) {
+    return (value*100).toFixed( decimals )+'%';
+}

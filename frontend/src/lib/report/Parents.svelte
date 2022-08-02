@@ -38,7 +38,7 @@
 <div class='flex flex-col my-2'>
     <div>Abstammung</div>
     <div class='flex flex-row> gap-x-1'>
-        <InputText class='w-12' label='Stamm' value={getComposition( report.parents )} disabled />
+        <InputText class='w-12' label='Stamm' value={getComposition( report.parents )} readonly />
         <InputDate class='w-24' label='Anpaarung' bind:value={report.paired} {disabled}/>
     </div>
 

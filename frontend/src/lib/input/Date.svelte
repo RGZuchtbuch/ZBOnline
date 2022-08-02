@@ -1,9 +1,9 @@
 <script>
-    import { getValidDate } from '../../js/util.js'
+    import { getValidDate, printDate } from '../../js/util.js'
 
     export let value;
-    export let label;
-    export let name;
+    export let label = null;
+    export let name = null;
     export let disabled = false;
     export let readonly = false;
     export let required = false;
@@ -15,7 +15,7 @@
     let classname = '';
     export { classname as class }
 
-    let input = toGermanDate( value );
+    let input = printDate( value );
     let date = null;
     let invalid = false;
 
@@ -29,13 +29,7 @@
     $: console.log( 'min changed', min );
     $: console.log( 'max changed', max );
 
-    function toGermanDate( date ) {
-        if( date ) {
-            date = new Date(date);
-            return date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
-        }
-        return null;
-    }
+
 
     function validate( input, min, max ) {
         console.log( 'Date', label, input, min, max );
