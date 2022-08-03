@@ -7,17 +7,19 @@
     import InputText from '../input/Text.svelte';
     import Select from '../select/Select.svelte';
 
-    export let report;
+//    export let report;
+    export let lay;
+    export let parents;
     export let disabled;
 
     let dames = null;
     let days = null
     let production = null;
-    let minEnd = report.lay.start;
+    let minEnd = lay.start;
 
-    $: setDames( report.parents );
-    $: setDays( report.lay.start, report.lay.end );
-    $: setProduction( days, report.lay.eggs, dames );
+    $: setDames( parents );
+    $: setDays( lay.start, lay.end );
+    $: setProduction( days, lay.eggs, dames );
 
     function setDames( parents ) {
         console.log( 'Counting dames' );
@@ -56,10 +58,10 @@
     <div>Legeleistung</div>
 
     <div class='flex flex-row gap-x-1'>
-        <InputDate class='w-24' label={'Gesammelt ab'} bind:value={report.lay.start} {disabled}/>
-        <InputDate class='w-24' label={'Gesammelt bis'} bind:value={report.lay.end} min={report.lay.start} {disabled}/>
+        <InputDate class='w-24' label={'Gesammelt ab'} bind:value={lay.start} {disabled}/>
+        <InputDate class='w-24' label={'Gesammelt bis'} bind:value={lay.end} min={lay.start} {disabled}/>
         <InputNumber class='w-16' label='Tagen' value={days} readonly/>
-        <InputNumber class='w-16' label={'Eierzahl'} bind:value={report.lay.eggs} min=0 max={days * dames} {disabled} />
+        <InputNumber class='w-16' label={'Eierzahl'} bind:value={lay.eggs} min=0 max={days * dames} {disabled} />
         <InputNumber class='w-16' label='# Hennen' value={dames} readonly/>
         <InputText class='w-16' label='Eier / Jahr' value={production} readonly />
     </div>

@@ -2,7 +2,7 @@
 
     export let value;
     export let label;
-    export let name;
+    export let name = null;
     export let disabled = false;
     export let readonly = false;
     export let min = Number.MIN_SAFE_INTEGER;
@@ -24,7 +24,6 @@
     $: validate( value, min, max );
 
     function validate( value, min, max ) { // using component value
-        console.log( 'Number', value );
         invalid = ! (( value >= min && value <= max ) || (! required && value === null )) ;
     }
 </script>

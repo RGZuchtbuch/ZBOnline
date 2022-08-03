@@ -25,23 +25,18 @@
     }
 
     $: validate( input, min, max );
-    $: console.log( 'input changed', input );
-    $: console.log( 'min changed', min );
-    $: console.log( 'max changed', max );
-
-
 
     function validate( input, min, max ) {
-        console.log( 'Date', label, input, min, max );
         const oldDate = date;
         date = getValidDate( input, min, max ); // null or valid
-        if( date !== value ) {
+        if( date !== oldDate ) {
             value = date;
             invalid = false;
         } else {
             value = null;
-            invalid = required || ! ( input === '' || input === null );
+            invalid = required || ! ( input === '' || input === null ); // true if required and wrong or not required and empty
         }
+//        console.log( 'Date', label, input, min, max, invalid );
     }
 
 </script>

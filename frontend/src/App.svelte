@@ -34,7 +34,7 @@
         </div>
 
 
-        <div class='grow bg-gray-100 overflow-y-scroll border border-black rounded p-4'>
+        <div class='grow bg-gray-100 overflow-y-scroll border border-black rounded p-4 scrollbar'>
             <Route path='/obmann/*'>
                 <Route path='/verband/'>
                     <Districts legend={'Verbände für ?'} promise={api.moderator.districts(1)} link={'obmann/verband/'}/>

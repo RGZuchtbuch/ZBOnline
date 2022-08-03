@@ -7,14 +7,20 @@
     import InputText from '../input/Text.svelte';
     import Select from '../select/Select.svelte';
 
-    export let report;
+    export let show;
     export let disabled;
 
-    function count( show ) {
-        return show.p89 + show.p91 + show.p92 + show.p93 + show.p94 + show.p95 + show.p96 + show.p97;
-    }
-    function score( show ) {
-        return (show.p89*89 + show.p91*91 + show.p92*92 + show.p93*93 + show.p94*94 + show.p95*95 + show.p96*96 + show.p97*97) / count( show );
+    let count = 0;
+    let score = null;
+
+    $: update( show );
+
+    function update( show ) {
+        count = show.p89 + show.p90 + show.p91 + show.p92 + show.p93 + show.p94 + show.p95 + show.p96 + show.p97;
+        score = count
+            ? ( (show.p89 * 89 + show.p90 * 90 + show.p91 * 91 + show.p92 * 92 + show.p93 * 93 + show.p94 * 94 + show.p95 * 95 + show.p96 * 96 + show.p97 * 97) / count ).toFixed(1)
+            : null;
+        console.log( 'Update', count, score );
     }
 
 </script>
@@ -23,17 +29,17 @@
     <div>Schauleistung</div>
 
     <div class='flex flex-row gap-x-1'>
-        <InputNumber class='w-12' label={'U/O'} bind:value={report.show.p89} {disabled}/>
-        <InputNumber class='w-12' label={'90'} bind:value={report.show.p90} {disabled}/>
-        <InputNumber class='w-12' label={'91'} bind:value={report.show.p91} {disabled}/>
-        <InputNumber class='w-12' label={'92'} bind:value={report.show.p92} {disabled}/>
-        <InputNumber class='w-12' label={'93'} bind:value={report.show.p93} {disabled}/>
-        <InputNumber class='w-12' label={'94'} bind:value={report.show.p94} {disabled}/>
-        <InputNumber class='w-12' label={'95'} bind:value={report.show.p95} {disabled}/>
-        <InputNumber class='w-12' label={'96'} bind:value={report.show.p96} {disabled}/>
-        <InputNumber class='w-12' label={'97'} bind:value={report.show.p97} {disabled}/>
-        <InputText class='w-12' label={'Tiere'} value={ count( report.show )} readonly />
-        <InputText class='w-12' label={'Tiere'} value={ score( report.show ).toFixed(1)} readonly />
+        <InputNumber class='w-12' label={'U/O'} bind:value={show.p89} {disabled}/>
+        <InputNumber class='w-12' label={'90'} bind:value={show.p90} {disabled}/>
+        <InputNumber class='w-12' label={'91'} bind:value={show.p91} {disabled}/>
+        <InputNumber class='w-12' label={'92'} bind:value={show.p92} {disabled}/>
+        <InputNumber class='w-12' label={'93'} bind:value={show.p93} {disabled}/>
+        <InputNumber class='w-12' label={'94'} bind:value={show.p94} {disabled}/>
+        <InputNumber class='w-12' label={'95'} bind:value={show.p95} {disabled}/>
+        <InputNumber class='w-12' label={'96'} bind:value={show.p96} {disabled}/>
+        <InputNumber class='w-12' label={'97'} bind:value={show.p97} {disabled}/>
+        <InputNumber class='w-16' label={'# Tiere'} value={ count } readonly />
+        <InputNumber class='w-20' label={'∅ Note'} value={ score } readonly />
     </div>
 </div>
 

@@ -6,18 +6,18 @@
     import InputText from '../input/Text.svelte';
     import Select from '../select/Select.svelte';
 
-    export let report;
+    export let parents;
     export let disabled;
 
     function addParent() {
         console.log( 'Add Parent' );
-        report.parents = [...report.parents, { id:Date.now(), sex:'0.1', ring:'D 22 AZ 999', score:null }];
+        parents = [...parents, { id:Date.now(), sex:'0.1', ring:'D 22 AZ 999', score:null }];
     }
 
     function removeParent( index ) {
         return () => {
-            report.parents.splice(index, 1);
-            report.parents = report.parents;
+            parents.splice(index, 1);
+            parents = parents;
         }
     }
 
@@ -37,13 +37,9 @@
 
 <div class='flex flex-col my-2'>
     <div>Abstammung</div>
-    <div class='flex flex-row> gap-x-1'>
-        <InputText class='w-12' label='Stamm' value={getComposition( report.parents )} readonly />
-        <InputDate class='w-24' label='Anpaarung' bind:value={report.paired} {disabled}/>
-    </div>
 
     <div class='flex flex-col gap-y-1'>
-        {#each report.parents as parent, i (parent.id)}
+        {#each parents as parent, i (parent.id)}
             <div class='flex flex-row gap-x-1'>
                 <InputNumber class='w-8' label={i===0 ? '#' : null} value={i} readonly />
                 <Select class='w-16' label={i===0 ? 'Sex' : null} bind:value={parent.sex} title='Hahn (1.0) oder Henne (0.1)' {disabled} required>
@@ -52,7 +48,7 @@
                     {/each}
                 </Select>
                 <InputRing class='w-32' label={i===0 ? 'Ring [D J Bs Nr]' : null} value={parent.ring} {disabled} require/>
-                <InputNumber class='w-16' label={i===0 ? 'ø Note' : null} bind:value={parent.score} min=90 max=97 step=0.1 {disabled} />
+                <InputNumber class='w-16' label={i===0 ? '∅ Note' : null} bind:value={parent.score} min=90 max=97 step=0.1 {disabled} />
 
                 <div class='grow'>
                     <InputText class='grow' label={i===0 ? 'Stamm Leistungen' : null} value='Todo 160 49, 90% 80%, 94.1'/>
