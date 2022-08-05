@@ -57,7 +57,7 @@ input:enabled:read-write, select:enabled:read-write {
 /* For Firefox Browser */
 .scrollbar {
     scrollbar-width: thin;
-    scrollbar-color: #aaa #777;
+    scrollbar-color: #ccc #777;
 }
 
 
@@ -67,7 +67,7 @@ input:enabled:read-write, select:enabled:read-write {
 }
 
 .scrollbar::-webkit-scrollbar-track {
-    background: #aaa;
+    background: #ccc;
 }
 
 .scrollbar::-webkit-scrollbar-thumb {

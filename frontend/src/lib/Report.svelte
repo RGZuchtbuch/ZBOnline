@@ -20,7 +20,7 @@
     export let legend = '';
     export let link='';
 
-    let report = null;
+    let pair = null;
     let breed = null;
     let parents = null;
     let lay = null;
@@ -35,41 +35,56 @@
     onMount( () => {
         if( promise ) promise.then( data => {
             console.log( 'Report', data );
-            report = data;
-            breed = { sectionId:4, breedId:1024, colorId:8543 };
-            parents = [ { id:1, sex:'1.0', ring:'D13 AZ 999', score:94.2 }, { id:2, sex:'0.1', ring:'D13 NY 10', score:94.1 } ];
-            lay = { start:'01.01.20', end:null, eggs:null };
-            broods = [];//[{ id:1, start:null, eggs:null, fertile:null, hatched:null },{ id:2, start:null, eggs:null, fertile:null, hatched:null }];
-            show = { p89:null, p90:null, p91:null, p92:null, p93:null, p94:null, p95:null, p96:null, p97:null };
-            notes = 'Notes here';
+            pair = data;
+            breed = { sectionId:pair.sectionId, breedId:pair.breedId, colorId:pair.colorId };
+            parents = pair.parents;
+            lay = pair.lay;
+            broods = pair.broods;
+            show = pair.show;
         }).catch( error => {
             console.error( 'Error', error );
         });
     })
 
-    // let parents = [ { sex:'1.0', ring:'D13 AZ 999', score:94.2 }, { sex:'0.1', ring:'D13 AZ 999', score:94.2 } ];
+    function onEdit() {
+        disabled = false;
+    }
 
-    function submit() {
-        report.breed = breed;
-        report.parents = parents;
-        report.lay = lay;
-        report.broods = broods;
-        report.show = show;
-        report.notes = notes;
-        console.log( 'Submit', report );
+    function onSubmit() {
+        disabled = true;
+        pair.sectionId = breed.sectionId;
+        pair.breedId = breed.breedId;
+        pair.colorId = breed.colorId;
+        pair.parents = parents;
+        pair.lay = lay;
+        pair.broods = broods;
+        pair.show = show;
+        pair.notes = notes;
+        console.log('Submit', pair);
+        if( pair.id ) {
+            api.report.put( pair )
+                .then( ( result ) => {
+                    console.log('Success');
+            });
+        } else {
+            api.report.post( pair )
+                .then( ( result ) => {
+                    console.log('Failed');
+                });
+        }
     }
 </script>
 
-<div class='flex flex-col '>
+<form class='flex flex-col' on:submit|preventDefault={onSubmit}>
     <h2>Zuchtbuch Meldung</h2>
-    {#if report}
+    {#if pair}
         <div class='flex flex-col my-2'>
             <div>Stamm</div>
             <div class='flex flex-row gap-x-1'>
                 <InputText class='w-32' label='Züchter' value='Eelco Jannink' readonly {disabled}/>
-                <InputNumber class='w-16' label='Jahr' bind:value={report.year} min='1850' max='2030' {disabled}/>
-                <InputText class='w-16' label='Name' bind:value={report.name} spellcheck=false {disabled} required/>
-                <Select class='w-12' label='Gruppe' options={groups} bind:value={report.group} placeholder='?' {disabled} required>
+                <InputNumber class='w-16' label='Jahr' bind:value={pair.year} min='1850' max='2030' {disabled}/>
+                <InputText class='w-16' label='Name' bind:value={pair.name} spellcheck=false {disabled} required/>
+                <Select class='w-12' label='Gruppe' options={groups} bind:value={pair.group} placeholder='?' {disabled} required>
                     {#each groups as group}
                         <option value={group}>{group}</option>
                     {/each}
@@ -80,22 +95,28 @@
 
         <ReportBreed bind:breed={breed} {disabled}/>
 
-        <ReportParents bind:parents={parents} {disabled}/>
+        <ReportParents bind:paired={pair.paired} bind:parents={parents} {disabled}/>
 
-        {#if breed.sectionId !== 5 }
+        {#if breed.sectionId !== 5}
             <ReportLay bind:lay={lay} parents={parents} {disabled}/>
         {/if}
 
-        <ReportBroods bind:broods={broods} {disabled} />
+        <ReportBroods sectionId={breed.sectionId} bind:broods={broods} {disabled} />
+
 
         <ReportShow bind:show={show} {disabled} />
 
-        <ReportNotes bind:notes={notes} />
+        <ReportNotes bind:notes={notes} {disabled} />
 
 
-        <div class='rounded border bg-gray-500 text-center text-white cursor-pointer' on:click={submit}>Meldung speichern</div>
+
+        {#if disabled}
+            <button type='button' class='rounded border bg-gray-500 text-center text-white cursor-pointer' on:click={onEdit}>Meldung beartbeiten</button>
+        {:else}
+            <button type='submit' class='rounded border bg-gray-500 text-center text-white cursor-pointer'>Meldung speichern</button>
+        {/if}
     {/if}
-</div>
+</form>
 
 <style>
 

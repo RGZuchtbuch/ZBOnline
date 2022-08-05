@@ -58,12 +58,16 @@
     <div>Legeleistung</div>
 
     <div class='flex flex-row gap-x-1'>
-        <InputDate class='w-24' label={'Gesammelt ab'} bind:value={lay.start} {disabled}/>
-        <InputDate class='w-24' label={'Gesammelt bis'} bind:value={lay.end} min={lay.start} {disabled}/>
-        <InputNumber class='w-16' label='Tagen' value={days} readonly/>
-        <InputNumber class='w-16' label={'Eierzahl'} bind:value={lay.eggs} min=0 max={days * dames} {disabled} />
-        <InputNumber class='w-16' label='# Hennen' value={dames} readonly/>
-        <InputText class='w-16' label='Eier / Jahr' value={production} readonly />
+        <div class='grow flex flex-row gap-x-1'>
+            <InputDate class='w-24' label={'Gesammelt ab'} bind:value={lay.start} {disabled}/>
+            <InputDate class='w-24' label={'Gesammelt bis'} bind:value={lay.end} min={lay.start} {disabled}/>
+            <InputNumber class='w-16' label={'Eierzahl'} bind:value={lay.eggs} min=0 max={days * dames} {disabled} />
+        </div>
+        <div class='flex flex-row gap-x-1'>
+            <InputNumber class='w-16' label='Tagen' value={days} readonly/>
+            <InputNumber class='w-16' label='# Hennen' value={dames} readonly/>
+            <InputText class='w-16' label='Eier / Jahr' value={production} readonly />
+        </div>
     </div>
 </div>
 

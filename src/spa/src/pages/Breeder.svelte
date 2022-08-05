@@ -1,8 +1,0 @@
-<script>
-    import Box from '../components/Box.svelte';
-
-</script>
-
-<Box legend='Breeder'>
-    <div class='w-128'>Breeder stuff</div>
-</Box>

@@ -176,9 +176,15 @@ export default {
                     return report;
                 });
         },
-        get: (id) => get('api/report/' + id),
-        post: (pair) => post( 'api/report/'+pair.id, pair ),
-        put: (pair) => put( 'api/report/'+pair.id, pair ),
+        get: (id) => get('api/pair/' + id),
+        post: (report) => {
+            // TODO adjust cache
+            return post( 'api/pair/', report );
+        },
+        put: (report) => {
+            // TODO cache
+            return put( 'api/pair/'+report.id, report );
+        },
     },
 
     section: {
@@ -241,7 +247,7 @@ async function get( url ) {
             method: 'GET',
             headers: getHeaders()
         }
-        //console.log('Get', url);
+        console.log('Get', url);
         let promise = fetch( settings.api.root+url, options)
             .then( response => {
                 if( response.ok ) {
