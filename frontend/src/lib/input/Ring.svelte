@@ -6,7 +6,7 @@
     export let disabled = false;
     export let readonly = false;
     export let required = false;
-    export let error = 'z.B. D21 AZ 999';
+    export let error = 'z.B. D 21 AZ 999';
 
     let classname = '';
     export {classname as class}
@@ -16,12 +16,14 @@
 
     const patterns = {
         default: ( input ) => {
+            console.log( 'Input D', input );
             const match = input.match(/^(\d\d?)[\ \.]*([a-zA-Z]+)[\ \.]*(\d+)$/); // 21 AZ 999, defaults to D
-            return match ? { country:'D ', year:match[1], code:match[2]+' '+match[3] } : null;
+            return match ? 'D '+match[1]+' '+match[2].toUpperCase()+' '+match[3] : null;
         },
         EU: (input) => {
+            console.log( 'Input EU', input );
             const match = input.match(/^([a-zA-Z]+)[\ \.]*(\d{2})[\ \.]*([a-zA-Z]+)[\ \.]*(\d+)$/); // D 21 AZ 999
-            return match ? { country:match[1].toUpperCase(), year:match[2], code:match[3].toUpperCase()+' '+match[4] } : null;
+            return match ? match[1].toUpperCase()+' '+match[2]+' '+match[3].toUpperCase()+' '+match[4] : null;
         }
     };
 
@@ -32,17 +34,28 @@
         },
     }
 
-    $: validate(input);
+    $: clear( value ); // clear from outside
+    $: validate(input); // on input changed
+
+    function clear( value ) {
+        if( value===null ) {
+            input = value;
+        }
+    }
 
     function validate(input) {
         if( input ) {
             invalid = true; // unless a match
             for (let key in patterns) {
+                console.log( 'Key', key );
                 const ring = patterns[key](input);
+                console.log( 'Ring', ring );
                 if (ring) {
-                    value = input;
+                    console.log( 'Found', ring );
+                    value = ring;
                     invalid = false;
-                    break; // on match
+                    return;
+                   // break; // on match
                 }
             }
         } else {

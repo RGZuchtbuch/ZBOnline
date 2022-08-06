@@ -55,7 +55,7 @@
 </script>
 
 <div class='flex flex-col my-2'>
-    <div>Legeleistung</div>
+    <h4>Legeleistung</h4>
 
     <div class='flex flex-row gap-x-1'>
         <div class='grow flex flex-row gap-x-1'>

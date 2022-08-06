@@ -26,7 +26,7 @@
 </script>
 
 <div class='flex flex-col my-2'>
-    <div>Schauleistung</div>
+    <h4>Schauleistung</h4>
 
     <div class='flex flex-row gap-x-1'>
         <InputNumber class='w-12' label={'U/O'} bind:value={show.p89} {disabled}/>

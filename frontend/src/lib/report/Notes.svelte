@@ -14,7 +14,7 @@
 </script>
 
 <div class='flex flex-col my-2'>
-    <div>Notizen</div>
+    <h4>Notizen</h4>
 
     <div class='flex flex-row gap-x-1'>
         <textarea class='grow' label={'Notizen'} bind:value={notes} {disabled}/>

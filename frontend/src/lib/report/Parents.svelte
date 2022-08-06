@@ -11,13 +11,14 @@
     export let disabled = false;
 
     function addParent() {
-        console.log( 'Add Parent' );
-        parents = [...parents, { index:Date.now(), sex:'0.1', ring:'D 22 AZ 999', score:null, parentsId:null }]; // index just for rendering
+        console.log('Add');
+        parents = [...parents, { sex:parents.length === 0 ? '1.0' : '0.1', ring:null, score:null }]; // index just for rendering
+        console.log('Added');
     }
 
-    function removeParent( index ) {
+    function removeParent( parent ) {
         return () => {
-            parents.splice(index, 1);
+            parent.removed = true;
             parents = parents;
         }
     }
@@ -35,34 +36,40 @@
         return ''+sires+"."+dames;
     }
 
-    console.log( 'Parents', parents );
 </script>
 
 <div class='flex flex-col my-2'>
-    <div>Abstammung</div>
+    <h4>Abstammung (?)</h4>
 
     <div class='flex flex-col gap-y-1'>
         <InputDate class='w-24' label={'Angepaart am'} bind:value={paired} {disabled} />
-
-        {#each parents as parent, i (parent.index)}
-            <div class='flex flex-row gap-x-1'>
-                <div class='grow flex flex-row gap-x-1'>
-                    <InputNumber class='w-8' label={i===0 ? '#' : null} value={i} readonly />
-                    <Select class='w-16' label={i===0 ? 'Sex' : null} bind:value={parent.sex} title='Hahn (1.0) oder Henne (0.1)' {disabled} required>
-                        {#each ['1.0', '0.1'] as sex }
-                            <option value={sex}>{sex}</option>
-                        {/each}
-                    </Select>
-                    <InputRing class='w-32' label={i===0 ? 'Ring [D J Bs Nr]' : null} bind:value={parent.ring} {disabled} required/>
-                    <InputNumber class='w-16' label={i===0 ? '∅ Note' : null} bind:value={parent.score} min=90 max=97 step=0.1 {disabled} />
-                </div>
+        {#each parents as parent, i (i)}
+            {#if ! parent.removed}
                 <div class='flex flex-row gap-x-1'>
-                    <InputText class='grow' label={i===0 ? 'Stamm Leistungen' : null} value='Todo 160 49, 90% 80%, 94.1' readonly/>
+                    <div class='grow flex flex-row gap-x-1'>
+                        <Select class='w-16' label={i===0 ? 'Sex' : null} bind:value={parent.sex} title='Hahn (1.0) oder Henne (0.1)' {disabled} required>
+                            {#each ['1.0', '0.1'] as sex }
+                                <option value={sex}>{sex}</option>
+                            {/each}
+                        </Select>
+                        <InputRing class='w-32' label={i===0 ? 'Ring [D J Bs Nr]' : null} bind:value={parent.ring} {disabled}/>
+                        <InputNumber class='w-16' label={i===0 ? '∅ Note' : null} bind:value={parent.score} min=90 max=97 step=0.1 {disabled} />
+                    </div>
+                    <div class='flex flex-row gap-x-1'>
+                        <InputText class='grow' label={i===0 ? 'Stamm Leistungen' : null} value='Todo 160 49, 90% 80%, 94.1' readonly/>
+                    </div>
+                    <InputButton class='w-8' on:click={removeParent(parent)} label={i===0 ? 'Entf' : null} value='X' />
                 </div>
-                <InputButton class='w-8' on:click={removeParent(i)} label={i===0 ? 'Entf' : null} value='X' />
-            </div>
+            {/if}
         {/each}
-        <div class='rounded border bg-gray-500 text-center text-white cursor-pointer' on:click={addParent}>Elterntier zufügen</div>
+        <div class='flex flex-row gap-x-1'>
+            <div class='grow flex flex-row gap-x-1'>
+            </div>
+            <div class='flex flex-row gap-x-1'>
+                <InputButton class='w-8' on:click={addParent} value='+' />
+            </div>
+        </div>
+
     </div>
 
 </div>
