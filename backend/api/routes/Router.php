@@ -42,7 +42,7 @@ class Router {
         $app->get( '/pair/{id}', new pair\Get() );
 //        $app->post( '/pair/{id}', new pair\Post() );
         $app->put( '/pair/{id}', new pair\Put() );
-//        $app->del( '/pair/{id}', new report\Delete() );
+//        $app->del( '/pair/{id}', new result\Delete() );
 
         $app->post( '/token', new PostToken() );
 

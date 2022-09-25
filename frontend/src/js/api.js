@@ -80,6 +80,15 @@ export default {
             return get( 'api/district/'+districtId+'/breeders');
         }
     },
+    group: {
+        getGroups: () => {
+            console.log( 'api getGroups' );
+            return new Promise( ( resolve ) => {
+//                clear( 'api/district/'+parentId );
+                resolve( ['I', 'II', 'III' ] );
+            })
+        }
+    },
     moderator: {
         new: (districtId) => {
             console.log('api new moderator');
@@ -194,6 +203,8 @@ export default {
         getBreeds: ( sectionId ) => get( 'api/section/'+sectionId+'/breeds'),
     },
 }
+
+
 
 
 /**

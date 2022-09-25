@@ -23,10 +23,10 @@
         blur: () => {},
     }
 
-    $: validate( value );
+    $: invalid = ! validate( value );
 
     function validate( value ) {
-        invalid = pattern ? ! value.match( pattern ) : false;
+        return (pattern && value.match( pattern )) || ( ! required && ! value ) || ( required && value );
     }
 
 </script>

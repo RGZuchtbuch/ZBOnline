@@ -7,7 +7,7 @@
     import InputText from '../input/Text.svelte';
     import Select from '../select/Select.svelte';
 
-//    export let report;
+//    export let result;
     export let notes;
     export let disabled;
 

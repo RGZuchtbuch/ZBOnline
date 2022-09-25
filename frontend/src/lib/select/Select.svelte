@@ -1,7 +1,6 @@
 <script>
 
     export let value;
-    export let options = [];
     export let label;
     export let error = '!';
     export let name;
@@ -31,7 +30,7 @@
 
 <div class='input {classname} flex flex-col gap-0' {title}>
     {#if label}
-        <label class='label' for='input'>{label} {value}</label>
+        <label class='label' for='input'>{label}</label>
     {/if}
 
     <select class='data' class:invalid  id='input'
@@ -42,7 +41,6 @@
             on:blur={on.blur}
             on:change
     >
-            <option value={null} hidden></option>
             <slot></slot>
     </select>
 

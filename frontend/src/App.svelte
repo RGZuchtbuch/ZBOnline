@@ -6,6 +6,7 @@
     import Breeders from './lib/Breeders.svelte';
     import District from './lib/District.svelte';
     import Districts from './lib/Districts.svelte';
+    import Reporting from './lib/Reporting.svelte';
     import Report from './lib/Report.svelte';
     import Reports from './lib/Reports.svelte';
 
@@ -22,17 +23,17 @@
             <a href=''>Das Zuchtbuch</a>
             <a href=''>Leistungen</a>
             <a href=''>Mein Zuchtbuch</a>
-            <a href=''>Obmann</a>
+            <a href='obmann'>Obmann</a>
             <a href=''>Admin</a>
         </div>
         <div>Anmelden</div>
     </div>
 
-    <div class='mx-32 my-2 flex flex-row gap-2 relative min-h-0 '>
-        <div class='w-48 border rounded'>
+    <div class='mx-16 my-2 flex flex-row gap-2 relative min-h-0 '>
+
+        <div class='w-48 mt-24 border rounded'>
             left menu
         </div>
-
 
         <div class='grow bg-gray-100 overflow-y-scroll border border-black rounded p-4 scrollbar'>
             <Route path='/obmann/*'>
@@ -42,6 +43,9 @@
                 <Route path='/verband/:districtId/*' let:meta>
                     <Route path='/' let:meta>
                         <District promise={api.district.get( meta.params.districtId) } />
+                    </Route>
+                    <Route path='/melden' let:meta>
+                        <Reporting districtId={meta.params.districtId} />
                     </Route>
                     <Route path='/zuechter/*' let:meta>
                         <Route path='/' let:meta>

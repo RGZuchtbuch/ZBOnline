@@ -9,72 +9,55 @@
 
     export let disabled;
 
-    let sections;
-    let breeds;
-    let colors;
+    let sections = [];
+    let breeds = [] ;
+    let colors = [];
 
-    onMount( () => {
-        getSections();
-        getBreeds( sectionId );
-        getColors( breedId );
-    })
+    onMount( () => {})
 
-//    $: getBreeds( sectionId );
-//    $: getColors( breedId );
-
-    const on = {
-        sectionId: () => {
-            console.log( 'On Section' );
-            getBreeds( sectionId );
-            colors = [];
-        },
-        breedId: () => {
-            console.log( 'On Breed' );
-            getColors(breedId);
-        },
-        colorId: () => {
-            console.log( 'On Color' );
-        }
-    }
+    getSections(); // only once
+    $: getBreeds( sectionId );
+    $: getColors( breedId ); // after getBreeds !
 
     function getSections() {
         api.section.getChildren(2).then( data => { sections = data });
     }
-
     function getBreeds( sectionId ) {
-        api.section.getBreeds( sectionId ).then( data => { breeds = data });
+        console.log( 'SelectBreed, getBreeds', sectionId );
+        if( sectionId ) {
+            api.section.getBreeds(sectionId).then(data => {
+                breeds = data;
+            });
+            colors = [];
+        }
     }
-
     function getColors( breedId ) {
-        api.breed.getColors( breedId ).then( data => { colors = data });
+        console.log( 'SelectBreed, getColors', breedId );
+        if( breedId ) api.breed.getColors( breedId ).then( data => { colors = data });
     }
 
 </script>
 
 
-<div class='flex flex-col my-2'>
+<div class='flex flex-col'>
     <div class='flex flex-row gap-x-1'>
-
-        <Select class='w-48' label='Sparte' options={sections} bind:value={sectionId} {disabled} required on:change={on.sectionId}>
-            {#if sections}
-                {#each sections as section }
-                    <option value={section.id} selected={sectionId === section.id}>{section.name}</option>
-                {/each}
-            {/if}
+        <Select class='w-48' label='Sparte' bind:value={sectionId} {disabled} required>
+            <option value={null} hidden></option>
+            {#each sections as section }
+                <option value={section.id} selected={section.id === sectionId}>{section.name}</option>
+            {/each}
         </Select>
-        <Select class='w-64' label='Rasse' bind:value={breedId} {disabled} required on:change={on.breedId}>
-            {#if breeds}
-                {#each breeds as breed }
-                    <option value={breed.id} selected={breedId === breed.id}>{breed.name}</option>
-                {/each}
-            {/if}
+        <Select class='w-64' label='Rasse' bind:value={breedId} {disabled} required>
+            <option value={null} hidden></option>
+            {#each breeds as breed }
+                <option value={breed.id} selected={breed.id === breedId}>{breed.name}</option>
+            {/each}
         </Select>
-        <Select class='w-48' label='Farbe' options={colors} bind:value={colorId} {disabled} required on:change={on.colorId}>
-            {#if colors}
-                {#each colors as color }
-                    <option value={color.id} selected={colorId === color.id}>{color.name}</option>
-                {/each}
-            {/if}
+        <Select class='w-48' label='Farbe' bind:value={colorId} {disabled} required>
+            <option value={null} hidden></option>
+            {#each colors as color }
+                <option value={color.id} selected={color.id === colorId}>{color.name}</option>
+            {/each}
         </Select>
     </div>
 </div>

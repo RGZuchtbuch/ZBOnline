@@ -63,3 +63,17 @@ export function printDate( date ) {
 export function printPct( value, decimals = 0 ) {
     return (value*100).toFixed( decimals )+'%';
 }
+
+export function dec( a ) {
+    if( a != null ) {
+        return a;
+    }
+    return '-';
+}
+
+export function perc( a, b, dec=1 ) {
+    if( a != null && b != null ) {
+        return (100 * a / b).toFixed( dec )+'%';
+    }
+    return '-';
+}

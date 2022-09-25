@@ -125,21 +125,21 @@ class Pair
         $success &= Pair::deleteParents($pairId); // remove all old
 
         $stmt = Query::prepare('
-            INSERT INTO pair_parent ( pairId, `index`, sex, ring, score, parentsId, modifier )
-            VALUES ( :pairId, :index, :sex, :ring, :score, :parentsId, :modifier )
+            INSERT INTO pair_parent ( pairId, `index`, sex, ring, score, modifier )
+            VALUES ( :pairId, :index, :sex, :ring, :score, :modifier )
         ');
 
         foreach ($parents as $index => $parent) {
             if( $parent['ring'] ) {
-                $success &= Pair::insertParent($stmt, $pairId, $index, $parent['sex'], $parent['ring'], $parent['score'], $parent['parentsId'], $modifier);
+                $success &= Pair::insertParent($stmt, $pairId, $index, $parent['sex'], $parent['ring'], $parent['score'], $modifier);
             }
         }
         return $success;
     }
 
-    private static function insertParent(PDOStatement $stmt, int $pairId, int $index, string $sex, string $ring, ? int $score, ?int $parentsId): bool
+    private static function insertParent(PDOStatement $stmt, int $pairId, int $index, string $sex, string $ring, ? int $score): bool
     {
-        $args = [ 'pairId'=>$pairId, 'index'=>$index, 'sex'=>$sex, 'ring'=>$ring, 'score'=>$score, 'parentsId'=>$parentsId, 'modifier'=>Controller::$requester['id'] ];
+        $args = [ 'pairId'=>$pairId, 'index'=>$index, 'sex'=>$sex, 'ring'=>$ring, 'score'=>$score, 'modifier'=>Controller::$requester['id'] ];
         return Query::insert($stmt, $args) != null; // Q::insert returns new id or null on failure
     }
 

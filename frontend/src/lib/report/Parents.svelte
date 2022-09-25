@@ -4,6 +4,7 @@
     import InputNumber from '../input/Number.svelte';
     import InputRing from '../input/Ring.svelte';
     import InputText from '../input/Text.svelte';
+    import ReadText from '../read/Text.svelte';
     import Select from '../select/Select.svelte';
 
     export let paired = null;
@@ -64,6 +65,7 @@
         {/each}
         <div class='flex flex-row gap-x-1'>
             <div class='grow flex flex-row gap-x-1'>
+                <ReadText class='w-16' value={getComposition( parents )} />
             </div>
             <div class='flex flex-row gap-x-1'>
                 <InputButton class='w-8' on:click={addParent} value='+' />
