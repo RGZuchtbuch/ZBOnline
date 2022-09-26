@@ -16,7 +16,7 @@ class Post extends Controller
     {
         //$district = $this->getData( $request );
         return 'Post';
-        //return Queries\District::create( $district['parent'], $district['name'], $district['fullname'], $district['short'], $district['coordinates'] );
+        //return queries\District::create( $district['parent'], $district['name'], $district['fullname'], $district['short'], $district['coordinates'] );
     }
 
 }

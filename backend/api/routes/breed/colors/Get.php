@@ -1,6 +1,6 @@
 <?php
 
-namespace App\routes\result;
+namespace App\routes\breed\colors;
 
 use App\Queries;
 use App\routes\Controller;
@@ -16,11 +16,6 @@ class Get extends Controller
 
     public function process(Request $request, array $args) : mixed
     {
-        $id = $args['id'];
-        $result = queries\Result::get( $id );
-
-        if( ! $result) throw new HttpNotFoundException($request, "Result not found");
-
-        return $result;
+        return queries\Breed::getColors( $args['id'] );
     }
 }

@@ -18,8 +18,8 @@ class Post extends Controller
     public function process(Request $request, array $args) : mixed
     {
         $result = $this->getData( $request );
-        $id = Queries\Result::insert(
-            $result['year'], $result['breederId'], $result['districtId'], $result['group'],
+        $id = queries\Result::insert(
+            $result['districtId'], $result['year'], $result['group'], $result['breederId'], $result['name'],
             $result['sectionId'], $result['breedId'], $result['colorId'],
             $result['layDames'], $result['layEggs'], $result['layWeight'],
             $result['broodEggs'], $result['broodFertile'], $result['broodHatched'],

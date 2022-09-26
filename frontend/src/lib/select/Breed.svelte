@@ -16,11 +16,11 @@
     onMount( () => {})
 
     getSections(); // only once
-    $: getBreeds( sectionId );
+    $: getBreeds( sectionId ); // after getSection
     $: getColors( breedId ); // after getBreeds !
 
     function getSections() {
-        api.section.getChildren(2).then( data => { sections = data });
+        api.section.children.get(2).then( data => { sections = data });
     }
     function getBreeds( sectionId ) {
         console.log( 'SelectBreed, getBreeds', sectionId );
@@ -42,19 +42,19 @@
 <div class='flex flex-col'>
     <div class='flex flex-row gap-x-1'>
         <Select class='w-48' label='Sparte' bind:value={sectionId} {disabled} required>
-            <option value={null} hidden></option>
+            <option value={null} ></option>
             {#each sections as section }
                 <option value={section.id} selected={section.id === sectionId}>{section.name}</option>
             {/each}
         </Select>
         <Select class='w-64' label='Rasse' bind:value={breedId} {disabled} required>
-            <option value={null} hidden></option>
+            <option value={null} ></option>
             {#each breeds as breed }
                 <option value={breed.id} selected={breed.id === breedId}>{breed.name}</option>
             {/each}
         </Select>
-        <Select class='w-48' label='Farbe' bind:value={colorId} {disabled} required>
-            <option value={null} hidden></option>
+        <Select class='w-48' label='Farbe' bind:value={colorId} {disabled} required={sectionId!==5}>
+            <option value={null}></option>
             {#each colors as color }
                 <option value={color.id} selected={color.id === colorId}>{color.name}</option>
             {/each}

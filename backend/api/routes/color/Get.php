@@ -1,6 +1,6 @@
 <?php
 
-namespace App\routes\result;
+namespace App\routes\color;
 
 use App\Queries;
 use App\routes\Controller;
@@ -17,10 +17,8 @@ class Get extends Controller
     public function process(Request $request, array $args) : mixed
     {
         $id = $args['id'];
-        $result = queries\Result::get( $id );
-
-        if( ! $result) throw new HttpNotFoundException($request, "Result not found");
-
-        return $result;
+        $color = queries\Color::get( $id );
+        if( ! $color) throw new HttpNotFoundException($request, "User not found");
+        return $color;
     }
 }

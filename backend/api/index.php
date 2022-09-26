@@ -16,9 +16,9 @@ header('Access-Control-Allow-Methods:  GET, POST, PUT, DELETE');
 
 $app = AppFactory::create();
 
-$app->setBasePath("/api"); // as the api lives here... els not found.
+$app->setBasePath("/api"); // as the api lives here... else not found.
 
-$app->addErrorMiddleware(true, false, false);
+$app->addErrorMiddleware(true, true, true );
 
 Router::registerRoutes( $app );
 

@@ -1,17 +1,19 @@
 <script>
     import { onMount } from 'svelte';
     import {active, meta, router, Route} from 'tinro';
+    import api from '../js/api.js';
 
-    export let promise;
+    export let districtId;
     export let legend = '';
     export let link='';
 
     let district = null;
 
     onMount( () => {
-        if( promise ) promise.then( data => {
-            district = data;
-        });
+        api.district.get( districtId )
+            .then( data => {
+                district = data;
+            });
     })
 
 
@@ -20,7 +22,7 @@
 <main>
     <div>{legend}</div>
     {#if district}
-        District {district.id}
+        District ({district.id}) {district.fullname}
     {/if}
 </main>
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\routes\result;
+namespace App\routes\section\breeds;
 
 use App\Queries;
 use App\routes\Controller;
@@ -16,11 +16,8 @@ class Get extends Controller
 
     public function process(Request $request, array $args) : mixed
     {
-        $id = $args['id'];
-        $result = queries\Result::get( $id );
-
-        if( ! $result) throw new HttpNotFoundException($request, "Result not found");
-
-        return $result;
+        $sectionId = $args['id'];
+        return queries\Section::getBreeds( $sectionId );
     }
+
 }

@@ -78,6 +78,9 @@ export default {
 
         getBreeders: (districtId) => {
             return get( 'api/district/'+districtId+'/breeders');
+        },
+        results: {
+            get: ( districtId, year ) => get( 'api/district/'+districtId+'/year/'+year+'/results' ),
         }
     },
     group: {
@@ -195,10 +198,19 @@ export default {
             return put( 'api/pair/'+report.id, report );
         },
     },
+    result: {
+        get: ( id ) => get( 'api/result/'+id ),
+        post: ( result ) => post( 'api/result', result ),
+        put: ( result ) => put( 'api/result/'+id, result ),
+        delete: ( id ) => del( 'api/result'+id ),
+
+    },
 
     section: {
         get: ( id ) => get( 'api/section/'+id ),
-        getChildren: ( parentId ) => get( 'api/section/'+parentId+'/children'),
+        children: {
+            get: ( parentId ) => get( 'api/section/'+parentId+'/children')
+        },
         getTree: ( parentId ) => get( 'api/section/'+parentId+'/tree'),
         getBreeds: ( sectionId ) => get( 'api/section/'+sectionId+'/breeds'),
     },
@@ -258,7 +270,7 @@ async function get( url ) {
             method: 'GET',
             headers: getHeaders()
         }
-        console.log('Get', url);
+        console.log('t', url);
         let promise = fetch( settings.api.root+url, options)
             .then( response => {
                 if( response.ok ) {

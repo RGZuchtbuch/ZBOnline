@@ -1,6 +1,6 @@
 <?php
 
-namespace App\routes\result;
+namespace App\routes\district\results;
 
 use App\Queries;
 use App\routes\Controller;
@@ -16,11 +16,8 @@ class Get extends Controller
 
     public function process(Request $request, array $args) : mixed
     {
-        $id = $args['id'];
-        $result = queries\Result::get( $id );
-
-        if( ! $result) throw new HttpNotFoundException($request, "Result not found");
-
-        return $result;
+        $districtId = $args['id'];
+        $year = $args['year'];
+        return queries\District::getResults( $districtId, $year );
     }
 }

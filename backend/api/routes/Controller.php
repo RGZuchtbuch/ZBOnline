@@ -15,7 +15,7 @@ abstract class Controller
     public function __invoke( Request $request, Response $response, array $args ) : Response {
         Controller::$requester = $this->getRequester( $request );
         if( ! Controller::$requester ) {
-            Controller::$requester = ['id'=>1 ];
+            Controller::$requester = ['id'=>1 ]; //TODO risky !!!!!!!!!!!!!!!!!!!!
         }
 
         if( ! $this->preAuthorized( Controller::$requester, $args ) ) throw new \Slim\Exception\HttpUnauthorizedException( $request, "Not Authorized for call");

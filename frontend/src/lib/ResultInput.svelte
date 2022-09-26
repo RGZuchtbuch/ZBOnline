@@ -22,7 +22,7 @@
     let colors = [];
     let groups = [];
 
-    let year = null;
+    let year = 2022;
     let breeder = null;
     let district = null;
     let name = null;
@@ -52,7 +52,7 @@
     let vBrood = false;
     let vShow = false;
 
-    let reports = [];
+    let results = [];
 
 
     $: getBreed( breedId );
@@ -77,13 +77,14 @@
 
     onMount( () => {
         api.district.get( districtId ).then( (response) => { district = response });
-        api.district.getBreeders( districtId ).then( ( respoonse ) => { breeders = respoonse });
+        //api.district.getBreeders( districtId ).then( ( respoonse ) => { breeders = respoonse });
         api.group.getGroups().then( ( response ) => { groups = response });
 
     })
 
     function validSource( year, breeder, districtId, name ) {
-        let v = year > MINYEAR && year < MAXYEAR && breeder !== null && breeder.id > 0 && districtId > 0 && name != null && name !== '';
+//        let v = year > MINYEAR && year < MAXYEAR && breeder !== null && breeder.id > 0 && districtId > 0 && name != null && name !== '';
+        let v = year > MINYEAR && year < MAXYEAR && districtId > 0;
         console.log( 'Validate source ', v );
         return v;
     }
@@ -122,46 +123,32 @@
     function onSubmit() {
         // validate and send trough api
         console.log( 'Store result' )
-        const report = {
-            year: year,
-            breederId: breeder.id,
-            name: name,
-            group: group,
-
-            sectionId: sectionId,
-            breedId: breedId,
-            breedName: breed.name, // for view
-            colorId: colorId,
-            colorName: color.name, // for view
-
-            layDames: layDames,
-            layEggs: layEggs,
-            layWeight: layWeight,
-
-            broodEggs: broodEggs,
-            broodFertile: broodFertile,
-            broodHatched: broodHatched,
-
-            showCount: showCount,
-            showScore: showScore
+        const result = {
+            districtId: districtId, year: year, group: group, breederId: null, name: null,
+            sectionId: sectionId, breedId: breedId, breedName: breed.name, colorId: colorId?colorId:0, colorName: color?color.name:null, // names for view
+            layDames: layDames, layEggs: layEggs, layWeight: layWeight,
+            broodEggs: broodEggs, broodFertile: broodFertile, broodHatched: broodHatched,
+            showCount: showCount, showScore: showScore
         }
 
-        reports = [ report, ...reports ];
+        api.result.post( result )
+            .then( id => {
+                result.id = id;
+                results = [ result, ...results ];
+            })
+            .catch( ( error ) => console.error( error ) );
 
-        // prep next
+        // prep for next entry
         name = null;
-
-        layDames = null;
-        layEggs = null;
-        layWeight = null;
-
-        broodEggs = null;
-        broodFertile = null;
-        broodHatched = null;
-
-        showCount = null;
-        showScore = null;
+        if( sectionId === 5 ) breedId = null;
+        colorId = null;
+        layDames = layEggs = layWeight = null;
+        broodEggs = broodFertile = broodHatched = null;
+        showCount = showScore = null;
     }
+
+    function edit() {}
+    function remove() {}
 </script>
 
 <form class='flex flex-col' on:submit|preventDefault={onSubmit}>
@@ -170,20 +157,6 @@
         <div>Züchter</div>
         <div class='flex flex-row gap-x-1'>
             <InputNumber class='w-16' label='Jahr' bind:value={year} min={MINYEAR} max={MAXYEAR} required/>
-            <Select class='w-32' label='Züchter' options={breeders} bind:value={breeder} placeholder='?' required>
-                <option value={null} hidden></option>
-                {#each breeders as breeder}
-                    <option value={breeder}>{breeder.name}</option>
-                {/each}
-            </Select>
-            <InputText class='w-24' label='Stamm name' bind:value={name} required/>
-        </div>
-    </div>
-
-    <div class='flex flex-col my-2'>
-        <div>Rasse</div>
-        <div class='flex flex-row gap-x-1'>
-            <BreedSelect bind:sectionId={sectionId} bind:breedId={breedId} bind:colorId={colorId}/>
 
             <Select class='w-12' label='Gruppe' options={groups} bind:value={group} placeholder='?' required>
                 {#each groups as group}
@@ -191,32 +164,46 @@
                 {/each}
             </Select>
         </div>
+    </div>
+
+
+    <div class='flex flex-col my-2'>
+        <div>Rasse</div>
+        <div class='flex flex-row gap-x-1'>
+            <BreedSelect bind:sectionId={sectionId} bind:breedId={breedId} bind:colorId={colorId}/>
+
+        </div>
         {sectionId} - {breedId} - {colorId} : {group}
     </div>
 
-    <div class='flex flex-col my-2'>
-        <div>Legeleistung (nur hühner)</div>
-        <div class='flex flex-row gap-x-1'>
-            <InputNumber class='w-16' label='Hennen' bind:value={layDames} min=0 max={MAXLAYDAMES} />
-            <InputNumber class='w-16' label='Eier / Jahr' bind:value={layEggs} min=0 max={MAXLAYEGGS} />
-            <InputNumber class='w-16' label='Eiergewicht' bind:value={layWeight} min={MINLAYWEIGHT} max={MAXLAYWEIGHT} />
-        </div>
-    </div>
+    <div class='flex flex-row gap-x-14'>
+        {#if sectionId && sectionId===5}
+        {:else}
+            <div class='flex flex-col my-2'>
+                <div>Legeleistung (nur hühner)</div>
+                <div class='flex flex-row gap-x-1'>
+                    <InputNumber class='w-16' label='Hennen' bind:value={layDames} min=0 max={MAXLAYDAMES} />
+                    <InputNumber class='w-16' label='Eier / Jahr' bind:value={layEggs} min=0 max={MAXLAYEGGS} />
+                    <InputNumber class='w-16' label='Eiergewicht' bind:value={layWeight} min={MINLAYWEIGHT} max={MAXLAYWEIGHT} />
+                </div>
+            </div>
+        {/if}
 
-    <div class='flex flex-col my-2'>
-        <div>Brutleistung (2x)</div>
-        <div class='flex flex-row gap-x-1'>
-            <InputNumber class='w-16' label='Eingelegt' bind:value={broodEggs} min=0 max={MAXBROODEGGS} />
-            <InputNumber class='w-16' label='Befruchtet' bind:value={broodFertile} min=0 max={broodEggs} error={0+' - '+broodEggs} />
-            <InputNumber class='w-16' label='Geschlüpft' bind:value={broodHatched} min=0 max={broodFertile} error={0+' - '+broodFertile} />
+        <div class='flex flex-col my-2'>
+            <div>Brutleistung (2x)</div>
+            <div class='flex flex-row gap-x-1'>
+                <InputNumber class='w-16' label='Eingelegt' bind:value={broodEggs} min=0 max={MAXBROODEGGS} />
+                <InputNumber class='w-16' label='Befruchtet' bind:value={broodFertile} min=0 max={broodEggs} error={0+' - '+broodEggs} />
+                <InputNumber class='w-16' label='Geschlüpft' bind:value={broodHatched} min=0 max={broodFertile} error={0+' - '+broodFertile} />
+            </div>
         </div>
-    </div>
 
-    <div class='flex flex-col my-2'>
-        <div>Schauleistung</div>
-        <div class='flex flex-row gap-x-1'>
-            <InputNumber class='w-16' label='Tiere' bind:value={showCount} min=0 max={MAXSHOWCOUNT} />
-            <InputNumber class='w-16' label='Bewertung' bind:value={showScore} min={MINSHOWSCORE} max={MAXSHOWSCORE} />
+        <div class='flex flex-col my-2'>
+            <div>Schauleistung</div>
+            <div class='flex flex-row gap-x-1'>
+                <InputNumber class='w-16' label='Tiere' bind:value={showCount} min=0 max={MAXSHOWCOUNT} />
+                <InputNumber class='w-16' label='Bewertung' bind:value={showScore} min={MINSHOWSCORE} max={MAXSHOWSCORE} />
+            </div>
         </div>
     </div>
 
@@ -230,6 +217,8 @@
 <div class='flex flex-col my-2'>
     <div>Eingegeben</div>
     <div class='flex flex-row gap-x-1 text-xs'>
+        <div class='w-8'>Jahr</div>
+        <div class='w-8'>Grp</div>
         <div class='w-48'>Rasse</div>
         <div class='w-32'>Farbe</div>
         <div class='w-12'>Zuchten</div>
@@ -242,24 +231,27 @@
         <div class='w-10'>Tiere</div>
         <div class='w-14'>Bewertung</div>
     </div>
-    {#each reports as report}
+    {#each results as result}
         <div class='flex flex-row gap-x-1 text-xs'>
-            <div class='w-48'>{report.breedName}</div>
-            <div class='w-32'>{report.colorName}</div>
+            <div class='w-8'>{result.year}</div>
+            <div class='w-8'>{result.group}</div>
+
+            <div class='w-48'>{result.breedName}</div>
+            <div class='w-32'>{result.colorName}</div>
             <div class='w-12'>1</div>
 
-            <div class='w-12'>{dec(report.layDames)}</div>
-            <div class='w-10'>{dec(report.layEggs)}</div>
-            <div class='w-14'>{dec(report.layWeight)}</div>
+            <div class='w-12'>{dec(result.layDames)}</div>
+            <div class='w-10'>{dec(result.layEggs)}</div>
+            <div class='w-14'>{dec(result.layWeight)}</div>
 
-            <div class='w-12'>{dec(report.broodEggs)}</div>
-            <div class='w-14'>{perc( report.broodFertile, report.broodEggs )}</div>
-            <div class='w-14'>{perc( report.broodHatched, report.broodEggs )}</div>
+            <div class='w-12'>{dec(result.broodEggs)}</div>
+            <div class='w-14'>{perc( result.broodFertile, result.broodEggs )}</div>
+            <div class='w-14'>{perc( result.broodHatched, result.broodEggs )}</div>
 
-            <div class='w-10'>{dec(report.showCount)}</div>
-            <div class='w-14'>{dec(report.showScore)}</div>
-            <div>e</div>
-            <div>d</div>
+            <div class='w-10'>{dec(result.showCount)}</div>
+            <div class='w-14'>{dec(result.showScore)}</div>
+            <div onclick={edit( result )}>e</div>
+            <div onclick={remove( result )}>d</div>
         </div>
     {/each}
 </div>

@@ -6,9 +6,10 @@
     import Breeders from './lib/Breeders.svelte';
     import District from './lib/District.svelte';
     import Districts from './lib/Districts.svelte';
-    import Reporting from './lib/Reporting.svelte';
+    import ResultInput from './lib/ResultInput.svelte';
     import Report from './lib/Report.svelte';
     import Reports from './lib/Reports.svelte';
+    import Results from './lib/Results.svelte';
 
 </script>
 
@@ -20,33 +21,49 @@
     </div>
     <div class='border bg-gray-200 flex flex-row justify-between px-48 border rounded'>
         <div class='flex flex-row gap-x-4'>
-            <a href=''>Das Zuchtbuch</a>
-            <a href=''>Leistungen</a>
-            <a href=''>Mein Zuchtbuch</a>
-            <a href='obmann'>Obmann</a>
-            <a href=''>Admin</a>
+            <a href='/#/obmann'>Das Zuchtbuch</a>
+            <a href='/#/obmann'>Leistungen</a>
+            <a href='/#/obmann'>Mein Zuchtbuch</a>
+            <a href='/#/obmann'>Obmann</a>
+            <a href='/#/obmann'>Admin</a>
         </div>
         <div>Anmelden</div>
     </div>
 
     <div class='mx-16 my-2 flex flex-row gap-2 relative min-h-0 '>
 
-        <div class='w-48 mt-24 border rounded'>
-            left menu
+        <div class='w-48 mt-24 border rounded flex flex-col '>
+            <Route path='/obmann/*'>
+                <h3>Obmann</h3>
+                <a href='/obmann/verband'>Verband x</a>
+                <Route path='/verband/:districtId/*' let:meta>
+                    <a href={'/obmann/verband/'+meta.params.districtId+'/zuechter'}>Züchter</a>
+                    <a href={'/obmann/verband/'+meta.params.districtId+'/leistungen'}>Leistungen</a>
+                    <a href={'/obmann/verband/'+meta.params.districtId+'/leistungen/eingeben'}>Eingeben</a>
+                </Route>
+            </Route>
         </div>
 
         <div class='grow bg-gray-100 overflow-y-scroll border border-black rounded p-4 scrollbar'>
             <Route path='/obmann/*'>
-                <Route path='/verband/'>
+                <Route path='/'>
                     <Districts legend={'Verbände für ?'} promise={api.moderator.districts(1)} link={'obmann/verband/'}/>
                 </Route>
                 <Route path='/verband/:districtId/*' let:meta>
                     <Route path='/' let:meta>
-                        <District promise={api.district.get( meta.params.districtId) } />
+                        District {meta.params.districtId}
+                        <District districtId={meta.params.districtId} />
                     </Route>
-                    <Route path='/melden' let:meta>
-                        <Reporting districtId={meta.params.districtId} />
+
+                    <Route path='/leistungen/*' let:meta>
+                        <Route path='/' let:meta >
+                            <Results districtId={meta.params.districtId} />
+                        </Route>
+                        <Route path='/eingeben' let:meta>
+                            <ResultInput districtId={meta.params.districtId} />
+                        </Route>
                     </Route>
+
                     <Route path='/zuechter/*' let:meta>
                         <Route path='/' let:meta>
                             <Breeders promise={api.district.getBreeders(meta.params.districtId) } />

@@ -7,42 +7,51 @@ use Slim\App;
 class Router {
 
     public static function registerRoutes( App $app ) {
-        $app->get( '/', new GetIndex() );
-        $app->get( '/breed/{id}', new GetBreed() );
-        $app->get( '/breed/{id}/colors', new GetBreedColors() );
+        $app->get( '/', new Get() );
 
-        $app->get( '/breeder/{id}', new GetBreeder() );
         $app->get( '/breeder/{id}/reports', new GetBreederReports() );
         $app->get( '/breeder/{id}/results', new GetBreederResults() );
         $app->get( '/breeder/{id}/years', new GetBreederYears() );
         $app->get( '/breeders', new GetBreeders() );
 
-        $app->get( '/color/{id}', new GetColor() );
-
-        $app->get( '/district/{id}', new GetDistrict() );
         $app->get( '/district/{id}/tree', new GetDistrictTree() );
-        $app->get( '/district/{id}/breeders', new GetDistrictBreeders() );
+//        $app->get( '/district/{id}/breeders', new Get() );
 
         $app->get( '/moderator/{id}/districts', new GetModeratorDistricts() );
         $app->get( '/page/{id}', new GetPage() );
 
-        $app->get( '/section/{id}', new GetSection() );
         $app->get( '/section/{id}/tree', new GetSectionTree() );
-        $app->get( '/section/{id}/children', new GetSectionChildren() );
-        $app->get( '/section/{id}/breeds', new GetSectionBreeds() );
 
 
 
         $app->post( '/district', new PostDistrict() );
-        $app->put( '/district/{id}', new PutDistrict() );
 
         $app->post( '/moderator', new PostModerator() );
         $app->delete( '/moderator', new DeleteModerator() );
 
-        $app->get( '/pair/{id}', new pair\Get() );
-//        $app->post( '/pair/{id}', new pair\Post() );
-        $app->put( '/pair/{id}', new pair\Put() );
-//        $app->del( '/pair/{id}', new result\Delete() );
+
+
+        $app->get( '/breed/{id}', new breed\Get() );
+        $app->get( '/breed/{id}/colors', new breed\colors\Get() );
+
+        $app->get( '/breeder/{id}', new breeder\Get() );
+
+        $app->get( '/color/{id}', new color\Get() );
+
+        $app->get( '/district/{id}', new district\Get() );
+        $app->get( '/district/{id}/year/{year}/results', new district\results\Get() );
+//        $app->get( '/pair/{id}', new pair\get() );
+//        $app->put( '/pair/{id}', new pair\Put() );
+
+        $app->get( '/result/{id}', new result\Get() );
+        $app->post( '/result', new result\Post() );
+//        $app->put( '/result/{id}', new result\Put() );
+
+
+        $app->get( '/section/{id}', new section\Get() );
+        $app->get( '/section/{id}/children', new section\children\Get() );
+        $app->get( '/section/{id}/breeds', new section\breeds\Get() );
+
 
         $app->post( '/token', new PostToken() );
 
