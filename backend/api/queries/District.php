@@ -92,4 +92,49 @@ class District
         return Query::selectTree( $stmt, $args );
     }
 
+    public static function getSectionFullResults( int $districtId, int $sectionId, int $year, string $group ) : array {
+        $args = get_defined_vars();
+        if( $sectionId === 5 ) {
+            $stmt = Query::prepare('
+                SELECT 
+                    breed.sectionId, breed.id AS breedId, breed.name AS breedName,
+                    result.breeders, 
+                    result.broodEggs, result.broodHatched,
+                    result.showCount, result.showScore
+                FROM breed
+            
+                LEFT JOIN result
+                    ON result.breedId = breed.id
+                    AND result.districtId = :districtId
+                    AND result.`group`= :group
+                    AND result.`year` = :year
+                
+                WHERE breed.sectionId=:sectionId
+                ORDER BY breed.id
+            ');
+        } else {
+            $stmt = Query::prepare('
+                SELECT 
+                    breed.sectionId, breed.id AS breedId, breed.name AS breedName, color.id AS colorId, color.name AS colorName,
+                    result.id AS resultId, 
+                    result.breeders,
+                    result.layDames, result.layEggs, result.layWeight, 
+                    result.broodEggs, result.broodFertile, result.broodHatched,
+                    result.showCount, result.showScore
+                FROM breed
+                
+                LEFT JOIN color ON color.breedId = breed.id 
+                LEFT JOIN result
+                    ON result.breedId = breed.id AND result.colorId = color.id
+                    AND result.districtId = :districtId
+                    AND result.`group`= :group
+                    AND result.`year` = :year
+                
+                WHERE breed.sectionId = :sectionId
+                ORDER BY breed.name, color.name        
+            ');
+        }
+        return Query::selectArray( $stmt, $args );
+    }
+
 }

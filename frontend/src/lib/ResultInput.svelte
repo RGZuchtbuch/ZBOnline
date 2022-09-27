@@ -147,7 +147,9 @@
         showCount = showScore = null;
     }
 
-    function edit() {}
+    function edit() {
+        
+    }
     function remove() {}
 </script>
 

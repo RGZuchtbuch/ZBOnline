@@ -6,7 +6,7 @@
     import Breeders from './lib/Breeders.svelte';
     import District from './lib/District.svelte';
     import Districts from './lib/Districts.svelte';
-    import ResultInput from './lib/ResultInput.svelte';
+    import ResultInputTable from './lib/ResultInputTable.svelte';
     import Report from './lib/Report.svelte';
     import Reports from './lib/Reports.svelte';
     import Results from './lib/Results.svelte';
@@ -60,7 +60,7 @@
                             <Results districtId={meta.params.districtId} />
                         </Route>
                         <Route path='/eingeben' let:meta>
-                            <ResultInput districtId={meta.params.districtId} />
+                            <ResultInputTable districtId={meta.params.districtId} />
                         </Route>
                     </Route>
 

@@ -40,6 +40,7 @@ class Router {
 
         $app->get( '/district/{id}', new district\Get() );
         $app->get( '/district/{id}/year/{year}/results', new district\results\Get() );
+        $app->get( '/district/{districtId}/section/{sectionId}/year/{year}/group/{group}/results/full', new district\results\full\Get() );
 //        $app->get( '/pair/{id}', new pair\get() );
 //        $app->put( '/pair/{id}', new pair\Put() );
 
@@ -51,6 +52,9 @@ class Router {
         $app->get( '/section/{id}', new section\Get() );
         $app->get( '/section/{id}/children', new section\children\Get() );
         $app->get( '/section/{id}/breeds', new section\breeds\Get() );
+
+
+        //'api/section/' + sectionId + '/year/'+year+'/breeds/results'
 
 
         $app->post( '/token', new PostToken() );

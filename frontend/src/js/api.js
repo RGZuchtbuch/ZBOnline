@@ -80,11 +80,13 @@ export default {
             return get( 'api/district/'+districtId+'/breeders');
         },
         results: {
-            get: ( districtId, year ) => get( 'api/district/'+districtId+'/year/'+year+'/results' ),
+            full: {
+                get: (districtId, sectionId, year, group) => get('api/district/' + districtId + '/section/' + sectionId + '/year/' + year + '/group/' + group + '/results/full')
+            },
         }
     },
-    group: {
-        getGroups: () => {
+    groups: {
+        get: () => {
             console.log( 'api getGroups' );
             return new Promise( ( resolve ) => {
 //                clear( 'api/district/'+parentId );
@@ -212,7 +214,10 @@ export default {
             get: ( parentId ) => get( 'api/section/'+parentId+'/children')
         },
         getTree: ( parentId ) => get( 'api/section/'+parentId+'/tree'),
-        getBreeds: ( sectionId ) => get( 'api/section/'+sectionId+'/breeds'),
+        breeds: {
+            get: (sectionId) => get('api/section/' + sectionId + '/breeds'),
+
+        }
     },
 }
 
