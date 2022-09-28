@@ -110,7 +110,7 @@ class District
                     AND result.`year` = :year
                 
                 WHERE breed.sectionId=:sectionId
-                ORDER BY breed.id
+                ORDER BY breed.name
             ');
         } else {
             $stmt = Query::prepare('
