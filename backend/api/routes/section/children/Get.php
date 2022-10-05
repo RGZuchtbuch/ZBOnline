@@ -17,7 +17,7 @@ class Get extends Controller
     public function process(Request $request, array $args) : mixed
     {
         $parentId = $args['id'];
-        return queries\Section::getChildren( $parentId );
+        return [ 'sections'=>queries\Section::getChildren( $parentId ) ];
     }
 
 }

@@ -20,11 +20,7 @@ class Get extends Controller
         $district = queries\District::get( $districtId );
         if( ! $district ) throw new HttpNotFoundException($request, "User not found");
 
-        if( isset( $district['parent'] ) ) {
-            $district['parent'] = queries\District::get($district['parent']);
-        }
-        $district['children'] = queries\District::getChildren( $districtId );
         $district['moderators'] = queries\District::getModerators( $districtId );
-        return $district;
+        return [ 'district'=>$district ];
     }
 }

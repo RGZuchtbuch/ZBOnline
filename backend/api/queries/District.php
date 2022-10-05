@@ -96,6 +96,7 @@ class District
         $args = get_defined_vars();
         $stmt = Query::prepare('
             SELECT
+                district.id AS districtId, district.name AS districtName,
                 section.id AS sectionId, section.name AS sectionName,
                 breed.id AS breedId, breed.name AS breedName, 
                 color.id AS colorId, color.name AS colorName,
@@ -105,18 +106,19 @@ class District
                 result.layDames, result.layEggs, result.layWeight, 
                 result.broodEggs, result.broodFertile, result.broodHatched,
                 result.showCount, result.showScore
-            FROM section
+            FROM district
             
+            LEFT JOIN section ON section.id = :sectionId
             LEFT JOIN breed ON breed.sectionId = section.id
             LEFT JOIN color ON color.breedId = breed.id 
             LEFT JOIN result
                 ON result.breedId = breed.id AND result.colorId = color.id
-                AND result.districtId = :districtId
+                AND result.districtId = district.id
                 AND result.`group`= :group
                 AND result.`year` = :year
             
-            WHERE breed.sectionId = :sectionId
-            ORDER BY breed.name, color.name        
+            WHERE district.id = :districtId
+            ORDER BY breed.name, color.name       
         ');
         return Query::selectArray( $stmt, $args );
     }

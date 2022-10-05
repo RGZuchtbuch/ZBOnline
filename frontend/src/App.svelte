@@ -6,7 +6,8 @@
     import Breeders from './lib/Breeders.svelte';
     import District from './lib/District.svelte';
     import Districts from './lib/Districts.svelte';
-    import ResultInputTable from './lib/ResultInputTable.svelte';
+    import ResultsInputHeader from './lib/ResultsInputHeader.svelte';
+    import ResultsInputTable from './lib/ResultsInputTable.svelte';
     import Report from './lib/Report.svelte';
     import Reports from './lib/Reports.svelte';
     import Results from './lib/Results.svelte';
@@ -24,7 +25,7 @@
             <a href='/#/obmann'>Das Zuchtbuch</a>
             <a href='/#/obmann'>Leistungen</a>
             <a href='/#/obmann'>Mein Zuchtbuch</a>
-            <a href='/#/obmann'>Obmann</a>
+            <a href='/#/obmann/verbaende'>Obmann</a>
             <a href='/#/obmann'>Admin</a>
         </div>
         <div>Anmelden</div>
@@ -49,18 +50,20 @@
                 <Route path='/'>
                     <Districts legend={'Verbände für ?'} promise={api.moderator.districts(1)} link={'obmann/verband/'}/>
                 </Route>
+                <Route path='/verbaende'>
+                    <Districts legend={'Verbände für ?'} promise={api.moderator.districts(1)} link={'obmann/verband/'}/>
+                </Route>
                 <Route path='/verband/:districtId/*' let:meta>
                     <Route path='/' let:meta>
                         District {meta.params.districtId}
                         <District districtId={meta.params.districtId} />
                     </Route>
-
+test
                     <Route path='/leistungen/*' let:meta>
-                        <Route path='/' let:meta >
-                            <Results districtId={meta.params.districtId} />
-                        </Route>
-                        <Route path='/eingeben' let:meta>
-                            <ResultInputTable districtId={meta.params.districtId} />
+                        results
+                        <ResultsInputHeader {...meta.params} />
+                        <Route path='/sparte/:sectionId/jahr/:year/gruppe/:group' let:meta>
+                            <ResultsInputTable {...meta.params} />
                         </Route>
                     </Route>
 

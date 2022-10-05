@@ -24,17 +24,23 @@ class Get extends Controller
         $group = $args['group'];
         $results = queries\District::getSectionFullResults( $districtId, $sectionId, $year, $group );
         //$results;
-        return $this->convert($results);
+        return [ 'district'=>$this->convert($results) ];
     }
 
     private function convert( & $results ) {
 
+        $district = null;
         $section = null;
         $breed = null;
 
         foreach ( $results as & $result ) {
+            if( $district === null || $result['districtId'] !== $district['id'] ) { // new district
+                $district = $this->makeDistrict( $result );
+            }
             if( $section === null || $result['sectionId'] !== $section['id'] ) { // new section
+                unset( $section ); // decouple reference
                 $section = $this->makeSection( $result );
+                $district[ 'section' ] = & $section;
             }
             if( $breed === null || $result['breedId'] !== $breed['id'] ) { // new breed
                 unset( $breed ); // decouple reference
@@ -49,10 +55,12 @@ class Get extends Controller
                 $breed['colors'][] = $color;
             }
         }
-        return $section;
+        return $district;
     }
 
-
+    private function makeDistrict( & $result ): array {
+        return ['id'=>$result['districtId'], 'name'=>$result['districtName'] ];
+    }
     private function makeSection( & $result ): array {
         return ['id'=>$result['sectionId'], 'name'=>$result['sectionName'], 'breeds'=>[] ];
     }
@@ -64,14 +72,14 @@ class Get extends Controller
         return [ 'id'=>$result['colorId'], 'name'=>$result['colorName'] ];
     }
     private function makeResult( array & $result ): array {
-        if( $result['sectionId'] === 5 ) {
-            return [
-                'id' => $result['id'],
-                'breeders' => $result['breeders'], // zuchten
-                'brood' => $this->makeBroodPigeons( $result ),
-                'show' => $this->makeShow( $result )
-            ];
-        } else {
+ //       if( $result['sectionId'] === 5 ) {
+ //           return [
+ //               'id' => $result['id'],
+ //               'breeders' => $result['breeders'], // zuchten
+ //               'brood' => $this->makeBroodPigeons( $result ),
+ //               'show' => $this->makeShow( $result )
+ //           ];
+ //       } else {
             return [
                 'id' => $result['resultId'],
                 'breeders' => $result['breeders'],
@@ -80,7 +88,7 @@ class Get extends Controller
                 'brood' => $this->makeBroodLayers( $result ),
                 'show' => $this->makeShow( $result )
             ];
-        }
+ //       }
     }
 
     private function makeLay( & $result ) {

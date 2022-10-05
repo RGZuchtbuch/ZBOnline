@@ -90,7 +90,7 @@ export default {
             console.log( 'api getGroups' );
             return new Promise( ( resolve ) => {
 //                clear( 'api/district/'+parentId );
-                resolve( ['I', 'II', 'III' ] );
+                resolve( { groups:['I', 'II', 'III' ] } );
             })
         }
     },

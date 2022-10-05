@@ -1,6 +1,6 @@
 <?php
 
-namespace App\routes\section;
+namespace App\routes\district;
 
 use App\Queries;
 use App\routes\Controller;
@@ -16,9 +16,10 @@ class Get extends Controller
 
     public function process(Request $request, array $args) : mixed
     {
-        $id = $args['id'];
-        $section = queries\Section::get( $id );
-        if( ! $section ) throw new HttpNotFoundException($request, "Section not found");
-        return [ 'section'=>$section ];
+        $districtId = $args['id'];
+        $district = queries\District::get( $districtId );
+        if( ! $district ) throw new HttpNotFoundException($request, "User not found");
+        $district['children'] = queries\District::getChildren( $districtId );
+        return [ 'district'=>$district ];
     }
 }
