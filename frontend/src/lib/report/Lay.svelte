@@ -1,5 +1,5 @@
 <script>
-    import { getProduction, getValidDate } from '../../js/util.js'
+    import { getProduction, toDate } from '../../js/util.js'
 
     import InputDate from '../input/Date.svelte';
     import InputNumber from '../input/Number.svelte';
@@ -7,68 +7,50 @@
     import InputText from '../input/Text.svelte';
     import Select from '../select/Select.svelte';
 
-//    export let result;
     export let lay;
-    export let parents;
     export let disabled;
 
-    let dames = null;
-    let days = null
-    let production = null;
-    let minEnd = lay.start;
-
-    $: setDames( parents );
-    $: setDays( lay.start, lay.end );
-    $: setProduction( days, lay.eggs, dames );
-
-    function setDames( parents ) {
-        console.log( 'Counting dames' );
-        let count = 0;
-        for( let parent of parents ) {
-            if( parent.sex === '0.1' ) count++;
-        }
-        dames = count;
-    }
-
     function setDays( start, end ) {
+        console.log( "Lay change", lay.start, lay.end );
         const startDate = new Date( start );
         const endDate = new Date( end );
-        days = null;
-        console.log('set days', start, end);
+        lay.days = null;
         if( startDate && endDate ) {
             const dif = 1 + Math.floor((endDate - startDate) / 86400000);
-            days = dif > 0 ? dif : null;
-            console.log('Days ok', days)
+            lay.days = dif > 0 ? dif : null;
         }
     }
 
     function setProduction( days, eggs, dames ) {
-        production = null;
+        lay.production = null;
         if( days && eggs && dames ) {
-            production = Math.round( getProduction(days, eggs, dames) ); //eggs * 274 / days / dames;
+            lay.production = Math.round( getProduction(days, eggs, dames) ); //eggs * 274 / days / dames;
         }
     }
 
-
+    $: setDays( lay.start, lay.end );
+    $: setProduction( lay.days, lay.eggs, lay.dames );
 
 
 </script>
 
 <div class='flex flex-col my-2'>
-    <h4>Legeleistung</h4>
-
-    <div class='flex flex-row gap-x-1'>
-        <div class='grow flex flex-row gap-x-1'>
-            <InputDate class='w-24' label={'Gesammelt ab'} bind:value={lay.start} {disabled}/>
-            <InputDate class='w-24' label={'Gesammelt bis'} bind:value={lay.end} min={lay.start} {disabled}/>
-            <InputNumber class='w-16' label={'Eierzahl'} bind:value={lay.eggs} min=0 max={days * dames} {disabled} />
-        </div>
+    <h4>Legeleistung {lay.start}</h4>
+    {#if lay }
         <div class='flex flex-row gap-x-1'>
-            <InputNumber class='w-16' label='Tagen' value={days} readonly/>
-            <InputNumber class='w-16' label='# Hennen' value={dames} readonly/>
-            <InputText class='w-16' label='Eier / Jahr' value={production} readonly />
+            <div class='grow flex flex-row gap-x-1'>
+                <InputDate class='w-24' label={'Gesammelt ab'} bind:value={lay.start} {disabled}/>
+                <InputDate class='w-24' label={'Gesammelt bis'} bind:value={lay.end} min={toDate( lay.start )} {disabled}/>
+                <InputNumber class='w-16' label={'# Eierzahl'} bind:value={lay.eggs} min=0 max={lay.days * lay.dames} {disabled} />
+                <InputNumber class='w-16' label={'∅ Gewicht'} bind:value={lay.weight} min=0 max=99 {disabled} />
+            </div>
+            <div class='flex flex-row gap-x-1'>
+                <InputNumber class='w-16' label='Tagen' value={lay.days} readonly/>
+                <InputNumber class='w-16' label='# Hennen' value={lay.dames} readonly/>
+                <InputText class='w-16' label='Eier / Jahr' value={lay.production} readonly />
+            </div>
         </div>
-    </div>
+    {/if}
 </div>
 
 <style>

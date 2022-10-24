@@ -1,3 +1,5 @@
+
+/*
 function extendYear( year, max ) {
     if( year >=0 && year < 100 ) {
         const maxYear = max.getFullYear() % 100;
@@ -9,25 +11,52 @@ function extendYear( year, max ) {
     }
     return year;
 }
+*/
 
+export function toDate( input, min, max ) {
+    if( input && max ) {
+        min = new Date(min);
+        max = new Date(max);
 
-export function getValidDate( input, min, max ) {
-    if ( typeof input === 'string' ) {
-        min = new Date( min );
-        max = new Date( max );
         let date = null;
-        let match; // D
-        match = input.match(/^([0-9]{4})[\-\.](1[0-2]|0[1-9]|[1-9])[\-\.](3[0-1]|[12][0-9]|0[1-9]|[1-9])$/); // iso 2022-7-22
-        if( match ) {
-            date = new Date( extendYear( parseInt( match[1] ), max), parseInt( match[2] )-1, parseInt( match[3] )) // yyyy, mm, dd
+        let match =
+            input.match(/^(3[0-1]|[12][0-9]|0[1-9]|[1-9])[\.](1[0-2]|0[1-9]|[1-9])[\.]([0-9]{2})$/) ||  // 31.01.22 D
+            input.match(/^(3[0-1]|[12][0-9]|0[1-9]|[1-9])[\-](1[0-2]|0[1-9]|[1-9])[\-]([0-9]{2})$/);    // 31-01-22 NL
+        if (match) {
+            console.log('Match D', match);
+            let year = Number(match[3]);
+            let maxYear = max.getFullYear() % 100; // year in century
+            year = max.getFullYear() - maxYear + year - (year <= maxYear ? 0 : 100);
+            date = new Date(year, match[2] - 1, match[1]);
         } else {
-            match = input.match(/^(3[0-1]|[12][0-9]|0[1-9]|[1-9])[\-\.](1[0-2]|0[1-9]|[1-9])[\-\.]([0-9]{2}|[0-9]{4})$/); // 31-01-22 or 31.01.22
+            match =
+                input.match(/^(3[0-1]|[12][0-9]|0[1-9]|[1-9])[\.](1[0-2]|0[1-9]|[1-9])[\.]([0-9]{4})$/) ||      // 31.01.2022 D
+                input.match(/^(3[0-1]|[12][0-9]|0[1-9]|[1-9])[\-](1[0-2]|0[1-9]|[1-9])[\-]([0-9]{4})$/);        // 31-01-2022 NL
             if (match) {
-                date = new Date( extendYear( parseInt( match[3] ), max ), parseInt( match[2] )-1, parseInt( match[1] )) // yyyy, mm, dd
+                date = new Date(match[3], match[2]-1, match[1]);
+            } else {
+                match =
+                    input.match(/^([0-9]{4})[\-\.](1[0-2]|0[1-9]|[1-9])[\-\.](3[0-1]|[12][0-9]|0[1-9]|[1-9])$/);    // 2022-7-22 ISO
+                if (match) {
+                    date = new Date(match[1], match[2]-1, match[3]);
+                }
             }
         }
+        console.log('Date ', date, min, max);
+        if (date && date >= min && date <= max) {
+            return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate(); // iso
+        }
+    }
+    return null;
+}
 
-        if( date && date >= min && date <= max ) return date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate();
+export function formatDate(local, dateString ) { // local ignored for now, default to 'D'
+    if( dateString ) {
+        const date = new Date( dateString );
+        switch( local ) {
+            case 'D': return date.getDate()+'.'+(date.getMonth()+1)+'.'+date.getFullYear(); // D
+            default:  return date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate(); // ISO
+        }
     }
     return null;
 }

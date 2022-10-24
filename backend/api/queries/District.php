@@ -67,11 +67,11 @@ class District
     public static function getResults( int $districtId, int $year ) : array {
         $args = get_defined_vars();
         $stmt = Query::prepare( '
-            SELECT result.*, breed.name AS breedName, color.name AS colorName
-            FROM result
-            LEFT JOIN breed ON breed.id = result.breedId
-            LEFT JOIN color ON color.id = result.colorId
-            WHERE result.districtId=:districtId AND result.year=:year
+            SELECT template.*, breed.name AS breedName, color.name AS colorName
+            FROM template
+            LEFT JOIN breed ON breed.id = template.breedId
+            LEFT JOIN color ON color.id = template.colorId
+            WHERE template.districtId=:districtId AND template.year=:year
             ORDER BY year, `group`, sectionId, breed.name, color.name
         ' );
         return Query::selectArray( $stmt, $args );
@@ -101,21 +101,21 @@ class District
                 breed.id AS breedId, breed.name AS breedName, 
                 color.id AS colorId, color.name AS colorName,
             
-                result.id AS resultId, result.group AS `group`,
-                result.breeders,
-                result.layDames, result.layEggs, result.layWeight, 
-                result.broodEggs, result.broodFertile, result.broodHatched,
-                result.showCount, result.showScore
+                template.id AS resultId, template.group AS `group`,
+                template.breeders,
+                template.layDames, template.layEggs, template.layWeight, 
+                template.broodEggs, template.broodFertile, template.broodHatched,
+                template.showCount, template.showScore
             FROM district
             
             LEFT JOIN section ON section.id = :sectionId
             LEFT JOIN breed ON breed.sectionId = section.id
             LEFT JOIN color ON color.breedId = breed.id 
-            LEFT JOIN result
-                ON result.breedId = breed.id AND result.colorId = color.id
-                AND result.districtId = district.id
-                AND result.`group`= :group
-                AND result.`year` = :year
+            LEFT JOIN template
+                ON template.breedId = breed.id AND template.colorId = color.id
+                AND template.districtId = district.id
+                AND template.`group`= :group
+                AND template.`year` = :year
             
             WHERE district.id = :districtId
             ORDER BY breed.name, color.name       

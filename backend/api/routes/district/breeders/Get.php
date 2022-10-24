@@ -15,7 +15,8 @@ class Get extends Controller {
 
     public function process(Request $request, array $args) : mixed
     {
-        $districtId = $args['id'];
-        return  queries\District::getBreeders( $districtId );
+        $districtId = $args['districtId'];
+        $breeders = queries\District::getBreeders( $districtId );
+        return [ 'breeders'=>$breeders ];
     }
 }

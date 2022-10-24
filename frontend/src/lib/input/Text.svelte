@@ -15,7 +15,7 @@
     let classname = '';
     export { classname as class }
 
-    value = value ? value.toString() : null;
+    //value = value ? value.toString() : null;
     let invalid = false;
 
     let on = {
@@ -23,10 +23,11 @@
         blur: () => {},
     }
 
-    $: invalid = ! validate( value );
+    $: validate( value );
 
     function validate( value ) {
-        return (pattern && value.match( pattern )) || ( ! required && ! value ) || ( required && value );
+        let valid = value ? pattern ? value.match( pattern ) : true : ! required;
+        invalid = ! valid;
     }
 
 </script>

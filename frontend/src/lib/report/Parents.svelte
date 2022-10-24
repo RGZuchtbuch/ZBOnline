@@ -7,8 +7,9 @@
     import ReadText from '../read/Text.svelte';
     import Select from '../select/Select.svelte';
 
+    export let layer = true;
     export let paired = null;
-    export let parents = [];
+    export let parents = null;
     export let disabled = false;
 
     function addParent() {
@@ -17,10 +18,10 @@
         console.log('Added');
     }
 
-    function removeParent( parent ) {
+    function removeParent( index ) {
         return () => {
-            parent.removed = true;
-            parents = parents;
+            parents.splice(index, 1);
+            parents = parents; // trigger
         }
     }
 
@@ -40,37 +41,33 @@
 </script>
 
 <div class='flex flex-col my-2'>
-    <h4>Abstammung (?)</h4>
-
+    <h4>Abstammung [{getComposition( parents )}] {layer}</h4>
     <div class='flex flex-col gap-y-1'>
         <InputDate class='w-24' label={'Angepaart am'} bind:value={paired} {disabled} />
-        {#each parents as parent, i (i)}
-            {#if ! parent.removed}
-                <div class='flex flex-row gap-x-1'>
-                    <div class='grow flex flex-row gap-x-1'>
-                        <Select class='w-16' label={i===0 ? 'Sex' : null} bind:value={parent.sex} title='Hahn (1.0) oder Henne (0.1)' {disabled} required>
-                            {#each ['1.0', '0.1'] as sex }
-                                <option value={sex}>{sex}</option>
-                            {/each}
-                        </Select>
-                        <InputRing class='w-32' label={i===0 ? 'Ring [D J Bs Nr]' : null} bind:value={parent.ring} {disabled}/>
-                        <InputNumber class='w-16' label={i===0 ? '∅ Note' : null} bind:value={parent.score} min=90 max=97 step=0.1 {disabled} />
-                    </div>
-                    <div class='flex flex-row gap-x-1'>
-                        <InputText class='grow' label={i===0 ? 'Stamm Leistungen' : null} value='Todo 160 49, 90% 80%, 94.1' readonly/>
-                    </div>
-                    <InputButton class='w-8' on:click={removeParent(parent)} label={i===0 ? 'Entf' : null} value='X' />
-                </div>
-            {/if}
-        {/each}
-        <div class='flex flex-row gap-x-1'>
-            <div class='grow flex flex-row gap-x-1'>
-                <ReadText class='w-16' value={getComposition( parents )} />
-            </div>
+        {#each parents as parent, index }
             <div class='flex flex-row gap-x-1'>
-                <InputButton class='w-8' on:click={addParent} value='+' />
+                <div class='grow flex flex-row gap-x-1'>
+                    <Select class='w-16' label={index===0 ? 'Sex' : null} bind:value={parent.sex} title='Hahn (1.0) oder Henne (0.1)' {disabled} required>
+                        {#each ['1.0', '0.1'] as sex }
+                            <option value={sex}>{sex}</option>
+                        {/each}
+                    </Select>
+                    <InputRing class='w-32' label={index===0 ? 'Ring [D J Bs Nr]' : null} bind:value={parent.ring} {disabled}/>
+                    <InputNumber class='w-16' label={index===0 ? '∅ Note' : null} bind:value={parent.score} min=90 max=97 step=0.1 {disabled} />
+                </div>
+                <div class='flex flex-row gap-x-1'>
+                    <InputText class='grow' label={index===0 ? 'Stamm Leistungen' : null} value='Todo 160 49, 90% 80%, 94.1' readonly/>
+                </div>
+                {#if index >= 2 }
+                    <InputButton class='w-8' on:click={removeParent( index )} label={index===0 ? 'Entf' : null} value='X' />
+                {:else}
+                    <div class='w-8' />
+                {/if}
             </div>
-        </div>
+        {/each}
+        {#if layer}
+            <div class='rounded border bg-gray-500 text-center text-white cursor-pointer' on:click={addParent}>Elterntier zufügen</div>
+        {/if}
 
     </div>
 

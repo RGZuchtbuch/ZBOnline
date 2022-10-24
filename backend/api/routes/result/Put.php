@@ -1,6 +1,6 @@
 <?php
 
-namespace App\routes\pair;
+namespace App\routes\result;
 
 use App\Queries;
 use App\routes\Controller;
@@ -17,7 +17,7 @@ class Put extends Controller
     public function process(Request $request, array $args) : bool
     {
         $pair = $this->getData( $request );
-        return Queries\Pair::update( $pair );
+        return Queries\Report::update( $pair );
     }
 
 

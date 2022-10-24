@@ -47,11 +47,11 @@ class Get extends Controller
                 $breed = $this->makeBreed( $result );
                 $section['breeds'][] = & $breed;
             }
-            if( $result['colorId'] === null ) { // breed result (pigeon )
-                $breed['result'] = $this->makeResult( $result );
-            } else { // color and result for layers
+            if( $result['colorId'] === null ) { // breed template (pigeon )
+                $breed['template'] = $this->makeResult( $result );
+            } else { // color and template for layers
                 $color = $this->makeColor( $result );
-                $color['result'] = $this->makeResult( $result );
+                $color['template'] = $this->makeResult( $result );
                 $breed['colors'][] = $color;
             }
         }
@@ -72,12 +72,12 @@ class Get extends Controller
         return [ 'id'=>$result['colorId'], 'name'=>$result['colorName'] ];
     }
     private function makeResult( array & $result ): array {
- //       if( $result['sectionId'] === 5 ) {
+ //       if( $template['sectionId'] === 5 ) {
  //           return [
- //               'id' => $result['id'],
- //               'breeders' => $result['breeders'], // zuchten
- //               'brood' => $this->makeBroodPigeons( $result ),
- //               'show' => $this->makeShow( $result )
+ //               'id' => $template['id'],
+ //               'breeders' => $template['breeders'], // zuchten
+ //               'brood' => $this->makeBroodPigeons( $template ),
+ //               'show' => $this->makeShow( $template )
  //           ];
  //       } else {
             return [

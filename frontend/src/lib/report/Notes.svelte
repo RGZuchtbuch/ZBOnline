@@ -1,13 +1,4 @@
 <script>
-    import { getProduction, getValidDate } from '../../js/util.js'
-
-    import InputDate from '../input/Date.svelte';
-    import InputNumber from '../input/Number.svelte';
-    import InputRing from '../input/Ring.svelte';
-    import InputText from '../input/Text.svelte';
-    import Select from '../select/Select.svelte';
-
-//    export let result;
     export let notes;
     export let disabled;
 

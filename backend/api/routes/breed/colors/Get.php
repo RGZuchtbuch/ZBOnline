@@ -9,13 +9,12 @@ use Slim\Exception\HttpNotFoundException;
 
 class Get extends Controller
 {
-    public function preAuthorized(?array &$requester, array &$args): bool
-    {
+    public function preAuthorized(?array &$requester, array &$args): bool {
         return true;
     }
 
-    public function process(Request $request, array $args) : mixed
-    {
-        return queries\Breed::getColors( $args['id'] );
+    public function process(Request $request, array $args) : mixed {
+        $colors = queries\Breed::getColors( $args['id'] );
+        return [ 'colors'=>$colors ];
     }
 }

@@ -5,8 +5,8 @@
     export let name = null;
     export let disabled = false;
     export let readonly = false;
-    export let min = Number.MIN_SAFE_INTEGER;
-    export let max = Number.MAX_SAFE_INTEGER;
+    export let min = -1000000; //Number.MIN_VALUE;
+    export let max = +1000000; //Number.MAX_VALUE;
     export let step = 1;
     export let error = '!'
     export let required = false;
@@ -15,6 +15,7 @@
     export { classname as class }
 
     let invalid = false;
+    validate( value, min, max );
 
     let on = {
         focus: () => {},
@@ -24,7 +25,7 @@
     $: validate( value, min, max );
 
     function validate( value, min, max ) { // using component value
-        invalid = ! (( value >= min && value <= max ) || (! required && value === null )) ;
+        invalid = ! (( value >= min && value <= max ) || (! required && value == null )) ;
     }
 </script>
 

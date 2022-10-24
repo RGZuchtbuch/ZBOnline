@@ -13,7 +13,7 @@
 
     onMount( () => {
         if( promise ) promise.then( data => {
-            breeders = data;
+            breeders = data.breeders;
         });
     })
 
@@ -23,7 +23,9 @@
 <main>
     <div>{legend}</div>
     {#if breeders}
-        Breeders
+        {#each breeders as breeder}
+            <div><a href={route.match+'/'+breeder.id}>{breeder.name}</a></div>
+        {/each}
     {/if}
 </main>
 

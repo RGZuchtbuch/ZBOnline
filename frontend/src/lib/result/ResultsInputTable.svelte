@@ -1,14 +1,14 @@
 <script>
     import { onMount } from 'svelte';
     import { active, meta, router, Route} from 'tinro';
-    import { dec, perc } from '../js/util.js';
+    import { dec, perc } from '../../js/util.js';
 
-    import api from '../js/api.js';
+    import api from '../../js/api.js';
 
-    import InputNumber from './input/Number.svelte';
-    import InputText   from './input/Text.svelte';
-    import Select from './select/Select.svelte';
-    import BreedSelect from './select/Breed.svelte';
+    import InputNumber from '../input/Number.svelte';
+    import InputText   from '../input/Text.svelte';
+    import Select from '../select/Select.svelte';
+    import BreedSelect from '../select/Breed.svelte';
 
     export let legend = '';
     export let link='';

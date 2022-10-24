@@ -22,7 +22,7 @@ abstract class Controller
 
         $data = $this->process($request, $args);
 
-//        if( ! $this->postAuthorized( $this->requester, $args,  $this->result ) ) throw new \Slim\Exception\HttpUnauthorizedException( $request, "Not Authorized for call");
+//        if( ! $this->postAuthorized( $this->requester, $args,  $this->template ) ) throw new \Slim\Exception\HttpUnauthorizedException( $request, "Not Authorized for call");
 
         $response->getBody()->write( json_encode( $data ) );
         return $response;

@@ -1,5 +1,5 @@
 <script>
-    import { getValidDate, printDate } from '../../js/util.js'
+    import { toDate, formatDate } from '../../js/util.js'
 
     export let value;
     export let label = null;
@@ -10,13 +10,13 @@
     export let min = settings.date.min;
     export let max = settings.date.max;
     export let error = new Date( min ).getFullYear() + ' - ' + new Date( max ).getFullYear();
-    console.log('Min', min );
+    export let valid = true;
 
     let classname = '';
     export { classname as class }
 
-    let input = printDate( value );
-    let date = null;
+    let input = formatDate( 'D', value );
+//    let date = null;
     let invalid = false;
 
     let on = {
@@ -27,16 +27,11 @@
     $: validate( input, min, max );
 
     function validate( input, min, max ) {
-        const oldDate = date;
-        date = getValidDate( input, min, max ); // null or valid
-        if( date !== oldDate ) {
-            value = date;
-            invalid = false;
-        } else {
-            value = null;
-            invalid = required || ! ( input === '' || input === null ); // true if required and wrong or not required and empty
-        }
-//        console.log( 'Date', label, input, min, max, invalid );
+        console.log( 'Check date', input, value );
+        value = toDate( input, min, max );
+        invalid = value ? false : required;
+        valid = ! invalid;
+        console.log( 'Checked date', input, value )
     }
 
 </script>

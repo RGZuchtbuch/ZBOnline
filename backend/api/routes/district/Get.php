@@ -16,7 +16,7 @@ class Get extends Controller
 
     public function process(Request $request, array $args) : mixed
     {
-        $districtId = $args['id'];
+        $districtId = $args['districtId'];
         $district = queries\District::get( $districtId );
         if( ! $district ) throw new HttpNotFoundException($request, "User not found");
 

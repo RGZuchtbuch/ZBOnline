@@ -1,6 +1,6 @@
 <?php
 
-namespace App\routes\breeder;
+namespace App\routes\breeder\reports;
 
 use App\Queries;
 use App\routes\Controller;
@@ -10,7 +10,7 @@ use Slim\Exception\HttpNotFoundException;
 class Get extends Controller {
 
     public function preAuthorized( ? array & $requester, array & $args ) : bool {
-        //$user = Queries\Authorized::get( $requester, $args['breederId'] );
+        //$user = Queries\Authorized::get( $requester, $args['id'] );
         //return isset( $user );
         return true;
     }
@@ -18,11 +18,8 @@ class Get extends Controller {
     public function process(Request $request, array $args) : mixed
     {
         $breederId = $args['breederId' ];
-        $breeder = queries\Breeder::get( $breederId );
-        if( ! $breeder) throw new HttpNotFoundException($request, "breeder not found");
-        $breeder[ 'district' ] = queries\District::get( $breeder['districtId'] );
-        $breeder[ 'club' ] = queries\District::get( $breeder['clubId'] );
-        return $breeder;
+        $reports = queries\breeder\reports\select::execute( $breederId );
+        return [ 'reports'=>$reports ];
     }
 
 }

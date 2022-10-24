@@ -16,8 +16,8 @@ class Get extends Controller
 
     public function process(Request $request, array $args) : mixed
     {
-        $id = $args['id'];
-        $color = queries\Color::get( $id );
+        $colorId = $args['colorId'];
+        $color = queries\Color::get( $colorId );
         if( ! $color) throw new HttpNotFoundException($request, "User not found");
         return $color;
     }

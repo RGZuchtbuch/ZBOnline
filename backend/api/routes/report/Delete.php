@@ -1,6 +1,6 @@
 <?php
 
-namespace App\routes\pair;
+namespace App\routes\report;
 
 use App\routes\Controller;
 use Psr\Http\Message\ServerRequestInterface as Request;

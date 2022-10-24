@@ -1,5 +1,6 @@
 import jwt_decode from 'jwt-decode';
 import { user } from './store.js'
+import { clone, reportTpl } from './template.js';
 
 //uses constants from js/setting.js { settings.cache.TIMEOUT, settings.api.root }
 
@@ -32,14 +33,20 @@ export default {
 
     breed: {
         get: (id) => get( 'api/breed/'+id ),
-        getColors: ( breedId ) => get( `api/breed/${breedId}/colors`),
+        colors : {
+            get: ( breedId ) => get( `api/breed/${breedId}/colors`)
+        },
     },
 
     breeder: {
-        get: (id) => get( 'api/breeder/'+id ),
-        getReports: (id) => get( 'api/breeder/'+id+'/reports' ),
-        getResults: (id) => get( 'api/breeder/'+id+'/results' ),
-        getYears: (id) => get( 'api/breeder/'+id+'/years' ),
+        get: (breederId) => get( 'api/breeder/'+breederId ),
+        reports: {
+            get: (breederId) => get( 'api/breeder/'+breederId+'/reports' ),
+        },
+        results: {
+            get: (breederId) => get( 'api/breeder/'+breederId+'/results' ),
+        },
+//        getYears: (id) => get( 'api/breeder/'+id+'/years' ),
     },
 
     color: {
@@ -76,9 +83,12 @@ export default {
             return get('api/district/'+parentId+'/tree');
         },
 
-        getBreeders: (districtId) => {
-            return get( 'api/district/'+districtId+'/breeders');
+        breeders: {
+            get: (districtId) => {
+                return get( 'api/district/'+districtId+'/breeders');
+            }
         },
+
         results: {
             full: {
                 get: (districtId, sectionId, year, group) => get('api/district/' + districtId + '/section/' + sectionId + '/year/' + year + '/group/' + group + '/results/full')
@@ -127,85 +137,37 @@ export default {
     },
 
     report: {
-        'new': (breederId) => {
-            console.log('api new Report for ', breederId);
-            let breederPromise = get('api/breeder/' + breederId);
-            let reportPromise = Promise.resolve({
-                id: 0,
-                breederId: breederId,
-                year: 2022, name: 'Test', group: 1, paired: null,
-                breed: { sectionId: 4, breedId: 1024, colorId: 8543 },
-                parents: [
-                    {
-                        sex: '1.0',
-                        ring: {country: 'D', year: new Date().getFullYear(), code: 'AA 000'},
-                        score: null,
-                        parents: {id: null, breeder: null, year: 2021, name: null}
-                    },
-                    {
-                        sex: '0.1',
-                        ring: {country: 'D', year: new Date().getFullYear(), code: 'AZ 999'},
-                        score: null,
-                        parents: {id: null, breeder: null, year: 2021, name: null}
-                    },
-                ],
-                lay: {start: '2022-01-01', until: '2022-04-01', eggs: 50},
-                broods: [
-                    {
-                        start: null,
-                        eggs: null,
-                        fertile: null,
-                        hatched: null,
-                        ringed: null,
-                        chicks: [{country: 'D', year: new Date().getFullYear(), code: 'AA 100'}, {
-                            country: 'D',
-                            year: new Date().getFullYear(),
-                            code: 'AA 101'
-                        }]
-                    },
-                    {
-                        start: null,
-                        eggs: null,
-                        fertile: null,
-                        hatched: null,
-                        ringed: null,
-                        chicks: [{country: 'D', year: new Date().getFullYear(), code: 'AA 100'}, {
-                            country: 'D',
-                            year: new Date().getFullYear(),
-                            code: 'AA 101'
-                        }]
-                    }
-                ],
-                show: {
-                    scores: {89: null, 90: null, 91: null, 92: null, 93: null, 94: null, 95: null, 96: null, 97: null}
-                },
-                notes: null,
-                //result must be deducted.
+        'new': ( districtId, breederId ) => {
+            console.log('api new Report for ', districtId, breederId );
+            const report = clone( reportTpl );
+            report.breederId = breederId;
+            report.districtId = districtId;
+            return Promise.resolve({
+                report: report
             });
-            return Promise.all([reportPromise, breederPromise])
-                .then(responses => {
-                    let report = responses[0];
-                    report.breeder = responses[1];
-                    // clear caches
-                    return report;
-                });
         },
-        get: (id) => get('api/pair/' + id),
+        get: (id) => get('api/report/' + id),
         post: (report) => {
             // TODO adjust cache
-            return post( 'api/pair/', report );
+            return post( 'api/report', report );
         },
         put: (report) => {
             // TODO cache
-            return put( 'api/pair/'+report.id, report );
+            return put( 'api/report', report );
         },
+        delete: ( id ) => del( 'api/report/'+id ),
     },
+
     result: {
         get: ( id ) => get( 'api/result/'+id ),
         post: ( result ) => post( 'api/result', result ),
-        put: ( result ) => put( 'api/result/'+id, result ),
-        delete: ( id ) => del( 'api/result'+id ),
+        put: ( result ) => put( 'api/result', result ),
+        delete: ( id ) => del( 'api/result/'+id ),
 
+        selection: {
+            get: ( districtId, sectionId, year, group ) =>
+                get( 'api/result/district/'+districtId+'/section/'+sectionId+'/year/'+year+'/group/'+group ),
+        }
     },
 
     section: {
@@ -275,11 +237,13 @@ async function get( url ) {
             method: 'GET',
             headers: getHeaders()
         }
-        console.log('t', url);
+        console.log('new get', url);
         let promise = fetch( settings.api.root+url, options)
             .then( response => {
                 if( response.ok ) {
-                    return response.json();
+                    const json = response.json();
+                    console.log( 'Got response ', json );
+                    return json;
                 }
                 throw response;
             });

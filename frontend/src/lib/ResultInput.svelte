@@ -122,7 +122,7 @@
 
     function onSubmit() {
         // validate and send trough api
-        console.log( 'Store result' )
+        console.log( 'Store template' )
         const result = {
             districtId: districtId, year: year, group: group, breederId: null, name: null,
             sectionId: sectionId, breedId: breedId, breedName: breed.name, colorId: colorId?colorId:0, colorName: color?color.name:null, // names for view

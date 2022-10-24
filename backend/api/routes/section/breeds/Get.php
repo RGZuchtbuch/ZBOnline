@@ -17,7 +17,7 @@ class Get extends Controller
     public function process(Request $request, array $args) : mixed
     {
         $sectionId = $args['id'];
-        return queries\Section::getBreeds( $sectionId );
+        return [ 'breeds'=>queries\Section::getBreeds( $sectionId ) ];
     }
 
 }

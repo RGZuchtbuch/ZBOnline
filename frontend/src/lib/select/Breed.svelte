@@ -16,24 +16,40 @@
     onMount( () => {})
 
     getSections(); // only once
-    $: getBreeds( sectionId ); // after getSection
-    $: getColors( breedId ); // after getBreeds !
+    getBreeds( sectionId ); // after getSection
+    getColors( breedId ); // after getBreeds !
 
     function getSections() {
-        api.section.children.get(2).then( data => { sections = data });
+        api.section.children.get(2).then( data => { sections = data.sections });
     }
     function getBreeds( sectionId ) {
-        console.log( 'SelectBreed, getBreeds', sectionId );
+        api.section.breeds.get(sectionId).then(data => {
+            breeds = data.breeds;
+        });
+    }
+    function onSectionChange( event ) {
+        console.log( 'SectionChange', sectionId );
         if( sectionId ) {
-            api.section.getBreeds(sectionId).then(data => {
-                breeds = data;
-            });
+            api.section.breeds.get(sectionId).then(data => { breeds = data.breeds });
+            colors = [];
+        } else {
+            breeds = [];
             colors = [];
         }
+        breedId = null;
+        colorId = null;
     }
     function getColors( breedId ) {
-        console.log( 'SelectBreed, getColors', breedId );
-        if( breedId ) api.breed.getColors( breedId ).then( data => { colors = data });
+        api.breed.colors.get( breedId ).then( data => { colors = data.colors });
+    }
+    function onBreedChange( event ) {
+        console.log( 'BreedChange', breedId );
+        if( breedId ) {
+            api.breed.colors.get( breedId ).then( data => { colors = data.colors });
+        } else {
+            colors = [];
+        }
+        colorId = null;
     }
 
 </script>
@@ -41,13 +57,13 @@
 
 <div class='flex flex-col'>
     <div class='flex flex-row gap-x-1'>
-        <Select class='w-48' label='Sparte' bind:value={sectionId} {disabled} required>
+        <Select class='w-48' label='Sparte' bind:value={sectionId} on:change={onSectionChange} {disabled} required>
             <option value={null} ></option>
             {#each sections as section }
                 <option value={section.id} selected={section.id === sectionId}>{section.name}</option>
             {/each}
         </Select>
-        <Select class='w-64' label='Rasse' bind:value={breedId} {disabled} required>
+        <Select class='w-64' label='Rasse' bind:value={breedId} on:change={onBreedChange} {disabled} required>
             <option value={null} ></option>
             {#each breeds as breed }
                 <option value={breed.id} selected={breed.id === breedId}>{breed.name}</option>

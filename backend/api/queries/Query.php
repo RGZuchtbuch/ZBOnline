@@ -82,10 +82,18 @@ class Query
     }
 
     public static function insert( PDOStatement & $stmt, array & $args ) : ? int { // returns new id
-        return $stmt->execute( $args ) ? Query::getPdo()->lastInsertId() : null;
+        return $stmt->execute( $args );
+    }
+
+    public static function lastInsertId( ? string $name ) : int {
+        return Query::getPdo()->lastInsertId( $name );
     }
 
     public static function update( PDOStatement & $stmt, array & $args ) : bool {
+        return $stmt->execute( $args );
+    }
+
+    public static function replace( PDOStatement & $stmt, array & $args ) : bool {
         return $stmt->execute( $args );
     }
 
@@ -107,8 +115,8 @@ class Query
             );
             Query::$pdo->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
             Query::$pdo->setAttribute( PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC );
-            Query::$pdo->setAttribute( PDO::ATTR_EMULATE_PREPARES, false ); // get text and numbers instead of always text as result
-            Query::$pdo->setAttribute( PDO::ATTR_STRINGIFY_FETCHES, false ); // also to get text and numbers instead of always text as result
+            Query::$pdo->setAttribute( PDO::ATTR_EMULATE_PREPARES, false ); // get text and numbers instead of always text as template
+            Query::$pdo->setAttribute( PDO::ATTR_STRINGIFY_FETCHES, false ); // also to get text and numbers instead of always text as template
         }
         return Query::$pdo;
     }
