@@ -6,8 +6,7 @@
     import Breeders from './lib/Breeders.svelte';
     import District from './lib/District.svelte';
     import Districts from './lib/Districts.svelte';
-    import ResultsInputHeader from './lib/result/ResultsInputHeader.svelte';
-    import ResultsInputTable from './lib/result/ResultsInputTable.svelte';
+    import ResultsInput from './lib/result/ResultsInput.svelte';
     import Report from './lib/report/Report.svelte';
     import Reports from './lib/Reports.svelte';
     import Results from './lib/Results.svelte';
@@ -66,10 +65,7 @@
 
                     <Route path='/leistungen/*' let:meta>
                         results
-                        <ResultsInputHeader {...meta.params} />
-                        <Route path='/sparte/:sectionId/jahr/:year/gruppe/:group' let:meta>
-                            <ResultsInputTable {...meta.params} />
-                        </Route>
+                        <ResultsInput {...meta.params} />
                     </Route>
 
                     <Route path='/zuechter/*' let:meta>

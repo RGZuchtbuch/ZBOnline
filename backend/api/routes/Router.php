@@ -53,7 +53,8 @@ class Router {
         $app->put( '/report', new report\Put() );
         $app->delete( '/report/{reportId}', new report\Delete() );
 
-        $app->get('/result/district/{districtId}/section/{sectionId}/year/{year}/group/{group}', new result\selection\Get() );
+        $app->get( '/result/breed/{breedId}/district/{districtId}/year/{year}/group/{group}/colors', new result\breed\colors\Get() );
+        $app->get('/result/breeds/district/{districtId}/section/{sectionId}/year/{year}/group/{group}', new result\breeds\Get() );
 
         $app->get( '/template/{id}', new result\Get() );
         $app->post( '/template', new result\Post() );

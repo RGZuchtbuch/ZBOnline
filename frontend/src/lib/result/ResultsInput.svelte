@@ -22,13 +22,13 @@
     let sectionId = null;
     let year = null; //TODO should be null to start
     let group = null;
-    let results = [];
+    let breeds = [];
 
     getDistrict();
     getSections();
     getGroups();
 
-    $: getResults( districtId, sectionId, year, group );
+    $: getBreeds( districtId, sectionId, year, group );
 
 /**  functions **/
 
@@ -42,19 +42,52 @@
         api.groups.get().then( response => { groups = response.groups } );
     }
 
-    function getResults( districtId, sectionId, year, group ) {
+    function getBreeds(districtId, sectionId, year, group ) {
         if( districtId && sectionId && year && group ) {
             console.log( 'Ready to get');
-            api.result.selection.get( districtId, sectionId, year, group )
-                .then( response => { results = response.results } );
+            api.result.breeds.get( districtId, sectionId, year, group )
+                .then( response => { breeds = response.breeds } );
         }
     }
 
-    function open( result ) {
-        console.log( "open", result.name );
-        api.breed.colors.get( result.breedId ).then( response => { result.colors = response.colors} )
-        //breed.open = ! breed.open;
-        //district = district; // trigger
+    function onOpen( breed ) {
+        if( breed.open ) {
+            let changed = false;
+            for( let color of breed.colors ) {
+                changed |= color.changed;
+            }
+            if( changed ) {
+                // breed.open = true; // stay open until saved
+            } else {
+                breed.open = false;
+                breeds = breeds; // trigger
+            }
+
+        } else { // open
+            api.result.breed.colors.get( breed.id, districtId, year, group )
+                .then( response => {
+                    breed.colors = response.colors
+                    breed.open = true;
+                    breeds = breeds; // trigger
+                } ) // should get color results
+        }
+    }
+
+    function onColorChange( breed, color ) {
+        return ( event ) => {
+            color.changed = true;
+            breeds = breeds; // trigger
+            console.log( 'Changed', color );
+        }
+    }
+
+    function onSave( color ) {
+        return ( event ) => {
+            console.log('Saved', color );
+            // save: api.result.color.post(...).then( ( response ) => {}
+            color.changed = false;
+            breeds = breeds; // trigger
+        }
     }
 
     function onSubmit( event ) {
@@ -104,7 +137,7 @@
 
             <div class='w-12'>Hennen</div>
             <div class='w-10'>Eier/J</div>
-            <div class='w-14'>Eiggewicht</div>
+            <div class='w-14'>∅ Gewicht</div>
 
             <div class='w-4'></div>
 
@@ -117,12 +150,12 @@
             <div class='w-10'>Tiere</div>
             <div class='w-14'>Bewertung</div>
         </div>
-        {#if district }
-            {#each results as result }
+        {#if district && breeds }
+            {#each breeds as breed }
                 <div class='flex flex-row gap-x-1 text-xs'>
-                    <div class='w-72 cursor-pointer' on:click={open(result)} >{result.name}</div>
+                    <div class='w-72 cursor-pointer' on:click={onOpen(breed)} >{breed.name}</div>
                     <div class='w-8'></div>
-                    {#if result.open }
+                    {#if breed.open }
                         <div class='w-12'>Zuchten</div>
 
                         <div class='w-4'></div>
@@ -143,31 +176,34 @@
                         <div class='w-14'>Bewertung</div>
                     {/if}
                 </div>
-                {#if result.open }
-                    {#each result.colors as color}
-                        <div class='flex flex-row gap-x-1 text-xs'>
+                {#if breed.open }
+                    {#each breed.colors as color}
+                        <form class='flex flex-row gap-x-1 text-xs' on:change={onColorChange( breed, color )}>
                             <div class='w-8'></div>
                             <div class='w-72'>{color.name}</div>
 
-                            <input class='w-12' bind:value={color.result.breeders} >
+                            <input class='w-12' bind:value={color.breeders} >
 
                             <div class='w-4'></div>
 
-                            <input class='w-12' bind:value={color.result.lay.dames} >
-                            <input class='w-10' bind:value={color.result.lay.eggs} >
-                            <input class='w-14' bind:value={color.result.lay.weight} >
+                            <input class='w-12' bind:value={color.layDames} >
+                            <input class='w-10' bind:value={color.layEggs} >
+                            <input class='w-14' bind:value={color.layWeight} >
 
                             <div class='w-4'></div>
 
-                            <input class='w-12' bind:value={color.result.brood.eggs} >
-                            <input class='w-14' bind:value={color.result.brood.fertile} >
-                            <input class='w-14' bind:value={color.result.brood.hatched} >
+                            <input class='w-12' bind:value={color.broodEggs} >
+                            <input class='w-14' bind:value={color.broodFertile} >
+                            <input class='w-14' bind:value={color.broodHatched} >
 
                             <div class='w-4'></div>
 
-                            <input class='w-10' bind:value={color.result.show.count} >
-                            <input class='w-14' bind:value={color.result.show.score} >
-                        </div>
+                            <input class='w-10' bind:value={color.showCount} >
+                            <input class='w-14' bind:value={color.showScore} >
+                            {#if color.changed }
+                                <div on:click={onSave( color )}>[Save]</div>
+                            {/if}
+                        </form>
                     {/each}
                 {/if}
             {/each}

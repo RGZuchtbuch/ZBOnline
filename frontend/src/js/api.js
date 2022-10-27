@@ -164,9 +164,14 @@ export default {
         put: ( result ) => put( 'api/result', result ),
         delete: ( id ) => del( 'api/result/'+id ),
 
-        selection: {
+        breed: {
+            colors: {
+                get: ( breedId, districtId, year, group ) => get( 'api/result/breed/'+breedId+'/district/'+districtId+'/year/'+year+'/group/'+group+'/colors'),
+            }
+        },
+        breeds: {
             get: ( districtId, sectionId, year, group ) =>
-                get( 'api/result/district/'+districtId+'/section/'+sectionId+'/year/'+year+'/group/'+group ),
+                get( 'api/result/breeds/district/'+districtId+'/section/'+sectionId+'/year/'+year+'/group/'+group ),
         }
     },
 

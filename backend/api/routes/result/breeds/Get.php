@@ -1,6 +1,6 @@
 <?php
 
-namespace App\routes\result\selection;
+namespace App\routes\result\breeds;
 
 use App\Queries;
 use App\routes\Controller;
@@ -20,10 +20,10 @@ class Get extends Controller
         $sectionId = $args[ 'sectionId' ];
         $year = $args[ 'year' ];
         $group = $args[ 'group' ];
-        $results = queries\result\selection\Select::execute( $districtId, $sectionId, $year, $group );
+        $breeds = queries\result\breeds\Select::execute( $districtId, $sectionId, $year, $group );
 
-        if( ! $results) throw new HttpNotFoundException($request, "Results not found");
+        if( ! $breeds) throw new HttpNotFoundException($request, "Breeds not found");
 
-        return [ 'results'=>$results ];
+        return [ 'breeds'=>$breeds ];
     }
 }
