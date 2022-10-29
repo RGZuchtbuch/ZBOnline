@@ -18,10 +18,11 @@ class Get extends Controller {
     public function process(Request $request, array $args) : mixed
     {
         $breederId = $args['breederId' ];
-        $breeder = queries\Breeder::get( $breederId );
+        $breeder = queries\breeder\Select::execute( $breederId );
         if( ! $breeder) throw new HttpNotFoundException($request, "breeder not found");
-        $breeder[ 'district' ] = queries\District::get( $breeder['districtId'] );
-        $breeder[ 'club' ] = queries\District::get( $breeder['clubId'] );
+
+        $breeder[ 'district' ] = queries\district\Select::execute( $breeder['districtId'] );
+        $breeder[ 'club' ] = queries\club\Select::execute( $breeder['clubId'] );
         return $breeder;
     }
 
