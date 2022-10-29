@@ -18,7 +18,7 @@
     $: getResults( districtId, year );
 
     function getResults( districtId, year ) {
-        console.log( 'Get results ', districtId, year );
+        console.log( 'Get colors ', districtId, year );
         if( districtId && year ) {
             api.district.results.get( districtId, year )
                 .then( (response) => {

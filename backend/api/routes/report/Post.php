@@ -19,7 +19,7 @@ class Post extends Controller
 
     public function process(Request $request, array $args) : mixed
     {
-        // first store results then report with all subs with template id
+        // first store colors then report with all subs with template id
         $report = $this->getData( $request );
         if( ! $report) throw new HttpBadRequestException($request, "No report found in request");
 

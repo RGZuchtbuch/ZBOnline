@@ -1,14 +1,8 @@
 <script>
-    import { onMount } from 'svelte';
-    import { active, meta, router, Route} from 'tinro';
-    import { dec, perc } from '../../js/util.js';
-
     import api from '../../js/api.js';
-
     import InputNumber from '../input/Number.svelte';
-    import InputText   from '../input/Text.svelte';
     import Select from '../select/Select.svelte';
-    import BreedSelect from '../select/Breed.svelte';
+
 
     export let legend = '';
     export let link='';
@@ -41,8 +35,8 @@
     function getGroups() {
         api.groups.get().then( response => { groups = response.groups } );
     }
-
     function getBreeds(districtId, sectionId, year, group ) {
+        if( sectionId === 5 ) group = 'I'; // pigeons don't have group, so defaults to 'I' locally
         if( districtId && sectionId && year && group ) {
             console.log( 'Ready to get');
             api.result.breeds.get( districtId, sectionId, year, group )
@@ -50,11 +44,30 @@
         }
     }
 
+    function isValid( result ) {
+        let valid =
+            ( result.breeders===null  || ( result.breeders>= 1 && result.breeders<=9999 ) ) &&
+            ( result.pairs===null        || ( result.pairs>=1 && result.pairs<=9999 ) ) &&
+            ( result.layDames===null     || ( result.layDames>=1 && result.layDames<=9999 ) ) &&
+            ( result.layEggs===null      || ( result.layEggs>=1 && result.layEggs<=399 ) ) &&
+            ( result.layWeight===null    || ( result.layWeight >=1 && result.layWeight<=999 ) ) &&
+            ( result.broodEggs===null    || ( result.broodEggs >=1 && result.broodEggs<=9999 ) ) &&
+            ( result.broodFertile===null || ( result.broodFertile >=0 && result.broodFertile<=result.broodEggs ) ) &&
+            ( sectionId === 5
+                ? ( result.broodHatched===null || ( result.broodHatched >=0 && result.broodHatched<=9999 ) )
+                : ( result.broodHatched===null || ( result.broodHatched >=0 && result.broodHatched<=(result.broodFertile===null ? result.broodEggs : result.broodFertile ) ) )
+            ) &&
+            ( result.showCount==null     || ( result.showCount >=1 && result.showCount<=999 ) ) &&
+            ( result.showScore===null    || ( result.showScore >=1 && result.showScore<=999 ) );
+        console.log( 'isValid', valid );
+        return valid;
+    }
+
     function onOpen( breed ) {
         if( breed.open ) {
             let changed = false;
-            for( let color of breed.colors ) {
-                changed |= color.changed;
+            for( let result of breed.results ) {
+                changed |= result.changed;
             }
             if( changed ) {
                 // breed.open = true; // stay open until saved
@@ -64,32 +77,35 @@
             }
 
         } else { // open
-            api.result.breed.colors.get( breed.id, districtId, year, group )
-                .then( response => {
-                    breed.colors = response.colors
-                    breed.open = true;
-                    breeds = breeds; // trigger
-                } ) // should get color results
+            if( sectionId === 5 ) group = 'I'; // pigeons don't have group, so defaults to 'I' locally
+            if( breed.id && districtId && sectionId && year && group ) {
+                api.result.breed.get(breed.id, districtId, year, group)
+                    .then(response => {
+                        breed.results = response.results
+                        breed.open = true;
+                        breeds = breeds; // trigger
+                    })
+            }
         }
     }
-
-    function onColorChange( breed, color ) {
+    function onResultChange( breed, result ) {
         return ( event ) => {
-            color.changed = true;
+            result.changed = true;
             breeds = breeds; // trigger
-            console.log( 'Changed', color );
+            //console.log( 'Changed', result );
         }
     }
-
-    function onSave( color ) {
+    function onSave( result ) {
         return ( event ) => {
-            console.log('Saved', color );
-            // save: api.result.color.post(...).then( ( response ) => {}
-            color.changed = false;
-            breeds = breeds; // trigger
+            console.log('Saved', result );
+
+            api.result.post( result ).then( ( response ) => {
+                result.id = response.id; // new id when inserted
+                result.changed = false;
+                breeds = breeds; // trigger
+            } );
         }
     }
-
     function onSubmit( event ) {
         console.log( 'Submit' );
     }
@@ -128,80 +144,143 @@
 
     <form class='flex flex-col' on:submit|preventDefault={onSubmit}>
         <div class='flex flex-row gap-x-1 text-xs'>
-            <div class='w-8'>Rasse</div>
-            <div class='w-72'>Farbe</div>
+            {#if sectionId === 5 }
+                <div class='w-8'>Rasse</div>
+                <div class='w-72'></div>
 
-            <div class='w-12'>Zuchten</div>
+                <div class='w-12'>Zuchten</div>
+                <div class='w-12'>Paare</div>
 
-            <div class='w-4'></div>
+                <div class='w-4'></div>
 
-            <div class='w-12'>Hennen</div>
-            <div class='w-10'>Eier/J</div>
-            <div class='w-14'>∅ Gewicht</div>
+                <div class='w-12'>Jungtiere</div>
+                <div class='w-14'>∅ pro Paar</div>
 
-            <div class='w-4'></div>
+                <div class='w-4'></div>
 
-            <div class='w-12'>Eingelegt</div>
-            <div class='w-14'>Befruchtet</div>
-            <div class='w-14'>Geschlüpft</div>
+                <div class='w-10'>Tiere</div>
+                <div class='w-14'>Bewertung</div>
+                <div class='w-16'></div>
+            {:else}
+                <div class='w-8'>Rasse</div>
+                <div class='w-72'>Farbe</div>
 
-            <div class='w-4'></div>
+                <div class='w-12'>Zuchten</div>
 
-            <div class='w-10'>Tiere</div>
-            <div class='w-14'>Bewertung</div>
+                <div class='w-4'></div>
+
+                <div class='w-12'>Hennen</div>
+                <div class='w-10'>Eier/J</div>
+                <div class='w-14'>∅ Gewicht</div>
+
+                <div class='w-4'></div>
+
+                <div class='w-12'>Eingelegt</div>
+                <div class='w-14'>Befruchtet</div>
+                <div class='w-14'>Geschlüpft</div>
+
+                <div class='w-4'></div>
+
+                <div class='w-10'>Tiere</div>
+                <div class='w-14'>Bewertung</div>
+                <div class='w-16'></div>
+            {/if}
         </div>
         {#if district && breeds }
             {#each breeds as breed }
                 <div class='flex flex-row gap-x-1 text-xs'>
+                    <div class='w-8 cursor-pointer' on:click={onOpen(breed)} >{breed.id}</div>
                     <div class='w-72 cursor-pointer' on:click={onOpen(breed)} >{breed.name}</div>
-                    <div class='w-8'></div>
                     {#if breed.open }
-                        <div class='w-12'>Zuchten</div>
+                        {#if sectionId === 5 }
+                            <div class='w-12'>Zuchten</div>
+                            <div class='w-12'>Paare</div>
 
-                        <div class='w-4'></div>
+                            <div class='w-4'></div>
 
-                        <div class='w-12'>Hennen</div>
-                        <div class='w-10'>Eier/J</div>
-                        <div class='w-14'>Eiggewicht</div>
+                            <div class='w-12'>Jungtiere</div>
+                            <div class='w-14'>∅ pro Paar</div>
 
-                        <div class='w-4'></div>
+                            <div class='w-4'></div>
 
-                        <div class='w-12'>Eingelegt</div>
-                        <div class='w-14'>Befruchtet</div>
-                        <div class='w-14'>Geschlüpft</div>
+                            <div class='w-10'>Tiere</div>
+                            <div class='w-14'>Bewertung</div>
+                            <div class='w-16'></div>
+                        {:else}
+                            <div class='w-12'>Zuchten</div>
 
-                        <div class='w-4'></div>
+                            <div class='w-4'></div>
 
-                        <div class='w-10'>Tiere</div>
-                        <div class='w-14'>Bewertung</div>
+                            <div class='w-12'>Hennen</div>
+                            <div class='w-10'>Eier/J</div>
+                            <div class='w-14'>∅ Gewicht</div>
+
+                            <div class='w-4'></div>
+
+                            <div class='w-12'>Eingelegt</div>
+                            <div class='w-14'>Befruchtet</div>
+                            <div class='w-14'>Geschlüpft</div>
+
+                            <div class='w-4'></div>
+
+                            <div class='w-10'>Tiere</div>
+                            <div class='w-14'>Bewertung</div>
+                            <div class='w-16'></div>
+                        {/if}
                     {/if}
                 </div>
                 {#if breed.open }
-                    {#each breed.colors as color}
-                        <form class='flex flex-row gap-x-1 text-xs' on:change={onColorChange( breed, color )}>
-                            <div class='w-8'></div>
-                            <div class='w-72'>{color.name}</div>
+                    {#each breed.results as result}
 
-                            <input class='w-12' bind:value={color.breeders} >
+                        <form class='flex flex-row gap-x-1 text-xs' on:change={onResultChange( breed, result )}>
+                            {#if sectionId === 5 }
+                                <div class='w-8'></div>
+                                <div class='w-72'>Gesamte Farbenschläge</div>
 
-                            <div class='w-4'></div>
+                                <InputNumber class='w-12' bind:value={result.breeders} min=1 max=9999 error='1..9999'/>
+                                <InputNumber class='w-12' bind:value={result.pairs} min=1 max=9999 error='1..9999'/>
 
-                            <input class='w-12' bind:value={color.layDames} >
-                            <input class='w-10' bind:value={color.layEggs} >
-                            <input class='w-14' bind:value={color.layWeight} >
+                                <div class='w-4'></div>
 
-                            <div class='w-4'></div>
+                                <InputNumber class='w-14' bind:value={result.broodHatched} min=0 max=9999 />
+                                <InputNumber class='w-14' value={result.pairs ? result.broodHatched / result.pairs : '-' } readonly />
 
-                            <input class='w-12' bind:value={color.broodEggs} >
-                            <input class='w-14' bind:value={color.broodFertile} >
-                            <input class='w-14' bind:value={color.broodHatched} >
+                                <div class='w-4'></div>
 
-                            <div class='w-4'></div>
+                                <InputNumber class='w-10' bind:value={result.showCount} min=1 max=9999 error='0..9999'/>
+                                <InputNumber class='w-14' bind:value={result.showScore} min=90 max=97 step=0.1 error='90..97'/>
+                            {:else}
+                                <div class='w-8'></div>
+                                <div class='w-72'>{result.name}</div>
 
-                            <input class='w-10' bind:value={color.showCount} >
-                            <input class='w-14' bind:value={color.showScore} >
-                            {#if color.changed }
-                                <div on:click={onSave( color )}>[Save]</div>
+                                <InputNumber class='w-12' bind:value={result.breeders} min=1 max=9999 error='1..9999'/>
+
+                                <div class='w-4'></div>
+
+                                <InputNumber class='w-12' bind:value={result.layDames} min=1 max=9999 error='0..9999'/>
+                                <InputNumber class='w-10' bind:value={result.layEggs} min=0 max=399 error='0..399'/>
+                                <InputNumber class='w-14' bind:value={result.layWeight} min=1 max=999 error='0..999'/>
+
+                                <div class='w-4'></div>
+
+                                <InputNumber class='w-12' bind:value={result.broodEggs} min=1 max=9999 error='0..9999'/>
+                                <InputNumber class='w-14' bind:value={result.broodFertile} min=0 max={result.broodEggs} error='0..{result.broodEggs}'/>
+                                <InputNumber class='w-14' bind:value={result.broodHatched} min=0 max={(result.broodFertile==null ? result.broodEggs : result.broodFertile )} error='0..{result.broodFertile}'/>
+
+                                <div class='w-4'></div>
+
+                                <InputNumber class='w-10' bind:value={result.showCount} min=1 max=9999 error='0..9999'/>
+                                <InputNumber class='w-14' bind:value={result.showScore} min=90 max=97 step=0.1 error='90..97'/>
+                            {/if}
+
+                            {#if result.changed }
+                                {#if isValid( result ) }
+                                    <div class='w-16' on:click={onSave( result )}>[Save]</div>
+                                {:else}
+                                    <div class='w-16 text-red-600'>[Save]</div>
+                                {/if}
+                            {:else}
+                                <div class='w-16'></div>
                             {/if}
                         </form>
                     {/each}

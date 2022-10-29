@@ -10,7 +10,7 @@ class Router {
         $app->get( '/', new Get() );
 
 //        $app->get( '/breeder/{breederId}/reports', new GetBreederReports() );
-//        $app->get( '/breeder/{breederId}/results', new GetBreederResults() );
+//        $app->get( '/breeder/{breederId}/colors', new GetBreederResults() );
 //        $app->get( '/breeder/{breederId}/years', new GetBreederYears() );
 //        $app->get( '/breeders', new GetBreeders() );
 
@@ -35,13 +35,13 @@ class Router {
 
         $app->get( '/breeder/{breederId}', new breeder\Get() );
         $app->get( '/breeder/{breederId}/reports', new breeder\reports\Get() );
-        $app->get( '/breeder/{breederId}/results', new breeder\results\Get() );
+        $app->get( '/breeder/{breederId}/colors', new breeder\results\Get() );
 
         $app->get( '/color/{colorId}', new color\Get() );
 
         $app->get( '/district/{districtId}', new district\Get() );
-        $app->get( '/district/{districtId}/year/{year}/results', new district\results\Get() );
-        $app->get( '/district/{districtId}/section/{sectionId}/year/{year}/group/{group}/results/full', new district\results\full\Get() );
+        $app->get( '/district/{districtId}/year/{year}/colors', new district\results\Get() );
+        $app->get( '/district/{districtId}/section/{sectionId}/year/{year}/group/{group}/colors/full', new district\results\full\Get() );
 
         $app->get( '/district/{districtId}/breeders', new district\breeders\Get() );
 
@@ -53,8 +53,9 @@ class Router {
         $app->put( '/report', new report\Put() );
         $app->delete( '/report/{reportId}', new report\Delete() );
 
-        $app->get( '/result/breed/{breedId}/district/{districtId}/year/{year}/group/{group}/colors', new result\breed\colors\Get() );
+        $app->get( '/result/breed/{breedId}/district/{districtId}/year/{year}/group/{group}/results', new result\breed\Get() );
         $app->get('/result/breeds/district/{districtId}/section/{sectionId}/year/{year}/group/{group}', new result\breeds\Get() );
+        $app->post('/result', new result\Post() );
 
         $app->get( '/template/{id}', new result\Get() );
         $app->post( '/template', new result\Post() );

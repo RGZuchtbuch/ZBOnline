@@ -1,10 +1,10 @@
 <?php
 
-namespace App\queries\result\breed\colors;
+namespace App\queries\result\breed;
 
 use App\queries\Query;
 
-// selects breeds results for each color
+// selects breed's result
 class Select
 {
     public static function execute( int $breedId, int $districtId, int $year, string $group ) : array {
@@ -13,21 +13,19 @@ class Select
         $args['aYear'] = $year;
         $args['aGroup'] = $group;
         $stmt = Query::prepare( '
-            SELECT result.id id, color.name,
+            SELECT result.id id, "*" AS name,
                    result.id AS resultId, reportId, :aDistrictId AS districtId, breeders, pairs, :aYear AS `year`, :aGroup AS `group`,
-                   breed.sectionId, color.breedId, color.id AS colorId, 
+                   breed.sectionId, breed.id AS breedId, null AS colorId, 
                    result.layDames, layEggs, layWeight,
                    result.broodEggs, broodFertile, broodHatched,
                    result.showCount, showScore
-            FROM color
-            LEFT JOIN breed ON breed.id = color.breedId
+            FROM breed
             LEFT JOIN result 
-                ON result.colorId = color.id
+                ON result.breedId = breed.id AND result.colorId IS NULL
                 AND result.districtId=:districtId 
                 AND result.year=:year
                 AND result.group=:group
-            WHERE color.breedId=:breedId
-            ORDER BY color.name 
+            WHERE breed.id=:breedId
         ' );
         return Query::selectArray( $stmt, $args );
     }

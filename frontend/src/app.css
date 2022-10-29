@@ -27,9 +27,8 @@ h4 {
 }
 
 input, select, option {
-    @apply h-8 rounded;
+    @apply h-6 rounded mb-1;
 }
-
 
 input:read-only {
     background-color: rgba(0, 0, 0, 0);

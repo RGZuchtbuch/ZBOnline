@@ -23,7 +23,7 @@ class Get extends Controller
         $year = $args['year'];
         $group = $args['group'];
         $results = queries\District::getSectionFullResults( $districtId, $sectionId, $year, $group );
-        //$results;
+        //$colors;
         return [ 'district'=>$this->convert($results) ];
     }
 

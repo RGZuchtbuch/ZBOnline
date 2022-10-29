@@ -160,19 +160,17 @@ export default {
 
     result: {
         get: ( id ) => get( 'api/result/'+id ),
-        post: ( result ) => post( 'api/result', result ),
+        post: ( result ) => post( 'api/result', result ), // does insert or replace based on id ( null )
         put: ( result ) => put( 'api/result', result ),
         delete: ( id ) => del( 'api/result/'+id ),
 
         breed: {
-            colors: {
-                get: ( breedId, districtId, year, group ) => get( 'api/result/breed/'+breedId+'/district/'+districtId+'/year/'+year+'/group/'+group+'/colors'),
-            }
+            get: ( breedId, districtId, year, group ) => get( 'api/result/breed/'+breedId+'/district/'+districtId+'/year/'+year+'/group/'+group+'/results'),
         },
         breeds: {
             get: ( districtId, sectionId, year, group ) =>
                 get( 'api/result/breeds/district/'+districtId+'/section/'+sectionId+'/year/'+year+'/group/'+group ),
-        }
+        },
     },
 
     section: {

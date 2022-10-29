@@ -1,20 +1,20 @@
 <script>
 
-    export let value;
-    export let label;
+    export let value = null;
+    export let label = null;
     export let name = null;
     export let disabled = false;
     export let readonly = false;
     export let min = -1000000; //Number.MIN_VALUE;
     export let max = +1000000; //Number.MAX_VALUE;
     export let step = 1;
-    export let error = '!'
+    export let error = min+'..'+max;
     export let required = false;
+    export let invalid = false;
 
     let classname = '';
     export { classname as class }
 
-    let invalid = false;
     validate( value, min, max );
 
     let on = {
@@ -25,7 +25,9 @@
     $: validate( value, min, max );
 
     function validate( value, min, max ) { // using component value
-        invalid = ! (( value >= min && value <= max ) || (! required && value == null )) ;
+        if( ! readonly ) {
+            invalid = !((value >= min && value <= max) || (!required && value == null));
+        }
     }
 </script>
 

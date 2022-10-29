@@ -13,7 +13,7 @@ const settings = {
 
 }
 
-// consts for results
+// consts for colors
 MINYEAR = 1850;
 MAXYEAR = 2030;
 
