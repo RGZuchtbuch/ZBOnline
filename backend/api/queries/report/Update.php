@@ -13,9 +13,9 @@ class Update
         $stmt = Query::prepare( '
             UPDATE report 
             SET breederId=:breederId, 
-                districtId=:districtId, year=:year, group=:group, 
+                districtId=:districtId, `year`=:year, `group`=:group, 
                 sectionId=:sectionId, breedId=:breedId, colorId=:colorId, 
-                name=:name, paired=:paired, 
+                `name`=:name, paired=:paired, 
                 notes=:notes
             WHERE id=:id   
         ' );

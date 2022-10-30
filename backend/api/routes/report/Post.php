@@ -21,7 +21,6 @@ class Post extends Controller
     {
         // first store colors then report with all subs with template id
         $report = $this->getData( $request );
-        if( ! $report) throw new HttpBadRequestException($request, "No report found in request");
 
         queries\Query::begin(); // start transaction
         if(
@@ -37,15 +36,15 @@ class Post extends Controller
             return [ 'id'=>$report['id'] ];
         } else {
             queries\Query::rollback();
-            return null;
+            if( ! $report) throw new HttpBadRequestException( $request, "Could not complete request" );
         }
     }
 
     private function replaceReport( & $report ) : bool {
         //  int $id, int $breederId, int $districtId, int $year, string $group, int $sectionId, int $breedId, ? int $colorId, string $name, ? string $paired, ? string $notes
-        $success = queries\Report::replace( $report['id'], $report['breederId'], $report['districtId'], $report['year'], $report['group'], $report['sectionId'], $report['breedId'], $report['colorId'], $report['name'], $report['paired'], $report['notes'] );
+        $success = queries\report\Select::execute( $report['id'], $report['breederId'], $report['districtId'], $report['year'], $report['group'], $report['sectionId'], $report['breedId'], $report['colorId'], $report['name'], $report['paired'], $report['notes'] );
         if( $success ) {
-            $newId =  Queries\Query::lastInsertId( 'id' );
+            $newId =  queries\Query::lastInsertId( 'id' );
             $report['id'] = $report['id'] == 0 ? $newId : $report['id']; // new or existing id
         }
         return $success;
@@ -53,7 +52,7 @@ class Post extends Controller
 
     private function replaceParents( & $report ) : bool {
         $success = queries\Elder::delete( $report['id'] );
-        foreach ( $report[ 'parents'] as $parent) {
+        foreach ( $report[ 'parent'] as $parent) {
             $success &= queries\Elder::insert( $report['id'], $parent['sex'], $parent['ring'], $parent['score'] );
         }
         return $success; // last inserted

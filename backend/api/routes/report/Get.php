@@ -17,13 +17,15 @@ class Get extends Controller
     public function process(Request $request, array $args) : mixed
     {
         $id = $args['reportId'];
-        $report = Queries\Report::get( $id );
+        $report = queries\report\Select::execute( $id );
+
         if( ! $report) throw new HttpNotFoundException($request, "Report not found");
 
-        $report['parents'] = queries\Elder::getArray( $id );
+        $report['parent'] = queries\Elder::getArray( $id );
         $report['lay'] = queries\Lay::get( $id );
         $report['broods'] = queries\Brood::getArray( $id );
         $report['show'] = queries\Show::get( $id );
+
         return [ 'report'=>$report ];
     }
 }

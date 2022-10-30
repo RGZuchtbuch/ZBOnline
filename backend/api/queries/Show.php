@@ -51,7 +51,7 @@ class Show
         $success = true;
         Query::begin();
             Report::updatePair( $pair['id'], $pair['breederId'], $pair['year'], $pair['name'], $pair['group'], $pair['sectionId'], $pair['breedId'], $pair['colorId'], $pair['paired'], $pair['notes'] );
-            Report::updateParents( $pair['id'], $pair['parents'] );
+            Report::updateParents( $pair['id'], $pair['parent'] );
         if( $success ) {
             Query::commit();
         } else {
