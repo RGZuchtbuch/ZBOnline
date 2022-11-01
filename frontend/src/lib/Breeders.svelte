@@ -21,7 +21,7 @@
 </script>
 
 <main>
-    <div>{legend}</div>
+    <h2>{legend}</h2>
     {#if breeders}
         {#each breeders as breeder}
             <div><a href={route.match+'/'+breeder.id}>{breeder.name}</a></div>

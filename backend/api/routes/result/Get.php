@@ -17,7 +17,7 @@ class Get extends Controller
     public function process(Request $request, array $args) : mixed
     {
         $id = $args['id'];
-        $result = queries\Result::get( $id );
+        $result = queries\result\Select::execute( $id );
 
         if( ! $result) throw new HttpNotFoundException($request, "Result not found");
 

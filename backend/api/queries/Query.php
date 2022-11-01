@@ -2,8 +2,13 @@
 
 namespace App\Queries;
 
+use App\routes\Controller;
+use http\Exception\BadMethodCallException;
 use PDO;
 use PDOStatement;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Exception\HttpNotFoundException;
 
 class Query
 {
@@ -14,8 +19,6 @@ class Query
 
     private static string $user = 'zbo'; // should be in config file with token secret
     private static string $password = 'zbo';
-
-
 
     public static function prepare( string $sql ) : PDOStatement {
         $pdo = Query::getPdo();

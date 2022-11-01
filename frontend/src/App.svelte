@@ -70,8 +70,8 @@
 
                     <Route path='/zuechter/*' let:meta>
                         <Route path='/' let:meta>
-                            <Breeders promise={api.district.breeders.get(meta.params.districtId) } />
-                            District Id {meta.params.districtId}, Breeders
+                            <Breeders promise={api.district.breeders.get(meta.params.districtId) } legend='Züchter' />
+
                         </Route>
                         <Route path='/:breederId/*' let:meta>
                             <Route path='/' let:meta>

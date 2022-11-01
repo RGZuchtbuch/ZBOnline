@@ -2,7 +2,7 @@
 
 namespace App\routes\breeder;
 
-use App\Queries;
+use App\queries;
 use App\routes\Controller;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpNotFoundException;
