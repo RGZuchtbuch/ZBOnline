@@ -1,23 +1,25 @@
 <?php
 
-namespace App\queries\district\breeders;
+namespace App\Queries\moderator\districts;
 
 use App\queries\Query;
-use App\routes\Controller;
 use http\Exception\BadMessageException;
 
 class Select extends Query
 {
-    public static function execute( ...$args ) : ? array {
+    public static function get( ...$args ) : ? array {
         $args = static::validate( ...$args );
         $stmt = static::prepare( '
-            SELECT * FROM user WHERE districtId=:districtId
+            SELECT district.*
+            FROM district
+            LEFT JOIN moderator ON moderator.districtiD=district.id
+            WHERE moderator.userId=:userId
         ' );
         return static::selectArray( $stmt, $args );
     }
 
-    private static function validate( int $districtId ) : array {
-        if( $districtId>0 ) {
+    private static function validate( int $userId ) : array {
+        if( $userId ) {
             return get_defined_vars();
         };
         throw new BadMessageException( "Error in query args");

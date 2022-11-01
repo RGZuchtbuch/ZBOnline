@@ -3,14 +3,22 @@
 namespace App\queries\report\lay;
 
 use App\queries\Query;
+use http\Exception\BadMessageException;
 
-class Select
+class Select extends Query
 {
-    public static function execute( int $reportId ) : ? array {
-        $args = get_defined_vars(); // all vars in scope
-        $stmt = Query::prepare( '
+    public static function execute( ...$args ) : ? array {
+        $args = static::validate( ...$args );
+        $stmt = static::prepare( '
             SELECT * FROM report_lay WHERE reportId=:reportId
         ' );
-        return Query::select( $stmt, $args );
+        return static::select( $stmt, $args );
+    }
+
+    private static function validate( int $reportId  ) : array {
+        if( $reportId>0 ) {
+            return get_defined_vars();
+        };
+        throw new BadMessageException( "Error in query args");
     }
 }

@@ -1,20 +1,28 @@
 <?php
 
-namespace App\queries\report\parents;
+namespace App\queries\report\brood;
 
 use App\queries\Query;
+use App\routes\Controller;
+use http\Exception\BadMessageException;
 
-class Update
+class Update extends Query
 {
-    public static function execute (
-        int $id, int $reportId, ? string $start, ? int $eggs, ? int $fertile, ? int $hatched
-    ) : bool {
-        $args = get_defined_vars(); // all vars in scope
-        $stmt = Query::prepare( '
+    public static function execute ( ...$args ) : bool {
+        $args = static::validate( ...$args );
+        $stmt = static::prepare( '
             UPDATE report_brood 
             SET reportId=:reportId, start=:start, eggs=:eggs, fertile=:fertile, hatched=:hatched
             WHERE id=:id   
         ' );
-        return Query::update( $stmt, $args );
+        return static::update( $stmt, $args );
+    }
+
+    private static function validate( int $id, int $reportId, ? string $start, ? int $eggs, ? int $fertile, ? int $hatched ) : array {
+        if( $id>0 ) {
+            $modifier = Controller::$requester['id']; // add to def vars
+            return get_defined_vars();
+        };
+        throw new BadMessageException( "Error in query args");
     }
 }

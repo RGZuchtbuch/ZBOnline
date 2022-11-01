@@ -17,7 +17,7 @@ class Delete extends Query
         return static::delete( $stmt, $args );
     }
 
-    private static function validate( int $id ) {
+    private static function validate( int $id ) : array {
         if( $id >0 ) {
             return get_defined_vars();
         };

@@ -20,9 +20,9 @@ class Insert extends Query
         return static::insert( $stmt, $args );
     }
 
-    private static function validate( string $name, string $city ) {
-        $modifier = Controller::$requester['id']; // add to def vars
+    private static function validate( string $name, string $city ) : array {
         if( strlen( $name ) > 3 && strlen( $city ) > 3 ) {
+            $modifier = Controller::$requester['id']; // add to def vars
             return get_defined_vars();
         };
         throw new BadMessageException( "Error in query args");

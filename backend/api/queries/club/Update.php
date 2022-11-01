@@ -22,8 +22,8 @@ class Update extends Query
 
 
     protected static function validate( int $id, string $name, string $city ) : array {
-        $modifier = Controller::$requester['id']; // add to def vars
         if( $id>0 && strlen( $name )>2 && strlen( $city )>2) {
+            $modifier = Controller::$requester['id']; // add to def vars
             return get_defined_vars();
         }
         throw new BadMessageException( "Error in query args");
