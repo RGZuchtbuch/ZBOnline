@@ -7,12 +7,12 @@ use http\Exception\BadMessageException;
 
 class Select extends Query
 {
-    public static function get( ...$args ) : ? array {
+    public static function execute( ...$args ) : ? array {
         $args = static::validate( ...$args );
         $stmt = static::prepare( '
             SELECT district.*
             FROM district
-            LEFT JOIN moderator ON moderator.districtiD=district.id
+            LEFT JOIN moderator ON moderator.districtId=district.id
             WHERE moderator.userId=:userId
         ' );
         return static::selectArray( $stmt, $args );

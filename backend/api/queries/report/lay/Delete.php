@@ -10,10 +10,10 @@ class Delete extends Query
 {
     public static function execute ( ...$args ) : bool {
         $args = static::validate( ...$args );
-        $stmt = Query::prepare( '
+        $stmt = static::prepare( '
             DELETE FROM report_lay WHERE reportId=:reportId
         ' );
-        return Query::delete( $stmt, $args );
+        return static::delete( $stmt, $args );
     }
 
     private static function validate( int $reportId ) : array {

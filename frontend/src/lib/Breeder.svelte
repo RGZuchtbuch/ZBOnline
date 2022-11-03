@@ -20,7 +20,7 @@
 <main>
     <div>{legend}</div>
     {#if breeder}
-        Breeder {breeder.id}
+        Breeder {breeder.id} {breeder.name}
     {/if}
 </main>
 

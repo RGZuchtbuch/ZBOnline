@@ -3,14 +3,22 @@
 namespace App\queries\report;
 
 use App\queries\Query;
+use http\Exception\BadMessageException;
 
-class Delete
+class Delete extends Query
 {
-    public static function execute ( int $reportId ) : bool {
-        $args = get_defined_vars(); // all vars in scope
-        $stmt = Query::prepare( '
-            DELETE FROM report WHERE id=:reportId
+    public static function execute ( ...$args ) : bool {
+        $args = static::validate( ...$args );
+        $stmt = static::prepare( '
+            DELETE FROM report WHERE id=:id
         ' );
-        return Query::delete( $stmt, $args );
+        return static::delete( $stmt, $args );
+    }
+
+    private static function validate( int $id ) : array {
+        if( $id>0 ) {
+            return get_defined_vars();
+        };
+        throw new BadMessageException( "Error in query args");
     }
 }

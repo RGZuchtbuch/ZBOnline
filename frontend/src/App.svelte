@@ -21,7 +21,7 @@
     </div>
     <div class='border bg-gray-200 flex flex-row justify-between px-48 border rounded'>
         <div class='flex flex-row gap-x-4'>
-            <a href='/#/obmann'>Das Zuchtbuch</a>
+            <a href='/#/'>Das Zuchtbuch</a>
             <a href='/#/obmann'>Leistungen</a>
             <a href='/#/obmann'>Mein Zuchtbuch</a>
             <a href='/#/obmann/verband'>Obmann</a>
@@ -63,21 +63,23 @@
 
                     <Route path="/" redirect={"/obmann/verband/"+meta.params.districtId+"/zuechter"} />
 
-                    <Route path='/leistungen/*' let:meta>
-                        results
-                        <ResultsInput {...meta.params} />
-                    </Route>
-
                     <Route path='/zuechter/*' let:meta>
                         <Route path='/' let:meta>
                             <Breeders promise={api.district.breeders.get(meta.params.districtId) } legend='Züchter' />
 
                         </Route>
                         <Route path='/:breederId/*' let:meta>
+                            <Route path='/' redirect={'/obmann/verband/'+meta.params.districtId+'/zuechter/'+meta.params.breederId+'/leistungen'} />
                             <Route path='/' let:meta>
                                 <Breeder promise={api.breeder.get(meta.params.breederId) } />
                             </Route>
-                            <Route path='/mitglied' let:meta>Mitglied</Route>
+                            <Route path='/mitglied' let:meta>
+                                <Breeder promise={api.breeder.get(meta.params.breederId) } />
+                            </Route>
+
+                            <Route path='/leistungen/' let:meta>
+                                <Results promise={api.breeder.results.get( meta.params.breederId ) } />
+                            </Route>
 
                             <Route path='/meldung/*' let:meta>
                                 <Route path='/' let:meta>
@@ -94,6 +96,14 @@
                             </Route>
                         </Route>
                     </Route>
+
+                    <Route path='/leistungen/*' let:meta>
+                        results
+                        <Route path='/eingeben' let:meta>
+                            <ResultsInput promise={api.district.get( meta.params.districtId )} />
+                        </Route>
+                    </Route>
+
                 </Route>
             </Route>
         </div>

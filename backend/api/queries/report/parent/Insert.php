@@ -1,19 +1,27 @@
 <?php
 
-namespace App\queries\report\parents;
+namespace App\queries\report\parent;
 
 use App\queries\Query;
+use App\controllers\Controller;
+use http\Exception\BadMessageException;
 
-class Insert
+class Insert extends Query
 {
-    public static function execute (
-        int $reportId, string $sex, string $ring, ? float $score
-    ) : bool {
-        $args = get_defined_vars(); // all vars in scope
-        $stmt = Query::prepare( '
-            INSERT INTO report_parent ( reportId, sex, ring, score )
-            VALUES ( :reportId, :sex, :ring, :score )
+    public static function execute (...$args ) : bool {
+        $args = static::validate( ...$args );
+        $stmt = static::prepare( '
+            INSERT INTO report_parent ( reportId, sex, ring, score, modifier )
+            VALUES ( :reportId, :sex, :ring, :score, :modifier )
         ' );
-        return Query::insert( $stmt, $args );
+        return static::insert( $stmt, $args );
+    }
+
+    private static function validate( int $reportId, string $sex, ? string $ring, ? float $score ) : array {
+        if( $reportId>0 && ( $sex === '1.0' || $sex === '0.1' ) ) {
+            $modifier = Controller::$requester['id']; // add to def vars
+            return get_defined_vars();
+        };
+        throw new BadMessageException( "Error in query args");
     }
 }

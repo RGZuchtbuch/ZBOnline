@@ -3,7 +3,7 @@
 namespace App\queries\report\lay;
 
 use App\queries\Query;
-use App\routes\Controller;
+use App\controllers\Controller;
 use http\Exception\BadMessageException;
 
 class Insert extends Query

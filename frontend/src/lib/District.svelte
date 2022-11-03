@@ -9,12 +9,15 @@
 
     let district = null;
 
-    onMount( () => {
-        api.district.get( districtId )
-            .then( data => {
-                district = data;
-            });
-    })
+    function handle( districtId ) {
+        api.district.get( districtId ).then( data => {
+            district = data.district;
+        });
+    }
+
+    onMount( () => {})
+
+    $: handle( districtId );
 
 
 </script>

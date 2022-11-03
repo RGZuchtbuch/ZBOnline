@@ -11,11 +11,16 @@
 
     let breeders = null;
 
-    onMount( () => {
+    function handle( promise ) {
         if( promise ) promise.then( data => {
             breeders = data.breeders;
         });
+    }
+
+    onMount( () => {
     })
+
+    $: handle( promise );
 
 
 </script>

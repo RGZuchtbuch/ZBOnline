@@ -1,20 +1,28 @@
 <?php
 
-namespace App\queries\report\parents;
+namespace App\queries\report\parent;
 
 use App\queries\Query;
+use App\controllers\Controller;
+use http\Exception\BadMessageException;
 
-class Update
+class Update extends Query
 {
-    public static function execute (
-        int $id, int $reportId, string $sex, string $ring, ? float $score
-    ) : bool {
-        $args = get_defined_vars(); // all vars in scope
-        $stmt = Query::prepare( '
+    public static function execute( ...$args ) : bool {
+        $args = static::validate( ...$args );
+        $stmt = static::prepare( '
             UPDATE report_parent 
-            SET reportId=:name, sex=:sex, ring=:ring, score=:score
-            WHERE id=:id   
+            SET reportId=:reportId, sex=:sex, ring=:ring, score=:score
+            WHERE id=:id    
         ' );
         return Query::update( $stmt, $args );
+    }
+
+    private static function validate( int $id, int $reportId, string $sex, ? string $ring, ? float $score ) : array {
+        if( $id>0 && $reportId>0 && ( $sex === '1.0' || $sex === '0.1' ) ) {
+            $modifier = Controller::$requester['id']; // add to def vars
+            return get_defined_vars();
+        };
+        throw new BadMessageException( "Error in query args");
     }
 }

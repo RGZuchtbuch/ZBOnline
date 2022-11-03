@@ -11,11 +11,16 @@
 
     let districts = null;
 
-    onMount( () => {
+    function handle( promise ) {
         if( promise ) promise.then( data => {
-            districts = data;
+            districts = data.districts;
         });
+    }
+
+    onMount( () => {
     })
+
+    $: handle( promise );
 
 
 </script>
