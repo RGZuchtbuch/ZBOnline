@@ -33,19 +33,12 @@
     function onSubmit() {
         disabled = true;
         console.log('Submit', report);
-        if( report.id === 0 ) {
-            api.report.post( report )
-                .then( response => {
-                    report.id = response.id;
-                    report = report;
-                    console.log('Success', response);
-                });
-        } else {
-            api.report.put( report )
-                .then( ( response ) => {
-                    console.log('Success', response);
+        api.report.post( report )
+            .then( response => {
+                report.id = response.id;
+                report = report;
+                console.log('Success', response);
             });
-        }
     }
 
     function handle( promise ) {

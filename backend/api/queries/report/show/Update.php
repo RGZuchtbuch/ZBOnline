@@ -12,8 +12,8 @@ class Update extends Query
         $args = static::validate( ...$args );
         $stmt = static::prepare( '
             UPDATE report_show
-            SET `89`=:s89, `90`=:s90, `91`=:s91, `92`=:s92, `93`=:s93, `94`=:s94, `95`=:s95, `96`=:s96, `97`=:s97
-            WHERE reportId=:reportId     
+            SET reportId=:reportId  , `89`=:s89, `90`=:s90, `91`=:s91, `92`=:s92, `93`=:s93, `94`=:s94, `95`=:s95, `96`=:s96, `97`=:s97, modifier=:modifier
+            WHERE id=:id     
         ' );
         return Query::update( $stmt, $args );
     }

@@ -38,7 +38,7 @@ class Post extends Controller
             $success &= queries\report\show\Update::execute( $show['id'], $report['id'], $show['89'], $show['90'], $show['91'], $show['92'], $show['93'], $show['94'], $show['95'], $show['96'], $show['97'] );
 
             $success &= $this->updateResult( $report );
-        } else { // so new ths insert
+        } else { // so new thus insert
             print_r( "Insert Report" );
             $success = queries\report\Insert::execute( $report['breederId'], $report['districtId'], $report['year'], $report['group'], $report['sectionId'], $report['breedId'], $report['colorId'], $report['name'], $report['paired'], $report['notes'] );
             $report['id'] =  queries\Query::lastInsertId( 'id' );

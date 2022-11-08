@@ -20,8 +20,6 @@ class Get extends Controller {
         $breederId = $args['breederId' ];
         $breeder = queries\breeder\Select::execute( $breederId );
         $results = queries\breeder\results\Select::execute( $breederId );
-        if( ! $results) throw new HttpNotFoundException($request, "results for breeder not found");
-
         return [ 'breeder'=>$breeder, 'results'=>$results ];
     }
 

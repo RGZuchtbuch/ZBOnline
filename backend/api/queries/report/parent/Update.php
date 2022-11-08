@@ -12,7 +12,7 @@ class Update extends Query
         $args = static::validate( ...$args );
         $stmt = static::prepare( '
             UPDATE report_parent 
-            SET reportId=:reportId, sex=:sex, ring=:ring, score=:score
+            SET reportId=:reportId, sex=:sex, ring=:ring, score=:score, modifier=:modifier
             WHERE id=:id    
         ' );
         return Query::update( $stmt, $args );
