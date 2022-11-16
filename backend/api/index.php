@@ -11,6 +11,7 @@ require __DIR__.'/vendor/autoload.php';
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers:  Bearer, Content-Type, Authorization, Origin');
 header('Access-Control-Allow-Methods:  GET, POST, PUT, DELETE');
+//header('Access-Control-Allow-Methods:  GET');
 
 //ob_start('ob_gzhandler'); // needs check if header has Accept-Encoding: gzip
 $app = AppFactory::create();

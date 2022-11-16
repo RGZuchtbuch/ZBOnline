@@ -19,14 +19,15 @@ if( token ) {
 
 export default {
     user: {
-        authorize: (email, password ) => {
-            return post('/api/token', {email: email, password: password}).then( response => {
+        credentials: (email, password ) => {
+            return post('api/credentials', {email: email, password: password}).then( response => {
                 if( response ) {
-                    token = response;
+                    token = response.token;
                     window.sessionStorage.setItem( 'token', token );
-                    return jwt_decode( token ).user;
+                    user.set(jwt_decode(token).user); // user or null
+                    return true; // success
                 }
-                return null;
+                return false;
             });
         },
     },

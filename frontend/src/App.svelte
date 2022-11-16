@@ -6,6 +6,7 @@
     import Breeders from './lib/Breeders.svelte';
     import District from './lib/District.svelte';
     import Districts from './lib/Districts.svelte';
+    import Login from './lib/Login.svelte';
     import ResultsInput from './lib/result/ResultsInput.svelte';
     import Report from './lib/report/Report.svelte';
     import BreederResults from './lib/BreederResults.svelte';
@@ -29,7 +30,7 @@
             <a href='/#/obmann/verband'>Obmann</a>
             <a href='/#/obmann'>Admin</a>
         </div>
-        <div>Anmelden</div>
+        <a href='/#/anmelden'>Anmelden</a>
     </div>
 
     <div class='mx-16 my-2 flex flex-row gap-2 relative min-h-0 '>
@@ -54,6 +55,9 @@
         </div>
 
         <div class='grow bg-gray-100 overflow-y-scroll border border-black rounded p-4 scrollbar'>
+            <Route path='/anmelden'>
+                <Login />
+            </Route>
             <Route path='/obmann/*'>
                 <Route path='/' redirect={'/obmann/verband'} />
 

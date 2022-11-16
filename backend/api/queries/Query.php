@@ -17,7 +17,7 @@ class Query
     private static string $host = 'localhost'; // TODO move to config file, ignored
     private static string $database = 'zbo';
 
-    private static string $user = 'zbo'; // should be in config file with token secret
+    private static string $user = 'zbo'; // should be in config file with credentials secret
     private static string $password = 'zbo';
 
     public static function prepare( string $sql ) : PDOStatement {
@@ -110,7 +110,7 @@ class Query
 //*** private ****
     private static function getPdo() {
         if( ! isset( Query::$pdo ) ) {
-            $config = require( './config.php' ); // get credentials
+            $config = require( './config.old.php' ); // get credentials
             Query::$pdo = new PDO(
                 'mysql:host='.$config['db' ]['host'].';dbname='.$config['db' ]['name'].';charset=utf8',
                 $config['db' ]['user'],
