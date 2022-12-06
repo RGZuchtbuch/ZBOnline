@@ -15,7 +15,7 @@ class Select extends Query
             LEFT JOIN moderator ON moderator.districtId=district.id
             WHERE moderator.userId=:userId
         ' );
-        return static::selectArray( $stmt, $args );
+        return static::selectTree( $stmt, $args );
     }
 
     private static function validate( int $userId ) : array {

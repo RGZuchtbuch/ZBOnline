@@ -3,14 +3,15 @@
     import {Route, meta} from 'tinro';
     import api from './js/api.js';
     import Breeder from './lib/Breeder.svelte';
-    import Breeders from './lib/Breeders.svelte';
-    import District from './lib/District.svelte';
-    import Districts from './lib/Districts.svelte';
     import Login from './lib/Login.svelte';
+    import BreederReports from './lib/breeder/Reports.svelte';
+    import DistrictBreeders from './lib/district/Breeders.svelte';
+    import ModeratorDistricts from './lib/moderator/Districts.svelte';
     import ResultsInput from './lib/result/ResultsInput.svelte';
     import Report from './lib/report/Report.svelte';
-    import BreederResults from './lib/BreederResults.svelte';
     import Results from './lib/Results.svelte';
+
+    import { user } from './js/store.js'
 
     //const route = meta();
 
@@ -24,21 +25,21 @@
     </div>
     <div class='border bg-gray-200 flex flex-row justify-between px-48 border rounded'>
         <div class='flex flex-row gap-x-4'>
-            <a href='/#/'>Das Zuchtbuch</a>
-            <a href='/#/obmann'>Leistungen</a>
-            <a href='/#/obmann'>Mein Zuchtbuch</a>
-            <a href='/#/obmann/verband'>Obmann</a>
-            <a href='/#/obmann'>Admin</a>
+            <a href='/'>Das Zuchtbuch</a>
+            <a href='/leistungen'>Leistungen</a>
+            <a href='/zuechter'>Mein Zuchtbuch</a>
+            <a href='/obmann'>Obmann</a>
+            <a href='/admin'>Admin</a>
         </div>
         <a href='/#/anmelden'>Anmelden</a>
     </div>
 
-    <div class='mx-16 my-2 flex flex-row gap-2 relative min-h-0 '>
+    <div class='grow mx-16 my-2 flex flex-row gap-2 relative min-h-0 '>
 
         <div class='w-48 mt-24 border rounded flex flex-col '>
             <Route path='/obmann/*'>
                 <h3>Obmann</h3>
-                <a href='/obmann/verband'>Verbände</a>
+                <a href='/obmann/verbaende'>Verbände</a>
                 <Route path='/verband/:districtId/*' let:meta>
                     <b>Verband name</b>
                     <a href={'/obmann/verband/'+meta.params.districtId+'/zuechter'}>Züchter</a>
@@ -47,71 +48,77 @@
                     <Route path='/zuechter/:breederId/*' let:meta>
                         <b>Breeder name</b>
                         <a href={'/obmann/verband/'+meta.params.districtId+'/zuechter/'+meta.params.breederId+'/mitglied'}>Mitglied</a>
-                        <a href={'/obmann/verband/'+meta.params.districtId+'/zuechter/'+meta.params.breederId+'/meldung'}>Meldungen</a>
+                        <a href={'/obmann/verband/'+meta.params.districtId+'/zuechter/'+meta.params.breederId+'/meldungen'}>Meldungen</a>
                         <a href={'/obmann/verband/'+meta.params.districtId+'/zuechter/'+meta.params.breederId+'/meldung/neu'}>Melden</a>
                     </Route>
                 </Route>
             </Route>
         </div>
 
-        <div class='grow bg-gray-100 overflow-y-scroll border border-black rounded p-4 scrollbar'>
-            <Route path='/anmelden'>
-                <Login />
-            </Route>
-            <Route path='/obmann/*'>
-                <Route path='/' redirect={'/obmann/verband'} />
-
-                <Route path='/verband'>
-                    <Districts legend={'Verbände für ?'} promise={api.moderator.districts(1)} link={'obmann/verband/'}/>
+                <Route path='/anmelden'>
+                    <Login />
                 </Route>
+                <Route path='/obmann/*'>
+                    <Route path='/' redirect={'/obmann/verbaende'} />
 
-                <Route path='/verband/:districtId/*' let:meta>
+                    <Route path='/verbaende'>
 
-                    <Route path="/" redirect={"/obmann/verband/"+meta.params.districtId+"/zuechter"} />
+                        <ModeratorDistricts />
+
+                    </Route>
+
+                    <Route path='/verband/:districtId/*' let:meta>
+
+                        <Route path="/" redirect={"/obmann/verband/"+meta.params.districtId+"/zuechter"} />
 
 
-                    <Route path='/zuechter/*' let:meta>
-                        <Route path='/' let:meta>
-                            <Breeders promise={api.district.breeders.get(meta.params.districtId) } legend='Züchter' />
-
-                        </Route>
-                        <Route path='/:breederId/*' let:meta>
-                            <Route path='/' redirect={'/obmann/verband/'+meta.params.districtId+'/zuechter/'+meta.params.breederId+'/meldung'} />
+                        <Route path='/zuechter/*' firstmatch let:meta>
                             <Route path='/' let:meta>
-                                <Breeder promise={api.breeder.get(meta.params.breederId) } />
-                            </Route>
-                            <Route path='/mitglied' let:meta>
-                                <Breeder promise={api.breeder.get(meta.params.breederId) } />
-                            </Route>
+                                <DistrictBreeders districtId={meta.params.districtId}/>
 
-                            <Route path='/meldung/*' let:meta>
-                                <Route path='/' let:meta>
-                                    <BreederResults promise={api.breeder.results.get(meta.params.breederId) } />
+                            </Route>
+                            <Route path='/neu' let:meta>
+                                Neu
+                            </Route>
+                            <Route path='/:breederId/*' let:meta>
+                                <Route path='/' redirect={'/obmann/verband/'+meta.params.districtId+'/zuechter/'+meta.params.breederId+'/meldungen'} />
+
+                                <Route path='/mitglied' let:meta>
+                                    <Breeder promise={api.breeder.get(meta.params.breederId) } />
                                 </Route>
-                                <Route path='/:reportId' let:meta>
-                                    {#if meta.params.reportId === 'neu'}
+
+                                <Route path='/meldung/*' let:meta>
+                                    <Route path='/' let:meta>
+                                        <BreederResults promise={api.breeder.results.get(meta.params.breederId) } />
+                                    </Route>
+                                    <Route path='/neu' let:meta>
                                         <Report promise={api.report.new( meta.params.districtId, meta.params.breederId )} />
-                                    {:else}
+                                    </Route>
+                                    <Route path='/:reportId' let:meta>
                                         <Report promise={api.report.get(meta.params.reportId)} />
-                                    {/if}
+                                    </Route>
                                 </Route>
+
+                                <Route path='/meldungen' let:meta>
+                                    <BreederReports breederId={meta.params.breederId} />
+                                </Route>
+
                             </Route>
-
                         </Route>
-                    </Route>
 
-                    <Route path='/leistung/*' let:meta>
-                        results
-                        <Route path='/eingeben' let:meta>
-                            <ResultsInput promise={api.district.get( meta.params.districtId )} />
+                        <Route path='/leistung/*' let:meta>
+                            results
+                            <Route path='/eingeben' let:meta>
+                                <ResultsInput promise={api.district.get( meta.params.districtId )} />
+                            </Route>
                         </Route>
-                    </Route>
 
+                    </Route>
                 </Route>
-            </Route>
-        </div>
 
-        <div class='w-48 border rounded'>info</div>
+
+
+        <div class='w-48 border rounded'>info {$user.id}</div>
     </div>
 
 </div>

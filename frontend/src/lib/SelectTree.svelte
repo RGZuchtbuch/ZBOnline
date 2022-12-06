@@ -19,7 +19,7 @@
 <ul>
     {#each children as node}
         <li class:selectable nowrap>
-            → <a href={link+node.id}>{node.name}</a>
+            &#10551; <a href={link+node.id}>{node.name}</a>
         </li>
         {#if node.children}
             <svelte:self children={node.children} {onSelect} link={link}/>
@@ -33,7 +33,7 @@
     }
 
     ul {
-        @apply ml-2;
+        @apply ml-4;
     }
     li {}
 </style>

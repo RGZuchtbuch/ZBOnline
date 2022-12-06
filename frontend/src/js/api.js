@@ -10,8 +10,9 @@ let cache = {
     promises: {} // url -> promise, time
 };
 
-let token = window.sessionStorage.getItem( 'token' );
-
+let token = window.sessionStorage.getItem( 'token' );//TODO
+//let token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJSRyBadWNodGJ1Y2ggT25saW5lIiwiaWF0IjoxNjY5MDYyODI4LCJleHAiOjE2NjkxNDkyMjgsInVzZXIiOnsiaWQiOjEsIm5hbWUiOiJFZWxjbyIsImVtYWlsIjoiZWVsY28uamFubmlua0BnbWFpbC5jb20iLCJkaXN0cmljdElkIjo2LCJtb2RlcmF0aW5nIjpbMSwyLDYsMTBdLCJhZG1pbiI6dHJ1ZX19.2OktsAOdgiHM-K3gVkWvh-B_NB23ntdyxmoSQU0R_L8";
+// eelco
 if( token ) {
     user.set(jwt_decode(token).user); // user or null
 }

@@ -8,12 +8,12 @@ use Slim\App;
 class Routes {
 
     public static function register( App $app ) {
-        $app->get( '/', new Get() )->add( new Authenticate() );
+        //$app->get( '/', new Get() )->add( new Authenticate() );
 
         $app->get( '/breed/{id}', new breed\Get() );
         $app->get( '/breed/{id}/colors', new breed\colors\Get() );
 
-        $app->get( '/breeder/{breederId}', new breeder\Get() );
+        $app->get( '/breeder/{breederId}', new breeder\Get() )->add( new Authenticate() );
         $app->get( '/breeder/{breederId}/reports', new breeder\reports\Get() );
         $app->get( '/breeder/{breederId}/results', new breeder\results\Get() );
         $app->get( '/breeder/{breederId}/colors', new breeder\results\Get() );

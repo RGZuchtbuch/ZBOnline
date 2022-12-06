@@ -76,13 +76,14 @@ class Post extends Controller
         $show = $this->getResultShow( $report );
         return queries\result\Insert::execute(
             $report['id'], $report['districtId'], $report['year'], $report['group'],
-            1, 1,
             $report['sectionId'], $report['breedId'], $report['colorId'],
+            1, 1, // breeders, pairs
             $lay['dames'], $lay['eggs'], $lay['weight'],
             $brood['eggs'], $brood['fertile'], $brood['hatched'],
             $show['count'], $show['score']
         );
     }
+
 
     protected function updateResult( & $report ) : bool {
         $lay = $this->getResultLay( $report );

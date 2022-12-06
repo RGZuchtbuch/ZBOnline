@@ -21,14 +21,12 @@ class Post extends Controller {
     public function process(Request $request, array $args) : mixed
     {
         $data = $this->getData( $request );
-        $user = queries\user\Select::execute( $data['email'], $data['password'] );
+        $user = queries\user\authenticate\Select::execute( $data['email'], $data['password'] );
 
         if( ! $user ) throw new HttpUnauthorizedException( $request, "Unknown user for credentials" );
 
         $user[ 'moderating' ] = queries\user\moderating\Select::execute( $user['id'] ); // array
         $user[ 'admin' ] = queries\user\admin\Select::execute( $user['id'] ); // bool
-
-        // $user['isAdmin'] = User::isAdmin( $user['id'] ); // TODO
 
         return [ 'token'=>static::encode( $user ) ];
     }

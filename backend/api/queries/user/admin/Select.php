@@ -15,12 +15,12 @@ class Select extends Query
 {
     public static function execute( ...$args ) : ? bool {
         $args = static::validate( ...$args );
-        $stmt = static::prepare( 'SELECT userId FROM admin WHERE userId=:id' );
-        return static::select($stmt, $args ) != null;
+        $stmt = static::prepare( 'SELECT userId FROM admin WHERE userId=:userId' );
+        return static::select($stmt, $args ) != null; // true or false
     }
 
-    private static function validate( int $id ) : array {
-        if( $id>0 ) {
+    private static function validate( int $userId ) : array {
+        if( $userId>0 ) {
             return get_defined_vars();
         };
         throw new BadMessageException( "Error in query args");
