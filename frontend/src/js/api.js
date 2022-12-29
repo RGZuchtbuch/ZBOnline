@@ -41,7 +41,15 @@ export default {
     },
 
     breeder: {
-        get: (breederId) => get( 'api/breeder/'+breederId ),
+        get: ( breederId ) => get( 'api/breeder/'+breederId ),
+        new: ( breederId ) => {
+            console.log( 'api newDistrict' );
+            return new Promise( ( resolve ) => {
+                // TODO, remember to delete cache for parent district
+                //clear( 'api/breeders/'+parentId );
+                resolve( { id:0, parent:parentId, name:null, fullname:null, short:null, coordinates:null, children:[], moderators:[] } );
+            })
+        },
         reports: {
             get: (breederId) => get( 'api/breeder/'+breederId+'/reports' ),
         },

@@ -35,7 +35,7 @@
 </script>
 
 <div class='flex flex-col my-2'>
-    <h4>Legeleistung {lay.start}</h4>
+    <h4 class='bg-gray-300'>Legeleistung {lay.start}</h4>
     {#if lay }
         <div class='flex flex-row gap-x-1'>
             <div class='grow flex flex-row gap-x-1'>

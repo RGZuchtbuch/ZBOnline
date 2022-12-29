@@ -26,38 +26,43 @@ class Post extends Controller
         queries\Query::begin(); // start transaction
         if( $report[ 'id' ] ) { // exists so update
             $success = queries\report\Update::execute( $report['id'], $report['breederId'], $report['districtId'], $report['year'], $report['group'], $report['sectionId'], $report['breedId'], $report['colorId'], $report['name'], $report['paired'], $report['notes'] );
-            foreach ( $report[ 'parents'] as $parent ) {
-                $success &= queries\report\parent\Update::execute( $parent['id'], $report['id'], $parent['sex'], $parent['ring'], $parent['score']  );
-            }
-            $lay = & $report[ 'lay' ];
-            $success &= queries\report\lay\Update::execute( $lay['id'], $report['id'], $lay['start'], $lay['end'], $lay['eggs'], $lay['dames'], $lay['weight'] );
-            foreach ( $report[ 'broods'] as $brood ) {
-                $success &= queries\report\brood\Update::execute( $brood['id'], $report['id'], $brood['start'], $brood['eggs'], $brood['fertile'], $brood['hatched'] );
-            }
-            $show = $report[ 'show' ];
-            $success &= queries\report\show\Update::execute( $show['id'], $report['id'], $show['89'], $show['90'], $show['91'], $show['92'], $show['93'], $show['94'], $show['95'], $show['96'], $show['97'] );
 
-            $success &= $this->updateResult( $report );
-        } else { // so new thus insert
-            print_r( "Insert Report" );
-            $success = queries\report\Insert::execute( $report['breederId'], $report['districtId'], $report['year'], $report['group'], $report['sectionId'], $report['breedId'], $report['colorId'], $report['name'], $report['paired'], $report['notes'] );
-            $report['id'] =  queries\Query::lastInsertId( 'id' );
-            print_r( "Insert parents" );
+            $success &= queries\report\parents\Delete::execute( $report['id'] ); // delete parents in case now less
             foreach ( $report[ 'parents'] as $parent ) {
-                $success &= queries\report\parent\Insert::execute(  $report['id'], $parent['sex'], $parent['ring'], $parent['score']  );
+                $success &= queries\report\parent\Insert::execute( $report['id'], $parent['sex'], $parent['ring'], $parent['score']  );
             }
-            print_r( "Insert lay" );
+
             $lay = & $report[ 'lay' ];
-            $success &= queries\report\lay\Insert::execute( $report['id'], $lay['start'], $lay['end'], $lay['eggs'], $lay['dames'], $lay['weight'] );
-            print_r( "Insert broods" );
+            $success &= queries\report\lay\Update::execute( $report['id'], $lay['start'], $lay['end'], $lay['eggs'], $lay['dames'], $lay['weight'] );
+
+            $success &= queries\report\broods\Delete::execute( $report['id'] ); // delete old, in case there is less broods
             foreach ( $report[ 'broods'] as $brood ) {
                 $success &= queries\report\brood\Insert::execute( $report['id'], $brood['start'], $brood['eggs'], $brood['fertile'], $brood['hatched'] );
             }
-            print_r( "Insert show" );
+
+            $show = $report[ 'show' ];
+            $success &= queries\report\show\Update::execute( $report['id'], $show['89'], $show['90'], $show['91'], $show['92'], $show['93'], $show['94'], $show['95'], $show['96'], $show['97'] );
+
+            $success &= $this->updateResult( $report );
+
+        } else { // so new thus insert
+
+            $success = queries\report\Insert::execute( $report['breederId'], $report['districtId'], $report['year'], $report['group'], $report['sectionId'], $report['breedId'], $report['colorId'], $report['name'], $report['paired'], $report['notes'] );
+            $report['id'] =  queries\Query::lastInsertId( 'id' );
+
+            foreach ( $report[ 'parents'] as $parent ) {
+                $success &= queries\report\parent\Insert::execute(  $report['id'], $parent['sex'], $parent['ring'], $parent['score']  );
+            }
+
+            $lay = & $report[ 'lay' ];
+            $success &= queries\report\lay\Insert::execute( $report['id'], $lay['start'], $lay['end'], $lay['eggs'], $lay['dames'], $lay['weight'] );
+
+            foreach ( $report[ 'broods'] as $brood ) {
+                $success &= queries\report\brood\Insert::execute( $report['id'], $brood['start'], $brood['eggs'], $brood['fertile'], $brood['hatched'] );
+            }
+
             $show = $report[ 'show' ];
             $success &= queries\report\show\Insert::execute( $report['id'], $show['89'], $show['90'], $show['91'], $show['92'], $show['93'], $show['94'], $show['95'], $show['96'], $show['97'] );
-
-            print_r( "Insert result" );
 
             $success &= $this->insertResult( $report );
         }
@@ -91,8 +96,8 @@ class Post extends Controller
         $show = $this->getResultShow( $report );
         return queries\result\report\Update::execute(
             $report['id'], $report['districtId'], $report['year'], $report['group'],
-            1, 1,
             $report['sectionId'], $report['breedId'], $report['colorId'],
+            1, 1, // breeders, pairs
             $lay['dames'], $lay['eggs'], $lay['weight'],
             $brood['eggs'], $brood['fertile'], $brood['hatched'],
             $show['count'], $show['score']

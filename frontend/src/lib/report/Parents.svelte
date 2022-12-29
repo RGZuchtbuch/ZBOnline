@@ -41,7 +41,7 @@
 </script>
 
 <div class='flex flex-col my-2'>
-    <h4>Abstammung [{getComposition( parents )}] {layer}</h4>
+    <h4 class='bg-gray-300'>Abstammung [{getComposition( parents )}] {layer}</h4>
     <div class='flex flex-col gap-y-1'>
         <InputDate class='w-24' label={'Angepaart am'} bind:value={paired} {disabled} />
         {#each parents as parent, index }

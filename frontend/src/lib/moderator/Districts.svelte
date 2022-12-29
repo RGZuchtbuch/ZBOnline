@@ -4,15 +4,11 @@
     import api from '../../js/api.js';
     import { user } from '../../js/store.js'
 
-    import SelectTree from '../SelectTree.svelte';
+    import Districts from '../Districts.svelte';
+
+    let districts = [];
 
     const route = meta();
-
-
-
-
-
-    let districts = null;
 
     function handle( userId ) {
         let promise = api.moderator.districts( userId );
@@ -24,20 +20,14 @@
     onMount( () => {
     })
 
-    $: handle( $user.id );
+    $: handle( $user.id ); // in case of user change ( login )
 
 
 </script>
 
-<div class='grow flex flex-col bg-gray-100 border border-black rounded'>
-    <h2 class='text-center'>{'Verbände für Obmann '+$user.name }</h2>
-    <div class='bg-gray-200 px-4 font-bold'>Verbände</div>
-    <div class='grow bg-gray-100 overflow-y-scroll border border-black scrollbar'>
-        {#if districts}
-            <SelectTree children={districts} link={'obmann/verband/'}/>
-        {/if}
-    </div>
-</div>
+<h2 class='text-center'>Verbände für Obmann {$user.name}</h2>
+
+<Districts districts={districts} />
 
 <style>
 

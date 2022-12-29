@@ -13,7 +13,7 @@
 
 
 <div class='flex flex-col my-2'>
-    <h4>Rasse</h4>
+    <h4 class='bg-gray-300'>Rasse</h4>
     <BreedSelect bind:sectionId={breed.sectionId} bind:breedId={breed.breedId} bind:colorId={breed.colorId} {disabled}/>
 </div>
 

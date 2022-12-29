@@ -17,12 +17,12 @@
 </script>
 
 <ul>
-    {#each children as node}
+    {#each children as child}
         <li class:selectable nowrap>
-            &#10551; <a href={link+node.id}>{node.name}</a>
+            &#10551; <a href={link+child.id}>{child.name}</a>
         </li>
-        {#if node.children}
-            <svelte:self children={node.children} {onSelect} link={link}/>
+        {#if child.children}
+            <svelte:self children={child.children} {onSelect} link={link}/>
         {/if}
     {/each}
 </ul>

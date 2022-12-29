@@ -12,14 +12,14 @@ class Update extends Query
         $args = static::validate( ...$args );
         $stmt = Query::prepare( '
             UPDATE report_lay 
-            SET reportId=:reportId, `start`=:start, `end`=:end, eggs=:eggs, dames=:dames, weight=:weight, modifier=:modifier
-            WHERE id=:id   
+            SET `start`=:start, `end`=:end, eggs=:eggs, dames=:dames, weight=:weight, modifier=:modifier
+            WHERE reportId=:reportId   
         ' );
         return Query::update( $stmt, $args );
     }
 
-    private static function validate( int $id, int $reportId, ? string $start, ? string $end, ? int $eggs, ? int $dames, ? int $weight ) : array {
-        if( $id>0 && $reportId>0 ) {
+    private static function validate( int $reportId, ? string $start, ? string $end, ? int $eggs, ? int $dames, ? int $weight ) : array {
+        if( $reportId>0 ) {
             $modifier = Controller::$requester['id']; // add to def vars
             return get_defined_vars();
         };

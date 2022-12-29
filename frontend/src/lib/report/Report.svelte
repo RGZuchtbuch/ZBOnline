@@ -16,14 +16,14 @@
     import ReportParents from './Parents.svelte';
     import ReportShow from './Show.svelte';
 
-    export let promise;
+    export let reportId;
     export let legend = '';
     export let link='';
 
     let report = null;
     let layer = true;
 
-    let disabled = false;
+    let disabled = true;
     const groups = ['I', 'II', 'III' ];
 
     function onEdit() {
@@ -41,13 +41,15 @@
             });
     }
 
-    function handle( promise ) {
-        if( promise ) promise.then( data => {
-            console.log( 'Report', data );
-            report = data.report;
-        }).catch( error => {
-            console.error( 'Error', error );
-        });
+    function handle( reportId ) {
+        if( reportId ) {
+            api.report.get( reportId ).then( data => {
+                console.log( 'Report', data );
+                report = data.report;
+            }).catch( error => {
+                console.error( 'Error', error );
+            });
+        }
     }
 
     function update( report ) {
@@ -64,7 +66,7 @@
         }
     }
 
-    $: handle( promise );
+    $: handle( reportId );
     $: update( report );
 
     onMount( () => {
@@ -75,11 +77,14 @@
 
 </script>
 
-<form class='flex flex-col' on:submit|preventDefault={onSubmit}>
-    <h2>Zuchtbuch tt Meldung</h2>
+
+<h2 class='text-center'>Zuchtbuch Meldung</h2>
+
+<form class='flex flex-col bg-gray-100 overflow-y-scroll border rounded border-gray-600 scrollbar' on:submit|preventDefault={onSubmit}>
     {#if report}
-        <div class='flex flex-col my-2'>
-            <h4>Stamm {report.id}</h4>
+
+        <div class='flex flex-col'>
+            <h4 class='bg-gray-300'>Stamm {report.id}</h4>
             <div class='flex flex-row gap-x-1'>
                 <InputText class='w-32' label='Züchter' value={report.breederId} readonly {disabled}/>
                 <InputNumber class='w-16' label='Jahr' name='year' bind:value={report.year} min='1850' max='2030' {disabled}/>

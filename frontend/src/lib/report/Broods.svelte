@@ -49,7 +49,7 @@
 </script>
 
 <div class='flex flex-col my-2'>
-    <h4>Brutleistung</h4>
+    <h4 class='bg-gray-300'>Brutleistung</h4>
 
     <div class='flex flex-col gap-y-1'>
         {#if broods}

@@ -29,7 +29,7 @@
 </script>
 
 <div class='flex flex-col my-2'>
-    <h4>Schauleistung</h4>
+    <h4 class='bg-gray-300'>Schauleistung</h4>
 
     <div class='flex flex-row gap-x-1'>
         <InputNumber class='w-12' label={'U/O'} name='count' bind:value={show['89']} min=0 max=999 {disabled}/>

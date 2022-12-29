@@ -18,8 +18,11 @@ class Get extends Controller {
     public function process(Request $request, array $args) : mixed
     {
         $breederId = $args['breederId' ];
-        $reports = queries\breeder\reports\select::execute( $breederId );
-        return [ 'reports'=>$reports ];
+        $breeder = queries\breeder\Select::execute( $breederId );
+        $reports = queries\breeder\reports\Select::execute( $breederId );
+        return [ 'breeder'=>$breeder, 'reports'=>$reports ];
     }
 
 }
+
+
