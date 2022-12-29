@@ -5,7 +5,7 @@
     import NavigationBar from './lib/NavigationBar.svelte';
     import Menu from './lib/Menu.svelte';
     import Home from './lib/Home.svelte';
-    import Moderator from './lib/Moderator.svelte';
+    import Moderator from './lib/moderator/Moderator.svelte';
 
     import Login from './lib/Login.svelte';
     import Logout from './lib/Logout.svelte';

@@ -2,16 +2,16 @@
 
 <script>
     import {Route, meta} from 'tinro';
-    import api from '../js/api.js';
+    import api from '../../js/api.js';
 
-    import Breeder from './Breeder.svelte';
-    import Breeders from './district/Breeders.svelte';
-    import BreederReports from './breeder/Reports.svelte';
-    import DistrictBreeders from './district/Breeders.svelte';
-    import ModeratorDistricts from './moderator/Districts.svelte';
-    import ResultsInput from './result/ResultsInput.svelte';
-    import Report from './report/Report.svelte';
-    import Results from './Results.svelte';
+    import Breeder from '../Breeder.svelte';
+    import Breeders from '../district/Breeders.svelte';
+    import BreederReports from '../breeder/Reports.svelte';
+    import DistrictBreeders from '../district/Breeders.svelte';
+    import ModeratorDistricts from './Districts.svelte';
+    import ResultsInput from '../result/ResultsInput.svelte';
+    import Report from '../report/Report.svelte';
+    import Results from '../Results.svelte';
 
     const route = meta();
 
