@@ -27,6 +27,7 @@ class Routes {
         $app->get( '/district/{districtId}/section/{sectionId}/year/{year}/group/{group}/colors/full', new district\results\full\Get() );
 
         $app->get( '/district/{districtId}/breeders', new district\breeders\Get() );
+        $app->get( '/district/{districtId}/results', new district\results\Get() );
 
 
         $app->get( '/moderator/{moderatorId}/districts', new moderator\districts\Get() );

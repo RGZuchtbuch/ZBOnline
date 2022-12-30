@@ -19,16 +19,19 @@
 
     onMount( () => {
     })
-
-    $: handle( $user.id ); // in case of user change ( login )
+    console.log( 'User', $user );
+    $: if( $user ) { // in case of user change ( login )
+        handle( $user.id );
+    } // no else, unintended user action
 
 
 </script>
-
-<h2 class='text-center'>Verbände für Obmann {$user.name}</h2>
-
-<Districts districts={districts} />
-
+{#if $user}
+    <h2 class='text-center'>Verbände für Obmann {$user.name}</h2>
+    <Districts districts={districts} />
+{:else}
+    NOT AUTORIZED
+{/if}
 <style>
 
 </style>

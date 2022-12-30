@@ -17,7 +17,7 @@
 </script>
 
 <div class='w-full h-full flex flex-col bg-gray-100'>
-    <img class='absolute w-32' src='../assets/bdrg_logo_r.png'>
+    <img class='absolute w-24 m-2 ml-16' src='../assets/bdrg_logo_r.png'>
 
     <div class='text-center'>
         Das Rassegeflügel Zuchtbuch. Schönheit und Leisting kombinieren.
@@ -25,7 +25,7 @@
 
     <NavigationBar />
 
-    <div class='grow mx-16 my-2 flex flex-row gap-2 relative min-h-0 '>
+    <div class='grow mx-2 my-2 flex flex-row gap-2 relative min-h-0 '>
 
         <Menu />
 

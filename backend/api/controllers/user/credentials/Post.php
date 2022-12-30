@@ -43,7 +43,7 @@ class Post extends Controller {
         $payload = [
             'iss'   => $issuer,
             'iat'   => $issued->getTimestamp(),
-//            'nbf'   => $issued->getTimestamp(),
+            'nbf'   => $issued->getTimestamp(),
             'exp'   => $expires->getTimestamp(),
             'user'  => (array) $user
         ];

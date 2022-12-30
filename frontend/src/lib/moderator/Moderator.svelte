@@ -7,8 +7,8 @@
     import Breeder from '../Breeder.svelte';
     import Breeders from '../district/Breeders.svelte';
     import BreederReports from '../breeder/Reports.svelte';
-    import DistrictBreeders from '../district/Breeders.svelte';
-    import ModeratorDistricts from './Districts.svelte';
+    import DistrictResults from '../district/Results.svelte';
+    import Districts from './Districts.svelte';
     import ResultsInput from '../result/ResultsInput.svelte';
     import Report from '../report/Report.svelte';
     import Results from '../Results.svelte';
@@ -21,7 +21,7 @@
 
 <Route path='/verband/*'>
 
-    <Route path='/'> <ModeratorDistricts /> </Route>
+    <Route path='/'> <Districts /> </Route>
 
     <Route path='/:districtId/*' let:meta>
         <Route path='/' redirect={meta.match+'/zuechter'} />
@@ -39,6 +39,10 @@
                 </Route>
 
             </Route>
+        </Route>
+
+        <Route path='/leistung/*' let:meta>
+            <Route path='/' let:meta> <DistrictResults districtId={ meta.params.districtId } /> </Route>
         </Route>
     </Route>
 </Route>

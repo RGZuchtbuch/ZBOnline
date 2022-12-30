@@ -2,17 +2,26 @@
     import {user} from '../js/store.js';
 </script>
 
-<div class='border bg-gray-200 flex flex-row justify-between px-48 border rounded'>
-    <div class='flex flex-row gap-x-4'>
+<div class='border border-gray-400 bg-header px-2 py-1 flex flex-row gap-2'>
+    <div class='w-48'></div>
+    <div class='grow gap-x-4 pl-8'>
         <a href='/'>Das Zuchtbuch</a>
         <a href='/leistungen'>Leistungen</a>
-        <a href='/zuechter'>Mein Zuchtbuch</a>
-        <a href='/obmann'>Obmann</a>
-        <a href='/admin'>Admin</a>
+        {#if $user } <a href='/zuechter'>Mein Zuchtbuch</a> {/if}
+        {#if $user && $user.moderating.length > 0 } <a href='/obmann'>Obmann</a> {/if}
+        {#if $user && $user.admin } <a href='/admin'>Admin</a> {/if}
     </div>
-    {#if $user}
-        <a href='/abmelden'>Abmelden</a>
-    {:else}
-        <a href='/anmelden'>Anmelden</a>
-    {/if}
+    <div class='w-48'>
+        {#if $user}
+            <a href='/abmelden'>Abmelden</a>
+        {:else}
+            <a href='/anmelden'>Anmelden</a>
+        {/if}
+    </div>
 </div>
+
+<style>
+    a {
+        @apply px-2 border border-gray-600 rounded bg-button;
+    }
+</style>

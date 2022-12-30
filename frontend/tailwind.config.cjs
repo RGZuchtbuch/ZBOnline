@@ -3,6 +3,10 @@ const config = {
 
   theme: {
     extend: {
+      colors: {
+        'button': '#4ade80',
+        'header': '#bbf7d0',
+      },
       spacing: {
         '128': '32rem',
         '144': '36rem',

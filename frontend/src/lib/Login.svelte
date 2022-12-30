@@ -11,7 +11,7 @@
     let route = meta();
 
     function onSubmit() {
-        api.user.credentials( email, password ).then( response => {
+        api.user.login( email, password ).then(response => {
             console.log( $user )
             router.goto( route.from );
         });

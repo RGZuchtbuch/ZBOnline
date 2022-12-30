@@ -6,7 +6,7 @@
 
 </script>
 
-<div class='w-48 mt-24 border rounded flex flex-col '>
+<div class='w-48 mt-8 border rounded flex flex-col '>
     {#if $user }
         <Route path='/obmann/*'>
             <h3>Obmann {$user.name}</h3>

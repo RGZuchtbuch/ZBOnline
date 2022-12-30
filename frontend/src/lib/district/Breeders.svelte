@@ -33,8 +33,8 @@
 
 {#if district}
     <h2 class='text-center'>Züchter für Verband {district.name}</h2>
+    <Breeders breeders={breeders} />
 {/if}
-<Breeders breeders={breeders} />
 
 
 <style>

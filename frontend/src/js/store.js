@@ -18,4 +18,4 @@ const tester = {
     //admin: {}
 }
 
-export const user = writable( tester ); //TODO should be null to start
+export const user = writable( null ); //TODO should be null to start

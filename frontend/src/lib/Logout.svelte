@@ -11,7 +11,7 @@
     let route = meta();
 
     function onSubmit() {
-        user.set( null );
+        api.user.logout();
         router.goto( '/' );
     }
 

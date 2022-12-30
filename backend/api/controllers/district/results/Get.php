@@ -18,6 +18,8 @@ class Get extends Controller
     {
         $districtId = $args['districtId'];
         $year = $args['year'];
-        return queries\District::getResults( $districtId, $year );
+        $district = queries\district\Select::execute( $districtId );
+        $results = queries\district\results\Select::execute( $districtId );
+        return [ 'district'=>$district, 'results'=>$results ]
     }
 }

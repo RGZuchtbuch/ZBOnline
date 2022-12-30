@@ -4,33 +4,39 @@ import { clone, reportTpl } from './template.js';
 
 //uses constants from js/setting.js { settings.cache.TIMEOUT, settings.api.root }
 
-const delay = 250;
-
 let cache = {
     promises: {} // url -> promise, time
 };
 
-let token = window.sessionStorage.getItem( 'token' );//TODO
+let token = window.sessionStorage.getItem( 'token' );//TODO, why ?
 //let token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJSRyBadWNodGJ1Y2ggT25saW5lIiwiaWF0IjoxNjY5MDYyODI4LCJleHAiOjE2NjkxNDkyMjgsInVzZXIiOnsiaWQiOjEsIm5hbWUiOiJFZWxjbyIsImVtYWlsIjoiZWVsY28uamFubmlua0BnbWFpbC5jb20iLCJkaXN0cmljdElkIjo2LCJtb2RlcmF0aW5nIjpbMSwyLDYsMTBdLCJhZG1pbiI6dHJ1ZX19.2OktsAOdgiHM-K3gVkWvh-B_NB23ntdyxmoSQU0R_L8";
 // eelco
-if( token ) {
-    user.set(jwt_decode(token).user); // user or null
+if( token !== null ) { // mind, could be "null" text as well
+    user.set( jwt_decode(token).user); // user from token or null
+} else {
+    user.set( null );
 }
 
 
 export default {
     user: {
-        credentials: (email, password ) => {
+        login: (email, password ) => {
             return post('api/credentials', {email: email, password: password}).then( response => {
                 if( response ) {
                     token = response.token;
                     window.sessionStorage.setItem( 'token', token );
-                    user.set(jwt_decode(token).user); // user or null
+                    user.set( jwt_decode(token).user ); // user or null
                     return true; // success
                 }
                 return false;
             });
         },
+        logout: () => {
+            token = null;
+            window.sessionStorage.clear();
+            user.set( null ); // user or null
+            return true; // always success
+        }
     },
 
     breed: {
@@ -100,9 +106,8 @@ export default {
         },
 
         results: {
-            full: {
-                get: (districtId, sectionId, year, group) => get('api/district/' + districtId + '/section/' + sectionId + '/year/' + year + '/group/' + group + '/results/full')
-            },
+            //get: (districtId, sectionId, year, group) => get('api/district/' + districtId + '/section/' + sectionId + '/year/' + year + '/group/' + group + '/results/full'),
+            get: (districtId) => get( 'api/district/'+districtId+'/results' ),
         }
     },
     groups: {
