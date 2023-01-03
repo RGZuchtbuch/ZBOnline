@@ -9,9 +9,9 @@
     import BreederReports from '../breeder/Reports.svelte';
     import DistrictResults from '../district/Results.svelte';
     import Districts from './Districts.svelte';
-    import ResultsInput from '../result/ResultsInput.svelte';
+    import ResultsInput from '../district/ResultsEdit.svelte';
     import Report from '../report/Report.svelte';
-    import Results from '../Results.svelte';
+    import DistrictResultsEdit from '../district/ResultsEdit.svelte';
 
     const route = meta();
 
@@ -43,6 +43,7 @@
 
         <Route path='/leistung/*' let:meta>
             <Route path='/' let:meta> <DistrictResults districtId={ meta.params.districtId } /> </Route>
+            <Route path='/edit' let:meta> <DistrictResultsEdit districtId={meta.params.districtId}  /></Route>
         </Route>
     </Route>
 </Route>

@@ -7,7 +7,7 @@
 
     import InputNumber from './input/Number.svelte';
     import InputText   from './input/Text.svelte';
-    import Select from './select/Select.svelte';
+    import Select from './input/Select.svelte';
     import BreedSelect from './select/Breed.svelte';
 
     export let promise;

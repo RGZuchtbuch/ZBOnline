@@ -8,7 +8,7 @@
     import InputNumber from '../input/Number.svelte';
     import InputText   from '../input/Text.svelte';
     import InputRing from '../input/Ring.svelte';
-    import Select from '../select/Select.svelte';
+    import Select from '../input/Select.svelte';
     import ReportBreed from './Breed.svelte';
     import ReportBroods from './Broods.svelte';
     import ReportLay from './Lay.svelte';

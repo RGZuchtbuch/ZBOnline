@@ -6,7 +6,7 @@
 
 </script>
 
-<div class='w-48 mt-8 border rounded flex flex-col '>
+<div class='w-48 mt-8 border rounded flex flex-col no-print'>
     {#if $user }
         <Route path='/obmann/*'>
             <h3>Obmann {$user.name}</h3>
@@ -15,7 +15,7 @@
                 <b>Verband name</b>
                 <a href={'/obmann/verband/'+meta.params.districtId+'/zuechter'}>Züchter</a>
                 <a href={'/obmann/verband/'+meta.params.districtId+'/leistung'}>Leistungen</a>
-                <a href={'/obmann/verband/'+meta.params.districtId+'/leistung/eingeben'}>Eingeben</a>
+                <a href={'/obmann/verband/'+meta.params.districtId+'/leistung/edit'}>Eingeben</a>
                 <Route path='/zuechter/:breederId/*' let:meta>
                     <b>Breeder name</b>
                     <a href={'/obmann/verband/'+meta.params.districtId+'/zuechter/'+meta.params.breederId+'/mitglied'}>Mitglied</a>

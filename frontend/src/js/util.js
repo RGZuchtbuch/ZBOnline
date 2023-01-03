@@ -93,11 +93,13 @@ export function printPct( value, decimals = 0 ) {
     return (value*100).toFixed( decimals )+'%';
 }
 
-export function dec( a ) {
-    if( a != null ) {
-        return a;
+export function dec( value, decimals ) {
+    value = +value; // make sure its a number
+    if( value===NaN || value===null || value===undefined ) {
+        return '-';
     }
-    return '-';
+    decimals = decimals || 0;
+    return value.toFixed( decimals )
 }
 
 export function perc( a, b, dec=1 ) {

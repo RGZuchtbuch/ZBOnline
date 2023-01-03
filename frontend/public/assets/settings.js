@@ -13,7 +13,7 @@ const settings = {
 
 }
 
-// consts for colors
+
 MINYEAR = 1850;
 MAXYEAR = 2030;
 
@@ -27,3 +27,5 @@ MAXBROODEGGS = 9999;
 MAXSHOWCOUNT = 999;
 MINSHOWSCORE = 90;
 MAXSHOWSCORE = 97;
+
+MAXLINESPERPAGE = 2;

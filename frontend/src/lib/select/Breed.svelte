@@ -1,7 +1,7 @@
 <script>
     import { onMount } from 'svelte';
     import api from "../../js/api.js";
-    import Select from './Select.svelte';
+    import Select from '../input/Select.svelte';
 
     export let sectionId;
     export let breedId;

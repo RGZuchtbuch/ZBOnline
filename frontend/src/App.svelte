@@ -16,21 +16,21 @@
 
 </script>
 
-<div class='w-full h-full flex flex-col bg-gray-100'>
-    <img class='absolute w-24 m-2 ml-16' src='../assets/bdrg_logo_r.png'>
+<div class='w-full h-full flex flex-col'>
+    <img class='absolute w-20 m-2 ml-8 no-print' src='../assets/bdrg_logo_r.png'>
 
-    <div class='text-center'>
+    <div class='text-center no-print'>
         Das Rassegeflügel Zuchtbuch. Schönheit und Leisting kombinieren.
     </div>
 
     <NavigationBar />
 
-    <div class='grow mx-2 my-2 flex flex-row gap-2 relative min-h-0 '>
+    <div class='grow p-2 flex flex-row gap-2 relative min-h-0 '>
 
         <Menu />
 
 
-        <div class='grow flex flex-col border rounded bg-white p-4'>
+        <div class='grow flex flex-col border rounded bg-white p-4 print'>
 
             <Route path='/' ><Home /></Route>
             <Route path='/obmann/*' ><Moderator /></Route>
@@ -43,7 +43,7 @@
 
         </div>
 
-        <div class='w-48 border rounded flex flex-col '>
+        <div class='w-48 border rounded flex flex-col no-print'>
             <h2>Info</h2>
             <div>
                 {#if $user}

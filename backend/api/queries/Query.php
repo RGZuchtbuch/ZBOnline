@@ -73,7 +73,7 @@ class Query
                     if ( $parent['id'] === $parentId ) {
                         $match = true;
                         if( ! isset( $parent['children'] ) ) $parent['children'] = [];
-                        $parent['children'][] = & $value;
+                        $parent['children'][] = & $value; // TODO ref check, does this work ok ? ( could be as passed by ref )
                         break; // done looking
                     }
                 }
@@ -118,7 +118,7 @@ class Query
             );
             Query::$pdo->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
             Query::$pdo->setAttribute( PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC );
-            Query::$pdo->setAttribute( PDO::ATTR_EMULATE_PREPARES, false ); // get text and numbers instead of always text as template
+//            Query::$pdo->setAttribute( PDO::ATTR_EMULATE_PREPARES, false ); // get text and numbers instead of always text as template
             Query::$pdo->setAttribute( PDO::ATTR_STRINGIFY_FETCHES, false ); // also to get text and numbers instead of always text as template
         }
         return Query::$pdo;

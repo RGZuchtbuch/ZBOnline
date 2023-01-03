@@ -5,7 +5,7 @@
     import InputNumber from '../input/Number.svelte';
     import InputRing from '../input/Ring.svelte';
     import InputText from '../input/Text.svelte';
-    import Select from '../select/Select.svelte';
+    import Select from '../input/Select.svelte';
 
     export let lay;
     export let disabled;

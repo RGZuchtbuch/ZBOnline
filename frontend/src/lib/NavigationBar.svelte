@@ -2,7 +2,7 @@
     import {user} from '../js/store.js';
 </script>
 
-<div class='border border-gray-400 bg-header px-2 py-1 flex flex-row gap-2'>
+<div class='border border-gray-400 bg-header px-2 py-1 flex flex-row gap-2 no-print'>
     <div class='w-48'></div>
     <div class='grow gap-x-4 pl-8'>
         <a href='/'>Das Zuchtbuch</a>

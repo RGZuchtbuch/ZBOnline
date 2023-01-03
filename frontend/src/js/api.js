@@ -107,7 +107,7 @@ export default {
 
         results: {
             //get: (districtId, sectionId, year, group) => get('api/district/' + districtId + '/section/' + sectionId + '/year/' + year + '/group/' + group + '/results/full'),
-            get: (districtId) => get( 'api/district/'+districtId+'/results' ),
+            get: (districtId, year) => get( 'api/district/'+districtId+'/results/'+year ),
         }
     },
     groups: {

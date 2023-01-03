@@ -4,7 +4,7 @@
 @tailwind utilities;
 
 html, body {
-    @apply w-full h-full overflow-clip bg-amber-100;
+    @apply w-full h-full;
 }
 
 h1 {
@@ -30,11 +30,15 @@ input, select, option {
     @apply h-6 rounded mb-1;
 }
 
-input:read-only {
+input:read-only, select:read-only {
     background-color: rgba(0, 0, 0, 0);
 }
 input:disabled, select:disabled {
     background-color: rgba(0, 0, 0, 0);
+    @apply border-gray-600;
+}
+
+select {
     @apply border-gray-600;
 }
 input:enabled:read-write, select:enabled:read-write {
@@ -79,3 +83,26 @@ input:enabled:read-write, select:enabled:read-write {
     background: #777;
 }
 
+@media print {
+    html body * {
+    }
+
+    .print {
+        @apply border-0;
+    }
+
+    .print, print * {
+        visibility: visible;
+        overflow: visible;
+    }
+
+    .print-break {
+        page-break-after:always;
+    }
+    div {
+
+    }
+    .no-print {
+        display: none;
+    }
+}
