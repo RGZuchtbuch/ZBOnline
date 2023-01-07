@@ -4,6 +4,7 @@ namespace App\controllers\district\results;
 
 use App\queries;
 use App\controllers\Controller;
+use PDOException;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpNotFoundException;
 
@@ -16,11 +17,15 @@ class Get extends Controller
 
     public function process(Request $request, array $args) : array
     {
-        $districtId = $args['districtId'];
-        $year = $args['year'];
-        $district = queries\district\Select::execute( $districtId );
-        $results = $this->tree( queries\district\results\Select::execute( $districtId, $year ) );
-        return [ 'district'=>$district, 'results'=>$results, 'debug'=>'test' ];
+        try {
+            $districtId = $args['districtId'];
+            $year = $args['year'];
+            $district = queries\district\Select::execute($districtId);
+            $results = $this->tree(queries\district\results\Select::execute($districtId, $year));
+            return ['district' => $district, 'results' => $results, 'debug' => 'test'];
+        } catch( PDOException $e ) {
+            throw $e;
+        }
     }
 
     private function tree( $results ) : array

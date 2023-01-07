@@ -40,10 +40,7 @@ class Routes {
         $app->get('/result/breeds/district/{districtId}/section/{sectionId}/year/{year}/group/{group}', new result\breeds\Get() );
         $app->post('/result', new result\Post() );
 
-//        $app->get( '/template/{id}', new result\Get() );
-//        $app->post( '/template', new result\Post() );
-
-//        $app->put( '/template/{id}', new template\Put() );
+        $app->get( '/map/count/year/{year}/section/{sectionId}', new map\count\Get() );
 
 
         $app->get( '/section/{sectionId}', new section\Get() );

@@ -1,82 +1,118 @@
 <script>
     import { onMount } from 'svelte';
-    import {active, meta, router, Route} from 'tinro';
     import { dec, perc } from '../js/util.js';
 
-    import api from '../js/api.js';
+    import {meta, router} from 'tinro';
 
-    import InputNumber from './input/Number.svelte';
-    import InputText   from './input/Text.svelte';
-    import Select from './input/Select.svelte';
-    import BreedSelect from './select/Breed.svelte';
+    export let results = [];
 
-    export let promise;
-    let breeder = null;
-    let results = [];
-
-    function handle( promise ) {
-        if( promise ) {
-            promise.then( (data) => {
-                breeder = data.breeder;
-                results = data.results;
-            })
-        }
-    }
+    const route = meta();
 
     onMount( () => {
     });
 
-    $: handle( promise )
 </script>
 
+<div class='bg-white overflow-y-scroll border border-gray-600 border-t-gray-400 rounded-b scrollbar print'>
+    {#if results}
+        {#each results.sections as section}
+            <h2 class='p-2 bg-header text-center text-xl'>Sparte {section.name}</h2>
 
+            {#if section.id === 5}
+                <div class='flex flex-row px-2 gap-x-1 font-bold'>
+                    <div class='w-64'></div>
+                    <div class='w-16'></div>
+                    <div class='w-16'></div>
+                    <div class='w-48'></div><div></div><div></div>
+                    <div class='w-48'>Brutleistung</div><div></div><div></div>
+                    <div class='w-16'>Schauleistung</div>
+                </div>
 
-<div class='flex flex-col my-2'>
-    {#if breeder && results}
-        <div class='flex flex-row gap-x-2'>
-            <span>Leistungen für {breeder.name}</span>
-        </div>
-        <div class='flex flex-row gap-x-1 text-xs'>
-            <div class='w-8'>Jahr</div>
-            <div class='w-8'>Grp</div>
-            <div class='w-16'>Stamm</div>
-            <div class='w-48'>Rasse</div>
-            <div class='w-32'>Farbe</div>
-            <div class='w-12'>Zuchten</div>
-            <div class='w-12'>Hennen</div>
-            <div class='w-10'>Eier/J</div>
-            <div class='w-14'>Eiggewicht</div>
-            <div class='w-12'>Eigelegt</div>
-            <div class='w-14'>Befruchtet</div>
-            <div class='w-14'>Geschüpft</div>
-            <div class='w-10'>Tiere</div>
-            <div class='w-14'>Bewertung</div>
-        </div>
-        {#each results as result}
-            <div class='flex flex-row gap-x-1 text-xs'>
-                <div class='w-8'>{result.year}</div>
-                <div class='w-8'>{result.group}</div>
+                <div class='flex flex-row px-2 gap-x-1 font-bold'>
+                    <div class='w-64'>Rasse & Farbe</div>
+                    <div class='w-16'>Zuchten</div>
+                    <div class='w-16'>Stämme</div>
+                    <div class='w-16'></div>
+                    <div class='w-16'></div>
+                    <div class='w-16'></div>
+                    <div class='w-16'>Soll Eier</div>
+                    <div class='w-16'></div>
+                    <div class='w-16'>Küken</div>
+                    <div class='w-16'>Tiere</div>
+                    <div class='w-16'>Bewertung</div>
+                </div>
+            {:else}
+                <div class='flex flex-row px-2 gap-x-1 text font-bold'>
+                    <div class='w-64'></div>
+                    <div class='w-16'></div>
+                    <div class='w-16'></div>
+                    <div class='w-48'>Legeleistung</div><div></div><div></div>
+                    <div class='w-48'>Brutleistung</div><div></div><div></div>
+                    <div class='w-16'>Schauleistung</div>
+                </div>
 
-                <div class='w-16'>{result.reportName}</div>
+                <div class='flex flex-row px-2 gap-x-1 font-bold'>
+                    <div class='w-64'>Rasse & Farbe</div>
+                    <div class='w-16'>Zuchten</div>
+                    <div class='w-16'>Stämme</div>
+                    <div class='w-16'>Hennen</div>
+                    <div class='w-16'>Eier/J</div>
+                    <div class='w-16'>Gewicht</div>
+                    <div class='w-16'>Eier</div>
+                    <div class='w-16'>Befr.</div>
+                    <div class='w-16'>Küken</div>
+                    <div class='w-16'>Tiere</div>
+                    <div class='w-16'>Bewertung</div>
+                </div>
+            {/if}
 
-                <div class='w-48'>{result.breedName}</div>
-                <div class='w-32'>{result.colorName}</div>
-                <div class='w-12'>1</div>
+            {#each section.breeds as breed, i}
 
-                <div class='w-12'>{dec(result.layDames)}</div>
-                <div class='w-10'>{dec(result.layEggs)}</div>
-                <div class='w-14'>{dec(result.layWeight)}</div>
+                <div class='flex flex-row px-2 gap-x-1 '>
+                    <div class='w-64'>{breed.name}</div>
+                    {#if breed.result}
+                        <div class='w-16'>{dec( breed.result.breeders )}</div>
+                        <div class='w-16'>{dec( breed.result.pairs )}</div>
+                        <div class='w-16'></div>
+                        <div class='w-16'></div>
+                        <div class='w-16'></div>
 
-                <div class='w-12'>{dec(result.broodEggs)}</div>
-                <div class='w-14'>{perc( result.broodFertile, result.broodEggs )}</div>
-                <div class='w-14'>{perc( result.broodHatched, result.broodEggs )}</div>
+                        <div class='w-16'>{dec( breed.result.broodEggs )}</div>
+                        <div class='w-16'></div>
+                        <div class='w-16'>{dec( breed.result.broodHatched )}</div>
 
-                <div class='w-10'>{dec(result.showCount)}</div>
-                <div class='w-14'>{dec(result.showScore)}</div>
-            </div>
+                        <div class='w-16'>{dec( breed.result.showCount )}</div>
+                        <div class='w-16'>{dec( breed.result.showScore, 1 )}</div>
+                    {/if}
+                </div>
+                {#each breed.colors as color}
+                    <div class='flex flex-row px-2 gap-x-1 print-no-break'>
+                        <div class='w-8 pl-4'>&#10551; </div>
+                        <div class='w-56'>{color.name}</div>
+                        {#if color.result}
+                            <div class='w-16'>{dec( color.result.breeders )}</div>
+                            <div class='w-16'>{dec( color.result.pairs )}</div>
+                            <div class='w-16'>{dec( color.result.layDames )}</div>
+                            <div class='w-16'>{dec( color.result.layEggs )}</div>
+                            <div class='w-16'>{dec( color.result.layWeight, 1 )}</div>
+
+                            <div class='w-16'>{dec( color.result.broodEggs )}</div>
+                            <div class='w-16'>{dec( color.result.broodFertile )}</div>
+                            <div class='w-16'>{dec( color.result.broodHatched )}</div>
+
+                            <div class='w-16'>{dec( color.result.showCount )}</div>
+                            <div class='w-16'>{dec( color.result.showScore, 1 )}</div>
+                        {/if}
+
+                    </div>
+                {/each}
+            {/each}
+            <div class='print-break'></div>
         {/each}
     {/if}
 </div>
+
+
 
 
 <style>

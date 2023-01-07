@@ -5,6 +5,7 @@
     import NavigationBar from './lib/NavigationBar.svelte';
     import Menu from './lib/Menu.svelte';
     import Home from './lib/Home.svelte';
+    import Guest from './lib/guest/Guest.svelte';
     import Moderator from './lib/moderator/Moderator.svelte';
 
     import Login from './lib/Login.svelte';
@@ -29,11 +30,11 @@
 
         <Menu />
 
-
         <div class='grow flex flex-col border rounded bg-white p-4 print'>
 
             <Route path='/' ><Home /></Route>
-            <Route path='/obmann/*' ><Moderator /></Route>
+            <Route path='/leistungen/*' > <Guest /> </Route>
+            <Route path='/obmann/*' > <Moderator /> </Route>
 
             <Route path='/anmelden'>
                 <Login />

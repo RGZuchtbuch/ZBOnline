@@ -119,6 +119,13 @@ export default {
             })
         }
     },
+    map: {
+        count: {
+            get: ( year, sectionId ) =>
+                get( 'api/map/count/year/'+year+'/section/'+sectionId ),
+        }
+    },
+
     moderator: {
         new: (districtId) => {
             console.log('api new moderator');

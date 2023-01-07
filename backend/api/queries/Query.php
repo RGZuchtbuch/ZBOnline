@@ -56,7 +56,7 @@ class Query
     }
 
     public static function selectArray(PDOStatement & $stmt, array & $args = [] ) : array { // array of objects, could be empty
-        if( $stmt->execute( $args ) ) {
+        if ($stmt->execute($args)) {
             return $stmt->fetchAll();
         }
         return [];
@@ -118,7 +118,7 @@ class Query
             );
             Query::$pdo->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
             Query::$pdo->setAttribute( PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC );
-//            Query::$pdo->setAttribute( PDO::ATTR_EMULATE_PREPARES, false ); // get text and numbers instead of always text as template
+//            Query::$pdo->setAttribute( PDO::ATTR_EMULATE_PREPARES, false ); // should be the default true for allowing multiple :year in prepare
             Query::$pdo->setAttribute( PDO::ATTR_STRINGIFY_FETCHES, false ); // also to get text and numbers instead of always text as template
         }
         return Query::$pdo;
