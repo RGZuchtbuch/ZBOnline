@@ -28,6 +28,7 @@ class Routes {
 
         $app->get( '/district/{districtId}/breeders', new district\breeders\Get() );
         $app->get( '/district/{districtId}/results/{year}', new district\results\Get() );
+//        $app->get('/district/{districtId}/section/{sectionId}/year/{year}/group/{group}/results', new district\section\results\Get() );
 
 
         $app->get( '/moderator/{moderatorId}/districts', new moderator\districts\Get() );
@@ -37,7 +38,7 @@ class Routes {
         $app->delete( '/report/{reportId}', new report\Delete() );
 
         $app->get( '/result/breed/{breedId}/district/{districtId}/year/{year}/group/{group}/results', new result\breed\Get() );
-        $app->get('/result/breeds/district/{districtId}/section/{sectionId}/year/{year}/group/{group}', new result\breeds\Get() );
+//        $app->get('/result/breeds/district/{districtId}/section/{sectionId}/year/{year}/group/{group}', new result\breeds\Get() );
         $app->post('/result', new result\Post() );
 
         $app->get( '/map/count/year/{year}/section/{sectionId}', new map\count\Get() );

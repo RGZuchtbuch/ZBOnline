@@ -7,9 +7,10 @@
 
     let result;
     let district;
-    let sections = [];
-    let groups = [];
-    let years = [ 2023, 2022, 2021, 2020, 2019, 2018, 2017 ];
+    const sections = settings.select.sections;
+    const groups = settings.select.groups;
+    let years = settings.select.years;
+
 
     let sectionId = null;
     let year = null; //TODO should be null to start
@@ -26,21 +27,12 @@
         api.district.get( districtId ).then( response => { district = response.district } );
     }
 
-    function getSections() {
-        api.section.children.get(2).then( response => {
-            sections = response.sections
-            console.log( 'Sections', sections );
-        } );
-    }
-    function getGroups() {
-        api.groups.get().then( response => { groups = response.groups } );
-    }
-    function getBreeds(districtId, sectionId, year, group ) {
+    function getBreeds(sectionId, year, group ) {
         breeds = []; // empty
         if( sectionId === 5 ) group = 'I'; // pigeons don't have group, so defaults to 'I' locally
-        if( districtId && sectionId && year && group ) {
+        if( sectionId && year && group ) { // on change of any reload all
             console.log( 'Ready to get');
-            api.result.breeds.get( districtId, sectionId, year, group )
+            api.section.breeds.get( sectionId )
                 .then( response => { breeds = response.breeds } );
         }
     }
@@ -115,10 +107,10 @@
         console.log( 'Submit' );
     }
 
-    getSections();
-    getGroups();
+
+
     $: getDistrict( districtId );
-    $: getBreeds( districtId, sectionId, year, group );
+    $: getBreeds( sectionId, year, group );
 
     console.log( 'ResultInputHeader here');
 

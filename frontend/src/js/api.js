@@ -108,7 +108,8 @@ export default {
         results: {
             //get: (districtId, sectionId, year, group) => get('api/district/' + districtId + '/section/' + sectionId + '/year/' + year + '/group/' + group + '/results/full'),
             get: (districtId, year) => get( 'api/district/'+districtId+'/results/'+year ),
-        }
+        },
+
     },
     groups: {
         get: () => {
@@ -188,10 +189,6 @@ export default {
 
         breed: {
             get: ( breedId, districtId, year, group ) => get( 'api/result/breed/'+breedId+'/district/'+districtId+'/year/'+year+'/group/'+group+'/results'),
-        },
-        breeds: {
-            get: ( districtId, sectionId, year, group ) =>
-                get( 'api/result/breeds/district/'+districtId+'/section/'+sectionId+'/year/'+year+'/group/'+group ),
         },
     },
 

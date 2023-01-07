@@ -15,6 +15,7 @@ class Get extends Controller
         return true;
     }
 
+    // for listing district with subs results
     public function process(Request $request, array $args) : array
     {
         try {

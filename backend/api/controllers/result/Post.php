@@ -27,7 +27,7 @@ class Post extends Controller
         } else if( $result['id'] === null ) {
             $success = queries\result\Insert::execute(
                 $result['reportId'], $result['districtId'], $result['year'], $result['group'],
-                $result['sectionId'], $result['breedId'], $result['colorId'],
+                $result['breedId'], $result['colorId'],
                 $result['breeders'], $result['pairs'],
                 $result['layDames'], $result['layEggs'], $result['layWeight'],
                 $result['broodEggs'], $result['broodFertile'], $result['broodHatched'],
@@ -38,7 +38,7 @@ class Post extends Controller
             $success = queries\result\Update::execute(
                 $result['id'],
                 $result['reportId'], $result['districtId'], $result['year'], $result['group'],
-                $result['sectionId'], $result['breedId'], $result['colorId'],
+                $result['breedId'], $result['colorId'],
                 $result['breeders'], $result['pairs'],
                 $result['layDames'], $result['layEggs'], $result['layWeight'],
                 $result['broodEggs'], $result['broodFertile'], $result['broodHatched'],

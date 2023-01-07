@@ -1,8 +1,9 @@
 <script>
     import {Route, meta} from 'tinro';
     import {user} from '../js/store.js';
+    import api from '../js/api.js';
 
-    console.log( 'Menu', $user );
+
 
 </script>
 
@@ -16,9 +17,9 @@
     {#if $user }
         <Route path='/obmann/*'>
             <h3>Obmann {$user.name}</h3>
-            <a href='/obmann/verbaende'>Verbände</a>
+            <a href='/obmann/verband'>Verbände</a>
             <Route path='/verband/:districtId/*' let:meta>
-                <b>Verband name</b>
+                <b>Verband {#await api.district.get( meta.params.districtId )} ... {:then response} {response.district.name} {/await}</b>
                 <a href={'/obmann/verband/'+meta.params.districtId+'/zuechter'}>Züchter</a>
                 <a href={'/obmann/verband/'+meta.params.districtId+'/leistung'}>Leistungen</a>
                 <a href={'/obmann/verband/'+meta.params.districtId+'/leistung/edit'}>Eingeben</a>

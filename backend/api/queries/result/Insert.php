@@ -13,7 +13,7 @@ class Insert extends Query
         $stmt = static::prepare( '
             INSERT INTO result (
                 reportId, districtId, `year`, `group`,
-                sectionId, breedId, colorId, 
+                breedId, colorId, 
                 breeders, pairs,
                 layDames, layEggs, layWeight,
                 broodEggs, broodFertile, broodHatched,
@@ -21,7 +21,7 @@ class Insert extends Query
             )
             VALUES ( 
                 :reportId, :districtId, :year, :group,
-                :sectionId, :breedId, :colorId,
+                :breedId, :colorId,
                 :breeders, :pairs,                        
                 :layDames, :layEggs, :layWeight,
                 :broodEggs, :broodFertile, :broodHatched,
@@ -33,7 +33,7 @@ class Insert extends Query
 
     private static function validate(
         ? int $reportId, int $districtId, int $year, string $group,
-        int $sectionId, int $breedId, ? int $colorId,
+        int $breedId, ? int $colorId,
         ? int $breeders, ? int $pairs,
         ? int $layDames, ? float $layEggs, ? float $layWeight,
         ? int $broodEggs, ? int $broodFertile, ? int $broodHatched,
@@ -43,7 +43,7 @@ class Insert extends Query
             ( $reportId===null || $reportId>0 ) && $districtId>0 &&
             ( $year>1900 && $year<9999 ) &&
             ( $group==="I" || $group==="II" || $group==="III" ) &&
-            $sectionId>0 && $breedId>0 && (( $sectionId===5 && $colorId===null ) || $colorId>0 ) &&
+            $breedId>0 && ( $colorId===null || $colorId>0 ) &&
             ( $breeders===null || ( $breeders>0 && $breeders<1000000 ) ) &&
             ( $pairs===null || ($pairs>0 && $pairs<1000000 ) ) &&
             ( $layDames===null || ( $layDames>0 && $layDames<1000000000 ) ) &&
