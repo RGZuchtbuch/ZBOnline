@@ -9,7 +9,7 @@ use Slim\Exception\HttpNotFoundException;
 
 class Get extends Controller {
 
-    public function preAuthorized( ? array & $requester, array & $args ) : bool {
+    public function authorized(? array & $requester, array & $args ) : bool {
         //$user = Queries\Authorized::get( $requester, $args['breederId'] );
         //return isset( $user );
         return true;

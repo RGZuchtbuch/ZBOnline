@@ -13,8 +13,8 @@
 
 <Route path='/' redirect={ route.match+'/karte'} />
 
-<Route path='/karte/*'>
-    <Map />
+<Route path='/karte/*' let:meta>
+    <Map query={meta.query} />
 </Route>
 
 <Route path='/trend/*'>

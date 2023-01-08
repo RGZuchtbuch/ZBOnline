@@ -3,23 +3,34 @@
     import Select from '../input/Select.svelte';
     import {router} from "tinro";
 
-    let year = new Date().getFullYear();
-    let sectionId = 2;
-    let type = 1;
+    export let query = [];
+
+    //set by query
+    let year;
+    let sectionId;
+    let breedId;
+    let colorId;
+
+    let type = 'pairs';
     let maxPairs = 0;
+
 
     const years = [ 2023, 2022, 2021, 2020 ];
     const sections = [
         { id:2, name:'Geflügel' },
         { id:3, name:'Groß & Wassergeflügel' },
-        { id:4, name:'Hühner' }, { id:11, name:'- Hühner (groß)' }, { id:12, name:'- Zwerghühner' }, { id:13, name:'- Wachteln' },
-        { id:5, name:'Tauben' }
+        { id:4, name:'Hühner' }, { id:11, name:' → Hühner (groß)' }, { id:12, name:' → Zwerghühner' }, { id:13, name:' → Wachteln' },
+        { id:5, name:'Tauben' },
+        { id:6, name:'Ziergeflügel'}
     ];
+    let breeds = [];
+    let colors = [];
+
     let districts = []; // the results per district
 
-    function getData( year, sectionId, type ) {
+    function getData( year, sectionId, breedId, colorId, type ) {
         // first count of reports
-        api.map.count.get( year, sectionId ).then( response => {
+        api.map.count.get( year, sectionId, breedId, colorId ).then( response => {
             districts = response.districts;
             maxPairs = 0;
             for( let district of districts ) {
@@ -31,28 +42,70 @@
         });
     }
 
-    function selectYear( year ) {
-        router.location.query.set( 'year', year );
+    function onQuery( query ) {
+        console.log( 'Update query', query )
+        year = Number( query.jahr ) || new Date().getFullYear();
+        sectionId = Number( query.sparte ) || 2;
+        breedId = Number( query.rasse ) || null;
+        colorId = Number( query.farbe ) || null;
+        console.log( 'Updated', year, sectionId, breedId, colorId );
     }
-    function selectSection( sectionId ) {
-        router.location.query.set( 'section', sectionId );
+
+    function onYear( year ) {
+        router.location.query.set( 'jahr', year );
+    }
+    function onSection( sectionId ) {
+        breeds = [];
+        breedId = null;
+        colors = [];
+        colorId = null;
+        api.section.breeds.get( sectionId ).then( response => {
+            breeds = response.breeds;
+        } );
+        router.location.query.set( 'sparte', sectionId );
+    }
+
+    function onBreed( breedId ) {
+        colors = [];
+        colorId = null;
+        api.breed.colors.get( breedId ).then( response => {
+            colors = response.colors;
+        });
+        if (breedId) {
+            router.location.query.set( 'rasse', breedId );
+        } else {
+            router.location.query.delete( 'rasse' );
+        }
+    }
+    function onColor( colorId ) {
+        api.section.breeds.get(sectionId).then(response => {
+            breeds = response.breeds;
+        });
+        if (colorId) {
+            router.location.query.set( 'farbe', colorId );
+        } else {
+            router.location.query.delete( 'farbe' );
+        }
+
     }
 
     function lon( value ) {
-        return ( value-5.74405 ) * 100;
+        return ( value-5.74405 ) * 70;
     }
     function lat( value ) {
-        return ( 55.02780 - value ) * 100;
+        return ( 55.02780 - value ) * 80;
     }
 
     function rel( value ) {
-        return 5 + value/maxPairs * 50;
+        return 5 + value/maxPairs * 40;
     }
 
-
-    $: getData( year, sectionId, type );
-    $: selectYear( year );
-    $: selectSection( sectionId );
+    $: onQuery( query );
+    $: getData( year, sectionId, breedId, colorId, type );
+    $: onYear( year );
+    $: onSection( sectionId );
+    $: onBreed( breedId );
+    $: onColor( colorId );
 
 </script>
 
@@ -65,9 +118,23 @@
         {/each}
     </Select>
 
-    <Select class='w-24' label='Sparte' bind:value={sectionId}>
+    <Select class='w-48' label='Sparte' bind:value={sectionId}>
         {#each sections as section}
-            <option value={section.id} >{section.name}</option>
+            <option value={section.id}>{section.name}</option>
+        {/each}
+    </Select>
+
+    <Select class='w-48' label='Rasse' bind:value={breedId}>
+        <option value={null}>-</option>
+        {#each breeds as breed}
+            <option value={breed.id} >{breed.name}</option>
+        {/each}
+    </Select>
+
+    <Select class='w-48' label='Farbe' bind:value={colorId}>
+        <option value={null}>-</option>
+        {#each colors as color}
+            <option value={color.id} >{color.name}</option>
         {/each}
     </Select>
 
@@ -85,8 +152,8 @@
             {/each}
         </div>
 
-        <svg width=939 height=796 class='border border-gray-600'>
-            <image href='./assets/de.svg' x=0  y=0 width=959 height=796 class=''/>
+        <svg width=600 height=600 class='border border-gray-600'>
+            <image href='./assets/de.svg' x=0  y=0 width=600 height=600 class=''/>
             {#each districts as district }
                 <circle cx={lon(district.longitude)} cy={lat(district.lattitude)} r={rel(district.pairs)} stroke='gray' stroke-width='2' fill='#ee7' class=''><title>{district.name} hat {district.pairs} Stämme</title></circle>
                 <circle cx={lon(district.longitude)} cy={lat(district.lattitude)} r={1} stroke='gray' stroke-width='0' fill='#000' class=''><title>{district.name} hat {district.pairs} Stämme</title></circle>

@@ -9,7 +9,7 @@ use Slim\Exception\HttpNotFoundException;
 
 class Delete extends Controller
 {
-    public function preAuthorized( ? array &$requester, array &$args): bool
+    public function authorized(? array &$requester, array &$args): bool
     {
         return true; //isset( $requester['isAdmin'] ) && $requester['isAdmin'];
     }

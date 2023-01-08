@@ -267,7 +267,8 @@ async function get( url ) {
                     console.log( 'Got response ', json );
                     return json;
                 }
-                throw response;
+                console.log( 'Fetch not ok, got null', response );
+                return null;
             });
         cache[url] = {promise: promise, time: now};
         return promise;
