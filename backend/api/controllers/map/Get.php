@@ -1,6 +1,6 @@
 <?php
 
-namespace App\controllers\map\count;
+namespace App\controllers\map;
 
 use App\queries;
 use App\controllers\Controller;
@@ -16,9 +16,13 @@ class Get extends Controller
 
     public function process(Request $request, array $args) : mixed
     {
-        $year = $args[ 'year' ];
-        $sectionId = $args[ 'sectionId' ];
-        $districts = queries\map\count\Select::execute( $year, $sectionId );
+        $query = $request->getQueryParams();
+        $year = $query[ 'year' ] ?? null;
+        $sectionId = $query[ 'sectionId' ] ?? null;
+        $breedId = $query[ 'breedId' ] ?? null;
+        $colorId = $query[ 'colorId' ] ?? null;
+
+        $districts = queries\map\Select::execute( $year, $sectionId );
 
         return [ 'districts'=>$districts ];
     }

@@ -16,8 +16,8 @@ class Get extends Controller
 
     public function process(Request $request, array $args) : mixed
     {
-        $id = $args['id'];
-        $breed = queries\breed\Select::execute( $id );
+        $breedId = $args['breedId'];
+        $colors = queries\breed\Select::execute( $id );
         if( ! $breed ) throw new HttpNotFoundException( $request, 'Breed not found' );
         $breed['colors'] = queries\breed\colors\Select::execute( $id );
         return $breed;

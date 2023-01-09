@@ -1,7 +1,7 @@
 <script>
 
     export let value;
-    export let label;
+    export let label = null;
     export let disabled = false;
 
     let classname = '';
@@ -18,7 +18,7 @@
 </script>
 
 <div class='input cursor-pointer {classname} flex flex-col gap-0'>
-    {#if label}
+    {#if label !== null}
         <label class='label' for='input'>{label}</label>
     {/if}
     <input class='data cursor-pointer' id='input' type='button' {name} bind:value={value}
@@ -31,6 +31,6 @@
 
 <style>
     input {
-        @apply border rounded border-gray-400 bg-emerald-200;
+        @apply border rounded border-gray-400 bg-button;
     }
 </style>

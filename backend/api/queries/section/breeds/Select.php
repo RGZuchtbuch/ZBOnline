@@ -21,6 +21,7 @@ class Select extends Query
             SELECT breed.id, breed.name, sections.name AS sectionName
             FROM sections
             LEFT JOIN breed ON breed.sectionId=sections.childId
+            WHERE breed.id IS NOT NULL
             ORDER BY breed.name
         ' );
         return static::selectArray( $stmt, $args );

@@ -121,10 +121,8 @@ export default {
         }
     },
     map: {
-        count: {
-            get: ( year, sectionId ) =>
-                get( 'api/map/count/year/'+year+'/section/'+sectionId ),
-        }
+        get: ( year, sectionId, breedId, colorId ) =>
+            get( 'api/map?year='+year+'&sectionId='+sectionId+'&breedId='+breedId+'&colorId='+colorId ),
     },
 
     moderator: {

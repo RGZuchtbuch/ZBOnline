@@ -23,7 +23,7 @@ h4 {
 .label {
     font-size: 0.7rem;
     line-height: 0.9rem;
-    @apply pl-1 text-gray-600;
+    @apply pl-1 h-4 text-gray-600;
 }
 
 input, select, option {

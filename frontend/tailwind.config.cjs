@@ -4,8 +4,8 @@ const config = {
   theme: {
     extend: {
       colors: {
-        'button': '#4ade80',
-        'header': '#bbf7d0',
+        'button': '#00AD5C',
+        'header': '#8CFAC7',
       },
       spacing: {
         '128': '32rem',

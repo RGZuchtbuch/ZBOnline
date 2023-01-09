@@ -2,6 +2,7 @@
     import api from '../../js/api.js';
     import Select from '../input/Select.svelte';
     import {router} from "tinro";
+    import Button from "../input/Button.svelte";
 
     export let query = [];
 
@@ -27,20 +28,6 @@
     let colors = [];
 
     let districts = []; // the results per district
-
-    function getData( year, sectionId, breedId, colorId, type ) {
-        // first count of reports
-        api.map.count.get( year, sectionId, breedId, colorId ).then( response => {
-            districts = response.districts;
-            maxPairs = 0;
-            for( let district of districts ) {
-                if( district.pairs > maxPairs ) {
-                    maxPairs = district.pairs;
-                }
-            }
-            console.log( 'Districts', districts, maxPairs );
-        });
-    }
 
     function onQuery( query ) {
         console.log( 'Update query', query )
@@ -78,15 +65,25 @@
         }
     }
     function onColor( colorId ) {
-        api.section.breeds.get(sectionId).then(response => {
-            breeds = response.breeds;
-        });
         if (colorId) {
             router.location.query.set( 'farbe', colorId );
         } else {
             router.location.query.delete( 'farbe' );
         }
 
+    }
+
+    function onShow() {
+        api.map.get( year, sectionId, breedId, colorId ).then( response => {
+            districts = response.districts;
+            maxPairs = 0;
+            for( let district of districts ) {
+                if( district.pairs > maxPairs ) {
+                    maxPairs = district.pairs;
+                }
+            }
+            console.log( 'Districts', districts, maxPairs );
+        });
     }
 
     function lon( value ) {
@@ -101,7 +98,6 @@
     }
 
     $: onQuery( query );
-    $: getData( year, sectionId, breedId, colorId, type );
     $: onYear( year );
     $: onSection( sectionId );
     $: onBreed( breedId );
@@ -137,6 +133,8 @@
             <option value={color.id} >{color.name}</option>
         {/each}
     </Select>
+
+    <Button label='' value='Zeigen' on:click={onShow} />
 
 </div>
 
