@@ -1,6 +1,6 @@
 <?php
 
-namespace App\queries\map;
+namespace App\queries\map\section;
 
 use App\queries\Query;
 use App\routes\Controller;

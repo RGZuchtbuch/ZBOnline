@@ -16,13 +16,20 @@ class Get extends Controller
 
     public function process(Request $request, array $args) : mixed
     {
+        $districts = null;
         $query = $request->getQueryParams();
         $year = $query[ 'year' ] ?? null;
-        $sectionId = $query[ 'sectionId' ] ?? null;
-        $breedId = $query[ 'breedId' ] ?? null;
-        $colorId = $query[ 'colorId' ] ?? null;
+        $sectionId = $query[ 'sectionId' ];
+        $breedId = $query[ 'breedId' ];
+        $colorId = $query[ 'colorId' ];
 
-        $districts = queries\map\Select::execute( $year, $sectionId );
+        if( $colorId !== 'null' ) {
+            $districts = queries\map\color\Select::execute($year, $colorId);
+        } else if ( $breedId !== 'null' ) {
+            $districts = queries\map\breed\Select::execute($year, $breedId);
+        } else if( $sectionId !== 'null' ) {
+            $districts = queries\map\section\Select::execute($year, $sectionId);
+        }
 
         return [ 'districts'=>$districts ];
     }

@@ -55,10 +55,10 @@
     function onBreed( breedId ) {
         colors = [];
         colorId = null;
-        api.breed.colors.get( breedId ).then( response => {
-            colors = response.colors;
-        });
         if (breedId) {
+            api.breed.colors.get( breedId ).then( response => {
+                colors = response.colors;
+            });
             router.location.query.set( 'rasse', breedId );
         } else {
             router.location.query.delete( 'rasse' );
