@@ -62,6 +62,30 @@ class Query
         return [];
     }
 
+    public static function selectRoot( PDOStatement & $stmt, array & $args = [] ) : ? array
+    { // array of objects, could be empty
+        $root = null;
+        if ($stmt->execute($args)) {
+            $rows = $stmt->fetchAll();
+            $nodes = [];
+            foreach( $rows as & $row ) {
+                $nodes[ $row['id'] ] = & $row;
+            }
+            foreach( $rows as & $child ) {
+                $parentId = & $child[ 'parentId' ];
+                if( $parentId && isset( $nodes[ $parentId ] ) ) { //has and exists in array
+                    $parent = & $nodes[ $parentId ];
+                    if( ! isset( $parent[ 'children' ] ) ) $parent[ 'children' ] = [];
+                    $parent[ 'children' ][] = $child;
+                } else {
+                    $root = & $child;
+                }
+            }
+        }
+        return $root;
+    }
+
+            // works on parentId and results parent having children based on parentId
     public static function selectTree(PDOStatement & $stmt, array & $args = [] ) : array { // array of objects, could be empty
         if( $stmt->execute( $args ) ) {
             $values = $stmt->fetchAll();

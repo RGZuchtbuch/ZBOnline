@@ -11,7 +11,7 @@ class Select extends Query
     public static function execute( ...$args ) : ? array {
         $args = static::validate( ...$args );
         $stmt = static::prepare( '           
-            SELECT districts.id AS districtId, districts.lattitude AS lattitude, districts.longitude AS longitude, districts.name AS name, 
+            SELECT districts.id, districts.lattitude AS lattitude, districts.longitude AS longitude, districts.name AS name, 
                 COUNT( result.id ) AS results, COUNT( DISTINCT breedId ) AS breeds, 					 
 				CAST( IFNULL( SUM( breeders ), 0 ) AS UNSIGNED ) AS breeders, CAST( IFNULL( SUM( pairs ), 0 ) AS UNSIGNED) AS pairs, 
                 CAST( IFNULL( SUM( layDames), 0 ) AS UNSIGNED) AS layDames, IFNULL( AVG( layEggs ), 0 ) AS layEggs, IFNULL( AVG( layWeight ), 0 ) AS layWeight,

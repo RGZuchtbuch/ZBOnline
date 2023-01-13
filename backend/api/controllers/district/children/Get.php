@@ -1,6 +1,6 @@
 <?php
 
-namespace App\controllers\district;
+namespace App\controllers\district\children;
 
 use App\queries;
 use App\controllers\Controller;
@@ -17,9 +17,7 @@ class Get extends Controller
     public function process(Request $request, array $args) : mixed
     {
         $districtId = $args['districtId'];
-        $district = queries\District::get( $districtId );
-        if( ! $district ) throw new HttpNotFoundException($request, "User not found");
-        $district['children'] = queries\District::getChildren( $districtId );
-        return [ 'district'=>$district ];
+        $root = queries\district\children\Select::execute( $districtId );
+        return [ 'rootDistrict'=>$root ];
     }
 }

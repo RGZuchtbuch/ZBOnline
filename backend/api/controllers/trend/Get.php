@@ -1,6 +1,6 @@
 <?php
 
-namespace App\controllers\map;
+namespace App\controllers\trend;
 
 use App\queries;
 use App\controllers\Controller;
@@ -18,15 +18,17 @@ class Get extends Controller
     {
         $districts = null;
         $query = $request->getQueryParams();
-        $year = $query[ 'year' ] ?? null;
+        $districtId = $query[ 'district' ] ?? null;
+
         if( $colorId = $query[ 'color' ] ?? null ) {
-            $districts = queries\map\color\Select::execute($year, $colorId);
+            $years = queries\trend\color\Select::execute($districtId, $colorId);
         } else if( $breedId = $query[ 'breed' ] ?? null ) {
-            $districts = queries\map\breed\Select::execute($year, $breedId);
+            $years = queries\trend\breed\Select::execute($districtId, $breedId);
         } else if( $sectionId = $query[ 'section' ] ?? null ) {
-            $districts = queries\map\section\Select::execute($year, $sectionId);
+            $years = queries\trend\section\Select::execute($districtId, $sectionId);
         }
 
-        return [ 'districts'=>$districts ];
+        return [ 'years'=>$years ];
+
     }
 }

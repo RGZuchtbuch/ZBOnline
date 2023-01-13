@@ -12,8 +12,8 @@
     let breedId;
     let colorId;
 
-    let type = 'pairs';
-    let maxPairs = 0;
+    let type = 'showCount';
+    let max = {}
 
 
     const years = [ 2023, 2022, 2021, 2020 ];
@@ -74,15 +74,24 @@
     }
 
     function onShow() {
-        api.map.get( year, sectionId, breedId, colorId ).then( response => {
+        let promise;
+        if( colorId ) {
+            promise = api.map.color.get( year, colorId )
+        } else if( breedId ) {
+            promise = api.map.breed.get( year, breedId )
+        } else if( sectionId ) {
+            promise = api.map.section.get( year, sectionId )
+        }
+        promise.then( response => {
             districts = response.districts;
-            maxPairs = 0;
+            max = {};
             for( let district of districts ) {
-                if( district.pairs > maxPairs ) {
-                    maxPairs = district.pairs;
+                for( let key in district ) {
+                    if( ! max[ key ] || district[ key ] > max[ key ] ) {
+                        max[ key ] = district[ key ];
+                    }
                 }
             }
-            console.log( 'Districts', districts, maxPairs );
         });
     }
 
@@ -94,7 +103,7 @@
     }
 
     function rel( value ) {
-        return 5 + value/maxPairs * 40;
+        return 5 + value/max[ type ] * 40;
     }
 
     $: onQuery( query );
@@ -106,7 +115,7 @@
 </script>
 
 
-<h2 class='text-center' >Karte der Zuchtbuch Leistungen</h2>
+<h2 class='text-center' >Karte der Zuchtbuchleistungen</h2>
 <div class='flex gap-x-2 justify-center'>
     <Select class='w-24' label='Jahr' bind:value={year}>
         {#each years as year}
@@ -134,6 +143,15 @@
         {/each}
     </Select>
 
+    <Select class='w-48' label='Was sehen' bind:value={type}>
+        <option value={'pairs'} >Stämme</option>
+        <option value={'breeders'} >Züchter</option>
+        <option value={'layEggs'} >Legeleistung</option>
+        <option value={'broodHatched'} >Küken</option>
+        <option value={'showCount'} >Ausgestellten Tiere</option>
+        <option value={'showScore'} >Bewertung</option>
+    </Select>
+
     <Button label='' value='Zeigen' on:click={onShow} />
 
 </div>
@@ -153,8 +171,8 @@
         <svg width=600 height=600 class='border border-gray-600'>
             <image href='./assets/de.svg' x=0  y=0 width=600 height=600 class=''/>
             {#each districts as district }
-                <circle cx={lon(district.longitude)} cy={lat(district.lattitude)} r={rel(district.pairs)} stroke='gray' stroke-width='2' fill='#ee7' class=''><title>{district.name} hat {district.pairs} Stämme</title></circle>
-                <circle cx={lon(district.longitude)} cy={lat(district.lattitude)} r={1} stroke='gray' stroke-width='0' fill='#000' class=''><title>{district.name} hat {district.pairs} Stämme</title></circle>
+                <circle cx={lon(district.longitude)} cy={lat(district.lattitude)} r={rel(district[ type ])} stroke='gray' stroke-width='2' fill='#ee7' class=''><title>{district.name} => {district[ type ].toFixed( 0 ) }</title></circle>
+                <circle cx={lon(district.longitude)} cy={lat(district.lattitude)} r={1} stroke='gray' stroke-width='0' fill='#000' class=''></circle>
                 <text x={lon(district.longitude)} y={lat(district.lattitude)-10}  text-anchor="middle" stroke='black' stroke-width='1' fill='black' > {district.name} </text>
             {/each}
         </svg>

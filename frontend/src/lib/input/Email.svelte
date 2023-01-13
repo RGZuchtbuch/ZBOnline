@@ -37,7 +37,7 @@
     {#if label}
         <label class='label' for='input'>{label}</label>
     {/if}
-    <input class='data' class:invalid id='input' type='email' {name} bind:value={value}
+    <input class='data w-64' class:invalid id='input' type='email' {name} bind:value={value}
            {minlength} {maxlength}
            {required} {disabled} {readonly}
            on:focus={on.focus}

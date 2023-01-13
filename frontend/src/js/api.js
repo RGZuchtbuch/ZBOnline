@@ -26,9 +26,9 @@ export default {
                     token = response.token;
                     window.sessionStorage.setItem( 'token', token );
                     user.set( jwt_decode(token).user ); // user or null
-                    return true; // success
+                    return { success:true }; // success
                 }
-                return false;
+                return { success: false };
             });
         },
         logout: () => {
@@ -104,6 +104,11 @@ export default {
                 return get( 'api/district/'+districtId+'/breeders');
             }
         },
+        children: {
+            get: (districtId) => {
+                return get( 'api/district/'+districtId+'/children' );
+            }
+        },
 
         results: {
             //get: (districtId, sectionId, year, group) => get('api/district/' + districtId + '/section/' + sectionId + '/year/' + year + '/group/' + group + '/results/full'),
@@ -120,9 +125,20 @@ export default {
             })
         }
     },
+
     map: {
-        get: ( year, sectionId, breedId, colorId ) =>
-            get( 'api/map?year='+year+'&sectionId='+sectionId+'&breedId='+breedId+'&colorId='+colorId ),
+        color: {
+            get: ( year, colorId ) =>
+                get( 'api/map?year='+year+'&color='+colorId ),
+        },
+        breed: {
+            get: ( year, breedId ) =>
+                get( 'api/map?year='+year+'&breed='+breedId ),
+        },
+        section: {
+            get: ( year, sectionId ) =>
+                get( 'api/map?year='+year+'&section='+sectionId ),
+        },
     },
 
     moderator: {
@@ -200,6 +216,21 @@ export default {
             get: (sectionId) => get('api/section/' + sectionId + '/breeds'),
 
         }
+    },
+
+    trend: {
+        color: {
+            get: ( districtId, colorId ) =>
+                get( 'api/trend?district='+districtId+'&color='+colorId ),
+        },
+        breed: {
+            get: ( districtId, breedId ) =>
+                get( 'api/trend?district='+districtId+'&breed='+breedId ),
+        },
+        section: {
+            get: ( districtId, sectionId ) =>
+                get( 'api/trend?district='+districtId+'&section='+sectionId ),
+        },
     },
 }
 
@@ -288,7 +319,7 @@ async function post( url, data ) {
                 return response.json();
             }
             throw response;
-        } );
+        } )
 }
 
 async function put( url, data ) {
