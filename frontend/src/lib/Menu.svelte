@@ -31,5 +31,22 @@
                 </Route>
             </Route>
         </Route>
+
+        <Route path='/admin/*' >
+            <h3>Admin</h3>
+            <a href='/admin/verband'>Verbände</a>
+            <a href='/admin/standard'>Standard</a>
+            <a href='/admin/seiten'>Seiten</a>
+            <Route path='/page/*'>
+                <Route path='/'>
+                    List
+                    <a href='/admin/page/1'>Seite 1</a>
+                </Route>
+                <Route path='/:pageId' let:meta>
+                    Page {meta.params.pageId}
+                </Route>
+            </Route>
+        </Route>
     {/if}
+
 </div>

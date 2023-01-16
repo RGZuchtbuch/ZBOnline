@@ -4,18 +4,20 @@
 
     import SelectTree from './select/SelectTree.svelte';
 
-    export let districts = [];
+    export let districts = null;
 
     const route = meta();
+
     onMount( () => {
     })
+
     console.log( 'Districts', districts )
 </script>
 
-<div class='border border-gray-600 rounded-t bg-gray-300 px-4 font-bold'>Verband</div>
-<div class='bg-gray-100 overflow-y-scroll border border-t-0 rounded-b border-gray-600 scrollbar'>
+
+<div class='border border-gray-400 rounded-t p-2 bg-header text-center text-xl print'>Verbände</div>
+<div class='bg-gray-100 overflow-y-scroll border rounded-b border-t-0 border-gray-400 scrollbar'>
     {#if districts}
-        Districts {districts.length}
         <SelectTree children={districts} link={route.match+'/'}/>
     {/if}
 </div>

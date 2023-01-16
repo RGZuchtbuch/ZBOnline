@@ -3,27 +3,27 @@
     import {active, meta, router, Route} from 'tinro';
     import api from '../js/api.js';
 
-    export let districtId;
+    export let id;
     export let legend = '';
     export let link='';
 
+    let edit = false;
     let district = null;
 
-    function handle( districtId ) {
-        api.district.get( districtId ).then( data => {
+    function handle( id ) {
+        api.district.get( id ).then( data => {
             district = data.district;
         });
     }
 
     onMount( () => {})
 
-    $: handle( districtId );
+    $: handle( id );
 
 
 </script>
 
 <main>
-    <div>{legend}</div>
     {#if district}
         District ({district.id}) {district.fullname}
     {/if}

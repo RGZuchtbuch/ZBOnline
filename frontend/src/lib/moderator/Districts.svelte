@@ -6,24 +6,17 @@
 
     import Districts from '../Districts.svelte';
 
-    let districts = [];
+    let districts = null;
 
     const route = meta();
 
-    function handle( userId ) {
-        let promise = api.moderator.districts( userId );
-        if( promise ) promise.then( data => {
-            districts = data.districts;
+    function loadDistricts( user ) {
+        api.moderator.districts( user.id ).then( response => {
+            districts = response.districts;
         });
     }
 
-    onMount( () => {
-    })
-    console.log( 'User', $user );
-    $: if( $user ) { // in case of user change ( login )
-        handle( $user.id );
-    } // no else, unintended user action
-
+    $: loadDistricts( $user );
 
 </script>
 {#if $user}

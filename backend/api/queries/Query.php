@@ -63,20 +63,23 @@ class Query
     }
 
     public static function selectRoot( PDOStatement & $stmt, array & $args = [] ) : ? array
-    { // array of objects, could be empty
+    {
         $root = null;
         if ($stmt->execute($args)) {
             $rows = $stmt->fetchAll();
             $nodes = [];
             foreach( $rows as & $row ) {
+                $row[ 'children' ] = []; // all nodes can have children
                 $nodes[ $row['id'] ] = & $row;
             }
             foreach( $rows as & $child ) {
+                //print( $child['id'].' \n' );
                 $parentId = & $child[ 'parentId' ];
                 if( $parentId && isset( $nodes[ $parentId ] ) ) { //has and exists in array
+                    //print( ' add '.$child['id'].' to '.$parentId.'\n' );
                     $parent = & $nodes[ $parentId ];
-                    if( ! isset( $parent[ 'children' ] ) ) $parent[ 'children' ] = [];
-                    $parent[ 'children' ][] = $child;
+//                    if( ! isset( $parent[ 'children' ] ) ) $parent[ 'children' ] = [];
+                    $parent[ 'children' ][] = & $child;
                 } else {
                     $root = & $child;
                 }

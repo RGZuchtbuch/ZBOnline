@@ -112,8 +112,16 @@ export default {
 
         results: {
             //get: (districtId, sectionId, year, group) => get('api/district/' + districtId + '/section/' + sectionId + '/year/' + year + '/group/' + group + '/results/full'),
-            get: (districtId, year) => get( 'api/district/'+districtId+'/results/'+year ),
+            get: (districtId, year) => {
+                return get( 'api/district/'+districtId+'/results/'+year );
+            },
         },
+
+        root: {
+            get: ( rootId ) => {
+                return get( 'api/district/'+rootId+'/root');
+            }
+        }
 
     },
     groups: {
@@ -173,6 +181,10 @@ export default {
         }
     },
 
+    page: {
+        get: (id) => get('api/page/' + id),
+    },
+
     report: {
         'new': ( districtId, breederId ) => {
             console.log('api new Report for ', districtId, breederId );
@@ -184,21 +196,21 @@ export default {
             });
         },
         get: (id) => get('api/report/' + id),
-        post: (report) => {
+        post: (report) => { // for insert and update
             // TODO adjust cache
             return post( 'api/report', report );
         },
-        put: (report) => {
-            // TODO cache
-            return put( 'api/report', report );
-        },
+//        put: (report) => {
+//            // TODO cache
+//            return put( 'api/report', report );
+//        },
         delete: ( id ) => del( 'api/report/'+id ),
     },
 
     result: {
         get: ( id ) => get( 'api/result/'+id ),
         post: ( result ) => post( 'api/result', result ), // does insert or replace based on id ( null )
-        put: ( result ) => put( 'api/result', result ),
+        // put: ( result ) => put( 'api/result', result ),
         delete: ( id ) => del( 'api/result/'+id ),
 
         breed: {
@@ -215,6 +227,11 @@ export default {
         breeds: {
             get: (sectionId) => get('api/section/' + sectionId + '/breeds'),
 
+        },
+        root: {
+            get: ( rootId ) => {
+                return get( 'api/section/'+rootId+'/root');
+            }
         }
     },
 

@@ -7,6 +7,8 @@
     import Home from './lib/Home.svelte';
     import Guest from './lib/guest/Guest.svelte';
     import Moderator from './lib/moderator/Moderator.svelte';
+    import Page from './lib/page.svelte';
+    import Admin from './lib/admin/Admin.svelte';
 
     import Login from './lib/Login.svelte';
     import Logout from './lib/Logout.svelte';
@@ -33,8 +35,10 @@
         <div class='grow flex flex-col border rounded bg-white p-4 print'>
 
             <Route path='/' ><Home /></Route>
+            <Route path='/seite/:pageId' let:meta>  </Route>
             <Route path='/leistungen/*' > <Guest /> </Route>
             <Route path='/obmann/*' > <Moderator /> </Route>
+            <Route path='/admin/*' > <Admin /> </Route>
 
             <Route path='/anmelden'>
                 <Login />

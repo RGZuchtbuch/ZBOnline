@@ -1,5 +1,6 @@
 <script>
+    import Page from './Page.svelte';
 
 </script>
 
-<h2>Home</h2>
+<Page pageId={1} />
