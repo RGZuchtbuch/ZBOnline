@@ -171,7 +171,9 @@
         <svg width=600 height=600 class='border border-gray-600'>
             <image href='./assets/de.svg' x=0 y=0 width=600 height=600 class=''/>
             {#each districts as district }
-                <circle cx={lon(district.longitude)} cy={lat(district.latitude)} r={rel(district[ type ])} stroke='gray' stroke-width='2' fill='#ee7' class=''><title>{district.name} => {district[ type ].toFixed( 0 ) }</title></circle>
+                {#if district[ type ] }
+                    <circle cx={lon(district.longitude)} cy={lat(district.latitude)} r={rel(district[ type ])} stroke='gray' stroke-width='2' fill='#ee7' class=''><title>{district.name} => {district[ type ].toFixed( 2 ) }</title></circle>
+                {/if}
                 <circle cx={lon(district.longitude)} cy={lat(district.latitude)} r={1} stroke='gray' stroke-width='0' fill='#000' class=''></circle>
             {/each}
 
