@@ -7,7 +7,7 @@ use http\Exception\BadMessageException;
 
 
 /**
- * Selects array of districtId's that the user by id is moderating
+ * Selects array of districtId's that the user by id is moderator
  * @args id
  * @returns array of districtId's
  */

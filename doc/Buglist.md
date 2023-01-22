@@ -6,7 +6,10 @@
     Map, list shows null if no result, should be 0.
 
 2023-01-08
-    Moderator - Results now all sections, have select om section and change into table for compat with excel
+    Moderator - Results now all sections, have select on section and change into table for compat with excel
 
 2023-01-08 
     api.section.breeds gives nulls, error in query
+
+2023-01-22
+    Map, still needs calculation for magallan to image coords to mnake more accurate.

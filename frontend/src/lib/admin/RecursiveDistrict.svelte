@@ -2,8 +2,13 @@
     import api from '../../js/api.js';
     import Button from '../input/Button.svelte';
     import Number from '../input/Number.svelte';
+    import Select from '../input/Select.svelte';
     import Text from '../input/Text.svelte';
+
     export let district = null;
+    let details = null;
+    let breeders = null;
+
 
     function onOpen() {
         district.open = ! district.open;
@@ -12,11 +17,22 @@
     function onEdit() {
         district.edit = ! district.edit;
         if( district.edit ) {
-            api.district.get(district.id).then(response => {
-                district.detail = response.district;
-                district = district;
-                console.log('Got Details', district);
-            });
+            // load district details
+            if( district.id ) { // existing
+                api.district.get(district.id).then(response => {
+                    details = response.district;
+                });
+                // load candidate moderaters
+                api.district.breeders.get(district.id).then(response => {
+                    breeders = response.breeders;
+                })
+            } else { // new, not saved
+                details = {
+                    id:null, parentId:district.parentId, name: null, fullname: null, short: null, latitude: null, longitude: null,
+                };
+                breeders = [];
+
+            }
         }
     }
 
@@ -24,10 +40,7 @@
         console.log( 'Add Child' );
         district.children.splice( 0, 0, {
             id:null, parentId:district.id, name:'Neu', children: [],
-            detail: {
-                id:null, parentId:district.id, name: null, fullname: null, short: null, latitude: null, longitude: null,
-            },
-            edit:true, // to make it show
+            edit:false, // to make it show
         });
         district.open = true; // show children including this one
         district = district; // redraw
@@ -39,10 +52,10 @@
     }
 
     function onSubmit() {
-        console.log( 'New district', district );
-        api.district.post( district.detail ).then( response => {
+        console.log( 'Submit district', district );
+        api.district.post( details ).then( response => {
+           details.id = response.id;
            district.id = response.id;
-           district.detail.id = district.id;
            district.name = district.detail.name;
         });
         district.changed = false;
@@ -68,14 +81,14 @@
 
     {#if district.edit }
         <form class='flex flex-col border border-gray-400 rounded m-4 p-2' on:change={onChange}>
-            {#if district.detail }
-                <Text class='w-64' bind:value={district.detail.name} label='Name' required/>
+            {#if details }
+                <Text class='w-64' bind:value={details.name} label='Name' required/>
 
-                <Text class='w-128' bind:value={district.detail.fullname} label='Name voll' required/>
-                <Text class='w-24' bind:value={district.detail.short} label='Name abk.' required/>
+                <Text class='w-128' bind:value={details.fullname} label='Name voll' required/>
+                <Text class='w-24' bind:value={details.short} label='Name abk.' required/>
                 <div class='flex gap-x-2'>
-                    <Number class='w-32' bind:value={district.detail.latitude} label='Breitegrad' min={MINLATITUDE} max={MAXLATITUDE} required/>
-                    <Number class='w-32' bind:value={district.detail.longitude}  label='Längegrad' min={MINLONGITUDE} max={MAXLONGITUDE} required/>
+                    <Number class='w-32' bind:value={details.latitude} label='Breitegrad N]' min={MINLATITUDE} max={MAXLATITUDE} required/>
+                    <Number class='w-32' bind:value={details.longitude}  label='Längegrad O' min={MINLONGITUDE} max={MAXLONGITUDE} required/>
                 </div>
                 {#if district.id > 0}
                     <div class='flex gap-x-2'>
@@ -83,6 +96,15 @@
                         <Button class='edit' on:click={onAddChild} label='' value='hinzufügen' />
                     </div>
                 {/if}
+
+                <Select class='' label='Obmann' bind:value={details.moderator} >
+                    {#if breeders}
+                        {#each breeders as candidate}
+                            <option class='bg-white' value={candidate.id}> {candidate.name} </option>
+                        {/each}
+                    {/if}
+                </Select>
+
                 {#if district.changed}
                     <Button class='edit' on:click={onSubmit} label='' value='speichern' />
                 {/if}
@@ -107,5 +129,8 @@
     }
     .edit {
         @apply cursor-pointer;
+    }
+    select {
+        background: green;
     }
 </style>

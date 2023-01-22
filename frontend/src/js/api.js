@@ -8,11 +8,12 @@ let cache = {
     promises: {} // url -> promise, time
 };
 
-let token = window.sessionStorage.getItem( 'token' );//TODO, why ?
-//let token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJSRyBadWNodGJ1Y2ggT25saW5lIiwiaWF0IjoxNjY5MDYyODI4LCJleHAiOjE2NjkxNDkyMjgsInVzZXIiOnsiaWQiOjEsIm5hbWUiOiJFZWxjbyIsImVtYWlsIjoiZWVsY28uamFubmlua0BnbWFpbC5jb20iLCJkaXN0cmljdElkIjo2LCJtb2RlcmF0aW5nIjpbMSwyLDYsMTBdLCJhZG1pbiI6dHJ1ZX19.2OktsAOdgiHM-K3gVkWvh-B_NB23ntdyxmoSQU0R_L8";
+let token = window.sessionStorage.getItem( 'token' );
 // eelco
 if( token !== null ) { // mind, could be "null" text as well
-    user.set( jwt_decode(token).user); // user from token or null
+    const decToken = jwt_decode(token);
+    decToken.user.exp = decToken.exp;
+    user.set( decToken.user); // user from token or null
 } else {
     user.set( null );
 }
@@ -25,11 +26,19 @@ export default {
                 if( response ) {
                     token = response.token;
                     window.sessionStorage.setItem( 'token', token );
-                    user.set( jwt_decode(token).user ); // user or null
+                    const decToken = jwt_decode(token);
+                    decToken.user.exp = decToken.exp;
+                    console.log( 'Token', decToken );
+                    console.log( 'Expired', new Date( decToken.exp * 1000 ) );
+                    user.set( decToken.user ); // user or null
                     return { success:true }; // success
                 }
                 return { success: false };
+            }).catch( response => {
+                console.log( 'oops', response );
+                return { success: false };
             });
+
         },
         logout: () => {
             token = null;
@@ -48,11 +57,10 @@ export default {
 
     breeder: {
         get: ( breederId ) => get( 'api/breeder/'+breederId ),
-        new: ( breederId ) => {
+        new: () => { // id being null
             console.log( 'api newDistrict' );
             return new Promise( ( resolve ) => {
                 // TODO, remember to delete cache for parent district
-                //clear( 'api/breeders/'+parentId );
                 resolve( { id:0, parent:parentId, name:null, fullname:null, short:null, coordinates:null, children:[], moderators:[] } );
             })
         },
@@ -62,7 +70,6 @@ export default {
         results: {
             get: (breederId) => get( 'api/breeder/'+breederId+'/results' ),
         },
-//        getYears: (id) => get( 'api/breeder/'+id+'/years' ),
     },
 
     color: {

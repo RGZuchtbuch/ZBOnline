@@ -17,7 +17,7 @@ class Select extends Query
         return static::select( $stmt, $args );
     }
 
-    private static function validate( $userId ) : array {
+    private static function validate( int $userId ) : array {
         if( $userId > 0 ) {
             return get_defined_vars();
         };

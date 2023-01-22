@@ -10,7 +10,7 @@ use Slim\Exception\HttpNotFoundException;
 class Get extends Controller {
 
     public function authorized(? array & $requester, array & $args ) : bool {
-        return $requester && count( $requester[ 'moderating' ] ) > 0; // only if logged in and moderates any districts
+        return $requester && count( $requester[ 'moderator' ] ) > 0; // only if logged in and moderates any districts
     }
 
     public function process(Request $request, array $args) : mixed

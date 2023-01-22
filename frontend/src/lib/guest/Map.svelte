@@ -148,7 +148,7 @@
         <option value={'breeders'} >Züchter</option>
         <option value={'layEggs'} >Legeleistung</option>
         <option value={'broodHatched'} >Küken</option>
-        <option value={'showCount'} >Ausgestellten Tiere</option>
+        <option value={'showCount'} >Ausgestellten Tieren</option>
         <option value={'showScore'} >Bewertung</option>
     </Select>
 
@@ -169,10 +169,13 @@
         </div>
 
         <svg width=600 height=600 class='border border-gray-600'>
-            <image href='./assets/de.svg' x=0  y=0 width=600 height=600 class=''/>
+            <image href='./assets/de.svg' x=0 y=0 width=600 height=600 class=''/>
             {#each districts as district }
                 <circle cx={lon(district.longitude)} cy={lat(district.latitude)} r={rel(district[ type ])} stroke='gray' stroke-width='2' fill='#ee7' class=''><title>{district.name} => {district[ type ].toFixed( 0 ) }</title></circle>
                 <circle cx={lon(district.longitude)} cy={lat(district.latitude)} r={1} stroke='gray' stroke-width='0' fill='#000' class=''></circle>
+            {/each}
+
+            {#each districts as district }
                 <text x={lon(district.longitude)} y={lat(district.latitude)-10}  text-anchor="middle" stroke='black' stroke-width='1' fill='black' > {district.name} </text>
             {/each}
         </svg>

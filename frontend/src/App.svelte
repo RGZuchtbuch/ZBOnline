@@ -1,7 +1,6 @@
 <script>
     //  import logo from './assets/svelte.png'
-    import {Route, meta} from 'tinro';
-    import api from './js/api.js';
+    import {Route} from 'tinro';
     import NavigationBar from './lib/NavigationBar.svelte';
     import Menu from './lib/Menu.svelte';
     import Home from './lib/Home.svelte';
@@ -15,12 +14,12 @@
 
     import { user } from './js/store.js'
 
-    //const route = meta();
+    console.log( 'User', $user );
 
 </script>
 
 <div class='w-full h-full flex flex-col'>
-    <img class='absolute w-20 m-2 ml-8 no-print' src='../assets/bdrg_logo_r.png'>
+    <img class='absolute w-20 m-2 ml-8 no-print' src='../assets/bdrg_logo_r.png' alt='BDRG Logo'>
 
     <div class='text-center no-print'>
         Das Rassegeflügel Zuchtbuch. Schönheit und Leisting kombinieren.
@@ -35,7 +34,7 @@
         <div class='grow flex flex-col border rounded bg-white p-4 print'>
 
             <Route path='/' ><Home /></Route>
-            <Route path='/seite/:pageId' let:meta>  </Route>
+            <Route path='/seite/:pageId' let:meta> <Page pageId={meta.params.pageId} /> </Route>
             <Route path='/leistungen/*' > <Guest /> </Route>
             <Route path='/obmann/*' > <Moderator /> </Route>
             <Route path='/admin/*' > <Admin /> </Route>
@@ -52,7 +51,10 @@
             <h2>Info</h2>
             <div>
                 {#if $user}
-                    {$user.name}
+                    {#if $user.admin} <div>Administrator</div>{/if}
+                    {#if $user.moderator.length>0} <div>Obmann</div>{/if}
+                    <div>{$user.name}</div>
+                    <div>Bis { new Date( $user.exp * 1000 ).toLocaleString( 'de') }</div>
                 {/if}
             </div>
         </div>

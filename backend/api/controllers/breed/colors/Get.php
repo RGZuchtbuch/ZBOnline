@@ -14,7 +14,7 @@ class Get extends Controller
     }
 
     public function process(Request $request, array $args) : mixed {
-        $colors = queries\breed\colors\Select::execute( $args['id'] );
+        $colors = queries\breed\colors\Select::execute( $args['breedId'] );
         return [ 'colors'=>$colors ];
     }
 }

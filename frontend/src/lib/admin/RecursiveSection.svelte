@@ -1,14 +1,30 @@
 <script>
     import api from '../../js/api.js';
+    import Breed from './Breed.svelte';
     import Button from '../input/Button.svelte';
     import Number from '../input/Number.svelte';
     import Select from '../input/Select.svelte';
     import Text from '../input/Text.svelte';
+
     export let section = null;
+
+    let breeds = null;
 
     function onOpen() {
         section.open = ! section.open;
     }
+
+    function onBreeds() {
+        console.log( 'OnBreeds');
+        if( breeds ) {
+            breeds = null;
+        } else {
+            api.section.breeds.get( section.id).then( response => {
+                breeds = response.breeds;
+            });
+        }
+    }
+
 
     function onEdit() {
         section.edit = ! section.edit;
@@ -31,7 +47,7 @@
         section = section; // redraw
     }
 
-    function onChange( event ) {
+    function onChange() {
         section.changed = true;
         section = section;
     }
@@ -55,6 +71,14 @@
                 <span class='open' on:click={onOpen}>[ + ]</span>
             {/if}
         {/if}
+
+        {#if breeds}
+            <span class='button text-red-600' on:click={onBreeds}>[ &#8628; ]</span>
+        {:else}
+            <span class='button text-green-600' on:click={onBreeds}>[ &#8628; ]</span>
+        {/if}
+
+
         {#if section.edit}
             <span class='button text-red-600' on:click={onEdit} title='schließen'>[ &#9998; ]</span>
         {:else}
@@ -65,7 +89,7 @@
     {#if section.edit }
         <form class='flex flex-col border border-gray-400 rounded m-4 p-2' on:change={onChange}>
             <Text class='w-64' bind:value={section.name} label='Name' required/>
-            <Select bind:value={section.layers} >
+            <Select bind:value={section.layers} label='Legeleistung'>
                 <option value='Y'>Y</option>
                 <option value='N'>N</option>
             </Select>
@@ -80,7 +104,12 @@
             {/if}
         </form>
     {/if}
-    <div></div>
+
+    {#if breeds}
+        {#each breeds as breed}
+            <Breed breed={breed} />
+        {/each}
+    {/if}
 
     {#if section.open}
         {#each section.children as child}

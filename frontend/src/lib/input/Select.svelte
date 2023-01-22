@@ -1,9 +1,9 @@
 <script>
 
-    export let value;
-    export let label;
+    export let value = null;
+    export let label = null;
     export let error = '!';
-    export let name;
+    export let name = null;
     export let title = null;
     export let disabled = false;
     export let readonly = false;
@@ -33,7 +33,7 @@
         <label class='label' for='input'>{label}</label>
     {/if}
 
-    <select class='data' class:invalid  id='input'
+    <select class:invalid class:disabled id='input'
             bind:value={value}
             {name}
             {disabled} {readonly} {required}

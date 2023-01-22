@@ -3,13 +3,14 @@
 namespace App\controllers;
 
 use App\Config;
-use App\utils\Token;
+//use App\utils\Token;
 use Firebase\JWT\ExpiredException;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
+use Firebase\JWT\SignatureInvalidException;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Slim\Exception\HttpUnauthorizedException;
+//use Slim\Exception\HttpUnauthorizedException;
 
 //
 
@@ -17,6 +18,7 @@ abstract class Controller
 {
     public static ? array $requester = null;
 
+    // Relays call to specific controller with auth step.
     public function __invoke( Request $request, Response $response, array $args ) : Response {
         Controller::$requester = $this->getRequester( $request ); // null or valid requester
 
@@ -32,16 +34,16 @@ abstract class Controller
 
 
 
-    public function authorized(? array & $requester, array & $args ) : bool {
-        return true;
+    public function authorized(? array & $requester, array & $args ) : bool { // TODO make abstract to enforce implementation
+        return true; // TODO then return false;
     }
 
 
-    public function postAuthorized( ? array & $requester, array & $args, array & $result ) : bool {
+    public function postAuthorized( ? array & $requester, array & $args, array & $result ) : bool { // TODO, may not be needed
         return true;
     }
 
-    public function process( Request $request, array $args ) : mixed {
+    public function process( Request $request, array $args ) : mixed { // must be overriden
         throw new \Slim\Exception\HttpInternalServerErrorException( $request, "Oops, this route is not processing yet" );
     }
 
@@ -49,6 +51,7 @@ abstract class Controller
         return json_decode( $request->getBody(), true );
     }
 
+    // get requester data from token
     private function getRequester(Request $request ) : ? array {
         global $requester;
         $token = $this->getToken( $request );
@@ -61,6 +64,7 @@ abstract class Controller
         return null; // not credentials
     }
 
+    // get token from request
     protected function getToken( Request $request ) : ? string {
         $authorization = $request->getHeaderLine( 'Authorization' );
 
@@ -73,29 +77,14 @@ abstract class Controller
         return null;
     }
 
-    protected function & toTree( int $rootId, & $array, $idName='id', $parentName='parent', $childrenName='children' ) : array {
-        $values = []; // for lookup table
-        foreach( $array as & $value ) { // lookup table by id
-            $id = $value[ $idName ];
-            $values[ $id ] = & $value;
-        }
-        foreach( $array as & $child ) { // build tree
-            $parentId = $child[ $parentName ];
-            if( isset( $parentId ) ) { // not root
-                $values[$parentId][$childrenName][] = & $child;
-            }
-        }
-        return $values[ $rootId ];
-    }
-
-
     private static function decode( string $token ) : array {
         try {
             $payload = (array)JWT::decode($token, new Key(Config::TOKEN_SECRET, Config::TOKEN_ALGORITHM));
             $payload['user'] = (array)$payload['user']; // convert back to 'normal' array
             return $payload;
         } catch( ExpiredException $e ) {
-            throw new HttpUnauthorizedException( $e->getMessage() );
+            throw new SignatureInvalidException( $e->getMessage() );
+//            throw new HttpUnauthorizedException( $e->getMessage() );
         }
     }
 }

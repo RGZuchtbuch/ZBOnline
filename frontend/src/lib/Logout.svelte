@@ -2,8 +2,8 @@
     import {meta, router} from 'tinro';
     import api from "../js/api.js";
     import { user } from '../js/store.js'
-    import EmailInput from './input/Email.svelte';
-    import PasswordInput from './input/Password.svelte';
+    import Submit from './input/Submit.svelte';
+    import Modal from './Modal.svelte';
 
     let email = 'eelco.jannink@gmail.com';
     let password = 'jannink';
@@ -17,11 +17,13 @@
 
 </script>
 
-<form on:submit|preventDefault={onSubmit}>
-    <h2>Abmelden</h2>
-    <button type="submit">Submit</button>
-</form>
-
+<Modal class=''>
+    <form class='w-64 flex flex-col gap-4 self-center border p-4' on:submit|preventDefault={onSubmit}>
+        <h2 class='bg-header rounded'>Abmelden</h2>
+        <div>{ $user.name }</div>
+        <Submit value='Ok' />
+    </form>
+</Modal>
 <style>
 
 </style>

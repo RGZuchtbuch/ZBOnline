@@ -11,7 +11,7 @@ h1 {
     @apply text-4xl;
 }
 h2 {
-    @apply text-2xl font-bold;
+    @apply p-2 text-2xl font-bold;
 }
 h3 {
     @apply text-xl font-bold;
@@ -34,12 +34,16 @@ input:read-only, select:read-only {
     background-color: rgba(0, 0, 0, 0);
 }
 input:disabled, select:disabled {
-    background-color: rgba(0, 0, 0, 0);
+    background-color: rgba(1, 0, 0, 0);
     @apply border-gray-600;
 }
 
-select {
+select:enabled {
     @apply border-gray-600;
+    background: white;
+}
+select.disabled {
+    background: rgba(0,0,0,0);
 }
 input:enabled:read-write, select:enabled:read-write {
     background-color: white;

@@ -4,12 +4,10 @@ namespace App\controllers\user\credentials;
 
 use App\queries;
 use App\controllers\Controller;
-use App\utils\Token;
 use App\Config;
 use DateTimeImmutable;
 use Firebase\JWT\JWT;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Slim\Exception\HttpNotFoundException;
 use Slim\Exception\HttpUnauthorizedException;
 
 class Post extends Controller {
@@ -25,7 +23,7 @@ class Post extends Controller {
 
         if( ! $user ) throw new HttpUnauthorizedException( $request, "Unknown user for credentials" );
 
-        $user[ 'moderating' ] = queries\user\moderating\Select::execute( $user['id'] ); // array
+        $user[ 'moderator' ] = queries\user\moderator\Select::execute( $user['id'] ); // array
         $user[ 'admin' ] = queries\user\admin\Select::execute( $user['id'] ); // bool
 
         return [ 'token'=>static::encode( $user ) ];
