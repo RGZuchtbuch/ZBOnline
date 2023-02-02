@@ -12,12 +12,12 @@ use Slim\Exception\HttpNotFoundException;
 
 class Post extends Controller
 {
-    public function authorized(? array &$requester, array &$args): bool
+    public function authorized(? array $requester, array $args, array $query): bool
     {
         return true; //isset( $requester['isAdmin'] ) && $requester['isAdmin'];
     }
 
-    public function process(Request $request, array $args) : mixed
+    public function process(Request $request, array $args, array $query) : mixed
     {
         // first store colors then report with all subs with template id
         $report = $this->getData( $request );

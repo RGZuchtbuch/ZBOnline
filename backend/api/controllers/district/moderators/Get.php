@@ -9,12 +9,12 @@ use Slim\Exception\HttpNotFoundException;
 
 class Get extends Controller {
 
-    public function authorized(? array & $requester, array & $args ) : bool {
+    public function authorized(? array $requester, array $args, array $query ) : bool {
         //$user = queries\Authorized::get( $requester, $args['id'] );
         return true;
     }
 
-    public function process(Request $request, array $args) : mixed
+    public function process(Request $request, array $args, array $query) : mixed
     {
         $moderatorId = $args['moderatorId' ];
         $districts =  queries\moderator\districts\Select::execute( $moderatorId );

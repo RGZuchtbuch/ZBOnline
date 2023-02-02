@@ -13,6 +13,21 @@ function extendYear( year, max ) {
 }
 */
 
+export function calcColor( min, max, value, alpha ) {
+    const relValue = (value-min)/(max-min);
+    const mid = (min+max)/2;
+    let r = 15;
+    let g = 15;
+    if( relValue < 0.5 ) { // get color on scale 0.15
+        g = Math.round( 15 * 2 * relValue );
+    } else {
+        r = Math.round( 15 * 2 * ( 1 - relValue ) );
+    }
+    alpha = Math.round( 15 * alpha ); // range 0..1 to 0..15
+    console.log( 'CalcColor', relValue, r, g, alpha, '#'+r.toString(16)+g.toString(16)+'0'+alpha.toString(16));
+    return '#'+r.toString(16)+g.toString(16)+'0'+alpha.toString(16); // only 1 char per color, like '#48f7' making '#4488ff77'
+}
+
 export function toDate( input, min, max ) {
     if( input && max ) {
         min = new Date(min);
@@ -102,7 +117,7 @@ export function dec( value, decimals ) {
     return value.toFixed( decimals )
 }
 
-export function perc( a, b, dec=1 ) {
+export function pct(a, b, dec=1 ) {
     if( a != null && b != null ) {
         return (100 * a / b).toFixed( dec )+'%';
     }

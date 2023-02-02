@@ -36,7 +36,7 @@ class Routes {
 
         $app->get( '/map', new map\Get() );
 
-        $app->get( '/moderator/{moderatorId}/districts', new moderator\districts\Get() );
+        $app->get( '/moderator/districts', new moderator\districts\Get() );
 
         $app->get( '/page/{pageId}', new page\Get() );
         $app->get( '/pages', new pages\Get() );

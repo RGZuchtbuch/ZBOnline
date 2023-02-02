@@ -2,19 +2,20 @@
     import { onMount } from 'svelte';
     import {active, meta, router, Route} from 'tinro';
 
-    import api from '../../js/api.js';
+    import api from '../js/api.js';
+    import { newReport } from '../js/template.js';
 
-    import InputDate   from '../input/Date.svelte';
-    import InputNumber from '../input/Number.svelte';
-    import InputText   from '../input/Text.svelte';
-    import InputRing from '../input/Ring.svelte';
-    import Select from '../input/Select.svelte';
-    import ReportBreed from './Breed.svelte';
-    import ReportBroods from './Broods.svelte';
-    import ReportLay from './Lay.svelte';
-    import ReportNotes from './Notes.svelte';
-    import ReportParents from './Parents.svelte';
-    import ReportShow from './Show.svelte';
+    import InputDate   from './input/Date.svelte';
+    import InputNumber from './input/Number.svelte';
+    import InputText   from './input/Text.svelte';
+    import InputRing from './input/Ring.svelte';
+    import Select from './input/Select.svelte';
+    import ReportBreed from './report/Breed.svelte';
+    import ReportBroods from './report/Broods.svelte';
+    import ReportLay from './report/Lay.svelte';
+    import ReportNotes from './report/Notes.svelte';
+    import ReportParents from './report/Parents.svelte';
+    import ReportShow from './report/Show.svelte';
 
     export let reportId;
     export let legend = '';
@@ -41,14 +42,15 @@
             });
     }
 
-    function handle( reportId ) {
-        if( reportId ) {
-            api.report.get( reportId ).then( data => {
-                console.log( 'Report', data );
-                report = data.report;
-            }).catch( error => {
-                console.error( 'Error', error );
+    function loadReport( reportId ) {
+        console.log( 'Load report ', reportId, Number.isInteger( reportId ), typeof reportId ==='string' );
+        if( reportId ) { // existing
+            api.report.get( reportId ).then( response => {
+                report = response.report;
             });
+        } else { // new
+            report = newReport();
+
         }
     }
 
@@ -66,7 +68,7 @@
         }
     }
 
-    $: handle( reportId );
+    $: loadReport( reportId );
     $: update( report );
 
     onMount( () => {

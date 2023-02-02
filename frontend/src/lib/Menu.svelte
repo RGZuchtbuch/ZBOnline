@@ -19,13 +19,15 @@
             <h3>Obmann {$user.name}</h3>
             <a href='/obmann/verband'>Verbände</a>
             <Route path='/verband/:districtId/*' let:meta>
-                <b>Verband {#await api.district.get( meta.params.districtId )} ... {:then response} {response.district.name} {/await}</b>
+                <h4>Verband {#await api.district.get( meta.params.districtId )} ... {:then response} {response.district.short} {/await}</h4>
                 <a href={'/obmann/verband/'+meta.params.districtId+'/zuechter'}>Züchter</a>
                 <a href={'/obmann/verband/'+meta.params.districtId+'/leistung'}>Leistungen</a>
                 <a href={'/obmann/verband/'+meta.params.districtId+'/leistung/edit'}>Eingeben</a>
                 <Route path='/zuechter/:breederId/*' let:meta>
-                    <b>Breeder name</b>
-                    <a href={'/obmann/verband/'+meta.params.districtId+'/zuechter/'+meta.params.breederId+'/mitglied'}>Mitglied</a>
+                    <h4>Züchter
+                        {#await api.breeder.get( meta.params.breederId )} ... {:then response} {response.breeder.name} {/await}
+                    </h4>
+                    <a href={'/obmann/verband/'+meta.params.districtId+'/zuechter/'+meta.params.breederId+'/daten'}>Daten</a>
                     <a href={'/obmann/verband/'+meta.params.districtId+'/zuechter/'+meta.params.breederId+'/meldung'}>Meldungen</a>
                     <a href={'/obmann/verband/'+meta.params.districtId+'/zuechter/'+meta.params.breederId+'/meldung/0'}>Melden</a>
                 </Route>

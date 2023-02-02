@@ -1,6 +1,6 @@
 import jwt_decode from 'jwt-decode';
 import { user } from './store.js'
-import { clone, reportTpl } from './template.js';
+
 
 //uses constants from js/setting.js { settings.cache.TIMEOUT, settings.api.root }
 
@@ -184,7 +184,7 @@ export default {
         },
 
         districts: ( moderatorId ) => {
-            return get( 'api/moderator/'+moderatorId+'/districts');
+            return get( 'api/moderator/districts');
         }
     },
 
@@ -193,24 +193,11 @@ export default {
     },
 
     report: {
-        'new': ( districtId, breederId ) => {
-            console.log('api new Report for ', districtId, breederId );
-            const report = clone( reportTpl );
-            report.breederId = breederId;
-            report.districtId = districtId;
-            return Promise.resolve({
-                report: report
-            });
-        },
         get: (id) => get('api/report/' + id),
         post: (report) => { // for insert and update
             // TODO adjust cache
             return post( 'api/report', report );
         },
-//        put: (report) => {
-//            // TODO cache
-//            return put( 'api/report', report );
-//        },
         delete: ( id ) => del( 'api/report/'+id ),
     },
 

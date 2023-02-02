@@ -13,12 +13,12 @@ use Slim\Exception\HttpNotFoundException;
 
 class Post extends Controller
 {
-    public function authorized(? array &$requester, array &$args): bool
+    public function authorized(? array $requester, array $args, array $query): bool
     {
         return $requester && $requester[ 'admin' ];
     }
 
-    public function process(Request $request, array $args) : mixed
+    public function process(Request $request, array $args, array $query) : mixed
     {
         try {
             $district = $this->getData($request);

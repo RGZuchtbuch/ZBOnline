@@ -9,13 +9,13 @@ use Slim\Exception\HttpNotFoundException;
 
 class Get extends Controller {
 
-    public function authorized(? array & $requester, array & $args ) : bool {
+    public function authorized(? array $requester, array $args, array $query ) : bool {
         //$user = Queries\Authorized::get( $requester, $args['id'] );
         //return isset( $user );
         return true;
     }
 
-    public function process(Request $request, array $args) : mixed
+    public function process(Request $request, array $args, array $query) : mixed
     {
         $breederId = $args['breederId' ];
         $breeder = queries\breeder\Select::execute( $breederId );

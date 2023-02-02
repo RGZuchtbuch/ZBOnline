@@ -9,15 +9,13 @@ use Slim\Exception\HttpNotFoundException;
 
 class Get extends Controller
 {
-    public function authorized(?array &$requester, array &$args): bool
+    public function authorized(?array $requester, array $args, array $query): bool
     {
         return true;
     }
 
-    public function process(Request $request, array $args) : mixed
+    public function process(Request $request, array $args, array $query) : mixed
     {
-        $districts = null;
-        $query = $request->getQueryParams();
         $districtId = $query[ 'district' ] ?? null;
 
         if( $colorId = $query[ 'color' ] ?? null ) {

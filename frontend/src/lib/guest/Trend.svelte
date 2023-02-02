@@ -4,7 +4,8 @@
     import Select from '../input/Select.svelte';
     import {router} from "tinro";
     import Button from "../input/Button.svelte";
-    import { Chart, Colors, BarController, BarElement } from 'chart.js';
+    import { Chart, Colors, BarController, BarElement, CategoryScale, LinearScale, Title, Tooltip } from 'chart.js';
+//    import Chart from 'chart.js/auto';
 
     export let query = [];
 
@@ -34,6 +35,7 @@
     let years = []; // the results per year
 
     let canvas = null;
+    let chart = null;
 
     function getDistricts() {
         api.district.children.get( 1 ).then( response => {
@@ -110,28 +112,54 @@
         return 100;
     }
 
-    Chart.register(
-        Colors, BarController, BarElement,
-    );
-
-    let chart = null;
     function showChart() {
-       const context = canvas.getContext( '2d' );
-       if( chart ) {
-           chart.data.labels = years.map(row => row.year);
-           chart.data.datasets = [ {label:type+' über Jahre', data:years.map(row => row[ type ]) } ];
+        const context = canvas.getContext( '2d' );
+        let labels = years.map(row => row.year);
+        let data = years.map(row => row[ type ]);
+        let data2 = null;//years.map(row => row[ type ] * 0.25);
+
+        if( chart ) {
+           chart.data.labels = labels;
+           chart.data.datasets = [ {label:type+' über Jahre', data:data } ];
            chart.update();
        } else {
            chart = new Chart( context, {
                type:'bar',
                data: {
-                   labels: years.map(row => row.year),
-                   datasets: [ { label:type+' über Jahre', data: years.map(row => row[ type ] ) }
-                   ]
+                   labels:labels,
+                   datasets: [ {
+                       label:type+' über Jahre',
+                       data:data,
+                   },{
+                       label:type+' über Jahre',
+                       data:data2,
+                   }]
+               },
+               options: {
+                   indexAxis:'y',
+                   plugins: {
+                       title: {
+                           display: true,
+                           text: 'Tiiitle',
+                       },
+                   },
+                   scales: {
+                       x: {
+                            stacked:true,
+                       },
+                       y: {
+                           reverse:true,
+                           stacked:true,
+                       }
+                   }
                }
            });
        }
     }
+
+    Chart.register(
+        Colors, BarController, BarElement, CategoryScale, LinearScale, Title, Tooltip
+    );
 
     $: onQuery( query );
     $: onSection( sectionId );
@@ -193,21 +221,26 @@
 </div>
 
 <div class='bg-gray-100 border border-gray-600 rounded-b flex flex-row overflow-y-scroll scrollbar justify-around px-2'>
-    {#if years}
         <div>
             <h3>Jahre</h3>
-            {#each years as year}
-                <div class='flex'>
-                    <div class='w-64'>{year.year}</div>
-                    <div>{year.pairs}</div>
-                </div>
-            {/each}
+            {#if years}
+                {#each years as year}
+                    <div class='flex'>
+                        <div class='w-64'>{year.year}</div>
+                        <div>{year.pairs}</div>
+                    </div>
+                {/each}
+            {/if}
         </div>
 
-        <div class='w-228 h-128 border border-gray-600'>
-            <canvas id='chart' class='w-full h-full' bind:this={canvas} />
+    <div>
+        <div>Title</div>
+        <div class='border border-gray-600 p-4'>
+            {#if years}
+                <canvas id='chart' width='256' height='512' bind:this={canvas} />
+            {/if}
         </div>
-    {/if}
+    </div>
 </div>
 
 

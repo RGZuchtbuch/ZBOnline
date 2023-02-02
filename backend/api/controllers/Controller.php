@@ -21,9 +21,10 @@ abstract class Controller
     // Relays call to specific controller with auth step.
     public function __invoke( Request $request, Response $response, array $args ) : Response {
         Controller::$requester = $this->getRequester( $request ); // null or valid requester
+        $query = $request->getQueryParams();
 
-        if( $this->authorized( Controller::$requester, $args ) ) {
-            $data = $this->process($request, $args);
+        if( $this->authorized( Controller::$requester, $args, $query ) ) {
+            $data = $this->process( $request, $args, $query );
 
             $response->getBody()->write(json_encode($data));
             return $response;
@@ -34,16 +35,16 @@ abstract class Controller
 
 
 
-    public function authorized(? array & $requester, array & $args ) : bool { // TODO make abstract to enforce implementation
+    public function authorized( ? array $requester, array $args, array $query ) : bool { // TODO make abstract to enforce implementation
         return true; // TODO then return false;
     }
 
 
-    public function postAuthorized( ? array & $requester, array & $args, array & $result ) : bool { // TODO, may not be needed
+    public function postAuthorized( ? array $requester, array $args, array $result ) : bool { // TODO, may not be needed
         return true;
     }
 
-    public function process( Request $request, array $args ) : mixed { // must be overriden
+    public function process( Request $request, array $args, array $query ) : mixed { // must be overriden
         throw new \Slim\Exception\HttpInternalServerErrorException( $request, "Oops, this route is not processing yet" );
     }
 

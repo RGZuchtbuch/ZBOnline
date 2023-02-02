@@ -10,13 +10,13 @@ use Slim\Exception\HttpNotFoundException;
 
 class Get extends Controller
 {
-    public function authorized(?array &$requester, array &$args): bool
+    public function authorized(?array $requester, array $args, array $query): bool
     {
         return true;
     }
 
     // for listing district with subs results
-    public function process(Request $request, array $args) : array
+    public function process(Request $request, array $args, array $query) : array
     {
         try {
             $districtId = $args['districtId'];

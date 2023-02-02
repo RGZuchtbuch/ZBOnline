@@ -1,19 +1,19 @@
-
-
 <script>
     import {Route, meta} from 'tinro';
     import api from '../../js/api.js';
+    import {user, district, breeder} from '../../js/store.js';
 
-    import Breeder from '../Breeder.svelte';
-    import Breeders from '../district/Breeders.svelte';
-    import BreederReports from '../breeder/Reports.svelte';
-    import DistrictResults from '../district/Results.svelte';
+    import Breeder from './Breeder.svelte';
+    import Breeders from './Breeders.svelte';
+    import Reports from './Reports.svelte';
+    import Results from './Results.svelte';
+    import District from './District.svelte';
     import Districts from './Districts.svelte';
-    import ResultsInput from '../district/ResultsEdit.svelte';
-    import Report from '../report/Report.svelte';
+    import Report from './Report.svelte';
     import DistrictResultsEdit from '../district/ResultsEdit.svelte';
 
     const route = meta();
+    $: console.log( 'Params', route, route.params );
 
 </script>
 
@@ -24,26 +24,8 @@
     <Route path='/'> <Districts /> </Route>
 
     <Route path='/:districtId/*' let:meta>
-        <Route path='/' redirect={meta.match+'/zuechter'} />
+        <District id={meta.params.districtId} >
 
-        <Route path='/zuechter/*' let:meta>
-            <Route path='/' let:meta> <Breeders districtId={ meta.params.districtId } /> </Route>
-            <Route path='/0' >New</Route>
-
-            <Route path='/:breederId/*' let:meta >
-                <Route path='/' redirect={meta.match+'/meldung'} />
-
-                <Route path='/meldung/*' let:meta>
-                    <Route path='/' let:meta> <BreederReports breederId={ meta.params.breederId } /> </Route>
-                    <Route path='/:reportId' let:meta> <Report reportId={ meta.params.reportId } /></Route>
-                </Route>
-
-            </Route>
-        </Route>
-
-        <Route path='/leistung/*' let:meta>
-            <Route path='/' let:meta> <DistrictResults districtId={ meta.params.districtId } /> </Route>
-            <Route path='/edit' let:meta> <DistrictResultsEdit districtId={meta.params.districtId}  /></Route>
-        </Route>
+        </District>
     </Route>
 </Route>

@@ -12,11 +12,11 @@ use Slim\Exception\HttpUnauthorizedException;
 
 class Post extends Controller {
 
-    public function authorized(? array & $requester, array & $args ) : bool {
+    public function authorized(? array $requester, array $args, array $query ) : bool {
         return true;
     }
 
-    public function process(Request $request, array $args) : mixed
+    public function process(Request $request, array $args, array $query) : mixed
     {
         $data = $this->getData( $request );
         $user = queries\user\authenticate\Select::execute( $data['email'], $data['password'] );

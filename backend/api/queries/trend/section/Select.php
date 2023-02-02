@@ -44,10 +44,10 @@ class Select extends Query
                 )
                 
                 AND districtId IN (
-                    WITH RECURSIVE districts( id, childId, lattitude, longitude, name ) AS (
-                        SELECT id, id AS childId, lattitude, longitude, name FROM district WHERE id=:districtId
+                    WITH RECURSIVE districts( id, childId, latitude, longitude, name ) AS (
+                        SELECT id, id AS childId, latitude, longitude, name FROM district WHERE id=:districtId
                         UNION
-                        SELECT districts.id, district.id AS childId, districts.lattitude, districts.longitude, districts.name
+                        SELECT districts.id, district.id AS childId, districts.latitude, districts.longitude, districts.name
                         FROM districts JOIN district ON district.parentId=districts.childId
                     )
                     SELECT childId AS id FROM districts  

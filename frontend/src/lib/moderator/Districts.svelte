@@ -8,10 +8,11 @@
 
     let districts = null;
 
+
     const route = meta();
 
     function loadDistricts( user ) {
-        api.moderator.districts( user.id ).then( response => {
+        api.moderator.districts().then( response => {
             districts = response.districts;
         });
     }
@@ -19,12 +20,15 @@
     $: loadDistricts( $user );
 
 </script>
+
 {#if $user}
-    <h2 class='text-center'>Verbände für Obmann {$user.name}</h2>
-    <Districts districts={districts} />
+    <h2 class='text-center'>Obmann {#if $user} {$user.name} {/if} → Verbände zum verwalten</h2>
+    {#if districts} <Districts {districts} /> {/if}
 {:else}
     NOT AUTORIZED
 {/if}
+
+
 <style>
 
 </style>

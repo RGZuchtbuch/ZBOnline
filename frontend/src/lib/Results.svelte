@@ -1,6 +1,6 @@
 <script>
     import { onMount } from 'svelte';
-    import { dec, perc } from '../js/util.js';
+    import { dec, pct } from '../js/util.js';
 
     import {meta, router} from 'tinro';
 

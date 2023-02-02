@@ -11,12 +11,12 @@ use Slim\Exception\HttpUnauthorizedException;
 
 class Get extends Controller {
 
-    public function authorized(?array &$requester, array &$args): bool {
+    public function authorized(?array $requester, array $args, array $query): bool {
         return queries\district\breeders\Authorized::execute( $requester[ 'id' ], $args[ 'districtId' ] );
         //return $requester && in_array($args['districtId'], $requester['moderator']); // only if logged in and moderates any districts
     }
 
-    public function process(Request $request, array $args) : mixed
+    public function process(Request $request, array $args, array $query) : mixed
     {
         $districtId = $args['districtId'];
         $breeders = queries\district\breeders\Select::execute( $districtId );

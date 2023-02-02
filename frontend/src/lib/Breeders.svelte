@@ -1,8 +1,13 @@
 <script>
     import { onMount } from 'svelte';
     import {active, meta, router, Route} from 'tinro';
+    import { user } from '../js/store.js'
 
-    export let breeders;
+    export let breeders = null;
+    export let moderator = null;
+
+    console.log( 'Moderator', moderator );
+
 
     const route = meta();
 
@@ -12,12 +17,15 @@
 </script>
 
 
-<div class='flex flex-row border border-gray-600 rounded-t bg-gray-300 px-4 gap-x-1 font-bold'>
+<div class='flex flex-row border border-gray-400 rounded-t p-2 bg-header gap-x-1 font-bold'>
     <div class='w-8'>Id</div>
     <div class='w-64'>Name</div>
     <div class='w-32'>Ortverein</div>
     <div class='w-32'>Meldungen</div>
-    <a class='w-8' href={route.match+'/neu'} >+</a>
+    <div class='grow'></div>
+    {#if moderator}
+        <a class='w-8' href={route.match+'/0'} >+</a>
+    {/if}
 </div>
 
 <div class='grow bg-gray-100 overflow-y-scroll border border-t-0 border-gray-600 rounded-b px-2 scrollbar'>

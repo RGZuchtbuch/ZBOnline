@@ -9,11 +9,11 @@ use Slim\Exception\HttpNotFoundException;
 
 class Get extends Controller {
 
-    public function authorized(? array & $requester, array & $args ) : bool {
+    public function authorized(? array $requester, array $args, array $query ) : bool {
         return queries\breeder\Authorized::execute( $requester['id'], $args[ 'breederId' ] );
     }
 
-    public function process(Request $request, array $args) : mixed
+    public function process(Request $request, array $args, array $query) : mixed
     {
         $breederId = $args['breederId' ];
         $breeder = queries\breeder\Select::execute( $breederId );
@@ -21,7 +21,7 @@ class Get extends Controller {
 
         $breeder[ 'district' ] = queries\district\Select::execute( $breeder['districtId'] );
         $breeder[ 'club' ] = queries\club\Select::execute( $breeder['clubId'] );
-        return $breeder;
+        return [ 'breeder'=>$breeder ];
     }
 
 }
