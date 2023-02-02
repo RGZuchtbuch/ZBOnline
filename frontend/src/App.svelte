@@ -4,7 +4,7 @@
     import NavigationBar from './lib/NavigationBar.svelte';
     import Menu from './lib/Menu.svelte';
     import Home from './lib/Home.svelte';
-    import Guest from './lib/guest/Guest.svelte';
+    import Guest from './lib/results/Guest.svelte';
     import Moderator from './lib/moderator/Moderator.svelte';
     import Page from './lib/page.svelte';
     import Admin from './lib/admin/Admin.svelte';

@@ -116,7 +116,7 @@
         const context = canvas.getContext( '2d' );
         let labels = years.map(row => row.year);
         let data = years.map(row => row[ type ]);
-        let data2 = null;//years.map(row => row[ type ] * 0.25);
+        let data2 = null;//years.results(row => row[ type ] * 0.25);
 
         if( chart ) {
            chart.data.labels = labels;
@@ -128,10 +128,10 @@
                data: {
                    labels:labels,
                    datasets: [ {
-                       label:type+' über Jahre',
+//                       label:type+' über Jahre',
                        data:data,
                    },{
-                       label:type+' über Jahre',
+//                       label:type+' über Jahre',
                        data:data2,
                    }]
                },
@@ -151,6 +151,12 @@
                            reverse:true,
                            stacked:true,
                        }
+                   },
+                   onClick: ( event, element ) => {
+                        if( element && element.length > 0 ) {
+                            const label = labels[ element[0].index ];
+                            console.log( label );
+                        }
                    }
                }
            });

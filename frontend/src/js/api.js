@@ -144,15 +144,15 @@ export default {
     map: {
         color: {
             get: ( year, colorId ) =>
-                get( 'api/map?year='+year+'&color='+colorId ),
+                get( 'api/results/districts?year='+year+'&color='+colorId ),
         },
         breed: {
             get: ( year, breedId ) =>
-                get( 'api/map?year='+year+'&breed='+breedId ),
+                get( 'api/results/districts?year='+year+'&breed='+breedId ),
         },
         section: {
             get: ( year, sectionId ) =>
-                get( 'api/map?year='+year+'&section='+sectionId ),
+                get( 'api/results/districts?year='+year+'&section='+sectionId ),
         },
     },
 
@@ -232,15 +232,15 @@ export default {
     trend: {
         color: {
             get: ( districtId, colorId ) =>
-                get( 'api/trend?district='+districtId+'&color='+colorId ),
+                get( 'api/results/years?district='+districtId+'&color='+colorId ),
         },
         breed: {
             get: ( districtId, breedId ) =>
-                get( 'api/trend?district='+districtId+'&breed='+breedId ),
+                get( 'api/results/years?district='+districtId+'&breed='+breedId ),
         },
         section: {
             get: ( districtId, sectionId ) =>
-                get( 'api/trend?district='+districtId+'&section='+sectionId ),
+                get( 'api/results/years?district='+districtId+'&section='+sectionId ),
         },
     },
 }

@@ -34,7 +34,6 @@ class Routes {
 
 //        $app->get('/district/{districtId}/section/{sectionId}/year/{year}/group/{group}/results', new district\section\results\Get() );
 
-        $app->get( '/map', new map\Get() );
 
         $app->get( '/moderator/districts', new moderator\districts\Get() );
 
@@ -47,13 +46,14 @@ class Routes {
 
         $app->get( '/result/breed/{breedId}/district/{districtId}/year/{year}/group/{group}/results', new result\breed\Get() );
         $app->post('/result', new result\Post() );
+        $app->get( '/results/years', new trend\Get() );
+        $app->get( '/results/districts', new map\Get() );
 
         $app->get( '/section/{sectionId}', new section\Get() );
         $app->get( '/section/{sectionId}/children', new section\children\Get() );
         $app->get( '/section/{sectionId}/breeds', new section\breeds\Get() );
         $app->get( '/section/{sectionId}/root', new section\root\Get() );
 
-        $app->get( '/trend', new trend\Get() );
     }
 };
 

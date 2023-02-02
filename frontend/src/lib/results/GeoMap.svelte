@@ -1,87 +1,28 @@
 <script>
-    import api from '../../js/api.js';
-    import { calcColor, pct } from '../../js/util.js';
+    import api from "../../js/api.js";
+    import {pct} from "../../js/util.js";
     import Select from '../input/Select.svelte';
-    import {router} from "tinro";
-    import Button from "../input/Button.svelte";
 
-    export let query = [];
+    export let type;
+    export let year;
+    export let sectionId;
+    export let breedId;
+    export let colorId;
 
-    //set by query
-    let year;
-    let sectionId;
-    let breedId;
-    let colorId;
+    export let districtId; //TODO for feedback, maybe should be event
 
-    let type = 'showCount';
-    let max = {}
-// what
-    const types = {
-        breeders: { label:'Züchter' },
-        pairs: { label:'Stämme' },
-        lay: { label:'Legeleistung' },
-        brood: { label:'Brutleistung' },
-        show: { label:'Schauleistung' }
+    let districts = null; // districts with fields
+    let max = null; // for max values per field in district
+
+    function lon( value ) {
+        return ( value-5.74405 ) * 55;
     }
-// from
-    const years = [ 2023, 2022, 2021, 2020 ];
-    const sections = [
-        { id:2, name:'Geflügel' },
-        { id:3, name:'Groß & Wassergeflügel' },
-        { id:4, name:'Hühner' }, { id:11, name:' → Hühner (groß)' }, { id:12, name:' → Zwerghühner' }, { id:13, name:' → Wachteln' },
-        { id:5, name:'Tauben' },
-        { id:6, name:'Ziergeflügel'}
-    ];
-    let breeds = [];
-    let colors = [];
-
-    let districts = []; // the results per district
-
-    function onQuery( query ) {
-        console.log( 'Update query', query )
-        year = Number( query.jahr ) || new Date().getFullYear();
-        sectionId = Number( query.sparte ) || 2;
-        breedId = Number( query.rasse ) || null;
-        colorId = Number( query.farbe ) || null;
-        console.log( 'Updated', year, sectionId, breedId, colorId );
+    function lat( value ) {
+        return ( 55.02780 - value ) * 80;
     }
 
-    function onYear( year ) {
-        router.location.query.set( 'jahr', year );
-    }
-    function onSection( sectionId ) {
-        breeds = [];
-        breedId = null;
-        colors = [];
-        colorId = null;
-        api.section.breeds.get( sectionId ).then( response => {
-            breeds = response.breeds;
-        } );
-        router.location.query.set( 'sparte', sectionId );
-    }
-
-    function onBreed( breedId ) {
-        colors = [];
-        colorId = null;
-        if (breedId) {
-            api.breed.colors.get( breedId ).then( response => {
-                colors = response.colors;
-            });
-            router.location.query.set( 'rasse', breedId );
-        } else {
-            router.location.query.delete( 'rasse' );
-        }
-    }
-    function onColor( colorId ) {
-        if (colorId) {
-            router.location.query.set( 'farbe', colorId );
-        } else {
-            router.location.query.delete( 'farbe' );
-        }
-
-    }
-
-    function onShow() {
+    function loadDistricts( year, sectionId, breedID, colorId ) {
+        console.log( 'GeoMap loads districts' )
         let promise;
         if( colorId ) {
             promise = api.map.color.get( year, colorId )
@@ -90,11 +31,13 @@
         } else if( sectionId ) {
             promise = api.map.section.get( year, sectionId )
         }
-        promise.then( response => {
-            districts = response.districts;
-            calcMaxValues( districts )
-            setTitles( districts )
-        });
+        if( promise ) {
+            promise.then(response => {
+                districts = response.districts;
+                calcMaxValues(districts)
+                setTitles(districts)
+            });
+        }
     }
 
     function calcMaxValues( districts ) {
@@ -133,90 +76,25 @@
         }
     }
 
-    function lon( value ) {
-        return ( value-5.74405 ) * 55;
-    }
-    function lat( value ) {
-        return ( 55.02780 - value ) * 80;
-    }
+    $: loadDistricts( year, sectionId, breedId, colorId );
 
-    function rel( value ) {
-        return 5 + value/max[ type ] * 40;
-    }
-
-    const on = {
-        click: ( district ) => {
-            return (event) => {
-                console.log(district.name, 'clicked')
-            }
-        }
-    }
-
-    $: onQuery( query );
-    $: onYear( year );
-    $: onSection( sectionId );
-    $: onBreed( breedId );
-    $: onColor( colorId );
 
 </script>
 
 
-<h2 class='text-center' >Karte der Zuchtbuchleistungen</h2>
-<div class='flex gap-x-2 justify-center'>
-    <Select class='w-24' label='Jahr' bind:value={year}>
-        {#each years as year}
-            <option value={year} >{year}</option>
-        {/each}
-    </Select>
-
-    <Select class='w-48' label='Sparte' bind:value={sectionId}>
-        {#each sections as section}
-            <option value={section.id}>{section.name}</option>
-        {/each}
-    </Select>
-
-    <Select class='w-48' label='Rasse' bind:value={breedId}>
-        <option value={null}>-</option>
-        {#each breeds as breed}
-            <option value={breed.id} >{breed.name}</option>
-        {/each}
-    </Select>
-
-    <Select class='w-48' label='Farbe' bind:value={colorId}>
-        <option value={null}>-</option>
-        {#each colors as color}
-            <option value={color.id} >{color.name}</option>
-        {/each}
-    </Select>
-
-    <Select class='w-48' label='Was sehen' bind:value={type}>
-        {#each Object.keys( types ) as key }
-            <option value={ types[ key ] } > { types[ key ].label }</option>
-        {/each}
-    </Select>
-
-    <Button label='' value='Zeigen' on:click={onShow} />
-
-</div>
-
-<div class='bg-gray-100 border border-gray-600 rounded-b flex flex-row overflow-y-scroll scrollbar justify-around px-2'>
-    {#if districts}
-        <div>
-            <h3>Verbände</h3>
-            {#each districts as district}
-                <div class='flex'>
-                    <div class='w-64'>{district.name}</div>:
-                    <div>{district.breeders}</div>:
-                    <div>{district.pairs}</div>:
-                    <div>{district.layEggs}</div>:
-                    <div>{district.broodEggs}</div>:
-                    <div>{max.brood}</div> =
-                    <div>{5+MAXBUBBLE*district.broodEggs/max.brood}</div>
-                </div>
+<div class='flex flex-col'>
+    <h3 class='text-center'>Karte mit Leistungen pro Landesverband {type.label}</h3>
+    <Select bind:value={year} label='Jahr'>
+        {#if districts}
+            {#each [ 2023, 2022, 2021, 2020, 2019 ] as option}
+                <option value={option}>{option}</option>
             {/each}
-        </div>
-        <svg width=500 height=600 class='border border-gray-600'>
-            <image href='./assets/de.svg' x=0 y=0 width=500 height=600 class=''/>
+        {/if}
+    </Select>
+
+    <svg width=500 height=600 class='border border-gray-600'>
+        <image href='./assets/de.svg' x=0 y=0 width=500 height=600 class=''/>
+        {#if districts}
             {#each districts as district }
                 {#if type===types.breeders }
                     <circle cx={lon(district.longitude)} cy={lat(district.latitude)} r={5+MAXBUBBLE} stroke='gray' stroke-width='1' fill='#eee3' class=''>
@@ -263,11 +141,6 @@
             {#each districts as district }
                 <text x={lon(district.longitude)} y={lat(district.latitude)-10}  text-anchor="middle" stroke='black' stroke-width='1' fill='black' > {district.name} </text>
             {/each}
-        </svg>
-    {/if}
+        {/if}
+    </svg>
 </div>
-
-
-<style>
-
-</style>
