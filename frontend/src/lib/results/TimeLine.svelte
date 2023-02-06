@@ -104,7 +104,7 @@
                                             if( datasetIndex < lastDatasetIndex ) {
                                                 const max = chart.data.datasets[ lastDatasetIndex ].data[context.dataIndex];
                                                 if( max > 0 ) {
-                                                    label += pct( value, max, 1);
+                                                    label += pct( value, max, 1)+' of '+max;
                                                 } else {
                                                     label += '?'
                                                 }
