@@ -17,11 +17,11 @@
     let colorId = null;
 
     const types = { // what options to show
-        breeders: { label:'Züchter', sets:1, extract: ( result ) => [ result.breeders ] },
-        pairs: { label:'Stämme', sets:1, extract: ( result ) => [ result.pairs ] },
-        lay: { label:'Legeleistung', sets:1, extract: ( result ) => [ result.layEggs ] },
-        brood: { label:'Brutleistung', sets:3, extract: ( result ) => [ result.broodHatched, result.broodFertile-result.broodHatched, result.broodEggs-result.broodFertile ] },
-        show: { label:'Schauleistung', sets:2, extract: ( result ) => [ result.showScore ] },
+        breeders: { label:'Züchter', min:0, extract: ( result ) => [ result.breeders ], title: ( result ) => ` meldeten ${result.breeders} Züchter` },
+        pairs: { label:'Stämme', min:0, extract: ( result ) => [ result.pairs ], title: ( result ) => ` meldete ${result.pairs} Stämme` },
+        lay: { label:'Legeleistung', min:0, extract: ( result ) => [ result.layEggs ], title: ( result ) => ` legten im durchscnitt ${result.layEggs} Eier im Jahr` },
+        brood: { label:'Brutleistung', min:0, extract: ( result ) => [ result.broodHatched, result.broodFertile, result.broodEggs ], title: ( result ) => ` von ${result.broodEggs} war ${pct(result.broodFertile,result.broodEggs, 0)} befruchtet und es schlüpften ${pct(result.broodHatched, result.broodEggs, 0)}` },
+        show: { label:'Schauleistung', min:89, extract: ( result ) => [ result.showScore ], title: ( result ) => ` ${result.showCount} Tiere holten ${result.showscore} Punkte` },
     }
     let type = types.pairs; // selected
 
@@ -106,12 +106,6 @@
 
 <h2 class='text-center' >Karte der Zuchtbuchleistungen</h2>
 <div class='flex gap-x-2 justify-center'>
-    <Select class='w-24' label='Jahr' bind:value={year}>
-        {#each years as option}
-            <option value={option} >{option}</option>
-        {/each}
-    </Select>
-
     <Select class='w-48' label='Sparte' bind:value={sectionId}>
         {#each sections as section}
             <option value={section.id}>{section.name}</option>
@@ -139,12 +133,14 @@
     </Select>
 
 </div>
-Type {type.label}
-<div class='bg-gray-100 border border-gray-600 rounded-b flex flex-row overflow-y-scroll scrollbar justify-around px-2'>
-    {#if districts}
-        <TimeLine bind:districtId={districtId} bind:year={year} {sectionId} {breedId} {colorId} {type} /> =
-        <GeoMap bind:year={year} bind:districtId={districtId} {sectionId} {breedId} {colorId} {type} />
-    {/if}
+<div class='bg-white border border-gray-600 rounded-b flex flex-col overflow-y-scroll scrollbar p-2'>
+    <h3 class='text-center'>Leistung {type.label}</h3>
+    <div class='flex flex-row justify-evenly'>
+        {#if districts}
+            <TimeLine bind:districtId={districtId} bind:year={year} {sectionId} {breedId} {colorId} {type} />
+            <GeoMap bind:year={year} bind:districtId={districtId} {sectionId} {breedId} {colorId} {type} />
+        {/if}
+    </div>
 </div>
 
 

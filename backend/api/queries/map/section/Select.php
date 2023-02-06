@@ -14,7 +14,7 @@ class Select extends Query
                 COUNT( results.id ) AS results, COUNT( DISTINCT results.breedId) AS breeds, 					 
 				CAST( IFNULL( SUM( results.breeders ), 0 ) AS UNSIGNED ) AS breeders, CAST( IFNULL( SUM(results.pairs ), 0 ) AS UNSIGNED) AS pairs, 
                 CAST( IFNULL( SUM(results.layDames), 0 ) AS UNSIGNED) AS layDames, IFNULL( AVG(results.layEggs ), 0 ) AS layEggs, IFNULL( AVG( results.layWeight ), 0 ) AS layWeight,
-                CAST( IFNULL( SUM( broodEggs ), 0 ) AS UNSIGNED) AS broodEggs, CAST( AVG( broodFertile / broodEggs ) AS FLOAT ) AS broodFertile, CAST( AVG( broodHatched / broodEggs ) AS FLOAT ) AS broodHatched,
+                CAST( IFNULL( SUM(results.broodEggs ), 0 ) AS UNSIGNED) AS broodEggs, CAST( IFNULL( SUM(broodFertile ), 0 ) AS UNSIGNED) AS broodFertile, CAST( IFNULL( SUM(broodHatched ), 0 ) AS UNSIGNED) AS broodHatched,
                 CAST( IFNULL( SUM(results.showCount ), 0 ) AS UNSIGNED) AS showCount, IFNULL( AVG(showScore), 0 ) AS showScore	
                         
             FROM (

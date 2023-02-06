@@ -55,4 +55,4 @@ const MAXLATITUDE = 55;
 const MINLONGITUDE = 5;
 const MAXLONGITUDE = 15;
 
-const MAXBUBBLE = 50;
+const MAXBUBBLE = 35;

@@ -1,17 +1,27 @@
-
-/*
-function extendYear( year, max ) {
-    if( year >=0 && year < 100 ) {
-        const maxYear = max.getFullYear() % 100;
-        if( year > maxYear ) {
-            return max.getFullYear() - 100 - maxYear + year;
-        } else {
-            return max.getFullYear() - maxYear + year;
-        }
-    }
-    return year;
+function mercY( lat ) {
+    return Math.log( Math.tan( Math.PI/4 + lat/2 ) );
 }
-*/
+
+export function gpsToPx( width, height, west, east, south, north, lon, lat ) {
+
+    west = west * Math.PI/180;
+    east = east * Math.PI/180;
+    south = south * Math.PI/180;
+    north = north * Math.PI/180;
+
+    lon = lon * Math.PI/180;
+    lat = lat * Math.PI/180;
+
+    const yMin = mercY( south );
+    const yMax = mercY( north );
+    const xFactor = width / ( east - west );
+    const yFactor = height / ( yMax - yMin );
+
+    let x = (lon-west)*xFactor;
+    let y = (yMax - mercY( lat ) )*yFactor;
+    return { x:x, y:y };
+}
+
 
 export function calcColor( min, max, value, alpha ) {
     const relValue = (value-min)/(max-min);

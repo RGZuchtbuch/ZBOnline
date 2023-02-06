@@ -1,7 +1,10 @@
 <script>
+    import { draw, fade } from 'svelte/transition';
     import api from "../../js/api.js";
-    import {pct} from "../../js/util.js";
+    import { calcColor, gpsToPx, pct} from "../../js/util.js";
+
     import Select from '../input/Select.svelte';
+    import DistrictsMap from "./DistrictsMap.svelte";
 
     export let type;
     export let year;
@@ -13,6 +16,8 @@
 
     let districts = null; // districts with fields
     let max = null; // for max values per field in district
+    let map = { labels:[], coords:[], datasets:[] }// datasets
+
 
     function lon( value ) {
         return ( value-5.74405 ) * 55;
@@ -23,6 +28,7 @@
 
     function loadDistricts( year, sectionId, breedID, colorId ) {
         console.log( 'GeoMap loads districts' )
+        map = null;
         let promise;
         if( colorId ) {
             promise = api.map.color.get( year, colorId )
@@ -34,8 +40,7 @@
         if( promise ) {
             promise.then(response => {
                 districts = response.districts;
-                calcMaxValues(districts)
-                setTitles(districts)
+                calcMaxValues(districts);
             });
         }
     }
@@ -53,37 +58,57 @@
         console.log( 'Pairs', districts.map( district => district.breeders ) );
     }
 
-    function setTitles( districts ) {
+
+
+    function showMap( districts ) {
+        const labels = [];
+        const coords = []
+        const datasets = [];
+        const titles = [];
+        let max = 1;
         if( districts ) {
-            districts.forEach( district => {
-                district.title = {};
-                district.title.breeders = `${district.name} hat von ${district.breeders} Züchter daten verarbeitet`;
-                district.title.pairs = `${district.name} hat ${district.pairs} Zuchten gemeldet`;
-                district.title.lay = `${district.name} hat eine durchschnitt Legeleistng von ${district.layEggs} Eier im Jahr`;
-                district.title.brood =
-                    ! district.broodEggs
-                        ? `${district.name} hat keine bebrütete Eier`
-                        : !district.broodFertile
-                            ? `${district.name} hat ${district.broodEggs} bebrütete Eier`
-                            : !district.broodHatched
-                                ? `${district.name} hat ${district.broodEggs} bebrütete Eier davon ${pct(district.broodFertile, 1, 0 )}% befruchtet aber keiner geschlüpft`
-                                : `${district.name} hat ${district.broodEggs} bebrütete Eier davon ${pct(district.broodFertile, 1, 0 )} befruchtet und ${pct(district.broodHatched, 1, 0 )} geschlüpft`;
-                district.title.show =
-                    ! district.showCount
-                        ? `${district.name} hat keine ausgestellten Tiere gemeldet.`
-                        : `${district.name} hat ${district.showCount} ausgestellten Tiere mit ${district.showScore.toFixed(1)} Punkte.`
+            // fill label;s and datasets depending on rows
+            districts.forEach(district => {
+                labels.push(district.name);
+                coords.push( gpsToPx( 380, 512, 5.7, 15.0, 47.5, 55.0, district.longitude, district.latitude ) );
+                titles.push( type.title( district ) );
+                let values = type.extract( district );
+                for (let i=0; i<values.length; i++) {
+                    if (datasets.length < i + 1) {
+                        datasets.push({ data: [] })
+                    }
+                    const dataset = datasets[i];
+                    const value = values[ values.length-i-1 ]; // last first
+                    dataset.data.push(value);
+                    if( value > max ) max = value;
+                }
             })
+            map = {
+                labels:labels,
+                coords:coords,
+                datasets:datasets,
+                titles:titles,
+                max:max,
+                colors:[ '#F9CA9BC0', '#F9ACBCC0', '#94cbf0C0'], // for each circle
+            };
+            console.log('Map Datasets', map);
+        }
+    }
+
+    function onClick( district ) {
+        return ( event ) => {
+            districtId = district.id;
         }
     }
 
     $: loadDistricts( year, sectionId, breedId, colorId );
-
+    $: showMap( districts, type );
 
 </script>
 
 
 <div class='flex flex-col'>
-    <h3 class='text-center'>Karte mit Leistungen pro Landesverband {type.label}</h3>
+    <h3 class='text-center'>In den Landesverbänden, {year} </h3>
     <Select bind:value={year} label='Jahr'>
         {#if districts}
             {#each [ 2023, 2022, 2021, 2020, 2019 ] as option}
@@ -92,55 +117,27 @@
         {/if}
     </Select>
 
-    <svg width=500 height=600 class='border border-gray-600'>
-        <image href='./assets/de.svg' x=0 y=0 width=500 height=600 class=''/>
-        {#if districts}
-            {#each districts as district }
-                {#if type===types.breeders }
-                    <circle cx={lon(district.longitude)} cy={lat(district.latitude)} r={5+MAXBUBBLE} stroke='gray' stroke-width='1' fill='#eee3' class=''>
-                        <title>{district.name} : {district.breeders} Züchter</title>
-                    </circle>
-                    <circle cx={lon(district.longitude)} cy={lat(district.latitude)} r={5+MAXBUBBLE*district.breeders/max.breeders} stroke='gray' stroke-width='2' fill='#7e77' class=''>
-                        <title>{district.name} : {district.breeders} Züchter</title>
-                    </circle>
-                {:else if type===types.pairs}
-                    <circle cx={lon(district.longitude)} cy={lat(district.latitude)} r={5+MAXBUBBLE} stroke='gray' stroke-width='1' fill='#eee3' class=''>
-                        <title>{district.name} : {district.pairs} Zuchten</title>
-                    </circle>
-                    <circle cx={lon(district.longitude)} cy={lat(district.latitude)} r={5+MAXBUBBLE*district.pairs/max.pairs} stroke='gray' stroke-width='1' fill='#7e77' class=''>
-                        <title>{district.name} : {district.pairs} Zuchten</title>
-                    </circle>
-                {:else if type===types.lay}
-                    <circle cx={lon(district.longitude)} cy={lat(district.latitude)} r={5+MAXBUBBLE} stroke='gray' stroke-width='1' fill='#eee3' class=''>
-                        <title>{district.title.lay}</title>
-                    </circle>
-                    <circle cx={lon(district.longitude)} cy={lat(district.latitude)} r={5+MAXBUBBLE*district.layEggs/max.lay} stroke='gray' stroke-width='1' fill='#7e77' class=''>
-                        <title>{district.title.lay}</title>
-                    </circle>
-                {:else if type===types.brood}
-                    <circle cx={lon(district.longitude)} cy={lat(district.latitude)} r={5+MAXBUBBLE*district.broodEggs/max.brood} stroke='gray' stroke-width='1' fill='#eee3' class=''>
-                        <title>{district.title.brood}</title>
-                    </circle>
-                    <circle cx={lon(district.longitude)} cy={lat(district.latitude)} r={5+MAXBUBBLE*district.broodEggs*district.broodFertile/max.brood} stroke='gray' stroke-width='1' fill='#ee07' class=''>
-                        <title>{district.title.brood}</title>
-                    </circle>
-                    <circle cx={lon(district.longitude)} cy={lat(district.latitude)} r={5+MAXBUBBLE*district.broodEggs*district.broodHatched/max.brood} stroke='gray' stroke-width='1' fill='#7e77' class=''>
-                        <title>{district.title.brood}</title>
-                    </circle>
-                {:else if type===types.show}
-                    <circle cx={lon(district.longitude)} cy={lat(district.latitude)} r={5+MAXBUBBLE*(district.showScore-89)/(97-89)} stroke='gray' stroke-width='1' fill={calcColor( 89, 97, district.showScore, 0.5 )}>
-                    </circle>
-                    <circle cx={lon(district.longitude)} cy={lat(district.latitude)} r={5+MAXBUBBLE} stroke='gray' stroke-width='1' fill='#0000' on:click={on.click(district)}>
-                        <title>{district.title.show}</title>
-                    </circle>
-                {/if}
+    <svg width=380 height=512 class='border border-gray-600'>
 
-                <circle cx={lon(district.longitude)} cy={lat(district.latitude)} r={1} stroke='gray' stroke-width='0' fill='#000' class=''></circle>
-            {/each}
+        <DistrictsMap/>
+        {#if map}
+            <g in:fade={{duration:1000}} >
 
-            {#each districts as district }
-                <text x={lon(district.longitude)} y={lat(district.latitude)-10}  text-anchor="middle" stroke='black' stroke-width='1' fill='black' > {district.name} </text>
-            {/each}
+                {#each districts as district, index }
+                    <circle cx={map.coords[index].x} cy={map.coords[index].y} r={1+MAXBUBBLE} stroke='none' fill='#ccf4'></circle>
+                    {#each map.datasets as dataset, d }
+                        <circle cx={map.coords[index].x} cy={map.coords[index].y} r={1+MAXBUBBLE*dataset.data[index]/map.max} stroke='#7777' fill={map.colors[d]} ></circle>
+                    {/each}
+                    <circle cx={map.coords[index].x} cy={map.coords[index].y} r={1+MAXBUBBLE} stroke='#7777' fill='#0000' on:click={onClick(district)}>
+                        <title>{map.labels[index]} : {map.titles[index]}</title>
+                    </circle>
+                {/each}
+
+                {#each map.labels as label, index }
+                    <text x={map.coords[index].x} y={map.coords[index].y-10}  text-anchor="middle" stroke='#666' stroke-width='1' fill='#666' > {label} </text>
+                {/each}
+            </g>
         {/if}
     </svg>
 </div>
+
