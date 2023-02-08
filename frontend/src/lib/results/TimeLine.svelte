@@ -123,7 +123,7 @@
                                 position:'top',
                             },
                             y: {
-                                reverse:true,
+                                reverse:true, // last to first year
                                 stacked:true,
                             }
                         },

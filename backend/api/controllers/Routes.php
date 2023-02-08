@@ -46,8 +46,9 @@ class Routes {
 
         $app->get( '/result/breed/{breedId}/district/{districtId}/year/{year}/group/{group}/results', new result\breed\Get() );
         $app->post('/result', new result\Post() );
-        $app->get( '/results/years', new trend\Get() );
-        $app->get( '/results/districts', new map\Get() );
+
+        $app->get( '/results/years', new trend\Get() ); // for trend
+        $app->get( '/results/districts', new map\Get() ); // for map
 
         $app->get( '/section/{sectionId}', new section\Get() );
         $app->get( '/section/{sectionId}/children', new section\children\Get() );

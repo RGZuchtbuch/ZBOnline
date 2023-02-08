@@ -11,13 +11,17 @@ let cache = {
 let token = window.sessionStorage.getItem( 'token' );
 // eelco
 if( token !== null ) { // mind, could be "null" text as well
-    const decToken = jwt_decode(token);
-    decToken.user.exp = decToken.exp;
-    user.set( decToken.user); // user from token or null
+    const decoded = jwt_decode(token);
+    if( decoded.exp * 1000 > Date.now() ) {
+        decoded.user.exp = decoded.exp;
+        user.set(decoded.user); // user from token or null
+    } else {
+        token = null;
+        user.set( null ); // expired
+    }
 } else {
     user.set( null );
 }
-
 
 export default {
     user: {
@@ -289,10 +293,10 @@ function getHeaders() {
 }
 
 async function get( url ) {
-    let cached = cache[ url ];
+    let cached = cache[url];
     let now = new Date().getTime(); // in ms
-    if( cached && cached.time > now-settings.cache.TIMEOUT ) { // fresh enough
-        console.log('Cache', url );
+    if (cached && cached.time > now - settings.cache.TIMEOUT) { // fresh enough
+        console.log('Cache', url);
         return cached.promise;
     } else {
         let options = {
@@ -300,19 +304,20 @@ async function get( url ) {
             headers: getHeaders()
         }
         console.log('new get', url);
-        let promise = fetch( settings.api.root+url, options)
-            .then( response => {
-                if( response.ok ) {
+        let promise = fetch(settings.api.root + url, options)
+            .then(response => {
+                if (response.ok) {
                     const json = response.json();
-                    console.log( 'Got response ', json );
+                    console.log('Got response ', json);
                     return json;
                 }
-                console.log( 'Fetch not ok, got null', response );
+                console.log('Fetch not ok, got null', response);
                 return null;
             });
         cache[url] = {promise: promise, time: now};
         return promise;
     }
+
 }
 
 async function post( url, data ) {

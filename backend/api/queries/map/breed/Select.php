@@ -17,29 +17,55 @@ class Select extends Query
     public static function execute( ...$args ) : ? array {
         $args = static::validate( ...$args );
         $stmt = static::prepare( '           
-            SELECT districts.id, districts.latitude AS latitude, districts.longitude AS longitude, districts.name AS name, 
-                COUNT( result.id ) AS results, COUNT( DISTINCT breedId ) AS breeds, 					 
-				CAST( IFNULL( SUM( breeders ), 0 ) AS UNSIGNED ) AS breeders, CAST( IFNULL( SUM( pairs ), 0 ) AS UNSIGNED) AS pairs, 
-                CAST( IFNULL( SUM( layDames), 0 ) AS UNSIGNED) AS layDames, IFNULL( AVG( layEggs ), 0 ) AS layEggs, IFNULL( AVG( layWeight ), 0 ) AS layWeight,
-                CAST( IFNULL( SUM( broodEggs ), 0 ) AS UNSIGNED) AS broodEggs, CAST( IFNULL( SUM(broodFertile ), 0 ) AS UNSIGNED) AS broodFertile, CAST( IFNULL( SUM(broodHatched ), 0 ) AS UNSIGNED) AS broodHatched,
-                CAST( IFNULL( SUM( showCount ), 0 ) AS UNSIGNED) AS showCount, IFNULL( AVG( showScore ), 0 ) AS showScore	
-                        
+            SELECT results.*, members.members
+            # first get results per district
             FROM (
-                WITH RECURSIVE districts( id, childId, latitude, longitude, name ) AS (
-                    SELECT id, id AS childId, latitude, longitude, name FROM district WHERE parentId=1
+                # start with all districts
+                WITH RECURSIVE districts( parentId, id, latitude, longitude, name ) AS (
+                    SELECT id, id, latitude, longitude, name FROM district WHERE parentId=1 # all bdrg children
                     UNION
-                    SELECT districts.id, district.id AS childId, districts.latitude, districts.longitude, districts.name
-                    FROM districts JOIN district ON district.parentId=districts.childId
+                    SELECT districts.parentId, district.id, null, null, null # add child, no details needed
+                    FROM districts JOIN district ON district.parentId=districts.id
                 )
-                SELECT * FROM districts
-            ) AS districts
             
-            LEFT JOIN result ON result.districtId = districts.childId
-                AND result.year=:year
-                AND result.breedId=:breedId
+                # get all data from results per district
+                SELECT 
+                    `year`,
+                    districts.id AS districtId, districts.latitude, districts.longitude, districts.name,
+                    CAST( IFNULL( SUM( breeders ), 0 ) AS UNSIGNED ) AS breeders,
+                    CAST( IFNULL( SUM( pairs ), 0 ) AS UNSIGNED) AS pairs, 
+                    CAST( IFNULL( COUNT( DISTINCT breedId ), 0 ) AS UNSIGNED) AS breeds, CAST( IFNULL( COUNT( DISTINCT colorId ), 0 ) AS UNSIGNED) AS colors, 		
+                    CAST( IFNULL( SUM( layDames), 0 ) AS UNSIGNED) AS layDames, CAST( IFNULL( AVG( layEggs ), 0 ) AS UNSIGNED) AS layEggs, CAST( IFNULL( AVG( layWeight ), 0 ) AS UNSIGNED) AS layWeight,
+                    CAST( IFNULL( SUM( broodEggs ), 0 ) AS UNSIGNED) AS broodEggs, CAST( IFNULL( SUM( broodFertile ), 0 ) AS UNSIGNED) AS broodFertile, CAST( IFNULL( SUM( broodHatched ), 0 ) AS UNSIGNED) AS broodHatched,
+                    CAST( IFNULL( SUM( showCount ), 0 ) AS UNSIGNED) AS showCount, CAST( IFNULL( AVG( showScore), 0 ) AS UNSIGNED) AS showScore	
+               
+                FROM districts
+                
+                # add results per district
+                LEFT JOIN result ON result.districtId = districts.id 
+                    AND result.year = :year # the year to get data for
+                    AND result.breedId = :breedId		
+                GROUP BY districts.parentId
+                ORDER BY districts.name
+            ) AS results
             
-            GROUP BY districts.id, districts.name
-            ORDER BY districts.name
+            # add users per LV district or its subs
+            LEFT JOIN (
+                WITH RECURSIVE districts( parentId, id, latitude, longitude, name ) AS (
+                    SELECT id, id, latitude, longitude, name FROM district WHERE parentId=1 # all bdrg children
+                    UNION
+                    SELECT districts.parentId, district.id, null, null, null # add child, no details needed
+                    FROM districts JOIN district ON district.parentId=districts.id
+                )
+                SELECT districts.id AS districtId, CAST( COUNT( DISTINCT user.id ) AS UNSIGNED ) AS members
+                FROM districts
+                LEFT JOIN user 
+                    ON YEAR( user.start ) <= :year AND ( user.`end` IS NULL OR YEAR( user.end ) >= :year )
+                    AND user.clubId = districts.id
+                    
+                GROUP BY districts.parentId
+            
+            ) AS members ON members.districtId = results.districtId
         ' );
         return static::selectArray( $stmt, $args );
     }
