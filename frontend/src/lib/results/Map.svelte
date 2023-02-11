@@ -118,12 +118,17 @@
                 colors = response.colors;
                 if( colors.length === 0 ) {
                     colorId = null;
+                    colors = [];
+                    router.location.query.delete( 'color' );
                 }
             });
 //            router.location.query.delete( 'color' );
             router.location.query.set( 'breed', breedId );
         } else {
+            colorId = null;
+            colors = [];
             router.location.query.delete( 'breed' );
+            router.location.query.delete( 'color' );
         }
     }
     function onColor( colorId ) {
