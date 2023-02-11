@@ -4,31 +4,62 @@
     import api from '../../js/api.js';
     import { user } from '../../js/store.js'
 
-    import Districts from '../Districts.svelte';
+    import District from '../RecursiveDistrict.svelte';
 
-    let districts = null;
+
+    let district = null;
 
 
     const route = meta();
 
-    function loadDistricts( user ) {
-        api.moderator.districts().then( response => {
-            districts = response.districts;
-        });
+    function checkEditable( district ) {
+        let editableChild = false;
+        for( const childDistrict of district.children ) {
+            editableChild |= checkEditable( childDistrict );
+        }
+
+        district.editable = $user && $user.moderator.indexOf( district.id )>=0;
+        district.visible = district.editable || editableChild;
+        console.log( 'Districts', district );
+        return district.visible;
     }
 
-    $: loadDistricts( $user );
+    function loadDistrict() {
+        api.district.root.get( 1 ).then( response => {
+            district = response.district;
+            checkEditable( district );
+        } );
+    }
+
+/*    function loadDistricts( user ) {
+        api.moderator.district.root( 1 ).then( response => {
+            //districts = response.districts;
+            district = response.district;
+        });
+    }
+*/
+    $: loadDistrict( $user );
 
 </script>
 
+
 {#if $user}
-    <h2 class='text-center'>Obmann {#if $user} {$user.name} {/if} → Verbände zum verwalten</h2>
-    {#if districts} <Districts {districts} /> {/if}
+    <h2 class='border border-gray-400 rounded-t p-2 bg-header text-center text-xl print'>Verbände für Obmann {$user.name} </h2>
+    {#if district}
+        <div class='bg-gray-100 overflow-y-scroll border rounded-b border-t-0 border-gray-400 px-4 scrollbar'>
+            <District district={district} />
+        </div>
+    {:else}
+        Einen moment bitte
+    {/if}
 {:else}
-    NOT AUTORIZED
+    Geht nicht, Sollte nicht
 {/if}
 
 
 <style>
 
 </style>
+
+
+

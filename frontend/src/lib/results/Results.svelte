@@ -7,9 +7,7 @@
 
 </script>
 
-<Route path='/' redirect={ route.match+'/karte'} />
-
-<Route path='/karte/*' let:meta>
+<Route path='/*' let:meta>
     <Map query={meta.query} />
 </Route>
 

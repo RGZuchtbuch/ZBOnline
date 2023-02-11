@@ -10,7 +10,7 @@
 <div class='w-48 mt-8 border rounded flex flex-col no-print'>
     <Route path='/leistungen/*'>
         <h3>Leistungen</h3>
-        <a href='/leistungen/karte'>Grafiken</a>
+        <a href='/leistungen/'>Grafiken</a>
     </Route>
 
     {#if $user }

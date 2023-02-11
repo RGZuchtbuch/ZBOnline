@@ -1,29 +1,60 @@
 <script>
+    import {meta, router} from "tinro";
     import api from '../../js/api.js';
     import { calcColor, pct } from '../../js/util.js';
     import Select from '../input/Select.svelte';
-    import {router} from "tinro";
     import Button from "../input/Button.svelte";
     import TimeLine from './TimeLine.svelte';
     import GeoMap from './GeoMap.svelte';
 
-    export let query = [];
+    const types = { // what options to show
+        1: {
+            id: 1,
+            label: 'Mitglieder',
+            extract: (result) => [result.members],
+            title: (result) => ` hat ${result.members} Mitglieder`
+        },
+        2: {
+            id: 2,
+            label: 'Züchter',
+            extract: (result) => [result.breeders],
+            title: (result) => ` meldete ${result.breeders} Züchter`
+        },
+        3: {
+            id: 3,
+            label: 'Stämme',
+            extract: (result) => [result.pairs],
+            title: (result) => ` meldete ${result.pairs} Stämme`
+        },
+        10: {
+            id: 10,
+            label: 'Legeleistung',
+            extract: (result) => [result.layEggs],
+            title: (result) => ` legten ⌀ ${result.layEggs.toFixed(0)} Eier im Jahr`
+        },
+        11: {
+            id: 11,
+            label: 'Brutleistung',
+            extract: (result) => [result.broodHatched, result.broodFertile, result.broodEggs],
+            title: (result) => ` von ${result.broodEggs} war ${pct(result.broodFertile, result.broodEggs, 0)} befruchtet und es schlüpften ${pct(result.broodHatched, result.broodEggs, 0)}`
+        },
+        12: {
+            id: 12,
+            label: 'Schauleistung',
+            min: 89,
+            max: 97,
+            extract: (result) => [result.showScore],
+            title: (result) => ` ${result.showCount} Tiere erhielten ⌀ ${result.showScore.toFixed(1)} Punkte`
+        },
+    }
 
     //set by query
+    let typeId = 3;
     let year = new Date().getFullYear(); // this year
     let districtId = 1;
     let sectionId = 2;
     let breedId = null;
     let colorId = null;
-
-    const types = { // what options to show
-        breeders: { label:'Züchter', min:0, extract: ( result ) => [ result.breeders ], title: ( result ) => ` meldeten ${result.breeders} Züchter` },
-        pairs: { label:'Stämme', min:0, extract: ( result ) => [ result.pairs ], title: ( result ) => ` meldete ${result.pairs} Stämme` },
-        lay: { label:'Legeleistung', min:0, extract: ( result ) => [ result.layEggs ], title: ( result ) => ` legten ⌀ ${result.layEggs.toFixed(0)} Eier im Jahr` },
-        brood: { label:'Brutleistung', min:0, extract: ( result ) => [ result.broodHatched, result.broodFertile, result.broodEggs ], title: ( result ) => ` von ${result.broodEggs} war ${pct(result.broodFertile,result.broodEggs, 0)} befruchtet und es schlüpften ${pct(result.broodHatched, result.broodEggs, 0)}` },
-        show: { label:'Schauleistung', min:89, extract: ( result ) => [ result.showScore ], title: ( result ) => ` ${result.showCount} Tiere erhielten ⌀ ${result.showScore.toFixed(1)} Punkte` },
-    }
-    let type = types.pairs; // selected
 
     let max = {}
 // from
@@ -40,52 +71,70 @@
 
     let districts = []; // the results per district
 
-    function onQuery( query ) {
-        console.log( 'Update query', query )
-        year = Number( query.jahr ) || new Date().getFullYear();
-        sectionId = Number( query.sparte ) || 2;
-        breedId = Number( query.rasse ) || null;
-        colorId = Number( query.farbe ) || null;
-        console.log( 'Updated', year, sectionId, breedId, colorId );
+    function onQuery( route ) {
+        console.log( 'onQuery', route.query );
+        typeId = Number( route.query.type ) || typeId;
+        year = Number( route.query.year ) || year;
+        districtId = Number( route.query.district ) || districtId;
+        sectionId = Number( route.query.section ) || sectionId;
+        breedId = Number( route.query.breed ) || breedId;
+        colorId = Number( route.query.color ) || colorId;
     }
 
+    function onType( typeId ) {
+        router.location.query.set( 'type', typeId );
+    }
     function onYear( year ) {
-        router.location.query.set( 'jahr', year );
+        router.location.query.set( 'year', year );
+    }
+    function onDistrict( districtId ) {
+        router.location.query.set( 'district', districtId );
     }
     function onSection( sectionId ) {
-        breeds = [];
-        breedId = null;
-        colors = [];
-        colorId = null;
+        if( ! $router.query.breed ) { // not though query
+            breeds = [];
+            breedId = null;
+            colors = [];
+            colorId = null;
+        }
         api.section.breeds.get( sectionId ).then( response => {
             breeds = response.breeds;
+            if( breeds.length === 0 ) {
+                breedId = null;
+                colorId = null;
+            }
         } );
-        router.location.query.set( 'sparte', sectionId );
+        router.location.query.set( 'section', sectionId );
     }
 
     function onBreed( breedId ) {
-        colors = [];
-        colorId = null;
+        console.log('C', $router.query.color );
+        if ( !$router.query.color) {
+            colors = [];
+            colorId = null;
+        }
         if (breedId) {
             api.breed.colors.get( breedId ).then( response => {
                 colors = response.colors;
+                if( colors.length === 0 ) {
+                    colorId = null;
+                }
             });
-            router.location.query.set( 'rasse', breedId );
+//            router.location.query.delete( 'color' );
+            router.location.query.set( 'breed', breedId );
         } else {
-            router.location.query.delete( 'rasse' );
+            router.location.query.delete( 'breed' );
         }
     }
     function onColor( colorId ) {
         if (colorId) {
-            router.location.query.set( 'farbe', colorId );
+//            router.location.query.delete( 'breed' );
+            router.location.query.set( 'color', colorId );
         } else {
-            router.location.query.delete( 'farbe' );
+            router.location.query.delete( 'color' );
         }
 
     }
-
-
-
 
     const on = {
         click: ( district ) => {
@@ -95,38 +144,42 @@
         }
     }
 
-//    $: onQuery( query );
-//    $: onYear( year );
+    $: onQuery( $router );
+    $: onType( typeId );
+    $: onYear( year );
+    $: onDistrict( districtId );
     $: onSection( sectionId );
     $: onBreed( breedId );
     $: onColor( colorId );
+
+    $: console.log( 'Router', $router );
 
 </script>
 
 
 <h2 class='text-center' >Das Zuchtbuch, Daten und leistungen</h2>
 <div class='flex gap-x-2'>
-    <div class='w-16 font-semibold' >Filter</div>:
+    <div class='w-20 font-semibold' >Filter</div>:
 
-    <div class='flex flex-wrap gap-x-2'>
-        <Select class='w-48' label='Sparte' bind:value={sectionId}>
+    <div class='flex flex-wrap gap-x-2'>{sectionId}
+        <Select class='w-48' label='Sparte ' bind:value={sectionId}>
             {#each sections as section}
-                <option value={section.id}>{section.name}</option>
+                <option value={section.id} selected={section.id === sectionId}>{section.name}</option>
             {/each}
         </Select>
 
         <div class='flex flex-wrap gap-x-2'>
-            <Select class='w-80' label='Rasse' bind:value={breedId}>
+            <Select class='w-80' label={'Rasse'+breedId} bind:value={breedId}>
                 <option value={null}>-</option>
                 {#each breeds as breed}
-                    <option value={breed.id} >{breed.name}</option>
+                    <option value={breed.id} selected={breed.id === breedId}> {breed.name} </option>
                 {/each}
             </Select>
 
-            <Select class='w-72' label='Farbe' bind:value={colorId}>
+            <Select class='w-72' label={'Farbe'+colorId} bind:value={colorId}>
                 <option value={null}>-</option>
                 {#each colors as color}
-                    <option value={color.id} >{color.name}</option>
+                    <option value={color.id} selected={color.id === colorId}>{color.name}</option>
                 {/each}
             </Select>
         </div>
@@ -135,21 +188,21 @@
 <hr>
 
 <div class='flex flex-wrap gap-x-2'>
-    <div class='w-16 font-semibold' >Was</div>:
-    <Select class='w-48' label='Was sehen' bind:value={type}>
-        {#each Object.keys( types ) as key }
-            <option value={ types[ key ] } > { types[ key ].label }</option>
+    <div class='w-20 font-semibold' >Ergebnisse</div>:{typeId}
+    <Select class='w-48' label='Was sehen' bind:value={typeId}>
+        {#each Object.values( types ) as type, i }
+            <option value={ type.id } > { type.label }</option>
         {/each}
     </Select>
 </div>
 
 
 <div class='bg-white border border-gray-600 rounded-b flex flex-col overflow-y-scroll scrollbar p-2'>
-    <h3 class='text-center'>{type.label}</h3>
+    <h3 class='text-center'>{types[typeId].label}</h3>
     <div class='flex flex-row flex-wrap justify-evenly'>
         {#if districts}
-            <TimeLine bind:districtId={districtId} bind:year={year} {sectionId} {breedId} {colorId} {type} />
-            <GeoMap bind:year={year} bind:districtId={districtId} {sectionId} {breedId} {colorId} {type} />
+            <TimeLine bind:districtId={districtId} bind:year={year} {sectionId} {breedId} {colorId} type={types[typeId]} />
+            <GeoMap bind:year={year} bind:districtId={districtId} {sectionId} {breedId} {colorId} type={types[typeId]} />
         {/if}
     </div>
 </div>

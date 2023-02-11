@@ -4,10 +4,11 @@
     import NavigationBar from './lib/NavigationBar.svelte';
     import Menu from './lib/Menu.svelte';
     import Home from './lib/Home.svelte';
-    import Guest from './lib/results/Guest.svelte';
-    import Moderator from './lib/moderator/Moderator.svelte';
-    import Page from './lib/page.svelte';
     import Admin from './lib/admin/Admin.svelte';
+    import Moderator from './lib/moderator/Moderator.svelte';
+    import Results from './lib/results/Results.svelte';
+    import Standard from './lib/standard/Standard.svelte';
+    import Page from './lib/page.svelte';
 
     import Login from './lib/Login.svelte';
     import Logout from './lib/Logout.svelte';
@@ -35,7 +36,8 @@
 
             <Route path='/' ><Home /></Route>
             <Route path='/seite/:pageId' let:meta> <Page pageId={meta.params.pageId} /> </Route>
-            <Route path='/leistungen/*' > <Guest /> </Route>
+            <Route path='/standard/*' > <Standard /> </Route>
+            <Route path='/leistungen/*' > <Results /> </Route>
             <Route path='/obmann/*' > <Moderator /> </Route>
             <Route path='/admin/*' > <Admin /> </Route>
 

@@ -98,6 +98,7 @@
     function onClick( district ) {
         return ( event ) => {
             districtId = district.id;
+            console.log( 'Cliecked ', district );
         }
     }
 
@@ -110,11 +111,9 @@
 <div class='flex flex-col'>
     <h3 class='text-center'>In den Landesverbänden, {year} </h3>
     <Select bind:value={year} label='Jahr'>
-        {#if districts}
-            {#each [ 2023, 2022, 2021, 2020, 2019 ] as option}
-                <option value={option}>{option}</option>
-            {/each}
-        {/if}
+        {#each [ 2023, 2022, 2021, 2020, 2019 ] as option}
+            <option value={option}>{option}</option>
+        {/each}
     </Select>
 
     <svg width=380 height=512 class='border border-gray-600'>

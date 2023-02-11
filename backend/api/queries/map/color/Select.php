@@ -26,7 +26,7 @@ class Select extends Query
                 # get all data from results per district
                 SELECT 
                     `year`,
-                    districts.id AS districtId, districts.latitude, districts.longitude, districts.name,
+                    districts.id, districts.latitude, districts.longitude, districts.name,
                     CAST( IFNULL( SUM( breeders ), 0 ) AS UNSIGNED ) AS breeders,
                     CAST( IFNULL( SUM( pairs ), 0 ) AS UNSIGNED) AS pairs, 
                     CAST( IFNULL( COUNT( DISTINCT breedId ), 0 ) AS UNSIGNED) AS breeds, CAST( IFNULL( COUNT( DISTINCT colorId ), 0 ) AS UNSIGNED) AS colors, 		
@@ -60,7 +60,7 @@ class Select extends Query
                     
                 GROUP BY districts.parentId
             
-            ) AS members ON members.districtId = results.districtId
+            ) AS members ON members.districtId = results.id
         ' );
         return static::selectArray( $stmt, $args );
     }

@@ -77,6 +77,7 @@
         {:else}
             <span class='button text-green-600' on:click={onEdit} title='bearbeiten'>[ &#9998; ]</span>
         {/if}
+
     </div>
 
     {#if district.edit }

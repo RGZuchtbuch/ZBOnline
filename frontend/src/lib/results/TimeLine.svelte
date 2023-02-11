@@ -6,10 +6,10 @@
     import Select from '../input/Select.svelte';
 
     export let type = null;
-    export let districtId = 1;
-    export let sectionId = 1;
+    export let districtId = null;
+    export let sectionId = null;
     export let breedId = null;
-    export let colorId = 0;
+    export let colorId = null;
     export let year;
 
     let district = null;
@@ -19,19 +19,19 @@
     let canvas = null;
     let chart = null;
 
-    function loadDistrict( districtId ) {
-        api.district.get( districtId ).then( response => {
+    function loadDistrict( id ) {
+        api.district.get( id ).then( response => {
             district = response.district;
         })
     }
 
-    function loadDistricts( rootDistrictId ) {
-        api.district.children.get( rootDistrictId ).then( response => {
+    function loadDistricts( id ) {
+        api.district.children.get( id ).then( response => {
             rootDistrict = response.rootDistrict;
         })
     }
 
-    function loadYears( districtId, sectionId, breedId, colorId ) {
+    function onChange( districtId, sectionId, breedId, colorId ) {
         let promise;
         if( districtId ) {
             if (colorId) {
@@ -71,10 +71,11 @@
                     data.push( value );
                 }
             })
-//            console.log('TL datasets', datasets);
             if( chart ) {
                 chart.data.labels = labels;
                 chart.data.datasets = datasets;
+                chart.options.scales.x.min = type.min;
+                chart.options.scales.x.max = type.max;
                 chart.update();
             } else {
                 chart = new Chart( context, {
@@ -89,8 +90,6 @@
                             tooltip: {
                                 callbacks: {
                                     label: function(context, data) {
-//                                        console.log( 'Context', context );
-//                                        console.log( 'More', chart.data.datasets.length );
                                         const value = context.parsed.x; // mind x as we swapped x and y
                                         let label = context.dataset.label || '';
 
@@ -121,6 +120,8 @@
                             x: {
                                 //stacked:true,
                                 position:'top',
+                                min:type.min,
+                                max:type.max,
                             },
                             y: {
                                 reverse:true, // last to first year
@@ -148,7 +149,7 @@
     loadDistricts( 1 );
 
     $: loadDistrict( districtId );
-    $: loadYears( districtId, sectionId, breedId, colorId );
+    $: onChange( districtId, sectionId, breedId, colorId );
     $: showChart( years, type );
 
 </script>
@@ -156,14 +157,15 @@
 
 
 <div class='flex flex-col'>
-    {#if district}
-        <h3 class='text-center'>Im {district.name}</h3>
-    {/if}
-    <Select bind:value={districtId} label='Landesverband'>
-        {#if rootDistrict}
-            <option value={rootDistrict.id}>{rootDistrict.name}</option>
+
+    <h3 class='text-center'>Im {#if district}{district.name}{/if}</h3>
+
+
+    <Select bind:value={districtId} label={'Landesverband'+districtId}>
+        {#if rootDistrict }
+            <option value={rootDistrict.id} selected={rootDistrict.id === districtId}>{rootDistrict.name}</option>
             {#each rootDistrict.children as district}
-                <option value={district.id}>{district.name}</option>
+                <option value={district.id}  selected={district.id === districtId}>{district.name}</option>
             {/each}
         {/if}
     </Select>

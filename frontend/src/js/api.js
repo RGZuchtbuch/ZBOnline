@@ -186,10 +186,9 @@ export default {
             clear('api/district/' + districtId);
             return del('api/moderator', data );
         },
-
-        districts: ( moderatorId ) => {
-            return get( 'api/moderator/districts');
-        }
+//        districts: ( moderatorId ) => {
+//            return get( 'api/moderator/districts');
+//        },
     },
 
     page: {
@@ -266,7 +265,7 @@ setInterval(  () => {
         }
     }
     for( const url of toDelete ) { // delete collected from cache
-        console.log( 'Auto clear cache for ', url );
+//        console.log( 'Auto clear cache for ', url );
         delete cache[ url ];
     }
 }, settings.cache.TIMEOUT )
@@ -296,7 +295,6 @@ async function get( url ) {
     let cached = cache[url];
     let now = new Date().getTime(); // in ms
     if (cached && cached.time > now - settings.cache.TIMEOUT) { // fresh enough
-        console.log('Cache', url);
         return cached.promise;
     } else {
         let options = {
@@ -307,11 +305,9 @@ async function get( url ) {
         let promise = fetch(settings.api.root + url, options)
             .then(response => {
                 if (response.ok) {
-                    const json = response.json();
-                    console.log('Got response ', json);
-                    return json;
+                    return response.json();
                 }
-                console.log('Fetch not ok, got null', response);
+                console.error('Fetch not ok, got null', response);
                 return null;
             });
         cache[url] = {promise: promise, time: now};
@@ -329,13 +325,12 @@ async function post( url, data ) {
     console.log( 'POST', url );
     return fetch( settings.api.root+url, options )
         .then( response => {
-            //console.log( 'POST', response );
             if( response.ok ) {
-                console.log( '  POST', 'ok' );
                 return response.json();
             }
-            throw response;
-        } )
+            console.error('Fetch not ok, got null', response);
+            return null;
+        });
 }
 
 async function put( url, data ) {
