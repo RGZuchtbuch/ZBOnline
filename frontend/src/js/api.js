@@ -32,14 +32,11 @@ export default {
                     window.sessionStorage.setItem( 'token', token );
                     const decToken = jwt_decode(token);
                     decToken.user.exp = decToken.exp;
-                    console.log( 'Token', decToken );
-                    console.log( 'Expired', new Date( decToken.exp * 1000 ) );
                     user.set( decToken.user ); // user or null
                     return { success:true }; // success
                 }
                 return { success: false };
             }).catch( response => {
-                console.log( 'oops', response );
                 return { success: false };
             });
 
@@ -62,7 +59,6 @@ export default {
     breeder: {
         get: ( breederId ) => get( 'api/breeder/'+breederId ),
         new: () => { // id being null
-            console.log( 'api newDistrict' );
             return new Promise( ( resolve ) => {
                 // TODO, remember to delete cache for parent district
                 resolve( { id:0, parent:parentId, name:null, fullname:null, short:null, coordinates:null, children:[], moderators:[] } );
@@ -82,11 +78,9 @@ export default {
 
     district: {
         get: ( districtId ) => {
-            console.log( 'api getDistrict', districtId );
             return get( 'api/district/'+districtId );
         },
         new: ( parentId ) => {
-            console.log( 'api newDistrict' );
             return new Promise( ( resolve ) => {
                 // TODO, remember to delete cache for parent district
                 clear( 'api/district/'+parentId );
@@ -94,15 +88,12 @@ export default {
             })
         },
         post: ( district ) => { // insert
-            console.log( 'api postDistrict' );
             return post( 'api/district', district );
         },
         put: ( district ) => { // updating
-            console.log( 'api postDistrict' );
             return put( 'api/district/'+district.id, district );
         },
         delete: ( districtId ) => {
-            console.log( 'api deleteDistrict' );
             //return del( 'api/district/'+districtId ); // TODO delete or better disable !
         },
 
@@ -137,9 +128,7 @@ export default {
     },
     groups: {
         get: () => {
-            console.log( 'api getGroups' );
             return new Promise( ( resolve ) => {
-//                clear( 'api/district/'+parentId );
                 resolve( { groups:['I', 'II', 'III' ] } );
             })
         }
@@ -162,7 +151,6 @@ export default {
 
     moderator: {
         new: (districtId) => {
-            console.log('api new moderator');
             let moderatorPromise = Promise.resolve({moderator: {id: 0, district: districtId}});
             let districtPromise = get('api/district/' + districtId);            ;
             let candidatesPromise = get('/api/users');
@@ -265,7 +253,6 @@ setInterval(  () => {
         }
     }
     for( const url of toDelete ) { // delete collected from cache
-//        console.log( 'Auto clear cache for ', url );
         delete cache[ url ];
     }
 }, settings.cache.TIMEOUT )
@@ -301,7 +288,6 @@ async function get( url ) {
             method: 'GET',
             headers: getHeaders()
         }
-        console.log('new get', url);
         let promise = fetch(settings.api.root + url, options)
             .then(response => {
                 if (response.ok) {
@@ -322,7 +308,6 @@ async function post( url, data ) {
         headers: getHeaders(),
         body: JSON.stringify( data ),
     }
-    console.log( 'POST', url );
     return fetch( settings.api.root+url, options )
         .then( response => {
             if( response.ok ) {

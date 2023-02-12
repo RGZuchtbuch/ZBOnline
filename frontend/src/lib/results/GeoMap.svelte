@@ -1,4 +1,5 @@
 <script>
+    import { createEventDispatcher } from 'svelte';
     import { draw, fade } from 'svelte/transition';
     import api from "../../js/api.js";
     import { calcColor, gpsToPx, pct} from "../../js/util.js";
@@ -27,7 +28,6 @@
     }
 
     function loadDistricts( year, sectionId, breedID, colorId ) {
-        console.log( 'GeoMap loads districts' )
         map = null;
         let promise;
         if( colorId ) {
@@ -54,8 +54,6 @@
             max.brood = Math.max( ...districts.map( district => district.broodEggs ) );
             max.show = Math.max( ...districts.map( district => district.showCount ) );
         }
-        console.log( 'Max', max );
-        console.log( 'Pairs', districts.map( district => district.breeders ) );
     }
 
 
@@ -91,16 +89,16 @@
                 max:max,
                 colors:[ '#F9CA9BC0', '#F9ACBCC0', '#94cbf0C0'], // for each circle
             };
-            console.log('Map Datasets', map);
         }
     }
 
     function onClick( district ) {
         return ( event ) => {
             districtId = district.id;
-            console.log( 'Cliecked ', district );
         }
     }
+
+    const dispatch = createEventDispatcher();
 
     $: loadDistricts( year, sectionId, breedId, colorId );
     $: showMap( districts, type );

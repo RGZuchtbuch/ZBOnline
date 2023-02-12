@@ -1,5 +1,5 @@
 <script>
-
+    import { createEventDispatcher } from 'svelte';
     import api from "../../js/api.js";
     import { pct } from '../../js/util.js';
     import { BarController, BarElement, CategoryScale, Chart, Colors, LinearScale, Title, Tooltip } from 'chart.js';
@@ -143,6 +143,8 @@
     function onClick( label ) {
         year = Number( label ); // to parent by binding.
     }
+
+    const dispatch = createEventDispatcher();
 
     Chart.register( Colors, BarController, BarElement, CategoryScale, LinearScale, Tooltip );
 

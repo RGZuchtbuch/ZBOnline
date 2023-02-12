@@ -1,5 +1,5 @@
 <script>
-    import {meta, router} from "tinro";
+    import {router} from "tinro";
     import api from '../../js/api.js';
     import { calcColor, pct } from '../../js/util.js';
     import Select from '../input/Select.svelte';
@@ -50,9 +50,9 @@
 
     //set by query
     let typeId = 3;
-    let year = new Date().getFullYear(); // this year
-    let districtId = 1;
-    let sectionId = 2;
+    let year = null;
+    let districtId = null;
+    let sectionId = null;
     let breedId = null;
     let colorId = null;
 
@@ -72,93 +72,61 @@
     let districts = []; // the results per district
 
     function onQuery( route ) {
-        console.log( 'onQuery', route.query );
-        typeId = Number( route.query.type ) || typeId;
-        year = Number( route.query.year ) || year;
-        districtId = Number( route.query.district ) || districtId;
-        sectionId = Number( route.query.section ) || sectionId;
-        breedId = Number( route.query.breed ) || breedId;
-        colorId = Number( route.query.color ) || colorId;
+        typeId = Number( route.query.type ) || 3;
+        year = Number( route.query.year ) || new Date().getFullYear(); // this year;
+        districtId = Number( route.query.district ) || 1;
+        sectionId = Number( route.query.section ) || 2;
+        breedId = Number( route.query.breed ) || null;
+        colorId = Number( route.query.color ) || null;
+        loadBreeds();
+        loadColors();
     }
 
-    function onType( typeId ) {
-        router.location.query.set( 'type', typeId );
+    function loadBreeds() {
+        breeds = [];
+        if( sectionId ) api.section.breeds.get( sectionId ).then( response => { breeds = response.breeds } );
+    }
+
+    function loadColors() {
+        colors = [];
+        if( breedId ) api.breed.colors.get( breedId ).then( response => { colors = response.colors });
+    }
+
+    function onType( event ) {
+        router.location.query.set( 'type', event.target.value );
     }
     function onYear( year ) {
         router.location.query.set( 'year', year );
     }
-    function onDistrict( districtId ) {
-        router.location.query.set( 'district', districtId );
+    function onDistrict( id ) {
+        router.location.query.set( 'district', id );
     }
-    function onSection( sectionId ) {
-        if( ! $router.query.breed ) { // not though query
-            breeds = [];
-            breedId = null;
-            colors = [];
-            colorId = null;
-        }
-        api.section.breeds.get( sectionId ).then( response => {
-            breeds = response.breeds;
-            if( breeds.length === 0 ) {
-                breedId = null;
-                colorId = null;
-            }
-        } );
-        router.location.query.set( 'section', sectionId );
+    function onSection( event ) {
+        router.location.query.set( 'section', event.target.value );
+        router.location.query.delete( 'breed' );
+        router.location.query.delete( 'color' );
     }
-
-    function onBreed( breedId ) {
-        console.log('C', $router.query.color );
-        if ( !$router.query.color) {
-            colors = [];
-            colorId = null;
-        }
-        if (breedId) {
-            api.breed.colors.get( breedId ).then( response => {
-                colors = response.colors;
-                if( colors.length === 0 ) {
-                    colorId = null;
-                    colors = [];
-                    router.location.query.delete( 'color' );
-                }
-            });
-//            router.location.query.delete( 'color' );
-            router.location.query.set( 'breed', breedId );
-        } else {
-            colorId = null;
-            colors = [];
-            router.location.query.delete( 'breed' );
-            router.location.query.delete( 'color' );
-        }
+    function onBreed( event ) {
+        colorId = null;
+        colors = [];
+        router.location.query.set( 'breed', event.target.value );
+        router.location.query.delete( 'color' );
     }
-    function onColor( colorId ) {
-        if (colorId) {
-//            router.location.query.delete( 'breed' );
-            router.location.query.set( 'color', colorId );
-        } else {
-            router.location.query.delete( 'color' );
-        }
-
+    function onColor( event ) {
+        router.location.query.set( 'color', event.target.value );
     }
 
     const on = {
         click: ( district ) => {
             return (event) => {
-                console.log(district.name, 'clicked')
+                console.log('clicked')
             }
         }
     }
 
     $: onQuery( $router );
-    $: onType( typeId );
     $: onYear( year );
     $: onDistrict( districtId );
-    $: onSection( sectionId );
-    $: onBreed( breedId );
-    $: onColor( colorId );
-
-    $: console.log( 'Router', $router );
-
 </script>
 
 
@@ -166,23 +134,23 @@
 <div class='flex gap-x-2'>
     <div class='w-20 font-semibold' >Filter</div>:
 
-    <div class='flex flex-wrap gap-x-2'>{sectionId}
-        <Select class='w-48' label='Sparte ' bind:value={sectionId}>
+    <div class='flex flex-wrap gap-x-2'>
+        <Select class='w-48' label='Sparte' value={sectionId} on:change={onSection}>
             {#each sections as section}
-                <option value={section.id} selected={section.id === sectionId}>{section.name}</option>
+                <option value={section.id} >{section.name}</option>
             {/each}
         </Select>
 
         <div class='flex flex-wrap gap-x-2'>
-            <Select class='w-80' label={'Rasse'+breedId} bind:value={breedId}>
-                <option value={null}>-</option>
+            <Select class='w-80' label={'Rasse'} value={breedId} on:change={onBreed}>
+                <option value={null}> ? </option>
                 {#each breeds as breed}
                     <option value={breed.id} selected={breed.id === breedId}> {breed.name} </option>
                 {/each}
             </Select>
 
-            <Select class='w-72' label={'Farbe'+colorId} bind:value={colorId}>
-                <option value={null}>-</option>
+            <Select class='w-72' label={'Farbe'} value={colorId} on:change={onColor}>
+                <option value={null}> ? </option>
                 {#each colors as color}
                     <option value={color.id} selected={color.id === colorId}>{color.name}</option>
                 {/each}
@@ -193,7 +161,7 @@
 <hr>
 
 <div class='flex flex-wrap gap-x-2'>
-    <div class='w-20 font-semibold' >Ergebnisse</div>:{typeId}
+    <div class='w-20 font-semibold' >Ergebnisse</div>:
     <Select class='w-48' label='Was sehen' bind:value={typeId}>
         {#each Object.values( types ) as type, i }
             <option value={ type.id } > { type.label }</option>

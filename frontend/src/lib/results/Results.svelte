@@ -8,7 +8,7 @@
 </script>
 
 <Route path='/*' let:meta>
-    <Map query={meta.query} />
+    <Map />
 </Route>
 
 

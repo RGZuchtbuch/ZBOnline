@@ -15,8 +15,6 @@
 
     import { user } from './js/store.js'
 
-    console.log( 'User', $user );
-
 </script>
 
 <div class='w-full h-full flex flex-col'>
