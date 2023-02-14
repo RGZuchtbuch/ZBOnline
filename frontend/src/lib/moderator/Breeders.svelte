@@ -14,6 +14,8 @@
         if( districtId ) {
             api.district.breeders.get( districtId ).then( response => {
                 breeders = response.breeders;
+
+                console.log( 'B', breeders );
             })
         }
     }

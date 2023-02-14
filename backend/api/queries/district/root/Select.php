@@ -10,10 +10,11 @@ class Select extends Query
     public static function execute( $rootId ) : ? array {
         $args = static::validate( $rootId );
         $stmt = static::prepare( '
-            WITH RECURSIVE districts( id, parentId, name ) AS (
-               SELECT id, parentId, name FROM district WHERE id=:rootId
+            WITH RECURSIVE districts( id, parentId, name, moderatable, level ) AS (
+               SELECT id, parentId, name, moderatable, level FROM district WHERE id=:rootId
                UNION
-               SELECT district.id, district.parentId, district.name FROM districts JOIN district ON district.parentId=districts.id
+               SELECT district.id, district.parentId, district.name, district.moderatable, district.level
+               FROM districts JOIN district ON district.parentId=districts.id
             )
             SELECT * FROM districts
             ORDER BY districts.name

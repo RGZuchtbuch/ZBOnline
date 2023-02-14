@@ -28,9 +28,9 @@ class Select extends Query
                     CAST( IFNULL( SUM( breeders ), 0 ) AS UNSIGNED ) AS breeders,
                     CAST( IFNULL( SUM( pairs ), 0 ) AS UNSIGNED) AS pairs, 
                     CAST( IFNULL( COUNT( DISTINCT breedId ), 0 ) AS UNSIGNED) AS breeds, CAST( IFNULL( COUNT( DISTINCT colorId ), 0 ) AS UNSIGNED) AS colors, 		
-                    CAST( IFNULL( SUM( layDames), 0 ) AS UNSIGNED) AS layDames, CAST( IFNULL( AVG( layEggs ), 0 ) AS UNSIGNED) AS layEggs, CAST( IFNULL( AVG( layWeight ), 0 ) AS UNSIGNED) AS layWeight,
+                    CAST( IFNULL( SUM( layDames), 0 ) AS UNSIGNED) AS layDames, IFNULL( AVG( layEggs ), 0 ) AS layEggs, IFNULL( AVG( layWeight ), 0 ) AS layWeight,
                     CAST( IFNULL( SUM( broodEggs ), 0 ) AS UNSIGNED) AS broodEggs, CAST( IFNULL( SUM( broodFertile ), 0 ) AS UNSIGNED) AS broodFertile, CAST( IFNULL( SUM( broodHatched ), 0 ) AS UNSIGNED) AS broodHatched,
-                    CAST( IFNULL( SUM( showCount ), 0 ) AS UNSIGNED) AS showCount, CAST( IFNULL( AVG( showScore), 0 ) AS UNSIGNED) AS showScore	
+                    CAST( IFNULL( SUM( showCount ), 0 ) AS UNSIGNED) AS showCount, IFNULL( AVG( showScore), 0 ) AS showScore	
                
                 FROM districts
                 

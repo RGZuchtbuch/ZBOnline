@@ -52,7 +52,7 @@
             max.pairs = Math.max( ...districts.map( district => district.pairs ) );
             max.lay = 365;
             max.brood = Math.max( ...districts.map( district => district.broodEggs ) );
-            max.show = Math.max( ...districts.map( district => district.showCount ) );
+            max.show = 97;
         }
     }
 
@@ -78,7 +78,7 @@
                     const dataset = datasets[i];
                     const value = values[ values.length-i-1 ]; // last first
                     dataset.data.push(value);
-                    if( value > max ) max = value;
+                    if( value > max ) max = value; // remember max, for ?
                 }
             })
             map = {
@@ -86,7 +86,8 @@
                 coords:coords,
                 datasets:datasets,
                 titles:titles,
-                max:max,
+                min:type.min ? type.min : 0, // take preset if set
+                max:type.max ? type.max : max,
                 colors:[ '#F9CA9BC0', '#F9ACBCC0', '#94cbf0C0'], // for each circle
             };
         }
@@ -123,7 +124,10 @@
                 {#each districts as district, index }
                     <circle cx={map.coords[index].x} cy={map.coords[index].y} r={1+MAXBUBBLE} stroke='none' fill='#ccf4'></circle>
                     {#each map.datasets as dataset, d }
-                        <circle cx={map.coords[index].x} cy={map.coords[index].y} r={1+MAXBUBBLE*dataset.data[index]/map.max} stroke='#7777' fill={map.colors[d]} ></circle>
+                        <circle cx={map.coords[index].x} cy={map.coords[index].y}
+                                r={MAXBUBBLE*(dataset.data[index] - map.min)/(map.max - map.min)}
+                                stroke='#7777' fill={map.colors[d]} >
+                        </circle>
                     {/each}
                     <circle cx={map.coords[index].x} cy={map.coords[index].y} r={1+MAXBUBBLE} stroke='#7777' fill='#0000' on:click={onClick(district)}>
                         <title>{map.labels[index]} : {map.titles[index]}</title>

@@ -20,7 +20,7 @@ class Get extends Controller {
         if( ! $breeder) throw new HttpNotFoundException($request, "breeder not found");
 
         $breeder[ 'district' ] = queries\district\Select::execute( $breeder['districtId'] );
-        $breeder[ 'club' ] = queries\club\Select::execute( $breeder['clubId'] );
+        $breeder[ 'club' ] = queries\district\Select::execute( $breeder['clubId'] );
         return [ 'breeder'=>$breeder ];
     }
 

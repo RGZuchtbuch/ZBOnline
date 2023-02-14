@@ -11,7 +11,10 @@ class Select extends Query
     public static function execute( ...$args ) : ? array {
         $args = static::validate( ...$args );
         $stmt = static::prepare( '
-            SELECT * FROM district WHERE id=:id
+            SELECT district.*, moderator.userId as moderatorId 
+            FROM district
+            LEFT JOIN moderator ON moderator.districtId = district.id
+            WHERE id=:id
         ' );
         return static::select( $stmt, $args );
     }

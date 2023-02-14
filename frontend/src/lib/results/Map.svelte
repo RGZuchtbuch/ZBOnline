@@ -162,7 +162,7 @@
 
 <div class='flex flex-wrap gap-x-2'>
     <div class='w-20 font-semibold' >Ergebnisse</div>:
-    <Select class='w-48' label='Was sehen' bind:value={typeId}>
+    <Select class='w-48' label='Was sehen' value={typeId} on:change={onType}>
         {#each Object.values( types ) as type, i }
             <option value={ type.id } > { type.label }</option>
         {/each}

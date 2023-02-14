@@ -1,33 +1,41 @@
 <script>
-    import { onMount } from 'svelte';
+    import { createEventDispatcher } from 'svelte';
     import {active, meta, router, Route} from 'tinro';
     import api from '../../js/api.js';
     import { user } from '../../js/store.js'
 
-    import District from '../RecursiveDistrict.svelte';
+    import RecursiveDistrict from './RecursiveDistrict.svelte';
 
 
-    let district = null;
+    let rootDistrict = null;
 
-
+    const dispatch = createEventDispatcher();
     const route = meta();
 
-    function checkEditable( district ) {
-        let editableChild = false;
-        for( const childDistrict of district.children ) {
-            editableChild |= checkEditable( childDistrict );
-        }
+    // set visible and editable as appropriate
+    // editable if moderator for district or its parent
+    // visible if editable or some child is editable
+    function checkEditable( district, selectableParent ) {
+        district.selectable = $user && ( $user.moderator.indexOf( district.id )>=0 );
+        district.editable = district.selectable || selectableParent
 
-        district.editable = $user && $user.moderator.indexOf( district.id )>=0;
-        district.visible = district.editable || editableChild;
-        console.log( 'Districts', district );
-        return district.visible;
+        let selectableChild = false;
+        for( const childDistrict of district.children ) {
+            selectableChild |= checkEditable( childDistrict, district.editable );
+        }
+        district.visible = selectableParent || district.selectable || selectableChild;
+
+        if( district.children && selectableChild ) district.open = true;
+
+        if( district.id === 2 ) console.log('D', district )
+        return district.selectable;
     }
 
-    function loadDistrict() {
+    // load whole district tree
+    function loadDistrictsTree() {
         api.district.root.get( 1 ).then( response => {
-            district = response.district;
-            checkEditable( district );
+            rootDistrict = response.district;
+            checkEditable( rootDistrict );
         } );
     }
 
@@ -38,16 +46,22 @@
         });
     }
 */
-    $: loadDistrict( $user );
+
+    // forward district select to parent
+    function onSelect( event ) {
+        dispatch( 'select', event.detail );
+    }
+
+    $: loadDistrictsTree( $user ); // if user changes by logout/login or exp
 
 </script>
 
 
 {#if $user}
     <h2 class='border border-gray-400 rounded-t p-2 bg-header text-center text-xl print'>Verbände für Obmann {$user.name} </h2>
-    {#if district}
+    {#if rootDistrict}
         <div class='bg-gray-100 overflow-y-scroll border rounded-b border-t-0 border-gray-400 px-4 scrollbar'>
-            <District district={district} />
+            <RecursiveDistrict district={rootDistrict} on:select={onSelect}/>
         </div>
     {:else}
         Einen moment bitte

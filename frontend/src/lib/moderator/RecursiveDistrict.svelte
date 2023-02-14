@@ -1,14 +1,20 @@
 <script>
-    import api from '../js/api.js';
-    import Button from './input/Button.svelte';
-    import Number from './input/Number.svelte';
-    import Select from './input/Select.svelte';
-    import Text from './input/Text.svelte';
+//    import {router} from 'tinro'; // router store
+    import { createEventDispatcher } from 'svelte';
+    import api from '../../js/api.js';
+    import Button from '../input/Button.svelte';
+    import Number from '../input/Number.svelte';
+    import Select from '../input/Select.svelte';
+    import Text from '../input/Text.svelte';
 
     export let district = null;
     let details = null;
     let breeders = null;
 
+    const editable = district.editable;
+    const selectable = district.selectable;
+
+    const dispatch = createEventDispatcher();
 
     function onOpen() {
         district.open = ! district.open;
@@ -40,7 +46,10 @@
         console.log( 'Add Child' );
         district.children.splice( 0, 0, {
             id:null, parentId:district.id, name:'Neu', children: [],
-            edit:false, // to make it show
+            editable:true, // to make it show
+            moderatable:false,
+            visible:true,
+
         });
         district.open = true; // show children including this one
         district = district; // redraw
@@ -51,21 +60,33 @@
         district = district;
     }
 
+    function onClick( event ) {
+        console.log( district, event )
+        if( selectable ) dispatch( 'select', district.id );
+    }
+
+    function onSelect( event ) {
+        dispatch( 'select', event.detail );
+    }
+
     function onSubmit() {
         console.log( 'Submit district', district );
         api.district.post( details ).then( response => {
            details.id = response.id;
            district.id = response.id;
-           district.name = district.detail.name;
+           district.name = details.name;
+           district.edit = false;
+//           district = district; // redraw
         });
         district.changed = false;
     }
 
 </script>
 
-<div on:click class='pl-6'>
+<div class='pl-6'>
     {#if district.visible}
-        <div>&#10551; {district.name}
+        <div class='flex'>
+            <div class='text-gray-400' class:selectable class:editable on:click={onClick} title="'Wähle Verband">&#10551; {district.name}</div>
             {#if district.children.length > 0}
                 {#if district.open}
                     <span class='open' on:click={onOpen}>[ - ]</span>
@@ -80,11 +101,10 @@
                     <span class='button text-green-600' on:click={onEdit} title='bearbeiten'>[ &#9998; ]</span>
                 {/if}
             {/if}
-
         </div>
 
         {#if district.edit }
-            <form class='flex flex-col border border-gray-400 rounded m-4 p-2' on:change={onChange}>
+            <form class='flex flex-col border border-gray-400 rounded m-4 p-2' on:input={onChange}>
                 {#if details }
                     <Text class='w-64' bind:value={details.name} label='Name' required/>
 
@@ -94,20 +114,23 @@
                         <Number class='w-32' bind:value={details.latitude} label='Breitegrad N]' min={MINLATITUDE} max={MAXLATITUDE} required/>
                         <Number class='w-32' bind:value={details.longitude}  label='Längegrad O' min={MINLONGITUDE} max={MAXLONGITUDE} required/>
                     </div>
-                    {#if district.id > 0}
+
+                    {#if district.level !== 'OV' }
                         <div class='flex gap-x-2'>
                             <Number class='w-24' value={district.children.length} label='U. Verbände' disabled/>
                             <Button class='edit' on:click={onAddChild} label='' value='hinzufügen' />
                         </div>
                     {/if}
 
-                    <Select class='' label='Obmann' bind:value={details.moderator} >
-                        {#if breeders}
-                            {#each breeders as candidate}
-                                <option class='bg-white' value={candidate.id}> {candidate.name} </option>
-                            {/each}
-                        {/if}
-                    </Select>
+                    {#if district.moderatable}
+                        <Select class='w-64' label='Obmann' bind:value={details.moderator} >
+                            {#if breeders}
+                                {#each breeders as candidate}
+                                    <option class='bg-white' value={candidate.id}> {candidate.name} </option>
+                                {/each}
+                            {/if}
+                        </Select>
+                    {/if}
 
                     {#if district.changed}
                         <Button class='edit' on:click={onSubmit} label='' value='speichern' />
@@ -119,7 +142,7 @@
 
         {#if district.open}
             {#each district.children as child}
-                <svelte:self district={child} />
+                <svelte:self district={child} on:select={onSelect}/>
             {/each}
         {/if}
     {/if}
@@ -137,5 +160,9 @@
     }
     select {
         background: green;
+    }
+
+    .selectable {
+        @apply cursor-pointer text-black;
     }
 </style>

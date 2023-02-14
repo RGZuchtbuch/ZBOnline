@@ -63,7 +63,8 @@
 
                 for( let i=0; i<values.length; i++ ) {
                     if( datasets.length < i+1 ) {
-                        datasets.push( { data:[], borderWidth:1, categoryPercentage:(0.4+i*0.2) } )
+//                        datasets.push( { data:[], borderWidth:1, categoryPercentage:(0.4+i*0.2) } )
+                        datasets.push( { data:[], borderWidth:1, categoryPercentage:(0.75) } )
                     }
                     const dataset = datasets[i];
                     const data = dataset.data;

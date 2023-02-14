@@ -20,7 +20,7 @@
 <div class='flex flex-row border border-gray-400 rounded-t p-2 bg-header gap-x-1 font-bold'>
     <div class='w-8'>Id</div>
     <div class='w-64'>Name</div>
-    <div class='w-32'>Ortverein</div>
+    <div class='w-32'>Ortsverein</div>
     <div class='w-32'>Meldungen</div>
     <div class='grow'></div>
     {#if moderator}
@@ -34,7 +34,7 @@
             <div class='flex flex-row gap-x-1'>
                 <a class='w-8 border' href={route.match+'/'+breeder.id}>{breeder.id}</a>
                 <a class='w-64 border' href={route.match+'/'+breeder.id}>{breeder.name}</a>
-                <a class='w-32 border' href={route.match+'/'+breeder.id}></a>
+                <a class='w-32 border' href={route.match+'/'+breeder.id}>{breeder.clubName}</a>
                 <a class='w-32 border' href={route.match+'/'+breeder.id}></a>
             </div>
         {/each}
