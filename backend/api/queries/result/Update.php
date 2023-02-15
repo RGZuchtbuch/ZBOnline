@@ -13,7 +13,7 @@ class Update extends Query
         $stmt = static::prepare( '
             UPDATE result
             SET reportId=:reportId, districtId=:districtId, `year`=:year, `group`=:group,
-                sectionId=:sectionId, breedId=:breedId, colorId=:colorId,
+                breedId=:breedId, colorId=:colorId,
                 breeders=:breeders, pairs=:pairs,
                 layDames=:layDames, layEggs=:layEggs, layWeight=:layWeight,
                 broodEggs=:broodEggs, broodFertile=:broodFertile, broodHatched=:broodHatched,
@@ -25,7 +25,8 @@ class Update extends Query
 
     private static function validate(
         $id, ? int $reportId, int $districtId, int $year, string $group,
-        int $sectionId, int $breedId, ? int $colorId,
+//        int $sectionId,
+        int $breedId, ? int $colorId,
         ? int $breeders, ? int $pairs,
         ? int $layDames, ? float $layEggs, ? float $layWeight,
         ? int $broodEggs, ? int $broodFertile, ? int $broodHatched,
@@ -36,7 +37,8 @@ class Update extends Query
             ( $reportId===null || $reportId>0 ) && $districtId>0 &&
             ( $year>1900 && $year<9999 ) &&
             ( $group==="I" || $group==="II" || $group==="III" ) &&
-            $sectionId>0 && $breedId>0 && (( $sectionId===5 && $colorId===null ) || $colorId>0 ) &&
+//            $sectionId>0 &&
+            $breedId>0 && ($colorId===null || $colorId>0 ) &&
             ( $breeders===null || ( $breeders>0 && $breeders<1000000 ) ) &&
             ( $pairs===null || ($pairs>0 && $pairs<1000000 ) ) &&
             ( $layDames===null || ( $layDames>0 && $layDames<1000000000 ) ) &&
@@ -54,3 +56,17 @@ class Update extends Query
         throw new BadMessageException( "Error in query args");
     }
 }
+
+/*
+        $stmt = static::prepare( '
+            UPDATE result
+            SET reportId=:reportId, districtId=:districtId, `year`=:year, `group`=:group,
+                sectionId=:sectionId, breedId=:breedId, colorId=:colorId,
+                breeders=:breeders, pairs=:pairs,
+                layDames=:layDames, layEggs=:layEggs, layWeight=:layWeight,
+                broodEggs=:broodEggs, broodFertile=:broodFertile, broodHatched=:broodHatched,
+                showCount=:showCount, showScore=:showScore, modifier=:modifier
+            WHERE id=:id
+        ' );
+
+ */

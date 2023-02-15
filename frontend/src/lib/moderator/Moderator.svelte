@@ -1,7 +1,7 @@
 <script>
     import { meta, router, Route } from 'tinro';
     import api from '../../js/api.js';
-    import {user, district, breeder} from '../../js/store.js';
+    import {user} from '../../js/store.js';
 
     import Breeder from './Breeder.svelte';
     import Breeders from './Breeders.svelte';

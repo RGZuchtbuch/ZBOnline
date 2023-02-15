@@ -12,6 +12,7 @@ class Routes {
         $app->get( '/breed/{breedId}', new breed\Get() );
         $app->get( '/breed/{breedId}/colors', new breed\colors\Get() );
 
+        $app->post('/breeder', new breeder\Post() );
         $app->get( '/breeder/{breederId}', new breeder\Get() );
         $app->get( '/breeder/{breederId}/reports', new breeder\reports\Get() );
         $app->get( '/breeder/{breederId}/results', new breeder\results\Get() );
@@ -45,6 +46,7 @@ class Routes {
         $app->delete( '/report/{reportId}', new report\Delete() );
 
         $app->get( '/result/breed/{breedId}/district/{districtId}/year/{year}/group/{group}/results', new result\breed\Get() );
+        $app->get( '/result/colors/{breedId}/district/{districtId}/year/{year}/group/{group}/results', new result\colors\Get() );
         $app->post('/result', new result\Post() );
 
         $app->get( '/results/years', new trend\Get() ); // for trend

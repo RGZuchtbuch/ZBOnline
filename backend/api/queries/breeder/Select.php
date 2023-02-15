@@ -10,7 +10,7 @@ class Select extends Query
     public static function execute( ...$args ) : ? array {
         $args = static::validate( ...$args );
         $stmt = static::prepare( '
-            SELECT id, name, email, districtId, clubId
+            SELECT id, name, email, districtId, clubId, start, end, active, info
             FROM user
             WHERE id=:userId
         ' );

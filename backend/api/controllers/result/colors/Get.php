@@ -1,6 +1,6 @@
 <?php
 
-namespace App\controllers\result\breed;
+namespace App\controllers\result\colors;
 
 use App\queries;
 use App\controllers\Controller;
@@ -26,9 +26,9 @@ class Get extends Controller
         if( ! $breed ) throw new HttpNotFoundException($request, "Breed not found");
 
 //        if( $breed[ 'sectionId' ] === 5 )  {
-            $results = queries\result\breed\Select::execute( $breedId, $districtId, $year, $group );
+//            $results = queries\result\breed\Select::execute( $breedId, $districtId, $year, $group );
 //        } else {
-//            $results = queries\result\breed\colors\Select::execute( $breedId, $districtId, $year, $group );
+            $results = queries\result\breed\colors\Select::execute( $breedId, $districtId, $year, $group );
 //        }
 
         if( ! $results) throw new HttpNotFoundException($request, "Results not found");

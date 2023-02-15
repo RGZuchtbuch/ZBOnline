@@ -1,34 +1,34 @@
 <script>
-    import { onMount } from 'svelte';
+    import { createEventDispatcher } from 'svelte';
     import {active, meta, router, Route} from 'tinro';
     import { user } from '../js/store.js'
 
     export let breeders = null;
     export let moderator = null;
 
-    console.log( 'Moderator', moderator );
-
-
     const route = meta();
+    const dispatch = createEventDispatcher();
 
-    onMount( () => {
-    })
+    function onAddMember( event ) {
+        dispach( 'addMember', )
+    }
+
 
 </script>
 
 
-<div class='flex flex-row border border-gray-400 rounded-t p-2 bg-header gap-x-1 font-bold'>
+<div class='flex flex-row border border-gray-400 rounded-t px-8 py-2 bg-header gap-x-1 font-bold'>
     <div class='w-8'>Id</div>
     <div class='w-64'>Name</div>
     <div class='w-32'>Ortsverein</div>
     <div class='w-32'>Meldungen</div>
     <div class='grow'></div>
     {#if moderator}
-        <a class='w-8' href={route.match+'/0'} >+</a>
+        <div class='w-8' on:click={onAddMember} title='Neues Mitglied'>+</div>
     {/if}
 </div>
 
-<div class='grow bg-gray-100 overflow-y-scroll border border-t-0 border-gray-600 rounded-b px-2 scrollbar'>
+<div class='grow bg-gray-100 overflow-y-scroll border border-t-0 border-gray-600 rounded-b px-8 scrollbar'>
     {#if breeders}
         {#each breeders as breeder}
             <div class='flex flex-row gap-x-1'>

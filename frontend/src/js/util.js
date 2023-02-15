@@ -133,3 +133,7 @@ export function pct(a, b, dec=1 ) {
     }
     return '-';
 }
+
+export function txt( text ) {
+    return text ? text : '';
+}

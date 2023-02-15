@@ -57,6 +57,7 @@
     }
 
     function onOpen( breed ) {
+        console.log( 'Open');
         if( breed.open ) {
             let changed = false;
             for( let result of breed.results ) {
@@ -72,12 +73,23 @@
         } else { // open
             if( sectionId === 5 ) group = 'I'; // pigeons don't have group, so defaults to 'I' locally
             if( breed.id && districtId && sectionId && year && group ) {
-                api.result.breed.get(breed.id, districtId, year, group)
-                    .then(response => {
-                        breed.results = response.results
-                        breed.open = true;
-                        breeds = breeds; // trigger
-                    })
+                if( sectionId === 5 ) {
+                    console.log('Getting breed results');
+                    api.result.breed.get(breed.id, districtId, year, group)
+                        .then(response => {
+                            breed.results = response.results
+                            breed.open = true;
+                            breeds = breeds; // trigger
+                        })
+                } else {
+                    console.log('Getting colors results');
+                    api.result.colors.get(breed.id, districtId, year, group)
+                        .then(response => {
+                            breed.results = response.results
+                            breed.open = true;
+                            breeds = breeds; // trigger
+                        })
+                }
             }
         }
     }
@@ -116,7 +128,7 @@
 
 </script>
 
-<h2 class='text-center'>Zuchtbuch Leistungen {district ? district.name : '...'}</h2>
+<h2 class='text-center'>Zuuuchtbuch Leistungen {district ? district.name : '...'}</h2>
 <div class='border-b border-gray-400 justify-center flex flex-row mx-2 gap-x-4'>
     <Select label="Sparte" bind:value={sectionId}>
         <option value={null}></option>

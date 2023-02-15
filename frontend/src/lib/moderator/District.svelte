@@ -1,7 +1,6 @@
 <script>
     import {Route, meta} from 'tinro';
     import api from '../../js/api.js';
-    import {district, user} from '../../js/store.js';
 
     import Breeder from './Breeder.svelte';
     import Breeders from './Breeders.svelte';
@@ -11,12 +10,11 @@
     import DistrictResultsEdit from '../district/ResultsEdit.svelte';
 
     export let id;
-//    let district = null;
+    let district = null;
 
     function loadDistrict( id ) {
         api.district.get( id ).then( response => {
-  //          district = response.district;
-            district.set( response.district );
+            district = response.district;
         })
     }
 

@@ -58,11 +58,14 @@ export default {
 
     breeder: {
         get: ( breederId ) => get( 'api/breeder/'+breederId ),
-        new: () => { // id being null
+        new: ( districtId ) => { // id being null
             return new Promise( ( resolve ) => {
                 // TODO, remember to delete cache for parent district
-                resolve( { id:0, parent:parentId, name:null, fullname:null, short:null, coordinates:null, children:[], moderators:[] } );
+                resolve( { breeder:{ id:null, name:null, email:null, districtId:districtId, clubId:null, start:new Date(), end:null, active:true, info:null }} );
             })
+        },
+        post: ( breeder ) => {
+            return post( 'api/breeder', breeder );
         },
         reports: {
             get: (breederId) => get( 'api/breeder/'+breederId+'/reports' ),
@@ -84,7 +87,7 @@ export default {
             return new Promise( ( resolve ) => {
                 // TODO, remember to delete cache for parent district
                 clear( 'api/district/'+parentId );
-                resolve( { id:0, parent:parentId, name:null, fullname:null, short:null, coordinates:null, children:[], moderators:[] } );
+                resolve( { id:null, parent:parentId, name:null, fullname:null, short:null, coordinates:null, children:[], moderators:[] } );
             })
         },
         post: ( district ) => { // insert
@@ -109,6 +112,26 @@ export default {
         children: {
             get: (districtId) => {
                 return get( 'api/district/'+districtId+'/children' );
+            }
+        },
+        clubs: {
+            get: (rootId) => {
+                return new Promise( resolve => {
+                    get( 'api/district/'+rootId+'/root').then( response => {
+                        const clubs = [];
+                        let root = response.district;
+                        let districts = [ root ];
+                        for( let index=0; index < districts.length; index++ ) {
+                            const district = districts[ index ];
+                            if( district.level==='OV' ) {
+                                clubs.push( district );
+                            }
+                            districts = districts.concat( district.children );
+                        }
+                        resolve( { clubs:clubs } );
+                    })
+                })
+
             }
         },
 
@@ -200,6 +223,9 @@ export default {
 
         breed: {
             get: ( breedId, districtId, year, group ) => get( 'api/result/breed/'+breedId+'/district/'+districtId+'/year/'+year+'/group/'+group+'/results'),
+        },
+        colors: {
+            get: ( breedId, districtId, year, group ) => get( 'api/result/colors/'+breedId+'/district/'+districtId+'/year/'+year+'/group/'+group+'/results'),
         },
     },
 
