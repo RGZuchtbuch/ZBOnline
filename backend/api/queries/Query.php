@@ -88,7 +88,7 @@ class Query
         return $root;
     }
 
-    // TODO is neede or should be replaced by selectRoot
+    // TODO is needed or should be replaced by selectRoot
     // works on parentId and results parent having children based on parentId
     public static function selectTree(PDOStatement & $stmt, array & $args = [] ) : array { // array of objects, could be empty
         if( $stmt->execute( $args ) ) {

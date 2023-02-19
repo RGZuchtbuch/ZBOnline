@@ -1,6 +1,10 @@
 <script>
     //  import logo from './assets/svelte.png'
     import {Route} from 'tinro';
+
+    import api from './js/api.js';
+    import { standard, user } from './js/store.js'
+
     import NavigationBar from './lib/NavigationBar.svelte';
     import Menu from './lib/Menu.svelte';
     import Home from './lib/Home.svelte';
@@ -13,7 +17,12 @@
     import Login from './lib/Login.svelte';
     import Logout from './lib/Logout.svelte';
 
-    import { user } from './js/store.js'
+
+
+//    api.standard.get().then( response => {
+//        standard.set( response.section );
+//        console.log( response.section );
+//    })
 
 </script>
 

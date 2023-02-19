@@ -36,7 +36,7 @@ export default {
                     return { success:true }; // success
                 }
                 return { success: false };
-            }).catch( response => {
+            }).catch( () => {
                 return { success: false };
             });
 
@@ -175,7 +175,7 @@ export default {
     moderator: {
         new: (districtId) => {
             let moderatorPromise = Promise.resolve({moderator: {id: 0, district: districtId}});
-            let districtPromise = get('api/district/' + districtId);            ;
+            let districtPromise = get('api/district/' + districtId);
             let candidatesPromise = get('/api/users');
 
             return Promise.all([moderatorPromise, districtPromise, candidatesPromise])
@@ -246,6 +246,10 @@ export default {
         }
     },
 
+    standard: {
+        get: () => get( 'api/standard' ),
+    },
+
     trend: {
         color: {
             get: ( districtId, colorId ) =>
@@ -295,8 +299,8 @@ function clear( url ) {
 
 function getHeaders() {
     let headers = {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Accept': 'application/data',
+        'Content-Type': 'application/data'
     }
     if( token ) {
         headers[ 'Authorization'] = 'Bearer '+token;

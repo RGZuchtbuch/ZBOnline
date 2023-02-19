@@ -57,6 +57,8 @@ class Routes {
         $app->get( '/section/{sectionId}/breeds', new section\breeds\Get() );
         $app->get( '/section/{sectionId}/root', new section\root\Get() );
 
+        $app->get( '/standard', new standard\Get() );
+
     }
 };
 

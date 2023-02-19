@@ -1,3 +1,4 @@
+
 import { writable } from 'svelte/store';
 
 // usefull
@@ -8,3 +9,7 @@ export const sexes = writable( ['1.0', '0.1' ] );
 export const user = writable( null ); // keeping loggedin user
 //export const district = writable( null ); // current districtexport
 //export const breeder = writable( null ); // current breeder
+
+export const standard = writable( {standard:[] } );
+
+

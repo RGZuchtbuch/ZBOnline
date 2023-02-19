@@ -6,9 +6,9 @@
     <div class='w-48'></div>
     <div class='grow gap-x-4 pl-8'>
         <a href='/seite/1'>Das Zuchtbuch</a>
-        <a href='/standard'>Standard</a>
-        <a href='/leistungen'>Leistungen</a>
-        {#if $user } <a href='/zuechter'>Mein Zuchtbuch</a> {/if}
+        {#if STANDARDSENABLED}<a href='/standard'>Standard</a>{/if}
+        {#if RESULTSENABLED}<a href='/leistungen'>Leistungen</a>{/if}
+        {#if $user && MYBOOKENABLED} <a href='/zuechter'>Mein Zuchtbuch</a> {/if}
         {#if $user && $user.moderator.length > 0 } <a href='/obmann'>Obmann</a> {/if}
         {#if $user && $user.admin } <a href='/admin'>Admin</a> {/if}
     </div>
