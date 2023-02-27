@@ -58,6 +58,6 @@ const MAXLONGITUDE = 15;
 const MAXBUBBLE = 35;
 
 
-const STANDARDSENABLED = true;
+const STANDARDENABLED = true;
 const RESULTSENABLED = true;
 const MYBOOKENABLED = false;

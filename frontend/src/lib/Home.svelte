@@ -1,6 +1,6 @@
 <script>
-    import Page from './Page.svelte';
+    import Article from './Article.svelte';
 
 </script>
 
-<Page pageId={1} />
+<Article id={1} />

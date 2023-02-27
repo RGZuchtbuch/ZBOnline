@@ -18,10 +18,9 @@ $app = AppFactory::create();
 
 $app->setBasePath("/api"); // as the api lives here... else not found.
 
+App\Controller\Router::register( $app );
+
 $app->addErrorMiddleware(true, true, true );
-
-App\controllers\Routes::register( $app );
-
 
 $app->run();
 

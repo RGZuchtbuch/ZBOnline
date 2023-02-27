@@ -27,7 +27,7 @@
 
     function loadDistricts( id ) {
         api.district.children.get( id ).then( response => {
-            rootDistrict = response.rootDistrict;
+            rootDistrict = response.district;
         })
     }
 

@@ -5,6 +5,7 @@
     import api from './js/api.js';
     import { standard, user } from './js/store.js'
 
+    import Article from './lib/Article.svelte';
     import NavigationBar from './lib/NavigationBar.svelte';
     import Menu from './lib/Menu.svelte';
     import Home from './lib/Home.svelte';
@@ -12,7 +13,6 @@
     import Moderator from './lib/moderator/Moderator.svelte';
     import Results from './lib/results/Results.svelte';
     import Standard from './lib/standard/Standard.svelte';
-    import Page from './lib/page.svelte';
 
     import Login from './lib/Login.svelte';
     import Logout from './lib/Logout.svelte';
@@ -42,7 +42,7 @@
         <div class='grow flex flex-col border rounded bg-white p-4 print'>
 
             <Route path='/' ><Home /></Route>
-            <Route path='/seite/:pageId' let:meta> <Page pageId={meta.params.pageId} /> </Route>
+            <Route path='/seite/:articleId' let:meta> <Article id={meta.params.articleId} /> </Route>
             <Route path='/standard/*' > <Standard /> </Route>
             <Route path='/leistungen/*' > <Results /> </Route>
             <Route path='/obmann/*' > <Moderator /> </Route>

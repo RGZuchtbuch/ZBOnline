@@ -50,8 +50,8 @@
                 ? ( result.broodHatched===null || ( result.broodHatched >=0 && result.broodHatched<=9999 ) )
                 : ( result.broodHatched===null || ( result.broodHatched >=0 && result.broodHatched<=(result.broodFertile===null ? result.broodEggs : result.broodFertile ) ) )
             ) &&
-            ( result.showCount==null     || ( result.showCount >=1 && result.showCount<=999 ) ) &&
-            ( result.showScore===null    || ( result.showScore >=89 && result.showScore<=97 ) );
+            ( result.showCount==null     || ( result.showCount >0 && result.showCount <100000 ) ) &&
+            ( result.showScore===null    || ( result.showCount >0 && result.showScore >=89 && result.showScore<=97 ) );
         console.log( 'isValid', valid );
         return valid;
     }
@@ -64,7 +64,7 @@
                 changed |= result.changed;
             }
             if( changed ) {
-                // breed.open = true; // stay open until saved
+                // Breed.open = true; // stay open until saved
             } else {
                 breed.open = false;
                 breeds = breeds; // trigger
@@ -74,7 +74,7 @@
             if( sectionId === 5 ) group = 'I'; // pigeons don't have group, so defaults to 'I' locally
             if( breed.id && districtId && sectionId && year && group ) {
                 if( sectionId === 5 ) {
-                    console.log('Getting breed results');
+                    console.log('Getting Breed results');
                     api.result.breed.get(breed.id, districtId, year, group)
                         .then(response => {
                             breed.results = response.results
@@ -267,13 +267,13 @@
                                 <div class='w-8 pl-4'>&#10551; </div>
                                 <div class='w-80'>Gesamte Farbenschläge</div>
 
-                                <InputNumber class='w-16' bind:value={result.breeders} min=1 max=9999 error='1..9999'/>
-                                <InputNumber class='w-16' bind:value={result.pairs} min=1 max=9999 error='1..9999'/>
+                                <InputNumber class='w-16' bind:value={result.breeders} min=1 max=99999 error='1..99999' />
+                                <InputNumber class='w-16' bind:value={result.pairs} min=1 max=99999 error='1..99999' />
 
                                 <div class='w-2'></div>
 
-                                <InputNumber class='w-16' bind:value={result.broodEggs} min=0 max=9999 />
-                                <InputNumber class='w-16' bind:value={result.broodHatched} min=0 max=9999 />
+                                <InputNumber class='w-16' bind:value={result.broodEggs} min=0 max=99999 />
+                                <InputNumber class='w-16' bind:value={result.broodHatched} min=0 max=99999 />
                                 <InputNumber class='w-16' value={result.pairs ? result.broodHatched / result.pairs : '-' } readonly />
 
                                 <div class='w-2'></div>
@@ -284,25 +284,25 @@
                                 <div class='w-8 pl-4'>&#10551; </div>
                                 <div class='w-80'>{result.name}</div>
 
-                                <InputNumber class='w-16' bind:value={result.breeders} min=1 max=9999 error='1..9999'/>
-                                <InputNumber class='w-16' bind:value={result.pairs} min=1 max=9999 error='1..9999'/>
+                                <InputNumber class='w-16' bind:value={result.breeders} min=1 max=99999 error='1..99999' />
+                                <InputNumber class='w-16' bind:value={result.pairs} min=1 max=99999 error='1..99999' />
 
                                 <div class='w-2'></div>
 
-                                <InputNumber class='w-16' bind:value={result.layDames} min=1 max=9999 error='0..9999'/>
+                                <InputNumber class='w-16' bind:value={result.layDames} min=1 max=99999 error='0..99999'/>
                                 <InputNumber class='w-16' bind:value={result.layEggs} min=0 max=399 error='0..399'/>
                                 <InputNumber class='w-16' bind:value={result.layWeight} min=1 max=999 error='0..999'/>
 
                                 <div class='w-2'></div>
 
-                                <InputNumber class='w-16' bind:value={result.broodEggs} min=1 max=9999 error='0..9999'/>
+                                <InputNumber class='w-16' bind:value={result.broodEggs} min=1 max=99999 error='0..99999'/>
                                 <InputNumber class='w-16' bind:value={result.broodFertile} min=0 max={result.broodEggs} error='0..{result.broodEggs}'/>
                                 <InputNumber class='w-16' bind:value={result.broodHatched} min=0 max={(result.broodFertile==null ? result.broodEggs : result.broodFertile )} error='0..{result.broodFertile}'/>
 
                                 <div class='w-2'></div>
 
-                                <InputNumber class='w-16' bind:value={result.showCount} min=1 max=9999 error='0..9999'/>
-                                <InputNumber class='w-16' bind:value={result.showScore} min=90 max=97 step=0.1 error='90..97'/>
+                                <InputNumber class='w-16' bind:value={result.showCount} min=1 max=99999 error='0..99999'/>
+                                <InputNumber class='w-16' bind:value={result.showScore} min=89 max=97 step=0.1 error='89..97'/>
                             {/if}
 
                             {#if result.changed }

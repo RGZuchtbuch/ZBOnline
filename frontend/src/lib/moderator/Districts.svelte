@@ -6,7 +6,6 @@
 
     import RecursiveDistrict from './RecursiveDistrict.svelte';
 
-
     let rootDistrict = null;
 
     const dispatch = createEventDispatcher();
@@ -26,14 +25,13 @@
         district.visible = selectableParent || district.selectable || selectableChild;
 
         if( district.children && selectableChild ) district.open = true;
-
-        if( district.id === 2 ) console.log('D', district )
         return district.selectable;
     }
 
     // load whole district tree
-    function loadDistrictsTree() {
-        api.district.root.get( 1 ).then( response => {
+    function loadDistrict() {
+        api.district.descendants.get( 1 ).then( response => {
+            console.log('Response', response );
             rootDistrict = response.district;
             checkEditable( rootDistrict );
         } );
@@ -52,16 +50,18 @@
         dispatch( 'select', event.detail );
     }
 
-    $: loadDistrictsTree( $user ); // if user changes by logout/login or exp
+    $: loadDistrict( $user ); // if user changes by logout/login or exp
 
 </script>
 
 
 {#if $user}
-    <h2 class='border border-gray-400 rounded-t p-2 bg-header text-center text-xl print'>Verbände für Obmann {$user.name} </h2>
+    <h2 class='border border-gray-400 rounded-t p-2 bg-header text-center text-xl print'>Verbände für Obmann {$user.fullname} </h2>
     {#if rootDistrict}
         <div class='bg-gray-100 overflow-y-scroll border rounded-b border-t-0 border-gray-400 px-4 scrollbar'>
+            o
             <RecursiveDistrict district={rootDistrict} on:select={onSelect}/>
+            a
         </div>
     {:else}
         Einen moment bitte

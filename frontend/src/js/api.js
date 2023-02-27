@@ -24,30 +24,11 @@ if( token !== null ) { // mind, could be "null" text as well
 }
 
 export default {
-    user: {
-        login: (email, password ) => {
-            return post('api/credentials', {email: email, password: password}).then( response => {
-                if( response ) {
-                    token = response.token;
-                    window.sessionStorage.setItem( 'token', token );
-                    const decToken = jwt_decode(token);
-                    decToken.user.exp = decToken.exp;
-                    user.set( decToken.user ); // user or null
-                    return { success:true }; // success
-                }
-                return { success: false };
-            }).catch( () => {
-                return { success: false };
-            });
 
-        },
-        logout: () => {
-            token = null;
-            window.sessionStorage.clear();
-            user.set( null ); // user or null
-            return true; // always success
-        }
+    article: {
+        get: (id) => get('api/article/' + id),
     },
+
 
     breed: {
         get: (id) => get( 'api/breed/'+id ),
@@ -142,9 +123,9 @@ export default {
             },
         },
 
-        root: {
-            get: ( rootId ) => {
-                return get( 'api/district/'+rootId+'/root');
+        descendants: {
+            get: ( id ) => {
+                return get( 'api/district/'+id+'/descendants');
             }
         }
 
@@ -202,9 +183,6 @@ export default {
 //        },
     },
 
-    page: {
-        get: (id) => get('api/page/' + id),
-    },
 
     report: {
         get: (id) => get('api/report/' + id),
@@ -235,6 +213,7 @@ export default {
             get: ( parentId ) => get( 'api/section/'+parentId+'/children')
         },
         getTree: ( parentId ) => get( 'api/section/'+parentId+'/tree'),
+
         breeds: {
             get: (sectionId) => get('api/section/' + sectionId + '/breeds'),
 
@@ -264,6 +243,33 @@ export default {
                 get( 'api/results/years?district='+districtId+'&section='+sectionId ),
         },
     },
+
+    user: {
+        login: (email, password ) => {
+            return post('api/user/token', {email: email, password: password}).then( response => {
+                if( response ) {
+                    token = response.token;
+                    window.sessionStorage.setItem( 'token', token );
+                    const decToken = jwt_decode(token);
+                    console.log( 'Token', decToken );
+                    decToken.user.exp = decToken.exp;
+                    user.set( decToken.user ); // user or null
+                    return { success:true }; // success
+                }
+                return { success: false };
+            }).catch( () => {
+                return { success: false };
+            });
+
+        },
+        logout: () => {
+            token = null;
+            window.sessionStorage.clear();
+            user.set( null ); // user or null
+            return true; // always success
+        }
+    },
+
 }
 
 
