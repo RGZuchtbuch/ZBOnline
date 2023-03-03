@@ -95,10 +95,14 @@ export default {
                 return get( 'api/district/'+districtId+'/children' );
             }
         },
+
+        /**
+         * returns array of clubs within district hierarchy incl root id
+         */
         clubs: {
-            get: ( id ) => {
+            get: ( districtId ) => {
                 return new Promise( resolve => {
-                    get( 'api/district/'+id+'/descendants' ).then( response => {
+                    get( 'api/district/'+districtId+'/descendants' ).then( response => {
                         const clubs = [];
                         let root = response.district;
                         let districts = [ root ];
@@ -116,9 +120,12 @@ export default {
             }
         },
 
+        /**
+         * returns the district hierarchie incl given root id
+          */
         descendants: {
-            get: ( id ) => {
-                return get( 'api/district/'+id+'/descendants');
+            get: ( districtId ) => {
+                return get( 'api/district/'+districtId+'/descendants');
             }
         },
 
@@ -145,6 +152,9 @@ export default {
         },
     },
 
+    /**
+     * provides the array of ZB groups, could be extended to own table in db with info text
+     */
     groups: {
         get: () => {
             return new Promise( ( resolve ) => {

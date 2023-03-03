@@ -94,7 +94,7 @@ export function getProduction( days, eggs, dames ) {
     if( days > 365 ) {
         fit = 365;
     } else if( days > 183 ) {
-        fit = 340.1984 - 0.7930455*days + 0.002358891*days*days;;  // https://mycurvefit.com/
+        fit = 340.1984 - 0.7930455*days + 0.002358891*days*days;  // https://mycurvefit.com/
     } else {
         fit = 274;
     }
@@ -120,7 +120,7 @@ export function printPct( value, decimals = 0 ) {
 
 export function dec( value, decimals ) {
     value = +value; // make sure its a number
-    if( value===NaN || value===null || value===undefined ) {
+    if( value == null ) { // incl undefined
         return '-';
     }
     decimals = decimals || 0;

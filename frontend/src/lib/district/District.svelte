@@ -2,14 +2,14 @@
     import {Route, meta} from 'tinro';
     import api from '../../js/api.js';
 
-    import Breeder from './Breeder.svelte';
-    import Breeders from './Breeders.svelte';
-    import Reports from './Reports.svelte';
-    import Results from './Results.svelte';
-    import Report from './Report.svelte';
-    import DistrictResultsEdit from '../district/ResultsEdit.svelte';
+    import Breeder from '../moderator/Breeder.svelte';
+    import Breeders from '../moderator/Breeders.svelte';
+    import Reports from '../moderator/Reports.svelte';
+    import Results from '../moderator/Results.svelte';
+    import Report from '../moderator/Report.svelte';
+    import DistrictResultsEdit from './ResultsEdit.svelte';
 
-    export let id;
+    export let id = null;
     let district = null;
 
     function loadDistrict( id ) {

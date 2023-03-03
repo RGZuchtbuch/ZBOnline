@@ -9,7 +9,7 @@
     const route = meta();
 
     function loadDistricts() {
-        api.district.root.get( 1 ).then( response => {
+        api.district.descendants.get( 1 ).then( response => {
            district = response.district;
         } );
     }

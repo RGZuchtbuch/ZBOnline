@@ -10,38 +10,72 @@ use Slim\Exception\HttpNotImplementedException;
 
 class District extends Model
 {
-    public static function new( string $name, int $sectionId, int $broodGroup, int $lay, int $eggWeight, int $sireRing, int $dameRing, int $sireWeight, int $dameWeight, string $info ) : ? int {
-        throw new HttpNotImplementedException( null, "oops" );
+
+    public static function new(
+        int $parentId, string $name, ? string $fullname, ? string $short, // parentId cannot change
+        ? float $latitude, ? float $longitude,
+        string $level, ? int $moderatorId, int $modifier
+    ) : ? int {
+        $args = get_defined_vars();
+        $stmt = Query::prepare( '
+            INSERT INTO district ( parentId, name, fullname, short, latitude, longitude, level, moderatorId, modifier )
+            VALUES ( :parentId, :name, :fullname, :short, :latitude, :longitude, :level, :moderatorId, :modifier )
+        ' );
+        return Query::insert( $stmt, $args );
     }
 
     public static function get( int $id ) : ? array {
         $args = get_defined_vars();
         $stmt = Query::prepare( '
-            SELECT district.*, moderator.userId as moderatorId 
+            SELECT district.* 
             FROM district
-            LEFT JOIN moderator ON moderator.districtId = district.id
             WHERE id=:id
         ' );
         return Query::select($stmt, $args);
     }
 
-
-    public static function set( int $id, string $name, int $sectionId, int $broodGroup, int $lay, int $eggWeight, int $sireRing, int $dameRing, int $sireWeight, int $dameWeight, string $info ) : bool {
-        throw new HttpNotImplementedException( null, "oops" );
+    public static function set(
+        int $id,
+        string $name, ? string $fullname, ? string $short,
+        ? float $latitude, ? float $longitude,
+        string $level, ? int $moderatorId, int $modifier
+    ) : bool {
+        $args = get_defined_vars();
+        $stmt = Query::prepare('
+            UPDATE district
+            SET name=:name, fullname=:fullname, short=:short, latitude=:latitude, longitude=:longitude, level=:level, moderatorId=:moderatorId, modifier=:modifier
+            WHERE id=:id  
+        ');
+        return Query::update($stmt, $args);
     }
 
     public static function del( int $id ) : bool {
         throw new HttpNotImplementedException( null, "oops" );
     }
 
-    public static function breeders( int $id ) : array {
+    /**
+     * @param int $districtId
+     * @return array of breeders in district incl descendants
+     */
+    public static function breeders( int $districtId ) : array {
         $args = get_defined_vars();
         $stmt = Query::prepare('
-            SELECT user.id, firstname, infix, lastname, email, districtId, clubId, club.name AS clubName, start, end 
-            FROM user 
-            LEFT JOIN district AS club ON club.id = user.clubId
-            WHERE districtId=:id
-            ORDER BY lastname
+            WITH RECURSIVE districts( id, name ) AS 
+            (
+                SELECT id, name FROM district WHERE id=:districtId
+                UNION
+                SELECT district.id, district.name
+                FROM districts 
+                JOIN district ON district.parentId = districts.id
+            )   
+            SELECT 
+                breeder.id, breeder.firstname, breeder.infix, breeder.lastname, 
+                districts.id AS districtId, districts.name AS districtName,
+                club.id AS clubId, club.name AS clubName
+            FROM user AS breeder
+            JOIN districts ON districts.id = breeder.districtId
+            LEFT JOIN district AS club ON club.id = breeder.clubId
+            ORDER BY breeder.lastname, breeder.firstname
         ');
         return Query::selectArray( $stmt, $args );
     }
@@ -60,10 +94,10 @@ class District extends Model
     public static function descendants( int $id ) : array {
         $args = get_defined_vars();
         $stmt = Query::prepare( '
-            WITH RECURSIVE districts( id, parentId, name, moderatable, level ) AS (
-               SELECT id, parentId, name, moderatable, level FROM district WHERE id=:id
+            WITH RECURSIVE districts( id, parentId, name, level, moderatorId ) AS (
+               SELECT id, parentId, name, level, moderatorId FROM district WHERE id=:id
                UNION
-               SELECT district.id, district.parentId, district.name, district.moderatable, district.level
+               SELECT district.id, district.parentId, district.name, district.level, district.moderatorId
                FROM districts JOIN district ON district.parentId=districts.id
             )
             SELECT * FROM districts
@@ -77,7 +111,7 @@ class District extends Model
         $stmt = Query::prepare('
             SELECT 
                    result.id, result.reportId, :districtId AS districtId, :year AS `year`, :group AS `group`,             
-                   breed.id AS breedId, null AS colorId, "gesamt" AS name,  
+                   breed.id AS breedId, null AS colorId, null AS name,  
                    result.breeders, result.pairs,
                    result.layDames, result.layEggs, result.layWeight,
                    result.broodEggs, result.broodFertile, result.broodHatched,
@@ -139,7 +173,7 @@ class District extends Model
                 )   
                 SELECT id FROM sections
             )
-            GROUP BY breed.id
+            GROUP BY breed.id, breed.name
             ORDER BY breed.name 
         ');
         return Query::selectArray( $stmt, $args );

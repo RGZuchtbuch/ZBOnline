@@ -28,7 +28,7 @@ class Breeder extends Model
         return Query::insert( $stmt, $args );
     }
 
-    public static function set( int $id, string $firstname, ? string $infix, string $lastname, ? string $email, int $districtId, int $clubId, string $start, ? string $end, ? string $info, int $modifier ) : ? int {
+    public static function set( int $id, string $firstname, ? string $infix, string $lastname, ? string $email, int $districtId, int $clubId, string $start, ? string $end, ? string $info, int $modifier ) : bool {
         $args = get_defined_vars();
         $stmt = Query::prepare('
             UPDATE user
@@ -38,7 +38,7 @@ class Breeder extends Model
         return Query::update($stmt, $args);
     }
 
-    public static function delete( int $id ) : ? int { // TODO use with case, as it's could be referred to from reports
+    public static function delete( int $id ) : bool { // TODO use with case, as it's could be referred to from reports
         $args = get_defined_vars();
         $stmt = Query::prepare('
             DELETE FROM user 

@@ -11,10 +11,11 @@ class Breeders extends Controller
 {
     public function authorized(): bool
     {
-        // requester should be moderator of district
-        $districtId = $this->args[ 'id' ];
-        $moderatedDistricts = $this->requester[ 'moderator' ];
-        return in_array( $districtId, $moderatedDistricts );
+        if( $this->requester ) {
+            if( $this->requester['admin'] ) return true; // admin
+            if( in_array( $this->args[ 'id' ], $this->requester[ 'moderator' ] ) ) return true; // moderator
+        }
+        return false;
     }
 
     public function process() : array // parent with direct children

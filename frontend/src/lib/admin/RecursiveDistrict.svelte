@@ -1,5 +1,6 @@
 <script>
     import api from '../../js/api.js';
+    import {txt} from '../../js/util.js';
     import Button from '../input/Button.svelte';
     import Number from '../input/Number.svelte';
     import Select from '../input/Select.svelte';
@@ -63,7 +64,7 @@
 
 </script>
 
-<div on:click class='pl-6'>
+<div on:click class='pl-8'>
     <div>&#10551; {district.name}
         {#if district.children.length > 0}
             {#if district.open}
@@ -98,10 +99,10 @@
                     </div>
                 {/if}
 
-                <Select class='' label='Obmann' bind:value={details.moderator} >
+                <Select class='' label='Obmann' bind:value={details.moderatorId} >
                     {#if breeders}
                         {#each breeders as candidate}
-                            <option class='bg-white' value={candidate.id}> {candidate.name} </option>
+                            <option class='bg-white' value={candidate.id}> {candidate.lastname}, {candidate.firstname} {txt(candidate.infix)} </option>
                         {/each}
                     {/if}
                 </Select>

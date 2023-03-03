@@ -67,7 +67,7 @@ class Router {
 //        $app->post('/credentials', new user\credentials\Post());
 
         $app->get('/district/{id}', 'App\Controller\District\Get' );
-//        $app->post('/district', new district\Post());
+        $app->post('/district', 'App\Controller\District\Post' );
 //        $app->get('/district/{districtId}/year/{year}/colors', new district\results\Get()); // not logical !
 //        $app->get('/district/{districtId}/section/{sectionId}/year/{year}/group/{group}/colors/full', new district\results\full\Get());
 

@@ -29,12 +29,12 @@ class Moderator extends Model
     }
 
 
-    public static function districts( int $id ) : array {
+    public static function districts( int $moderatorId ) : array {
         $args = get_defined_vars();
         $stmt = Query::prepare('
-            SELECT userId, districtId
-            FROM moderator
-            WHERE userId=:id
+            SELECT id
+            FROM district
+            WHERE moderatorId=:moderatorId
         ');
         return Query::selectArray($stmt, $args);
     }

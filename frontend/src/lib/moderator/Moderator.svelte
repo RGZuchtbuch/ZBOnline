@@ -3,14 +3,8 @@
     import api from '../../js/api.js';
     import {user} from '../../js/store.js';
 
-    import Breeder from './Breeder.svelte';
-    import Breeders from './Breeders.svelte';
-    import Reports from './Reports.svelte';
-    import Results from './Results.svelte';
-    import District from './District.svelte';
+    import District from '../district/District.svelte';
     import Districts from './Districts.svelte';
-    import Report from './Report.svelte';
-    import DistrictResultsEdit from '../district/ResultsEdit.svelte';
 
     const route = meta();
 

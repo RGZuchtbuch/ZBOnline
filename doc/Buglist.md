@@ -1,15 +1,11 @@
 2023-01-06
     On outdated jwt token, now Status code 500, should be more specific frontend can jump to login ( after del user )
-
-
-2023-01-08
-    Map, list shows null if no result, should be 0.
+    should check exp each 30 minutes or so ?
 
 2023-01-08
     Moderator - Results now all sections, have select on section and change into table for compat with excel
 
-2023-01-08 
-    api.section.breeds gives nulls, error in query
+2023-03-03
+    Moderator can now only moderate district, not it's descendants. Is that ok ?
 
-2023-01-22
-    Map, still needs calculation for magallan to image coords to mnake more accurate.
+

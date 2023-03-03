@@ -23,19 +23,10 @@ class Post extends Controller
         $data = $this->data;
         $id = $data[ 'id' ] ?? null;
         if( $id ) {
-            Model\Breeder::set( $id, $data['firstname'], $data['infix'], $data['lastname'], $data['email'], $data['districtId'], $data['clubId'], $data['start'], $data['end'], $data['info'] );
+            Model\Breeder::set( $id, $data['firstname'], $data['infix'], $data['lastname'], $data['email'], $data['districtId'], $data['clubId'], $data['start'], $data['end'], $data['info'], $this->requester[ 'id' ] );
         } else {
-            $id = Model\Breeder::new( $data['firstname'], $data['infix'], $data['lastname'], $data['email'], $data['districtId'], $data['clubId'], $data['start'], $data['end'], $data['info'] );
+            $id = Model\Breeder::new( $data['firstname'], $data['infix'], $data['lastname'], $data['email'], $data['districtId'], $data['clubId'], $data['start'], $data['end'], $data['info'], $this->requester[ 'id' ] );
         }
         return ['id' => $id];
     }
 }
-
-
-$id = $this->args['id'];
-$data = $this->data;
-if( $id === $data['id'] ) {
-    $id = Model\Breeder::set($data['firstname'], $data['firstname'], $data['infix'], $data['lastname'], $data['email'], $data['districtId'], $data['clubId'], $data['start'], $data['end'], $data['info'] );
-    return ['id' => $id];
-}
-throw new HttpBadRequestException( $this->request, "Arg id does not match data id");
