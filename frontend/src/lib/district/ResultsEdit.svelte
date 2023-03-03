@@ -1,4 +1,5 @@
 <script>
+    import {router} from "tinro";
     import api from '../../js/api.js';
     import InputNumber from '../input/Number.svelte';
     import Select from '../input/Select.svelte';
@@ -23,67 +24,82 @@
 
 
 
-    function getDistrict() {
+    function loadDistrict() {
         api.district.get( districtId ).then( response => { district = response.district } );
     }
 
-    function getBreeds(sectionId, year, group ) {
+    function loadBreeds() {
+        console.log( 'loadBreeds', sectionId, year, group );
         breeds = []; // empty
         if( sectionId === 5 ) group = 'I'; // pigeons don't have group, so defaults to 'I' locally
         if( sectionId && year && group ) { // on change of any reload all
             console.log( 'Ready to get');
-            api.section.breeds.get( sectionId )
-                .then( response => { breeds = response.breeds } );
+//            api.section.breeds.get( sectionId )
+            api.district.results.section.get( districtId, sectionId, year, group ).then( response => {
+                breeds = response.results }
+            );
         }
     }
 
     function isValid( result ) {
         let valid =
-            ( result.breeders===null  || ( result.breeders>= 1 && result.breeders<=9999 ) ) &&
-            ( result.pairs===null        || ( result.pairs>=1 && result.pairs<=9999 ) ) &&
-            ( result.layDames===null     || ( result.layDames>=1 && result.layDames<=9999 ) ) &&
+            ( result.breeders == null    || ( result.breeders>=1 && result.breeders<=999999 ) )&&
+            ( result.pairs == null       || ( result.pairs>=1 && result.pairs<=999999 ) )&&
+            ( result.layDames===null     || ( result.layDames>=1 && result.layDames<=999999 ) ) &&
             ( result.layEggs===null      || ( result.layEggs>=1 && result.layEggs<=399 ) ) &&
             ( result.layWeight===null    || ( result.layWeight >=1 && result.layWeight<=999 ) ) &&
-            ( result.broodEggs===null    || ( result.broodEggs >=1 && result.broodEggs<=9999 ) ) &&
+            ( result.broodEggs===null    || ( result.broodEggs >=1 && result.broodEggs<=999999 ) ) &&
             ( result.broodFertile===null || ( result.broodFertile >=0 && result.broodFertile<=result.broodEggs ) ) &&
             ( sectionId === 5
-                ? ( result.broodHatched===null || ( result.broodHatched >=0 && result.broodHatched<=9999 ) )
+                ? ( result.broodHatched===null || ( result.broodHatched >=0 && result.broodHatched<=999999 ) ) // pigeons
                 : ( result.broodHatched===null || ( result.broodHatched >=0 && result.broodHatched<=(result.broodFertile===null ? result.broodEggs : result.broodFertile ) ) )
             ) &&
-            ( result.showCount==null     || ( result.showCount >0 && result.showCount <100000 ) ) &&
+            ( result.showCount==null     || ( result.showCount >0 && result.showCount <=999999 ) ) &&
             ( result.showScore===null    || ( result.showCount >0 && result.showScore >=89 && result.showScore<=97 ) );
         console.log( 'isValid', valid );
         return valid;
     }
 
-    function onOpen( breed ) {
-        console.log( 'Open');
-        if( breed.open ) {
-            let changed = false;
-            for( let result of breed.results ) {
-                changed |= result.changed;
-            }
-            if( changed ) {
-                // Breed.open = true; // stay open until saved
-            } else {
-                breed.open = false;
-                breeds = breeds; // trigger
-            }
+    function onQuery( route ) {
+        console.log( 'OnQuery');
+        sectionId = route.query.section ? Number( route.query.section ) : 3;
+        year = route.query.year ? Number( route.query.year ) : new Date().getFullYear();
+        group = route.query.group && [ 'I', 'II', 'III' ].includes( route.query.group ) ? route.query.group : 'I';
+        loadDistrict();
+        loadBreeds();
+    }
 
-        } else { // open
-            if( sectionId === 5 ) group = 'I'; // pigeons don't have group, so defaults to 'I' locally
-            if( breed.id && districtId && sectionId && year && group ) {
-                if( sectionId === 5 ) {
-                    console.log('Getting Breed results');
-                    api.result.breed.get(breed.id, districtId, year, group)
-                        .then(response => {
-                            breed.results = response.results
-                            breed.open = true;
-                            breeds = breeds; // trigger
-                        })
+    function onSection( event ) {
+        router.location.query.set( 'section', sectionId );
+    }
+    function onYear( event ) {
+        router.location.query.set( 'year', year );
+    }
+    function onGroup( event ) {
+        router.location.query.set( 'group', group );
+    }
+
+    function onOpen( breed ) {
+        return ( event ) => {
+            console.log('Open');
+            if (breed.open) {
+                let changed = false;
+                for (let result of breed.results) {
+                    changed |= result.changed;
+                }
+                if (changed) {
+                    // Breed.open = true; // stay open until saved
                 } else {
-                    console.log('Getting colors results');
-                    api.result.colors.get(breed.id, districtId, year, group)
+                    breed.open = false;
+                    breeds = breeds; // trigger
+                }
+
+            } else { // to open
+                console.log('Fetch', breed, districtId, sectionId, year, group);
+                if (sectionId === 5) group = 'I'; // pigeons don't have group, so defaults to 'I' locally
+                if (breed.id && districtId && sectionId && year && group) {
+                    console.log('Getting Breed results');
+                    api.district.results.breed.get(districtId, sectionId, breed.id, year, group)
                         .then(response => {
                             breed.results = response.results
                             breed.open = true;
@@ -119,10 +135,9 @@
         console.log( 'Submit' );
     }
 
-
-
-    $: getDistrict( districtId );
-    $: getBreeds( sectionId, year, group );
+    $: onQuery( $router );
+//    $: getDistrict( districtId );
+//    $: getBreeds( sectionId, year, group );
 
     console.log( 'ResultInputHeader here');
 
@@ -130,14 +145,14 @@
 
 <h2 class='text-center'>Zuuuchtbuch Leistungen {district ? district.name : '...'}</h2>
 <div class='border-b border-gray-400 justify-center flex flex-row mx-2 gap-x-4'>
-    <Select label="Sparte" bind:value={sectionId}>
+    <Select label="Sparte" bind:value={sectionId} on:change={onSection}>
         <option value={null}></option>
         {#each sections as section}
             <option value={section.id}>{section.name}</option>
         {/each}
     </Select>
 
-    <Select label="Jahr" bind:value={year}>
+    <Select label="Jahr" bind:value={year} on:change={onYear}>
         <option value={null}></option>
         {#each years as year}
             <option value={year}>{year}</option>
@@ -145,7 +160,7 @@
     </Select>
 
     {#if sectionId && sectionId !== 5}
-        <Select label="Gruppe" bind:value={group}>
+        <Select label="Gruppe" bind:value={group} on:change={onGroup}>
             <option value={null}></option>
             {#each groups as group}
                 <option value={group}>{group}</option>
@@ -307,7 +322,7 @@
 
                             {#if result.changed }
                                 {#if isValid( result ) }
-                                    <div class='w-16' on:click={onSave( result )}>[Save]</div>
+                                    <div class='w-16 text-green-600' on:click={onSave( result )}>[Save]</div>
                                 {:else}
                                     <div class='w-16 text-red-600'>[Save]</div>
                                 {/if}

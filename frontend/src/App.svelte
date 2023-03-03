@@ -62,7 +62,7 @@
                 {#if $user}
                     {#if $user.admin} <div>Administrator</div>{/if}
                     {#if $user.moderator.length>0} <div>Obmann</div>{/if}
-                    <div>{$user.name}</div>
+                    <div>{$user.fullname}</div>
                     <div>Bis { new Date( $user.exp * 1000 ).toLocaleString( 'de') }</div>
                 {/if}
             </div>

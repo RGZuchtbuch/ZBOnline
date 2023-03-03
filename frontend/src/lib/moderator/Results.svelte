@@ -6,8 +6,6 @@
     import Results from '../Results.svelte';
     import Range from '../input/Range.svelte';
 
-
-
     export let districtId = null;
     export let moderator = null;
 
@@ -39,9 +37,9 @@
 </script>
 
 {#if $user}
-    <h2 class='text-center'>Obmann {#if $user} {$user.name} {/if} → Verband {#if district} {district.name} {/if} → Leistungen</h2>
-    <Range label='Jahr' bind:value={year} min={2000} max={new Date().getFullYear()} step={1} />
-    {#if results} <Results {results} /> {/if}
+    <h2 class='text-center'>Verband {#if district} {district.name} {/if} → Leistungen {year}</h2>
+    <Range class='px-8' label='Jahr' bind:value={year} min={2000} max={new Date().getFullYear()} step={1} title='Schieben um das Jahr zu wählen'/>
+    <Results {results} />
 {:else}
     NOT AUTORIZED
 {/if}

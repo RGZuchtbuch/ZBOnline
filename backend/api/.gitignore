@@ -1,5 +1,5 @@
 /vendor/
-
+/api/old/
 # composer.phar
 composer.lock
-config.old.php
+Config.php

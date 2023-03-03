@@ -53,10 +53,10 @@ class Query
     }
 
     public static function insert( PDOStatement & $stmt, array & $args ) : ? int { // returns new id
-        return $stmt->execute( $args );
+        return $stmt->execute( $args ) ? Query::lastInsertId() : null;
     }
 
-    public static function lastInsertId( ? string $name ) : int {
+    public static function lastInsertId( ? string $name = null ) : int {
         return Query::getPdo()->lastInsertId( $name );
     }
 

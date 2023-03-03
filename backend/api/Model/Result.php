@@ -4,6 +4,59 @@ namespace App\Model;
 
 class Result
 {
+    public static function get( $id ) {
+        $args = get_defined_vars();
+        $stmt = Query::prepare( '
+            SELECT id, reportId, districtId, `year`, `group`, breedId, colorId, breeders, pairs, layDames, layEggs, broodEggs, broodFertile, broodHatched, showCount, showScore
+            FROM result
+            WHERE id=:id
+        ' );
+        return Query::selectArray( $stmt, $args );
+    }
+
+    public static function new(
+        $reportId, $districtId, $year, $group,
+        $breedId, $colorId,
+        $breeders, $pairs,
+        $layDames, $layEggs, $layWeight,
+        $broodEggs, $broodFertile, $broodHatched,
+        $showCount, $showScore,
+        $modifier
+    ) {
+        $args = get_defined_vars();
+        $stmt = Query::prepare( '
+            INSERT INTO result ( reportId, districtId, `year`, `group`, breedId, colorId, breeders, pairs, layDames, layEggs, layWeight, broodEggs, broodFertile, broodHatched, showCount, showScore, modifier ) 
+            VALUES ( :reportId, :districtId, :year, :group, :breedId, :colorId, :breeders, :pairs, :layDames, :layEggs, :layWeight, :broodEggs, :broodFertile, :broodHatched, :showCount, :showScore, :modifier )
+        ' );
+        return Query::insert( $stmt, $args );
+    }
+    public static function set(
+        $id, $reportId, $districtId, $year, $group,
+        $breedId, $colorId,
+        $breeders, $pairs,
+        $layDames, $layEggs, $layWeight,
+        $broodEggs, $broodFertile, $broodHatched,
+        $showCount, $showScore,
+        $modifier
+    ) {
+        $args = get_defined_vars();
+        $stmt = Query::prepare( '
+            UPDATE  result
+            SET reportId=:reportId, districtId=:districtId, `year`=:year, `group`=:group, breedId=:breedId, colorId=:colorId, breeders=:breeders, pairs=:pairs, layDames=:layDames, layEggs=:layEggs, layWeight=:layWeight, broodEggs=:broodEggs, broodFertile=:broodFertile, broodHatched=:broodHatched, showCount=:showCount, showScore=:showScore, modifier=:modifier
+            WHERE id=:id
+        ' );
+        return Query::update( $stmt, $args );
+    }
+
+    public static function delete( $id ) {
+        $args = get_defined_vars();
+        $stmt = Query::prepare( '
+            DELETE 
+            FROM result
+            WHERE id=:id
+        ' );
+        return Query::delete( $stmt, $args );
+    }
 
     public static function districtsForColor( $year, $colorId ) {
         $args = get_defined_vars();

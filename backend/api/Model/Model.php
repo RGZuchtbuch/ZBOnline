@@ -2,8 +2,9 @@
 
 namespace App\Model;
 
+use App\Controller\Controller;
+
 abstract class Model
 {
-    public abstract static function authorized( int $requesterId, int $id ) : bool; // enforce implementation !
 
 }

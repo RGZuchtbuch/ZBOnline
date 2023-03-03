@@ -4,9 +4,6 @@ namespace App\Model;
 
 class User
 {
-    public static function authorized( int $id, int $requesterId ) : bool {
-        return true;
-    }
 
     public static function new( ? string $firstname, ? string $infix, ? string $lastname, ? string $password, ? string $email, int $districtId, int $clubId, string $start, ? string $end, ? string $info ) : ? int {
         return null;
@@ -15,7 +12,7 @@ class User
     public static function get( int $id ) : ? array {
         $args = get_defined_vars();
         $stmt = Query::prepare('
-            SELECT id, firstname, infix, lastname, email, districtId, clubId, start, end, info
+            SELECT id, firstname, infix, lastname, email, districtId, clubId, start, end, info, admin
             FROM user
             WHERE id=:id
         ');

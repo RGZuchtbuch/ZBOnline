@@ -4,8 +4,6 @@ namespace App\Controller\Breed;
 
 use App\Model;
 use App\Controller\Controller;
-use http\Exception\InvalidArgumentException;
-use Slim\Exception\HttpNotFoundException;
 
 class Get extends Controller
 {

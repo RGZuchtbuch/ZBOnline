@@ -7,10 +7,6 @@ use Slim\Exception\HttpNotFoundException;
 
 class Article extends Model
 {
-    public static function authorized( int $id, int $requesterId ) : bool {
-        return true;
-    }
-
     public static function new( string $title, string $text ) : ? int {
         return null;
     }

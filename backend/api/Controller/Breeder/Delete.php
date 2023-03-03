@@ -11,9 +11,14 @@ class Delete extends Controller
 {
 
 
-    public function authorized(): bool
+    public function authorized(): bool // only admin and moderator of district
     {
-        return Model\Breeder::authorized( $this->args[ 'id' ], $this->requester[ 'id' ] );
+        if( $this->requester && $this->args ) {
+            if( $this->requester['admin'] ) return true; // admin
+            $breeder = Model\Breeder::get( $this->args[ 'id' ] );
+            if( in_array( $breeder[ 'districtId' ], $this->requester[ 'moderator' ] ) ) return true; // moderator
+        }
+        return false;
     }
 
     public function process() : array

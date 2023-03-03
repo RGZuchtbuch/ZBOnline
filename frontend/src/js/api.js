@@ -96,9 +96,9 @@ export default {
             }
         },
         clubs: {
-            get: (rootId) => {
+            get: ( id ) => {
                 return new Promise( resolve => {
-                    get( 'api/district/'+rootId+'/root').then( response => {
+                    get( 'api/district/'+id+'/descendants' ).then( response => {
                         const clubs = [];
                         let root = response.district;
                         let districts = [ root ];
@@ -116,20 +116,35 @@ export default {
             }
         },
 
-        results: {
-            //get: (districtId, sectionId, year, group) => get('api/district/' + districtId + '/section/' + sectionId + '/year/' + year + '/group/' + group + '/results/full'),
-            get: (districtId, year) => {
-                return get( 'api/district/'+districtId+'/results/'+year );
-            },
-        },
-
         descendants: {
             get: ( id ) => {
                 return get( 'api/district/'+id+'/descendants');
             }
-        }
+        },
 
+        results: { // showing results for district, all sections etc
+            //get: (districtId, sectionId, year, group) => get('api/district/' + districtId + '/section/' + sectionId + '/year/' + year + '/group/' + group + '/results/full'),
+            get: (districtId, year) => {
+                return get( 'api/district/'+districtId+'/results?year='+year );
+            },
+            section: {// for edit breeds in section, closed
+                get: ( districtId, sectionId, year, group ) => {
+                    return get( 'api/district/'+districtId+'/results?section='+sectionId+'&year='+year+'&group='+group );
+                }
+            },
+            breed: { // for edit per color or breed as pigeon
+                get: ( districtId, sectionId, breedId, year, group ) => {
+                    return get( 'api/district/'+districtId+'/results?section='+sectionId+'&breed='+breedId+'&year='+year+'&group='+group );
+                },
+ //               colors: {
+ //                   get: ( districtId, breedId, year, group ) => {
+ //                       return get( 'api/district/'+districtId+'/results?breed='+breedId+'&year='+year+'&group='+group );
+ //                   },
+ //               }
+            }
+        },
     },
+
     groups: {
         get: () => {
             return new Promise( ( resolve ) => {
@@ -196,15 +211,15 @@ export default {
     result: {
         get: ( id ) => get( 'api/result/'+id ),
         post: ( result ) => post( 'api/result', result ), // does insert or replace based on id ( null )
-        // put: ( result ) => put( 'api/result', result ),
         delete: ( id ) => del( 'api/result/'+id ),
 
-        breed: {
-            get: ( breedId, districtId, year, group ) => get( 'api/result/breed/'+breedId+'/district/'+districtId+'/year/'+year+'/group/'+group+'/results'),
-        },
-        colors: {
-            get: ( breedId, districtId, year, group ) => get( 'api/result/colors/'+breedId+'/district/'+districtId+'/year/'+year+'/group/'+group+'/results'),
-        },
+//        breed: {
+//            get: ( districtId, breedId, year, group ) => get( 'api/district/'+districtId+'/results?/breed/'+breedId+'/district/'+districtId+'/year/'+year+'/group/'+group+'/results' ),
+//        },
+//        colors: {
+////            get: ( breedId, districtId, year, group ) => get( 'api/result/colors/'+breedId+'/district/'+districtId+'/year/'+year+'/group/'+group+'/results'),
+//            get: ( districtId, breedId, year, group ) => get( 'api/district/'+districtId+'/results?breed='+breedId+'&year='+year+'&group='+group ),
+//        },
     },
 
     section: {
@@ -212,17 +227,14 @@ export default {
         children: {
             get: ( parentId ) => get( 'api/section/'+parentId+'/children')
         },
-        getTree: ( parentId ) => get( 'api/section/'+parentId+'/tree'),
+//        getTree: ( parentId ) => get( 'api/section/'+parentId+'/tree'),
 
-        breeds: {
-            get: (sectionId) => get('api/section/' + sectionId + '/breeds'),
-
-        },
-        root: {
-            get: ( rootId ) => {
-                return get( 'api/section/'+rootId+'/root');
-            }
-        }
+        breeds: { get: (sectionId) => get('api/section/' + sectionId + '/breeds'), },
+//        root: {
+//            get: ( rootId ) => {
+//                return get( 'api/section/'+rootId+'/root');
+//            }
+//        }
     },
 
     standard: {

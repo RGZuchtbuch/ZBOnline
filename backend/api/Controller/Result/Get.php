@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Breeder;
+namespace App\Controller\Result;
 
 use App\Model;
 use App\Controller\Controller;
@@ -9,22 +9,15 @@ use Slim\Exception\HttpNotFoundException;
 
 class Get extends Controller
 {
-
-
     public function authorized(): bool
     {
-        if( $this->requester && $this->data ) {
-            if( $this->requester['admin'] ) return true; // admin
-            if( in_array( $this->data[ 'districtId' ], $this->requester[ 'moderator' ] ) ) return true; // moderator
-            if( $this->requester[ 'id' ] == $this->data[ 'id' ] ) return true; // self
-        }
-        return false;
+        return true;
     }
 
     public function process() : array
     {
         $id = $this->args['id'];
-        $breed = Model\Breed::get( $id );
+        $result = Model\Result::get( $id );
         if( ! $breed ) throw new HttpNotFoundException( );
         $breed['colors'] = Model\Breed::colors( $id );
         return [ 'Breed'=>$breed ];

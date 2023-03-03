@@ -12,17 +12,21 @@ use Firebase\JWT\SignatureInvalidException;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
+$controller = null;
+
 abstract class Controller
 {
-    protected ? array $requester;
     protected Request $request;
     protected Response $response;
-    protected array $args;
-    protected ? array $data;
-    protected array $query;
+    public ? array $requester;
+    public array $args;
+    public ? array $data;
+    public array $query;
 
     // Relays call to specific controller with auth step.
     public function __invoke( Request $request, Response $response, array $args ) : Response {
+        global $controller;
+        $controller = $this;
         $this->requester = $this->getRequester( $request ); // null or valid requester
         $this->request = $request;
         $this->response = $response;

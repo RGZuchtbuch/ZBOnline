@@ -9,9 +9,7 @@ use Slim\Exception\HttpNotFoundException;
 
 class Moderator extends Model
 {
-    public static function authorized( int $id, int $requesterId ) : bool {
-        return true;
-    }
+
 
     public static function new( int $userId, int $districtId ) : ? int {
         return null;

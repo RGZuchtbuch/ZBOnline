@@ -8,9 +8,6 @@ use Slim\Exception\HttpNotImplementedException;
 
 class Section extends Model
 {
-    public static function authorized( int $id, int $requesterId ) : bool {
-        return true;
-    }
 
     public static function new( string $name, int $sectionId, int $broodGroup, int $lay, int $eggWeight, int $sireRing, int $dameRing, int $sireWeight, int $dameWeight, string $info ) : ? int {
         throw new HttpNotImplementedException( null, "oops" );

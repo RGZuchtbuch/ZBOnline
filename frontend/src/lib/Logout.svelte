@@ -20,7 +20,7 @@
 <Modal class=''>
     <form class='w-64 flex flex-col gap-4 self-center border p-4' on:submit|preventDefault={onSubmit}>
         <h2 class='bg-header rounded'>Abmelden</h2>
-        <div>{ $user.name }</div>
+        <div>{ $user.fullname }</div>
         <Submit value='Ok' />
     </form>
 </Modal>

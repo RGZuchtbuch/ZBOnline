@@ -116,7 +116,7 @@
                         <div class='flex'>
                             <div class='flex flex-row gap-x-1'>
                                 <div class='w-8 border'>{breeder.id}</div>
-                                <a class='w-64 border' href={route.match+'/'+breeder.id}>{txt( breeder.name )}</a>
+                                <a class='w-64 border' href={route.match+'/'+breeder.id}>{ txt( breeder.lastname )+', '+txt( breeder.firstname )+' '+txt( breeder.infix ) }</a>
                                 <div class='w-32 border'>{txt( breeder.clubName )}</div>
                                 {#if !breeder.end}
                                     <div class='w-32 border text-green-700'>&#10003;</div>

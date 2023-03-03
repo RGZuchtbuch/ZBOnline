@@ -71,11 +71,16 @@ class Router {
 //        $app->get('/district/{districtId}/year/{year}/colors', new district\results\Get()); // not logical !
 //        $app->get('/district/{districtId}/section/{sectionId}/year/{year}/group/{group}/colors/full', new district\results\full\Get());
 
-//        $app->get('/district/{districtId}/breeders', new district\breeders\Get());
+        $app->get('/district/{id}/breeders', 'App\Controller\District\Breeders' );
         $app->get('/district/{id}/children', 'App\Controller\District\Children' );
-//        $app->get('/district/{districtId}/results/{year}', new district\results\Get());
         $app->get('/district/{id}/descendants', 'App\Controller\District\Descendants' );
+        $app->get('/district/{id}/results', 'App\Controller\District\Results' ); // for showing
 
+//        $app->get('/district/{id}/section/{sectionId}/results', 'App\Controller\District\SectionResults' ); // query section year, group
+//        $app->get('/district/{id}/breed/{breedId}/results', 'App\Controller\District\BreedResults' ); // query section year, group results per color or all for pigeons
+
+
+//        get: ( breedId, districtId, year, group ) => get( 'api/district/'+districtId+'/breed/'+breedId+'/colors/results?year='+$year+'&group='+$group'),
 
 // ?       $app->get('/district/{districtId}/section/{sectionId}/year/{year}/group/{group}/results', new district\section\results\Get() );
 
@@ -90,7 +95,9 @@ class Router {
 
 //        $app->get('/result/Breed/{breedId}/district/{districtId}/year/{year}/group/{group}/results', new result\breed\Get());
 //        $app->get('/result/colors/{breedId}/district/{districtId}/year/{year}/group/{group}/results', new result\colors\Get());
-//        $app->post('/result', new result\Post());
+
+
+        $app->post('/result', 'App\Controller\Result\Post' );
 
         $app->get('/results/years', 'App\Controller\Result\Years' ); // for trend, query with section/Breed/color,  year
         $app->get('/results/districts', 'App\Controller\Result\Districts' ); // for map, , query with section/Breed/color,  year

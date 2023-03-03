@@ -4,9 +4,6 @@ namespace App\Model;
 
 class Color extends Model
 {
-    public static function authorized( int $id, int $requesterId ) : bool {
-        return true;
-    }
 
     public static function new( string $name, int $sectionId, int $broodGroup, int $lay, int $eggWeight, int $sireRing, int $dameRing, int $sireWeight, int $dameWeight, string $info ) : ? int {
         return null;
