@@ -45,7 +45,7 @@ class Results extends Controller
             } else if( $sectionId && $year && $group) { // 2
                 $debug[] = 'section '.$sectionId;
                 $results = Model\District::sectionResults( $districtId, $sectionId, $year, $group );
-            } else if( $year ) { // 1
+            } else if( $year ) { // 1, for results listing
                 $debug[] = 1;
                 $results = $this->resultsTree( Model\District::results( $districtId, $year ) );
             } else {

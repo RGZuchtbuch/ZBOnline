@@ -18,7 +18,9 @@ class Get extends Controller
     {
         $id = $this->args['id'];
         $district = Model\District::get( $id );
-
+        if( $district && $district[ 'moderatorId' ] ) { // if has moderator
+            $district['moderator'] = Model\Moderator::get($district['moderatorId'] );
+        }
         return ['district' => $district];
     }
 }

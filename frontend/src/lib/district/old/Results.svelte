@@ -1,12 +1,12 @@
 <script>
     import { onMount } from 'svelte';
-    import { dec, pct } from '../../js/util.js';
+    import { dec, pct } from '../../../js/util.js';
 
-    import api from '../../js/api.js';
+    import api from '../../../js/api.js';
     import {meta, router} from 'tinro';
 
-    import Results from '../Results.svelte';
-    import Select from '../input/Select.svelte';
+    import Results from '../../Results.svelte';
+    import Select from '../../input/Select.svelte';
 
     export let districtId;
 

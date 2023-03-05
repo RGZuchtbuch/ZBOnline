@@ -1,14 +1,14 @@
 <script>
     import { onMount } from 'svelte';
     import {active, meta, router, Route} from 'tinro';
-    import api from '../../js/api.js';
-    import { txt } from '../../js/util.js';
-    import { user } from '../../js/store.js'
+    import api from '../../../js/api.js';
+    import { txt } from '../../../js/util.js';
+    import { user } from '../../../js/store.js'
 //    import Breeders from '../Breeders.svelte';
-    import Button from '../input/Button.svelte';
-    import Date from '../input/Date.svelte';
-    import Select from '../input/Select.svelte';
-    import Text from '../input/Text.svelte';
+    import Button from '../../input/Button.svelte';
+    import Date from '../../input/Date.svelte';
+    import Select from '../../input/Select.svelte';
+    import Text from '../../input/Text.svelte';
 
     export let districtId = null;
     export let moderator = null;
@@ -96,7 +96,7 @@
 </script>
 
 {#if $user}
-    <h32 class='text-center'>Obmann {#if $user} {$user.name} {/if} → Verband {#if district} {district.name} {/if} → Züchter</h32>
+    <h32 class='text-center'>Obmann {#if $user} {$user.lastname} {/if} → Verband {#if district} {district.name} {/if} → Züchter</h32>
     {#if breeders}
         <div class='flex flex-row border border-gray-400 rounded-t px-8 py-2 bg-header gap-x-1 font-bold'>
             <div class='w-8'>Id</div>

@@ -28,29 +28,32 @@
         return district.selectable;
     }
 
+    function setState( district, parentModerated ) {
+        district.moderated = parentModerated || ( $user && ( $user.moderator.indexOf( district.id )>=0 ) ); // is moderator
+        district.childModerated = false;
+        for( const childDistrict of district.children ) {
+            district.childModerated |= setState( childDistrict );
+        }
+        return district.moderated;
+    }
+
     // load whole district tree
-    function loadDistrict() {
+    function loadRootDistrict() {
         api.district.descendants.get( 1 ).then( response => {
             console.log('Response', response );
             rootDistrict = response.district;
-            checkEditable( rootDistrict );
+//            rootDistrict.visible = true;
+//            checkEditable( rootDistrict );
+            setState( rootDistrict );
         } );
     }
-
-/*    function loadDistricts( user ) {
-        api.moderator.district.root( 1 ).then( response => {
-            //districts = response.districts;
-            district = response.district;
-        });
-    }
-*/
 
     // forward district select to parent
     function onSelect( event ) {
         dispatch( 'select', event.detail );
     }
 
-    $: loadDistrict( $user ); // if user changes by logout/login or exp
+    $: loadRootDistrict( $user ); // if user changes by logout/login or exp
 
 </script>
 
@@ -59,9 +62,7 @@
     <h2 class='border border-gray-400 rounded-t p-2 bg-header text-center text-xl print'>Verbände für Obmann {$user.fullname} </h2>
     {#if rootDistrict}
         <div class='bg-gray-100 overflow-y-scroll border rounded-b border-t-0 border-gray-400 px-4 scrollbar'>
-            o
             <RecursiveDistrict district={rootDistrict} on:select={onSelect}/>
-            a
         </div>
     {:else}
         Einen moment bitte

@@ -28,7 +28,7 @@ class Token extends Controller
         if( $id ) {
             $user = Model\User::get( $id );
             $user[ 'fullname' ] = $user[ 'firstname' ].' '.($user[ 'infix' ] ? $user[ 'infix' ].' ':'').$user[ 'lastname' ];
-            $user[ 'moderator' ] = array_column( Model\Moderator::districts( $id ), 'districtId' );
+            $user[ 'moderator' ] = array_column( Model\Moderator::districts( $id ), 'id' );
             $token = $this->encode( $user );
             return [ 'token' => $token ];
         }

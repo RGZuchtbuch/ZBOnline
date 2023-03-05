@@ -2,6 +2,7 @@
 //    import {router} from 'tinro'; // router store
     import { createEventDispatcher } from 'svelte';
     import api from '../../js/api.js';
+    import {txt} from '../../js/util.js';
     import Button from '../input/Button.svelte';
     import Number from '../input/Number.svelte';
     import Select from '../input/Select.svelte';
@@ -11,8 +12,10 @@
     let details = null;
     let breeders = null;
 
-    const editable = district.editable;
-    const selectable = district.selectable;
+
+    const moderated = district ? district.moderated : false;
+//    const editable = district.moderated;
+//    const selectable = district.selectable;
 
     const dispatch = createEventDispatcher();
 
@@ -29,9 +32,9 @@
                     details = response.district;
                 });
                 // load candidate moderaters
-                api.district.breeders.get(district.id).then(response => {
-                    breeders = response.breeders;
-                })
+ //               api.district.breeders.get(district.id).then(response => {
+ //                   breeders = response.breeders;
+ //               })
             } else { // new, not saved
                 details = {
                     id:null, parentId:district.parentId, name: null, fullname: null, short: null, latitude: null, longitude: null,
@@ -62,7 +65,7 @@
 
     function onClick( event ) {
         console.log( district, event )
-        if( selectable ) dispatch( 'select', district.id );
+        if( district.moderated ) dispatch( 'select', district.id );
     }
 
     function onSelect( event ) {
@@ -81,20 +84,22 @@
         district.changed = false;
     }
 
+    console.log( 'District', district );
+
 </script>
 
 <div class='pl-6'>
-    {#if district.visible}
+    {#if district.moderated || district.childModerated }
         <div class='flex'>
-            <div class='text-gray-400' class:selectable class:editable on:click={onClick} title="'Wähle Verband">&#10551; {district.name}</div>
-            {#if district.children.length > 0}
+            <div class='text-gray-400' class:moderated on:click={onClick} title="'Wähle Verband">&#10551; {district.name}</div>
+            {#if district.childModerated }
                 {#if district.open}
                     <span class='open' on:click={onOpen}>[ - ]</span>
                 {:else}
                     <span class='open' on:click={onOpen}>[ + ]</span>
                 {/if}
             {/if}
-            {#if district.editable}
+            {#if district.moderated}
                 {#if district.edit}
                     <span class='button text-red-600' on:click={onEdit} title='schließen'>[ &#9998; ]</span>
                 {:else}
@@ -106,31 +111,15 @@
         {#if district.edit }
             <form class='flex flex-col border border-gray-400 rounded m-4 p-2' on:input={onChange}>
                 {#if details }
-                    <Text class='w-64' bind:value={details.name} label='Name' required/>
+                    <Text class='w-64' bind:value={details.name} label='Name' required disabled/>
 
-                    <Text class='w-128' bind:value={details.fullname} label='Name voll' required/>
-                    <Text class='w-24' bind:value={details.short} label='Name abk.' required/>
+                    <Text class='w-128' bind:value={details.fullname} label='Name voll' required disabled/>
+                    <Text class='w-24' bind:value={details.short} label='Name abk.' required disabled/>
                     <div class='flex gap-x-2'>
-                        <Number class='w-32' bind:value={details.latitude} label='Breitegrad N]' min={MINLATITUDE} max={MAXLATITUDE} required/>
-                        <Number class='w-32' bind:value={details.longitude}  label='Längegrad O' min={MINLONGITUDE} max={MAXLONGITUDE} required/>
+                        <Number class='w-32' bind:value={details.latitude} label='Breitegrad N]' min={MINLATITUDE} max={MAXLATITUDE} required disabled/>
+                        <Number class='w-32' bind:value={details.longitude}  label='Längegrad O' min={MINLONGITUDE} max={MAXLONGITUDE} required disabled/>
                     </div>
-
-                    {#if district.level !== 'OV' }
-                        <div class='flex gap-x-2'>
-                            <Number class='w-24' value={district.children.length} label='U. Verbände' disabled/>
-                            <Button class='edit' on:click={onAddChild} label='' value='hinzufügen' />
-                        </div>
-                    {/if}
-
-                    {#if district.moderatable}
-                        <Select class='w-64' label='Obmann' bind:value={details.moderator} >
-                            {#if breeders}
-                                {#each breeders as candidate}
-                                    <option class='bg-white' value={candidate.id}> {candidate.name} </option>
-                                {/each}
-                            {/if}
-                        </Select>
-                    {/if}
+                    <Text class='w-96' value={details.moderator.lastname+', '+details.moderator.firstname+' '+txt(details.moderator.infix)} label='Obmann' disabled />
 
                     {#if district.changed}
                         <Button class='edit' on:click={onSubmit} label='' value='speichern' />
@@ -162,7 +151,7 @@
         background: green;
     }
 
-    .selectable {
+    .moderated {
         @apply cursor-pointer text-black;
     }
 </style>

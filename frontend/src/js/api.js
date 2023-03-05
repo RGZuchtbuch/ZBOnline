@@ -71,19 +71,16 @@ export default {
                 resolve( { id:null, parent:parentId, name:null, fullname:null, short:null, coordinates:null, children:[], moderators:[] } );
             })
         },
-        post: ( district ) => { // insert
+        post: ( district ) => { // save, insert on id=null or update
             return post( 'api/district', district );
-        },
-        put: ( district ) => { // updating
-            return put( 'api/district/'+district.id, district );
         },
         delete: ( districtId ) => {
             //return del( 'api/district/'+districtId ); // TODO delete or better disable !
         },
 
-        tree: (parentId) => {
-            return get('api/district/'+parentId+'/tree');
-        },
+//        tree: (parentId) => {
+//            return get('api/district/'+parentId+'/tree');
+//        },
 
         breeders: {
             get: (districtId) => {
@@ -271,11 +268,12 @@ export default {
             return post('api/user/token', {email: email, password: password}).then( response => {
                 if( response ) {
                     token = response.token;
-                    window.sessionStorage.setItem( 'token', token );
                     const decToken = jwt_decode(token);
                     console.log( 'Token', decToken );
                     decToken.user.exp = decToken.exp;
                     user.set( decToken.user ); // user or null
+                    window.sessionStorage.setItem( 'token', token );
+                    cache.promises = {}; // not using previous users cache
                     return { success:true }; // success
                 }
                 return { success: false };
@@ -286,8 +284,9 @@ export default {
         },
         logout: () => {
             token = null;
-            window.sessionStorage.clear();
             user.set( null ); // user or null
+            window.sessionStorage.clear();
+            cache.promises = {}; // clear cache so it's not used by next user
             return true; // always success
         }
     },

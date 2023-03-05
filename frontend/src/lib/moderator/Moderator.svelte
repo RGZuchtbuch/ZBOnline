@@ -3,7 +3,7 @@
     import api from '../../js/api.js';
     import {user} from '../../js/store.js';
 
-    import District from '../district/District.svelte';
+    import District from './district/District.svelte';
     import Districts from './Districts.svelte';
 
     const route = meta();

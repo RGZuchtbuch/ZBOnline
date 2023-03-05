@@ -119,10 +119,10 @@ export function printPct( value, decimals = 0 ) {
 }
 
 export function dec( value, decimals ) {
-    value = +value; // make sure its a number
     if( value == null ) { // incl undefined
-        return '-';
+        return '';
     }
+    value = +value; // make sure its a number
     decimals = decimals || 0;
     return value.toFixed( decimals )
 }
@@ -131,7 +131,7 @@ export function pct(a, b, dec=1 ) {
     if( a != null && b != null ) {
         return (100 * a / b).toFixed( dec )+'%';
     }
-    return '-';
+    return '';
 }
 
 export function txt( text ) {

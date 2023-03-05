@@ -41,6 +41,7 @@
            {disabled} {readonly} {required}
            on:focus={on.focus}
            on:blur={on.blur}
+           on:change on:input
     >
     {#if invalid && ! disabled}
         <span class:invalid>{error}</span>

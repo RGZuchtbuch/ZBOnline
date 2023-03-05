@@ -10,7 +10,6 @@
     let details = null;
     let breeders = null;
 
-
     function onOpen() {
         district.open = ! district.open;
     }
@@ -102,7 +101,7 @@
                 <Select class='' label='Obmann' bind:value={details.moderatorId} >
                     {#if breeders}
                         {#each breeders as candidate}
-                            <option class='bg-white' value={candidate.id}> {candidate.lastname}, {candidate.firstname} {txt(candidate.infix)} </option>
+                            <option class='bg-white' value={candidate.id} selected={candidate.id == details.moderatorId}> {candidate.lastname}, {candidate.firstname} {txt(candidate.infix)} </option>
                         {/each}
                     {/if}
                 </Select>

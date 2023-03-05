@@ -1,8 +1,8 @@
 <script>
     import {router} from "tinro";
-    import api from '../../js/api.js';
-    import InputNumber from '../input/Number.svelte';
-    import Select from '../input/Select.svelte';
+    import api from '../../../js/api.js';
+    import InputNumber from '../../input/Number.svelte';
+    import Select from '../../input/Select.svelte';
 
     export let districtId;
 
@@ -184,9 +184,8 @@
 
                 <div class='w-2'></div>
 
-                <div class='w-16'>Soll Eier</div>
+                <div class='w-16'>Bruten</div>
                 <div class='w-16'>Küken</div>
-                <div class='w-16 whitespace-nowrap'>∅ Paar</div>
 
                 <div class='w-2'></div>
 
@@ -236,9 +235,8 @@
 
                                 <div class='w-2'></div>
 
-                                <div class='w-16'>Soll Eier</div>
+                                <div class='w-16'>Bruten</div>
                                 <div class='w-16'>Küken</div>
-                                <div class='w-16 whitespace-nowrap'>∅ pro Paar</div>
 
                                 <div class='w-2'></div>
 
@@ -287,9 +285,8 @@
 
                                 <div class='w-2'></div>
 
-                                <InputNumber class='w-16' bind:value={result.broodEggs} min=0 max=99999 />
+                                <InputNumber class='w-16' value={result.broodEggs/2} min=0 max=99999 on:input={( e )=>result.broodEggs = 2 * e.target.value}/>
                                 <InputNumber class='w-16' bind:value={result.broodHatched} min=0 max=99999 />
-                                <InputNumber class='w-16' value={result.pairs ? result.broodHatched / result.pairs : '-' } readonly />
 
                                 <div class='w-2'></div>
 

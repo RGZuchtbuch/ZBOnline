@@ -15,7 +15,7 @@
 
     {#if $user }
         <Route path='/obmann/*'>
-            <h3>Obmann {$user.name}</h3>
+            <h3>Obmann {$user.lastname}</h3>
             <a href='/obmann/verband'>Verbände</a>
             <Route path='/verband/:districtId/*' let:meta>
                 <h4>Verband {#await api.district.get( meta.params.districtId )} ... {:then response} {response.district.short} {/await}</h4>
