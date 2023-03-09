@@ -96,13 +96,14 @@
 </script>
 
 {#if $user}
-    <h32 class='text-center'>Obmann {#if $user} {$user.lastname} {/if} → Verband {#if district} {district.name} {/if} → Züchter</h32>
+    <h3 class='text-center'>Obmann {#if $user} {$user.lastname} {/if} → Verband {#if district} {district.name} {/if} → Züchter</h3>
     {#if breeders}
         <div class='flex flex-row border border-gray-400 rounded-t px-8 py-2 bg-header gap-x-1 font-bold'>
-            <div class='w-8'>Id</div>
+            <div class='w-8'>Ide</div>
             <div class='w-64'>Name</div>
             <div class='w-32'>Ortsverein</div>
-            <div class='w-32'>Aktiv</div>
+            <div class='w-64'>ZB Verband</div>
+            <div class='w-16'>Aktiv</div>
             <div class='grow'></div>
             <div class='w-18'>Incl Abgemeldete</div> <input type='checkbox' bind:checked={allBreeders}>
             <div class='w-8'></div>
@@ -117,11 +118,12 @@
                             <div class='flex flex-row gap-x-1'>
                                 <div class='w-8 border'>{breeder.id}</div>
                                 <a class='w-64 border' href={route.match+'/'+breeder.id}>{ txt( breeder.lastname )+', '+txt( breeder.firstname )+' '+txt( breeder.infix ) }</a>
-                                <div class='w-32 border'>{txt( breeder.clubName )}</div>
+                                <div class='w-32 border whitespace-nowrap'>{txt( breeder.clubName )}</div>
+                                <div class='w-64 border whitespace-nowrap'>{txt( breeder.districtName )}</div>
                                 {#if !breeder.end}
-                                    <div class='w-32 border text-green-700'>&#10003;</div>
+                                    <div class='w-16 border text-green-700'>&#10003;</div>
                                 {:else}
-                                    <div class='w-32 border text-red-700'>&#10005;</div>
+                                    <div class='w-16 border text-red-700'>&#10005;</div>
                                 {/if}
                             </div>
                             <div class='grow'></div>

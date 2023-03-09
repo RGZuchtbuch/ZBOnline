@@ -4,6 +4,7 @@ namespace App\Controller\Breed;
 
 use App\Model;
 use App\Controller\Controller;
+use Slim\Exception\HttpNotFoundException;
 
 class Get extends Controller
 {
@@ -18,7 +19,9 @@ class Get extends Controller
         $breed = Model\Breed::get( $id );
         if ($breed) {
             $breed['colors'] = Model\Breed::colors( $id );
+            return ['breed' => $breed];
         }
-        return ['breed' => $breed];
+        throw new HttpNotFoundException( $this->request, 'Breed not found' );
+
     }
 }

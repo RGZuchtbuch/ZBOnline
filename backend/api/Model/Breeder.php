@@ -12,8 +12,8 @@ class Breeder extends Model
     public static function get( int $id ) : ? array {
         $args = get_defined_vars();
         $stmt = Query::prepare('
-            SELECT *
-            FROM breed
+            SELECT id, firstname, infix, lastname, email, districtId, clubId, start, end, info
+            FROM user
             WHERE id=:id
         ');
         return Query::select($stmt, $args);

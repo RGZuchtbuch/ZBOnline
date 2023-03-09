@@ -2,6 +2,7 @@
     import {Route, meta} from 'tinro';
     import {user} from '../js/store.js';
     import api from '../js/api.js';
+    import {txt} from '../js/util.js';
 
 
 
@@ -15,7 +16,7 @@
 
     {#if $user }
         <Route path='/obmann/*'>
-            <h3>Obmann {$user.lastname}</h3>
+            <h3>Obmann {txt($user.firstname.charAt(0))}. {txt($user.infix)} {txt($user.lastname)}</h3>
             <a href='/obmann/verband'>Verbände</a>
             <Route path='/verband/:districtId/*' let:meta>
                 <h4>Verband {#await api.district.get( meta.params.districtId )} ... {:then response} {response.district.short} {/await}</h4>
@@ -24,7 +25,9 @@
                 <a href={'/obmann/verband/'+meta.params.districtId+'/leistung/edit'}>Eingeben</a>
                 <Route path='/zuechter/:breederId/*' let:meta>
                     <h4>Züchter
-                        {#await api.breeder.get( meta.params.breederId )} ... {:then response} {response.breeder.name} {/await}
+                        {#await api.breeder.get( meta.params.breederId )} ... {:then response}
+                            {txt(response.breeder.firstname.charAt(0))}. {txt(response.breeder.infix)} {txt(response.breeder.lastname)}
+                        {/await}
                     </h4>
                     <a href={'/obmann/verband/'+meta.params.districtId+'/zuechter/'+meta.params.breederId+'/daten'}>Daten</a>
                     <a href={'/obmann/verband/'+meta.params.districtId+'/zuechter/'+meta.params.breederId+'/meldung'}>Meldungen</a>

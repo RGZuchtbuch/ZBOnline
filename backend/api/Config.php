@@ -3,7 +3,7 @@ namespace App;
 
 class Config
 {
-    const DB_HOST = 'localhost';
+    const DB_HOST = 'localhost:3306'; // 3306 for deploy
     const DB_NAME = 'web71db_zb';
     const DB_USER = 'web71db_zb';
     const DB_PASSWORD = 'jfb%^GR56rgf%&*^iUYHTgiuytgiuYCddyi%$^';

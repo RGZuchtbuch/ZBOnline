@@ -1,6 +1,7 @@
 <script>
     import {Route, router, meta} from 'tinro';
     import api from '../../../../js/api.js';
+    import {txt} from '../../../../js/util.js';
     import { newBreeder } from '../../../../js/template.js';
 //    import {breeder} from '../../js/store.js';
     import Breeder from '../../../Breeder.svelte';
@@ -31,7 +32,7 @@
 </script>
 
 <div>
-    Breeder {#if breeder} {breeder.name}{:else}...{/if}
+    Breeder {#if breeder} {txt(breeder.firstname)} {txt( breeder.infix)} {txt(breeder.lastname)} {:else}...{/if}
 </div>
 {#if breeder}
     <Route path='/' redirect={meta.match+'/meldung'} />

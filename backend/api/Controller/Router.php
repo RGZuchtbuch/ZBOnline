@@ -57,7 +57,7 @@ class Router {
 
         $app->post('/breeder', 'App\Controller\Breeder\Post');
 
-//        $app->get('/breeder/{breederId}', new breeder\Get());
+        $app->get('/breeder/{id}', 'App\Controller\Breeder\Get');
 //        $app->get('/breeder/{breederId}/reports', new breeder\reports\Get());
 //        $app->get('/breeder/{breederId}/results', new breeder\results\Get());
 //        $app->get('/breeder/{breederId}/colors', new breeder\results\Get()); // needed ?

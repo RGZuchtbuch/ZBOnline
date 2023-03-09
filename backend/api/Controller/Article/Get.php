@@ -18,11 +18,11 @@ class Get extends Controller
 
     public function process() : array
     {
-        try {
-            $article = Model\Article::get( $this->args[ 'id' ] );
+        $article = Model\Article::get( $this->args[ 'id' ] );
+        if( $article ) {
             return ['article' => $article];
-        } catch( Exception $e ) {
-            throw new Exception( $e->getMessage() );
         }
+        throw new HttpNotFoundException( $this->request, 'Article not found' );
+
     }
 }

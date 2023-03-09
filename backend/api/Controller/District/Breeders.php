@@ -22,6 +22,7 @@ class Breeders extends Controller
     {
         $id = $this->args['id'];
         $breeders = Model\District::breeders( $id );
-        return [ 'breeders' => $breeders ];
+
+        return [ 'breeders' => $breeders, 'id'=>$id ];
     }
 }
