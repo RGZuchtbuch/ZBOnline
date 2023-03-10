@@ -132,17 +132,13 @@
                         onClick: ( event, element ) => {
                             if( element && element.length > 0 ) {
                                 const label = labels[ element[0].index ];
-                                onClick( label );
+                                year = Number( label );
                             }
                         }
                     }
                 });
             }
         }
-    }
-
-    function onClick( label ) {
-        year = Number( label ); // to parent by binding.
     }
 
     const dispatch = createEventDispatcher();

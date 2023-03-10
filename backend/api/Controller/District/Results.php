@@ -31,7 +31,7 @@ class Results extends Controller
         $district = null;
         $results = null;
         $debug = [];
-        if( $districtId ) {
+        if( $districtId ) { // TODO when used, only case 1, last is found for district results.
             $district = Model\District::get( $districtId );
             if( $sectionId && $breedId && $year && $group) { // 3
                 $debug[] = 'breed && sectionId = '.$sectionId;

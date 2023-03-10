@@ -96,12 +96,12 @@ class District extends Model
         $stmt = Query::prepare( "
             SELECT *
             FROM (
+                SELECT @root:=:id, @parents:=@root
+            ) AS init, (
                 SELECT id, parentId, name, level, moderatorId
                 FROM district ORDER BY parentId, id
-            ) AS sorted, (
-                SELECT @pv:=:id AS root
-            ) AS init
-            WHERE ( find_in_set(parentId, @pv) > 0 AND @pv := CONCAT(@pv, ',', id) ) OR id=:id
+            ) AS sorted 
+            WHERE ( find_in_set(parentId, @parents) > 0 AND @parents := CONCAT(@parents, ',', id) ) OR id=@root
             ORDER BY sorted.name
         ");
 /*
@@ -119,6 +119,10 @@ class District extends Model
         return Query::selectArray( $stmt, $args );
     }
 
+    /*
+     * getting results for pigeons
+     */
+/*
     public static function breedResult( int $districtId, int $breedId, int $year, string $group ) : array {
         $args = get_defined_vars();
         $stmt = Query::prepare('
@@ -138,7 +142,11 @@ class District extends Model
         ');
         return Query::selectArray( $stmt, $args );
     }
-
+*/
+    /*
+     * get result for a breed's colors, so for non pigeons
+     */
+/*
     public static function colorResults( int $districtId, int $breedId, int $year, string $group ) : array {
         $args = get_defined_vars();
         $stmt = Query::prepare('
@@ -159,7 +167,8 @@ class District extends Model
         ');
         return Query::selectArray( $stmt, $args );
     }
-
+*/
+/*
     public static function sectionResults( int $districtId, int $sectionId, int $year, string $group ) : array {
         $args = get_defined_vars();
 
@@ -188,6 +197,7 @@ class District extends Model
             GROUP BY breed.id, breed.name
             ORDER BY breed.name 
         ");
+
 /*
         $stmt = Query::prepare('
             SELECT 
@@ -216,10 +226,10 @@ class District extends Model
             GROUP BY breed.id, breed.name
             ORDER BY breed.name 
         ');
-*/
+*//*
         return Query::selectArray( $stmt, $args );
     }
-
+*/
     public static function results( int $districtId, int $year ) : array {
         $args = get_defined_vars();
         $stmt = Query::prepare("
