@@ -8,4 +8,7 @@
 2023-03-03
     Moderator can now only moderate district, not it's descendants. Is that ok ?
 
+2023-03-11 Leistungen, map voor geflügel krijgt niet correcte data, bij lagere sectie wis het wel ok, maar mij de hogere dus niet.
+
+2023-03-11 Leistungen: bij legeleisting komt een toFixed voor op null.
 

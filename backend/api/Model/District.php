@@ -120,9 +120,8 @@ class District extends Model
     }
 
     /*
-     * getting results for pigeons
+     * getting results for pigeons for results edit
      */
-/*
     public static function breedResult( int $districtId, int $breedId, int $year, string $group ) : array {
         $args = get_defined_vars();
         $stmt = Query::prepare('
@@ -142,11 +141,10 @@ class District extends Model
         ');
         return Query::selectArray( $stmt, $args );
     }
-*/
+
     /*
-     * get result for a breed's colors, so for non pigeons
+     * get result for a breed's colors, so for non pigeons edit
      */
-/*
     public static function colorResults( int $districtId, int $breedId, int $year, string $group ) : array {
         $args = get_defined_vars();
         $stmt = Query::prepare('
@@ -167,8 +165,7 @@ class District extends Model
         ');
         return Query::selectArray( $stmt, $args );
     }
-*/
-/*
+
     public static function sectionResults( int $districtId, int $sectionId, int $year, string $group ) : array {
         $args = get_defined_vars();
 
@@ -226,10 +223,10 @@ class District extends Model
             GROUP BY breed.id, breed.name
             ORDER BY breed.name 
         ');
-*//*
+*/
         return Query::selectArray( $stmt, $args );
     }
-*/
+
     public static function results( int $districtId, int $year ) : array {
         $args = get_defined_vars();
         $stmt = Query::prepare("
@@ -277,7 +274,7 @@ class District extends Model
             
             WHERE results.breedId IS NOT NULL
             
-            GROUP BY sections.rootId, results.breedId, results.colorId
+            GROUP BY sections.rootId, results.breedName, results.colorName
             ORDER BY sections.order, results.breedName, results.colorName
         ");
 /*
