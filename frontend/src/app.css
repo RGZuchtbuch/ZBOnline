@@ -7,6 +7,10 @@ html, body {
     @apply w-full h-full;
 }
 
+a {
+    @apply font-bold;
+}
+
 h1 {
     @apply text-4xl;
 }
@@ -51,7 +55,7 @@ input:enabled:read-write, select:enabled:read-write {
 }
 
 .input > .data {
-    @apply px-1 border-b;
+    @apply px-2;
 
 }
 .input > input.invalid, .input > select.invalid {

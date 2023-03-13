@@ -23,7 +23,7 @@
         blur: () => {},
     }
 
-    function validate() {
+    function validate( value ) {
         if( value ) {
             invalid = value.match( pattern ) === null ;
         } else {
@@ -37,7 +37,7 @@
 
 <div class='input {classname} flex flex-col gap-0'>
     {#if label}
-        <label class='label' for='input'>{label} {invalid}</label>
+        <label class='label' for='input'>{label}</label>
     {/if}
     <input class='data' class:invalid id='input' type='text' {name} bind:value={value}
            {minlength} {maxlength}

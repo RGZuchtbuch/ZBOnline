@@ -1,6 +1,7 @@
 <script>
     import {router} from "tinro";
     import api from '../../js/api.js';
+    import {dec} from '../../js/util.js';
     import { calcColor, pct } from '../../js/util.js';
     import Select from '../input/Select.svelte';
     import Button from "../input/Button.svelte";
@@ -12,31 +13,31 @@
             id: 1,
             label: 'Mitglieder',
             extract: (result) => [result.members],
-            title: (result) => ` hat ${result.members} Mitglieder`
+            title: (result) => ` hat ${dec(result.members)} Mitglieder`
         },
         2: {
             id: 2,
             label: 'Züchter',
             extract: (result) => [result.breeders],
-            title: (result) => ` meldete ${result.breeders} Züchter`
+            title: (result) => ` meldete ${dec(result.breeders)} Züchter`
         },
         3: {
             id: 3,
             label: 'Stämme',
             extract: (result) => [result.pairs],
-            title: (result) => ` meldete ${result.pairs} Stämme`
+            title: (result) => ` meldete ${dec(result.pairs)} Stämme`
         },
         10: {
             id: 10,
             label: 'Legeleistung',
             extract: (result) => [result.layEggs],
-            title: (result) => ` legten ⌀ ${result.layEggs.toFixed(0)} Eier im Jahr`
+            title: (result) => ` legten ⌀ ${dec(result.layEggs)} Eier im Jahr`
         },
         11: {
             id: 11,
             label: 'Brutleistung',
             extract: (result) => [result.broodHatched, result.broodFertile, result.broodEggs],
-            title: (result) => ` von ${result.broodEggs} war ${pct(result.broodFertile, result.broodEggs, 0)} befruchtet und es schlüpften ${pct(result.broodHatched, result.broodEggs, 0)}`
+            title: (result) => ` von ${dec(result.broodEggs)} war ${pct(result.broodFertile, result.broodEggs, 0)} befruchtet und es schlüpften ${pct(result.broodHatched, result.broodEggs, 0)}`
         },
         12: {
             id: 12,
@@ -44,7 +45,7 @@
             min: 89,
             max: 97,
             extract: (result) => [result.showScore],
-            title: (result) => ` ${result.showCount} Tiere erhielten ⌀ ${result.showScore.toFixed(1)} Punkte`
+            title: (result) => ` ${result.showCount} Tiere erhielten ⌀ ${dec(result.showScore, 1)} Punkte`
         },
     }
 

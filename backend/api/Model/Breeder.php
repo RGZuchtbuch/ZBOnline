@@ -19,20 +19,20 @@ class Breeder extends Model
         return Query::select($stmt, $args);
     }
 
-    public static function new( string $firstname, ? string $infix, string $lastname, ? string $email, int $districtId, int $clubId, string $start, ? string $end, ? string $info, int $modifier ) : ? int {
+    public static function new( string $firstname, ? string $infix, string $lastname, ? string $email, int $districtId, int $clubId, string $start, ? string $end, ? string $info, int $modifierId ) : ? int {
         $args = get_defined_vars();
         $stmt = Query::prepare( '
-            INSERT INTO user ( firstname, infix, lastname, email, districtId, clubId, `start`, `end`, info, modifier )
-            VALUES ( :firstname, :infix, :lastname, :email, :districtId, :clubId, :start, :end, :info, :modifier )
+            INSERT INTO user ( firstname, infix, lastname, email, districtId, clubId, `start`, `end`, info, modifierId )
+            VALUES ( :firstname, :infix, :lastname, :email, :districtId, :clubId, :start, :end, :info, :modifierId )
         ' );
         return Query::insert( $stmt, $args );
     }
 
-    public static function set( int $id, string $firstname, ? string $infix, string $lastname, ? string $email, int $districtId, int $clubId, string $start, ? string $end, ? string $info, int $modifier ) : bool {
+    public static function set( int $id, string $firstname, ? string $infix, string $lastname, ? string $email, int $clubId, string $start, ? string $end, ? string $info, int $modifierId ) : bool {
         $args = get_defined_vars();
         $stmt = Query::prepare('
             UPDATE user
-            SET firstname=:firstname, infix=:infix, lastname=:lastname, email=:email, districtId=:districtId, clubId=:clubId, `start`=:start, `end`=:end, info=:info, modifier=:modifier
+            SET firstname=:firstname, infix=:infix, lastname=:lastname, email=:email, clubId=:clubId, `start`=:start, `end`=:end, info=:info, modifierId=:modifierId
             WHERE id=:id  
         ');
         return Query::update($stmt, $args);

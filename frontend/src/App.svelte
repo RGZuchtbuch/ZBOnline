@@ -15,6 +15,7 @@
     import Standard from './lib/standard/Standard.svelte';
 
     import Login from './lib/Login.svelte';
+    import Reset from './lib/Reset.svelte';
     import Logout from './lib/Logout.svelte';
 
 
@@ -48,10 +49,9 @@
             <Route path='/obmann/*' > <Moderator /> </Route>
             <Route path='/admin/*' > <Admin /> </Route>
 
-            <Route path='/anmelden'>
-                <Login />
-            </Route>
-            <Route path='/abmelden' ><Logout /></Route>
+            <Route path='/anmelden'> <Login /> </Route>
+            <Route path='/reset'> <Reset /> </Route>
+            <Route path='/abmelden'> <Logout /></Route>
 
 
         </div>

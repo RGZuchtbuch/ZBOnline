@@ -3,6 +3,7 @@
 namespace App\Model;
 
 use App\Config;
+use Exception;
 
 class Result
 {
@@ -82,8 +83,9 @@ class Result
                 SUM( IF( showScore, pairs * showScore, NULL ) ) / SUM( IF( showScore, pairs, NULL ) ) AS showScore
             FROM district AS root
             LEFT JOIN (
-                SELECT  result.*, district.rootId FROM result 
-                LEFT JOIN district ON district.id=result.districtId
+                SELECT  result.*, district.rootId 
+                FROM result 
+                    LEFT JOIN district ON district.id=result.districtId
                 WHERE `year`=:year AND colorId=:colorId               
             ) AS results ON results.rootId=root.id
             WHERE root.id = root.rootId            
@@ -166,8 +168,9 @@ class Result
                 SUM( IF( showScore, pairs * showScore, NULL ) ) / SUM( IF( showScore, pairs, NULL ) ) AS showScore
             FROM district AS root
             LEFT JOIN (
-                SELECT  result.*, district.rootId FROM result 
-                LEFT JOIN district ON district.id=result.districtId
+                SELECT  result.*, district.rootId 
+                FROM result 
+                    LEFT JOIN district ON district.id=result.districtId
                 WHERE `year`=:year AND breedId=:breedId               
             ) AS results ON results.rootId=root.id
             WHERE root.id = root.rootId            
@@ -228,108 +231,39 @@ class Result
 */
         return Query::selectArray( $stmt, $args );
     }
+
     public static function districtsForSection( $year, $sectionId ) {
         $args = get_defined_vars();
         $stmt = Query::prepare( "
             SELECT 
-                COUNT(*) AS `count`, results.colorId, 
-                root.id, root.name, root.latitude, root.longitude,
-                CAST( SUM( breeders ) AS UNSIGNED ) AS breeders, CAST( SUM( pairs ) AS UNSIGNED) AS pairs,               
+                COUNT(*) AS `count`, 
+                district.rootId AS id, district.name, district.latitude, district.longitude,
+            
+                CAST( SUM( breeders ) AS UNSIGNED ) AS breeders, CAST( SUM( pairs ) AS UNSIGNED) AS pairs,                
                 CAST( COUNT( DISTINCT breedId ) AS UNSIGNED) AS breeds, CAST( COUNT( DISTINCT colorId ) AS UNSIGNED) AS colors, 	# could both be just 1 !	
                 SUM( layDames) AS layDames, 
-                SUM( IF( layEggs, pairs * layEggs, NULL ) ) / SUM( IF( layEggs, pairs, NULL ) ) AS layEggs,
-                SUM( IF( layWeight, pairs * layWeight, NULL ) ) / SUM( IF( layWeight, pairs, NULL ) ) AS layWeight,
-                CAST( SUM( broodEggs ) AS UNSIGNED) AS broodEggs, 
-                CAST( SUM( broodFertile ) AS UNSIGNED) AS broodFertile, 
-                CAST( SUM( broodHatched ) AS UNSIGNED) AS broodHatched,
-                CAST( SUM( showCount ) AS UNSIGNED) AS showCount, 
-                SUM( IF( showScore, pairs * showScore, NULL ) ) / SUM( IF( showScore, pairs, NULL ) ) AS showScore
-                 
-            FROM district AS root
+                SUM( IF( layEggs, pairs * layEggs, NULL ) ) / SUM( IF( layEggs, pairs, NULL ) ) AS layEggs, SUM( IF( layWeight, pairs * layWeight, NULL ) ) / SUM( IF( layWeight, pairs, NULL ) ) AS layWeight,
+                CAST( SUM( broodEggs ) AS UNSIGNED) AS broodEggs, CAST( SUM( broodFertile ) AS UNSIGNED) AS broodFertile, CAST( SUM( broodHatched ) AS UNSIGNED) AS broodHatched,
+                CAST( SUM( showCount ) AS UNSIGNED) AS showCount, SUM( IF( showScore, pairs * showScore, NULL ) ) / SUM( IF( showScore, pairs, NULL ) ) AS showScore            
+            FROM district 
+            
             LEFT JOIN (
-                SELECT  result.*, district.rootId FROM result 
-                LEFT JOIN district ON district.id=result.districtId
-                LEFT JOIN breed ON breed.id = result.breedId
-                WHERE `year`=:year
-                    AND breed.sectionId IN (
-                        SELECT id
-                        FROM (
-                            SELECT @root:=:sectionId, @parents:=@root
-                        ) AS init, (
-                            SELECT id, parentId FROM section ORDER BY parentId, id
-                        ) AS sorted
-                        WHERE ( FIND_IN_SET( parentId, @parents )>0 AND @parents:=CONCAT( @parents, ',', id ) ) OR id=@root
-                    ) 
-            ) AS results ON results.rootId=root.id
-            WHERE root.id = root.rootId
-            GROUP BY root.id        
+                SELECT breed.sectionId, result.*
+                FROM result 
+                    LEFT JOIN breed ON breed.id = result.breedId	
+                WHERE result.year=:year
+            ) AS results ON results.districtId = district.id AND results.sectionId IN (
+                SELECT id
+                FROM (
+                    SELECT @parents:=:sectionId
+                ) AS init,  (
+                    SELECT parentId, id FROM section 
+                    WHERE ( FIND_IN_SET( parentId, @parents ) AND @parents:=CONCAT( @parents, ',', id ) ) OR id=:sectionId
+                ) AS list
+            )
+            GROUP BY district.rootId      
         " );
-/*
-
-        $stmt = Query::prepare( '
-            SELECT results.*, members.members
-            
-            FROM (
-                # start with all distrcts
-                WITH RECURSIVE districts( parentId, id, latitude, longitude, name ) AS (
-                    SELECT id, id, latitude, longitude, name FROM district WHERE parentId=1 # all bdrg children
-                    UNION
-                    SELECT districts.parentId, district.id, null, null, null # add child, no details needed
-                    FROM districts JOIN district ON district.parentId=districts.id
-                )
-            
-                # get all data from results per district
-                SELECT 
-                    `year`,
-                    districts.id, districts.latitude, districts.longitude, districts.name,
-                    CAST( IFNULL( SUM( breeders ), 0 ) AS UNSIGNED ) AS breeders,
-                    CAST( IFNULL( SUM( pairs ), 0 ) AS UNSIGNED) AS pairs, 
-                    CAST( IFNULL( COUNT( DISTINCT breedId ), 0 ) AS UNSIGNED) AS breeds, CAST( IFNULL( COUNT( DISTINCT colorId ), 0 ) AS UNSIGNED) AS colors, 		
-                    CAST( IFNULL( SUM( layDames), 0 ) AS UNSIGNED) AS layDames, IFNULL( AVG( layEggs ), 0 ) AS layEggs, IFNULL( AVG( layWeight ), 0 ) AS layWeight,
-                    CAST( IFNULL( SUM( broodEggs ), 0 ) AS UNSIGNED) AS broodEggs, CAST( IFNULL( SUM( broodFertile ), 0 ) AS UNSIGNED) AS broodFertile, CAST( IFNULL( SUM( broodHatched ), 0 ) AS UNSIGNED) AS broodHatched,
-                    CAST( IFNULL( SUM( showCount ), 0 ) AS UNSIGNED) AS showCount, IFNULL( AVG( showScore), 0 ) AS showScore	
-               
-                FROM districts
-                
-                # add results per district
-                LEFT JOIN result ON result.districtId = districts.id 
-                    AND result.year = :year # the year to get data for
-                    AND result.breedId IN ( # check if in section 
-                        WITH RECURSIVE sections( parentId, id ) AS (
-                            SELECT id, id FROM section WHERE id = :sectionId # the root sectionId
-                            UNION
-                            SELECT sections.id, section.id
-                            FROM sections JOIN section ON section.parentId=sections.id
-                        )
-                        SELECT Breed.id FROM Breed, sections
-                        WHERE Breed.sectionId = sections.id	
-                    )
-                    
-                GROUP BY districts.parentId
-                ORDER BY districts.name
-            ) AS results
-            
-            # add users per LV district or its subs
-            LEFT JOIN (
-                WITH RECURSIVE districts( parentId, id, latitude, longitude, name ) AS (
-                    SELECT id, id, latitude, longitude, name FROM district WHERE parentId=1 # all bdrg children
-                    UNION
-                    SELECT districts.parentId, district.id, null, null, null # add child, no details needed
-                    FROM districts JOIN district ON district.parentId=districts.id
-                )
-                SELECT districts.id AS districtId, CAST( COUNT( DISTINCT user.id ) AS UNSIGNED ) AS members
-                FROM districts
-                LEFT JOIN user 
-                    ON YEAR( user.start ) <= :year AND ( user.`end` IS NULL OR YEAR( user.end ) >= :year )
-                    AND user.clubId = districts.id
-                    
-                GROUP BY districts.parentId
-            
-            ) AS members ON members.districtId = results.id
-
-        ' );
-*/
-        return Query::selectArray( $stmt, $args );
+        return Query::selectArray($stmt, $args );
     }
 
 
@@ -356,11 +290,11 @@ class Result
                 AND result.districtId IN (
                     SELECT id
                     FROM (
-                        SELECT @root:=:districtId, @parents:=@root
+                        SELECT @parents:=:districtId
                     ) AS init, (
                         SELECT rootId, id, parentId FROM district ORDER BY parentId, id
                     ) AS sorted
-                    WHERE (FIND_IN_SET(parentId, @parents) > 0 AND @parents:=CONCAT(@parents, ',', id)) OR id = @root
+                    WHERE (FIND_IN_SET(parentId, @parents) > 0 AND @parents:=CONCAT(@parents, ',', id)) OR id=:districtId
                     
                 )
                         
@@ -562,7 +496,7 @@ class Result
 				WHERE result.districtId IN (
 	                    SELECT id
 	                    FROM (
-	                        SELECT @districtRoot:=:districtId, @districts:=@districtRoot
+	                        SELECT @districtRoot:=:districtId, @districts:=:districtId
 	                    ) AS init, (
                             SELECT id, parentId FROM district 
                             ORDER BY parentId, id
@@ -571,7 +505,7 @@ class Result
 	                )
 	                AND breed.sectionId IN (
 						SELECT id FROM (
-							SELECT @sectionRoot:=:sectionId, @sections:=@sectionRoot
+							SELECT @sectionRoot:=:sectionId, @sections:=:sectionId
 						) AS init, (
 							SELECT id, parentId FROM section 
 							ORDER BY parentId, id

@@ -265,6 +265,12 @@ export default {
 
     user: {
         login: (email, password ) => {
+            // clear all client info
+            token = null;
+            user.set( null ); // user or null
+            window.sessionStorage.clear();
+            cache.promises = {}; // clear cache so it's not used by next user
+
             return post('api/user/token', {email: email, password: password}).then( response => {
                 if( response ) {
                     token = response.token;
@@ -288,9 +294,27 @@ export default {
             window.sessionStorage.clear();
             cache.promises = {}; // clear cache so it's not used by next user
             return true; // always success
-        }
-    },
+        },
+        reset: ( email ) => get( 'api/user/reset/'+email ),
 
+        password: ( email, resetToken, password ) => {
+            return post( 'api/user/password', { email:email, token:resetToken, password:password } ).then( response => {
+                if( response ) {
+                    token = response.token; // the new auth token
+                    const decToken = jwt_decode(token);
+                    console.log( 'Token', decToken );
+                    decToken.user.exp = decToken.exp;
+                    user.set( decToken.user ); // user or null
+                    window.sessionStorage.setItem( 'token', token );
+                    cache.promises = {}; // not using previous users cache
+                    return { success:true }; // success
+                }
+                return { success:false };
+            }).catch( () => { // on error
+                return { success: false };
+            });
+        },
+    },
 }
 
 

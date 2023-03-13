@@ -36,7 +36,7 @@
 
 <div class='input {classname} flex flex-col gap-0'>
     {#if label}
-        <label class='label' for='input'>{label}{invalid}</label>
+        <label class='label' for='input'>{label}</label>
     {/if}
     <input class='data' class:invalid id='input' type='password' {name} bind:value={value}
            {minlength} {maxlength}

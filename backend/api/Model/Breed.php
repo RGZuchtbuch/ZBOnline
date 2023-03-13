@@ -40,6 +40,7 @@ class Breed extends Model
             SELECT id, name, breedId, info
             FROM color
             WHERE breedId=:id
+            ORDER BY name
         ');
         return Query::selectArray($stmt, $args);
     }

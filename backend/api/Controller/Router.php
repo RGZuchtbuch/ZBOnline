@@ -109,7 +109,9 @@ class Router {
 
 //        $app->get('/standard', new standard\Get());
 
+        $app->get('/user/reset/{email}', 'App\Controller\User\Reset' );
         $app->post('/user/token', 'App\Controller\User\Token' );
+        $app->post('/user/password', 'App\Controller\User\Password' );
 
     }
 };

@@ -2,16 +2,18 @@
     import {meta, router} from 'tinro';
     import api from "../js/api.js";
     import { user } from '../js/store.js'
-    import Submit from './input/Submit.svelte';
+    import Button from './input/Button.svelte';
     import EmailInput from './input/Email.svelte';
     import Modal from './Modal.svelte';
     import PasswordInput from './input/Password.svelte';
+    import Submit from './input/Submit.svelte';
 
     let email = 'eelco.jannink@gmail.com';
-    let password = 'jannink';
+    let password = '';
     let success = true;
     let invalids = { email:false, password:false };
     let invalid = true;
+    let forgot = false;
 
     let route = meta();
 
@@ -32,16 +34,54 @@
         });
     }
 
+    function onForgot( event ) {
+        forgot = ! forgot;
+        console.log( 'Forgot', forgot );
+    }
+
+    function onResetPassword( event ) {
+        console.log( event.target.disabled );
+        if( event.target.disabled )
+            console.log( 'Disabled' )
+        else
+            console.log( 'Enabled' );
+        event.target.disabled = true;
+        console.log( "Reset password requested");
+        api.user.reset( email ).then( response => {
+            if( response.success ) {
+                console.log( "Reset succesfull" )
+                event.target.disabled = false;
+                router.goto( route.from );
+            }
+        });
+
+    }
+
+    function cancel() {
+        router.goto( route.from );
+    }
+
     $: checkInvalid( invalids );
 
 </script>
 
 <Modal class=''>
     <form class='w-96 flex flex-col gap-4 self-center border rounded p-4' on:submit|preventDefault={onSubmit}>
-        <h2 class='bg-header'>Anmelden</h2>
+        <div class='flex bg-header'>
+            <h2 class='grow '>Anmelden</h2>
+            <div class='cursor-pointer mr-2' on:click={cancel}>&#8855;</div>
+        </div>
         <EmailInput class='' label='eMail' bind:value={email} bind:invalid={invalids.email} required/>
         <PasswordInput class='' label='Password' bind:value={password} bind:invalid={invalids.password} required/>
-        <Submit value='Ok' disabled={invalid} />
+
+        <div class='cursor-pointer error text-sm text-right' on:click={onForgot}>Ich habe mein Passwort vergessen :(</div>
+
+        {#if forgot }
+            <Button value='Passwort vergessen!' on:click={onResetPassword} alert=true/>
+        {/if}
+        {#if ! forgot && ! invalids.email && ! invalids.password }
+            <Submit value='Ich wil herein' disabled={invalid} />
+        {/if}
         {#if ! success} <div class='error'>Nicht erfolgreich</div> {/if}
     </form>
 

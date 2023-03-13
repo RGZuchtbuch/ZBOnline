@@ -185,10 +185,10 @@ class District extends Model
             WHERE breed.sectionId IN (              
                 SELECT id
                 FROM (
-                    select id, parentId from section ORDER BY parentId, id
-                ) sorted, (
                     SELECT @pv:=:sectionId AS root
-                ) init
+                ) init, (
+                    select id, parentId from section ORDER BY parentId, id
+                ) sorted 
                 WHERE ( find_in_set(parentId, @pv) > 0 AND @pv := CONCAT(@pv, ',', id) ) OR id=:sectionId     
             )
             GROUP BY breed.id, breed.name
@@ -265,9 +265,9 @@ class District extends Model
             ) AS sections
             
             LEFT JOIN ( # now add results to district per wanted sections
-                SELECT result.*, Breed.sectionId AS sectionId, Breed.name AS breedName, color.name AS colorName 
+                SELECT result.*, breed.sectionId AS sectionId, breed.name AS breedName, color.name AS colorName 
                 FROM result 
-                    LEFT JOIN Breed ON Breed.id=result.breedId
+                    LEFT JOIN breed ON breed.id=result.breedId
                     LEFT JOIN color ON color.id=result.colorId
                 WHERE result.year=:year
             ) AS results ON  results.districtId=districts.id AND results.sectionId=sections.id

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Config;
 //use App\utils\Token;
+use App\Controller\User\Token;
 use BadFunctionCallException;
 use Firebase\JWT\ExpiredException;
 use Firebase\JWT\JWT;
@@ -36,7 +37,7 @@ abstract class Controller
 
         if( $this->authorized() ) {
             $data = $this->process();
-            $response->getBody()->write( json_encode( $data ) );
+            $response->getBody()->write( json_encode( $data, JSON_UNESCAPED_SLASHES ) ); // to avoid unneeded slashes like in url
             return $response;
         } else {
             throw new \Slim\Exception\HttpUnauthorizedException( $request, 'Not Authorized');
@@ -51,7 +52,7 @@ abstract class Controller
     private function getRequester( Request $request ) : ? array {
         $token = static::getToken( $request );
         if( $token ) {
-            $payload = static::decode( $token );
+            $payload = Token::decode( $token );
             if( $payload ) {
                 return $payload[ 'user' ];
             }
@@ -71,13 +72,7 @@ abstract class Controller
         return null;
     }
 
-    // decode jwt token
-    private static function decode( string $token ) : array {
-        $payload = (array)JWT::decode($token, new Key(Config::TOKEN_SECRET, Config::TOKEN_ALGORITHM));
-        $payload['user'] = (array)$payload['user']; // convert back to 'normal' array
-        return $payload;
-    // may throw ExpiredException $e
-    }
+
 
     public static function tree( array $rows ) : ? array // uses id and parentId for hierarchy
     {

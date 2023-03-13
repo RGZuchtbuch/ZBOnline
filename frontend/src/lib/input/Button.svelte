@@ -3,6 +3,7 @@
     export let value;
     export let label = null;
     export let disabled = false;
+    export let alert = false
 
     let classname = '';
     export { classname as class }
@@ -17,11 +18,11 @@
 
 </script>
 
-<div class='input cursor-pointer {classname} flex flex-col gap-0'>
+<div class='{classname}' class:alert>
     {#if label !== null}
         <label class='label' for='input'>{label}</label>
     {/if}
-    <input class='data cursor-pointer' id='input' type='button' {name} bind:value={value}
+    <input class='cursor-pointer font-bold' id='input' type='button' {name} bind:value={value}
            {disabled} readonly
             on:focus={on.focus}
             on:blur={on.blur}
@@ -30,7 +31,11 @@
 </div>
 
 <style>
-    input {
-        @apply border rounded border-gray-400 bg-button;
+    div {
+        @apply cursor-pointer border rounded border-gray-400 bg-button flex flex-col gap-0
+    }
+
+    .alert {
+        @apply bg-alert;
     }
 </style>

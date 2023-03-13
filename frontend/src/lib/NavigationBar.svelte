@@ -8,9 +8,9 @@
         <a href='/seite/1'>Das Zuchtbuch</a>
         {#if STANDARDENABLED}<a href='/standard'>Standard</a>{/if}
         {#if RESULTSENABLED}<a href='/leistungen'>Leistungen</a>{/if}
-        {#if $user && MYBOOKENABLED} <a href='/zuechter'>Mein Zuchtbuch</a> {/if}
-        {#if $user && $user.moderator.length > 0 } <a href='/obmann'>Obmann</a> {/if}
-        {#if $user && $user.admin } <a href='/admin'>Admin</a> {/if}
+        {#if MYBOOKENABLED && $user } <a href='/zuechter'>Mein Zuchtbuch</a> {/if}
+        {#if MODERATORENABLED && $user && $user.moderator.length > 0 } <a href='/obmann'>Obmann</a> {/if}
+        {#if ADMINENABLED && $user && $user.admin } <a href='/admin'>Admin</a> {/if}
     </div>
     <div class='w-48'>
         {#if $user}
