@@ -99,11 +99,11 @@ class Section extends Model
             FROM (
                 SELECT sorted.*
                 FROM (
+                    SELECT @parent:=:id AS root
+                ) init, (
                     select * from section ORDER BY parentId, id
-                ) sorted, (
-                    SELECT @pv:=:id AS root
-                ) init
-                WHERE ( find_in_set(parentId, @pv) > 0 AND @pv := CONCAT(@pv, ',', id) ) OR id=:id     
+                ) sorted 
+                WHERE ( find_in_set(parentId, @parent) > 0 AND @parent := CONCAT(@parent, ',', id) ) OR id=:id     
             ) AS sections                    
             ORDER BY sections.order
         " );

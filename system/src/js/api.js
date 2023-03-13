@@ -8,20 +8,9 @@ let cache = {
     promises: {} // url -> promise, time
 };
 
-let token = window.sessionStorage.getItem( 'token' );
-// eelco
-if( token !== null ) { // mind, could be "null" text as well
-    const decoded = jwt_decode(token);
-    if( decoded.exp * 1000 > Date.now() ) {
-        decoded.user.exp = decoded.exp;
-        user.set(decoded.user); // user from token or null
-    } else {
-        token = null;
-        user.set( null ); // expired
-    }
-} else {
-    user.set( null );
-}
+let token = getToken();
+
+
 
 export default {
 
@@ -236,12 +225,13 @@ export default {
         },
 //        getTree: ( parentId ) => get( 'api/section/'+parentId+'/tree'),
 
-        breeds: { get: (sectionId) => get('api/section/' + sectionId + '/breeds'), },
-//        root: {
-//            get: ( rootId ) => {
-//                return get( 'api/section/'+rootId+'/root');
-//            }
-//        }
+        breeds: {
+            get: (sectionId) => get('api/section/' + sectionId + '/breeds'),
+        },
+
+        descendants: {
+            get: ( sectionId ) => get( 'api/section/'+sectionId+'/descendants'),
+        },
     },
 
     standard: {
@@ -317,8 +307,27 @@ export default {
     },
 }
 
+/*
+ * takes token from session storage and checks for expired, then returns null.
+ * also sets the user store to the user data like moderator as an array of districts and if admin.
+ */
+function getToken() {
+    let token = window.sessionStorage.getItem( 'token' );
 
-
+    if( token !== null ) { // mind, could be "null" text as well
+        const decoded = jwt_decode(token);
+        if( decoded.exp * 1000 > Date.now() ) {
+            decoded.user.exp = decoded.exp;
+            user.set(decoded.user); // user from token or null
+        } else {
+            user.set( null ); // expired
+            token =  null;
+        }
+    } else {
+        user.set( null );
+    }
+    return token;
+}
 
 /**
  * clears item from cache if older than cacheTimout

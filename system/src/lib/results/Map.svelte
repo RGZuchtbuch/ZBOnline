@@ -9,17 +9,19 @@
     import GeoMap from './GeoMap.svelte';
 
     const types = { // what options to show
+/*
         1: {
             id: 1,
             label: 'Mitglieder',
             extract: (result) => [result.members],
             title: (result) => ` hat ${dec(result.members)} Mitglieder`
         },
+ */
         2: {
             id: 2,
-            label: 'Züchter',
+            label: 'Zuchten',
             extract: (result) => [result.breeders],
-            title: (result) => ` meldete ${dec(result.breeders)} Züchter`
+            title: (result) => ` meldete ${dec(result.breeders)} Zuchten`
         },
         3: {
             id: 3,
@@ -60,13 +62,16 @@
     let max = {}
 // from
     const years = [ 2023, 2022, 2021, 2020, 2019 ];
-    const sections = [
+    let sections = []
+/*
         { id:2, name:'Geflügel' },
         { id:3, name:'Groß & Wassergeflügel' },
         { id:4, name:'Hühner' }, { id:11, name:' → Hühner (groß)' }, { id:12, name:' → Zwerghühner' }, { id:13, name:' → Wachteln' },
         { id:5, name:'Tauben' },
         { id:6, name:'Ziergeflügel'}
     ];
+
+ */
     let breeds = [];
     let colors = [];
 
@@ -81,6 +86,26 @@
         colorId = Number( route.query.color ) || null;
         loadBreeds();
         loadColors();
+    }
+
+    function loadSections() {
+        sections = [];
+        api.section.descendants.get( 2 ).then( response => {
+            const root = response.section;
+            sections = prepareSections( sections, root, '' );
+            console.log( sections );
+        });
+    }
+
+    function prepareSections( sections, section, prepend ) {
+        sections.push( { id:section.id, name:prepend+section.name } );
+        if( prepend == '' ) prepend = '→ ';
+        if( section && section.children ) {
+            for( const child of section.children ) {
+                prepareSections( sections, child, ' - '+prepend );
+            }
+        }
+        return sections;
     }
 
     function loadBreeds() {
@@ -125,6 +150,7 @@
         }
     }
 
+    loadSections();
     $: onQuery( $router );
     $: onYear( year );
     $: onDistrict( districtId );

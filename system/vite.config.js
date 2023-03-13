@@ -7,7 +7,7 @@ export default defineConfig({
     port:8100,
   },
   build: {
-    outDir: '../backend'
+    outDir: './'
   },
   plugins: [svelte()],
 })

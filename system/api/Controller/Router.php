@@ -105,6 +105,7 @@ class Router {
 //        $app->get('/section/{sectionId}', new section\Get());
         $app->get('/section/{id}/children', 'App\Controller\Section\Children' );
         $app->get('/section/{id}/breeds', 'App\Controller\Section\Breeds' );
+        $app->get('/section/{id}/descendants', 'App\Controller\Section\Descendants' );
 //        $app->get('/section/{sectionId}/root', new section\root\Get());
 
 //        $app->get('/standard', new standard\Get());
