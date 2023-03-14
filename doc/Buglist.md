@@ -25,3 +25,11 @@
 2023-03-13
     GeoMap, tooltip werkt niet voor tablet/touch
 
+2023-03-14
+    CSS needs cleanup, using tailwind extentions AND App.css, mlast one is mess
+
+2023-03-14
+    Getting warning on build: 
+    consts not defined, can be ingored
+    non-interactive elements.... should us button or anchor instead of div for on:click
+

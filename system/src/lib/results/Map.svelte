@@ -102,7 +102,7 @@
         if( prepend == '' ) prepend = '→ ';
         if( section && section.children ) {
             for( const child of section.children ) {
-                prepareSections( sections, child, ' - '+prepend );
+                prepareSections( sections, child, ' · '+prepend );
             }
         }
         return sections;
