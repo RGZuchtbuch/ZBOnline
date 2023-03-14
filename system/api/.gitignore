@@ -1,4 +1,6 @@
 /vendor/
+
+# some old impl stuff, should be removed
 /old/
 # composer.phar
 composer.lock
