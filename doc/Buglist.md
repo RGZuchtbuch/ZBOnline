@@ -33,3 +33,11 @@
 
     theme greenish, soft toned.
     pick a palette.
+
+2023-03-16
+    in Obmann, KV EB, eingeben Bielefelder zwerge, multiple results per color, not good
+
+2023-03-16 
+    no permission on port 8100, after laptop seems to have auto restarted.
+    Suggestions here: https://stackoverflow.com/questions/48478869/cannot-bind-to-some-ports-due-to-permission-denied
+    But fitrst try complete restart.

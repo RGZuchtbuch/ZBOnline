@@ -42,9 +42,9 @@
             LEFT JOIN section AS subsection ON subsection.id = breed.sectionId
             LEFT JOIN section ON section.id = subsection.parentId
             
-            WHERE result.year=2023 AND result.districtId IN (
-                SELECT child.id FROM district AS parent
-                LEFT JOIN district AS child ON child.id = parent.id OR child.parentId = parent.id
+            WHERE result.year=:year AND result.districtId IN (
+                SELECT DISTINCT child.id FROM district AS parent
+                    LEFT JOIN district AS child ON child.id = parent.id OR child.parentId = parent.id
                 WHERE parent.id=:districtId OR parent.parentId = :districtId                
             )
             

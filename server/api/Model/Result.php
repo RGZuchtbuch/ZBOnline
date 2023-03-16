@@ -146,13 +146,9 @@ class Result
                     LEFT JOIN breed ON breed.id = result.breedId	
                 WHERE result.year=:year
             ) AS results ON results.districtId = district.id AND results.sectionId IN (
-                SELECT id
-                FROM (
-                    SELECT @parents:=:sectionId
-                ) AS init,  (
-                    SELECT parentId, id FROM section 
-                    WHERE ( FIND_IN_SET( parentId, @parents ) AND @parents:=CONCAT( @parents, ',', id ) ) OR id=:sectionId
-                ) AS list
+                SELECT DISTINCT child.id FROM section AS parent
+                    LEFT JOIN section AS child ON child.id = parent.id OR child.parentId = parent.id
+                WHERE parent.id=:sectionId OR parent.parentId = :sectionId  
             )
             GROUP BY district.rootId      
         " );
@@ -179,88 +175,16 @@ class Result
                 FROM color
                 WHERE @year > :startYear
             ) AS years
-            
-            LEFT JOIN result ON result.year = years.year AND result.colorId=:colorId
-                AND result.districtId IN (
-                    SELECT id
-                    FROM (
-                        SELECT @parents:=:districtId
-                    ) AS init, (
-                        SELECT rootId, id, parentId FROM district ORDER BY parentId, id
-                    ) AS sorted
-                    WHERE (FIND_IN_SET(parentId, @parents) > 0 AND @parents:=CONCAT(@parents, ',', id)) OR id=:districtId
-                    
+                LEFT JOIN result ON result.year = years.year AND result.colorId=:colorId AND result.districtId IN (
+                    SELECT DISTINCT child.id FROM district AS parent
+                        LEFT JOIN district AS child ON child.id = parent.id OR child.parentId = parent.id
+                    WHERE parent.id=:districtId OR parent.parentId = :districtId                                          
                 )
                         
             GROUP BY years.year
             ORDER BY years.year
         " );
 
-/*
-        $stmt = Query::prepare( '       
-            SELECT  results.*, members.members
-            
-            # first get grouped results for all years (2000-now)
-            FROM (
-                # start with list of years as we want results per year
-               WITH RECURSIVE years(`year`) AS (
-                   SELECT :startYear AS `year`
-                   UNION
-                   SELECT `year`+1 AS `year` FROM years
-                   WHERE `year` < YEAR( NOW())
-               )
-               SELECT 
-                    years.year AS `year`, result.districtId AS districtId,
-                    CAST( IFNULL( SUM( breeders ), 0 ) AS UNSIGNED ) AS breeders, 
-                    CAST( IFNULL( SUM( pairs ), 0 ) AS UNSIGNED ) AS pairs, 
-                    CAST( IFNULL( COUNT( DISTINCT breedId ), 0 ) AS  UNSIGNED ) AS breeds,
-                    CAST( IFNULL( COUNT( DISTINCT colorId ), 0 ) AS  UNSIGNED ) AS colors,
-                    CAST( IFNULL( SUM( layDames), 0 ) AS UNSIGNED) AS layDames, IFNULL( AVG( layEggs ), 0 ) AS layEggs, IFNULL( AVG( layWeight ), 0 ) AS layWeight,
-                    CAST( IFNULL( SUM( broodEggs ), 0 ) AS UNSIGNED) AS broodEggs, CAST( IFNULL( SUM( broodFertile ), 0 ) AS UNSIGNED) AS broodFertile, CAST( IFNULL( SUM( broodHatched ), 0 ) AS UNSIGNED) AS broodHatched,
-                    CAST( IFNULL( SUM( showCount ), 0 ) AS UNSIGNED) AS showCount, IFNULL( AVG( showScore), 0 ) AS showScore		
-                FROM years
-            
-                # add results for year and check for wanted district and subdistricts    
-                LEFT JOIN result ON result.year = years.year
-                AND result.colorId = :colorId
-                AND result.districtId IN ( # check is in district or a child district
-                    WITH RECURSIVE districts( parentId, id, latitude, longitude, name ) AS (
-                        SELECT id, id, latitude, longitude, name FROM district WHERE id=:districtId
-                        UNION
-                        SELECT districts.id, district.id, districts.latitude, districts.longitude, districts.name
-                        FROM districts JOIN district ON district.parentId=districts.id
-                    )
-                    SELECT id FROM districts  	
-                )
-                GROUP BY years.year
-            ) AS results
-            
-            # add members from user
-            LEFT JOIN (
-               WITH RECURSIVE years(year) AS (
-                   SELECT 2000 AS `year` 
-                   UNION
-                   SELECT `year`+1 AS `year` FROM years
-                   WHERE `year` < YEAR( NOW())
-               )
-                SELECT years.year AS `year`, CAST( COUNT( DISTINCT user.id ) AS UNSIGNED ) AS members
-                FROM years
-                LEFT JOIN user 
-                    ON YEAR( user.start ) <= years.year AND ( user.end IS NULL OR YEAR( user.end ) >= years.year )
-                	AND user.clubId IN ( # check if in district or a child district
-                        WITH RECURSIVE districts( parentId, id, latitude, longitude, name ) AS (
-                            SELECT id, id, latitude, longitude, name FROM district WHERE id=:districtId
-                            UNION
-                            SELECT districts.id, district.id, districts.latitude, districts.longitude, districts.name
-                            FROM districts JOIN district ON district.parentId=districts.id
-                        )
-                        SELECT id FROM districts  	
-                    )
-
-                GROUP BY years.year
-            ) AS members ON members.year = results.year
-    ' );
-*/
         return Query::selectArray( $stmt, $args );
     }
     public static function yearsForBreed( $districtId, $breedId ) {
@@ -281,87 +205,16 @@ class Result
                 WHERE @year > :startYear
             ) AS years
             
-            LEFT JOIN result ON result.year = years.year AND result.breedId=:breedId
-                AND result.districtId IN (
-                    SELECT id
-                    FROM (
-                        SELECT @root:=:districtId, @parents:=@root
-                    ) AS init, (
-                        SELECT rootId, id, parentId FROM district ORDER BY parentId, id
-                    ) AS sorted
-                    WHERE (FIND_IN_SET(parentId, @parents) > 0 AND @parents:=CONCAT(@parents, ',', id)) OR id = @root
-                    
+            LEFT JOIN result ON result.year = years.year AND result.breedId=:breedId AND result.districtId IN (
+                    SELECT DISTINCT child.id FROM district AS parent
+                        LEFT JOIN district AS child ON child.id = parent.id OR child.parentId = parent.id
+                    WHERE parent.id=:districtId OR parent.parentId = :districtId                                          
                 )
                         
             GROUP BY years.year
             ORDER BY years.year
         " );
 
-/*
-        $stmt = Query::prepare( '       
-            SELECT  results.*, members.members
-           
-            # first get grouped results for all years (2000-now)
-            FROM (
-                # start with list of years as we want results per year
-               WITH RECURSIVE years(`year`) AS (
-                   SELECT 2000 AS `year` 
-                   UNION
-                   SELECT `year`+1 AS `year` FROM years
-                   WHERE `year` < YEAR( NOW())
-               )
-               SELECT 
-                    years.year AS `year`, result.districtId AS districtId,
-                    CAST( IFNULL( SUM( breeders ), 0 ) AS UNSIGNED ) AS breeders, 
-                    CAST( IFNULL( SUM( pairs ), 0 ) AS UNSIGNED ) AS pairs, 
-                    CAST( IFNULL( COUNT( DISTINCT breedId ), 0 ) AS  UNSIGNED ) AS breeds,
-                    CAST( IFNULL( COUNT( DISTINCT colorId ), 0 ) AS  UNSIGNED ) AS colors,
-                    CAST( IFNULL( SUM( layDames), 0 ) AS UNSIGNED) AS layDames, IFNULL( AVG( layEggs ), 0 ) AS layEggs, IFNULL( AVG( layWeight ), 0 ) AS layWeight,
-                    CAST( IFNULL( SUM( broodEggs ), 0 ) AS UNSIGNED) AS broodEggs, CAST( IFNULL( SUM( broodFertile ), 0 ) AS UNSIGNED) AS broodFertile, CAST( IFNULL( SUM( broodHatched ), 0 ) AS UNSIGNED) AS broodHatched,
-                    CAST( IFNULL( SUM( showCount ), 0 ) AS UNSIGNED) AS showCount, IFNULL( AVG( showScore), 0 ) AS showScore		
-                FROM years
-            
-                # add results for year and check for wanted district and subdistricts    
-                LEFT JOIN result ON result.year = years.year
-                AND result.breedId = :breedId
-                AND result.districtId IN ( # check is in district or a child district
-                    WITH RECURSIVE districts( parentId, id, latitude, longitude, name ) AS (
-                        SELECT id, id, latitude, longitude, name FROM district WHERE id=:districtId
-                        UNION
-                        SELECT districts.id, district.id, districts.latitude, districts.longitude, districts.name
-                        FROM districts JOIN district ON district.parentId=districts.id
-                    )
-                    SELECT id FROM districts  	
-                )
-                GROUP BY years.year
-            ) AS results
-            
-            # add members from user
-            LEFT JOIN (
-               WITH RECURSIVE years(year) AS (
-                   SELECT 2000 AS `year` 
-                   UNION
-                   SELECT `year`+1 AS `year` FROM years
-                   WHERE `year` < YEAR( NOW())
-               )
-                SELECT years.year AS `year`, CAST( COUNT( DISTINCT user.id ) AS UNSIGNED ) AS members
-                FROM years
-                LEFT JOIN user 
-                    ON YEAR( user.start ) <= years.year AND ( user.end IS NULL OR YEAR( user.end ) >= years.year )
-                	AND user.clubId IN ( # check if in district or a child district
-                        WITH RECURSIVE districts( parentId, id, latitude, longitude, name ) AS (
-                            SELECT id, id, latitude, longitude, name FROM district WHERE id=:districtId
-                            UNION
-                            SELECT districts.id, district.id, districts.latitude, districts.longitude, districts.name
-                            FROM districts JOIN district ON district.parentId=districts.id
-                        )
-                        SELECT id FROM districts  	
-                    )
-
-                GROUP BY years.year
-            ) AS members ON members.year = results.year 
-        ' );
-*/
         return Query::selectArray( $stmt, $args );
     }
     public static function yearsForSection( $districtId, $sectionId ) {
@@ -388,104 +241,20 @@ class Result
             	FROM result
 				LEFT JOIN breed ON breed.id=result.breedId
 				WHERE result.districtId IN (
-	                    SELECT id
-	                    FROM (
-	                        SELECT @districtRoot:=:districtId, @districts:=:districtId
-	                    ) AS init, (
-                            SELECT id, parentId FROM district 
-                            ORDER BY parentId, id
-	                    ) AS sorted
-						WHERE (FIND_IN_SET(parentId, @districts) > 0 AND @districts:=CONCAT(@districts, ',', id)) OR id = @districtRoot 
-	                )
-	                AND breed.sectionId IN (
-						SELECT id FROM (
-							SELECT @sectionRoot:=:sectionId, @sections:=:sectionId
-						) AS init, (
-							SELECT id, parentId FROM section 
-							ORDER BY parentId, id
-						) AS sectionList
-						WHERE ( FIND_IN_SET( parentId, @sections ) AND @sections:=CONCAT( @sections, ',', id ) ) OR id=@sectionRoot
-	                )           
+                    SELECT DISTINCT child.id FROM district AS parent
+                        LEFT JOIN district AS child ON child.id = parent.id OR child.parentId = parent.id
+                    WHERE parent.id=:districtId OR parent.parentId = :districtId                                          
+	            ) AND breed.sectionId IN (
+                    SELECT DISTINCT child.id FROM district AS parent
+                        LEFT JOIN section AS child ON child.id = parent.id OR child.parentId = parent.id
+                    WHERE parent.id=:sectionId OR parent.parentId=:sectionId                                          
+                )           
 			) AS results ON results.year = years.year 
                 
             GROUP BY years.year
             ORDER BY years.year
         " );
 
-/*
-        $stmt = Query::prepare( '
-            SELECT  results.*, members.members
-            
-            # first get grouped results for all years (2000-now)
-            FROM (
-                # start with list of years as we want results per year
-               WITH RECURSIVE years(`year`) AS (
-                   SELECT 2000 AS `year` 
-                   UNION
-                   SELECT `year`+1 AS `year` FROM years
-                   WHERE `year` < YEAR( NOW())
-               )
-               SELECT 
-                    years.year AS `year`, result.districtId AS districtId,
-                    CAST( IFNULL( SUM( breeders ), 0 ) AS UNSIGNED ) AS breeders, 
-                    CAST( IFNULL( SUM( pairs ), 0 ) AS UNSIGNED ) AS pairs, 
-                    CAST( IFNULL( COUNT( DISTINCT breedId ), 0 ) AS  UNSIGNED ) AS breeds,
-                    CAST( IFNULL( COUNT( DISTINCT colorId ), 0 ) AS  UNSIGNED ) AS colors,
-                    CAST( IFNULL( SUM( layDames), 0 ) AS UNSIGNED) AS layDames, IFNULL( AVG( layEggs ), 0 ) AS layEggs, IFNULL( AVG( layWeight ), 0 ) AS layWeight,
-                    CAST( IFNULL( SUM( broodEggs ), 0 ) AS UNSIGNED) AS broodEggs, CAST( IFNULL( SUM( broodFertile ), 0 ) AS UNSIGNED) AS broodFertile, CAST( IFNULL( SUM( broodHatched ), 0 ) AS UNSIGNED) AS broodHatched,
-                    CAST( IFNULL( SUM( showCount ), 0 ) AS UNSIGNED) AS showCount, IFNULL( AVG( showScore), 0 ) AS showScore		
-                FROM years
-            
-                # add result per year. each single result has equal weight in the calculations
-                LEFT JOIN result ON result.year = years.year
-                AND result.breedId IN ( # check if Breed IN section OR subsection 
-                    WITH RECURSIVE sections( parentId, id ) AS (
-                        SELECT id, id FROM section WHERE id=:sectionId
-                        UNION
-                        SELECT sections.id, section.id
-                        FROM sections JOIN section ON section.parentId=sections.id
-                    )
-                    SELECT Breed.id FROM Breed, sections
-                    WHERE Breed.sectionId = sections.id		
-                )
-                AND result.districtId IN ( # check if in district or a child district
-                    WITH RECURSIVE districts( parentId, id, latitude, longitude, name ) AS (
-                        SELECT id, id, latitude, longitude, name FROM district WHERE id=:districtId
-                        UNION
-                        SELECT districts.id, district.id, districts.latitude, districts.longitude, districts.name
-                        FROM districts JOIN district ON district.parentId=districts.id
-                    )
-                    SELECT id FROM districts  	
-                )
-                GROUP BY years.year
-            ) AS results
-            
-            # add members from user
-            LEFT JOIN (
-               WITH RECURSIVE years(year) AS (
-                   SELECT 2000 AS `year` 
-                   UNION
-                   SELECT `year`+1 AS `year` FROM years
-                   WHERE `year` < YEAR( NOW())
-               )
-                SELECT years.year AS `year`, CAST( COUNT( DISTINCT user.id ) AS UNSIGNED ) AS members
-                FROM years
-                LEFT JOIN user 
-                ON YEAR( user.start ) <= years.year AND ( user.end IS NULL OR YEAR( user.end ) >= years.year )
-                AND user.clubId IN ( # check if in district or a child district
-                    WITH RECURSIVE districts( parentId, id, latitude, longitude, name ) AS (
-                        SELECT id, id, latitude, longitude, name FROM district WHERE id=:districtId
-                        UNION
-                        SELECT districts.id, district.id, districts.latitude, districts.longitude, districts.name
-                        FROM districts JOIN district ON district.parentId=districts.id
-                    )
-                    SELECT id FROM districts  	
-                )
-                
-                GROUP BY years.year
-            ) AS members ON members.year = results.year
-        ' );
-*/
         return Query::selectArray( $stmt, $args );
     }
 

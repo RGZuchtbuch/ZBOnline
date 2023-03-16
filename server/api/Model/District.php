@@ -60,20 +60,17 @@ class District extends Model
         $stmt = Query::prepare( "
             SELECT 
                 breeder.id, breeder.firstname, breeder.infix, breeder.lastname, 
-                districts.id AS districtId, districts.name AS districtName,
+                district.id AS districtId, district.name AS districtName,
                 club.id AS clubId, club.name AS clubName
-			FROM user AS breeder 
-			JOIN (
-                SELECT id, parentId, name, level, moderatorId
-                FROM (
-                	SELECT @root:=:districtId, @districtId:=:districtId # insert districtId here 
-				) AS init, (
-                    SELECT * FROM district ORDER BY parentId, id
-                ) AS sorted				
-                WHERE ( find_in_set(parentId, @districtId) > 0 AND @districtId := CONCAT(@districtId, ',', id) ) OR id=@root
-			) AS districts ON districts.id = breeder.districtId
-			LEFT JOIN district AS club ON club.id = breeder.clubId
-            ORDER BY breeder.lastname, breeder.firstname 
+			FROM user AS breeder
+                LEFT JOIN district ON district.id=breeder.districtId 
+                LEFT JOIN district AS club ON club.id=breeder.clubId 
+            WHERE breeder.districtId IN (
+                SELECT DISTINCT child.id FROM district AS parent
+                    LEFT JOIN district AS child ON child.id = parent.id OR child.parentId = parent.id
+                WHERE parent.id=:districtId OR parent.parentId = :districtId  
+            )
+            ORDER BY breeder.lastName, breeder.firstName
         ");
         return Query::selectArray( $stmt, $args );
     }
@@ -89,31 +86,14 @@ class District extends Model
         return Query::selectArray( $stmt, $args );
     }
 
-    public static function descendants( int $id ) : array {
+    public static function descendants( int $districtIid ) : array {
         $args = get_defined_vars();
         $stmt = Query::prepare( "
-            SELECT *
-            FROM (
-                SELECT @root:=:id, @parents:=@root
-            ) AS init, (
-                SELECT id, parentId, name, level, moderatorId
-                FROM district ORDER BY parentId, id
-            ) AS sorted 
-            WHERE ( find_in_set(parentId, @parents) > 0 AND @parents := CONCAT(@parents, ',', id) ) OR id=@root
-            ORDER BY sorted.name
+            SELECT DISTINCT child.* FROM district AS parent
+                LEFT JOIN district AS child ON child.id = parent.id OR child.parentId = parent.id
+            WHERE parent.id=:districtId OR parent.parentId=:disrictId
+            ORDER BY name
         ");
-/*
-        $stmt = Query::prepare( '
-            WITH RECURSIVE districts( id, parentId, name, level, moderatorId ) AS (
-               SELECT id, parentId, name, level, moderatorId FROM district WHERE id=:id
-               UNION
-               SELECT district.id, district.parentId, district.name, district.level, district.moderatorId
-               FROM districts JOIN district ON district.parentId=districts.id
-            )
-            SELECT * FROM districts
-            ORDER BY districts.name
-        ' );
-*/
         return Query::selectArray( $stmt, $args );
     }
 
@@ -181,99 +161,42 @@ class District extends Model
                 AND result.year = :year
                 AND result.group = :group
             WHERE breed.sectionId IN (              
-                SELECT id
-                FROM (
-                    SELECT @pv:=:sectionId AS root
-                ) init, (
-                    select id, parentId from section ORDER BY parentId, id
-                ) sorted 
-                WHERE ( find_in_set(parentId, @pv) > 0 AND @pv := CONCAT(@pv, ',', id) ) OR id=:sectionId     
+				SELECT child.id FROM section AS parent
+					LEFT JOIN section AS child ON child.id = parent.id OR child.parentId = parent.id
+				WHERE parent.id=:sectionId OR parent.parentId=:sectionId
             )
             GROUP BY breed.id, breed.name
             ORDER BY breed.name 
         ");
 
-/*
-        $stmt = Query::prepare('
-            SELECT 
-          		breed.id, breed.name, 
-          		COUNT( result.id ) AS results, :districtId AS districtId, :year AS `year`, :group AS `group`, 
-                SUM( breeders ) AS breeders, SUM( pairs ) AS pairs,
-                SUM( result.layDames ) AS layDames, AVG( layEggs ) AS layEggs, AVG( result.layWeight ) AS layWeight,
-                SUM( result.broodEggs) AS broodEggs, SUM( broodFertile ) AS broodFertile, SUM( broodHatched ) AS broodHatched,
-                SUM( result.showCount ) AS showCount, AVG( showScore ) AS showScore
-            FROM breed
-            LEFT JOIN result ON result.breedId = breed.id
-                AND result.districtId = :districtId
-                AND result.year = :year
-                AND result.group = :group
-            WHERE breed.sectionId IN (
-                WITH RECURSIVE sections( id ) AS 
-                (
-                    SELECT id FROM section WHERE id = :sectionId
-                    UNION
-                    SELECT section.id
-                    FROM sections 
-                    JOIN section ON section.parentId = sections.id
-                )   
-                SELECT id FROM sections
-            )
-            GROUP BY breed.id, breed.name
-            ORDER BY breed.name 
-        ');
-*/
         return Query::selectArray( $stmt, $args );
     }
 
     public static function results( int $districtId, int $year ) : array {
         $args = get_defined_vars();
         $stmt = Query::prepare("
-             SELECT COUNT(*) AS `count`,
-				districts.id AS districtId, sections.rootId AS sectionId, sections.name AS sectionName, sections.order,
-                results.id, results.breedId, results.breedName, results.colorId, results.colorName,
-                CAST( SUM( results.breeders ) AS UNSIGNED ) AS breeders, CAST( SUM( results.pairs ) AS UNSIGNED ) AS pairs,
-                CAST( SUM( results.layDames ) AS UNSIGNED ) AS layDames, AVG( results.layEggs ) AS layEggs, AVG( results.layWeight ) AS layWeight,
-                CAST( SUM( results.broodEggs ) AS UNSIGNED ) AS broodEggs, CAST( SUM( results.broodFertile ) AS UNSIGNED ) AS broodFertile, CAST( SUM( results.broodHatched ) AS UNSIGNED ) AS broodHatched, 
-                CAST( SUM( results.showCount ) AS UNSIGNED ) AS showCount, AVG( results.showScore ) AS showScore
-
-            FROM (
-				SELECT * # get district with subdistricts as we need to get results from the whole tree
-				FROM (
-				    SELECT @root:=:districtId, @parents:=@root AS path
-				) AS init, (
-				    SELECT id, parentId, name, level, moderatorId
-				    FROM district 
-				    WHERE moderatorId IS NOT NULL
-				    ORDER BY parentId, id
-				) AS sorted
-				WHERE ( find_in_set(parentId, @parents) > 0 AND @parents:=CONCAT(@parents, ',', id) ) OR id=@root
-            ) AS districts
-
-            JOIN (
-				SELECT # need to get wanted sections with their subsection tree, solved non recursive for max depth of 3
-					g0.id AS rootId, g0.name,
-					IF( ISNULL(g3.id), IF( ISNULL(g2.id), IF( ISNULL(g1.id), g0.id, g1.id ), g2.id ), g3.id ) AS id,
-					IF( ISNULL(g3.id), IF( ISNULL(g2.id), IF( ISNULL(g1.id), g0.order, g1.order ), g2.order ), g3.order ) AS `order`
-				FROM section AS g0
-					LEFT JOIN section AS g1 ON g1.parentId = g0.id
-					LEFT JOIN section AS g2 ON g2.parentId = g1.id
-					LEFT JOIN section AS g3 ON g3.parentId = g2.id
-				WHERE g0.id IN ( 3,11,12,13,5,6 ) # the sections to group by
-				ORDER BY rootId, id 
-            ) AS sections
+            SELECT COUNT(*),
+                result.districtId AS districtId, section.id AS sectionId, subsection.id AS subsectionId, section.name AS sectionName, section.order, subsection.name AS subsectionName, subsection.order AS subsectionOrder,
+                result.id, result.breedId, breed.name AS breedName, result.colorId, color.name AS colorName,
+                CAST( SUM( result.breeders ) AS UNSIGNED ) AS breeders, CAST( SUM( result.pairs ) AS UNSIGNED ) AS pairs,
+                CAST( SUM( result.layDames ) AS UNSIGNED ) AS layDames, AVG( result.layEggs ) AS layEggs, AVG( result.layWeight ) AS layWeight,
+                CAST( SUM( result.broodEggs ) AS UNSIGNED ) AS broodEggs, CAST( SUM( result.broodFertile ) AS UNSIGNED ) AS broodFertile, CAST( SUM( result.broodHatched ) AS UNSIGNED ) AS broodHatched, 
+                CAST( SUM( result.showCount ) AS UNSIGNED ) AS showCount, AVG( result.showScore ) AS showScore
             
-            LEFT JOIN ( # now add results to district per wanted sections
-                SELECT result.*, breed.sectionId AS sectionId, breed.name AS breedName, color.name AS colorName 
-                FROM result 
-                    LEFT JOIN breed ON breed.id=result.breedId
-                    LEFT JOIN color ON color.id=result.colorId
-                WHERE result.year=:year
-            ) AS results ON  results.districtId=districts.id AND results.sectionId=sections.id
+            FROM result
+            LEFT JOIN breed ON breed.id = result.breedId
+            LEFT JOIN color ON color.id = result.colorId
+            LEFT JOIN section AS subsection ON subsection.id = breed.sectionId
+            LEFT JOIN section ON section.id = subsection.parentId
             
-            WHERE results.breedId IS NOT NULL
+            WHERE result.year=:year AND result.districtId IN (
+                SELECT child.id FROM district AS parent
+                    LEFT JOIN district AS child ON child.id = parent.id OR child.parentId = parent.id
+                WHERE parent.id=:districtId OR parent.parentId = :districtId                
+            )
             
-            GROUP BY sections.rootId, results.breedName, results.colorName
-            ORDER BY sections.order, results.breedName, results.colorName
+            GROUP BY subsection.order, breed.name, color.name
+            ORDER BY subsection.order, breed.name, color.name
         ");
 
         return Query::selectArray( $stmt, $args );
