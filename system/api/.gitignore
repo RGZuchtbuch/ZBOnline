@@ -1,9 +1,0 @@
-/vendor/
-
-# some old impl stuff, should be removed
-/old/
-# composer.phar
-composer.lock
-
-# we want no secrets in git
-Config.php
