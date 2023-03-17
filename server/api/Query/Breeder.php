@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Model;
+namespace App\Query;
 
 use App\Controller\Controller;
 use Slim\Exception\HttpNotImplementedException;
 
-class Breeder extends Model
+class Breeder extends Query
 {
 
 
@@ -38,12 +38,12 @@ class Breeder extends Model
         return Query::update($stmt, $args);
     }
 
-    public static function delete( int $id ) : bool { // TODO use with case, as it's could be referred to from reports
+    public static function del( int $id ) : bool { // TODO use with case, as it's could be referred to from reports
         $args = get_defined_vars();
         $stmt = Query::prepare('
             DELETE FROM user 
             WHERE id=:id
         ');
-        return Query::delete($stmt, $args);
+        return Query::del($stmt, $args);
     }
 }

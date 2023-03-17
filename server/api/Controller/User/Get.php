@@ -2,7 +2,7 @@
 
 namespace App\Controller\Breeder;
 
-use App\Model;
+use App\Query;
 use App\Controller\Controller;
 use http\Exception\InvalidArgumentException;
 use Slim\Exception\HttpNotFoundException;
@@ -19,9 +19,9 @@ class Get extends Controller
     public function process() : array
     {
         $id = $this->args['id'];
-        $breed = Model\User::get( $id );
+        $breed = Query\User::get( $id );
         if( ! $breed ) throw new HttpNotFoundException( );
-        $breed['colors'] = Model\Breed::colors( $id );
+        $breed['colors'] = Query\Breed::colors( $id );
         return [ 'Breed'=>$breed ];
     }
 }

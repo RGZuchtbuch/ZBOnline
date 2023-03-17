@@ -21,6 +21,9 @@ const config = {
         '288': '72rem',
         '384': '96rem'
       },
+      fontSize: {
+        '2xs': '0.5rem',
+      },
     },
   },
 

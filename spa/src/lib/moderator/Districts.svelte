@@ -45,6 +45,7 @@
 //            rootDistrict.visible = true;
 //            checkEditable( rootDistrict );
             setState( rootDistrict );
+            rootDistrict.open = true;
         } );
     }
 

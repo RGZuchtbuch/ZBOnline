@@ -2,7 +2,7 @@
 
 namespace App\Controller\Breeder;
 
-use App\Model;
+use App\Query;
 use App\Controller\Controller;
 use http\Exception\InvalidArgumentException;
 use Slim\Exception\HttpNotFoundException;
@@ -15,7 +15,7 @@ class Delete extends Controller
     {
         if( $this->requester && $this->args ) {
             if( $this->requester['admin'] ) return true; // admin
-            $breeder = Model\Breeder::get( $this->args[ 'id' ] );
+            $breeder = Query\Breeder::get( $this->args[ 'id' ] );
             if( in_array( $breeder[ 'districtId' ], $this->requester[ 'moderator' ] ) ) return true; // moderator
         }
         return false;
@@ -24,7 +24,7 @@ class Delete extends Controller
     public function process() : array
     {
         $id = $this->args['id'];
-        $removed = Model\Breeder::del( $id );
+        $removed = Query\Breeder::del( $id );
         return [ 'id'=>$removed ];
     }
 }

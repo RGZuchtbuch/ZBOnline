@@ -2,7 +2,7 @@
 
 namespace App\Controller\Breed;
 
-use App\Model;
+use App\Query;
 use App\Controller\Controller;
 use http\Exception\InvalidArgumentException;
 use Slim\Exception\HttpNotFoundException;
@@ -17,7 +17,7 @@ class Colors extends Controller
     public function process() : array
     {
         $id = $this->args['id'];
-        $colors = Model\Breed::colors( $id );
+        $colors = Query\Breed::colors( $id );
         return [ 'colors'=>$colors ];
     }
 }

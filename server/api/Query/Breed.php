@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Model;
+namespace App\Query;
 
 
 
@@ -8,7 +8,7 @@ use http\Exception\InvalidArgumentException;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Exception\HttpNotImplementedException;
 
-class Breed extends Model
+class Breed extends Query
 {
     public static function new( string $name, int $sectionId, int $broodGroup, int $lay, int $eggWeight, int $sireRing, int $dameRing, int $sireWeight, int $dameWeight, string $info ) : ? int {
         throw new HttpNotImplementedException( null, "oops" );

@@ -2,7 +2,7 @@
 
 namespace App\Controller\Result;
 
-use App\Model;
+use App\Query;
 use App\Controller\Controller;
 use http\Exception\InvalidArgumentException;
 use Slim\Exception\HttpNotFoundException;
@@ -22,11 +22,11 @@ class Districts extends Controller
         $sectionId = $this->query[ 'section' ] ?? null;
         $districts = [];
         if( $colorId ) {
-            $districts = Model\Result::districtsForColor( $year, $colorId );
+            $districts = Query\Result::districtsForColor( $year, $colorId );
         } else if( $breedId ) {
-            $districts = Model\Result::districtsForBreed( $year, $breedId );
+            $districts = Query\Result::districtsForBreed( $year, $breedId );
         } else if( $sectionId ) {
-            $districts = Model\Result::districtsForSection( $year, $sectionId );
+            $districts = Query\Result::districtsForSection( $year, $sectionId );
         }
         return ['districts' => $districts ];
     }

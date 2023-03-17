@@ -1,11 +1,8 @@
 <?php
 
-namespace App\Model;
+namespace App\Query;
 
-use App\Config;
-use Exception;
-
-class Result
+class Result extends Query
 {
     public static function get( $id ) {
         $args = get_defined_vars();
@@ -51,14 +48,14 @@ class Result
         return Query::update( $stmt, $args );
     }
 
-    public static function delete( $id ) {
+    public static function del($id ) {
         $args = get_defined_vars();
         $stmt = Query::prepare( '
             DELETE 
             FROM result
             WHERE id=:id
         ' );
-        return Query::delete( $stmt, $args );
+        return Query::del( $stmt, $args );
     }
 
     public static function districtsForColor( $year, $colorId ) {
@@ -158,7 +155,7 @@ class Result
 
 
     public static function yearsForColor( $districtId, $colorId ) {
-        $startYear = Config::START_YEAR;
+        $startYear = START_YEAR;
         $args = get_defined_vars();
         $stmt = Query::prepare( "
             SELECT years.year, result.colorId,
@@ -188,7 +185,7 @@ class Result
         return Query::selectArray( $stmt, $args );
     }
     public static function yearsForBreed( $districtId, $breedId ) {
-        $startYear = Config::START_YEAR;
+        $startYear = START_YEAR;
         $args = get_defined_vars();
         $stmt = Query::prepare( "
             SELECT years.year, result.colorId,
@@ -218,7 +215,7 @@ class Result
         return Query::selectArray( $stmt, $args );
     }
     public static function yearsForSection( $districtId, $sectionId ) {
-        $startYear = Config::START_YEAR;
+        $startYear = START_YEAR;
         $args = get_defined_vars();
         $stmt = Query::prepare( "            
             SELECT years.year,
@@ -242,12 +239,13 @@ class Result
 				LEFT JOIN breed ON breed.id=result.breedId
 				WHERE result.districtId IN (
                     SELECT DISTINCT child.id FROM district AS parent
-                        LEFT JOIN district AS child ON child.id = parent.id OR child.parentId = parent.id
-                    WHERE parent.id=:districtId OR parent.parentId = :districtId                                          
+                        LEFT JOIN district AS child ON child.parentId=parent.id OR child.id=parent.id 
+                    WHERE parent.id=:districtId OR parent.parentId=:districtId                                          
 	            ) AND breed.sectionId IN (
-                    SELECT DISTINCT child.id FROM district AS parent
-                        LEFT JOIN section AS child ON child.id = parent.id OR child.parentId = parent.id
-                    WHERE parent.id=:sectionId OR parent.parentId=:sectionId                                          
+                    SELECT DISTINCT grandchild.id FROM section # root could be 1 
+                        LEFT JOIN section AS child ON child.parentId=section.id OR child.id=section.id
+                        LEFT JOIN section AS grandchild ON grandchild.parentId=child.id OR grandchild.id=section.id
+                    WHERE section.id=1 OR section.parentId=1                                       
                 )           
 			) AS results ON results.year = years.year 
                 

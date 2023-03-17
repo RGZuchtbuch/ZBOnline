@@ -2,7 +2,7 @@
 
 namespace App\Controller\Result;
 
-use App\Model;
+use App\Query;
 use App\Controller\Controller;
 use http\Exception\InvalidArgumentException;
 use Slim\Exception\HttpNotFoundException;
@@ -17,9 +17,8 @@ class Get extends Controller
     public function process() : array
     {
         $id = $this->args['id'];
-        $result = Model\Result::get( $id );
-        if( ! $breed ) throw new HttpNotFoundException( );
-        $breed['colors'] = Model\Breed::colors( $id );
-        return [ 'Breed'=>$breed ];
+        $result = Query\Result::get( $id );
+        if( ! $result ) throw new HttpNotFoundException( );
+        return [ 'result'=>$result ];
     }
 }

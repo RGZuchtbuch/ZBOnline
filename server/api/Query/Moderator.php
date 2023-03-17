@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Model;
+namespace App\Query;
 
 
 
 use http\Exception\InvalidArgumentException;
 use Slim\Exception\HttpNotFoundException;
 
-class Moderator extends Model
+class Moderator extends Query
 {
 
 

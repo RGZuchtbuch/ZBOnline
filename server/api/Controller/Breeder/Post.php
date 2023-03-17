@@ -2,7 +2,7 @@
 
 namespace App\Controller\Breeder;
 
-use App\Model;
+use App\Query;
 use App\Controller\Controller;
 use http\Exception\InvalidArgumentException;
 use Slim\Exception\HttpNotFoundException;
@@ -23,9 +23,9 @@ class Post extends Controller
         $data = $this->data;
         $id = $data[ 'id' ] ?? null;
         if( $id ) {
-            Model\Breeder::set( $id, $data['firstname'], $data['infix'], $data['lastname'], $data['email'], $data['districtId'], $data['clubId'], $data['start'], $data['end'], $data['info'], $this->requester[ 'id' ] );
+            Query\Breeder::set( $id, $data['firstname'], $data['infix'], $data['lastname'], $data['email'], $data['districtId'], $data['clubId'], $data['start'], $data['end'], $data['info'], $this->requester[ 'id' ] );
         } else {
-            $id = Model\Breeder::new( $data['firstname'], $data['infix'], $data['lastname'], $data['email'], $data['districtId'], $data['clubId'], $data['start'], $data['end'], $data['info'], $this->requester[ 'id' ] );
+            $id = Query\Breeder::new( $data['firstname'], $data['infix'], $data['lastname'], $data['email'], $data['districtId'], $data['clubId'], $data['start'], $data['end'], $data['info'], $this->requester[ 'id' ] );
         }
         return ['id' => $id];
     }

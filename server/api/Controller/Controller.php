@@ -2,18 +2,11 @@
 
 namespace App\Controller;
 
-use App\Config;
-//use App\utils\Token;
 use App\Controller\User\Token;
-use BadFunctionCallException;
-use Firebase\JWT\ExpiredException;
-use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
-use Firebase\JWT\SignatureInvalidException;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
-$controller = null;
+//$controller = null; // not used...
 
 abstract class Controller
 {
@@ -83,7 +76,6 @@ abstract class Controller
             $nodes[ $row['id'] ] = & $row;
         }
         foreach( $rows as & $child ) {
-            //print( $child['id'].' \n' );
             $parentId = & $child[ 'parentId' ];
             if( $parentId && isset( $nodes[ $parentId ] ) ) { //has and exists in array
                 $parent = & $nodes[ $parentId ];

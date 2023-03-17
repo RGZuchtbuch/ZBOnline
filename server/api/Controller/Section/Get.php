@@ -2,7 +2,7 @@
 
 namespace App\Controller\Section;
 
-use App\Model;
+use App\Query;
 use App\Controller\Controller;
 use http\Exception\InvalidArgumentException;
 use Slim\Exception\HttpNotFoundException;
@@ -17,7 +17,7 @@ class Get extends Controller
     public function process() : array
     {
         $id = $this->args['id'];
-        $section = Model\Section::get( $id );
+        $section = Query\Section::get( $id );
         return [ 'section' => $section ];
     }
 }

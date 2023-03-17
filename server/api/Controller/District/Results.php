@@ -2,7 +2,7 @@
 
 namespace App\Controller\District;
 
-use App\Model;
+use App\Query;
 use App\Controller\Controller;
 use http\Exception\InvalidArgumentException;
 use Slim\Exception\HttpBadRequestException;
@@ -32,22 +32,22 @@ class Results extends Controller
         $results = null;
         $debug = [];
         if( $districtId ) { // TODO when used, only case 1, last is found for district results.
-            $district = Model\District::get( $districtId );
+            $district = Query\District::get( $districtId );
             if( $sectionId && $breedId && $year && $group) { // 3
                 $debug[] = 'breed && sectionId = '.$sectionId;
                 if( $sectionId == 5 ) {
                     $debug[] = 'pigeon '.$sectionId;
-                    $results = Model\District::breedResult($districtId, $breedId, $year, $group); // per breed (5) or colors
+                    $results = Query\District::breedResult($districtId, $breedId, $year, $group); // per breed (5) or colors
                 } else {
                     $debug[] = 'other '.$sectionId;
-                    $results = Model\District::colorResults($districtId, $breedId, $year, $group); // per breed (5) or colors
+                    $results = Query\District::colorResults($districtId, $breedId, $year, $group); // per breed (5) or colors
                 }
             } else if( $sectionId && $year && $group) { // 2
                 $debug[] = 'section '.$sectionId;
-                $results = Model\District::sectionResults( $districtId, $sectionId, $year, $group );
+                $results = Query\District::sectionResults( $districtId, $sectionId, $year, $group );
             } else if( $year ) { // 1, for results listing
                 $debug[] = 1;
-                $results = $this->resultsTree( Model\District::results( $districtId, $year ) );
+                $results = $this->resultsTree( Query\District::results( $districtId, $year ) );
             } else {
                 throw new HttpBadRequestException( $this->request, "wrong arguments");
             }
@@ -56,6 +56,52 @@ class Results extends Controller
         return [ 'district'=>$district, 'results'=>$results, 'debug'=>$debug ];
     }
 
+    function resultsTree( $results ) : array
+    {
+        $tree = [ 'sections'=>[] ];
+        $sectionId = 0;
+        $subsectionId = 0;
+        $section = null;
+        $subsection = null;
+        $breedId = 0;
+        $breed = null;
+
+        foreach ($results as $row) {
+            if( $row['sectionId'] !== $sectionId ) { // next section
+                $sectionId = $row['sectionId'];
+                unset( $section ); // to lose ref
+                $section = [ 'id'=>$sectionId, 'name'=>$row['sectionName'], 'subsections'=>[] ];
+                $tree[ 'sections'][] = & $section; // new section array
+            }
+            if( $row['subsectionId'] !== $subsectionId ) { // next section
+                $subsectionId = $row['subsectionId'];
+                unset( $subsection ); // to lose ref
+                $subsection = [ 'id'=>$subsectionId, 'name'=>$row['subsectionName'], 'breeds'=>[] ];
+                $section[ 'subsections'][] = & $subsection; // new section array
+            }
+            if( $row[ 'breedId' ] !== $breedId ) { // next Breed
+                $breedId = $row[ 'breedId' ];
+                unset( $breed ); // to loose ref
+                $breed = [ 'id'=>$breedId, 'name'=>$row[ 'breedName' ], 'colors'=>[] ];
+                $subsection[ 'breeds' ][] = & $breed; // new Breed array
+            }
+            $result = [
+                'id'=>$row['id'], 'breeders'=>$row['breeders'], 'pairs'=>$row['pairs'],
+                'layDames'=>$row['layDames'], 'layEggs'=>$row['layEggs'], 'layWeight'=>$row['layWeight'],
+                'broodEggs'=>$row['broodEggs'], 'broodFertile'=>$row['broodFertile'], 'broodHatched'=>$row['broodHatched'],
+                'showCount'=>$row['showCount'], 'showScore'=>$row['showScore']
+            ];
+            if( $row['colorId'] === null ) {
+                $breed[ 'result' ] = $result;
+            } else {
+                $breed['colors'][] = [
+                    'id' => $row['colorId'], 'name' => $row['colorName'], 'result'=> $result
+                ];
+            }
+        }
+        return $tree;
+    }
+/*
     private function resultsTree( $results ) : array
     {
         $tree = [ 'sections'=>[] ];
@@ -93,4 +139,5 @@ class Results extends Controller
         }
         return $tree;
     }
+    */
 }

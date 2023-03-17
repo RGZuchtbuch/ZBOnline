@@ -5,7 +5,6 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
 
 
-require __DIR__.'/vendor/autoload.php';
 
 // allow cross origin from all, could use Slim for this ?
 header('Access-Control-Allow-Origin: *');
@@ -13,6 +12,9 @@ header('Access-Control-Allow-Headers:  Accept, Authorization, Content-Type, Orig
 header('Access-Control-Allow-Methods:  GET, POST, PUT, DELETE');
 header("Content-Type: application/json");
 
+require_once './config/config.php';
+//require __DIR__.'/vendor/autoload.php';
+require_once './vendor/autoload.php';
 
 
 //ob_start('ob_gzhandler'); // needs check if header has Accept-Encoding: gzip

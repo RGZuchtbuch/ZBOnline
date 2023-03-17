@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Model;
+namespace App\Query;
 
 use http\Exception\InvalidArgumentException;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Exception\HttpNotImplementedException;
 
-class Section extends Model
+class Section extends Query
 {
 
     public static function new( string $name, int $sectionId, int $broodGroup, int $lay, int $eggWeight, int $sireRing, int $dameRing, int $sireWeight, int $dameWeight, string $info ) : ? int {
@@ -32,11 +32,11 @@ class Section extends Model
         throw new HttpNotImplementedException( null, "oops" );
     }
 
-    public static function breeds( int $id ) : array {
+    public static function breeds( int $sectionId ) : array {
         $args = get_defined_vars();
         $stmt = Query::prepare( "
             SELECT 
-                SELECT breed.id, breed.name, section.name AS sectionName
+                breed.id, breed.name, section.name AS sectionName
             FROM breed
                 LEFT JOIN section ON section.id=breed.sectionId
             WHERE breed.sectionId IN (
@@ -59,7 +59,7 @@ class Section extends Model
         return Query::selectArray($stmt, $args);
     }
 
-    public static function descendants( int $id ) : array {
+    public static function descendants( int $sectionId ) : array {
         $args = get_defined_vars();
         $stmt = Query::prepare( "
             SELECT DISTINCT child.id, child.parentId, child.name, child.layers, child.order FROM section AS parent

@@ -1,13 +1,11 @@
 <?php
     declare(strict_types=1);
 
+    require '../api/config/config.php';
+
     //http://localhost/html/results.php?district=2&year=2023
 
-    const DB_HOST = 'localhost:3306'; // 3306 for deploy
-    const DB_NAME = 'web71db_zb';
-    const DB_USER = 'web71db_zb';
-    const DB_PASSWORD = 'jfb%^GR56rgf%&*^iUYHTgiuytgiuYCddyi%$^';
-
+// cors not needed, as there's no browser nor spa ?
 //    header('Access-Control-Allow-Origin: *');
 //    header('Access-Control-Allow-Headers:  Accept, Authorization, Content-Type, Origin, X-Requested-With');
 //    header('Access-Control-Allow-Methods:  GET');
@@ -22,6 +20,18 @@
             $pdo->setAttribute( PDO::ATTR_STRINGIFY_FETCHES, false ); // also to get text and numbers instead of always text as template
 //            Query::$pdo->setAttribute( PDO::ATTR_EMULATE_PREPARES, false ); // should be the default true for allowing multiple :year in prepare
         return $pdo;
+    }
+
+    function district( int $districtId ) {
+        $args = get_defined_vars();
+        global $pdo;
+        $stmt = $pdo->prepare("
+            SELECT district.id, district.name FROM district WHERE district.id=:districtId 
+        ");
+        if ( $stmt->execute($args) ) {
+            return $stmt->fetch(); // only first row
+        }
+        return null;
     }
 
     function results( int $districtId, int $year ) : array {
@@ -104,7 +114,7 @@
         return $tree;
     }
 
-    function render( $results ) {
+    function render( $district, $year, $results ) {
         print( "
             <!DOCTYPE html>
             <html lang='en'>
@@ -115,6 +125,7 @@
               </head>
               <body>        
         " );
+        print( "<div>RGZuchtbuch results for district [{$district['id']}] {$district['name']} and year {$year}</div>" );
         print( "<table border=1>" );
         print( "
             <thead>
@@ -182,15 +193,22 @@
     $pdo = getPdo();
 
     $query = $_GET;
-    $districtId = +$query[ 'district' ] ?? null;
-    $year = +$query[ 'year' ] ?? null;
+    $districtId = +( $query[ 'district' ] ?? null ); // null or number by +
+    $year = +( $query[ 'year' ] ?? null ); // null or number
 
     if( $districtId && $year ) {
+        $district = district( $districtId );
         $results = resultsTree( results($districtId, $year) );
         //print( json_encode( $results ) );
-        render($results);
+        if( $district && $results ) {
+            render($district, $year, $results);
+        } else {
+            print("Error, district {$districtId} not found");
+            http_response_code(404);
+        }
     } else {
-        print("Error");
+        print("Error, required format: https://rgzuchtbuch.de/html/results.php?year=2023&district=6");
+        http_response_code(400);
     }
 
 

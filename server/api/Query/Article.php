@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Model;
+namespace App\Query;
 
 use http\Exception\InvalidArgumentException;
 use Slim\Exception\HttpNotFoundException;
 
-class Article extends Model
+class Article extends Query
 {
     public static function new( string $title, string $text ) : ? int {
         return null;

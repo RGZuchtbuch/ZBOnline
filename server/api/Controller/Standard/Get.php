@@ -2,9 +2,8 @@
 
 namespace App\Controller\Standard;
 
-use App\Model;
+use App\Query\Query;
 use App\Controller\Controller;
-use App\Model\Query;
 use Exception;
 use http\Exception\InvalidArgumentException;
 use PDOException;
@@ -17,6 +16,7 @@ class Get extends Controller
         return true;
     }
 
+    /*
     public function process() : array
     {
         $sections = $this->sections();
@@ -25,8 +25,6 @@ class Get extends Controller
         $standard = $this->toStandardTree( $sections, $breeds, $colors );
         return ['standard' => $standard];
     }
-
-    /** Helpers **/
 
     private function sections() {
         $args = [];
@@ -78,5 +76,5 @@ class Get extends Controller
 
         return $sections[2]; // geflügel
     }
-
+*/
 }

@@ -2,11 +2,13 @@
 
 namespace App\Controller\District;
 
-use App\Model;
+use App\Query;
 use App\Controller\Controller;
 use http\Exception\InvalidArgumentException;
 use Slim\Exception\HttpNotFoundException;
 
+
+// provides district detail with it's moderator details
 class Get extends Controller
 {
     public function authorized(): bool
@@ -17,9 +19,9 @@ class Get extends Controller
     public function process() : array
     {
         $id = $this->args['id'];
-        $district = Model\District::get( $id );
+        $district = Query\District::get( $id );
         if( $district && $district[ 'moderatorId' ] ) { // if has moderator
-            $district['moderator'] = Model\Moderator::get($district['moderatorId'] );
+            $district['moderator'] = Query\Moderator::get($district['moderatorId'] );
         }
         return ['district' => $district];
     }

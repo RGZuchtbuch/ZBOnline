@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Model;
+namespace App\Query;
 
-class User
+class User extends Query
 {
 /*
     public static function new( ? string $firstname, ? string $infix, ? string $lastname, ? string $email, int $districtId, int $clubId, string $start, ? string $end, ? string $info ) : ? int {
@@ -31,7 +31,9 @@ class User
         ');
         return Query::select($stmt, $args);
     }
-
+/*
+    public static function new( ? string $firstname, ? string $infix, ? string $lastname, ? string $email, int districtId, int $clubId, string $start, ? string $end, ? string $info, int $modifierId ) : bool {
+ */
 
 /*
     public static function set( int $id,  ? string $firstname, ? string $infix, ? string $lastname, ? string $email, int $clubId, string $start, ? string $end, ? string $info, int $modifierId ) : bool {

@@ -7,6 +7,7 @@
     import Button from "../input/Button.svelte";
     import TimeLine from './TimeLine.svelte';
     import GeoMap from './GeoMap.svelte';
+    import ResultList from './ResultList.svelte';
 
     const types = { // what options to show
 /*
@@ -62,18 +63,12 @@
     let colorId = null;
 
     let max = {}
-// from
-    const years = [ 2023, 2022, 2021, 2020, 2019 ];
-    let sections = []
-/*
-        { id:2, name:'Geflügel' },
-        { id:3, name:'Groß & Wassergeflügel' },
-        { id:4, name:'Hühner' }, { id:11, name:' → Hühner (groß)' }, { id:12, name:' → Zwerghühner' }, { id:13, name:' → Wachteln' },
-        { id:5, name:'Tauben' },
-        { id:6, name:'Ziergeflügel'}
-    ];
 
- */
+    const years = [];
+    for( let year=new Date().getFullYear(); year >= STARTYEAR; year--) years.push( year );
+
+    let sections = []
+
     let breeds = [];
     let colors = [];
 
@@ -207,7 +202,11 @@
             <GeoMap bind:year={year} bind:districtId={districtId} {sectionId} {breedId} {colorId} type={types[typeId]} />
         {/if}
     </div>
+
+    <ResultList districtId={districtId} year={year} />
+
 </div>
+
 
 
 <style>

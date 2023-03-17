@@ -2,7 +2,7 @@
 
 namespace App\Controller\Article;
 
-use App\Model;
+use App\Query;
 use App\Controller\Controller;
 use Exception;
 use http\Exception\InvalidArgumentException;
@@ -18,7 +18,7 @@ class Get extends Controller
 
     public function process() : array
     {
-        $article = Model\Article::get( $this->args[ 'id' ] );
+        $article = Query\Article::get( $this->args[ 'id' ] );
         if( $article ) {
             return ['article' => $article];
         }

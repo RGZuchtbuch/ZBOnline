@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Model;
+namespace App\Query;
 
 use http\Exception\InvalidArgumentException;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Exception\HttpNotImplementedException;
 
-class District extends Model
+class District extends Query
 {
 
     public static function new(
@@ -86,12 +86,12 @@ class District extends Model
         return Query::selectArray( $stmt, $args );
     }
 
-    public static function descendants( int $districtIid ) : array {
+    public static function descendants( int $districtId ) : array {
         $args = get_defined_vars();
         $stmt = Query::prepare( "
             SELECT DISTINCT child.* FROM district AS parent
                 LEFT JOIN district AS child ON child.id = parent.id OR child.parentId = parent.id
-            WHERE parent.id=:districtId OR parent.parentId=:disrictId
+            WHERE parent.id=:districtId OR parent.parentId=:districtId
             ORDER BY name
         ");
         return Query::selectArray( $stmt, $args );

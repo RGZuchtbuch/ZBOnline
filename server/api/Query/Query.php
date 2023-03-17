@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Model;
+namespace App\Query;
 
-use App\Config;
 use PDO;
 use PDOStatement;
 
@@ -10,11 +9,19 @@ class Query
 {
     private static ? PDO $pdo = null;
 
+    /**
+     * @param string $sql
+     * @return PDOStatement
+     */
     public static function prepare( string $sql ) : PDOStatement {
         $pdo = Query::getPdo();
         return $pdo->prepare( $sql );
     }
 
+    /**
+     * Begin transaction, should be followed by either commit on ok or rollback on failure !
+     * @return bool
+     */
     public static function begin(): bool {
         $pdo = Query::getPdo();
         return $pdo->beginTransaction();
@@ -33,11 +40,11 @@ class Query
     /**
      * @param PDOStatement $stmt
      * @param array $args
-     * @return array|null
+     * @return 1st row or |null on empty
      */
-    public static function select( PDOStatement  & $stmt, array & $args = [] ): ? array {
+    protected static function select( PDOStatement  & $stmt, array & $args = [] ): ? array {
         if( $stmt->execute( $args ) ) {
-            $data = $stmt->fetch();
+            $data = $stmt->fetch(); // get first row
             if( $data ) { // could be false
                 return $data;
             }
@@ -45,34 +52,59 @@ class Query
         return null;
     }
 
-    public static function selectArray(PDOStatement & $stmt, array & $args = [] ) : array { // array of objects, could be empty
+    /**
+     * @param PDOStatement $stmt
+     * @param array $args
+     * @return array of all rows found or empty array
+     */
+    protected static function selectArray(PDOStatement & $stmt, array & $args = [] ) : array { // array of objects, could be empty
         if ($stmt->execute($args)) {
             return $stmt->fetchAll();
         }
         return [];
     }
 
-    public static function insert( PDOStatement & $stmt, array & $args ) : ? int { // returns new id
+    /**
+     * @param PDOStatement $stmt
+     * @param array $args
+     * @return id of newly inserted row or null on failure
+     */
+    protected static function insert( PDOStatement & $stmt, array & $args ) : ? int { // returns new id
         return $stmt->execute( $args ) ? Query::lastInsertId() : null;
     }
 
-    public static function lastInsertId( ? string $name = null ) : int {
+    /**
+     * @param PDOStatement $stmt
+     * @param array $args
+     * @return bool true on success
+     */
+    protected static function update( PDOStatement & $stmt, array & $args ) : bool {
+        return $stmt->execute( $args );
+    }
+
+    /**
+     * @param PDOStatement $stmt
+     * @param array $args
+     * @return bool, true on success
+     */
+    protected static function delete(PDOStatement & $stmt, array & $args ) : bool {
+        return $stmt->execute( $args );
+    }
+
+    /**
+     * @param string|null $name
+     * needs to called right after an insert statement, Query::insert already does so
+     * @return last inserted id,
+     */
+    protected static function lastInsertId( ? string $name = null ) : int {
         return Query::getPdo()->lastInsertId( $name );
-    }
-
-    public static function update( PDOStatement & $stmt, array & $args ) : bool {
-        return $stmt->execute( $args );
-    }
-
-    public static function delete( PDOStatement & $stmt, array & $args ) : bool {
-        return $stmt->execute( $args );
     }
 
 //*** private ****
     private static function getPdo() {
         if( ! Query::$pdo ) { // create pdo if not exists
             Query::$pdo = new PDO(
-                'mysql:host='.Config::DB_HOST.';dbname='.Config::DB_NAME.';charset=utf8', Config::DB_USER, Config::DB_PASSWORD
+                'mysql:host='.DB_HOST.';dbname='.DB_NAME.';charset=utf8', DB_USER, DB_PASSWORD
             );
             Query::$pdo->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
             Query::$pdo->setAttribute( PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC ); // return associated array only

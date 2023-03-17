@@ -5,7 +5,7 @@
     import Breeder from './breeder/Breeder.svelte';
     import Breeders from './Breeders.svelte';
     import Reports from './Reports.svelte';
-    import Results from './Results.svelte';
+    import Results from './ResultsList.svelte';
     import Report from './Report.svelte';
     import DistrictResultsEdit from './ResultsEdit.svelte';
 

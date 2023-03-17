@@ -38,6 +38,8 @@ const settings = {
 const MINYEAR = 1850;
 const MAXYEAR = 2030;
 
+const STARTYEAR = 2000;
+
 const MAXLAYDAMES = 99;
 const MAXLAYEGGS = 366;
 const MINLAYWEIGHT = 5;

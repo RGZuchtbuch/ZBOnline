@@ -2,7 +2,7 @@
 
 namespace App\Controller\District;
 
-use App\Model;
+use App\Query;
 use App\Controller\Controller;
 use http\Exception\InvalidArgumentException;
 use Slim\Exception\HttpNotFoundException;
@@ -23,9 +23,9 @@ class Post extends Controller
         $data = $this->data;
         $id = $data[ 'id' ] ?? null;
         if( $id ) {
-            Model\District::set( $data['id'], $data['name'], $data['fullname'], $data['short'], $data['latitude'], $data['longitude'], $data['level'], $data['moderatorId'], $this->requester[ 'id' ] );
+            Query\District::set( $data['id'], $data['name'], $data['fullname'], $data['short'], $data['latitude'], $data['longitude'], $data['level'], $data['moderatorId'], $this->requester[ 'id' ] );
         } else {
-            $id = Model\District::new( $data['parentId'], $data['name'], $data['fullname'], $data['short'], $data['latitude'], $data['longitude'], $data['level'], $data['moderatorId'], $this->requester[ 'id' ] );
+            $id = Query\District::new( $data['parentId'], $data['name'], $data['fullname'], $data['short'], $data['latitude'], $data['longitude'], $data['level'], $data['moderatorId'], $this->requester[ 'id' ] );
         }
         return ['id' => $id];
     }

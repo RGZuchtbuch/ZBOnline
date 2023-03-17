@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Model;
+namespace App\Query;
 
-class Color extends Model
+class Color extends Query
 {
 
     public static function new( string $name, int $sectionId, int $broodGroup, int $lay, int $eggWeight, int $sireRing, int $dameRing, int $sireWeight, int $dameWeight, string $info ) : ? int {

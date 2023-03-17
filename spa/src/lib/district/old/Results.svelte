@@ -5,7 +5,7 @@
     import api from '../../../js/api.js';
     import {meta, router} from 'tinro';
 
-    import Results from '../../Results.svelte';
+    import Results from '../../ResultsList.svelte';
     import Select from '../../input/Select.svelte';
 
     export let districtId;

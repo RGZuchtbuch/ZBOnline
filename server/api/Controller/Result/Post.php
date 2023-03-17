@@ -2,7 +2,7 @@
 
 namespace App\Controller\Result;
 
-use App\Model;
+use App\Query;
 use App\Controller\Controller;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpInternalServerErrorException;
@@ -23,10 +23,10 @@ class Post extends Controller
         $result = $this->data;
         $success = false;
         if( $this->isCleared( $result ) ) {
-            $success = Model\Result::delete( $result['id'] );
+            $success = Query\Result::del( $result['id'] );
             $result['id'] = null; // signals deleted
         } else if( $result['id'] == null ) {
-            $id = Model\Result::new(
+            $id = Query\Result::new(
                 $result['reportId'], $result['districtId'], $result['year'], $result['group'],
                 $result['breedId'], $result['colorId'],
                 $result['breeders'], $result['pairs'],
@@ -39,7 +39,7 @@ class Post extends Controller
                 $success = true;
             }
         } else {
-            $success = Model\Result::set(
+            $success = Query\Result::set(
                 $result['id'],
                 $result['reportId'], $result['districtId'], $result['year'], $result['group'],
                 $result['breedId'], $result['colorId'],

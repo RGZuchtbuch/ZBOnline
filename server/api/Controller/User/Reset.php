@@ -2,8 +2,7 @@
 
 namespace App\Controller\User;
 
-use App\Config;
-use App\Model;
+use App\Query;
 use App\Controller\Controller;
 //use App\Controller\User\Token;
 
@@ -40,7 +39,7 @@ class Reset extends Controller
 
             $this->sendMail( $email, $url );
 
-            return [ 'success' => true, 'servername'=>$servername ];
+            return [ 'success' => true, 'servername'=>$servername ]; // servname for debug
         }
         throw new HttpNotFoundException( $this->request, "Invalid credentials");
     }
@@ -53,17 +52,17 @@ class Reset extends Controller
             //Server
             $mail->SMTPDebug = SMTP::DEBUG_OFF; //SMTP::DEBUG_SERVER;   //Dis/Enable verbose debug output
             $mail->isSMTP();                                            //Send using SMTP
-            $mail->Host       = CONFIG::MAIL_SERVER;
+            $mail->Host       = MAIL_SERVER;
             $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-            $mail->Username   = CONFIG::MAIL_SENDER;                     //SMTP username
-            $mail->Password   = CONFIG::MAIL_PASSWORD;                               //SMTP password
+            $mail->Username   = MAIL_SENDER;                     //SMTP username
+            $mail->Password   = MAIL_PASSWORD;                               //SMTP password
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
-            $mail->Port       = CONFIG::MAIL_PORT;
+            $mail->Port       = MAIL_PORT;
 
             //Recipients
-            $mail->setFrom(Config::MAIL_SENDER, Config::MAIL_SENDER_NAME );
+            $mail->setFrom(MAIL_SENDER, MAIL_SENDER_NAME );
             $mail->addAddress($email, 'Zuchtbuch Mitglied');     //Add a recipient
-            $mail->addReplyTo(Config::MAIL_SENDER, Config::MAIL_SENDER_NAME );
+            $mail->addReplyTo(MAIL_SENDER, MAIL_SENDER_NAME );
 
             //Content
             $mail->isHTML(true);                                  //Set email format to HTML

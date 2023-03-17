@@ -2,7 +2,7 @@
 
 namespace App\Controller\Breed;
 
-use App\Model;
+use App\Query;
 use App\Controller\Controller;
 use Slim\Exception\HttpNotFoundException;
 
@@ -13,12 +13,12 @@ class Get extends Controller
         return true;
     }
 
-    public function process() : array
+    public function process() : array // TODO should it include colors ?
     {
         $id = $this->args['id'];
-        $breed = Model\Breed::get( $id );
+        $breed = Query\Breed::get( $id );
         if ($breed) {
-            $breed['colors'] = Model\Breed::colors( $id );
+            $breed['colors'] = Query\Breed::colors( $id );
             return ['breed' => $breed];
         }
         throw new HttpNotFoundException( $this->request, 'Breed not found' );
