@@ -32,7 +32,7 @@
     }
 
     function selectYear( year ) {
-//        router.goto( route.match+'?year='+year );
+//        Router.goto( route.match+'?year='+year );
         router.location.query.set( 'year', year );
     }
 

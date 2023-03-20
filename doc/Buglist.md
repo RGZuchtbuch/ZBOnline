@@ -29,3 +29,10 @@
 
 2023-03-17 
     all tables have modifier, should be modifierId
+
+2023-03-19
+    Saving district as admin fails, tried changing moderator, not correctly updated ( old moderatorId )
+
+2023-03-19
+    In select moderator for district as admin, ther should be an empty option ( not first one shown if no moderaotor )
+

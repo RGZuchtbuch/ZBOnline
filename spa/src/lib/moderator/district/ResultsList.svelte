@@ -5,6 +5,7 @@
     import { user } from '../../../js/store.js'
     import Results from '../../ResultsList.svelte';
     import Range from '../../input/Range.svelte';
+    import ScrollDiv from '../../common/ScrollDiv.svelte';
 
     export let districtId = null;
 //    export let moderator = null;
@@ -38,7 +39,9 @@
 {#if $user}
     <h2 class='text-center'>Verband {#if district} {district.name} {/if} → Leistungen {year}</h2>
     <Range class='px-8' label='Jahr' bind:value={year} min={STARTYEAR} max={new Date().getFullYear()} step={1} title='Schieben um das Jahr zu wählen'/>
-    <Results class='h256' {results} />
+    <ScrollDiv>
+        <Results class='h256' {results} />
+    </ScrollDiv>
 {:else}
     NOT AUTORIZED
 {/if}

@@ -28,7 +28,7 @@
                 })
             } else { // new, not saved
                 details = {
-                    id:null, parentId:district.parentId, name: null, fullname: null, short: null, latitude: null, longitude: null,
+                    id:null, parentId:district.parentId, name: null, fullname: null, short: null, latitude: null, longitude: null, moderatorId:null
                 };
                 breeders = [];
 
@@ -52,11 +52,11 @@
     }
 
     function onSubmit() {
-        console.log( 'Submit district', district );
+        console.log( 'Submit district', district, details );
         api.district.post( details ).then( response => {
            details.id = response.id;
            district.id = response.id;
-           district.name = district.detail.name;
+           district.name = details.name;
         });
         district.changed = false;
     }
@@ -100,8 +100,9 @@
 
                 <Select class='' label='Obmann' bind:value={details.moderatorId} >
                     {#if breeders}
+                        <option class='bg-white' value={null} > ? </option>
                         {#each breeders as candidate}
-                            <option class='bg-white' value={candidate.id} selected={candidate.id == details.moderatorId}> {candidate.lastname}, {candidate.firstname} {txt(candidate.infix)} </option>
+                            <option class='bg-white' value={candidate.id} selected={candidate.id === details.moderatorId}> {candidate.lastname}, {txt(candidate.firstname)} {txt(candidate.infix)} </option>
                         {/each}
                     {/if}
                 </Select>

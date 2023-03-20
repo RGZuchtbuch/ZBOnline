@@ -1,9 +1,8 @@
 <script>
-    import { createEventDispatcher } from 'svelte';
+//    import { createEventDispatcher } from 'svelte';
     import api from "../../js/api.js";
     import { pct } from '../../js/util.js';
     import { BarController, BarElement, CategoryScale, Chart, Colors, LinearScale, Title, Tooltip } from 'chart.js';
-    import Select from '../input/Select.svelte';
 
     export let type = null;
     export let districtId = null;
@@ -13,23 +12,17 @@
     export let year;
 
     let district = null;
-    let rootDistrict = null;
     let years = null;
 
     let canvas = null;
     let chart = null;
 
-    function loadDistrict( id ) {
-        api.district.get( id ).then( response => {
+    function loadDistrict( districtId ) {
+        api.district.get( districtId ).then( response => {
             district = response.district;
         })
     }
 
-    function loadDistricts( id ) {
-        api.district.children.get( id ).then( response => {
-            rootDistrict = response.district;
-        })
-    }
 
     function onChange( districtId, sectionId, breedId, colorId ) {
         let promise;
@@ -86,7 +79,7 @@
                         datasets:datasets,
                     },
                     options: {
-                        //responsive: false,
+                        responsive: false,
                         //maintainAspectRatio: false, // added due to shrinking problem
                         indexAxis:'y',
                         plugins: {
@@ -143,11 +136,9 @@
         }
     }
 
-    const dispatch = createEventDispatcher();
+//    const dispatch = createEventDispatcher();
 
     Chart.register( Colors, BarController, BarElement, CategoryScale, LinearScale, Tooltip );
-
-    loadDistricts( 1 );
 
     $: loadDistrict( districtId );
     $: onChange( districtId, sectionId, breedId, colorId );
@@ -160,16 +151,6 @@
 <div class='flex flex-col'>
 
     <h3 class='text-center'>Im {#if district}{district.name}{/if}</h3>
-
-
-    <Select bind:value={districtId} label={'Landesverband'+districtId}>
-        {#if rootDistrict }
-            <option value={rootDistrict.id} selected={rootDistrict.id === districtId}>{rootDistrict.name}</option>
-            {#each rootDistrict.children as district}
-                <option value={district.id}  selected={district.id === districtId}>{district.name}</option>
-            {/each}
-        {/if}
-    </Select>
 
     <div class='border border-gray-600'>
         <canvas id='canvas' bind:this={canvas} width='380px' height='512px'></canvas>

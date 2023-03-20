@@ -40,10 +40,7 @@
     // load whole district tree
     function loadRootDistrict() {
         api.district.descendants.get( 1 ).then( response => {
-            console.log('Response', response );
             rootDistrict = response.district;
-//            rootDistrict.visible = true;
-//            checkEditable( rootDistrict );
             setState( rootDistrict );
             rootDistrict.open = true;
         } );

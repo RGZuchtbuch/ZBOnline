@@ -20,29 +20,29 @@ The SPA relies on the backend for a serving the SPA and static files as well as 
 ```puml
 
     component Article
-    component GeoMap
-    component TimeLine
-    component Districts
-    component District
-    component Members
+    component GeoMap #cfc
+    component TimeLine #cfc
+    component Districts #cfc
+    component District #cfc
+    component Members 
     component Member
-    component ResultsList
-    component ResultsEdit
-    component Sections
-    component Section
-    component Breeds
-    component Breed
+    component ResultsList #cfc
+    component ResultsEdit #cfc
+    component Sections #cfc
+    component Section #cfc
+    component Breeds #cfc
+    component Breed 
     component Colors
     component Color
     
     component App {
-        component Router
-        component Info
+        component Router #cfc 
+        component Info #cfc
         component Standard
-        component Results
+        component Results #cfc
         component Breeder
-        component Moderator
-        component Admin
+        component Moderator #cfc
+        component Admin #fc0
     }
     
     Router --> Info
@@ -80,26 +80,30 @@ On top of this a three layered structure is chosen. The router forwards the requ
 ```puml
     class Client
     package Server {
-        class Router
+        class Router {
+            routes
+        }
+        
         class Controller {
+            requester
+            request
+            response
+            args
+             
             authorized()
             process()
         }
-        class Model {
-            get()
-            set()
-            del()
-        }
         class Query {
-            prepare()
-            execute()
+            static new()
+            static get()
+            static set()
+            static del()
         }
     }
     
-    Client -r-> Router
-    Router -r-> Controller
-    Controller -r-> Model
-    Model -r-> Query
+    Client -r-> Router : api
+    Router -r-> Controller : request
+    Controller -r-> Query : query
 ```
 
 
@@ -120,15 +124,17 @@ This caused some issues writing the recursive queries. First solution was to use
 For that reason the iterative setup was chosen, in these case to check if a breed is in a section or one of it's descendants, or a result in a district  or one of it's descendants.
 
     WHERE breed.sectionId IN (
-        SELECT distinct child.id FROM section AS parent
-		    LEFT JOIN section AS child ON child.id = parent.id OR child.parentId = parent.id
-		WHERE parent.id=:sectionId OR parent.parentId=:sectionId
+        SELECT child.id
+        FROM section AS parent
+            LEFT JOIN section AS child ON child.parentId = parent.id
+        WHERE parent.id=:sectionId OR parent.parentId=:sectionId OR child.id=:sectionId
     )
 
 and
 
     WHERE result.districtId IN (
-        SELECT distinct child.id FROM district AS parent
+        SELECT child.id 
+        FROM district AS parent
 		    LEFT JOIN district AS child ON child.id = parent.id OR child.parentId = parent.id
 		WHERE parent.id=:districtId OR parent.parentId=:districtId
     )

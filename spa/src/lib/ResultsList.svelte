@@ -69,7 +69,6 @@
 </script>
 
 
-<div class='bg-white overflow-y-scroll border border-gray-600 border-t-gray-400 rounded-b scrollbar print'>
 
     {#if results}
         {#each results.sections as section}
@@ -184,7 +183,6 @@
             <h2 class='p-2 bg-header text-center text-xl'>Leider keine Daten für dieses Jahr</h2>
         {/if}
     {/if}
-</div>
 
 
 

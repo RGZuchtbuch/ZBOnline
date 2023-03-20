@@ -11,7 +11,7 @@
     function onSelectDistrict( event ) {
         const url = route.match+'/verband/'+event.detail;
         console.log( 'Mod sel d', event.detail,  );
-//        router.location.query.set( 'district', event.detail, url );
+//        Router.location.query.set( 'district', event.detail, url );
        router.goto( url );
     }
 

@@ -144,8 +144,8 @@ class Result extends Query
                 WHERE result.year=:year
             ) AS results ON results.districtId = district.id AND results.sectionId IN (
                 SELECT DISTINCT child.id FROM section AS parent
-                    LEFT JOIN section AS child ON child.id = parent.id OR child.parentId = parent.id
-                WHERE parent.id=:sectionId OR parent.parentId = :sectionId  
+                    LEFT JOIN section AS child ON child.parentId = parent.id OR child.id=parent.id
+                WHERE parent.id=:sectionId OR parent.parentId=:sectionId
             )
             GROUP BY district.rootId      
         " );
@@ -174,7 +174,7 @@ class Result extends Query
             ) AS years
                 LEFT JOIN result ON result.year = years.year AND result.colorId=:colorId AND result.districtId IN (
                     SELECT DISTINCT child.id FROM district AS parent
-                        LEFT JOIN district AS child ON child.id = parent.id OR child.parentId = parent.id
+                        LEFT JOIN district AS child ON child.parentId = parent.id OR child.id = parent.id # add children and repeat parent
                     WHERE parent.id=:districtId OR parent.parentId = :districtId                                          
                 )
                         
@@ -204,8 +204,8 @@ class Result extends Query
             
             LEFT JOIN result ON result.year = years.year AND result.breedId=:breedId AND result.districtId IN (
                     SELECT DISTINCT child.id FROM district AS parent
-                        LEFT JOIN district AS child ON child.id = parent.id OR child.parentId = parent.id
-                    WHERE parent.id=:districtId OR parent.parentId = :districtId                                          
+                        LEFT JOIN district AS child ON child.parentId = parent.id OR child.id = parent.id
+                    WHERE parent.id=:districtId OR parent.parentId=:districtId                                          
                 )
                         
             GROUP BY years.year
@@ -219,6 +219,7 @@ class Result extends Query
         $args = get_defined_vars();
         $stmt = Query::prepare( "            
             SELECT years.year,
+                COUNT(*) AS count, :districtId AS districtId,
                 CAST( SUM( breeders ) AS UNSIGNED ) AS breeders, CAST( SUM( pairs ) AS UNSIGNED) AS pairs,                
                 CAST( COUNT( DISTINCT breedId ) AS UNSIGNED) AS breeds, CAST( COUNT( DISTINCT colorId ) AS UNSIGNED) AS colors, 	# could both be just 1 !	
                 SUM( layDames) AS layDames, SUM( IF( layEggs, pairs * layEggs, NULL ) ) / SUM( IF( layEggs, pairs, NULL ) ) AS layEggs, SUM( IF( layWeight, pairs * layWeight, NULL ) ) / SUM( IF( layWeight, pairs, NULL ) ) AS layWeight,
@@ -242,10 +243,9 @@ class Result extends Query
                         LEFT JOIN district AS child ON child.parentId=parent.id OR child.id=parent.id 
                     WHERE parent.id=:districtId OR parent.parentId=:districtId                                          
 	            ) AND breed.sectionId IN (
-                    SELECT DISTINCT grandchild.id FROM section # root could be 1 
-                        LEFT JOIN section AS child ON child.parentId=section.id OR child.id=section.id
-                        LEFT JOIN section AS grandchild ON grandchild.parentId=child.id OR grandchild.id=section.id
-                    WHERE section.id=1 OR section.parentId=1                                       
+                    SELECT DISTINCT child.id FROM section AS parent                                  # root could be 2, geflügel 
+                        LEFT JOIN section AS child ON child.parentId=parent.id OR child.id=parent.id # and children and repeat parent 
+                    WHERE parent.id=:sectionId OR parent.parentId=:sectionId                         # root and it's children
                 )           
 			) AS results ON results.year = years.year 
                 

@@ -1,5 +1,5 @@
 <script>
-//    import {router} from 'tinro'; // router store
+//    import {Router} from 'tinro'; // Router store
     import { createEventDispatcher } from 'svelte';
     import api from '../../js/api.js';
     import {txt} from '../../js/util.js';
@@ -83,9 +83,6 @@
         });
         district.changed = false;
     }
-
-    console.log( 'District', district );
-
 </script>
 
 <div class='pl-6'>
