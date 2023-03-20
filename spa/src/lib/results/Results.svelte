@@ -59,7 +59,7 @@
     }
 
     //set by query
-    let typeId = 2;
+    let typeId = null;
     let year = null;
     let rootDistrict = null;
     let districtId = null;
@@ -77,11 +77,11 @@
     let breeds = [];
     let colors = [];
 
-    let districts = []; // the results per district
+    let districts = null; // map id->district
 
     function onQuery( route ) {
         typeId = Number( route.query.type ) || 2;
-        year = Number( route.query.year ) || new Date().getFullYear(); // this year;
+        year = Number( route.query.year ) || new Date().getFullYear() -1; // last year;
         districtId = Number( route.query.district ) || 1;
         sectionId = Number( route.query.section ) || 2;
         breedId = Number( route.query.breed ) || null;
@@ -94,6 +94,9 @@
     function loadDistricts() {
         api.district.children.get( 1 ).then( response => { // bdrg (1) is fixed root
             rootDistrict = response.district;
+            districts = {};
+            districts[ rootDistrict.id ] = rootDistrict;
+            for( const district of rootDistrict.children ) districts[ district.id ] = district;
         })
     }
 
@@ -106,7 +109,7 @@
 
     function prepareSections( sections, section, prepend ) { // recursive
         sections.push( { id:section.id, name:prepend+section.name } );
-        if( prepend == '' ) prepend = ' → ';
+        if( prepend === '' ) prepend = ' → ';
         if( section && section.children ) {
             for( const child of section.children ) {
                 prepareSections( sections, child, ' · '+prepend );
@@ -166,10 +169,8 @@
 </script>
 
 <Route path='/*' let:meta>
-    <h2 class='text-center' >Das Zuchtbuch, Daten und leistungen</h2>
-
     <ScrollDiv>
-        <div class='flex-col m-2 bg-header border rounded px-4 items-center gap-2'>
+        <div class='flex-col m-2 bg-header border rounded px-4 items-center gap-2 no-print'>
             <div class='flex flex-row gap-x-2'>
                 <div class='w-8 font-semibold' >Filter</div>:
                 <Select class='w-52' label='Sparte' value={sectionId} on:change={onSection}>
@@ -218,23 +219,26 @@
             </div>
         </div>
 
-        <div class='flex flex-row border border-gray-600 gap-x-8 justify-evenly'>
-            <SectionsPie {districtId} {year} />
-            <DistrictsPie {districtId} {year} {sectionId} {breedId} {colorId} />
-        </div>
-        <h3 class='text-center'>{types[typeId].label}</h3>
-        <div class='flex flex-row flex-wrap justify-evenly'>
-            {#if districts}
-                <TimeLine bind:year={year} {districtId} {sectionId} {breedId} {colorId} type={types[typeId]} />
-                <DistrictsMap bind:districtId={districtId} {year} {sectionId} {breedId} {colorId} type={types[typeId]} />
-            {/if}
-        </div>
+        {#if districts && districtId && year && sectionId}
+            <h2 class='text-center' >Das Zuchtbuch : {types[typeId].label} für {districts[ districtId ].name} in {year}</h2>
 
-        <div class='print-break h-4'></div>
 
-        <div class='m-2 border rounded'>
-            <ResultList class='' districtId={districtId} year={year} />
-        </div>
+            <div class='flex flex-row border border-gray-600 gap-x-8 justify-evenly'>
+                <SectionsPie {districtId} {year} />
+                <DistrictsPie {districtId} {year} {sectionId} {breedId} {colorId} />
+            </div>
+            <h3 class='text-center'>{types[typeId].label}</h3>
+            <div class='flex flex-row flex-wrap justify-evenly'>
+                    <TimeLine bind:year={year} {districtId} {sectionId} {breedId} {colorId} type={types[typeId]} />
+                    <DistrictsMap bind:districtId={districtId} {year} {sectionId} {breedId} {colorId} type={types[typeId]} />
+            </div>
+
+            <div class='print-break h-4'></div>
+
+            <div class='m-2 border rounded'>
+                <ResultList districtId={districtId} year={year} />
+            </div>
+        {/if}
     </ScrollDiv>
 
 </Route>

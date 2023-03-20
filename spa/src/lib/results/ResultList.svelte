@@ -19,7 +19,6 @@
                 district = response.district;
             })
             api.district.results.get( districtId, year ).then( response => {
-                console.log( 'Results', response.results );
                 results = response.results;
             })
         }

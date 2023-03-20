@@ -26,8 +26,6 @@
             }
             if( promise ) {
                 promise.then(response => {
-                    console.log( 'DistrictsPie Results', response.results );
-
                     const districts = response.districts;
                     let data = districts.map( district => district.breeders ); // get array of breeders
                     let datasets = [ { data:data } ];

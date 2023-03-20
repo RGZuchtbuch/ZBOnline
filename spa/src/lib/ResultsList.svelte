@@ -10,6 +10,7 @@
 
     onMount( () => {
     });
+
     function addTo( total, result ) {
         result.broods = result.broodEggs ? result.broodEggs / 2 : null;
         result.broodResult = result.pairs && result.broodHatched ? result.broodHatched / result.pairs : null;

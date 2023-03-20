@@ -2,7 +2,8 @@
     import { createEventDispatcher } from 'svelte';
     import { draw, fade } from 'svelte/transition';
     import api from "../../js/api.js";
-    import { calcColor, gpsToPx, pct} from "../../js/util.js";
+    import { calcColor, gpsToPx, pct} from '../../js/util.js';
+    import BdrgSVG from './BdrgSVG.svelte';
 
     import Select from '../input/Select.svelte';
 //    import DistrictsMap from "./DistrictsMap.svelte";
@@ -112,6 +113,7 @@
 
 
     <svg width=380 height=512 class='border border-gray-600'>
+        <BdrgSVG />
         {#if map}
             <g in:fade={{duration:1000}} >
                 {#each districts as district, index }

@@ -47,7 +47,6 @@
     function handle( districtId, year ) {
         if( districtId ) {
             api.district.results.get( districtId, year ).then( response => {
-                console.log( 'Pie Results', response.results );
                 const results = response.results;
                 countBreeders( results );
                 let data = results.sections.map( section => section.count ); // get array of counts
