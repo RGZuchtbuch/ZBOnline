@@ -1,11 +1,11 @@
 <script>
     import { onMount } from 'svelte';
     import {active, meta, router, Route} from 'tinro';
-    import api from '../../../js/api.js';
-    import { user } from '../../../js/store.js'
-    import Results from '../../ResultsList.svelte';
-    import Range from '../../input/Range.svelte';
-    import ScrollDiv from '../../common/ScrollDiv.svelte';
+    import api from '../../js/api.js';
+    import { user } from '../../js/store.js'
+    import ResultsList from '../ResultsList.svelte';
+    import Range from '../input/Range.svelte';
+    import ScrollDiv from '../common/ScrollDiv.svelte';
 
     export let districtId = null;
 //    export let moderator = null;
@@ -37,10 +37,10 @@
 </script>
 
 {#if $user}
-    <h2 class='text-center'>Verband {#if district} {district.name} {/if} → Leistungen {year}</h2>
-    <Range class='px-8' label='Jahr' bind:value={year} min={STARTYEAR} max={new Date().getFullYear()} step={1} title='Schieben um das Jahr zu wählen'/>
+    <h2 class='w-256 text-center'>Verband {#if district} {district.name} {/if} → Leistungen {year}</h2>
+    <Range class='w-228 px-8' label='Jahr' bind:value={year} min={STARTYEAR} max={new Date().getFullYear()} step={1} title='Schieben um das Jahr zu wählen'/>
     <ScrollDiv>
-        <Results class='h256' {results} />
+        <ResultsList class='' {results} />
     </ScrollDiv>
 {:else}
     NOT AUTORIZED

@@ -1,14 +1,14 @@
 <script>
     import { onMount } from 'svelte';
     import {active, meta, router, Route} from 'tinro';
-    import api from '../../../js/api.js';
-    import { txt } from '../../../js/util.js';
-    import { user } from '../../../js/store.js'
-//    import Breeders from '../Breeders.svelte';
-    import Button from '../../input/Button.svelte';
-    import Date from '../../input/Date.svelte';
-    import Select from '../../input/Select.svelte';
-    import Text from '../../input/Text.svelte';
+    import api from '../../js/api.js';
+    import { txt } from '../../js/util.js';
+    import { user } from '../../js/store.js'
+//    import Breeders from '../BreederList.svelte';
+    import Button from '../input/Button.svelte';
+    import Date from '../input/Date.svelte';
+    import Select from '../input/Select.svelte';
+    import Text from '../input/Text.svelte';
 
     export let districtId = null;
     export let moderator = null;
@@ -96,9 +96,9 @@
 </script>
 
 {#if $user}
-    <h3 class='text-center'>Obmann {#if $user} {$user.lastname} {/if} → Verband {#if district} {district.name} {/if} → Züchter</h3>
+    <h3 class='w-256 text-center'>Obmann {#if $user} {$user.lastname} {/if} → Verband {#if district} {district.name} {/if} → Züchter</h3>
     {#if breeders}
-        <div class='flex flex-row border border-gray-400 rounded-t px-8 py-2 bg-header gap-x-1 font-bold'>
+        <div class='flex flex-row w-256 border border-gray-400 rounded-t px-8 py-2 bg-header gap-x-1 font-bold'>
             <div class='w-8'>Ide</div>
             <div class='w-64'>Name</div>
             <div class='w-32'>Ortsverein</div>
@@ -110,7 +110,7 @@
             <div class='w-8 cursor-pointer' on:click={onAdd} title='Neues Mitglied'>+</div>
         </div>
 
-        <div class='grow bg-gray-100 overflow-y-scroll border border-t-0 border-gray-600 rounded-b px-8 scrollbar'>
+        <div class='w-256 bg-gray-100 overflow-y-scroll border border-t-0 border-gray-600 rounded-b px-8 scrollbar'>
             {#if breeders}
                 {#each breeders as breeder}
                     {#if allBreeders || ! breeder.end }

@@ -36,17 +36,18 @@
 
     <NavigationBar />
 
-    <div class='grow p-2 flex flex-row gap-2 relative min-h-0 '>
+    <div class='grow p-2 flex flex-row gap-2 relative min-h-0'>
 
         <Menu />
 
-        <div class='grow flex flex-col border rounded bg-white p-4 print'>
+        <div class='grow flex flex-col border rounded bg-white items-center p-4 print'>
 
             <Route path='/' ><Home /></Route>
             <Route path='/seite/:articleId' let:meta> <Article id={meta.params.articleId} /> </Route>
             <Route path='/standard/*' > <Standard /> </Route>
             <Route path='/leistungen/*' > <Results /> </Route>
             <Route path='/obmann/*' > <Moderator /> </Route>
+
             <Route path='/admin/*' > <Admin /> </Route>
 
             <Route path='/anmelden'> <Login /> </Route>

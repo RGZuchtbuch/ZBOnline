@@ -15,11 +15,12 @@
             });
         }
     }
+
 </script>
 
 <div class='pl-6'>
     <div class='flex'>
-    &#10551; &#174; {breed.name}
+        <div>&#10551; &#174; {breed.name} </div>
     {#if colors}
         <span class='button text-red-600' on:click={onColors}>[ &#8628; ]</span>
     {:else}

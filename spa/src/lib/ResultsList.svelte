@@ -70,7 +70,7 @@
 </script>
 
 
-
+<div class='w-256'>
     {#if results}
         {#each results.sections as section}
             <h2 class='p-2 bg-header text-center text-xl'>Sparte {section.name}</h2>
@@ -184,7 +184,7 @@
             <h2 class='p-2 bg-header text-center text-xl'>Leider keine Daten für dieses Jahr</h2>
         {/if}
     {/if}
-
+</div>
 
 
 

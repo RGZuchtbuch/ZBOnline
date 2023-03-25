@@ -1,12 +1,12 @@
 <script>
     import {Route, router, meta} from 'tinro';
-    import api from '../../../../js/api.js';
-    import {txt} from '../../../../js/util.js';
-    import { newBreeder } from '../../../../js/template.js';
+    import api from '../../js/api.js';
+    import {txt} from '../../js/util.js';
+    import { newBreeder } from '../../js/template.js';
 //    import {breeder} from '../../js/store.js';
-    import Breeder from '../../../Breeder.svelte';
-    import Report from '../Report.svelte';
-    import Reports from '../Reports.svelte';
+    import Breeder from '../Breeder.svelte';
+    import Report from '../district/Report.svelte';
+    import Reports from '../district/Reports.svelte';
 
     export let id;
     export let districtId;

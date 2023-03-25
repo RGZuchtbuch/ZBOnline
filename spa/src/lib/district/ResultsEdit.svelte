@@ -1,8 +1,8 @@
 <script>
     import {router} from "tinro";
-    import api from '../../../js/api.js';
-    import InputNumber from '../../input/Number.svelte';
-    import Select from '../../input/Select.svelte';
+    import api from '../../js/api.js';
+    import InputNumber from '../input/Number.svelte';
+    import Select from '../input/Select.svelte';
 
     export let districtId;
 

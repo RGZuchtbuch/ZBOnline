@@ -74,13 +74,13 @@
         <EmailInput class='' label='eMail' bind:value={email} bind:invalid={invalids.email} required/>
         <PasswordInput class='' label='Password' bind:value={password} bind:invalid={invalids.password} required/>
 
-        <div class='cursor-pointer error text-sm text-right' on:click={onForgot}>Ich habe mein Passwort vergessen :(</div>
 
         {#if forgot }
-            <Button value='Passwort vergessen!' on:click={onResetPassword} alert=true/>
+            <Button value='&#9993; Schick mir eine reset Mail!' on:click={onResetPassword} alert=true/>
         {/if}
         {#if ! forgot && ! invalids.email && ! invalids.password }
-            <Submit value='Ich wil herein' disabled={invalid} />
+            <Submit value='Las mich herein &#10170;' disabled={invalid} />
+            <div class='cursor-pointer error text-sm text-right' on:click={onForgot}>Ich habe mein Passwort vergessen :(</div>
         {/if}
         {#if ! success} <div class='error'>Nicht erfolgreich</div> {/if}
     </form>

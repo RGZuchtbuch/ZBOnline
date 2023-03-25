@@ -26,24 +26,28 @@
             id: 2,
             label: 'Zuchten',
             extract: (result) => [result.breeders],
+            forPie: (result) => [result.breeders],
             title: (result) => result.breeders ? ` meldete ${dec(result.breeders)} Zuchten` : ' hat keine Daten',
         },
         3: {
             id: 3,
             label: 'Stämme',
             extract: (result) => [result.pairs],
+            forPie: (result) => [result.pairs],
             title: (result) => result.pairs ? ` meldete ${dec(result.pairs)} Stämme` : ' hat keine Daten',
         },
         10: {
             id: 10,
             label: 'Legeleistung',
             extract: (result) => [result.layEggs],
+            forPie: (result) => [result.layEggs],
             title: (result) =>  result.layEggs ? ` legten ⌀ ${dec(result.layEggs)} Eier im Jahr` : ' hat keine Daten',
         },
         11: {
             id: 11,
             label: 'Brutleistung',
-            extract: (result) => [result.broodHatched, result.broodFertile, result.broodEggs],
+            extract: (result) => [result.broodHatched, result.broodFertile, result.broodEggs], // for map and chart
+            forPie: (result) => [ 100 * result.broodHatched / result.broodEggs], // for pie
             title: (result) => result.broodEggs ?
                 ` von ${dec(result.broodEggs)} war ${pct(result.broodFertile, result.broodEggs, 0)} befruchtet und es schlüpften ${pct(result.broodHatched, result.broodEggs, 0)}` :
                 ' hat keine Daten',
@@ -54,6 +58,7 @@
             min: 89,
             max: 97,
             extract: (result) => [result.showScore],
+            forPie: (result) => [result.showScore],
             title: (result) => result.showCount ? ` ${result.showCount} Tiere erhielten ⌀ ${dec(result.showScore, 1)} Punkte` : ' hat keine Daten',
         },
     }
@@ -170,7 +175,7 @@
 
 <Route path='/*' let:meta>
     <ScrollDiv>
-        <div class='flex-col m-2 bg-header border rounded px-4 items-center gap-2 no-print'>
+        <div class='flex-col w-256 m-2 bg-header border rounded px-4 items-center gap-2 no-print'>
             <div class='flex flex-row gap-x-2'>
                 <div class='w-8 font-semibold' >Filter</div>:
                 <Select class='w-52' label='Sparte' value={sectionId} on:change={onSection}>
@@ -224,8 +229,8 @@
 
 
             <div class='flex flex-row border border-gray-600 gap-x-8 justify-evenly'>
-                <SectionsPie {districtId} {year} />
-                <DistrictsPie {districtId} {year} {sectionId} {breedId} {colorId} />
+                <SectionsPie {districtId} {year} type={types[typeId]}/>
+                <DistrictsPie {districtId} {year} {sectionId} {breedId} {colorId} type={types[typeId]} />
             </div>
             <h3 class='text-center'>{types[typeId].label}</h3>
             <div class='flex flex-row flex-wrap justify-evenly'>

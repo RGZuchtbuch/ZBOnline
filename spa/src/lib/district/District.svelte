@@ -1,9 +1,9 @@
 <script>
     import {Route, meta} from 'tinro';
-    import api from '../../../js/api.js';
+    import api from '../../js/api.js';
 
-    import Breeder from './breeder/Breeder.svelte';
-    import Breeders from './Breeders.svelte';
+    import Breeder from '../breeder/Breeder.svelte';
+    import Breeders from '../breeder/BreederList.svelte';
     import Reports from './Reports.svelte';
     import Results from './ResultsList.svelte';
     import Report from './Report.svelte';

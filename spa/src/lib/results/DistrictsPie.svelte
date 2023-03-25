@@ -9,12 +9,13 @@
     export let sectionId = null;
     export let breedId = null;
     export let colorId = null;
+    export let type = null; // what to display
 
     let canvas = null; // ref to canvas element
 
     let chart = null;
 
-    function handle( districtId, year, sectionId, breedId, colorId ) {
+    function handle( districtId, year, sectionId, breedId, colorId, type ) {
         if( districtId &&  year && sectionId ) { // at least
             let promise;
             if( colorId ) {
@@ -27,7 +28,8 @@
             if( promise ) {
                 promise.then(response => {
                     const districts = response.districts;
-                    let data = districts.map( district => district.breeders ); // get array of breeders
+//                    let data = districts.map( district => district.breeders ); // get array of breeders
+                    let data = districts.map( district => type.forPie( district)[0] );
                     let datasets = [ { data:data } ];
                     let labels = districts.map( district => district.name ); // get array of names
 
@@ -55,14 +57,14 @@
     }
 
     Chart.register( ArcElement, DoughnutController, Tooltip );
-    $: handle( districtId, year, sectionId, breedId, colorId );
+    $: handle( districtId, year, sectionId, breedId, colorId, type );
 
 
 
 </script>
 
     <div class='flex flex-col' >
-        <h5> Zuchten / LV</h5>
+        <h5> {type.label} / LV</h5>
         <canvas id='districtspie' bind:this={canvas} width='128px' height='128px'></canvas>
     </div>
 

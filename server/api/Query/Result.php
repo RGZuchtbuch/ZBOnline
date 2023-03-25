@@ -69,15 +69,19 @@ class Result extends Query
                 CAST( COUNT( DISTINCT breedId ) AS UNSIGNED) AS breeds, CAST( COUNT( DISTINCT colorId ) AS UNSIGNED) AS colors, 	# could both be just 1 !	
                 
                 SUM( layDames) AS layDames, 
-                SUM( IF( layEggs, pairs * layEggs, NULL ) ) / SUM( IF( layEggs, pairs, NULL ) ) AS layEggs,
-                SUM( IF( layWeight, pairs * layWeight, NULL ) ) / SUM( IF( layWeight, pairs, NULL ) ) AS layWeight,
+#                SUM( IF( layEggs, pairs * layEggs, NULL ) ) / SUM( IF( layEggs, pairs, NULL ) ) AS layEggs,
+                SUM( IF( breeders AND layEggs, breeders * layEggs, NULL ) )  /  SUM( IF( breeders AND layEggs, breeders, NULL ) ) AS layEggs,
+#                SUM( IF( layWeight, pairs * layWeight, NULL ) ) / SUM( IF( layWeight, pairs, NULL ) ) AS layWeight,
+                SUM( IF( breeders AND layWeight, breeders * layWeight, NULL ) )  /  SUM( IF( breeders AND layEggs, breeders, NULL ) ) AS layWeight,
                 
                 CAST( SUM( broodEggs ) AS UNSIGNED) AS broodEggs, 
                 CAST( SUM( broodFertile ) AS UNSIGNED) AS broodFertile, 
                 CAST( SUM( broodHatched ) AS UNSIGNED) AS broodHatched,
                 
                 CAST( SUM( showCount ) AS UNSIGNED) AS showCount, 
-                SUM( IF( showScore, pairs * showScore, NULL ) ) / SUM( IF( showScore, pairs, NULL ) ) AS showScore
+#                SUM( IF( showScore, pairs * showScore, NULL ) ) / SUM( IF( showScore, pairs, NULL ) ) AS showScore
+                SUM( IF( showCount AND showScore, showCOunt * showScore, NULL ) )  /  SUM( IF( showCount AND showScore, showCount, NULL ) ) AS showScore
+            
             FROM district
             LEFT JOIN (
                 SELECT  result.*, district.rootId 
@@ -100,15 +104,19 @@ class Result extends Query
                 CAST( COUNT( DISTINCT breedId ) AS UNSIGNED) AS breeds, CAST( COUNT( DISTINCT colorId ) AS UNSIGNED) AS colors, 	# could both be just 1 !	
                 
                 SUM( layDames) AS layDames, 
-                SUM( IF( layEggs, pairs * layEggs, NULL ) ) / SUM( IF( layEggs, pairs, NULL ) ) AS layEggs,
-                SUM( IF( layWeight, pairs * layWeight, NULL ) ) / SUM( IF( layWeight, pairs, NULL ) ) AS layWeight,
+#                SUM( IF( layEggs, pairs * layEggs, NULL ) ) / SUM( IF( layEggs, pairs, NULL ) ) AS layEggs,
+                SUM( IF( breeders AND layEggs, breeders * layEggs, NULL ) )  /  SUM( IF( breeders AND layEggs, breeders, NULL ) ) AS layEggs,
+#                SUM( IF( layWeight, pairs * layWeight, NULL ) ) / SUM( IF( layWeight, pairs, NULL ) ) AS layWeight,
+                SUM( IF( breeders AND layWeight, breeders * layWeight, NULL ) )  /  SUM( IF( breeders AND layEggs, breeders, NULL ) ) AS layWeight,
                 
                 CAST( SUM( broodEggs ) AS UNSIGNED) AS broodEggs, 
                 CAST( SUM( broodFertile ) AS UNSIGNED) AS broodFertile, 
                 CAST( SUM( broodHatched ) AS UNSIGNED) AS broodHatched,
                 
                 CAST( SUM( showCount ) AS UNSIGNED) AS showCount, 
-                SUM( IF( showScore, pairs * showScore, NULL ) ) / SUM( IF( showScore, pairs, NULL ) ) AS showScore
+#                SUM( IF( showScore, pairs * showScore, NULL ) ) / SUM( IF( showScore, pairs, NULL ) ) AS showScore
+                SUM( IF( showCount AND showScore, showCOunt * showScore, NULL ) )  /  SUM( IF( showCount AND showScore, showCount, NULL ) ) AS showScore
+
             FROM district
             LEFT JOIN (
                 SELECT  result.*, district.rootId 
@@ -131,10 +139,21 @@ class Result extends Query
             
                 CAST( SUM( breeders ) AS UNSIGNED ) AS breeders, CAST( SUM( pairs ) AS UNSIGNED) AS pairs,                
                 CAST( COUNT( DISTINCT breedId ) AS UNSIGNED) AS breeds, CAST( COUNT( DISTINCT colorId ) AS UNSIGNED) AS colors, 	# could both be just 1 !	
+                
                 SUM( layDames) AS layDames, 
-                SUM( IF( layEggs, pairs * layEggs, NULL ) ) / SUM( IF( layEggs, pairs, NULL ) ) AS layEggs, SUM( IF( layWeight, pairs * layWeight, NULL ) ) / SUM( IF( layWeight, pairs, NULL ) ) AS layWeight,
-                CAST( SUM( broodEggs ) AS UNSIGNED) AS broodEggs, CAST( SUM( broodFertile ) AS UNSIGNED) AS broodFertile, CAST( SUM( broodHatched ) AS UNSIGNED) AS broodHatched,
-                CAST( SUM( showCount ) AS UNSIGNED) AS showCount, SUM( IF( showScore, pairs * showScore, NULL ) ) / SUM( IF( showScore, pairs, NULL ) ) AS showScore            
+#                SUM( IF( layEggs, pairs * layEggs, NULL ) ) / SUM( IF( layEggs, pairs, NULL ) ) AS layEggs,
+                SUM( IF( breeders AND layEggs, breeders * layEggs, NULL ) )  /  SUM( IF( breeders AND layEggs, breeders, NULL ) ) AS layEggs,
+#                SUM( IF( layWeight, pairs * layWeight, NULL ) ) / SUM( IF( layWeight, pairs, NULL ) ) AS layWeight,
+                SUM( IF( breeders AND layWeight, breeders * layWeight, NULL ) )  /  SUM( IF( breeders AND layEggs, breeders, NULL ) ) AS layWeight,
+                
+                CAST( SUM( broodEggs ) AS UNSIGNED) AS broodEggs, 
+                CAST( SUM( broodFertile ) AS UNSIGNED) AS broodFertile, 
+                CAST( SUM( broodHatched ) AS UNSIGNED) AS broodHatched,
+                
+                CAST( SUM( showCount ) AS UNSIGNED) AS showCount, 
+#                SUM( IF( showScore, pairs * showScore, NULL ) ) / SUM( IF( showScore, pairs, NULL ) ) AS showScore
+                SUM( IF( showCount AND showScore, showCOunt * showScore, NULL ) )  /  SUM( IF( showCount AND showScore, showCount, NULL ) ) AS showScore
+            
             FROM district 
             
             LEFT JOIN (
@@ -161,9 +180,21 @@ class Result extends Query
             SELECT years.year, result.colorId,
                 CAST( SUM( breeders ) AS UNSIGNED ) AS breeders, CAST( SUM( pairs ) AS UNSIGNED) AS pairs,                
                 CAST( COUNT( DISTINCT breedId ) AS UNSIGNED) AS breeds, CAST( COUNT( DISTINCT colorId ) AS UNSIGNED) AS colors, 	# could both be just 1 !	
-                SUM( layDames) AS layDames, SUM( IF( layEggs, pairs * layEggs, NULL ) ) / SUM( IF( layEggs, pairs, NULL ) ) AS layEggs, SUM( IF( layWeight, pairs * layWeight, NULL ) ) / SUM( IF( layWeight, pairs, NULL ) ) AS layWeight,
-                CAST( SUM( broodEggs ) AS UNSIGNED) AS broodEggs, CAST( SUM( broodFertile ) AS UNSIGNED) AS broodFertile, CAST( SUM( broodHatched ) AS UNSIGNED) AS broodHatched,
-                CAST( SUM( showCount ) AS UNSIGNED) AS showCount, SUM( IF( showScore, pairs * showScore, NULL ) ) / SUM( IF( showScore, pairs, NULL ) ) AS showScore
+                
+                SUM( layDames) AS layDames, 
+#                SUM( IF( layEggs, pairs * layEggs, NULL ) ) / SUM( IF( layEggs, pairs, NULL ) ) AS layEggs,
+                SUM( IF( breeders AND layEggs, breeders * layEggs, NULL ) )  /  SUM( IF( breeders AND layEggs, breeders, NULL ) ) AS layEggs,
+#                SUM( IF( layWeight, pairs * layWeight, NULL ) ) / SUM( IF( layWeight, pairs, NULL ) ) AS layWeight,
+                SUM( IF( breeders AND layWeight, breeders * layWeight, NULL ) )  /  SUM( IF( breeders AND layEggs, breeders, NULL ) ) AS layWeight,
+                
+                CAST( SUM( broodEggs ) AS UNSIGNED) AS broodEggs, 
+                CAST( SUM( broodFertile ) AS UNSIGNED) AS broodFertile, 
+                CAST( SUM( broodHatched ) AS UNSIGNED) AS broodHatched,
+                
+                CAST( SUM( showCount ) AS UNSIGNED) AS showCount, 
+#                SUM( IF( showScore, pairs * showScore, NULL ) ) / SUM( IF( showScore, pairs, NULL ) ) AS showScore
+                SUM( IF( showCount AND showScore, showCOunt * showScore, NULL ) )  /  SUM( IF( showCount AND showScore, showCount, NULL ) ) AS showScore
+
             
             FROM (
                 SELECT @year:=YEAR( NOW() )+1
@@ -191,9 +222,21 @@ class Result extends Query
             SELECT years.year, result.colorId,
                 CAST( SUM( breeders ) AS UNSIGNED ) AS breeders, CAST( SUM( pairs ) AS UNSIGNED) AS pairs,                
                 CAST( COUNT( DISTINCT breedId ) AS UNSIGNED) AS breeds, CAST( COUNT( DISTINCT colorId ) AS UNSIGNED) AS colors, 	# could both be just 1 !	
-                SUM( layDames) AS layDames, SUM( IF( layEggs, pairs * layEggs, NULL ) ) / SUM( IF( layEggs, pairs, NULL ) ) AS layEggs, SUM( IF( layWeight, pairs * layWeight, NULL ) ) / SUM( IF( layWeight, pairs, NULL ) ) AS layWeight,
-                CAST( SUM( broodEggs ) AS UNSIGNED) AS broodEggs, CAST( SUM( broodFertile ) AS UNSIGNED) AS broodFertile, CAST( SUM( broodHatched ) AS UNSIGNED) AS broodHatched,
-                CAST( SUM( showCount ) AS UNSIGNED) AS showCount, SUM( IF( showScore, pairs * showScore, NULL ) ) / SUM( IF( showScore, pairs, NULL ) ) AS showScore
+                
+                SUM( layDames) AS layDames, 
+#                SUM( IF( layEggs, pairs * layEggs, NULL ) ) / SUM( IF( layEggs, pairs, NULL ) ) AS layEggs,
+                SUM( IF( breeders AND layEggs, breeders * layEggs, NULL ) )  /  SUM( IF( breeders AND layEggs, breeders, NULL ) ) AS layEggs,
+#                SUM( IF( layWeight, pairs * layWeight, NULL ) ) / SUM( IF( layWeight, pairs, NULL ) ) AS layWeight,
+                SUM( IF( breeders AND layWeight, breeders * layWeight, NULL ) )  /  SUM( IF( breeders AND layEggs, breeders, NULL ) ) AS layWeight,
+                
+                CAST( SUM( broodEggs ) AS UNSIGNED) AS broodEggs, 
+                CAST( SUM( broodFertile ) AS UNSIGNED) AS broodFertile, 
+                CAST( SUM( broodHatched ) AS UNSIGNED) AS broodHatched,
+                
+                CAST( SUM( showCount ) AS UNSIGNED) AS showCount, 
+#                SUM( IF( showScore, pairs * showScore, NULL ) ) / SUM( IF( showScore, pairs, NULL ) ) AS showScore
+                SUM( IF( showCount AND showScore, showCOunt * showScore, NULL ) )  /  SUM( IF( showCount AND showScore, showCount, NULL ) ) AS showScore
+
             FROM (
                 SELECT @year:=YEAR( NOW() )+1
             ) AS init, (
@@ -222,9 +265,21 @@ class Result extends Query
                 COUNT(*) AS count, :districtId AS districtId,
                 CAST( SUM( breeders ) AS UNSIGNED ) AS breeders, CAST( SUM( pairs ) AS UNSIGNED) AS pairs,                
                 CAST( COUNT( DISTINCT breedId ) AS UNSIGNED) AS breeds, CAST( COUNT( DISTINCT colorId ) AS UNSIGNED) AS colors, 	# could both be just 1 !	
-                SUM( layDames) AS layDames, SUM( IF( layEggs, pairs * layEggs, NULL ) ) / SUM( IF( layEggs, pairs, NULL ) ) AS layEggs, SUM( IF( layWeight, pairs * layWeight, NULL ) ) / SUM( IF( layWeight, pairs, NULL ) ) AS layWeight,
-                CAST( SUM( broodEggs ) AS UNSIGNED) AS broodEggs, CAST( SUM( broodFertile ) AS UNSIGNED) AS broodFertile, CAST( SUM( broodHatched ) AS UNSIGNED) AS broodHatched,
-                CAST( SUM( showCount ) AS UNSIGNED) AS showCount, SUM( IF( showScore, pairs * showScore, NULL ) ) / SUM( IF( showScore, pairs, NULL ) ) AS showScore
+                
+                SUM( layDames) AS layDames, 
+#                SUM( IF( layEggs, pairs * layEggs, NULL ) ) / SUM( IF( layEggs, pairs, NULL ) ) AS layEggs,
+                SUM( IF( breeders AND layEggs, breeders * layEggs, NULL ) )  /  SUM( IF( breeders AND layEggs, breeders, NULL ) ) AS layEggs,
+#                SUM( IF( layWeight, pairs * layWeight, NULL ) ) / SUM( IF( layWeight, pairs, NULL ) ) AS layWeight,
+                SUM( IF( breeders AND layWeight, breeders * layWeight, NULL ) )  /  SUM( IF( breeders AND layEggs, breeders, NULL ) ) AS layWeight,
+                
+                CAST( SUM( broodEggs ) AS UNSIGNED) AS broodEggs, 
+                CAST( SUM( broodFertile ) AS UNSIGNED) AS broodFertile, 
+                CAST( SUM( broodHatched ) AS UNSIGNED) AS broodHatched,
+                
+                CAST( SUM( showCount ) AS UNSIGNED) AS showCount, 
+#                SUM( IF( showScore, pairs * showScore, NULL ) ) / SUM( IF( showScore, pairs, NULL ) ) AS showScore
+                SUM( IF( showCount AND showScore, showCOunt * showScore, NULL ) )  /  SUM( IF( showCount AND showScore, showCount, NULL ) ) AS showScore
+
             
             FROM (
                 SELECT @year:=YEAR( NOW() )+1

@@ -1,11 +1,11 @@
 <script>
     import { onMount } from 'svelte';
-    import { dec, pct } from '../../../js/util.js';
+    import { dec, pct } from '../../js/util.js';
 
-    import api from '../../../js/api.js';
+    import api from '../../js/api.js';
     import {meta} from 'tinro';
 
-    import Reports from '../../Reports.svelte';
+    import Reports from '../Reports.svelte';
 
     export let promise = null;
 
