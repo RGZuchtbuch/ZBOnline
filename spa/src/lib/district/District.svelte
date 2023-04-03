@@ -3,7 +3,7 @@
     import api from '../../js/api.js';
 
     import Breeder from '../breeder/Breeder.svelte';
-    import Breeders from '../breeder/BreederList.svelte';
+    import Breeders from './Breeders.svelte';
     import Reports from './Reports.svelte';
     import Results from './ResultsList.svelte';
     import Report from './Report.svelte';
@@ -29,7 +29,7 @@
 
     <Route path='/zuechter/*' let:meta>
         <Route path='/' let:meta>
-            <Breeders districtId={ +meta.params.districtId } moderator={true} />
+            <Breeders {district} />
         </Route>
 
         <Route path='/:breederId/*' let:meta >

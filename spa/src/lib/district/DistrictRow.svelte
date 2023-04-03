@@ -12,12 +12,15 @@
 
     export let district = null;
     export let open = false;
+    export let parentModerated = false;;
+    //export let role = 'breeder'; // breeder, moderator or admin, dont want role here!
 
-    const moderated = district ?? district.moderated;
+    let moderated = false;
     let show = false;
     let edit = false;
     let details = null;
     let changed = false;
+    let children = null;
     let breeders = null;
 
     const route    = meta();
@@ -48,10 +51,12 @@
 
     function onToggleEdit() {
         console.log( 'edit' );
-        api.district.breeders.get( district.id ).then( response => {
-            breeders = response.breeders;
-        })
         edit = ! edit;
+        if( edit ) {
+            api.district.breeders.get(district.id).then(response => {
+                breeders = response.breeders;
+            })
+        }
     }
 
     function onAddChild() {
@@ -83,33 +88,44 @@
         changed = false;
     }
 
-    console.log( $user );
+    function onDistrict( district ) {
+        moderated = $user && ( parentModerated || $user.id === district.moderatorId || $user.admin )
+//        moderated = $user && ( parentModerated || $user.id === district.moderatorId ) // took out admin for testing
+    }
+
+    $: onDistrict( district );
+    console.log( 'DN', district.name, moderated, open, district.children.length );
 </script>
 
 <div class='flex flex-col pl-6'>
 
-        <div class='flex'>
-            {#if moderated}
-                <a class='border' href={route.match+'/'+district.id} title='Zum Verband'> &#10551; {district.name}</a>
-            {:else}
-                <div class='border text-gray-400' title='Kein zugang' > &#10551; {district.name}</div>
-            {/if}
-
+        <div class='flex border-b'>
+            <div class='w-4'>&#10551;</div>
             {#if district.children.length > 0 }
                 {#if open}
-                    <div class='px-4 cursor-zoom-out text-red-600' on:click={onToggleOpen}>[{district.children.length}]</div>
+                    <div class='w-4 cursor-zoom-out text-red-600' on:click={onToggleOpen} title='Schließen'>&#8679;</div>
                 {:else}
-                    <div class='px-4 cursor-zoom-in text-green-600' on:click={onToggleOpen}>[{district.children.length}]</div>
+                    <div class='w-4 cursor-zoom-in text-green-600' on:click={onToggleOpen} title='Öffnen'>&#8681;</div>
+                {/if}
+            {:else}
+                <div class='w-4'></div>
+            {/if}
+
+            {#if moderated}
+                <a class='text-black cursor-pointer' href={route.match+'/'+district.id} title='Zum Verband'>{district.name}</a>
+            {:else}
+                <div class='text-gray-400 cursor-not-allowed' title='Kein zugang' > &#10551; {district.name}</div>
+            {/if}
+            <div class='w-16'></div>
+            {#if moderated}
+                {#if show}
+                    <div class='cursor-pointer text-red-600 px-2' on:click={onToggleShow} title='schließen'>&#8505;</div>
+                {:else}
+                    <div class='cursor-pointer text-green-600 px-2' on:click={onToggleShow} title='bearbeiten'>&#8505;</div>
                 {/if}
             {/if}
             <div class='grow'></div>
-            {#if moderated}
-                {#if show}
-                    <div class='cursor-pointer border border-gray-400 rounded text-red-600 px-2' on:click={onToggleShow} title='schließen'>&#8505;</div>
-                {:else}
-                    <div class='cursor-pointer border border-gray-400 rounded text-green-600 px-2' on:click={onToggleShow} title='bearbeiten'>&#8505;</div>
-                {/if}
-            {/if}
+            <div>[ + ]</div>
         </div>
 
         {#if show && details }
@@ -119,7 +135,7 @@
                         <Text class='w-64' bind:value={details.name} label='Name' required disabled={!edit}/>
                         <div class='grow'></div>
                         {#if $user.admin && !changed}
-                            <div class='border border-gray-400 rounded w-6 h-6 text-center text-green-600' on:click={onToggleEdit}>&#9998;</div>
+                            <div class='border-2 border-gray-400 rounded w-6 h-6 text-center text-green-600' on:click={onToggleEdit}>&#9998;</div>
                         {/if}
                     </div>
                     <Text class='w-128' bind:value={details.fullname} label='Name voll' required disabled={!edit}/>
@@ -128,16 +144,20 @@
                         <Number class='w-32' bind:value={details.latitude} label='Breitegrad N]' min={MINLATITUDE} max={MAXLATITUDE} required disabled={!edit}/>
                         <Number class='w-32' bind:value={details.longitude}  label='Längegrad O' min={MINLONGITUDE} max={MAXLONGITUDE} required disabled={!edit}/>
                     </div>
-                    {#if edit && breeders }
-                        <Select bind:value={details.moderatorId}>
-                            <option value={null}></option>
-                            {#each breeders as breeder}
-                                <option value={breeder.id}> {txt(breeder.lastname)}, {txt(breeder.firstname)} {txt(breeder.infix)}</option>
-                            {/each}
+                        <Select bind:value={details.moderatorId} label='Obmann' disabled={! edit}>
+                            {#if edit && breeders}
+                                <option value={null}></option>
+                                {#each breeders as breeder}
+                                    <option value={breeder.id} selected={breeder.id === details.moderator.id}>
+                                        {txt(breeder.lastname)}, {txt(breeder.firstname)} {txt(breeder.infix)}
+                                    </option>
+                                {/each}
+                            {:else}
+                                <option value={ details.moderator ? details.moderator.id : null } selected>
+                                    { details.moderator ? txt( details.moderator.lastname)+', '+txt(details.moderator.firstname)+' '+txt(details.moderator.infix) : null }
+                                </option>
+                            {/if}
                         </Select>
-                    {:else}
-                        <Text class='w-96' value={details.moderator ? details.moderator.lastname+', '+details.moderator.firstname+' '+txt(details.moderator.infix) : null } label='Obmann' disabled />
-                    {/if}
                     {#if edit && changed}
                         <Button class='edit' on:click={onSubmit} label='' value='speichern' />
                     {/if}
@@ -148,26 +168,16 @@
 
         {#if open}
             {#each district.children as child}
-                <svelte:self district={child}/>
+                <svelte:self district={child} parentModerated={moderated}/>
             {/each}
         {/if}
 </div>
 
 <style>
-    .button {
-        @apply cursor-pointer;
-    }
-    .open {
-        @apply cursor-pointer;
-    }
     .edit {
         @apply cursor-pointer;
     }
     select {
         background: green;
-    }
-
-    .moderated {
-        @apply cursor-pointer text-black;
     }
 </style>

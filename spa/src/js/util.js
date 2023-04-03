@@ -118,6 +118,14 @@ export function printPct( value, decimals = 0 ) {
     return (value*100).toFixed( decimals )+'%';
 }
 
+export function dat( date ) { // expecting yyyy-mm-dd
+    if( date ) {
+        date = new Date(date);
+        return date.toLocaleDateString('de-DE', {year: 'numeric', month: '2-digit', day: '2-digit'});
+    }
+    return '';
+}
+
 export function dec( value, decimals ) {
     if( value == null ) { // incl undefined
         return '';

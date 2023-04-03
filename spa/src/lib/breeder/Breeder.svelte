@@ -3,15 +3,15 @@
     import api from '../../js/api.js';
     import {txt} from '../../js/util.js';
     import { newBreeder } from '../../js/template.js';
-//    import {breeder} from '../../js/store.js';
     import Breeder from '../Breeder.svelte';
     import Report from '../district/Report.svelte';
     import Reports from '../district/Reports.svelte';
+    import Results from './Results.svelte';
 
-    export let id;
-    export let districtId;
+    export let id = null;
 
     let breeder = null;
+
     let route = meta();
 
     function loadBreeder( id ) {
@@ -35,7 +35,15 @@
     Breeder {#if breeder} {txt(breeder.firstname)} {txt( breeder.infix)} {txt(breeder.lastname)} {:else}...{/if}
 </div>
 {#if breeder}
-    <Route path='/' redirect={meta.match+'/meldung'} />
+    <Route path='/' redirect={route.match+'/leistungen'} />
+
+    <Route path='/leistungen/*' let:meta> Results
+        <Route path='/' let:meta>
+            RR
+            <Results {breeder} />
+        </Route>
+        <Route path='/:reportId' let:meta> <Report reportId={ +meta.params.reportId } /></Route>
+    </Route>
 
     <Route path='/meldung/*' let:meta>
         <Route path='/' let:meta>

@@ -21,6 +21,7 @@ class Router {
         $app->post('/breeder', 'App\Controller\Breeder\Post');
 
         $app->get('/breeder/{id}', 'App\Controller\Breeder\Get');
+        $app->get('/breeder/{id}/results', 'App\Controller\Breeder\Results');
 
         $app->get('/district/{id}', 'App\Controller\District\Get' );
         $app->post('/district', 'App\Controller\District\Post' );

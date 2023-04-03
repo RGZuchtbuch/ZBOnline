@@ -12,9 +12,11 @@ class Breeder extends Query
     public static function get( int $id ) : ? array {
         $args = get_defined_vars();
         $stmt = Query::prepare('
-            SELECT id, firstname, infix, lastname, email, districtId, clubId, start, end, info
+            SELECT user.id, firstname, infix, lastname, email, districtId, district.name AS districtName, clubId, club.name AS clubName, start, end, info
             FROM user
-            WHERE id=:id
+            LEFT JOIN district ON district.id=user.districtId
+            LEFT JOIN district AS club ON club.id=user.clubId
+            WHERE user.id=:id
         ');
         return Query::select($stmt, $args);
     }
@@ -45,5 +47,9 @@ class Breeder extends Query
             WHERE id=:id
         ');
         return Query::del($stmt, $args);
+    }
+
+    public static function results( int $breederId ) : array {
+        return [];
     }
 }

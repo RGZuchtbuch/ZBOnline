@@ -61,7 +61,7 @@ class District extends Query
             SELECT 
                 breeder.id, breeder.firstname, breeder.infix, breeder.lastname, 
                 district.id AS districtId, district.name AS districtName,
-                club.id AS clubId, club.name AS clubName
+                club.id AS clubId, club.name AS clubName, start, end
 			FROM user AS breeder
                 LEFT JOIN district ON district.id=breeder.districtId 
                 LEFT JOIN district AS club ON club.id=breeder.clubId 
