@@ -89,12 +89,11 @@
     }
 
     function onDistrict( district ) {
-        moderated = $user && ( parentModerated || $user.id === district.moderatorId || $user.admin )
+        moderated = district.moderated;
 //        moderated = $user && ( parentModerated || $user.id === district.moderatorId ) // took out admin for testing
     }
 
     $: onDistrict( district );
-    console.log( 'DN', district.name, moderated, open, district.children.length );
 </script>
 
 <div class='flex flex-col pl-6'>
@@ -111,13 +110,13 @@
                 <div class='w-4'></div>
             {/if}
 
-            {#if moderated}
-                <a class='text-black cursor-pointer' href={route.match+'/'+district.id} title='Zum Verband'>{district.name}</a>
+            {#if district.moderated}
+                <a class='text-black cursor-pointer' href={route.match+'/'+district.id} title='Zum Verband'>{district.name} {district.moderated}</a>
             {:else}
                 <div class='text-gray-400 cursor-not-allowed' title='Kein zugang' > &#10551; {district.name}</div>
             {/if}
             <div class='w-16'></div>
-            {#if moderated}
+            {#if district.moderated}
                 {#if show}
                     <div class='cursor-pointer text-red-600 px-2' on:click={onToggleShow} title='schließen'>&#8505;</div>
                 {:else}

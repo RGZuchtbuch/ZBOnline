@@ -7,7 +7,7 @@
     import Reports from './Reports.svelte';
     import Results from './ResultsList.svelte';
     import Report from './Report.svelte';
-    import DistrictResultsEdit from './ResultsEdit.svelte';
+    import ResultsEdit from './ResultsEdit.svelte';
 
     export let id = null;
     let district = null;
@@ -41,5 +41,5 @@
 
     <Route path='/leistung/*' let:meta>
         <Route path='/' let:meta> <Results districtId={ +meta.params.districtId } /> </Route>
-        <Route path='/edit' let:meta> <DistrictResultsEdit districtId={ +meta.params.districtId }  /></Route>
+        <Route path='/edit' let:meta> <ResultsEdit districtId={ +meta.params.districtId }  /></Route>
     </Route>{/if}

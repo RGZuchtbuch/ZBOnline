@@ -2,7 +2,7 @@
 
 namespace App\Controller\Standard;
 
-use App\Query\Query;
+use App\Query;
 use App\Controller\Controller;
 use Exception;
 use http\Exception\InvalidArgumentException;
@@ -16,36 +16,13 @@ class Get extends Controller
         return true;
     }
 
-    /*
     public function process() : array
     {
-        $sections = $this->sections();
-        $breeds = $this->breeds();
-        $colors = $this->colors();
+        $sections = Query\Section::descendants( 2 );
+        $breeds = Query\Breed::all();
+        $colors = Query\Color::all();
         $standard = $this->toStandardTree( $sections, $breeds, $colors );
         return ['standard' => $standard];
-    }
-
-    private function sections() {
-        $args = [];
-        $stmt = Query::prepare( '
-            SELECT id, name, parentId, `order`, layers FROM section ORDER BY `order`
-        ');
-        return Query::selectArray( $stmt, $args );
-    }
-    private function breeds() {
-        $args = [];
-        $stmt = Query::prepare( '
-            SELECT id, name, sectionId FROM Breed ORDER BY name
-        ');
-        return Query::selectArray( $stmt, $args );
-    }
-    private function colors() {
-        $args = [];
-        $stmt = Query::prepare( '
-            SELECT id, name, breedId FROM color ORDER BY name
-        ');
-        return Query::selectArray( $stmt, $args );
     }
 
     private function toStandardTree(& $sectionsRows, & $breedsRows, & $colorsRows ) : array {
@@ -70,11 +47,12 @@ class Get extends Controller
             $breeds[ $breed[ 'id' ] ] = & $breed;
             $sections[ $breed[ 'sectionId' ] ][ 'breeds' ][] = & $breed;
         }
+
         foreach($colorsRows as & $color ) {
             $breeds[ $color[ 'breedId' ] ][ 'colors' ][] = & $color;
         }
 
         return $sections[2]; // geflügel
     }
-*/
+
 }

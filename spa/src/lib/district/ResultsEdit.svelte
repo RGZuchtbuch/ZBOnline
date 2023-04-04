@@ -145,8 +145,8 @@
 
 </script>
 
-<h2 class='text-center'>Zuuuchtbuch Leistungen {district ? district.name : '...'}</h2>
-<div class='border-b border-gray-400 justify-center flex flex-row mx-2 gap-x-4'>
+<h2 class='w-256 text-center'>Zuuuchtbuch Leistungen {district ? district.name : '...'}</h2>
+<div class='w-256 justify-center flex flex-row mx-2 gap-x-4'>
     <Select label="Sparte" bind:value={sectionId} on:change={onSection}>
         <option value={null}></option>
         {#each sections as section}
@@ -174,100 +174,78 @@
 </div>
 
 {#if sectionId }
-    <div class='flex flex-col bg-header'>
+    <div class='w-256 flex flex-col bg-header rounded-t'>
         <div class='flex flex-row p-2 gap-x-1 text-sm font-bold'>
+            <div class='w-64'>Rasse {sectionId === 5 ? '' : ' & Farbe'}</div>
+            <div class='w-4'></div>
+
+            <div class='w-28 text-center'>Zucht</div>
+
+            <div class='w-4 text-center'>|</div>
+
+            {#if sectionId !== 5 }
+                <div class='w-44 text-center'>Legeleistung</div>
+                <div class='w-1 text-center'>|</div>
+            {/if}
 
             {#if sectionId === 5 }
-                <div class='w-16'>Rasse</div>
-                <div class='w-72'></div>
-
-                <div class='w-16'>Zuchten</div>
-                <div class='w-16'>Paare</div>
-
-                <div class='w-2'></div>
-
-                <div class='w-16'>Bruten</div>
-                <div class='w-16'>Küken</div>
-
-                <div class='w-2'></div>
-
-                <div class='w-16'>Tiere</div>
-                <div class='w-16 whitespace-nowrap'>∅ Note</div>
-                <div class='w-16'></div>
+                <div class='w-28 text-center'>Brutleistung</div>
+                <div class='w-4 text-center'>|</div>
             {:else}
-                <div class='w-16'>Rasse</div>
-                <div class='w-72'>Farbe</div>
-
-                <div class='w-16'>Zuchten</div>
-                <div class='w-16'>Paare</div>
-
-                <div class='w-2'></div>
-
-                <div class='w-16'>Hennen</div>
-                <div class='w-16'>Eier/J</div>
-                <div class='w-16 whitespace-nowrap'>∅ Gewicht</div>
-
-                <div class='w-2'></div>
-
-                <div class='w-16'>Eingelegt</div>
-                <div class='w-16'>Befruchtet</div>
-                <div class='w-16'>Geschlüpft</div>
-
-                <div class='w-2'></div>
-
-                <div class='w-16'>Tiere</div>
-                <div class='w-16 whitespace-nowrap'>∅ Note</div>
-                <div class='w-16'></div>
+                <div class='w-44 text-center'>Brutleistung</div>
+                <div class='w-3 text-center'>|</div>
             {/if}
+
+
+            <div class='w-28 text-center'>Schauleistung</div>
         </div>
     </div>
 
 
-    <div class='bg-gray-100 overflow-y-scroll border border-gray-600 border-t-gray-400 rounded-b scrollbar'>
+    <div class='w-256 bg-gray-100 overflow-y-scroll border border-t-gray-400 rounded-b scrollbar'>
         {#if breeds }
             {#each breeds as breed }
                 <div class='flex flex-row px-2 gap-x-1'>
-                    <div class='w-72 cursor-pointer' on:click={onOpen(breed)} >{breed.name}</div>
-                    <div class='w-16 cursor-pointer'></div>
+                    <div class='w-64 cursor-pointer whitespace-nowrap' on:click={onOpen(breed)} >{breed.name}</div>
+                    <div class='w-4'></div>
                     {#if breed.open }
                         {#if sectionId === 5 }
                             <div class='flex flex-row gap-x-1 text-xs'>
-                                <div class='w-16'>Zuchten</div>
-                                <div class='w-16'>Paare</div>
+                                <div class='w-14'>Zuchten</div>
+                                <div class='w-14'>Paare</div>
 
                                 <div class='w-2'></div>
 
-                                <div class='w-16'>Bruten</div>
-                                <div class='w-16'>Küken</div>
+                                <div class='w-14'>Bruten</div>
+                                <div class='w-14'>Küken</div>
 
                                 <div class='w-2'></div>
 
-                                <div class='w-16'>Tiere</div>
-                                <div class='w-16 whitespace-nowrap'>∅ Note</div>
-                                <div class='w-16'></div>
+                                <div class='w-14'>Tiere</div>
+                                <div class='w-14 whitespace-nowrap'>Note</div>
+                                <div class='w-14'></div>
                             </div>
                         {:else}
                             <div class='flex flex-row gap-x-1 text-xs'>
-                                <div class='w-16'>Zuchten</div>
-                                <div class='w-16'>Paare</div>
+                                <div class='w-14'>Zuchten</div>
+                                <div class='w-14'>Stämme</div>
 
                                 <div class='w-2'></div>
 
-                                <div class='w-16'>Hennen</div>
-                                <div class='w-16'>Eier/J</div>
-                                <div class='w-16 whitespace-nowrap'>∅ Gewicht</div>
+                                <div class='w-14'>Hennen</div>
+                                <div class='w-14'>Eier/J</div>
+                                <div class='w-14 whitespace-nowrap'>Gewicht</div>
 
                                 <div class='w-2'></div>
 
-                                <div class='w-16'>Eingelegt</div>
-                                <div class='w-16'>Befruchtet</div>
-                                <div class='w-16'>Geschlüpft</div>
+                                <div class='w-14'>Eingelegt</div>
+                                <div class='w-14'>Befruchtet</div>
+                                <div class='w-14'>Geschlüpft</div>
 
                                 <div class='w-2'></div>
 
-                                <div class='w-16'>Tiere</div>
-                                <div class='w-16 whitespace-nowrap'>∅ Note</div>
-                                <div class='w-16'></div>
+                                <div class='w-14'>Tiere</div>
+                                <div class='w-14 whitespace-nowrap'>Note</div>
                             </div>
                         {/if}
                     {/if}
@@ -279,54 +257,52 @@
 
                         <form class='flex flex-row px-2 gap-x-1 text-base' on:change={onResultChange( breed, result )}>
                             {#if sectionId === 5 }
-                                <div class='w-8 pl-4'>&#10551; </div>
-                                <div class='w-80'>Gesamte Farbenschläge</div>
+                                <div class='w-4 pl-2'>&#10551; </div>
+                                <div class='w-64'>Gesamte Farbenschläge</div>
 
-                                <InputNumber class='w-16' bind:value={result.breeders} min=1 max=99999 error='1..99999' />
-                                <InputNumber class='w-16' bind:value={result.pairs} min=1 max=99999 error='1..99999' />
-
-                                <div class='w-2'></div>
-
-                                <InputNumber class='w-16' value={result.broodEggs ? result.broodEggs/2 : null} min=0 max=99999 on:input={( e )=>result.broodEggs = e.target.value ? 2 * e.target.value : null }/>
-                                <InputNumber class='w-16' bind:value={result.broodHatched} min=0 max=99999 />
+                                <InputNumber class='w-14' bind:value={result.breeders} min=1 max=99999 error='1..99999' />
+                                <InputNumber class='w-14' bind:value={result.pairs} min=1 max=99999 error='1..99999' />
 
                                 <div class='w-2'></div>
 
-                                <InputNumber class='w-16' bind:value={result.showCount} min=1 max=9999 error='0..9999'/>
-                                <InputNumber class='w-16' bind:value={result.showScore} min=90 max=97 step=0.1 error='90..97'/>
+                                <InputNumber class='w-14' value={result.broodEggs ? result.broodEggs/2 : null} min=0 max=99999 on:input={( e )=>result.broodEggs = e.target.value ? 2 * e.target.value : null }/>
+                                <InputNumber class='w-14' bind:value={result.broodHatched} min=0 max=99999 />
+
+                                <div class='w-2'></div>
+
+                                <InputNumber class='w-14' bind:value={result.showCount} min=1 max=9999 error='0..9999'/>
+                                <InputNumber class='w-14' bind:value={result.showScore} min=90 max=97 step=0.1 error='90..97'/>
                             {:else}
-                                <div class='w-8 pl-4'>&#10551; </div>
-                                <div class='w-80'>{result.name}</div>
+                                <div class='w-4 pl-2'>&#10551; </div>
+                                <div class='w-64'>{result.name}</div>
 
-                                <InputNumber class='w-16' bind:value={result.breeders} min=1 max=99999 error='1..99999' />
-                                <InputNumber class='w-16' bind:value={result.pairs} min=1 max=99999 error='1..99999' />
-
-                                <div class='w-2'></div>
-
-                                <InputNumber class='w-16' bind:value={result.layDames} min=1 max=99999 error='0..99999'/>
-                                <InputNumber class='w-16' bind:value={result.layEggs} min=0 max=399 error='0..399'/>
-                                <InputNumber class='w-16' bind:value={result.layWeight} min=1 max=999 error='0..999'/>
+                                <InputNumber class='w-14' bind:value={result.breeders} min=1 max=99999 error='1..99999' />
+                                <InputNumber class='w-14' bind:value={result.pairs} min=1 max=99999 error='1..99999' />
 
                                 <div class='w-2'></div>
 
-                                <InputNumber class='w-16' bind:value={result.broodEggs} min=1 max=99999 error='0..99999'/>
-                                <InputNumber class='w-16' bind:value={result.broodFertile} min=0 max={result.broodEggs} error='0..{result.broodEggs}'/>
-                                <InputNumber class='w-16' bind:value={result.broodHatched} min=0 max={(result.broodFertile==null ? result.broodEggs : result.broodFertile )} error='0..{result.broodFertile}'/>
+                                <InputNumber class='w-14' bind:value={result.layDames} min=1 max=99999 error='0..99999'/>
+                                <InputNumber class='w-14' bind:value={result.layEggs} min=0 max=399 error='0..399'/>
+                                <InputNumber class='w-14' bind:value={result.layWeight} min=1 max=999 error='0..999'/>
 
                                 <div class='w-2'></div>
 
-                                <InputNumber class='w-16' bind:value={result.showCount} min=1 max=99999 error='0..99999'/>
-                                <InputNumber class='w-16' bind:value={result.showScore} min=89 max=97 step=0.1 error='89..97'/>
+                                <InputNumber class='w-14' bind:value={result.broodEggs} min=1 max=99999 error='0..99999'/>
+                                <InputNumber class='w-14' bind:value={result.broodFertile} min=0 max={result.broodEggs} error='0..{result.broodEggs}'/>
+                                <InputNumber class='w-14' bind:value={result.broodHatched} min=0 max={(result.broodFertile==null ? result.broodEggs : result.broodFertile )} error='0..{result.broodFertile}'/>
+
+                                <div class='w-2'></div>
+
+                                <InputNumber class='w-14' bind:value={result.showCount} min=1 max=99999 error='0..99999'/>
+                                <InputNumber class='w-14' bind:value={result.showScore} min=89 max=97 step=0.1 error='89..97'/>
                             {/if}
 
                             {#if result.changed }
                                 {#if isValid( result ) }
-                                    <div class='w-16 text-green-600' on:click={onSave( result )}>[Save]</div>
+                                    <div class='w-8 text-green-600' on:click={onSave( result )}>S</div>
                                 {:else}
-                                    <div class='w-16 text-red-600'>[Save]</div>
+                                    <div class='w-8 text-red-600'>S</div>
                                 {/if}
-                            {:else}
-                                <div class='w-16'></div>
                             {/if}
                         </form>
                     {/each}

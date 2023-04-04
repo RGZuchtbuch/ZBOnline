@@ -26,3 +26,4 @@ optional
 * Ä capital ä
 * Ö Capital ö  
 * Ü Capital ü
+* ∅ average

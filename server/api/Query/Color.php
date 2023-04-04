@@ -28,4 +28,13 @@ class Color extends Query
         return false;
     }
 
+    public static function all() : array {
+        $stmt = Query::prepare('
+            SELECT *
+            FROM color
+            ORDER BY name;
+        ');
+        return Query::selectArray($stmt );
+    }
+
 }

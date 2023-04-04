@@ -33,6 +33,15 @@ class Breed extends Query
         throw new HttpNotImplementedException( null, "oops" );
     }
 
+    public static function all() : array {
+        $stmt = Query::prepare('
+            SELECT *
+            FROM breed
+            ORDER BY name
+        ');
+        return Query::selectArray($stmt );
+    }
+
 
     public static function colors( int $id ) : array {
         $args = get_defined_vars();
