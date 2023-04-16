@@ -57,6 +57,6 @@ class Post extends Controller
 
     // is no relevant content then delete the result ( is id != null )
     private function isCleared( array $result ) {
-        return $result['breeders'] === null && $result['pairs'] === null; // no breeders and no pairs means empty
+        return $result['breeders'] === null; // no breeders means empty
     }
 }

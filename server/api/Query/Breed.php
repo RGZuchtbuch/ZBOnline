@@ -2,31 +2,40 @@
 
 namespace App\Query;
 
-
-
-use http\Exception\InvalidArgumentException;
-use Slim\Exception\HttpNotFoundException;
 use Slim\Exception\HttpNotImplementedException;
 
 class Breed extends Query
 {
-    public static function new( string $name, int $sectionId, int $broodGroup, int $lay, int $eggWeight, int $sireRing, int $dameRing, int $sireWeight, int $dameWeight, string $info ) : ? int {
-        throw new HttpNotImplementedException( null, "oops" );
+    public static function new( string $name, int $sectionId, ? int $broodGroup, ? int $lay, ? int $layWeight, ? int $sireRing, ? int $dameRing, ? int $sireWeight, ? int $dameWeight, ? string $info, int $modifierId ) : ? int
+    {
+        $args = get_defined_vars();
+        $stmt = Query::prepare( '
+        INSERT INTO breed ( name, sectionId, broodGroup, lay, layWeight, sireRing, dameRing, sireWeight, dameWeight, info, modifierId ) 
+            VALUES ( :name, :sectionId, :broodGroup, :lay, :layWeight, :sireRing, :dameRing, :sireWeight, :dameWeight, :info, :modifierId )
+        ' );
+        return Query::insert( $stmt, $args );
     }
 
-    public static function get( int $id ) : ? array {
+    public static function get( int $id ) : ? array
+    {
         $args = get_defined_vars();
         $stmt = Query::prepare('
-            SELECT *
+            SELECT name, sectionId, broodGroup, lay, layWeight, sireRing, dameRing, sireWeight, dameWeight, info
             FROM breed
             WHERE id=:id
         ');
         return Query::select($stmt, $args);
     }
 
-
-    public static function set( int $id, string $name, int $sectionId, int $broodGroup, int $lay, int $eggWeight, int $sireRing, int $dameRing, int $sireWeight, int $dameWeight, string $info ) : bool {
-        throw new HttpNotImplementedException( null, "oops" );
+    public static function set( int $id, string $name, int $sectionId, ? int $broodGroup, ? int $lay, ? int $layWeight, ? int $sireRing, ? int $dameRing, ? int $sireWeight, ? int $dameWeight, ? string $info, int $modifierId ) : bool
+    {
+        $args = get_defined_vars();
+        $stmt = Query::prepare( '
+            UPDATE breed
+            SET name=:name, sectionId=:sectionId, broodGroup=:broodGroup, lay=:lay, layWeight=:layWeight, sireRing=:sireRing, dameRing=:dameRing, sireWeight=:sireWeight, dameWeight=:dameWeight, info=:info, modifierId=:modifierId
+            WHERE id=:id
+        ' );
+        return Query::update( $stmt, $args );
     }
 
     public static function del( int $id ) : bool {
@@ -35,7 +44,7 @@ class Breed extends Query
 
     public static function all() : array {
         $stmt = Query::prepare('
-            SELECT *
+            SELECT id, name, sectionId, broodGroup, lay, layWeight, sireRing, dameRing, sireWeight, dameWeight, info
             FROM breed
             ORDER BY name
         ');

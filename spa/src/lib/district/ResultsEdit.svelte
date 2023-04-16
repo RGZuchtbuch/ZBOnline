@@ -1,6 +1,7 @@
 <script>
     import {router} from "tinro";
     import api from '../../js/api.js';
+    import Button from '../input/Button.svelte';
     import InputNumber from '../input/Number.svelte';
     import Select from '../input/Select.svelte';
 
@@ -18,7 +19,7 @@
     let group = null;
     let breeds = [];
 
-    let resultsChanged = []; // counter for knowing if any still unsaved.
+    let changeCounter = 0; // counter for knowing if any still unsaved.
 
 
 
@@ -69,6 +70,7 @@
         group = route.query.group && [ 'I', 'II', 'III' ].includes( route.query.group ) ? route.query.group : 'I';
         loadDistrict();
         loadBreeds();
+        changeCounter = 0;
     }
 
     function onSection( event ) {
@@ -86,7 +88,7 @@
             console.log('Open');
             if (breed.open) {
                 let changed = false;
-                for (let result of breed.results) {
+                for (let result of breed.colors) {
                     changed |= result.changed;
                 }
                 if (changed) {
@@ -103,7 +105,7 @@
                     console.log('Getting Breed results');
                     api.district.results.breed.get(districtId, sectionId, breed.id, year, group)
                         .then(response => {
-                            breed.results = response.results
+                            breed.colors = response.results
                             breed.open = true;
                             breeds = breeds; // trigger
                         })
@@ -113,22 +115,21 @@
     }
     function onResultChange( breed, result ) {
         return ( event ) => {
-            result.changed = true; // changing the data object here !
-            resultsChanged[ result ] = true;
-            breeds = breeds; // trigger to redraw
-            console.log( 'Changed', Object.keys( resultsChanged ).length );
+            if( result.changed !== true ) {
+                changeCounter++
+                result.changed = true; // changing the data object here !
+                breeds = breeds; // trigger to redraw
+            }
         }
     }
     function onSave( result ) {
         return ( event ) => {
             console.log('Saved', result );
+            result.changed = false; // asap
 
             api.result.post( result ).then( ( response ) => {
                 result.id = response.id; // new id when inserted
-                result.changed = false;
-                delete resultsChanged[ result ];
-                resultsChanged = resultsChanged;
-                console.log( 'Changed', Object.keys( resultsChanged ).length );
+                changeCounter--;
                 breeds = breeds; // trigger
             } );
         }
@@ -145,7 +146,7 @@
 
 </script>
 
-<h2 class='w-256 text-center'>Zuuuchtbuch Leistungen {district ? district.name : '...'}</h2>
+<h2 class='w-256 text-center'>Zuchtbuch Leistungen {district ? district.name : '...'}</h2>
 <div class='w-256 justify-center flex flex-row mx-2 gap-x-4'>
     <Select label="Sparte" bind:value={sectionId} on:change={onSection}>
         <option value={null}></option>
@@ -170,7 +171,7 @@
         </Select>
     {/if}
 
-    <span>Nicht gespeichert # {Object.keys( resultsChanged ).length}</span>
+
 </div>
 
 {#if sectionId }
@@ -196,8 +197,11 @@
                 <div class='w-3 text-center'>|</div>
             {/if}
 
-
             <div class='w-28 text-center'>Schauleistung</div>
+
+            {#if changeCounter > 0 }
+                <div class='px-4 text-red-600'> # { changeCounter }</div>
+            {/if}
         </div>
     </div>
 
@@ -206,7 +210,9 @@
         {#if breeds }
             {#each breeds as breed }
                 <div class='flex flex-row px-2 gap-x-1'>
-                    <div class='w-64 cursor-pointer whitespace-nowrap' on:click={onOpen(breed)} >{breed.name}</div>
+                    <div class='w-64 cursor-pointer whitespace-nowrap' on:click={onOpen(breed)} >
+                        {breed.name} {#if breed.results } <span class='text-xs'>({breed.results})</span> {/if}
+                    </div>
                     <div class='w-4'></div>
                     {#if breed.open }
                         {#if sectionId === 5 }
@@ -253,7 +259,7 @@
 
 
                 {#if breed.open }
-                    {#each breed.results as result}
+                    {#each breed.colors as result}
 
                         <form class='flex flex-row px-2 gap-x-1 text-base' on:change={onResultChange( breed, result )}>
                             {#if sectionId === 5 }
@@ -295,13 +301,15 @@
 
                                 <InputNumber class='w-14' bind:value={result.showCount} min=1 max=99999 error='0..99999'/>
                                 <InputNumber class='w-14' bind:value={result.showScore} min=89 max=97 step=0.1 error='89..97'/>
+
+                                <div class='w-2'></div>
                             {/if}
 
                             {#if result.changed }
                                 {#if isValid( result ) }
-                                    <div class='w-8 text-green-600' on:click={onSave( result )}>S</div>
+                                    <Button class='bg-green-100 px-2 text-green-700' value='&#10004;' on:click={onSave(result)} />
                                 {:else}
-                                    <div class='w-8 text-red-600'>S</div>
+                                    <Button class='bg-red-100 px-2 text-red-700' value='&#10006;' alert={true}/>
                                 {/if}
                             {/if}
                         </form>

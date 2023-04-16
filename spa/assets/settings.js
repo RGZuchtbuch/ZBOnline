@@ -33,7 +33,8 @@ const settings = {
     }
 }
 
-
+const CACHETIMEOUT = 10000; // 10 secs in dev mode
+const CACHECHECKINTERVAL = 60000; // once a minute
 
 const MINYEAR = 1850;
 const MAXYEAR = 2030;

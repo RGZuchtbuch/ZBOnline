@@ -66,10 +66,25 @@ class Reset extends Controller
 
             //Content
             $mail->isHTML(true);                                  //Set email format to HTML
-            $mail->Subject = 'RG Zuchtbuch, neues Passwort<br><br>';
-            $mail->Body    = "Benütze diesen Link: <a href='".$url."'>Neues Paswort</a> um ein neues Passwort ein zu geben.<br><br>Die complette URL: ".$url." <br><br>Viel spaß im RGZuchtbuch ";
-            $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
-
+            $mail->Subject = 'RG Zuchtbuch, reset Passwort beantragt';
+            $mail->Body    = "
+                Für den RGZuchtbuch.de ist auf diese Emailadresse um ein neues Paswort gebeten.<br>
+                <br>
+                Benütze diesen Link: <a href='".$url."'>Neues Paswort</a> um ein neues Passwort einzugeben.<br>
+                <br>
+                Viel spaß im RGZuchtbuch Online 2.0<br>
+                <br>
+                Eelco Jannink<br> 
+            ";
+            $mail->AltBody = "
+                Für den RGZuchtbuch.de ist auf diese Emailadresse um ein neues Paswort bebeten.\n
+                \n
+                Benütze diesen Link: ".$url."> um ein neues Passwort einzugeben.\n
+                \n
+                Viel spaß im RGZuchtbuch Online 2.0\n
+                \n
+                Eelco Jannink\n
+            ";
             $mail->send();
         } catch( Exception $e ) {
             throw new HttpInternalServerErrorException( $this->request, "mail error: ".$e->getMessage() );

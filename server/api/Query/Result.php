@@ -15,14 +15,14 @@ class Result extends Query
     }
 
     public static function new(
-        $reportId, $districtId, $year, $group,
-        $breedId, $colorId,
-        $breeders, $pairs,
-        $layDames, $layEggs, $layWeight,
-        $broodEggs, $broodFertile, $broodHatched,
-        $showCount, $showScore,
-        $modifier
-    ) {
+        ? int $reportId, int $districtId, int $year, string $group,
+        int $breedId, ? int $colorId,
+        int $breeders, ? int $pairs,
+        ? int $layDames, ? float $layEggs, ? float $layWeight,
+        ? int $broodEggs, ? int $broodFertile, ? int $broodHatched,
+        ? int $showCount, ? float $showScore,
+        int $modifier
+    ) : ? int {
         $args = get_defined_vars();
         $stmt = Query::prepare( '
             INSERT INTO result ( reportId, districtId, `year`, `group`, breedId, colorId, breeders, pairs, layDames, layEggs, layWeight, broodEggs, broodFertile, broodHatched, showCount, showScore, modifier ) 
@@ -31,14 +31,14 @@ class Result extends Query
         return Query::insert( $stmt, $args );
     }
     public static function set(
-        $id, $reportId, $districtId, $year, $group,
-        $breedId, $colorId,
-        $breeders, $pairs,
-        $layDames, $layEggs, $layWeight,
-        $broodEggs, $broodFertile, $broodHatched,
-        $showCount, $showScore,
-        $modifier
-    ) {
+        int $id, ? int $reportId, int $districtId, int $year, string $group,
+        int $breedId, ? int $colorId,
+        int $breeders, ? int $pairs,
+        ? int $layDames, ? float $layEggs, ? float $layWeight,
+        ? int $broodEggs, ? int $broodFertile, ? int $broodHatched,
+        ? int $showCount, ? float $showScore,
+        int $modifier
+    ) : bool {
         $args = get_defined_vars();
         $stmt = Query::prepare( '
             UPDATE  result
@@ -48,16 +48,17 @@ class Result extends Query
         return Query::update( $stmt, $args );
     }
 
-    public static function del($id ) {
+    public static function del( int $id ) {
         $args = get_defined_vars();
         $stmt = Query::prepare( '
             DELETE 
             FROM result
             WHERE id=:id
         ' );
-        return Query::del( $stmt, $args );
+        return Query::delete( $stmt, $args );
     }
 
+    // for view page
     public static function districtsForColor( $year, $colorId ) {
         $args = get_defined_vars();
         $stmt = Query::prepare( " 
@@ -90,9 +91,13 @@ class Result extends Query
                 WHERE `year`=:year AND colorId=:colorId               
             ) AS results ON results.rootId=district.id
             GROUP BY district.rootId
+            ORDER BY district.name
+
         " );
         return Query::selectArray( $stmt, $args );
     }
+
+    //for view page
     public static function districtsForBreed( $year, $breedId ) {
         $args = get_defined_vars();
         $stmt = Query::prepare( " 
@@ -125,11 +130,14 @@ class Result extends Query
                 WHERE `year`=:year AND breedId=:breedId               
             ) AS results ON results.rootId=district.id
             GROUP BY district.rootId
+            ORDER BY district.name
+
         " );
 
         return Query::selectArray( $stmt, $args );
     }
 
+    // for view page
     public static function districtsForSection( $year, $sectionId ) {
         $args = get_defined_vars();
         $stmt = Query::prepare( "
@@ -167,6 +175,7 @@ class Result extends Query
                 WHERE parent.id=:sectionId OR parent.parentId=:sectionId
             )
             GROUP BY district.rootId      
+            ORDER BY district.name
         " );
 
         return Query::selectArray($stmt, $args );

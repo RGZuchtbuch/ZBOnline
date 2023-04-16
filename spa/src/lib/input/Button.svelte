@@ -18,7 +18,7 @@
 
 </script>
 
-<div class='{classname}' class:alert>
+<div class='input {classname}' class:alert>
     {#if label !== null}
         <label class='label' for='input'>{label}</label>
     {/if}
@@ -31,7 +31,7 @@
 </div>
 
 <style>
-    div {
+    .input {
         @apply cursor-pointer border rounded border-gray-400 bg-button flex flex-col gap-0
     }
 

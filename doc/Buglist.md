@@ -27,5 +27,10 @@
 2023-03-17 
     all tables have modifier, should be modifierId
 
+2023-04-10
+    Leistungen, brutleistung tauben separat ! ku/pa
+
+2023-04-10
+    Section Pie, could have more than just zuchten.
 
 

@@ -2,7 +2,7 @@
 
     import api from "../../js/api.js";
 //    import {BarController, BarElement, CategoryScale, Chart, Colors, LinearScale, Tooltip} from "chart.js";
-    import { Chart, ArcElement, DoughnutController, Tooltip} from 'chart.js';
+    import { Chart, ArcElement, DoughnutController, Legend, Tooltip} from 'chart.js';
 
     export let districtId = null;
     export let year = null;
@@ -67,6 +67,12 @@
                         },
                         options: {
                             responsive:false,
+                            plugins: {
+                                legend: {
+                                    display: true,
+                                    position: 'right',
+                                }
+                            }
                         }
                     }
                     const context = canvasFraction.getContext( '2d' );
@@ -76,7 +82,7 @@
         }
     }
 
-    Chart.register( ArcElement, DoughnutController, Tooltip );
+    Chart.register( ArcElement, DoughnutController, Legend, Tooltip );
     $: handle( districtId, year, type );
 
 
@@ -85,7 +91,7 @@
 {#if fractions }
     <div class='flex flex-col' >
         <h5> Zuchten / Sparte</h5>
-        <canvas id='fractions' bind:this={canvasFraction} width='128px' height='128px'></canvas>
+        <canvas id='fractions' bind:this={canvasFraction} width='256px' height='128px'></canvas>
     </div>
 {/if}
 

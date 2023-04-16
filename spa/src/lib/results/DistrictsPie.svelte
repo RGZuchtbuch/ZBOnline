@@ -46,7 +46,12 @@
                             },
                             options: {
                                 responsive:false,
-                            }
+                                plugins: {
+                                    legend: {
+                                        display: true,
+                                        position: 'right',
+                                    }
+                                }                            }
                         }
                         const context = canvas.getContext( '2d' );
                         chart = new Chart( context, config );
@@ -65,7 +70,7 @@
 
     <div class='flex flex-col' >
         <h5> {type.label} / LV</h5>
-        <canvas id='districtspie' bind:this={canvas} width='128px' height='128px'></canvas>
+        <canvas id='districtspie' bind:this={canvas} width='256px' height='128px'></canvas>
     </div>
 
 <style></style>

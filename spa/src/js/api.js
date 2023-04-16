@@ -21,6 +21,9 @@ export default {
 
     breed: {
         get: (id) => get( 'api/breed/'+id ),
+
+        post:( breed ) => post( 'api/breed', breed ),
+
         colors : {
             get: ( breedId ) => get( `api/breed/${breedId}/colors`)
         },
@@ -47,6 +50,7 @@ export default {
 
     color: {
         get: ( id ) => get( 'api/color/'+id ),
+        post:( color ) => post( 'api/color', color ),
     },
 
     district: {
@@ -235,7 +239,7 @@ export default {
     },
 
     standard: {
-        get: () => get( 'api/standard' ),
+        get: () => get( 'api/standard', 24 * 60 * 60 * 1000 ),
     },
 
     trend: {
@@ -336,20 +340,20 @@ setInterval(  () => {
     let now = new Date().getTime(); // in ms
     const toDelete = []; // collecte old, avoiding deleting while iterating
     for( const url in cache ) { // check per url->promise and collect before delete
-        let promise = cache[ url ];
-        const time = promise.time;
-        if( time < now - settings.cache.TIMEOUT ) {
+        let request = cache[ url ];
+        const timeout = request.timeout;
+        if( timeout < now ) {
             toDelete.push( url );
         }
     }
     for( const url of toDelete ) { // delete collected from cache
         delete cache[ url ];
     }
-}, settings.cache.TIMEOUT )
+}, CACHECHECKINTERVAL ) // once a minute
 
 function clear( url ) {
-    let promise = cache[ url ];
-    if( promise ) {
+    let request = cache[ url ];
+    if( request ) {
         console.log( 'Clearing cache for ', url );
     } else {
         console.log( 'NOT Clearing cache for', url );
@@ -368,10 +372,10 @@ function getHeaders() {
     return headers;
 }
 
-async function get( url ) {
+async function get( url, timeout = settings.cache.TIMEOUT ) {
     let cached = cache[url];
     let now = new Date().getTime(); // in ms
-    if (cached && cached.time > now - settings.cache.TIMEOUT) { // fresh enough
+    if( cached && cached.timeout > now ) { // still fresh
         return cached.promise;
     } else {
         let options = {
@@ -386,7 +390,7 @@ async function get( url ) {
                 console.error('Fetch not ok, got null', response);
                 return null;
             });
-        cache[url] = {promise: promise, time: now};
+        cache[url] = { promise: promise, timeout: now + timeout };
         return promise;
     }
 

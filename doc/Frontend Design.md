@@ -6,6 +6,9 @@
 * &#10003; ok
 * &#9993; email
 * &#10170; enter
+* &#10004; ok, save
+* &#10006; error in red
+* 
 * &#8853; Open
 * &#8854; Close
 * &#8855; Exit

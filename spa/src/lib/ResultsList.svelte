@@ -32,7 +32,7 @@
         total.broodHatched += result.broodHatched;
         if( result.pairs && result.broodHatched ) {
             total.brooders += result.breeders;
-            total.broodResult += result.broodHatched / result.pairs;
+            total.broodResult += result.breeders * result.broodHatched / result.pairs; // sum chicks per pair per result
         }
         total.showCount += result.showCount;
         if( result.showScore ) {
@@ -59,6 +59,7 @@
                 }
                 total.layEggs = total.layers ? total.layEggs / total.layers : null;
                 total.layWeight = total.layWeighters ? total.layWeight / total.layWeighters : null;
+                total.broodResult = total.brooders ? total.broodResult / total.brooders : null; // avg of ch/pair per breeder.
                 total.showScore = total.showers ? total.showScore / total.showers : null;
                 section.total = total;
             }
@@ -137,7 +138,7 @@
             {/each}
 
             <div class='flex flex-row bg-gray-300  px-2 gap-x-4 font-bold text-sm italic'>
-                <div class='w-56'>{section.name}</div>
+                <div class='w-56'>Gesamt {section.name}</div>
                 {#if section.id === 5 }
                     <div class='flex w-28 gap-x-1'>
                         <div class='td'>{dec( section.total.breeders )}</div>

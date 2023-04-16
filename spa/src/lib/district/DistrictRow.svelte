@@ -111,7 +111,7 @@
             {/if}
 
             {#if district.moderated}
-                <a class='text-black cursor-pointer' href={route.match+'/'+district.id} title='Zum Verband'>{district.name} {district.moderated}</a>
+                <a class='text-black cursor-pointer' href={route.match+'/'+district.id} title='Zum Verband'>{district.name}</a>
             {:else}
                 <div class='text-gray-400 cursor-not-allowed' title='Kein zugang' > &#10551; {district.name}</div>
             {/if}

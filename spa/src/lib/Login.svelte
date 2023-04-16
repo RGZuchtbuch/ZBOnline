@@ -68,16 +68,23 @@
 <Modal class=''>
     <form class='w-96 flex flex-col gap-4 self-center border rounded p-4' on:submit|preventDefault={onSubmit}>
         <div class='flex bg-header'>
-            <h2 class='grow '>Anmelden</h2>
+            {#if forgot}
+                <h2 class='grow '>Passwort Reset</h2>
+            {:else}
+                <h2 class='grow '>Anmelden</h2>
+            {/if}
             <div class='cursor-pointer mr-2' on:click={cancel}>&#8855;</div>
         </div>
         <EmailInput class='' label='eMail' bind:value={email} bind:invalid={invalids.email} required/>
-        <PasswordInput class='' label='Password' bind:value={password} bind:invalid={invalids.password} required/>
 
+        {#if ! forgot}
+            <PasswordInput class='' label='Passwort' bind:value={password} bind:invalid={invalids.password} required/>
+        {/if}
 
         {#if forgot }
             <Button value='&#9993; Schick mir eine reset Mail!' on:click={onResetPassword} alert=true/>
         {/if}
+
         {#if ! forgot && ! invalids.email && ! invalids.password }
             <Submit value='Las mich herein &#10170;' disabled={invalid} />
             <div class='cursor-pointer error text-sm text-right' on:click={onForgot}>Ich habe mein Passwort vergessen :(</div>

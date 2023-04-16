@@ -31,7 +31,7 @@
     <img class='absolute w-20 m-2 ml-8 no-print' src='../assets/bdrg_logo_r.png' alt='BDRG Logo'>
 
     <div class='text-center no-print'>
-        Das Rassegeflügel Zuchtbuch. Schönheit und Leisting kombinieren.
+        Das Rassegeflügel Zuchtbuch. Schönheit und Leistung kombinieren.
     </div>
 
     <NavigationBar />
@@ -57,17 +57,19 @@
 
         </div>
 
-        <div class='w-48 border rounded flex flex-col no-print'>
-            <h2>Info</h2>
-            <div>
-                {#if $user}
-                    {#if $user.admin} <div>Administrator</div>{/if}
-                    {#if $user.moderator.length>0} <div>Obmann</div>{/if}
-                    <div>{$user.fullname}</div>
-                    <div>Bis { new Date( $user.exp * 1000 ).toLocaleString( 'de') }</div>
-                {/if}
+        {#if false}
+            <div class='w-48 border rounded flex flex-col no-print'>
+                <h2>Info</h2>
+                <div>
+                    {#if $user}
+                        {#if $user.admin} <div>Administrator</div>{/if}
+                        {#if $user.moderator.length>0} <div>Obmann</div>{/if}
+                        <div>{$user.fullname}</div>
+                        <div>Bis { new Date( $user.exp * 1000 ).toLocaleString( 'de') }</div>
+                    {/if}
+                </div>
             </div>
-        </div>
+        {/if}
     </div>
 
 </div>

@@ -6,6 +6,7 @@
     import Districts from './Districts.svelte';
     import Pages from './Pages.svelte';
     import Sections from './Sections.svelte';
+    import Standard from '../standard/Standard.svelte';
 
     const route = meta();
 
@@ -20,7 +21,7 @@
 
 <Route path='/' redirect={ route.match+'/verband'} />
 
-<Route path='/standard'> <Sections /> </Route>
+<Route path='/standard'> <Standard /> </Route>
 
 <Route path='/verband/*'>
 
