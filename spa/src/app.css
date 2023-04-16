@@ -1,0 +1,119 @@
+/* Write your global styles here, in PostCSS syntax */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body {
+    @apply w-full h-full;
+}
+
+a {
+    @apply font-normal;
+}
+
+h1 {
+    @apply text-4xl;
+}
+h2 {
+    @apply p-2 text-2xl font-bold;
+}
+h3 {
+    @apply text-xl font-bold;
+}
+h4 {
+    @apply text-lg font-bold;
+}
+h5 {
+    @apply text-base font-bold;
+}
+
+.label {
+    font-size: 0.7rem;
+    line-height: 0.9rem;
+    @apply pl-1 h-4 text-gray-600 whitespace-nowrap;
+}
+
+input, select, option {
+    @apply h-6 rounded mb-1;
+}
+
+input:read-only, select:read-only {
+    background-color: rgba(0, 0, 0, 0);
+}
+input:disabled, select:disabled {
+    background-color: rgba(1, 0, 0, 0);
+    @apply border-gray-600;
+}
+
+select:enabled {
+    @apply border-gray-600;
+    background: white;
+}
+select.disabled {
+    background: rgba(0,0,0,0);
+}
+input:enabled:read-write, select:enabled:read-write {
+    background-color: white;
+    @apply border-green-600;
+}
+
+.input > .data {
+    @apply px-0;
+
+}
+.input > input.invalid, .input > select.invalid {
+    @apply border-red-600;
+}
+
+.input > span.invalid {
+    font-size: 0.6rem;
+    line-height: 0.6rem;
+    @apply pl-1 text-red-600;
+}
+
+
+
+
+/* For Firefox Browser */
+.scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #ccc #777;
+}
+
+
+/* For Chrome, EDGE, Opera, Others */
+.scrollbar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+    background: #ccc;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+    background: #777;
+}
+
+@media print {
+    html body * {
+    }
+
+    .print {
+        @apply border-0;
+    }
+
+    .print, print * {
+        visibility: visible;
+        overflow: visible;
+    }
+
+    .print-break {
+        page-break-after:always;
+    }
+    div {
+
+    }
+    .no-print {
+        display: none;
+    }
+}

@@ -1,26 +1,6 @@
-2023-01-08
-    Moderator - Results now all sections, have select on section and change into table for compat with excel
-
-2023-03-13 
-    Leistungen tables moeten per subsection met totaal voor topsection, nu alleen per top section
-
-2023-03-13
-    Leistungen, selectie alle secties en subsecties, nu kleine array.
-
-2023-03-13
-    Invoer Tauben, brut kan null zijn. brutleidting is küken per paar ( niet per brut ). Brut als optie...
-
-2023-03-13
-    BDRG komt mee in Geo Map, moet eruit ( in query wellicht )
-
-2023-03-13
-    Uit GeoMap wel BDRG kunnen kiezen, bv circel in noordzee of anyclick buiten circels.
-
 2023-03-13
     Leistungen, Vervang Züchter door Zuchten, is beter omdat een Züchter dubbeltelt als ij meerdere rassen heeft
-
-2023-03-13 
-    GeoMap, title geeft niet befruchtet weer.
+    > voor nu opgelost alleen in ui
 
 2023-03-13
     GeoMap, tooltip werkt niet voor tablet/touch
@@ -32,4 +12,25 @@
     Getting warning on build: 
     consts not defined, can be ingored
     non-interactive elements.... should us button or anchor instead of div for on:click
+
+2023-03-14
+    colors need work...
+    menu options not button like but clickable text
+    buttons subtle
+
+    theme greenish, soft toned.
+    pick a palette.
+
+2023-03-16
+    in Obmann, KV EB, eingeben Bielefelder zwerge, multiple results per color, not good
+
+2023-03-17 
+    all tables have modifier, should be modifierId
+
+2023-04-10
+    Leistungen, brutleistung tauben separat ! ku/pa
+
+2023-04-10
+    Section Pie, could have more than just zuchten.
+
 

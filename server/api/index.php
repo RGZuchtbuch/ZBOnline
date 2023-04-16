@@ -1,0 +1,41 @@
+<?php
+declare(strict_types=1);
+
+use Slim\Factory\AppFactory;
+use App\Router;
+// allow cross origin from all, could use Slim for this ?
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Headers:  Accept, Authorization, Content-Type, Origin, X-Requested-With');
+header('Access-Control-Allow-Methods:  GET, POST, PUT, DELETE');
+header("Content-Type: application/json");
+
+require_once './config/config.php';
+require_once './vendor/autoload.php'; // require __DIR__.'/vendor/autoload.php';
+
+
+
+//ob_start('ob_gzhandler'); // needs check if header has Accept-Encoding: gzip
+$app = AppFactory::create();
+
+$app->addRoutingMiddleware();
+$app->addErrorMiddleware(true, true, true );
+
+/*
+$app->add(function ($req, $res, $next) {
+    $response = $next($req, $res);
+    return $response
+            ->withHeader('Access-Control-Allow-Origin', '*')
+            ->withHeader('Access-Control-Allow-Headers', 'Accept, Authorization, Content-Type, Origin, X-Requested-With')
+            ->withHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS'); // 'GET, POST, PUT, DELETE, PATCH, OPTIONS'
+});
+*/
+$app->setBasePath("/api"); // as the api lives here... else not found.
+
+App\Router\Router::register( $app );
+
+
+
+
+$app->run();
+
+//ob_end_flush();
