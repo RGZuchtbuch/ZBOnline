@@ -28,6 +28,7 @@
             extract: (result) => [result.breeders],
             forPie: (result) => [result.breeders],
             title: (result) => result.breeders ? ` meldete ${dec(result.breeders)} Zuchten` : ' hat keine Daten',
+            tooltip: 'Meldende Mitglieder',
         },
         3: {
             id: 3,
@@ -35,6 +36,7 @@
             extract: (result) => [result.pairs],
             forPie: (result) => [result.pairs],
             title: (result) => result.pairs ? ` meldete ${dec(result.pairs)} Stämme` : ' hat keine Daten',
+            tooltip: 'Stämme oder Paare (Tauben)',
         },
         10: {
             id: 10,
@@ -42,6 +44,7 @@
             extract: (result) => [result.layEggs],
             forPie: (result) => [result.layEggs],
             title: (result) =>  result.layEggs ? ` legten ⌀ ${dec(result.layEggs)} Eier im Jahr` : ' hat keine Daten',
+            tooltip: 'Nicht fär Tauben',
         },
         11: {
             id: 11,
@@ -51,6 +54,7 @@
             title: (result) => result.broodEggs ?
                 ` von ${dec(result.broodEggs)} war ${pct(result.broodFertile, result.broodEggs, 0)} befruchtet und es schlüpften ${pct(result.broodHatched, result.broodEggs, 0)}` :
                 ' hat keine Daten',
+            tooltip: 'Nur für Hühner',
         },
         12: {
             id: 12,
@@ -60,6 +64,7 @@
             extract: (result) => [result.showScore],
             forPie: (result) => [result.showScore],
             title: (result) => result.showCount ? ` ${result.showCount} Tiere erhielten ⌀ ${dec(result.showScore, 1)} Punkte` : ' hat keine Daten',
+            tooltip: 'Bewertungen der Tiere (u), 90 (b) .. 97 (v) Punkte',
         },
     }
 
@@ -114,10 +119,11 @@
 
     function prepareSections( sections, section, prepend ) { // recursive
         sections.push( { id:section.id, name:prepend+section.name } );
-        if( prepend === '' ) prepend = ' → ';
+//        if( prepend === '' ) prepend = '';
         if( section && section.children ) {
             for( const child of section.children ) {
-                prepareSections( sections, child, ' · '+prepend );
+//                prepareSections( sections, child, '\xA0\xA0\xA0'+prepend );
+                prepareSections( sections, child, '   '+prepend ); // alt 255
             }
         }
         return sections;
@@ -185,14 +191,14 @@
                 </Select>
 
                 <Select class='w-64' label={'Rasse'} value={breedId} on:change={onBreed}>
-                    <option value={null}> ? </option>
+                    <option value={null} title='Alle Rassen in der gewählten Sparte'> * </option>
                     {#each breeds as breed}
                         <option value={breed.id} selected={breed.id === breedId}> {breed.name} </option>
                     {/each}
                 </Select>
 
                 <Select class='w-60' label={'Farbe'} value={colorId} on:change={onColor}>
-                    <option value={null}> ? </option>
+                    <option value={null} title='Alle farben der gewählten Rasse'> * </option>
                     {#each colors as color}
                         <option value={color.id} selected={color.id === colorId}>{color.name}</option>
                     {/each}
@@ -203,7 +209,7 @@
                 <div class='w-8 font-semibold' >Was</div>:
                 <Select class='w-52' label='Was sehen' value={typeId} on:change={onType}>
                     {#each Object.values( types ) as type, i }
-                        <option value={ type.id } > { type.label }</option>
+                        <option value={ type.id } title={ type.tooltip }> { type.label }</option>
                     {/each}
                 </Select>
 

@@ -44,7 +44,7 @@ class Breed extends Query
 
     public static function all() : array {
         $stmt = Query::prepare('
-            SELECT id, name, sectionId, broodGroup, lay, layWeight, sireRing, dameRing, sireWeight, dameWeight, info
+            SELECT id, name, sectionId, broodGroup, lay, layWeight, sireRing, dameRing, sireWeight, dameWeight
             FROM breed
             ORDER BY name
         ');

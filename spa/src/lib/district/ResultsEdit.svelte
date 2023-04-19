@@ -59,7 +59,6 @@
 
             ( result.showCount==null     || ( result.showCount >0 && result.showCount <=999999 ) ) &&
             ( result.showScore===null    || ( result.showCount >0 && result.showScore >=89 && result.showScore<=97 ) );
-        console.log( 'isValid', valid );
         return valid;
     }
 
@@ -122,6 +121,20 @@
             }
         }
     }
+
+    function onPigeonBroodsChange( result, broods ) { // calc eggs from broods
+        return ( e ) => {
+            let value = e.target.value;
+            if( value ) {
+                result.broodEggs = value * 2;
+                //result.broodFertile = result.broodEggs;
+            } else {
+                result.broodEggs = null;
+                result.broodFertile = null;
+            }
+        }
+    }
+
     function onSave( result ) {
         return ( event ) => {
             console.log('Saved', result );
@@ -134,6 +147,7 @@
             } );
         }
     }
+
     function onSubmit( event ) {
         console.log( 'Submit' );
     }
@@ -213,42 +227,44 @@
                     <div class='w-64 cursor-pointer whitespace-nowrap' on:click={onOpen(breed)} >
                         {breed.name} {#if breed.results } <span class='text-xs'>({breed.results})</span> {/if}
                     </div>
+
                     <div class='w-4'></div>
+
                     {#if breed.open }
                         {#if sectionId === 5 }
-                            <div class='flex flex-row gap-x-1 text-xs'>
+                            <div class='flex flex-row gap-x-1 text-xs text-center'>
                                 <div class='w-14'>Zuchten</div>
                                 <div class='w-14'>Paare</div>
 
-                                <div class='w-2'></div>
+                                <div class='w-2 text-center'> | </div>
 
                                 <div class='w-14'>Bruten</div>
                                 <div class='w-14'>Küken</div>
 
-                                <div class='w-2'></div>
+                                <div class='w-2 text-center'> | </div>
 
                                 <div class='w-14'>Tiere</div>
                                 <div class='w-14 whitespace-nowrap'>Note</div>
                                 <div class='w-14'></div>
                             </div>
                         {:else}
-                            <div class='flex flex-row gap-x-1 text-xs'>
+                            <div class='flex flex-row gap-x-1 text-xs text-center'>
                                 <div class='w-14'>Zuchten</div>
                                 <div class='w-14'>Stämme</div>
 
-                                <div class='w-2'></div>
+                                <div class='w-2 text-center'>|</div>
 
                                 <div class='w-14'>Hennen</div>
                                 <div class='w-14'>Eier/J</div>
                                 <div class='w-14 whitespace-nowrap'>Gewicht</div>
 
-                                <div class='w-2'></div>
+                                <div class='w-2 text-center'>|</div>
 
                                 <div class='w-14'>Eingelegt</div>
                                 <div class='w-14'>Befruchtet</div>
                                 <div class='w-14'>Geschlüpft</div>
 
-                                <div class='w-2'></div>
+                                <div class='w-2 text-center'>|</div>
 
                                 <div class='w-14'>Tiere</div>
                                 <div class='w-14 whitespace-nowrap'>Note</div>
@@ -271,7 +287,7 @@
 
                                 <div class='w-2'></div>
 
-                                <InputNumber class='w-14' value={result.broodEggs ? result.broodEggs/2 : null} min=0 max=99999 on:input={( e )=>result.broodEggs = e.target.value ? 2 * e.target.value : null }/>
+                                <InputNumber class='w-14' value={result.broodEggs ? result.broodEggs/2 : null} min=0 max=99999 on:input={onPigeonBroodsChange( result )}/>
                                 <InputNumber class='w-14' bind:value={result.broodHatched} min=0 max=99999 />
 
                                 <div class='w-2'></div>

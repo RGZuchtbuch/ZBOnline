@@ -28,10 +28,10 @@
 </script>
 
 <div class='w-full h-full flex flex-col'>
-    <img class='absolute w-20 m-2 ml-8 no-print' src='../assets/bdrg_logo_r.png' alt='BDRG Logo'>
+    <img class='absolute w-32 m-2 ml-12 no-print' src='../assets/bdrg_logo_r.png' alt='BDRG Logo'>
 
     <div class='text-center no-print'>
-        Das Rassegeflügel Zuchtbuch. Schönheit und Leistung kombinieren.
+        Das Rassegeflügel Zuchtbuch. Schönheit und Leistung durch Wissen.
     </div>
 
     <NavigationBar />
@@ -42,8 +42,11 @@
 
         <div class='grow flex flex-col border rounded bg-white items-center p-4 print'>
 
-            <Route path='/' ><Home /></Route>
-            <Route path='/seite/:articleId' let:meta> <Article id={meta.params.articleId} /> </Route>
+            <Route path='/' > <Article id=1 /> /></Route>
+            <Route path='/zuchtbuch/*' let:meta>
+                <Route path='/'> <Article id=1 /> </Route>
+                <Route path='/:articleId'> <Article id={meta.params.articleId} /> </Route>
+            </Route>
             <Route path='/standard/*' > <Standard /> </Route>
             <Route path='/leistungen/*' > <Results /> </Route>
             <Route path='/obmann/*' > <Moderator /> </Route>

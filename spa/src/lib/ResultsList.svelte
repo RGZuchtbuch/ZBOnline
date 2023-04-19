@@ -99,18 +99,18 @@
                         <div class='th'>Paare</div>
                     </div>
                     {#if section.id === 5}
-                        <div class='flex w-40 gap-x-1'> <div class='th'></div> <div class='th'></div> <div class='th'></div> </div>
+                        <div class='flex w-40 gap-x-1'>| <div class='td'></div> <div class='td'></div> <div class='td'></div> </div>
                     {:else}
-                        <div class='flex w-40 gap-x-1'> <div class='th'>Hennen</div> <div class='th'>Eier/J</div> <div class='th'>Gewicht</div> </div>
+                        <div class='flex w-40 gap-x-1'>| <div class='td'>Hennen</div> <div class='td'>Eier/J</div> <div class='td'>Gewicht</div> </div>
                     {/if}
 
                     {#if section.id === 5}
-                        <div class='flex w-40 gap-x-1'> <div class='th'>Bruten</div> <div class='w-14'>Küken</div> <div class='w-14'>Kü/Pa</div> </div>
+                        <div class='flex w-40 gap-x-1'>| <div class='td'>Bruten</div> <div class='td'>Küken</div> <div class='td'>Kü/Pa</div> </div>
                     {:else}
-                        <div class='flex w-40 gap-x-1'> <div class='th'>Eier</div> <div class='w-14'>Befr.</div> <div class='w-14'>Küken</div> </div>
+                        <div class='flex w-40 gap-x-1'>| <div class='td'>Eier</div> <div class='td'>Befr.</div> <div class='td'>Küken</div> </div>
                     {/if}
 
-                    <div class='flex w-26 gap-x-1'> <div class='th'>Tiere</div> <div class='w-14'>Punkte</div> </div>
+                    <div class='flex w-26 gap-x-1'>| <div class='td'>Tiere</div> <div class='td'>Punkte</div> </div>
                 </div>
 
                 {#each subsection.breeds as breed, i}
@@ -118,8 +118,8 @@
                         <div class='w-56'>{breed.name}</div>
                         {#if section.id === 5 && breed.result}
                             <div class='flex w-28 gap-x-1'> <div class='td'>{dec( breed.result.breeders )}</div> <div class='td'>{dec( breed.result.pairs )}</div> </div>
-                            <div class='flex w-40 gap-x-1'> <div class='td'></div> <div class='td'></div> <div class='td'></div> </div>
-                            <div class='flex w-40 gap-x-1'> <div class='td'>{dec( breed.result.broods )}</div> <div class='td'>{pct( breed.result.broodHatched, breed.result.broodEggs, 1 ) }</div> <div class='td'>{dec( breed.result.broodResult, 1 )}</div> </div>
+                            <div class='flex w-40 gap-x-1'> <div class='td'></div> <div class='w-14'></div> <div class='td'></div> </div>
+                            <div class='flex w-40 gap-x-1'> <div class='td'>{dec( breed.result.broods )}</div>  <div class='td'>{dec( breed.result.broodHatched ) }</div>  <div class='td'>{dec( breed.result.broodResult, 1 )}</div> </div>
                             <div class='flex w-28 gap-x-1'> <div class='td'>{dec( breed.result.showCount )}</div> <div class='td'>{dec( breed.result.showScore, 1 )}</div> </div>
                         {/if}
                     </div>
@@ -151,7 +151,7 @@
                     </div>
                     <div class='flex w-40 gap-x-1'>
                         <div class='td'>{dec( section.total.broodEggs ? section.total.broodEggs/2 : null )}</div>
-                        <div class='td'>{pct( section.total.broodHatched, section.total.broodEggs, 1 ) }</div>
+                        <div class='td'>{dec( section.total.broodHatched ) }</div>
                         <div class='td'>{dec( section.total.broodResult, 1 )}</div>
                     </div>
                     <div class='flex w-28 gap-x-1'>

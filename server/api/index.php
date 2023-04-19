@@ -14,7 +14,8 @@ require_once './vendor/autoload.php'; // require __DIR__.'/vendor/autoload.php';
 
 
 
-//ob_start('ob_gzhandler'); // needs check if header has Accept-Encoding: gzip
+ob_start('ob_gzhandler'); // needs check if header has Accept-Encoding: gzip
+
 $app = AppFactory::create();
 
 $app->addRoutingMiddleware();
@@ -38,4 +39,4 @@ App\Router\Router::register( $app );
 
 $app->run();
 
-//ob_end_flush();
+ob_end_flush(); // for zip

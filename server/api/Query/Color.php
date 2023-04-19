@@ -17,8 +17,8 @@ class Color extends Query
     public static function get( int $id ) : ? array {
         $args = get_defined_vars();
         $stmt = Query::prepare('
-            SELECT *
-            FROM breed
+            SELECT id, name, breedId, aoc, info
+            FROM color
             WHERE id=:id
         ');
         return Query::select($stmt, $args);
@@ -40,7 +40,7 @@ class Color extends Query
 
     public static function all() : array {
         $stmt = Query::prepare('
-            SELECT *
+            SELECT id, name, breedId, aoc
             FROM color
             ORDER BY name;
         ');

@@ -11,24 +11,25 @@
     export let error = min+'..'+max;
     export let required = false;
     export let invalid = false;
+    export let validator = null;
 
     let classname = '';
     export { classname as class }
 
-    validate( value, min, max );
 
     let on = {
         focus: () => {},
         blur: () => {},
     }
 
-    $: validate( value, min, max );
 
     function validate( value, min, max ) { // using component value
         if( ! readonly ) {
             invalid = !((value >= min && value <= max) || (!required && value == null));
         }
     }
+
+    $: validate( value, min, max, required );
 </script>
 
 <div class='input {classname} flex flex-col gap-0'>

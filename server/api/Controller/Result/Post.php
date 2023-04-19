@@ -21,11 +21,55 @@ class Post extends Controller
     public function process() : array
     {
         $result = $this->data;
+
+        if( $result['breeders'] == null ) { // delete
+            if( $result['id'] != null ) { // if exists
+                Query\Result::del( $result['id'] );
+            }
+            return ['id' => null];
+        }
+
+        if( $result['id'] != null && $result['breeders'] != null ) { // set
+            if( Query\Result::set( // change
+                $result['id'],
+                $result['reportId'], $result['districtId'], $result['year'], $result['group'],
+                $result['breedId'], $result['colorId'],
+                $result['breeders'], $result['pairs'],
+                $result['layDames'], $result['layEggs'], $result['layWeight'],
+                $result['broodEggs'], $result['broodFertile'], $result['broodHatched'],
+                $result['showCount'], $result['showScore'], $this->requester[ 'id' ]
+            ) ) {
+                return [ 'id' => $result['id'] ];
+            }
+        }
+
+        if( $result['id'] == null && $result['breeders'] != null ) { // new
+            $id = Query\Result::new(
+                $result['reportId'], $result['districtId'], $result['year'], $result['group'],
+                $result['breedId'], $result['colorId'],
+                $result['breeders'], $result['pairs'],
+                $result['layDames'], $result['layEggs'], $result['layWeight'],
+                $result['broodEggs'], $result['broodFertile'], $result['broodHatched'],
+                $result['showCount'], $result['showScore'], $this->requester[ 'id' ]
+            );
+            if( $id != null ) {
+                return ['id' => $id];
+            }
+        }
+        // if nothing worked
+        throw new HttpInternalServerErrorException( $this->request, "Query result\Post failed" );
+    }
+
+
+
+    public function oldprocess() : array
+    {
+        $result = $this->data;
         $success = false;
-        if( $this->isCleared( $result ) ) {
+        if( $result['id'] != null && $result['breeders'] == null ) { // existing but breeders null, then delete
             $success = Query\Result::del( $result['id'] );
             $result['id'] = null; // signals deleted
-        } else if( $result['id'] == null ) {
+        } else if( $result['id'] == null && $result['breeders'] != null ) { // add
             $id = Query\Result::new(
                 $result['reportId'], $result['districtId'], $result['year'], $result['group'],
                 $result['breedId'], $result['colorId'],
@@ -39,7 +83,7 @@ class Post extends Controller
                 $success = true;
             }
         } else {
-            $success = Query\Result::set(
+            $success = Query\Result::set( // change
                 $result['id'],
                 $result['reportId'], $result['districtId'], $result['year'], $result['group'],
                 $result['breedId'], $result['colorId'],
@@ -55,8 +99,6 @@ class Post extends Controller
         throw new HttpInternalServerErrorException( $this->request, "Query result\Post failed" );
     }
 
-    // is no relevant content then delete the result ( is id != null )
-    private function isCleared( array $result ) {
-        return $result['breeders'] === null; // no breeders means empty
-    }
+
+
 }

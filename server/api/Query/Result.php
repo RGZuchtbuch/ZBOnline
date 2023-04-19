@@ -30,6 +30,8 @@ class Result extends Query
         ' );
         return Query::insert( $stmt, $args );
     }
+
+
     public static function set(
         int $id, ? int $reportId, int $districtId, int $year, string $group,
         int $breedId, ? int $colorId,
@@ -58,7 +60,9 @@ class Result extends Query
         return Query::delete( $stmt, $args );
     }
 
-    // for view page
+
+
+    // for results page
     public static function districtsForColor( $year, $colorId ) {
         $args = get_defined_vars();
         $stmt = Query::prepare( " 
@@ -77,7 +81,9 @@ class Result extends Query
                 
                 CAST( SUM( broodEggs ) AS UNSIGNED) AS broodEggs, 
                 CAST( SUM( broodFertile ) AS UNSIGNED) AS broodFertile, 
-                CAST( SUM( broodHatched ) AS UNSIGNED) AS broodHatched,
+                CAST( SUM( broodHatched ) AS UNSIGNED) AS broodHatched, 
+                
+                
                 
                 CAST( SUM( showCount ) AS UNSIGNED) AS showCount, 
 #                SUM( IF( showScore, pairs * showScore, NULL ) ) / SUM( IF( showScore, pairs, NULL ) ) AS showScore

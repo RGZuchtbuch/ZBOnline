@@ -25,7 +25,7 @@ const settings = {
         groups: ['I', 'II', 'III'], // for selects
         sections: [ // for selects
             {id: 3, name: 'Groß & Wassergeflügel'},
-            {id: 11, name: ' → Hühner (Groß)'}, { id: 12, name: ' → Zwerghühner' }, {id: 13, name: ' → Wachteln'}, {
+            {id: 11, name: 'Hühner (Groß)'}, { id: 12, name: 'Zwerghühner' }, {id: 13, name: 'Wachteln'}, {
             id: 5, name: 'Tauben'},
             {id: 6, name: 'Ziergeflügel'}
         ],

@@ -7,12 +7,23 @@
     console.log( 'Router', $router );
 </script>
 
-<div class='w-48 mt-8 border rounded flex flex-col no-print'>
+<div class='w-64 mt-32 p-4 border rounded flex flex-col no-print'>
+    {#if $user}
+        <h3>Hallo {$user.firstname}</h3>
+    {:else}
+        <h3>Hallo Besucher</h3>
+    {/if}
+    <hr>
+    <Route path='/zuchtbuch/*'>
+        <h4>Das BDRG Zuchtbuch ←</h4>
+        <p>In bearbeitung !</p>
+    </Route>
+    <Route path='/standard/*'>
+        <h4>BDRG Rassestandard ←</h4>
+        <p>In bearbeitung !</p>
+    </Route>
     <Route path='/leistungen/*'>
-        <h3>Leistungen</h3>
-        <ul class='list-inside list-disc'>
-            <li> <a href='/leistungen/'>Grafiken</a> </li>
-        </ul>
+        <h4>Zuchtleistungen ←</h4>
     </Route>
 
     {#if $user }
