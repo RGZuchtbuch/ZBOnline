@@ -4,6 +4,8 @@
 
     import {meta, router} from 'tinro';
 
+    import Comment from './common/Comment.svelte';
+
     export let results = [];
 
     const route = meta();
@@ -74,10 +76,12 @@
 <div class='w-256'>
     {#if results}
         {#each results.sections as section}
-            <h2 class='p-2 bg-header text-center text-xl'>Sparte {section.name}</h2>
 
-            <div class='flex flex-row px-2 gap-x-4 text-center font-bold'>
-                <div class='w-56'></div>
+            <Comment>TOP HEADERS</Comment>
+
+            <h2 class='p-2 bg-header text-center text-xl'>Sparte {section.name}</h2>
+            <div class='flex flex-row px-2 gap-x-1 justify-evenly text-center font-bold'>
+                <div class='w-48'></div>
                 <div class='w-28 border-b'>Zucht</div>
                 {#if section.id === 5}
                     <div class='w-40 border-b'> x </div>
@@ -92,92 +96,83 @@
                 <div class='flex flex-row bg-gray-300 px-2 gap-x-4 font-bold text-xl text-left'>
                     {subsection.name}
                 </div>
-                <div class='flex flex-row bg-gray-300 px-2 gap-x-4 text-center text-xs'>
+
+
+                <Comment>SUB HEADERS</Comment>
+                <div class='flex flex-row bg-gray-300 px-2 gap-x-1 justify-evenly text-xs'>
                     <div class='w-56 text-left'>Rasse & Farbe</div>
-                    <div class='flex w-28 gap-x-1'>
-                        <div class='th'>Zuchten</div>
-                        <div class='th'>Paare</div>
-                    </div>
+                    <div class='td'>Zuchten</div><div class='td'>Paare</div> <div>|</div>
                     {#if section.id === 5}
-                        <div class='flex w-40 gap-x-1'>| <div class='td'></div> <div class='td'></div> <div class='td'></div> </div>
+                        <div class='td'></div> <div class='td'></div> <div class='td'></div> <div class='w-4 text-center'> | </div>
+                        <div class='td'></div> <div class='td'>Küken</div> <div class='td'>Kü/Pa</div> <div> | </div>
                     {:else}
-                        <div class='flex w-40 gap-x-1'>| <div class='td'>Hennen</div> <div class='td'>Eier/J</div> <div class='td'>Gewicht</div> </div>
+                        <div class='td'>Hennen</div> <div class='td'>Eier/J</div> <div class='td'>Gewicht</div> <div> | </div>
+                        <div class='td'>Eier</div> <div class='td'>Befr.</div> <div class='td'>Küken</div> <div> | </div>
                     {/if}
-
-                    {#if section.id === 5}
-                        <div class='flex w-40 gap-x-1'>| <div class='td'>Bruten</div> <div class='td'>Küken</div> <div class='td'>Kü/Pa</div> </div>
-                    {:else}
-                        <div class='flex w-40 gap-x-1'>| <div class='td'>Eier</div> <div class='td'>Befr.</div> <div class='td'>Küken</div> </div>
-                    {/if}
-
-                    <div class='flex w-26 gap-x-1'>| <div class='td'>Tiere</div> <div class='td'>Punkte</div> </div>
+                    <div class='td'>Tiere</div> <div class='td'>Punkte</div>
                 </div>
 
+                <Comment>BREEDS, RSEULTS AND COLOR RESULTS</Comment>
                 {#each subsection.breeds as breed, i}
-                    <div class='flex flex-row mt-1 px-2 gap-x-4 bg-gray-100'>
-                        <div class='w-56'>{breed.name}</div>
+                    <div class='flex flex-row mt-1 px-2 gap-x-1 bg-gray-100 justify-evenly text-sm'>
+                        <div class='w-56 text-base'>{breed.name}</div>
                         {#if section.id === 5 && breed.result}
-                            <div class='flex w-28 gap-x-1'> <div class='td'>{dec( breed.result.breeders )}</div> <div class='td'>{dec( breed.result.pairs )}</div> </div>
-                            <div class='flex w-40 gap-x-1'> <div class='td'></div> <div class='w-14'></div> <div class='td'></div> </div>
-                            <div class='flex w-40 gap-x-1'> <div class='td'>{dec( breed.result.broods )}</div>  <div class='td'>{dec( breed.result.broodHatched ) }</div>  <div class='td'>{dec( breed.result.broodResult, 1 )}</div> </div>
-                            <div class='flex w-28 gap-x-1'> <div class='td'>{dec( breed.result.showCount )}</div> <div class='td'>{dec( breed.result.showScore, 1 )}</div> </div>
+                            <div class='td'>{dec( breed.result.breeders )}</div> <div class='td'>{dec( breed.result.pairs )}</div>
+                            <div class='w-4'></div>
+                            <div class='td'></div> <div class='td'></div> <div class='td'></div>
+                            <div class='w-4'></div>
+                            <div class='td'></div>  <div class='td'>{dec( breed.result.broodHatched ) }</div>  <div class='td'>{dec( breed.result.broodResult, 1 )}</div>
+                            <div class='w-4'></div>
+                            <div class='td'>{dec( breed.result.showCount )}</div> <div class='td'>{dec( breed.result.showScore, 1 )}</div>
+                        {:else}
+                            <div class='grow'></div>
+
                         {/if}
                     </div>
                     {#each breed.colors as color}
                         {#if section.id !== 5 && color.result}
-                            <div class='flex flex-row px-2 gap-x-4 print-no-break text-sm'>
+                            <div class='flex flex-row px-2 gap-x-1 print-no-break justify-evenly text-sm'>
                                 <div class='w-56 pl-4'>&#10551; {color.name}</div>
-                                <div class='flex w-28 gap-x-1'> <div class='td'>{dec( color.result.breeders )}</div> <div class='td'>{dec( color.result.pairs )}</div> </div>
-                                <div class='flex w-40 gap-x-1'> <div class='td'>{dec( color.result.layDames )}</div> <div class='td'>{dec( color.result.layEggs )}</div> <div class='td'>{dec( color.result.layWeight, 1 )}</div> </div>
-                                <div class='flex w-40 gap-x-1'> <div class='td'>{dec( color.result.broodEggs )}</div> <div class='td'>{pct( color.result.broodFertile, color.result.broodEggs )}</div> <div class='td'>{pct( color.result.broodHatched , color.result.broodEggs )}</div> </div>
-                                <div class='flex w-28 gap-x-1'> <div class='td'>{dec( color.result.showCount )}</div> <div class='td'>{dec( color.result.showScore, 1 )}</div> </div>
+                                <div class='td'>{dec( color.result.breeders )}</div> <div class='td'>{dec( color.result.pairs )}</div>
+                                <div class='w-4'></div>
+                                <div class='td'>{dec( color.result.layDames )}</div> <div class='td'>{dec( color.result.layEggs )}</div> <div class='td'>{dec( color.result.layWeight, 1 )}</div>
+                                <div class='w-4'></div>
+                                <div class='td'>{dec( color.result.broodEggs )}</div> <div class='td'>{pct( color.result.broodFertile, color.result.broodEggs )}</div> <div class='td'>{pct( color.result.broodHatched , color.result.broodEggs )}</div>
+                                <div class='ts'></div>
+                                <div class='td'>{dec( color.result.showCount )}</div> <div class='td'>{dec( color.result.showScore, 1 )}</div>
                             </div>
                         {/if}
                     {/each}
                 {/each}
             {/each}
 
-            <div class='flex flex-row bg-gray-300  px-2 gap-x-4 font-bold text-sm italic'>
+
+            <Comment>TOTAL PER SECTION</Comment>
+
+            <div class='flex flex-row bg-gray-300 px-2 gap-x-1 justify-evenly font-bold text-sm italic'>
                 <div class='w-56'>Gesamt {section.name}</div>
+
+                <div class='td'>{dec( section.total.breeders )}</div>
+                <div class='td'>{dec( section.total.pairs )}</div>
+                <div class='ts'></div>
                 {#if section.id === 5 }
-                    <div class='flex w-28 gap-x-1'>
-                        <div class='td'>{dec( section.total.breeders )}</div>
-                        <div class='td'>{dec( section.total.pairs )}</div>
-                    </div>
-                    <div class='flex w-40 gap-x-1'>
-                        <div class='td'></div>
-                        <div class='td'></div>
-                        <div class='td'></div>
-                    </div>
-                    <div class='flex w-40 gap-x-1'>
-                        <div class='td'>{dec( section.total.broodEggs ? section.total.broodEggs/2 : null )}</div>
-                        <div class='td'>{dec( section.total.broodHatched ) }</div>
-                        <div class='td'>{dec( section.total.broodResult, 1 )}</div>
-                    </div>
-                    <div class='flex w-28 gap-x-1'>
-                        <div class='td'>{dec( section.total.showCount )}</div>
-                        <div class='td'>{dec( section.total.showScore, 1 )}</div>
-                    </div>
-                {:else}
-                    <div class='flex w-28 gap-x-1'>
-                        <div class='td'>{dec( section.total.breeders )}</div>
-                        <div class='td'>{dec( section.total.pairs )}</div>
-                    </div>
-                    <div class='flex w-40 gap-x-1'>
-                        <div class='td'>{dec( section.total.layDames )}</div>
-                        <div class='td'>{dec( section.total.layEggs )}</div>
-                        <div class='td'>{dec( section.total.layWeight, 1 )}</div>
-                    </div>
-                    <div class='flex w-40 gap-x-1'>
-                        <div class='td'>{dec( section.total.broodEggs )}</div>
-                        <div class='td'>{pct( section.total.broodFertile, section.total.broodEggs )}</div>
-                        <div class='td'>{pct( section.total.broodHatched , section.total.broodEggs )}</div>
-                    </div>
-                    <div class='flex w-28 gap-x-1'>
-                        <div class='td'>{dec( section.total.showCount )}</div>
-                        <div class='td'>{dec( section.total.showScore, 1 )}</div>
-                    </div>
+                    <div class='td'>.</div> <div class='td'>.</div> <div class='td'>.</div>
+                    <div class='ts'></div>
+                    <div class='td'>.</div>
+                    <div class='td'>{dec( section.total.broodHatched ) }</div>
+                    <div class='td'>{dec( section.total.broodResult, 1 )}</div>
+               {:else}
+                    <div class='td'>{dec( section.total.layDames )}</div>
+                    <div class='td'>{dec( section.total.layEggs )}</div>
+                    <div class='td'>{dec( section.total.layWeight, 1 )}</div>
+                    <div class='ts'></div>
+                    <div class='td'>{dec( section.total.broodEggs )}</div>
+                    <div class='td'>{pct( section.total.broodFertile, section.total.broodEggs )}</div>
+                    <div class='td'>{pct( section.total.broodHatched , section.total.broodEggs )}</div>
                 {/if}
+                <div class='ts'></div>
+                <div class='td'>{dec( section.total.showCount )}</div>
+                <div class='td'>{dec( section.total.showScore, 1 )}</div>
             </div>
             <div class='print-break h-4'></div>
         {/each}
@@ -191,9 +186,12 @@
 
 <style>
     .th {
-        @apply w-12 border-b border-gray-200 px-1 text-center;
+        @apply w-12 border-b border-gray-300 px-1 text-center;
     }
     .td {
         @apply w-12 border-b border-gray-200 px-1 text-right;
+    }
+    .ts {
+        @apply w-4 text-center;
     }
 </style>

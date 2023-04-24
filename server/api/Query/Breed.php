@@ -13,7 +13,7 @@ class Breed extends Query
         INSERT INTO breed ( name, sectionId, broodGroup, lay, layWeight, sireRing, dameRing, sireWeight, dameWeight, info, modifierId ) 
             VALUES ( :name, :sectionId, :broodGroup, :lay, :layWeight, :sireRing, :dameRing, :sireWeight, :dameWeight, :info, :modifierId )
         ' );
-        return Query::insert( $stmt, $args );
+        return Query::insert( $stmt, $args ); // returns id
     }
 
     public static function get( int $id ) : ? array
@@ -55,7 +55,7 @@ class Breed extends Query
     public static function colors( int $id ) : array {
         $args = get_defined_vars();
         $stmt = Query::prepare('
-            SELECT id, name, breedId, info
+            SELECT id, name, breedId
             FROM color
             WHERE breedId=:id
             ORDER BY name
