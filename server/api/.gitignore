@@ -3,6 +3,7 @@
 composer.lock
 
 # we want no secrets in git
+config
 config/config.php
 
 /old/

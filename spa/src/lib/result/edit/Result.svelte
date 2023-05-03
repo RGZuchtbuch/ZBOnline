@@ -6,20 +6,15 @@
     export let result = null;
     export let saveCount = 0;
 
-    let changed = false;
-
-    let showCountValid = true;
-    let showScoreValid = true;
-
     let invalids = { // hold keys->true/false for validity per field
     }
 
     function onFormChange() {
-        if( ! changed ) {
-            changed = true;
+        if( ! result.changed ) {
+            result.changed = true; // use result.changed instead of result to keep changed after open/close/open of breed
             saveCount++;
         }
-
+        // VALIDATE ALL
         invalids.breeders     = result.breeders !== null && ( result.breeders < 1 || result.breeders > 99999 );
         invalids.pairs        = result.pairs !== null && ( result.pairs < 1 || result.pairs > 99999 );
 
@@ -47,12 +42,12 @@
         }
         invalids = invalids;
         console.log( 'OnFormChange', invalids.form );
-
     }
 
     function onSave() {
         console.log('onSave' );
-        changed = false; // asap
+//        changed = false; // asap
+        result.changed = false;
         saveCount--;
 
         api.result.post( result ).then( ( response ) => {
@@ -113,7 +108,7 @@
     <div class='w-2'></div>
 
 
-    {#if changed }
+    {#if result.changed }
         {#if ! result.breeders }
             <input class='bg-yellow-200 px-2 cursor-pointer' type='button' value='&#10006;' title='Löschen' on:click={onDelete}>
         {:else if invalids.form }

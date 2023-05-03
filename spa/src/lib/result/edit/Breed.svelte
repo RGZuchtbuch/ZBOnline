@@ -18,10 +18,14 @@
         if( open ) {
             open = false;
         } else {
-            api.district.results.breed.get( districtId, sectionId, breed.id, year, group ).then( response => {
-                results = response.results;
-                open = true;
-            })
+            if( results.length === 0 ) { // only if not already fetched
+                api.district.results.breed.get( districtId, sectionId, breed.id, year, group ).then( response => {
+                    results = response.results;
+                })
+            } else {
+                results = results;
+            }
+            open = true;
         }
         console.log( 'Open', open );
 
