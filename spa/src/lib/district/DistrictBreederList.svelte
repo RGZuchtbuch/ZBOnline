@@ -7,10 +7,10 @@
     import { user } from '../../js/store.js'
 
     import BreederList from '../breeder/BreederList.svelte';
-    import Button from '../input/Button.svelte';
-    import Date from '../input/Date.svelte';
-    import Select from '../input/Select.svelte';
-    import Text from '../input/Text.svelte';
+    import Button from '../common/input/Button.svelte';
+    import Date from '../common/input/Date.svelte';
+    import Select from '../common/input/Select.svelte';
+    import Text from '../common/input/Text.svelte';
 
     export let district = null;
 

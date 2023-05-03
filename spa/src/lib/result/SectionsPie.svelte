@@ -6,9 +6,9 @@
 
     export let districtId = null;
     export let year = null;
-    export let sectionId = null;
-    export let breedId = null;
-    export let colorId = null;
+//    export let sectionId = null;
+    //export let breedId = null;
+//    export let colorId = null;
     export let type = null;
 
     let canvasFraction = null; // ref to canvas element

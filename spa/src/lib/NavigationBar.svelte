@@ -23,6 +23,6 @@
 
 <style>
     a {
-        @apply px-2 border border-gray-600 rounded bg-button;
+        @apply px-2 border-b border-b-gray-600 font-semibold text-white;
     }
 </style>

@@ -5,7 +5,7 @@
     import { calcColor, gpsToPx, pct} from '../../js/util.js';
     import BdrgSVG from './BdrgSVG.svelte';
 
-    import Select from '../input/Select.svelte';
+    import Select from '../common/input/Select.svelte';
 //    import DistrictsMap from "./DistrictsMap.svelte";
 
     export let type;

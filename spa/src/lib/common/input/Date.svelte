@@ -1,5 +1,5 @@
 <script>
-    import { toDate, formatDate } from '../../js/util.js'
+    import { toDate, formatDate } from '../../../js/util.js'
 
     export let value;
     export let label = null;

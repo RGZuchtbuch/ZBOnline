@@ -3,11 +3,12 @@
     import api from '../../js/api.js';
 
     import Breeder from '../breeder/Breeder.svelte';
-    import Breeders from './Breeders.svelte';
+    import Breeders from './DistrictBreederList.svelte';
     import Reports from './Reports.svelte';
-    import Results from './ResultsList.svelte';
+    import ResultsList from './DistrictResultsList.svelte';
     import Report from './Report.svelte';
     import ResultsEdit from './ResultsEdit.svelte';
+    import ResultEdit from '../result/edit/Edit.svelte';
 
     export let id = null;
     let district = null;
@@ -40,6 +41,7 @@
     </Route>
 
     <Route path='/leistung/*' let:meta>
-        <Route path='/' let:meta> <Results districtId={ +meta.params.districtId } /> </Route>
-        <Route path='/edit' let:meta> <ResultsEdit districtId={ +meta.params.districtId }  /></Route>
-    </Route>{/if}
+        <Route path='/' let:meta> <ResultsList districtId={ +meta.params.districtId } /> </Route>
+        <Route path='/edit' let:meta> <ResultEdit districtId={ +meta.params.districtId }  /></Route>
+    </Route>
+{/if}

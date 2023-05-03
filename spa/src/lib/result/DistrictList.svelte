@@ -3,15 +3,13 @@
     import {active, meta, router, Route} from 'tinro';
     import api from '../../js/api.js';
     import { user } from '../../js/store.js'
-    import ResultsList from '../ResultsList.svelte';
-    import Range from '../input/Range.svelte';
-    import ScrollDiv from '../common/ScrollDiv.svelte';
+    import ResultList from './ResultsList.svelte';
 
     export let districtId = null;
+    export let year = null;
 //    export let moderator = null;
 
     let district = null;
-    let year = new Date().getFullYear();
     let results = null;
 
 
@@ -21,7 +19,6 @@
                 district = response.district;
             })
             api.district.results.get( districtId, year ).then( response => {
-                console.log( 'Results', response.results );
                 results = response.results;
             })
         }
@@ -36,16 +33,10 @@
 
 </script>
 
-{#if $user}
-    <h2 class='w-256 text-center'>Verband {#if district} {district.name} {/if} → Leistungen {year}</h2>
-    <Range class='w-228 px-8' label='Jahr' bind:value={year} min={STARTYEAR} max={new Date().getFullYear()} step={1} title='Schieben um das Jahr zu wählen'/>
-    <ScrollDiv>
-        <ResultsList class='' {results} />
-    </ScrollDiv>
-{:else}
-    NOT AUTORIZED
+{#if district && year }
+    <h2 class='text-center'>Verband {#if district} {district.name} {/if} → Leistungen {year}</h2>
+    <ResultList {results} />
 {/if}
-
 
 
 <style>

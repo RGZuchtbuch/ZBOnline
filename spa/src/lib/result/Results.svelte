@@ -3,13 +3,13 @@
     import api from '../../js/api.js';
     import {dec} from '../../js/util.js';
     import { calcColor, pct } from '../../js/util.js';
-    import Select from '../input/Select.svelte';
-    import Button from "../input/Button.svelte";
+    import Select from '../common/input/Select.svelte';
+    import Button from "../common/input/Button.svelte";
     import DistrictsPie from './DistrictsPie.svelte';
     import SectionsPie from './SectionsPie.svelte';
     import DistrictsMap from './DistrictsMap.svelte';
     import TimeLine from './TimeLine.svelte';
-    import ResultList from './ResultList.svelte';
+    import DistrictList from './DistrictList.svelte';
     import ScrollDiv from '../common/ScrollDiv.svelte';
 
     const route = meta();
@@ -179,56 +179,59 @@
 
 </script>
 
+
+
+
 <Route path='/*' let:meta>
-    <ScrollDiv>
-        <div class='flex-col w-256 m-2 bg-header border rounded px-4 items-center gap-2 no-print'>
-            <div class='flex flex-row gap-x-2'>
-                <div class='w-8 font-semibold' >Filter</div>:
-                <Select class='w-52' label='Sparte' value={sectionId} on:change={onSection}>
-                    {#each sections as section}
-                        <option value={section.id} selected={section.id === sectionId}> {section.name} </option>
-                    {/each}
-                </Select>
+    <h2 class='w-256 border border-gray-400 rounded-t bg-header text-white text-center text-xl print'>Leistungen</h2>
+    <div class='w-256 bg-gray-100 overflow-y-scroll border rounded-b border-t-0 border-gray-400 scrollbar'>
+        <div class='flex flex-row bg-header px-4 gap-x-2'>
+            <div class='w-8 font-semibold' >Filter</div>:
+            <Select class='w-52' label='Sparte' value={sectionId} on:change={onSection}>
+                {#each sections as section}
+                    <option value={section.id} selected={section.id === sectionId}> {section.name} </option>
+                {/each}
+            </Select>
 
-                <Select class='w-64' label={'Rasse'} value={breedId} on:change={onBreed}>
-                    <option value={null} title='Alle Rassen in der gewählten Sparte'> * </option>
-                    {#each breeds as breed}
-                        <option value={breed.id} selected={breed.id === breedId}> {breed.name} </option>
-                    {/each}
-                </Select>
+            <Select class='w-64' label={'Rasse'} value={breedId} on:change={onBreed}>
+                <option value={null} title='Alle Rassen in der gewählten Sparte'> * </option>
+                {#each breeds as breed}
+                    <option value={breed.id} selected={breed.id === breedId}> {breed.name} </option>
+                {/each}
+            </Select>
 
-                <Select class='w-60' label={'Farbe'} value={colorId} on:change={onColor}>
-                    <option value={null} title='Alle farben der gewählten Rasse'> * </option>
-                    {#each colors as color}
-                        <option value={color.id} selected={color.id === colorId}>{color.name}</option>
-                    {/each}
-                </Select>
-            </div>
-
-            <div class='flex flex-row gap-x-2'>
-                <div class='w-8 font-semibold' >Was</div>:
-                <Select class='w-52' label='Was sehen' value={typeId} on:change={onType}>
-                    {#each Object.values( types ) as type, i }
-                        <option value={ type.id } title={ type.tooltip }> { type.label }</option>
-                    {/each}
-                </Select>
-
-                <Select class='w-64' bind:value={districtId} label={'Landesverband'}>
-                    {#if rootDistrict }
-                        <option value={rootDistrict.id} selected={rootDistrict.id === districtId}>{rootDistrict.name}</option>
-                        {#each rootDistrict.children as district}
-                            <option value={district.id}  selected={district.id === districtId}>{district.name}</option>
-                        {/each}
-                    {/if}
-                </Select>
-
-                <Select class='w-32' bind:value={year} label='Jahr'>
-                    {#each years as option}
-                        <option value={option}>{option}</option>
-                    {/each}
-                </Select>
-            </div>
+            <Select class='w-60' label={'Farbe'} value={colorId} on:change={onColor}>
+                <option value={null} title='Alle farben der gewählten Rasse'> * </option>
+                {#each colors as color}
+                    <option value={color.id} selected={color.id === colorId}>{color.name}</option>
+                {/each}
+            </Select>
         </div>
+
+        <div class='flex flex-row bg-header px-4 gap-x-2'>
+            <div class='w-8 font-semibold' >Was</div>:
+            <Select class='w-52' label='Was sehen' value={typeId} on:change={onType}>
+                {#each Object.values( types ) as type, i }
+                    <option value={ type.id } title={ type.tooltip }> { type.label }</option>
+                {/each}
+            </Select>
+
+            <Select class='w-64' bind:value={districtId} label={'Landesverband'}>
+                {#if rootDistrict }
+                    <option value={rootDistrict.id} selected={rootDistrict.id === districtId}>{rootDistrict.name}</option>
+                    {#each rootDistrict.children as district}
+                        <option value={district.id}  selected={district.id === districtId}>{district.name}</option>
+                    {/each}
+                {/if}
+            </Select>
+
+            <Select class='w-32' bind:value={year} label='Jahr'>
+                {#each years as option}
+                    <option value={option}>{option}</option>
+                {/each}
+            </Select>
+        </div>
+
 
         {#if districts && districtId && year && sectionId}
             <h2 class='text-center' >Das Zuchtbuch : {types[typeId].label} für {districts[ districtId ].name} in {year}</h2>
@@ -246,11 +249,11 @@
 
             <div class='print-break h-4'></div>
 
-            <div class='m-2 border rounded'>
-                <ResultList districtId={districtId} year={year} />
+            <div class='border rounded'>
+                <DistrictList districtId={districtId} year={year} />
             </div>
         {/if}
-    </ScrollDiv>
+    </div>
 
 </Route>
 

@@ -5,13 +5,13 @@ namespace App\Query;
 use http\Exception\InvalidArgumentException;
 use Slim\Exception\HttpNotFoundException;
 
-class Article extends Query
+class Log extends Query
 {
-    public static function new( string $title, string $html, $modifierId ) : ? int {
+    public static function new( string $method, string $uri, ? string $query, ? string $body, ? int $requesterId ) : ? int {
         $args = get_defined_vars();
         $stmt = Query::prepare( '
-            INSERT INTO article ( title, `html`, modifierId )
-            VALUES (:title, :html, :modifierId )
+            INSERT INTO _log ( method, uri, query, body, modifierId )
+            VALUES ( :method, :uri, :query, :body, :requesterId )
         ' );
         return Query::insert( $stmt, $args ); // returns id
     }
@@ -24,7 +24,7 @@ class Article extends Query
             FROM article
             WHERE id=:id
         ');
-        return Query::select($stmt, $args);
+        return null; //Query::select($stmt, $args);
     }
 
 
@@ -35,7 +35,7 @@ class Article extends Query
             SET title=:title, html=:html, modifierId=:modifierId
             WHERE id=:id
         ' );
-        return Query::update( $stmt, $args );
+        return false; // Query::update( $stmt, $args );
     }
 
 
@@ -43,12 +43,11 @@ class Article extends Query
         return false;
     }
 
-    // for list, without html
     public static function getAll() : array {
         $stmt = Query::prepare('
-            SELECT id, title
-            FROM article
-            ORDER BY title
+            SELECT *
+            FROM _log
+            ORDER BY modified
         ');
         return Query::selectArray($stmt );
     }

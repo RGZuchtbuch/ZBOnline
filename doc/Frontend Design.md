@@ -30,3 +30,19 @@ optional
 * Ö Capital ö  
 * Ü Capital ü
 * ∅ average
+*   nbsp
+
+
+
+https://hookagency.com/blog/website-color-schemes-2020/ 
+# 5. Strong Contrast and Trustworthy
+* Left Blue: #1561ad
+* Right Blue- Muted: #1c77ac
+* Blue-Green: #1dbab4
+* Red-Orange: #fc5226
+
+# 15. Minty refreshed
+* Mint: #4cb69f
+* Touch of Grey: #f5f5f5
+* Deep purple: #201d3a – Not quite B&W+1 – Hint of purple in the corner of the photograph  
+Found at Dapper Ink by Joel Reid on Dribbble

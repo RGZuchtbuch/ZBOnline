@@ -3,9 +3,9 @@
     import api from '../../js/api.js';
 
     import District from '../district/District.svelte';
-    import Districts from './Districts.svelte';
-    import Pages from './Pages.svelte';
-    import Sections from './Sections.svelte';
+    import Districts from './DistrictsList.svelte';
+    import Articles from './ArticlesList.svelte';
+//    import Sections from './SectionsList.svelte';
     import Standard from '../standard/Standard.svelte';
 
     const route = meta();
@@ -25,13 +25,17 @@
 
 <Route path='/verband/*'>
 
-    <Route path='/'> <Districts on:select={onSelectDistrict}/> </Route>
+    <Route path='/'>
+        <Districts on:select={onSelectDistrict}/>
+    </Route>
 
     <Route path='/:districtId/*' let:meta>
         <District id={meta.params.districtId} />
     </Route>
 </Route>
 
-<Route path='/seite' /> <Pages></Pages>
+<Route path='/seite' >
+    <Articles />
+</Route>
 
 

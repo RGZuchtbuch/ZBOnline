@@ -20,6 +20,8 @@ class Post extends Controller
 
     public function process() : array
     {
+        Query\Cache::del( 'results' );
+
         $result = $this->data;
 
         if( $result['breeders'] == null ) { // delete

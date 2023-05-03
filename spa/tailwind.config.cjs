@@ -4,9 +4,9 @@ const config = {
   theme: {
     extend: {
       colors: {
-        'alert' : '#DB818A',
+        'alert' : '#fc5226',
         'button': '#4FDB6F',
-        'header': '#91DBA2',
+        'header': '#1dbab4',
       },
       spacing: {
         '128': '32rem',

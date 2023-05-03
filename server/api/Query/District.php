@@ -102,10 +102,10 @@ class District extends Query
      */
     public static function breedResult( int $districtId, int $breedId, int $year, string $group ) : array {
         $args = get_defined_vars();
-        $stmt = Query::prepare('
+        $stmt = Query::prepare("
             SELECT 
                    result.id, result.reportId, :districtId AS districtId, :year AS `year`, :group AS `group`,             
-                   breed.id AS breedId, null AS colorId, null AS name,  
+                   breed.id AS breedId, null AS colorId, 'Gesamte Farbenschläge' AS name,  
                    result.breeders, result.pairs,
                    result.layDames, result.layEggs, result.layWeight,
                    result.broodEggs, result.broodFertile, result.broodHatched,
@@ -116,7 +116,7 @@ class District extends Query
                 AND result.year = :year
                 AND result.group = :group  
             WHERE breed.id = :breedId
-        ');
+        ");
         return Query::selectArray( $stmt, $args );
     }
 
@@ -125,9 +125,9 @@ class District extends Query
      */
     public static function colorResults( int $districtId, int $breedId, int $year, string $group ) : array {
         $args = get_defined_vars();
-        $stmt = Query::prepare('
+        $stmt = Query::prepare("
             SELECT result.id, result.reportId, :districtId AS districtId, :year AS `year`, :group AS `group`,
-                   breed.id AS breedId, color.id AS colorId, color.name,  
+                   breed.id AS breedId, color.id AS colorId, color.name,
                    result.breeders, result.pairs,
                    result.layDames, result.layEggs, result.layWeight,
                    result.broodEggs, result.broodFertile, result.broodHatched,
@@ -140,7 +140,7 @@ class District extends Query
                 AND result.group = :group             
             WHERE breed.id = :breedId
             ORDER BY color.name 
-        ');
+        ");
         return Query::selectArray( $stmt, $args );
     }
 

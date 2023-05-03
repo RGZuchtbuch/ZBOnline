@@ -3,10 +3,10 @@
     import api from '../../js/api.js';
     import { dat, txt } from '../../js/util.js';
 
-    import Button from '../input/Button.svelte';
-    import DateInput from '../input/Date.svelte';
-    import Select from '../input/Select.svelte';
-    import Text from '../input/Text.svelte';
+    import Button from '../common/input/Button.svelte';
+    import DateInput from '../common/input/Date.svelte';
+    import Select from '../common/input/Select.svelte';
+    import Text from '../common/input/Text.svelte';
 
     export let breeder = null;
     export let showAll = false;

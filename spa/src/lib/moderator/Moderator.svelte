@@ -4,7 +4,7 @@
     import {user} from '../../js/store.js';
 
     import District from '../district/District.svelte';
-    import Districts from './Districts.svelte';
+    import Districts from './DistrictsList.svelte';
 
     const route = meta();
 

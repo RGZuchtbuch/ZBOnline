@@ -5,11 +5,11 @@
     import api from '../../js/api.js';
     import { newReport } from '../../js/template.js';
 
-    import InputDate   from '../input/Date.svelte';
-    import InputNumber from '../input/Number.svelte';
-    import InputText   from '../input/Text.svelte';
-    import InputRing from '../input/Ring.svelte';
-    import Select from '../input/Select.svelte';
+    import InputDate   from '../common/input/Date.svelte';
+    import InputNumber from '../common/input/Number.svelte';
+    import InputText   from '../common/input/Text.svelte';
+    import InputRing from '../common/input/Ring.svelte';
+    import Select from '../common/input/Select.svelte';
     import ReportBreed from '../report/Breed.svelte';
     import ReportBroods from '../report/Broods.svelte';
     import ReportLay from '../report/Lay.svelte';

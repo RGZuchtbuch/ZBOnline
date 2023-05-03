@@ -1,12 +1,12 @@
 <script>
     import { printPct } from '../../js/util.js'
 
-    import InputButton from '../input/Button.svelte';
-    import InputDate from '../input/Date.svelte';
-    import InputNumber from '../input/Number.svelte';
-    import InputRing from '../input/Ring.svelte';
-    import InputText from '../input/Text.svelte';
-    import Select from '../input/Select.svelte';
+    import InputButton from '../common/input/Button.svelte';
+    import InputDate from '../common/input/Date.svelte';
+    import InputNumber from '../common/input/Number.svelte';
+    import InputRing from '../common/input/Ring.svelte';
+    import InputText from '../common/input/Text.svelte';
+    import Select from '../common/input/Select.svelte';
 
     export let layer = true; // type of brood depends on this
     export let broods;

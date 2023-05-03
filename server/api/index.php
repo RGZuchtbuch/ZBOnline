@@ -12,8 +12,6 @@ header("Content-Type: application/json");
 require_once './config/config.php';
 require_once './vendor/autoload.php'; // require __DIR__.'/vendor/autoload.php';
 
-
-
 ob_start('ob_gzhandler'); // needs check if header has Accept-Encoding: gzip
 
 $app = AppFactory::create();
@@ -21,7 +19,7 @@ $app = AppFactory::create();
 $app->addRoutingMiddleware();
 $app->addErrorMiddleware(true, true, true );
 
-/*
+/* TODO does not work as replace for lines 7-10
 $app->add(function ($req, $res, $next) {
     $response = $next($req, $res);
     return $response
@@ -33,9 +31,6 @@ $app->add(function ($req, $res, $next) {
 $app->setBasePath("/api"); // as the api lives here... else not found.
 
 App\Router\Router::register( $app );
-
-
-
 
 $app->run();
 

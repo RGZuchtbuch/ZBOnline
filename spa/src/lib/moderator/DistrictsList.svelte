@@ -4,7 +4,7 @@
     import api from '../../js/api.js';
     import { user } from '../../js/store.js'
 
-    import DistrictRow from '../district/DistrictRow.svelte';
+    import DistrictRow from '../district/DistrictListRow.svelte';
 
     let district = null;
 

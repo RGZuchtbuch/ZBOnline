@@ -15,7 +15,9 @@ let token = getToken();
 export default {
 
     article: {
-        get: (id) => get('api/article/' + id),
+        get:    (id) => get('api/article/' + id),
+        getAll: () => get( 'api/articles' ),
+        post:   ( article ) => post( 'api/article', article ),
     },
 
 
@@ -124,20 +126,15 @@ export default {
             get: (districtId, year) => {
                 return get( 'api/district/'+districtId+'/results?year='+year );
             },
-            section: {// for edit breeds in section, closed
+            section: {// to edit section's breeds results
                 get: ( districtId, sectionId, year, group ) => {
                     return get( 'api/district/'+districtId+'/results?section='+sectionId+'&year='+year+'&group='+group );
                 }
             },
-            breed: { // for edit per color or breed as pigeon
+            breed: { // to edit breed's colors results
                 get: ( districtId, sectionId, breedId, year, group ) => {
                     return get( 'api/district/'+districtId+'/results?section='+sectionId+'&breed='+breedId+'&year='+year+'&group='+group );
                 },
- //               colors: {
- //                   get: ( districtId, breedId, year, group ) => {
- //                       return get( 'api/district/'+districtId+'/results?breed='+breedId+'&year='+year+'&group='+group );
- //                   },
- //               }
             }
         },
     },
@@ -239,7 +236,7 @@ export default {
     },
 
     standard: {
-        get: () => get( 'api/standard', 24 * 60 * 60 * 1000 ),
+        get: () => get( 'api/standard', 2500 ), //24 * 60 * 60 * 1000
     },
 
     trend: {

@@ -2,7 +2,7 @@
     import {createEventDispatcher, onMount} from 'svelte';
     import {active, meta, router, Route} from 'tinro';
     import { user } from '../../js/store.js'
-    import DistrictRow from '../district/DistrictRow.svelte';
+    import DistrictRow from '../district/DistrictListRow.svelte';
     import ScrollDiv from '../common/ScrollDiv.svelte'
     import api from '../../js/api.js';
 

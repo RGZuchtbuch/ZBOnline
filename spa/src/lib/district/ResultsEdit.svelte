@@ -1,9 +1,9 @@
 <script>
     import {router} from "tinro";
     import api from '../../js/api.js';
-    import Button from '../input/Button.svelte';
-    import InputNumber from '../input/Number.svelte';
-    import Select from '../input/Select.svelte';
+    import Button from '../common/input/Button.svelte';
+    import InputNumber from '../common/input/Number.svelte';
+    import Select from '../common/input/Select.svelte';
 
     export let districtId;
 
@@ -20,9 +20,6 @@
     let breeds = [];
 
     let changeCounter = 0; // counter for knowing if any still unsaved.
-
-
-
 
 
     function loadDistrict() {
@@ -57,9 +54,33 @@
                 : ( result.broodHatched===null || ( result.broodHatched >=0 && result.broodHatched<=(result.broodFertile===null ? result.broodEggs : result.broodFertile ) ) )
             ) &&
 
-            ( result.showCount==null     || ( result.showCount >0 && result.showCount <=999999 ) ) &&
+            ( result.showCount===null     || ( result.showCount >0 && result.showCount <=999999 ) ) &&
             ( result.showScore===null    || ( result.showCount >0 && result.showScore >=89 && result.showScore<=97 ) );
         return valid;
+    }
+
+    const validator = {
+        showCount: (result) => {
+            const valid =
+                (result.showCount === null && result.showScore === null) ||
+                (result.showCount > 0 && result.showCount < 999999);
+
+            console.log( 'Showcount valid', valid );
+            return valid;
+        }
+    }
+
+    const showCount = (result) => {
+        console.log('v');
+        return () => {
+            console.log('validate showcount');
+            const valid =
+                (result.showCount === null && result.showScore === null) ||
+                (result.showCount > 0 && result.showCount < 999999);
+
+            console.log('Showcount valid', valid);
+            return valid;
+        }
     }
 
     function onQuery( route ) {
@@ -107,6 +128,7 @@
                             breed.colors = response.results
                             breed.open = true;
                             breeds = breeds; // trigger
+                            breed = breed;
                         })
                 }
             }
@@ -117,7 +139,7 @@
             if( result.changed !== true ) {
                 changeCounter++
                 result.changed = true; // changing the data object here !
-                breeds = breeds; // trigger to redraw
+ //               breeds = breeds; // trigger to redraw
             }
         }
     }
@@ -143,7 +165,7 @@
             api.result.post( result ).then( ( response ) => {
                 result.id = response.id; // new id when inserted
                 changeCounter--;
-                breeds = breeds; // trigger
+//                breeds = breeds; // trigger
             } );
         }
     }
@@ -162,17 +184,18 @@
 
 <h2 class='w-256 text-center'>Zuchtbuch Leistungen {district ? district.name : '...'}</h2>
 <div class='w-256 justify-center flex flex-row mx-2 gap-x-4'>
-    <Select label="Sparte" bind:value={sectionId} on:change={onSection}>
-        <option value={null}></option>
-        {#each sections as section}
-            <option value={section.id}>{section.name}</option>
-        {/each}
-    </Select>
 
     <Select label="Jahr" bind:value={year} on:change={onYear}>
         <option value={null}></option>
         {#each years as year}
             <option value={year}>{year}</option>
+        {/each}
+    </Select>
+
+    <Select label="Sparte" bind:value={sectionId} on:change={onSection}>
+        <option value={null}></option>
+        {#each sections as section}
+            <option value={section.id}>{section.name}</option>
         {/each}
     </Select>
 
@@ -315,17 +338,19 @@
 
                                 <div class='w-2'></div>
 
-                                <InputNumber class='w-14' bind:value={result.showCount} min=1 max=99999 error='0..99999'/>
+                                <InputNumber class='w-14' bind:value={result.showCount} min=1 max=99999 error='0..99999' validator={showCount(result)}/>
                                 <InputNumber class='w-14' bind:value={result.showScore} min=89 max=97 step=0.1 error='89..97'/>
 
                                 <div class='w-2'></div>
                             {/if}
 
                             {#if result.changed }
-                                {#if isValid( result ) }
+                                {#if ! result.breeders }
+                                    <input class='bg-yellow-500 px-2 cursor-pointer' type='button' value='&#10006;' on:click={onSave(result)}>
+                                {:else if isValid( result ) }
                                     <Button class='bg-green-100 px-2 text-green-700' value='&#10004;' on:click={onSave(result)} />
                                 {:else}
-                                    <Button class='bg-red-100 px-2 text-red-700' value='&#10006;' alert={true}/>
+                                    <Button class='bg-red-100 px-2 text-red-700' value='-' alert={true}/>
                                 {/if}
                             {/if}
                         </form>

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Color;
+namespace App\Controller\Article;
 
 use App\Query;
 use App\Controller\Controller;
@@ -16,14 +16,12 @@ class Post extends Controller
     public function process() : array
     {
         $data = $this->data;
-        $id = $data[ 'id' ] ?? null;
+        $id = $data[ 'id' ] ?? null;// get it or null
         if( $id ) {
-            Query\Color::set( $id, $data['name'], $data['breedId'], $data['aoc'], $data['info'], $this->requester[ 'id' ] );
+            Query\Article::set( $id, $data['title'], $data['html'], $this->requester[ 'id' ] );
         } else {
-            $id = Query\Color::new( $data['name'], $data['breedId'], $data['aoc'], $data['info'], $this->requester[ 'id' ] );
+            $id = Query\Article::new( $data['title'], $data['html'], $this->requester[ 'id' ] );
         }
-        Query\Cache::del( 'standard' );
-        Query\Cache::del( 'results' );
         return ['id' => $id];
     }
 }

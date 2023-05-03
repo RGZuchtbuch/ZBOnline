@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Controller\User\Token;
+use App\Query;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -27,10 +28,26 @@ abstract class Controller
         $this->args = $args;
         $this->data = json_decode( $request->getBody(), true );
         $this->query = $request->getQueryParams();
+        $authorized = $this->authorized();
 
-        if( $this->authorized() ) {
-            $data = $this->process();
-            $response->getBody()->write( json_encode( $data, JSON_UNESCAPED_SLASHES ) ); // to avoid unneeded slashes like in url
+        // log
+        Query\Log::new(
+            $request->getMethod(),
+            $request->getUri()->getPath(),
+            $request->getUri()->getQuery(),
+            $request->getBody(),
+            $this->requester ? $this->requester['id'] : null
+        );
+
+        // start processing
+        if( $authorized ) {
+            $json = $this->getCache();
+            if( $json == NUll ) {
+                $data = $this->process();
+                $json = json_encode( $data, JSON_UNESCAPED_SLASHES );
+                $this->setCache( $json );
+            }
+            $response->getBody()->write( $json );
             return $response;
         } else {
             throw new \Slim\Exception\HttpUnauthorizedException( $request, 'Not Authorized');
@@ -38,6 +55,12 @@ abstract class Controller
     }
 
     public abstract function authorized() : bool;
+    public function getCache() : ? string {
+        return null;
+    }
+    public function setCache( ? string $json ) : ? bool {
+        return null;
+    }
     public abstract function process() : array;
 
 
@@ -50,7 +73,7 @@ abstract class Controller
                 return $payload[ 'user' ];
             }
         }
-        return null; // not credentials
+        return null; // no credentials
     }
 
     // get token from request

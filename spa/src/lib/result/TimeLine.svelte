@@ -2,7 +2,7 @@
 //    import { createEventDispatcher } from 'svelte';
     import api from "../../js/api.js";
     import { pct } from '../../js/util.js';
-    import { BarController, BarElement, CategoryScale, Chart, Colors, LinearScale, Title, Tooltip } from 'chart.js';
+    import { BarController, BarElement, CategoryScale, Chart, Colors, LinearScale, Tooltip } from 'chart.js';
 
     export let type = null;
     export let districtId = null;
@@ -107,6 +107,9 @@
                                         return label;
                                     }
                                 }
+                            },
+                            legend: {
+                                display: false,
                             }
                         },
                         scales: {
@@ -119,11 +122,15 @@
                             y: {
                                 reverse:true, // last to first year
                                 stacked:true,
-                            }
+                                onClick: ( event, elements ) => console.log( 'Click', elements )
+                            },
+
+
                         },
-                        onClick: ( event, element ) => {
-                            if( element && element.length > 0 ) {
-                                const label = labels[ element[0].index ];
+                        onClick: ( event, elements ) => {
+                            console.log( 'Click', event, elements );
+                            if( elements && elements.length > 0 ) {
+                                const label = labels[ elements[0].index ];
                                 year = Number( label );
                             }
                         }

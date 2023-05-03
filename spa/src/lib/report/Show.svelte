@@ -1,5 +1,5 @@
 <script>
-    import InputNumber from '../input/Number.svelte';
+    import InputNumber from '../common/input/Number.svelte';
 
     export let show;
     export let disabled;

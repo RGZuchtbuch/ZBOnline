@@ -1,5 +1,5 @@
 <script>
-    import Article from './Article.svelte';
+    import Article from './article/Article.svelte';
 
 
 </script>

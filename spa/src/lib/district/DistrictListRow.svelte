@@ -5,10 +5,10 @@
     import api from '../../js/api.js';
     import {user} from '../../js/store.js';
     import {txt} from '../../js/util.js';
-    import Button from '../input/Button.svelte';
-    import Number from '../input/Number.svelte';
-    import Select from '../input/Select.svelte';
-    import Text from '../input/Text.svelte';
+    import Button from '../common/input/Button.svelte';
+    import Number from '../common/input/Number.svelte';
+    import Select from '../common/input/Select.svelte';
+    import Text from '../common/input/Text.svelte';
 
     export let district = null;
     export let open = false;

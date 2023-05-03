@@ -4,10 +4,10 @@
     import api from '../../js/api.js';
     import { txt } from '../../js/util.js';
     import { user } from '../../js/store.js'
-    import BreederRow from './BreederRow.svelte';
-    import Button from '../input/Button.svelte';
-    import Select from '../input/Select.svelte';
-    import Text from '../input/Text.svelte';
+    import BreederRow from './BreederListRow.svelte';
+    import Button from '../common/input/Button.svelte';
+    import Select from '../common/input/Select.svelte';
+    import Text from '../common/input/Text.svelte';
 
 
     export let breeders = null;

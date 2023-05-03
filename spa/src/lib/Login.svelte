@@ -2,11 +2,11 @@
     import {meta, router} from 'tinro';
     import api from "../js/api.js";
     import { user } from '../js/store.js'
-    import Button from './input/Button.svelte';
-    import EmailInput from './input/Email.svelte';
+    import Button from './common/input/Button.svelte';
+    import EmailInput from './common/input/Email.svelte';
     import Modal from './Modal.svelte';
-    import PasswordInput from './input/Password.svelte';
-    import Submit from './input/Submit.svelte';
+    import PasswordInput from './common/input/Password.svelte';
+    import Submit from './common/input/Submit.svelte';
 
     let email = 'eelco.jannink@gmail.com';
     let password = '';
@@ -101,7 +101,5 @@
     h2 {
         @apply rounded;
     }
-    .invalid {
-        @apply bg-red-300;
-    }
+
 </style>

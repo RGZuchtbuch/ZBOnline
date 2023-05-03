@@ -5,13 +5,13 @@
     import api from './js/api.js';
     import { standard, user } from './js/store.js'
 
-    import Article from './lib/Article.svelte';
+    import Article from './lib/article/Article.svelte';
     import NavigationBar from './lib/NavigationBar.svelte';
     import Menu from './lib/Menu.svelte';
     import Home from './lib/Home.svelte';
     import Admin from './lib/admin/Admin.svelte';
     import Moderator from './lib/moderator/Moderator.svelte';
-    import Results from './lib/results/Results.svelte';
+    import Results from './lib/result/Results.svelte';
     import Standard from './lib/standard/Standard.svelte';
 
     import Login from './lib/Login.svelte';
@@ -78,9 +78,6 @@
 </div>
 
 <style>
-    :root {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
-        Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    }
+
 
 </style>

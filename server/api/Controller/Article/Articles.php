@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Controller\Color;
+namespace App\Controller\Article;
 
 use App\Query;
 use App\Controller\Controller;
 use http\Exception\InvalidArgumentException;
 use Slim\Exception\HttpNotFoundException;
 
-class Get extends Controller
+class Articles extends Controller
 {
     public function authorized(): bool
     {
@@ -16,9 +16,8 @@ class Get extends Controller
 
     public function process() : array
     {
-        $id = $this->args['id'];
-        $color = Query\Color::get( $id );
-        return [ 'color'=>$color ];
+
+        $articles = Query\Article::getAll();
+        return [ 'articles' => $articles ];
     }
 }
-

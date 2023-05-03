@@ -20,7 +20,7 @@ class Breed extends Query
     {
         $args = get_defined_vars();
         $stmt = Query::prepare('
-            SELECT name, sectionId, broodGroup, lay, layWeight, sireRing, dameRing, sireWeight, dameWeight, info
+            SELECT id, name, sectionId, broodGroup, lay, layWeight, sireRing, dameRing, sireWeight, dameWeight, info
             FROM breed
             WHERE id=:id
         ');

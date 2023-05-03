@@ -60,7 +60,7 @@
             <h3>Admin</h3>
             <a href='/admin/verband'>→ Verbände</a>
             <a href='/admin/standard'>→ Standard</a>
-            <a href='/admin/seiten'>→ Seiten</a>
+            <a href='/admin/seite'>→ Seiten</a>
             <Route path='/verband/:districtId/*' let:meta>
                 <h3>Verband</h3>
                 <ul>

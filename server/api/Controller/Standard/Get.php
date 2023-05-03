@@ -4,6 +4,7 @@ namespace App\Controller\Standard;
 
 use App\Query;
 use App\Controller\Controller;
+use App\Query\Cache;
 use Exception;
 use http\Exception\InvalidArgumentException;
 use PDOException;
@@ -16,13 +17,21 @@ class Get extends Controller
         return true;
     }
 
+    public function getCache() : ? string {
+        return Cache::getJson( 'standard', '' );
+    }
+
+    public function setCache( ? string $json ) : bool {
+        return Cache::replace( 'standard', '', $json );
+    }
+
     public function process() : array
     {
-        $sections = Query\Section::descendants( 2 );
+        $sections = Query\Section::descendants(2);
         $breeds = Query\Breed::all();
         $colors = Query\Color::all();
-        $standard = $this->toStandardTree( $sections, $breeds, $colors );
-        return ['standard' => $standard];
+        $standard = $this->toStandardTree($sections, $breeds, $colors);
+        return ['standard' => $standard ];
     }
 
     private function toStandardTree(& $sectionsRows, & $breedsRows, & $colorsRows ) : array {
