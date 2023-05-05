@@ -31,13 +31,7 @@ abstract class Controller
         $authorized = $this->authorized();
 
         // log
-        Query\Log::new(
-            $request->getMethod(),
-            $request->getUri()->getPath(),
-            $request->getUri()->getQuery(),
-            $request->getBody(),
-            $this->requester ? $this->requester['id'] : null
-        );
+        $this->log( $request );
 
         // start processing
         if( $authorized ) {
@@ -86,6 +80,31 @@ abstract class Controller
             }
         }
         return null;
+    }
+
+    private  function log( $request ) {
+
+        //obfuscate passwords
+        $requesterId = $this->requester ? $this->requester['id'] : null;
+        $method = $request->getMethod();
+        $path = $request->getUri()->getPath();
+        $query = $request->getUri()->getQuery();
+        $body = $request->getBody();
+
+        if( $path === '/api/user/token') {
+            $object = json_decode( $body, true );
+            $object['password'] = '*';
+            $body = json_encode( $object );
+        }
+
+        Query\Log::new(
+            $method,
+            $path,
+            $query,
+            $body, // should exclude password on /api/user/token
+            $requesterId
+        );
+
     }
 
 

@@ -150,18 +150,19 @@ export default {
         }
     },
 
+    log: {
+        getNext: ( from=0, count=100 ) => get( 'api/log/next?from='+from+'&count='+count ),
+    },
+
     map: {
         color: {
-            get: ( year, colorId ) =>
-                get( 'api/results/districts?year='+year+'&color='+colorId ),
+            get: ( year, colorId ) => get( 'api/results/districts?year='+year+'&color='+colorId ),
         },
         breed: {
-            get: ( year, breedId ) =>
-                get( 'api/results/districts?year='+year+'&breed='+breedId ),
+            get: ( year, breedId ) => get( 'api/results/districts?year='+year+'&breed='+breedId ),
         },
         section: {
-            get: ( year, sectionId ) =>
-                get( 'api/results/districts?year='+year+'&section='+sectionId ),
+            get: ( year, sectionId ) => get( 'api/results/districts?year='+year+'&section='+sectionId ),
         },
     },
 

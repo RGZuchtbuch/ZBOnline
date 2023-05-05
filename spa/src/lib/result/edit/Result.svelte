@@ -71,7 +71,7 @@
 </script>
 
 
-<form class='flex flex-row px-2 gap-x-1 text-base' on:input={onFormChange}>
+<form class='flex flex-row px-2 gap-x-1 text-sm' on:input={onFormChange}>
     <div class='w-4 pl-2'>&#10551; </div>
     <div class='w-64'>{result.name}</div>
 

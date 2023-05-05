@@ -28,7 +28,6 @@
 
     {#if $user }
         <Route path='/obmann/*'>
-            <h3>{txt($user.firstname.charAt(0))}. {txt($user.infix)} {txt($user.lastname)}</h3>
             <h3>Obmann</h3>
             <ul class='list-inside list-disc'>
                 <li> <a href='/obmann/verband'>Verbände</a> </li>
@@ -56,11 +55,11 @@
         </Route>
 
         <Route path='/admin/*' >
-            <h3>{txt($user.firstname.charAt(0))}. {txt($user.infix)} {txt($user.lastname)}</h3>
             <h3>Admin</h3>
             <a href='/admin/verband'>→ Verbände</a>
             <a href='/admin/standard'>→ Standard</a>
             <a href='/admin/seite'>→ Seiten</a>
+            <a href='/admin/log'>→ Log</a>
             <Route path='/verband/:districtId/*' let:meta>
                 <h3>Verband</h3>
                 <ul>

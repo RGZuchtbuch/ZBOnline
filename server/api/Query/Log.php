@@ -43,11 +43,13 @@ class Log extends Query
         return false;
     }
 
-    public static function getAll() : array {
+    public static function next( int $from, int $count ) : array {
+        // need to concatenate args as it requires constant ints
         $stmt = Query::prepare('
             SELECT *
             FROM _log
-            ORDER BY modified
+            ORDER BY modified DESC
+            LIMIT '.$from.','.$count.'
         ');
         return Query::selectArray($stmt );
     }

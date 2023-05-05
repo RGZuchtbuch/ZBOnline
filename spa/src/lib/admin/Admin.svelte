@@ -7,6 +7,7 @@
     import Articles from './ArticlesList.svelte';
 //    import Sections from './SectionsList.svelte';
     import Standard from '../standard/Standard.svelte';
+    import Log from './log/Log.svelte';
 
     const route = meta();
 
@@ -38,4 +39,7 @@
     <Articles />
 </Route>
 
+<Route path='/log' >
+    <Log />
+</Route>
 

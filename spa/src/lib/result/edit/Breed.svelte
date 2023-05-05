@@ -33,17 +33,19 @@
 
     function recount() {
         console.log( 'Count ');
-        let counter = 0;
-        for( let result of results ) {
-            if( result.breeders && result.breeders > 0 ) {
-                counter ++;
+        if( results.length > 0 ) {
+            let counter = 0;
+            for (let result of results) {
+                if (result.breeders && result.breeders > 0) {
+                    counter++;
+                }
             }
+            breed.results = counter;
+            breed = breed;
         }
-        breed.results = counter;
-        breed = breed;
     }
 
-    $: recount( saveCount );
+    $: recount( breed, saveCount );
 </script>
 
 

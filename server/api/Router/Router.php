@@ -37,6 +37,7 @@ class Router {
         $app->get('/district/{id}/children', 'App\Controller\District\Children' );
         $app->get('/district/{id}/descendants', 'App\Controller\District\Descendants' );
 
+        $app->get('/log/next', 'App\Controller\Log\Next' );
 
         $app->post('/result', 'App\Controller\Result\Post' );
         $app->get('/results/years', 'App\Controller\Result\Years' ); // for trend, query with section/Breed/color,  year
