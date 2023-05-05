@@ -39,6 +39,9 @@ class Router {
 
         $app->get('/log/next', 'App\Controller\Log\Next' );
 
+        $app->post('/message', 'App\Controller\Message\Post' );
+
+
         $app->post('/result', 'App\Controller\Result\Post' );
         $app->get('/results/years', 'App\Controller\Result\Years' ); // for trend, query with section/Breed/color,  year
         $app->get('/results/districts', 'App\Controller\Result\Districts' ); // for map, , query with section/Breed/color,  year

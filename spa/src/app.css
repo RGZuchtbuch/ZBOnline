@@ -45,7 +45,7 @@ p {
     @apply pl-1 h-4 text-gray-600 whitespace-nowrap;
 }
 
-input, select, option {
+input, textarea, select, option {
     @apply h-6 rounded mb-1;
 }
 
@@ -70,7 +70,7 @@ input:enabled:read-write, select:enabled:read-write {
 }
 
 .input > .data {
-    @apply px-0;
+    @apply px-1;
 
 }
 .input > input.invalid, .input > select.invalid {

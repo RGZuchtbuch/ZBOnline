@@ -67,7 +67,7 @@
         <li>Schauleistung:
             <ul>
                 <li>Tiere: Zahl der ausgestellten Tieren.</li>
-                <li>Note: Durchschnitt Note, U oder O gibt nicht 0 sondern 89 Punkte damit der Durchschnitt einen sinn hat!</li>
+                <li>Note: Durchschnitt Note, U oder O gibt nicht 0 sondern 89 Punkte damit der Durchschnitt Sinn macht!</li>
             </ul>
         </li>
 

@@ -1,9 +1,9 @@
 <script>
     import {meta, router} from 'tinro';
-    import api from "../js/api.js";
-    import { user } from '../js/store.js'
-    import Submit from './common/input/Submit.svelte';
-    import Modal from './Modal.svelte';
+    import api from "../../js/api.js";
+    import { user } from '../../js/store.js'
+    import Submit from '../common/input/Submit.svelte';
+    import Modal from '../common/Modal.svelte';
 
     let email = 'eelco.jannink@gmail.com';
     let password = 'jannink';

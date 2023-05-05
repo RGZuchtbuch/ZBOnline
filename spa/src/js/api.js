@@ -1,7 +1,6 @@
 import jwt_decode from 'jwt-decode';
 import { user } from './store.js'
 
-
 //uses constants from js/setting.js { settings.cache.TIMEOUT, settings.api.root }
 
 let cache = {
@@ -163,6 +162,13 @@ export default {
         },
         section: {
             get: ( year, sectionId ) => get( 'api/results/districts?year='+year+'&section='+sectionId ),
+        },
+    },
+
+    message: {
+        post: ( districtId, from, name, subject, message, confirm ) => {
+            const data = { districtId:districtId, from:from, name:name, subject:subject, message:message, confirm:confirm };
+            return post( 'api/message', data );
         },
     },
 

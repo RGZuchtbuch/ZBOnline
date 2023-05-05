@@ -2,33 +2,26 @@
 
     export let value;
     export let label;
-    export let error = '';
+    export let error = '!';
     export let name = null;
     export let disabled = false;
     export let readonly = false;
-    export let maxlength = 524288;
+    export let maxlength = 255;
     export let minlength = 0;
     export let required = false;
     export let pattern = null;
     export let spellcheck = true;
+    export let invalid = false;
 
     let classname = '';
     export { classname as class }
 
-    //value = value ? value.toString() : null;
-    let invalid = false;
 
-    let on = {
-        focus: () => {},
-        blur: () => {},
+    function validate( value ) {
+        invalid = ( required && value.length === 0 );
     }
 
     $: validate( value );
-
-    function validate( value ) {
-        let valid = value ? pattern ? value.match( pattern ) : true : ! required;
-        invalid = ! valid;
-    }
 
 </script>
 
@@ -39,10 +32,9 @@
     <input class='data' class:invalid id='input' type='text' {name} bind:value={value}
            {minlength} {maxlength}
            {required} {disabled} {readonly} {pattern}
-            on:focus={on.focus}
-            on:blur={on.blur}
            {spellcheck}
     >
+
     {#if invalid && ! disabled}
         <span class:invalid>{error}</span>
     {/if}

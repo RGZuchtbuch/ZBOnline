@@ -1,14 +1,14 @@
 <script>
     import {meta, router} from 'tinro';
-    import api from "../js/api.js";
-    import { user } from '../js/store.js'
-    import Button from './common/input/Button.svelte';
-    import EmailInput from './common/input/Email.svelte';
-    import Modal from './Modal.svelte';
-    import PasswordInput from './common/input/Password.svelte';
-    import Submit from './common/input/Submit.svelte';
+    import api from "../../js/api.js";
+    import { user } from '../../js/store.js'
+    import Button from '../common/input/Button.svelte';
+    import EmailInput from '../common/input/Email.svelte';
+    import Modal from '../common/Modal.svelte';
+    import PasswordInput from '../common/input/Password.svelte';
+    import Submit from '../common/input/Submit.svelte';
 
-    let email = 'eelco.jannink@gmail.com';
+    let email = '';
     let password = '';
     let success = true;
     let invalids = { email:false, password:false };
@@ -17,7 +17,7 @@
 
     let route = meta();
 
-    function checkInvalid() {
+    function onInput() { // verify invalid
         invalid = false;
         for( let key in invalids ) {
             invalid = invalid || invalids[ key ];
@@ -25,13 +25,15 @@
     }
 
     function onSubmit() {
-        api.user.login( email, password ).then(response => {
-            success = response.success;
-            if( success ) {
-                console.log( $user )
-                router.goto( route.from );
-            }
-        });
+        if( ! invalid ) {
+            api.user.login(email, password).then(response => {
+                success = response.success;
+                if (success) {
+                    console.log($user)
+                    router.goto(route.from);
+                }
+            });
+        }
     }
 
     function onForgot( event ) {
@@ -61,12 +63,10 @@
         router.goto( route.from );
     }
 
-    $: checkInvalid( invalids );
-
 </script>
 
 <Modal class=''>
-    <form class='w-96 flex flex-col gap-4 self-center border rounded p-4' on:submit|preventDefault={onSubmit}>
+    <form class='w-96 flex flex-col gap-4 self-center border rounded p-4' on:input={onInput} on:submit|preventDefault={onSubmit}>
         <div class='flex bg-header'>
             {#if forgot}
                 <h2 class='grow '>Passwort Reset</h2>
@@ -82,7 +82,7 @@
         {/if}
 
         {#if forgot }
-            <Button value='&#9993; Schick mir eine reset Mail!' on:click={onResetPassword} alert=true/>
+            <Button value='&#9993; Schick mir eine reset Mail!' on:click={onResetPassword} alert=true />
         {/if}
 
         {#if ! forgot && ! invalids.email && ! invalids.password }

@@ -4,7 +4,6 @@
     import api from '../js/api.js';
     import {txt} from '../js/util.js';
 
-    console.log( 'Router', $router );
 </script>
 
 <div class='w-64 mt-32 p-4 border rounded flex flex-col no-print'>

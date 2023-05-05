@@ -2,12 +2,12 @@
 
     export let value = null;
     export let label = null;
-           let error = 'ungültiger eMail';
     export let name = null;
     export let disabled = false;
     export let readonly = false;
     export let maxlength = 128;
-    export let minlength = 3;
+    export let minlength = 5;
+    export let error = 'Unvollständiger eMail Adresse';
     export let required = false;
     export let invalid = false;
 
@@ -18,17 +18,13 @@
 
     //value = value ? value.toString() : null;
 
-    let on = {
-        focus: () => {},
-        blur: () => {},
-    }
-
     function validate( value ) {
         if( value ) {
             invalid = value.match( pattern ) === null ;
         } else {
             invalid = required;
         }
+        console.log('EMail invalid', value, invalid );
     }
 
     $: validate( value );
@@ -42,8 +38,6 @@
     <input class='data' class:invalid id='input' type='text' {name} bind:value={value}
            {minlength} {maxlength}
            {required} {disabled} {readonly}
-           on:focus={on.focus}
-           on:blur={on.blur}
     >
     {#if invalid && ! disabled}
         <span class:invalid>{error}</span>

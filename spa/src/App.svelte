@@ -14,16 +14,10 @@
     import Results from './lib/result/Results.svelte';
     import Standard from './lib/standard/Standard.svelte';
 
-    import Login from './lib/Login.svelte';
-    import Reset from './lib/Reset.svelte';
-    import Logout from './lib/Logout.svelte';
-
-
-
-//    api.standard.get().then( response => {
-//        standard.set( response.section );
-//        console.log( response.section );
-//    })
+    import Login from './lib/login/Login.svelte';
+    import Reset from './lib/login/Reset.svelte';
+    import Logout from './lib/login/Logout.svelte';
+    import Message from './lib/Message.svelte';
 
 </script>
 
@@ -55,9 +49,9 @@
 
             <Route path='/anmelden'> <Login /> </Route>
             <Route path='/reset'> <Reset /> </Route>
-            <Route path='/abmelden'> <Logout /></Route>
+            <Route path='/abmelden'> <Logout /> </Route>
 
-
+            <Route path='/kontakt/:districtId' let:meta> <Message districtId={meta.params.districtId} /> </Route>
         </div>
 
         {#if false}

@@ -37,15 +37,15 @@ class Reset extends Controller
                 'http://localhost:8100/#/reset?email='.$email.'&token='.$resetToken :
                 'https://rgzuchtbuch.de/#/reset?email='.$email.'&token='.$resetToken;
 
-            $this->sendMail( $email, $url );
+            $success = $this->sendMail( $email, $url );
 
-            return [ 'success' => true, 'servername'=>$servername ]; // servname for debug
+            return [ 'success' => $success, 'servername'=>$servername ]; // servname for debug
         }
         throw new HttpNotFoundException( $this->request, "Invalid credentials");
     }
 
 
-    public function sendMail( string $email, string $url ) {
+    public function sendMail( string $email, string $url ) : bool {
         $mail = new PHPMailer( true );
 
         try {
@@ -54,14 +54,14 @@ class Reset extends Controller
             $mail->isSMTP();                                            //Send using SMTP
             $mail->Host       = MAIL_SERVER;
             $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-            $mail->Username   = MAIL_SENDER;                     //SMTP username
-            $mail->Password   = MAIL_PASSWORD;                               //SMTP password
+            $mail->Username   = MAIL_USER;                              //SMTP username
+            $mail->Password   = MAIL_PASSWORD;                          //SMTP password
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
             $mail->Port       = MAIL_PORT;
 
             //Recipients
             $mail->setFrom(MAIL_SENDER, MAIL_SENDER_NAME );
-            $mail->addAddress($email, 'Zuchtbuch Mitglied');     //Add a recipient
+            $mail->addAddress( $email, 'RGZuchtbuch Mitglied');     //Add a recipient
             $mail->addReplyTo(MAIL_SENDER, MAIL_SENDER_NAME );
 
             //Content
@@ -85,7 +85,7 @@ class Reset extends Controller
                 \n
                 Eelco Jannink\n
             ";
-            $mail->send();
+            return $mail->send();
         } catch( Exception $e ) {
             throw new HttpInternalServerErrorException( $this->request, "mail error: ".$e->getMessage() );
         }

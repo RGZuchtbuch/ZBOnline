@@ -1,12 +1,12 @@
 <script>
     import {meta, router} from 'tinro';
-    import api from "../js/api.js";
-    import { user } from '../js/store.js'
-    import Button from './common/input/Button.svelte';
-    import EmailInput from './common/input/Email.svelte';
-    import Modal from './Modal.svelte';
-    import PasswordInput from './common/input/Password.svelte';
-    import Submit from './common/input/Submit.svelte';
+    import api from "../../js/api.js";
+    import { user } from '../../js/store.js'
+    import Button from '../common/input/Button.svelte';
+    import EmailInput from '../common/input/Email.svelte';
+    import Modal from '../common/Modal.svelte';
+    import PasswordInput from '../common/input/Password.svelte';
+    import Submit from '../common/input/Submit.svelte';
 
     let email = $router.query.email;
     let token = $router.query.token;

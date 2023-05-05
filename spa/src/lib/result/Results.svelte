@@ -234,7 +234,10 @@
 
 
         {#if districts && districtId && year && sectionId}
-            <h2 class='text-center' >Das Zuchtbuch : {types[typeId].label} für {districts[ districtId ].name} in {year}</h2>
+            <div class='flex'>
+                <h2 class='grow text-center' >Das Zuchtbuch : {types[typeId].label} für {districts[ districtId ].name} in {year}</h2>
+                <a href={'/kontakt/'+districtId}>&#9993;</a>
+            </div>
 
 
             <div class='flex flex-row border border-gray-600 gap-x-8 justify-evenly'>
