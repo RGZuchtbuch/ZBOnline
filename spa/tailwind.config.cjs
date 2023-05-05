@@ -5,7 +5,7 @@ const config = {
     extend: {
       colors: {
         'alert' : '#fc5226',
-        'button': '#4FDB6F',
+        'button': '#fc5226',
         'header': '#1dbab4',
       },
       spacing: {

@@ -66,30 +66,33 @@
 </script>
 
 <Modal class=''>
-    <form class='w-96 flex flex-col gap-4 self-center border rounded p-4' on:input={onInput} on:submit|preventDefault={onSubmit}>
-        <div class='flex bg-header'>
+    <form class='w-96 flex flex-col self-center rounded' on:input={onInput} on:submit|preventDefault={onSubmit}>
+        <div class='flex bg-header rounded-t p-4'>
             {#if forgot}
-                <h2 class='grow '>Passwort Reset</h2>
+                <h2 class='grow text-white'>Passwort Reset</h2>
             {:else}
-                <h2 class='grow '>Anmelden</h2>
+                <h2 class='grow text-white'>Anmelden</h2>
             {/if}
-            <div class='cursor-pointer mr-2' on:click={cancel}>&#8855;</div>
+            <div class='w-8 justify-center m-2 circled bg-alert cursor-pointer' on:click={cancel}>X</div>
         </div>
-        <EmailInput class='' label='eMail' bind:value={email} bind:invalid={invalids.email} required/>
 
-        {#if ! forgot}
-            <PasswordInput class='' label='Passwort' bind:value={password} bind:invalid={invalids.password} required/>
-        {/if}
+        <div class='flex flex-col gap-4 rounded-b bg-gray-200 gap-4 p-4'>
+            <EmailInput class='' label='eMail *' bind:value={email} bind:invalid={invalids.email} required/>
 
-        {#if forgot }
-            <Button value='&#9993; Schick mir eine reset Mail!' on:click={onResetPassword} alert=true />
-        {/if}
+            {#if ! forgot}
+                <PasswordInput class='' label='Passwort *' bind:value={password} bind:invalid={invalids.password} required/>
+            {/if}
 
-        {#if ! forgot && ! invalids.email && ! invalids.password }
-            <Submit value='Las mich herein &#10170;' disabled={invalid} />
-            <div class='cursor-pointer error text-sm text-right' on:click={onForgot}>Ich habe mein Passwort vergessen :(</div>
-        {/if}
-        {#if ! success} <div class='error'>Nicht erfolgreich</div> {/if}
+            {#if forgot }
+                <Button value='&#9993; Schick mir eine reset Mail!' on:click={onResetPassword} alert=true />
+            {/if}
+
+            {#if ! forgot && ! invalids.email && ! invalids.password }
+                <Submit value='Las mich herein &#10170;' disabled={invalid} />
+                <div class='cursor-pointer error text-sm text-right' on:click={onForgot}>Ich habe mein Passwort vergessen :(</div>
+            {/if}
+            {#if ! success} <div class='error'>Nicht erfolgreich</div> {/if}
+        </div>
     </form>
 
 </Modal>

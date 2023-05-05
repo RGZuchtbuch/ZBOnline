@@ -30,7 +30,7 @@
     }
 
     function onHelp( event ) {
-        help = event.detail;
+        help = ! help;
         console.log( 'Help', help );
     }
 
@@ -55,10 +55,14 @@
 
 </script>
 
+<div class='w-256 flex bg-header rounded-t'>
+    <div class='w-8'></div>
+    <h2 class='grow bg-header text-white text-center'>Eingabe Leistungen {district ? district.name : '...'}</h2>
+    <div class='w-8 justify-center m-2 circled bg-alert cursor-pointer' on:click={onHelp}>?</div>
+</div>
 
-<h2 class='w-256 text-center'>Eingabe Leistungen {district ? district.name : '...'}</h2>
 
-<Selector bind:year bind:sectionId bind:group on:help={onHelp}/>
+<Selector bind:year bind:sectionId bind:group/>
 
 <Header {saveCount} />
 

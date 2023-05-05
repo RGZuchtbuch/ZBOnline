@@ -31,10 +31,6 @@
         router.location.query.set( 'group', group );
     }
 
-    function onHelp() {
-        dispatch( 'help', true );
-    }
-
     function getYears() {
         const thisYear = new Date().getFullYear();
         const years = [];
@@ -48,29 +44,24 @@
 
 
 
-<div class='w-256 flex flex-row mx-2 rounded-t bg-header'>
+<div class='w-256 flex flex-row rounded-t bg-header gap-x-4 justify-center'>
+    <Select label="Jahr" bind:value={year} on:change={onYear}>
+        {#each years as year}
+            <option value={year}>{year}</option>
+        {/each}
+    </Select>
 
-    <div class='w-8'></div>
-    <div class='grow flex gap-x-4 justify-center'>
-        <Select label="Jahr" bind:value={year} on:change={onYear}>
-            {#each years as year}
-                <option value={year}>{year}</option>
-            {/each}
-        </Select>
+    <Select label="Sparte" bind:value={sectionId} on:change={onSection}>
+        {#each sections as section}
+            <option value={section.id}>{section.name}</option>
+        {/each}
+    </Select>
 
-        <Select label="Sparte" bind:value={sectionId} on:change={onSection}>
-            {#each sections as section}
-                <option value={section.id}>{section.name}</option>
-            {/each}
-        </Select>
-
-        <Select label="Gruppe" bind:value={group} on:change={onGroup} disabled={sectionId === 5}>
-            {#each groups as group}
-                <option value={group}>{group}</option>
-            {/each}
-        </Select>
-    </div>
-    <div class='w-8 justify-center m-2 circled bg-alert cursor-pointer' on:click={onHelp}>?</div>
+    <Select label="Gruppe" bind:value={group} on:change={onGroup} disabled={sectionId === 5}>
+        {#each groups as group}
+            <option value={group}>{group}</option>
+        {/each}
+    </Select>
 </div>
 
 

@@ -60,7 +60,7 @@ class Reset extends Controller
             $mail->Port       = MAIL_PORT;
 
             //Recipients
-            $mail->setFrom(MAIL_SENDER, MAIL_SENDER_NAME );
+            $mail->setFrom(MAIL_SENDER, MAIL_SENDER_NAME ); // Must be these !?
             $mail->addAddress( $email, 'RGZuchtbuch Mitglied');     //Add a recipient
             $mail->addReplyTo(MAIL_SENDER, MAIL_SENDER_NAME );
 

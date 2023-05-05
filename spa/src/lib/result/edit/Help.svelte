@@ -13,7 +13,7 @@
 </script>
 
 
-<Help title='Eingabe Leistungen' on:help>
+<Help title='Eingabe Leistungen Anleitung' on:help>
     Das eingeben der Leistungdaten ist eine Aufgabe für der Obman. Dies kann auf Landesverband- oder Kreisverbandsebene, aber auch auf BDRG ebene.
     Wichtig ist es zu wissen das für den LV Bericht die LV und die KV Datendaten zusammen gefügt werden. Für den Bericht Mann muss also zuvor wissen wer welche Daten eingibt um doppelte Daten zu vermeiden.<br>
     <hr>

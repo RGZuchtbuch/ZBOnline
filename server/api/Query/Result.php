@@ -83,8 +83,6 @@ class Result extends Query
                 CAST( SUM( broodFertile ) AS UNSIGNED) AS broodFertile, 
                 CAST( SUM( broodHatched ) AS UNSIGNED) AS broodHatched, 
                 
-                
-                
                 CAST( SUM( showCount ) AS UNSIGNED) AS showCount, 
                 SUM( IF( showCount AND showScore, showCOunt * showScore, NULL ) )  /  SUM( IF( showCount AND showScore, showCount, NULL ) ) AS showScore
             

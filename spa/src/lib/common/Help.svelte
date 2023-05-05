@@ -16,9 +16,9 @@
 
 
 <div class='modal'>
-    <h2 class='w-256 text-center'>{title}</h2>
-    <div class='flex bg-header border rounded-t'>
-        <h2 class='grow text-white text-center'>Anleitung</h2>
+    <div class='w-256 flex bg-header border rounded-t pb-2'>
+        <div class='w-8'></div>
+        <h2 class='grow text-center text-white'>{title}</h2>
         <div class='w-8 justify-center m-2 circled bg-alert' on:click={onHelp}>X</div>
     </div>
     <div class='w-256 h-full overflow-y-scroll border border-t-gray-400 rounded-b scrollbar p-8'>

@@ -6,17 +6,17 @@
     export let name = null;
     export let disabled = false;
     export let readonly = false;
-    export let maxlength = 524288;
+    export let maxlength = 655535;
     export let minlength = 0;
     export let required = false;
     export let pattern = null;
     export let spellcheck = true;
+    export let invalid = false;
 
     let classname = '';
     export { classname as class }
 
     //value = value ? value.toString() : null;
-    let invalid = false;
 
     let on = {
         focus: () => {},

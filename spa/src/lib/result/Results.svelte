@@ -10,6 +10,7 @@
     import DistrictsMap from './DistrictsMap.svelte';
     import TimeLine from './TimeLine.svelte';
     import DistrictList from './DistrictList.svelte';
+    import Help from './Help.svelte';
     import ScrollDiv from '../common/ScrollDiv.svelte';
 
     const route = meta();
@@ -46,9 +47,9 @@
             title: (result) =>  result.layEggs ? ` legten ⌀ ${dec(result.layEggs)} Eier im Jahr` : ' hat keine Daten',
             tooltip: 'Nicht fär Tauben',
         },
-        11: {
-            id: 11,
-            label: 'Brutleistung',
+        20: {
+            id: 20,
+            label: 'Brutleistung Leger',
             extract: (result) => [result.broodHatched, result.broodFertile, result.broodEggs], // for map and chart
             forPie: (result) => [ 100 * result.broodHatched / result.broodEggs], // for pie
             title: (result) => result.broodEggs ?
@@ -56,8 +57,18 @@
                 ' hat keine Daten',
             tooltip: 'Nur für Hühner',
         },
-        12: {
-            id: 12,
+        21: {
+            id: 21,
+            label: 'Brutleistung Tauben',
+            extract: (result) => [ result.broodHatched/result.pairs ], // for map and chart
+            forPie: (result) => [ result.broodHatched/result.pairs ], // for pie
+            title: (result) => result.pairs ?
+                ` aus ${dec(result.pairs)} schlüpften ${dec(result.broodHatched)} Küken also ${dec(result.broodHatched/result.pairs)} Küken / Paar` :
+                ` hat keine Daten`,
+            tooltip: 'Nur für Hühner',
+        },
+        30: {
+            id: 30,
             label: 'Schauleistung',
             min: 89,
             max: 97,
@@ -88,6 +99,7 @@
     let colors = [];
 
     let districts = null; // map id->district
+    let help = false;
 
     function onQuery( route ) {
         typeId = Number( route.query.type ) || 2;
@@ -163,6 +175,10 @@
         router.location.query.set( 'color', event.target.value );
     }
 
+    function onHelp() {
+        help = ! help;
+    }
+
     const on = {
         click: ( district ) => {
             return (event) => {
@@ -183,7 +199,11 @@
 
 
 <Route path='/*' let:meta>
-    <h2 class='w-256 border border-gray-400 rounded-t bg-header text-white text-center text-xl print'>Leistungen</h2>
+    <div class='w-256 flex bg-header rounded-t'>
+        <h2 class='grow border border-gray-400 text-white text-center text-xl print'>Leistungen</h2>
+        <div class='w-8 justify-center m-2 circled bg-alert cursor-pointer' on:click={onHelp}>?</div>
+    </div>
+
     <div class='w-256 bg-gray-100 overflow-y-scroll border rounded-b border-t-0 border-gray-400 scrollbar'>
         <div class='flex flex-row bg-header px-4 gap-x-2'>
             <div class='w-8 font-semibold' >Filter</div>:
@@ -236,7 +256,11 @@
         {#if districts && districtId && year && sectionId}
             <div class='flex'>
                 <h2 class='grow text-center' >Das Zuchtbuch : {types[typeId].label} für {districts[ districtId ].name} in {year}</h2>
-                <a href={'/kontakt/'+districtId}>&#9993;</a>
+                <div class='flex flex-col p-2'>
+                    <div class='text-sm'>eMail am Obmann</div>
+                    <a class='p-1 bg-alert rounded text-xl text-black text-center' href={'/kontakt/'+districtId}>&#9993;</a>
+
+                </div>
             </div>
 
 
@@ -257,6 +281,10 @@
             </div>
         {/if}
     </div>
+
+    {#if help}
+        <Help on:help={onHelp} />
+    {/if}
 
 </Route>
 
