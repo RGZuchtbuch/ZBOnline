@@ -5,19 +5,17 @@ node "Client" {
     [Browser]
 }
 
+        () HTTPS
+
 node "Zuchtbuch Online" {
 
-
     component Apache/PHP {
-        () HTTPS
         [API]
         [SPA]
     }
 
     () SQL
-
     database MySQL
-
 }
 
 Browser -d-> HTTPS

@@ -21,7 +21,7 @@
             {@html article.html}
         </div>
     {:else}
-        NO PAGE FOUND
+        Seite wird geladen.....
     {/if}
 
 

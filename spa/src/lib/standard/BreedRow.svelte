@@ -81,7 +81,7 @@
         </div>
         <div class='w-8 cursor-pointer' on:click={onDetails} title='Details'>[ D ]</div>
         {#if $user && $user.admin}
-            <div class='w-8 cursor-pointer' on:click={onAddColor} title='Farbe hinzufügen'>[ + ]</div>
+            <div class='w-8 cursor-pointer' title='Neue Farbe' on:click={onAddColor}>[ + ]</div>
         {/if}
     </div>
 

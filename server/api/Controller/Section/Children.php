@@ -17,7 +17,7 @@ class Children extends Controller
     public function process() : array
     {
         $id = $this->args['id'];
-        $section = Query\Section::children( $id );
-        return [ 'section' => $section ];
+        $sections = Query\Section::children( $id );
+        return [ 'sections' => $sections ];
     }
 }

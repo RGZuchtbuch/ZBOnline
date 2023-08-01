@@ -1,11 +1,9 @@
 <script>
     import {Route, meta, router} from 'tinro';
-    import api from '../../js/api.js';
 
     import District from '../district/District.svelte';
     import Districts from './DistrictsList.svelte';
     import Articles from './ArticlesList.svelte';
-//    import Sections from './SectionsList.svelte';
     import Standard from '../standard/Standard.svelte';
     import Log from './log/Log.svelte';
 

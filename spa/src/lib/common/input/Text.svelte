@@ -18,7 +18,7 @@
 
 
     function validate( value ) {
-        invalid = ( required && value.length === 0 );
+        invalid = ( required && value && value.length === 0 );
     }
 
     $: validate( value );

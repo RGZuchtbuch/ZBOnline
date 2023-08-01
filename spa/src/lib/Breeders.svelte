@@ -10,7 +10,7 @@
     const dispatch = createEventDispatcher();
 
     function onAddMember( event ) {
-        dispach( 'addMember', )
+        dispatch( 'addMember', )
     }
 
 

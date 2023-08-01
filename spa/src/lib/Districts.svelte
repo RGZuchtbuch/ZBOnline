@@ -2,7 +2,7 @@
     import { onMount } from 'svelte';
     import {active, meta, router, Route} from 'tinro';
 
-    import SelectTree from './select/SelectTree.svelte';
+    import SelectTree from './common/select/SelectTree.svelte';
 
     export let districts = null;
 

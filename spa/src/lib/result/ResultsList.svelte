@@ -73,7 +73,7 @@
 </script>
 
 
-<div class='w-full'>
+<div class='print'>
     {#if results}
         {#each results.sections as section}
 
@@ -217,11 +217,12 @@
                     </div>
                 </div>
             </div>
-            <div class='print-break h-4'></div>
+            <div class='print-break text-center'> - </div>
         {/each}
         {#if results.sections.length == 0 }
             <h2 class='p-2 bg-header text-center text-xl'>Leider keine Daten für dieses Jahr</h2>
         {/if}
+
     {/if}
 </div>
 

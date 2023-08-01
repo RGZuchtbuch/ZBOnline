@@ -4,8 +4,13 @@ namespace App\Controller;
 
 use App\Controller\User\Token;
 use App\Query;
+use Exception;
+use HttpException;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Exception\HttpBadRequestException;
+use Error;
+
 
 //$controller = null; // not used...
 
@@ -22,29 +27,33 @@ abstract class Controller
     public function __invoke( Request $request, Response $response, array $args ) : Response {
         global $controller;
         $controller = $this;
-        $this->requester = $this->getRequester( $request ); // null or valid requester
-        $this->request = $request;
-        $this->response = $response;
-        $this->args = $args;
-        $this->data = json_decode( $request->getBody(), true );
-        $this->query = $request->getQueryParams();
-        $authorized = $this->authorized();
+        try {
+            $this->requester = $this->getRequester($request); // null or valid requester
+            $this->request = $request;
+            $this->response = $response;
+            $this->args = $args;
+            $this->data = json_decode($request->getBody(), true);
+            $this->query = $request->getQueryParams();
+            $authorized = $this->authorized();
 
-        // log
-        $this->log( $request );
+            // log
+            $this->log($request);
 
-        // start processing
-        if( $authorized ) {
-            $json = $this->getCache();
-            if( $json == NUll ) {
-                $data = $this->process();
-                $json = json_encode( $data, JSON_UNESCAPED_SLASHES );
-                $this->setCache( $json );
+            // start processing
+            if ($authorized) {
+                $json = $this->getCache();
+                if ($json == NUll) {
+                    $data = $this->process();
+                    $json = json_encode($data, JSON_UNESCAPED_SLASHES);
+                    $this->setCache($json);
+                }
+                $response->getBody()->write($json);
+                return $response;
+            } else {
+                throw new \Slim\Exception\HttpUnauthorizedException($request, 'Not Authorized');
             }
-            $response->getBody()->write( $json );
-            return $response;
-        } else {
-            throw new \Slim\Exception\HttpUnauthorizedException( $request, 'Not Authorized');
+        } catch( Exception | Error $e ) {
+            throw new HttpBadRequestException( $this->request, $e->getMessage() );
         }
     }
 

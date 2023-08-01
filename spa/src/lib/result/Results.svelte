@@ -199,13 +199,13 @@
 
 
 <Route path='/*' let:meta>
-    <div class='w-256 flex bg-header rounded-t'>
+    <div class='w-256 flex bg-header rounded-t no-print'>
         <h2 class='grow border border-gray-400 text-white text-center text-xl print'>Leistungen</h2>
         <div class='w-8 justify-center m-2 circled bg-alert cursor-pointer' on:click={onHelp}>?</div>
     </div>
 
-    <div class='w-256 bg-gray-100 overflow-y-scroll border rounded-b border-t-0 border-gray-400 scrollbar'>
-        <div class='flex flex-row bg-header px-4 gap-x-2'>
+    <div class='w-256 bg-gray-100 overflow-y-scroll border rounded-b border-t-0 border-gray-400 scrollbar print-no-border'>
+        <div class='flex flex-row bg-header px-4 gap-x-2 no-print'>
             <div class='w-8 font-semibold' >Filter</div>:
             <Select class='w-52' label='Sparte' value={sectionId} on:change={onSection}>
                 {#each sections as section}
@@ -228,7 +228,7 @@
             </Select>
         </div>
 
-        <div class='flex flex-row bg-header px-4 gap-x-2'>
+        <div class='flex flex-row bg-header px-4 gap-x-2 no-print'>
             <div class='w-8 font-semibold' >Was</div>:
             <Select class='w-52' label='Was sehen' value={typeId} on:change={onType}>
                 {#each Object.values( types ) as type, i }
@@ -254,15 +254,18 @@
 
 
         {#if districts && districtId && year && sectionId}
+            {#if true}
             <div class='flex'>
-                <h2 class='grow text-center' >Das Zuchtbuch : {types[typeId].label} für {districts[ districtId ].name} in {year}</h2>
-                <div class='flex flex-col p-2'>
+                <h2 class='grow text-center' >Das Zuchtbuch : {districts[ districtId ].name} in {year}</h2>
+                <div class='flex flex-col p-2 no-print'>
                     <div class='text-sm'>eMail am Obmann</div>
                     <a class='p-1 bg-alert rounded text-xl text-black text-center' href={'/kontakt/'+districtId}>&#9993;</a>
 
                 </div>
             </div>
+            {/if}
 
+            {#if true}
 
             <div class='flex flex-row border border-gray-600 gap-x-8 justify-evenly'>
                 <SectionsPie {districtId} {year} type={types[typeId]}/>
@@ -273,10 +276,12 @@
                     <TimeLine bind:year={year} {districtId} {sectionId} {breedId} {colorId} type={types[typeId]} />
                     <DistrictsMap bind:districtId={districtId} {year} {sectionId} {breedId} {colorId} type={types[typeId]} />
             </div>
+            {/if}
+            {#if true}
 
-            <div class='print-break h-4'></div>
-
-            <div class='border rounded'>
+            <div class='print-break'></div>
+            {/if}
+            <div class='border rounded print'>
                 <DistrictList districtId={districtId} year={year} />
             </div>
         {/if}

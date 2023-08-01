@@ -17,7 +17,7 @@
             section = section;
         }
     }
-
+    console.log( "Section", section);
 </script>
 
 <div class='flex flex-col pl-8'>
@@ -28,8 +28,9 @@
         <div class='grow cursor-pointer' on:click={onOpen}>
             {section.name} ({section.children.length + section.breeds.length })
         </div>
-        {#if $user && $user.admin}
-            <div class='cursor-pointer' on:click={onAddBreed}>[ + ]</div>
+
+        {#if section.children.length === 0 && $user && $user.admin}
+            <div class='cursor-pointer' title='Neue Rasse' on:click={onAddBreed}>[ + ]</div>
         {/if}
     </div>
     {#if open }

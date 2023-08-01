@@ -98,24 +98,27 @@
 
 <div class='flex flex-col pl-6'>
 
+    {#if district.moderated}
         <div class='flex border-b'>
             <div class='w-4'>&#10551;</div>
-            {#if district.children.length > 0 }
+            {#if false && district.children.length > 0 }
                 {#if open}
-                    <div class='w-4 cursor-zoom-out text-red-600' on:click={onToggleOpen} title='Schließen'>&#8679;</div>
+                    <div class='w-6 cursor-zoom-out text-red-800' on:click={onToggleOpen} title='Schließen'>[-]</div>
                 {:else}
-                    <div class='w-4 cursor-zoom-in text-green-600' on:click={onToggleOpen} title='Öffnen'>&#8681;</div>
+                    <div class='w-6 cursor-zoom-in text-green-800' on:click={onToggleOpen} title='Öffnen'>[+]</div>
                 {/if}
             {:else}
-                <div class='w-4'></div>
+                <div class='w-6'></div>
             {/if}
 
             {#if district.moderated}
                 <a class='text-black cursor-pointer' href={route.match+'/'+district.id} title='Zum Verband'>{district.name}</a>
             {:else}
-                <div class='text-gray-400 cursor-not-allowed' title='Kein zugang' > &#10551; {district.name}</div>
+                <div class='text-gray-400 cursor-not-allowed' title='Kein zugang' >{district.name}</div>
             {/if}
             <div class='w-16'></div>
+
+            <div class='grow'></div>
             {#if district.moderated}
                 {#if show}
                     <div class='cursor-pointer text-red-600 px-2' on:click={onToggleShow} title='schließen'>&#8505;</div>
@@ -123,8 +126,6 @@
                     <div class='cursor-pointer text-green-600 px-2' on:click={onToggleShow} title='bearbeiten'>&#8505;</div>
                 {/if}
             {/if}
-            <div class='grow'></div>
-            <div>[ + ]</div>
         </div>
 
         {#if show && details }
@@ -164,13 +165,16 @@
             </form>
         {/if}
         <div></div>
+    {/if}
 
-        {#if open}
-            {#each district.children as child}
-                <svelte:self district={child} parentModerated={moderated}/>
-            {/each}
-        {/if}
+
 </div>
+
+{#if true || open}
+    {#each district.children as child}
+        <svelte:self district={child} parentModerated={moderated}/>
+    {/each}
+{/if}
 
 <style>
     .edit {

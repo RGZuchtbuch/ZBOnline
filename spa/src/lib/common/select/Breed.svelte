@@ -1,7 +1,7 @@
 <script>
     import { onMount } from 'svelte';
-    import api from "../../js/api.js";
-    import Select from '../common/input/Select.svelte';
+    import api from "../../../js/api.js";
+    import Select from '../input/Select.svelte';
 
     export let sectionId;
     export let breedId;
@@ -20,7 +20,9 @@
     getColors( breedId ); // after getBreeds !
 
     function getSections() {
-        api.section.children.get(2).then( data => { sections = data.sections });
+        api.section.children.get(2).then( data => {
+            console.log( "Sections", data);
+            sections = data.sections });
     }
     function getBreeds( sectionId ) {
         api.section.breeds.get(sectionId).then(data => {

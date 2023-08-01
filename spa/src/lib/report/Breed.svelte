@@ -1,7 +1,7 @@
 <script>
     import { onMount } from 'svelte';
     import api from "../../js/api.js";
-    import BreedSelect from '../select/Breed.svelte';
+    import BreedSelect from '../common/select/Breed.svelte';
 
     export let breed;
     export let disabled;

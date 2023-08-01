@@ -24,7 +24,7 @@
         console.log( 'Toggle Details' );
         showDetails = ! showDetails;
         if( showDetails ) {
-            loadDetails( breeder.id );
+            loadDetails(breeder.id);
         }
     }
 
@@ -55,21 +55,30 @@
     }
 
     function loadDetails( id ) {
-        api.breeder.get( id ).then( response => {
-            details = response.breeder;
-            console.log( 'Details', details );
-        })
+        console.log( 'Breeder', breeder );
+        if( id === null ) { // new breeder has id null
+            details = Object.assign( {}, breeder );
+            console.log( 'New Details', details );
+        } else {
+            api.breeder.get( id ).then( response => {
+                details = response.breeder;
+                console.log( 'Details', details );
+            })
+        }
+        loadClubs( breeder.districtId );
     }
 
-    function loadClubs( district ) {
-        api.district.clubs.get( district.id ).then( response => {
+    function loadClubs( districtId ) {
+        api.district.clubs.get( districtId ).then( response => {
             clubs = response.clubs;
         });
     }
 
     function loadDistricts( district ) {
+        console.log( 'Load Clubs' );
         api.district.children.get( district.id ).then( response => {
             rootDistrict = response.district;
+            console.log('District', rootDistrict );
         });
     }
 
@@ -103,6 +112,7 @@
         {/if}
 
     </div>
+
     {#if showDetails && details }
         <form class='flex flex-col border border-gray-400 rounded m-4 p-2' on:input={onChange}>
 
@@ -112,7 +122,7 @@
 
             <Text class='w-128' bind:value={details.email} label='Email Adresse'/>
 
-            <Select class='w-64' label='Ortsverein' bind:value={details.clubId} disabled={!edit} required>
+            <Select class='w-64' label='Ortsverein' bind:value={details.clubId} required>
                 {#if clubs}
                     {#each clubs as club}
                         <option class='bg-white' value={club.id} selected={club.id === details.clubId}> {club.name} </option>

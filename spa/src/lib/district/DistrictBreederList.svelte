@@ -2,15 +2,10 @@
     import { onMount } from 'svelte';
     import {active, meta, router, Route} from 'tinro';
     import api from '../../js/api.js';
-    import { txt } from '../../js/util.js';
-    import { newBreeder } from '../../js/template.js';
     import { user } from '../../js/store.js'
 
     import BreederList from '../breeder/BreederList.svelte';
-    import Button from '../common/input/Button.svelte';
-    import Date from '../common/input/Date.svelte';
-    import Select from '../common/input/Select.svelte';
-    import Text from '../common/input/Text.svelte';
+//    import Date from "../common/input/Date.svelte";
 
     export let district = null;
 
@@ -21,6 +16,28 @@
 
     const route = meta();
 
+    function onAddBreeder() { // event
+
+        let breeder = {
+            id: null,
+            firstname: null,
+            infix: null,
+            lastname: null,
+            email: null,
+            districtId: district.id,
+            districtName: district.name,
+            clubId: null,
+            clubName: null,
+            start: Date.now(),
+            end: null,
+            active: true,
+            info: null
+        };
+        breeders.unshift(breeder);
+        breeders = breeders;
+    }
+
+
     function loadBreeders( district ) {
         api.district.breeders.get( district.id ).then( response => {
            breeders = response.breeders;
@@ -30,6 +47,7 @@
 
     onMount( () => {
     })
+
 
     $: loadBreeders( district );
 
@@ -44,11 +62,11 @@
 
     <div class='w-256 bg-gray-100 overflow-y-scroll border border-gray-400 rounded scrollbar'>
         {#if breeders}
-            <BreederList {breeders} />
+            <BreederList {breeders} on:addBreeder={onAddBreeder}/>
         {/if}
     </div>
 {:else}
-    NOT AAUTORIZED
+    NOT AUTORIZED
 {/if}
 
 
