@@ -1,8 +1,8 @@
 <script>
     import {Route, meta, router} from 'tinro';
-    import {user} from '../js/store.js';
-    import api from '../js/api.js';
-    import {txt} from '../js/util.js';
+    import {user} from '../../js/store.js';
+    import api from '../../js/api.js';
+    import {txt} from '../../js/util.js';
 
 </script>
 
@@ -46,7 +46,7 @@
                     </h4>
                     <ul class='list-inside list-disc'>
                         <li> <a href={'/obmann/verband/'+meta.params.districtId+'/zuechter/'+meta.params.breederId+'/daten'}>Daten</a> </li>
-                        <li> <a href={'/obmann/verband/'+meta.params.districtId+'/zuechter/'+meta.params.breederId+'/meldung'}>Meldungen</a> </li>
+                        <li> <a href={'/obmann/verband/'+meta.params.districtId+'/zuechter/'+meta.params.breederId+'/meldungen'}>Meldungen</a> </li>
                         <li> <a href={'/obmann/verband/'+meta.params.districtId+'/zuechter/'+meta.params.breederId+'/meldung/0'}>Melden</a> </li>
                     </ul>
                 </Route>

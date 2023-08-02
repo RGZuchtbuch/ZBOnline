@@ -1,9 +1,9 @@
 <script>
     import {router} from "tinro";
-    import api from '../../js/api.js';
-    import Button from '../common/input/Button.svelte';
-    import InputNumber from '../common/input/Number.svelte';
-    import Select from '../common/input/Select.svelte';
+    import api from '../../../js/api.js';
+    import Button from '../../common/input/Button.svelte';
+    import InputNumber from '../../common/input/Number.svelte';
+    import Select from '../../common/input/Select.svelte';
 
     export let districtId;
 

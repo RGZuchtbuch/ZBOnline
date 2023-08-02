@@ -1,6 +1,7 @@
 <script>
-    import { user } from '../../js/store.js';
+    import { user } from '../../../js/store.js';
     import BreedRow from './BreedRow.svelte';
+
     export let section = null;
     export let open = false;
 
@@ -17,7 +18,6 @@
             section = section;
         }
     }
-    console.log( "Section", section);
 </script>
 
 <div class='flex flex-col pl-8'>
@@ -29,7 +29,7 @@
             {section.name} ({section.children.length + section.breeds.length })
         </div>
 
-        {#if section.children.length === 0 && $user && $user.admin}
+        {#if section.children.length === 0 && $user && $user.admin && open }
             <div class='cursor-pointer' title='Neue Rasse' on:click={onAddBreed}>[ + ]</div>
         {/if}
     </div>

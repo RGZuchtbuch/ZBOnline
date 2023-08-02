@@ -3,11 +3,11 @@
     import api from '../../js/api.js';
 
     import Breeder from '../breeder/Breeder.svelte';
-    import Breeders from './DistrictBreederList.svelte';
-    import Reports from './Reports.svelte';
-    import ResultsList from './DistrictResultsList.svelte';
-    import Report from './Report.svelte';
-    import ResultsEdit from './ResultsEdit.svelte';
+    import Breeders from './breeders/Breeders.svelte';
+    import Reports from './reports/Reports.svelte';
+    import ResultsList from './results/DistrictResultsList.svelte';
+    import Report from '../report/Report.svelte';
+    import ResultsEdit from './results/ResultsEdit.svelte';
     import ResultEdit from '../result/edit/Edit.svelte';
 
     export let id = null;
@@ -34,9 +34,7 @@
         </Route>
 
         <Route path='/:breederId/*' let:meta >
-            <Breeder id={ +meta.params.breederId } districtId={id} moderator={true} edit={true}>
-
-            </Breeder>
+            <Breeder id={ +meta.params.breederId } districtId={id} moderator={true} edit={true} />
         </Route>
     </Route>
 

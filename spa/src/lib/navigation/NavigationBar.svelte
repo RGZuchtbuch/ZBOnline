@@ -1,5 +1,5 @@
 <script>
-    import {user} from '../js/store.js';
+    import {user} from '../../js/store.js';
 </script>
 
 <div class='border border-gray-400 bg-header px-2 py-1 flex flex-row gap-2 no-print'>
@@ -8,7 +8,7 @@
         <a href='/zuchtbuch'>Das Zuchtbuch</a>
         {#if STANDARDENABLED}<a href='/standard'>Standard</a>{/if}
         {#if RESULTSENABLED}<a href='/leistungen'>Leistungen</a>{/if}
-        {#if MYBOOKENABLED && $user } <a href='/zuechter'>Mein Zuchtbuch</a> {/if}
+        {#if BREEDERENABLED && $user } <a href='/zuechter'>Mein Zuchtbuch</a> {/if}
         {#if MODERATORENABLED && $user && $user.moderator.length > 0 } <a href='/obmann'>Obmann</a> {/if}
         {#if ADMINENABLED && $user && $user.admin } <a href='/admin'>Admin</a> {/if}
     </div>

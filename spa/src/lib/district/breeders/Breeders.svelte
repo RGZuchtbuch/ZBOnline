@@ -1,18 +1,17 @@
 <script>
-    import { onMount } from 'svelte';
+    import {createEventDispatcher, onMount} from 'svelte';
     import {active, meta, router, Route} from 'tinro';
-    import api from '../../js/api.js';
-    import { user } from '../../js/store.js'
+    import api from '../../../js/api.js';
+    import { user } from '../../../js/store.js'
 
-    import BreederList from '../breeder/BreederList.svelte';
-//    import Date from "../common/input/Date.svelte";
+    import BreederRow from "./BreederRow.svelte";
 
     export let district = null;
 
     let breeders = null;
     let clubs = null;
 
-    let allBreeders = false;
+    let showInactive = false; // should ex members be included ?
 
     const route = meta();
 
@@ -45,6 +44,7 @@
         });
     }
 
+
     onMount( () => {
     })
 
@@ -57,12 +57,28 @@
 {#if $user && ( $user.admin || $user.id === district.moderatorId ) }
 
     <h3 class='w-256 text-center'>
-        Zuchtbuchmitglieder im {district.name}
+        {district.name} - Zuchtbuchmitglieder
     </h3>
 
     <div class='w-256 bg-gray-100 overflow-y-scroll border border-gray-400 rounded scrollbar'>
+
+        <div class='flex flex-row border border-gray-400 rounded-t px-4 py-1 bg-header gap-x-1 font-bold'>
+            <div class='w-4'>Id</div>
+            <div class='w-56'>Name</div>
+            <div class='w-36'>Ortsverein</div>
+            <div class='w-64'>ZB Verband</div>
+            <div class='w-24'>Seit</div>
+            <div class='w-16'>Inaktive</div> <input class='cursor-pointer' type='checkbox' bind:checked={showInactive}>
+            <div class='grow'></div>
+            {#if $user && $user.moderator}
+                <div class='cursor-pointer' title='Neues Mitglied' on:click={onAddBreeder}>[+]</div>
+            {/if}
+        </div>
+
         {#if breeders}
-            <BreederList {breeders} on:addBreeder={onAddBreeder}/>
+            {#each breeders as breeder}
+                <BreederRow {breeder} {showInactive} />
+            {/each}
         {/if}
     </div>
 {:else}

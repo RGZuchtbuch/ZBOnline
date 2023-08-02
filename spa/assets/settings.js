@@ -64,6 +64,6 @@ const MAXBUBBLE = 35;
 
 const STANDARDENABLED = true;
 const RESULTSENABLED = true;
-const MYBOOKENABLED = false;
+const BREEDERENABLED = true;
 const MODERATORENABLED = true;
 const ADMINENABLED = true;

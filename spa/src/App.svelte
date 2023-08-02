@@ -6,10 +6,10 @@
     import { standard, user } from './js/store.js'
 
     import Article from './lib/article/Article.svelte';
-    import NavigationBar from './lib/NavigationBar.svelte';
-    import Menu from './lib/Menu.svelte';
-    import Home from './lib/Home.svelte';
-    import Admin from './lib/admin/Admin.svelte';
+    import NavigationBar from './lib/navigation/NavigationBar.svelte';
+    import Menu from './lib/menu/Menu.svelte';
+    import Home from './lib/Info.svelte';
+    import Admin from './lib/Admin.svelte';
     import Moderator from './lib/moderator/Moderator.svelte';
     import Results from './lib/result/Results.svelte';
     import Standard from './lib/standard/Standard.svelte';
@@ -17,7 +17,7 @@
     import Login from './lib/login/Login.svelte';
     import Reset from './lib/login/Reset.svelte';
     import Logout from './lib/login/Logout.svelte';
-    import Message from './lib/Message.svelte';
+    import Message from './lib/common/Message.svelte';
 
 </script>
 

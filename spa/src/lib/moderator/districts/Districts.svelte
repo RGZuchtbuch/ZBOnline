@@ -1,10 +1,10 @@
 <script>
     import { createEventDispatcher } from 'svelte';
     import {active, meta, router, Route} from 'tinro';
-    import api from '../../js/api.js';
-    import { user } from '../../js/store.js'
+    import api from '../../../js/api.js';
+    import { user } from '../../../js/store.js'
 
-    import DistrictRow from '../district/DistrictListRow.svelte';
+    import DistrictRow from './DistrictRow.svelte';
 
     let district = null;
 

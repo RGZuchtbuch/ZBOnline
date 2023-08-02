@@ -3,10 +3,11 @@
     import api from '../../js/api.js';
     import {txt} from '../../js/util.js';
     import { newBreeder } from '../../js/template.js';
-    import Breeder from '../Breeder.svelte';
-    import Report from '../district/Report.svelte';
-    import Reports from '../district/Reports.svelte';
-    import Results from './Results.svelte';
+    import Breeder from './account/Account.svelte';
+    import Report from '../report/Report.svelte';
+    import Reports from '../district/reports/Reports.svelte';
+    import Results from './results/Results.svelte';
+    import Account from "./account/Account.svelte";
 
     export let id = null;
 
@@ -31,9 +32,6 @@
 
 </script>
 
-<div>
-    Breeder {#if breeder} {txt(breeder.firstname)} {txt( breeder.infix)} {txt(breeder.lastname)} {:else}...{/if}
-</div>
 {#if breeder}
     <Route path='/' redirect={route.match+'/leistungen'} />
 
@@ -53,7 +51,7 @@
     </Route>
 
     <Route path='/daten' let:meta>
-        Daten
-        <Breeder {breeder} moderator={true} />
+
+        <Account {breeder} />
     </Route>
 {/if}

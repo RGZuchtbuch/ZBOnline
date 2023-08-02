@@ -5,7 +5,7 @@ graph TD
     App --> Info
     App --> Standard
     App --> ResultsView
-    App --> Member
+    App --> Breeder
     App --> Moderator
     App --> Admin
     
@@ -25,16 +25,17 @@ graph TD
     ResultsView --> TimeLineChart
     ResultsView --> ResultsDoc
     
-    Member --> MemberDetails
-    Member --> Reports
+    Breeder --> BreederDetails
+    Breeder --> Reports
     Reports --> Report
     
     Moderator --> Districts
     Districts --> District
     District --> Results
-    District --> Members
+    District --> Breeders
+    District --> ResultsDoc
     
-    Members --> Member
+    Breeders --> Breeder
     
     Admin --> Districts
     Admin --> Articles

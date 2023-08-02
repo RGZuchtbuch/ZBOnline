@@ -5,6 +5,7 @@
     export let sectionId = null;
     export let result = null;
     export let saveCount = 0;
+    let hasResult = false;
 
     let invalids = { // hold keys->true/false for validity per field
     }
@@ -68,12 +69,14 @@
 
     }
 
+    $: hasResult = result.breeders > 0;
+
 </script>
 
 
 <form class='flex flex-row px-2 gap-x-1 text-sm' on:input={onFormChange}>
     <div class='w-4 pl-2'>&#10551; </div>
-    <div class='w-64'>{result.name}</div>
+    <div class='w-64' class:hasResult>{result.name}</div>
 
     <InputNumber class='w-14' bind:value={result.breeders} min=1 max=99999 error='1..99999' invalid={invalids.breeders} />
     <InputNumber class='w-14' bind:value={result.pairs} min=1 max=99999 error='1..99999' invalid={invalids.pairs} />
@@ -118,3 +121,9 @@
         {/if}
     {/if}
 </form>
+
+<style>
+    .hasResult {
+        @apply font-bold;
+    }
+</style>

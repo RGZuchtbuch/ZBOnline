@@ -1,34 +1,17 @@
 <script>
     import { onMount } from 'svelte';
+    import {meta} from 'tinro';
     import { dec, pct } from '../../js/util.js';
 
-    import api from '../../js/api.js';
-    import {meta} from 'tinro';
-
-    import Reports from '../Reports.svelte';
-
-    export let promise = null;
-
-    let reports = [];
+    export let reports = [];
 
     const route = meta();
 
-    function handle( promise ) {
-        if( promise ) {
-            promise.then( response => {
-                reports = response.reports;
-                console.log('Reports', reports);
-            })
-        }
-    }
 
     onMount( () => {
     });
-
-    $: handle( promise )
-
+    console.log( 'Reports', reports );
 </script>
-
 
 <div class='flex flex-row border border-gray-400 rounded-t p-0 bg-header gap-x-1 font-bold'>
     <div class='w-32 p-2'>Meldung</div>
@@ -64,31 +47,32 @@
 </div>
 
 <div class='bg-gray-100 overflow-y-scroll border border-gray-600 border-t-gray-400 rounded-b scrollbar'>
-    {#if reports}
-        {#each reports as report}
-            <a class='flex flex-row gap-x-1 text-xs' href={ route.match+'/'+report.reportId}>
-                <div class='w-8 px-1'>{report.year}</div>
-                <div class='w-8 border border-l-gray-400 px-1 text-center'>{report.group}</div>
+    {#each reports as report}
+        <a class='flex flex-row gap-x-1 text-xs' href={ route.match+'/'+report.reportId}>
+            <div class='w-8 px-1'>{report.year}</div>
+            <div class='w-8 border border-l-gray-400 px-1 text-center'>{report.group}</div>
 
-                <div class='w-16 border border-l-gray-400 px-1'>{report.reportName}</div>
+            <div class='w-16 border border-l-gray-400 px-1'>{report.reportName}</div>
 
-                <div class='w-48 border border-l-gray-400 px-1'>{report.breedName}</div>
-                <div class='w-32 border border-l-gray-400 px-1'>{report.colorName}</div>
+            <div class='w-48 border border-l-gray-400 px-1'>{report.breedName}</div>
+            <div class='w-32 border border-l-gray-400 px-1'>{report.colorName}</div>
 
-                <div class='w-12 border border-l-gray-400 px-1'>{dec(report.layDames)}</div>
-                <div class='w-10 border border-l-gray-400 px-1'>{dec(report.layEggs)}</div>
-                <div class='w-14 border border-l-gray-400 px-1'>{dec(report.layWeight)}</div>
+            <div class='w-12 border border-l-gray-400 px-1'>{dec(report.layDames)}</div>
+            <div class='w-10 border border-l-gray-400 px-1'>{dec(report.layEggs)}</div>
+            <div class='w-14 border border-l-gray-400 px-1'>{dec(report.layWeight)}</div>
 
-                <div class='w-16 border border-l-gray-400 px-1'>{dec(report.broodEggs)}</div>
-                <div class='w-16 border border-l-gray-400 px-1'>{pct( report.broodFertile, report.broodEggs )}</div>
-                <div class='w-16 border border-l-gray-400 px-1'>{pct( report.broodHatched, report.broodEggs )}</div>
+            <div class='w-16 border border-l-gray-400 px-1'>{dec(report.broodEggs)}</div>
+            <div class='w-16 border border-l-gray-400 px-1'>{pct( report.broodFertile, report.broodEggs )}</div>
+            <div class='w-16 border border-l-gray-400 px-1'>{pct( report.broodHatched, report.broodEggs )}</div>
 
-                <div class='w-10 border border-l-gray-400 px-1'>{dec(report.showCount)}</div>
-                <div class='w-14 border border-l-gray-400 px-1'>{dec(report.showScore)}</div>
-            </a>
-        {/each}
-    {/if}
+            <div class='w-10 border border-l-gray-400 px-1'>{dec(report.showCount)}</div>
+            <div class='w-14 border border-l-gray-400 px-1'>{dec(report.showScore)}</div>
+        </a>
+    {/each}
 </div>
+
+
+
 
 <style>
 

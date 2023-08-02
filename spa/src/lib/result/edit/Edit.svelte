@@ -55,9 +55,9 @@
 
 </script>
 
-<div class='w-256 flex bg-header rounded-t'>
+<div class='w-256 flex rounded-t'>
     <div class='w-8'></div>
-    <h2 class='grow bg-header text-white text-center'>Eingabe Leistungen {district ? district.name : '...'}</h2>
+    <h2 class='grow text-center'>Eingabe Leistungen {district ? district.name : '...'}</h2>
     <div class='w-8 justify-center m-2 circled bg-alert cursor-pointer' on:click={onHelp}>?</div>
 </div>
 

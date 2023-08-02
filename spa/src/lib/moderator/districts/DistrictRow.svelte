@@ -2,13 +2,14 @@
 //    import {Router} from 'tinro'; // Router store
     import { createEventDispatcher } from 'svelte';
     import {meta} from "tinro";
-    import api from '../../js/api.js';
-    import {user} from '../../js/store.js';
-    import {txt} from '../../js/util.js';
-    import Button from '../common/input/Button.svelte';
-    import Number from '../common/input/Number.svelte';
-    import Select from '../common/input/Select.svelte';
-    import Text from '../common/input/Text.svelte';
+    import api from '../../../js/api.js';
+    import {user} from '../../../js/store.js';
+    import {txt} from '../../../js/util.js';
+    import Button from '../../common/input/Button.svelte';
+    import Number from '../../common/input/Number.svelte';
+    import Select from '../../common/input/Select.svelte';
+    import Text from '../../common/input/Text.svelte';
+import DistrictDetails from "./DistrictDetails.svelte";
 
     export let district = null;
     export let open = false;
@@ -128,43 +129,8 @@
             {/if}
         </div>
 
-        {#if show && details }
-            <form class='flex flex-col border border-gray-400 rounded m-4 p-2' on:input={onChange}>
-                {#if details }
-                    <div class='flex'>
-                        <Text class='w-64' bind:value={details.name} label='Name' required disabled={!edit}/>
-                        <div class='grow'></div>
-                        {#if $user.admin && !changed}
-                            <div class='border-2 border-gray-400 rounded w-6 h-6 text-center text-green-600' on:click={onToggleEdit}>&#9998;</div>
-                        {/if}
-                    </div>
-                    <Text class='w-128' bind:value={details.fullname} label='Name voll' required disabled={!edit}/>
-                    <Text class='w-24' bind:value={details.short} label='Name abk.' required disabled={!edit}/>
-                    <div class='flex gap-x-2'>
-                        <Number class='w-32' bind:value={details.latitude} label='Breitegrad N]' min={MINLATITUDE} max={MAXLATITUDE} required disabled={!edit}/>
-                        <Number class='w-32' bind:value={details.longitude}  label='Längegrad O' min={MINLONGITUDE} max={MAXLONGITUDE} required disabled={!edit}/>
-                    </div>
-                        <Select bind:value={details.moderatorId} label='Obmann' disabled={! edit}>
-                            {#if edit && breeders}
-                                <option value={null}></option>
-                                {#each breeders as breeder}
-                                    <option value={breeder.id} selected={breeder.id === details.moderator.id}>
-                                        {txt(breeder.lastname)}, {txt(breeder.firstname)} {txt(breeder.infix)}
-                                    </option>
-                                {/each}
-                            {:else}
-                                <option value={ details.moderator ? details.moderator.id : null } selected>
-                                    { details.moderator ? txt( details.moderator.lastname)+', '+txt(details.moderator.firstname)+' '+txt(details.moderator.infix) : null }
-                                </option>
-                            {/if}
-                        </Select>
-                    {#if edit && changed}
-                        <Button class='edit' on:click={onSubmit} label='' value='speichern' />
-                    {/if}
-                {/if}
-            </form>
-        {/if}
-        <div></div>
+        <DistrictDetails district={district.id} />
+
     {/if}
 
 

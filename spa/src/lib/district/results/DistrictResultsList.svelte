@@ -1,11 +1,11 @@
 <script>
     import { onMount } from 'svelte';
     import {active, meta, router, Route} from 'tinro';
-    import api from '../../js/api.js';
-    import { user } from '../../js/store.js'
-    import ResultsList from '../result/ResultsList.svelte';
-    import Range from '../common/input/Range.svelte';
-    import ScrollDiv from '../common/ScrollDiv.svelte';
+    import api from '../../../js/api.js';
+    import { user } from '../../../js/store.js'
+    import ResultsList from '../../result/ResultsList.svelte';
+    import Range from '../../common/input/Range.svelte';
+    import ScrollDiv from '../../common/ScrollDiv.svelte';
 
     export let districtId = null;
 //    export let moderator = null;

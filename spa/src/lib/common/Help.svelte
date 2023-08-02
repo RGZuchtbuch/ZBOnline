@@ -16,9 +16,9 @@
 
 
 <div class='modal'>
-    <div class='w-256 flex bg-header border rounded-t pb-2'>
+    <div class='w-256 flex border rounded-t pb-2'>
         <div class='w-8'></div>
-        <h2 class='grow text-center text-white'>{title}</h2>
+        <h2 class='grow text-center'>{title}</h2>
         <div class='w-8 justify-center m-2 circled bg-alert' on:click={onHelp}>X</div>
     </div>
     <div class='w-256 h-full overflow-y-scroll border border-t-gray-400 rounded-b scrollbar p-8'>
@@ -30,7 +30,7 @@
 <style>
     .modal {
         z-index: 2;
-        @apply absolute backdrop-blur-xl w-256 top-0 bottom-0 flex flex-col py-6 justify-center cursor-pointer;
+        @apply absolute backdrop-blur-md w-256 top-0 bottom-0 flex flex-col py-6 justify-center cursor-pointer;
     }
 
     ol {

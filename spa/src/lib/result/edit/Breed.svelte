@@ -13,6 +13,7 @@
     export let open = false;
 
     let results = [];
+    let hasResults = 0;
 
     function onOpen() {
         if( open ) {
@@ -46,12 +47,13 @@
     }
 
     $: recount( breed, saveCount );
+    $: hasResults = breed.results;
 </script>
 
 
 
 <div class='flex flex-row px-2 gap-x-1'>
-    <div class='w-64 cursor-pointer whitespace-nowrap' on:click={onOpen} >
+    <div class='w-64 cursor-pointer whitespace-nowrap' class:hasResults on:click={onOpen} >
         {breed.name} {#if breed.results } <span class='text-xs'>({breed.results})</span> {/if}
     </div>
 
@@ -89,3 +91,9 @@
         <Result {sectionId} {result} bind:saveCount/>
     {/each}
 {/if}
+
+<style>
+    .hasResults {
+        @apply font-bold;
+    }
+</style>

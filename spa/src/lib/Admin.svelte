@@ -1,11 +1,11 @@
 <script>
     import {Route, meta, router} from 'tinro';
 
-    import District from '../district/District.svelte';
-    import Districts from './DistrictsList.svelte';
-    import Articles from './ArticlesList.svelte';
-    import Standard from '../standard/Standard.svelte';
-    import Log from './log/Log.svelte';
+    import District from './district/District.svelte';
+    import Districts from './admin/DistrictsList.svelte';
+    import Articles from './admin/ArticlesList.svelte';
+    import Standard from './standard/Standard.svelte';
+    import Log from './admin/log/Log.svelte';
 
     const route = meta();
 

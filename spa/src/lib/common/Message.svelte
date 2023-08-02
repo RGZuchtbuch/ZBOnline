@@ -1,13 +1,13 @@
 <script>
     import {meta, router} from 'tinro';
-    import api from '../js/api.js';
-    import {txt} from '../js/util.js';
-    import { user } from '../js/store.js'
-    import EmailInput from './common/input/Email.svelte';
-    import Modal from './common/Modal.svelte';
-    import Submit from './common/input/Submit.svelte';
-    import TextInput from './common/input/Text.svelte';
-    import TextArea from './common/input/TextArea.svelte';
+    import api from '../../js/api.js';
+    import {txt} from '../../js/util.js';
+    import { user } from '../../js/store.js'
+    import EmailInput from './input/Email.svelte';
+    import Modal from './Modal.svelte';
+    import Submit from './input/Submit.svelte';
+    import TextInput from './input/Text.svelte';
+    import TextArea from './input/TextArea.svelte';
 
     export let districtId = null;
     let district = null;

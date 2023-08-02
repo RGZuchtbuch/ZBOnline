@@ -3,8 +3,9 @@
     import api from '../../js/api.js';
     import {user} from '../../js/store.js';
 
+    import Comment from '../common/Comment.svelte';
     import District from '../district/District.svelte';
-    import Districts from './DistrictsList.svelte';
+    import Districts from './districts/Districts.svelte';
 
     const route = meta();
 
@@ -23,7 +24,10 @@
 
     <Route path='/'> <Districts on:select={onSelectDistrict}/> </Route>
 
+
     <Route path='/:districtId/*' let:meta>
         <District id={meta.params.districtId} />
     </Route>
+
+
 </Route>

@@ -1,23 +1,22 @@
 <script>
-    import api from '../../js/api.js';
-    import { user } from '../../js/store.js';
+    import api from '../../../js/api.js';
+    import { user } from '../../../js/store.js';
     import ColorRow from './ColorRow.svelte';
 
-    import Button from '../common/input/Button.svelte';
-    import NumberInput from '../common/input/Number.svelte';
-    import TextInput from '../common/input/Text.svelte';
-    import TextArea from '../common/input/TextArea.svelte';
+    import Button from '../../common/input/Button.svelte';
+    import NumberInput from '../../common/input/Number.svelte';
+    import TextInput from '../../common/input/Text.svelte';
+    import TextArea from '../../common/input/TextArea.svelte';
 
     export let breed = null;
     let details = null;
 
-    let open = false;
-    let showDetails = breed && breed.id ? false : true; // show details if new
     let edit = false;
     let changed = false;
 
     function onOpen() {
         open = ! open;
+        loadDetails();
     }
 
     function onAddColor() {
@@ -70,23 +69,26 @@
         })
         console.log( 'Submit' );
     }
+
+    function loadBreed( id ) {
+        console.log( 'Load Breed Details', id );
+        if( id ) {
+            api.breed.get(breed.id).then( response => {
+                details = response.breed;
+            });
+        } else { // id = null so new breed
+            details = Object.assign( {}, breed ); // get from new breed
+        }
+    }
+
+    $: loadBreed( breed.id );
 </script>
 
+
 <div class='flex flex-col pl-8'>
-    <div class='flex flex-row border-b border-gray-300 px-4 gap-x-1'>
-        <div class='w-12 text-xs'># {breed.id}</div>
+    {#if details}
 
-        <div class='grow cursor-pointer' on:click={onOpen}>
-            {breed.name} ({breed.colors.length})
-        </div>
-        <div class='w-8 cursor-pointer' on:click={onDetails} title='Details'>[ D ]</div>
-        {#if $user && $user.admin}
-            <div class='w-8 cursor-pointer' title='Neue Farbe' on:click={onAddColor}>[ + ]</div>
-        {/if}
-    </div>
-
-    {#if showDetails && details}
-        <form class='ml-16 p-2 border border-gray-600' on:change={onChange} on:submit|preventDefault={onSubmit}>
+        <form class='ml-4 p-2 border border-gray-600' on:change={onChange} on:submit|preventDefault={onSubmit}>
 
             <div class='flex flex-row'>
                 <div class='grow'><TextInput class='w-64' label={'Name der Rasse'} bind:value={details.name} disabled={! edit}/></div>
@@ -111,6 +113,7 @@
                 <span class='label'>Info</span>
                 <div class=''>{@html details.info}</div>
             </div>
+            <div class='h-4'></div>
 
             {#if changed}
                 <div class='flex flex-row'>
@@ -121,9 +124,4 @@
         </form>
     {/if}
 
-    {#if open}
-        {#each breed.colors as color }
-            <ColorRow color={color}/>
-        {/each}
-    {/if}
 </div>

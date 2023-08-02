@@ -1,12 +1,12 @@
 <script>
-    import { user } from '../../js/store.js';
-    import { txt }  from '../../js/util.js';
-    import api from "../../js/api.js";
+    import { user } from '../../../js/store.js';
+    import { txt }  from '../../../js/util.js';
+    import api from "../../../js/api.js";
 
-    import Button from '../common/input/Button.svelte';
-    import NumberInput from '../common/input/Number.svelte';
-    import TextInput from '../common/input/Text.svelte';
-    import TextArea from '../common/input/TextArea.svelte';
+    import Button from '../../common/input/Button.svelte';
+    import NumberInput from '../../common/input/Number.svelte';
+    import TextInput from '../../common/input/Text.svelte';
+    import TextArea from '../../common/input/TextArea.svelte';
 
     export let color = null;
 
