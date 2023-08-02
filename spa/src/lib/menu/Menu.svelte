@@ -7,6 +7,8 @@
     import DistrictMenu from "./DistrictMenu.svelte";
     import BreederMenu from "./BreederMenu.svelte";
     import ModeratorMenu from "./ModeratorMenu.svelte";
+    import StandardMenu from "./StandardMenu.svelte";
+    import InfoMenu from "./InfoMenu.svelte";
 
 </script>
 
@@ -18,22 +20,19 @@
     {/if}
     <hr>
     <Route path='/zuchtbuch/*'>
-        <h4>Das BDRG Zuchtbuch ←</h4>
-        <p>In bearbeitung !</p>
+        <InfoMenu />
     </Route>
     <Route path='/standard/*'>
-        <h4>BDRG Rassestandard ←</h4>
-        <p>In bearbeitung !</p>
+        <StandardMenu />
+
     </Route>
     <Route path='/leistungen/*'>
         <h4>Zuchtleistungen ←</h4>
     </Route>
 
-    {#if $user }
+    {#if $user && $user.moderator.length > 0 }
         <Route path='/obmann/*'>
-
             <ModeratorMenu />
-
             <Route path='/verband/:districtId/*' let:meta>
                 <DistrictMenu districtId={meta.params.districtId} />
 
@@ -42,7 +41,8 @@
                 </Route>
             </Route>
         </Route>
-
+    {/if}
+    {#if $user && $user.admin }
         <Route path='/admin/*' >
             <AdminMenu />
 

@@ -5,11 +5,11 @@
     import api from './js/api.js';
     import { standard, user } from './js/store.js'
 
-    import Article from './lib/article/Article.svelte';
+    import Article from './lib/info/Article.svelte';
     import NavigationBar from './lib/navigation/NavigationBar.svelte';
     import Menu from './lib/menu/Menu.svelte';
-    import Home from './lib/Info.svelte';
-    import Admin from './lib/Admin.svelte';
+    import Home from './lib/info/Info.svelte';
+    import Admin from './lib/admin/Admin.svelte';
     import Moderator from './lib/moderator/Moderator.svelte';
     import Results from './lib/result/Results.svelte';
     import Standard from './lib/standard/Standard.svelte';
@@ -38,8 +38,8 @@
 
             <Route path='/' > <Article id=1 /> /></Route>
             <Route path='/zuchtbuch/*' let:meta>
-                <Route path='/'> <Article id=1 /> </Route>
-                <Route path='/:articleId'> <Article id={meta.params.articleId} /> </Route>
+                <Route path='/'> <Article articleId=1 /> </Route>
+                <Route path='/:articleId' let:meta> <Article articleId={meta.params.articleId} /> </Route>
             </Route>
             <Route path='/standard/*' > <Standard /> </Route>
             <Route path='/leistungen/*' > <Results /> </Route>

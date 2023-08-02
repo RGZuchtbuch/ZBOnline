@@ -28,7 +28,6 @@
         for( let child of sourceDistrict.children ) {
             const filteredChild = filter( child );
             if( moderated || filteredChild.moderated || filteredChild.children.length > 0 ) {
-                console.log( 'Filter', district.name, filteredChild.name, filteredChild.moderated );
                 district.children.push( filteredChild );
             }
         }
@@ -45,17 +44,11 @@
 </script>
 
 
-{#if $user}
-    <h2 class='w-256 border border-gray-400 rounded-t p-2 bg-header text-center text-xl print'>Verbände für Obmann {$user.fullname} </h2>
-    {#if district}
-        <div class='w-256 bg-gray-100 overflow-y-scroll border rounded-b border-t-0 border-gray-400 px-4 scrollbar'>
-            <DistrictRow district={district} open={true} />
-        </div>
-    {:else}
-        Einen moment bitte
-    {/if}
-{:else}
-    Geht nicht, Sollte nicht
+<h2 class='w-256 border border-gray-400 rounded-t p-2 bg-header text-center text-xl print'>Verbände für Obmann {$user.fullname} </h2>
+{#if district}
+    <div class='w-256 bg-gray-100 overflow-y-scroll border rounded-b border-t-0 border-gray-400 px-4 scrollbar'>
+        <DistrictRow district={district} open={true} />
+    </div>
 {/if}
 
 

@@ -1,17 +1,19 @@
 <script>
     import api from '../../js/api.js';
 
-    export let id = null;
+    export let articleId = null;
 
     let article = null;
 
     function loadArticle( id ) {
+        console.log( "ArticleId", id );
         api.article.get( id ).then( response => {
             article = response.article;
+            console.log( 'Article', article );
         });
     }
 
-    $: loadArticle( id );
+    $: loadArticle( articleId );
 </script>
 
 

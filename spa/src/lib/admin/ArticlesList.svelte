@@ -4,7 +4,7 @@
     import { user } from '../../js/store.js'
     import api from '../../js/api.js';
 
-    import ArticleRow from '../article/ArticleRow.svelte';
+    import ArticleRow from '../info/ArticleRow.svelte';
     import ScrollDiv from '../common/ScrollDiv.svelte'
 
 

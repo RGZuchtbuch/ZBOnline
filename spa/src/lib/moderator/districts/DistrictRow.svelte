@@ -3,13 +3,6 @@
     import { createEventDispatcher } from 'svelte';
     import {meta} from "tinro";
     import api from '../../../js/api.js';
-    import {user} from '../../../js/store.js';
-    import {txt} from '../../../js/util.js';
-    import Button from '../../common/input/Button.svelte';
-    import Number from '../../common/input/Number.svelte';
-    import Select from '../../common/input/Select.svelte';
-    import Text from '../../common/input/Text.svelte';
-import DistrictDetails from "./DistrictDetails.svelte";
 
     export let district = null;
     export let open = false;
@@ -97,55 +90,31 @@ import DistrictDetails from "./DistrictDetails.svelte";
     $: onDistrict( district );
 </script>
 
-<div class='flex flex-col pl-6'>
-
-    {#if district.moderated}
+<div class='flex flex-col pl-4'>
+    {#if district.moderated || district.children.length > 0 }
         <div class='flex border-b'>
-            <div class='w-4'>&#10551;</div>
-            {#if false && district.children.length > 0 }
-                {#if open}
-                    <div class='w-6 cursor-zoom-out text-red-800' on:click={onToggleOpen} title='Schließen'>[-]</div>
-                {:else}
-                    <div class='w-6 cursor-zoom-in text-green-800' on:click={onToggleOpen} title='Öffnen'>[+]</div>
-                {/if}
-            {:else}
-                <div class='w-6'></div>
-            {/if}
+            <div class='w-6'>&#10551;</div>
 
             {#if district.moderated}
                 <a class='text-black cursor-pointer' href={route.match+'/'+district.id} title='Zum Verband'>{district.name}</a>
             {:else}
                 <div class='text-gray-400 cursor-not-allowed' title='Kein zugang' >{district.name}</div>
             {/if}
-            <div class='w-16'></div>
 
-            <div class='grow'></div>
-            {#if district.moderated}
-                {#if show}
-                    <div class='cursor-pointer text-red-600 px-2' on:click={onToggleShow} title='schließen'>&#8505;</div>
-                {:else}
-                    <div class='cursor-pointer text-green-600 px-2' on:click={onToggleShow} title='bearbeiten'>&#8505;</div>
-                {/if}
-            {/if}
         </div>
-
-        <DistrictDetails district={district.id} />
-
     {/if}
 
+    {#if true || open}
+        {#each district.children as child}
+            <svelte:self district={child} parentModerated={moderated}/>
+        {/each}
+    {/if}
 
 </div>
 
-{#if true || open}
-    {#each district.children as child}
-        <svelte:self district={child} parentModerated={moderated}/>
-    {/each}
-{/if}
+
 
 <style>
-    .edit {
-        @apply cursor-pointer;
-    }
     select {
         background: green;
     }

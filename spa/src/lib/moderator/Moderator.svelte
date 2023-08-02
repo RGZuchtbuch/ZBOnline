@@ -26,8 +26,6 @@
 
 
     <Route path='/:districtId/*' let:meta>
-        <District id={meta.params.districtId} />
+        <District districtId={meta.params.districtId} />
     </Route>
-
-
 </Route>
