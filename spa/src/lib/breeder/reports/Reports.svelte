@@ -15,12 +15,13 @@
     const route = meta();
 
 
-    function loadReports() {
-        if( breeder ) {
-            api.breeder.reports.get(breeder.id).then(response => {
-                reports = response.reports;
-                console.log("Reports loaded", reports);
-            });
+    function loadReports( id ) {
+        if( id ) {
+            //api.breeder.reports.get(breeder.id).then(response => {
+            //    reports = response.reports;
+            //    console.log("Reports loaded", reports);
+            //});
+            console.log( 'Todo: loadReports');
         }
     }
 
@@ -29,7 +30,7 @@
         dispatch( 'select', event.detail );
     }
 
-    $: loadDistricts( $user ); // if user changes by logout/login or exp
+    $: loadReports( breeder.id ); // if user changes by logout/login or exp
 
 </script>
 

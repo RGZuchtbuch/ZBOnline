@@ -5,7 +5,7 @@
     import { newBreeder } from '../../js/template.js';
     import Breeder from './account/Account.svelte';
     import Report from '../report/Report.svelte';
-    import Reports from '../district/reports/Reports.svelte';
+    import Reports from '../breeder/reports/Reports.svelte';
     import Results from './results/Results.svelte';
     import Account from "./account/Account.svelte";
 
@@ -35,20 +35,14 @@
 {#if breeder}
     <Route path='/' redirect={route.match+'/leistungen'} />
 
-    <Route path='/leistungen/*' let:meta> Results
+    <Route path='/meldung/*' let:meta> Results
         <Route path='/' let:meta>
-            RR
-            <Results {breeder} />
+            <Reports {breeder} />
         </Route>
+
         <Route path='/:reportId' let:meta> <Report reportId={ +meta.params.reportId } /></Route>
     </Route>
 
-    <Route path='/meldung/*' let:meta>
-        <Route path='/' let:meta>
-            <Reports promise={api.breeder.reports.get( breeder.id ) } />
-        </Route>
-        <Route path='/:reportId' let:meta> <Report reportId={ +meta.params.reportId } /></Route>
-    </Route>
 
     <Route path='/daten' let:meta>
 
