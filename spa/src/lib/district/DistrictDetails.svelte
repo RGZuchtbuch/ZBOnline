@@ -1,11 +1,9 @@
 <script>
-//    import {Router} from 'tinro'; // Router store
     import { createEventDispatcher } from 'svelte';
     import {meta} from "tinro";
     import api from '../../js/api.js';
     import {user} from '../../js/store.js';
     import {txt} from '../../js/util.js';
-    import Button from '../common/input/Button.svelte';
     import Number from '../common/input/Number.svelte';
     import Select from '../common/input/Select.svelte';
     import Text from '../common/input/Text.svelte';
@@ -37,9 +35,9 @@
     function onSubmit() {
         console.log( 'Submit district', district );
         disabled = true;
-        changed = false;
         api.district.post( district ).then( response => {
-           district.id = response.id;
+            district.id = response.id;
+            changed = false;
         });
     }
 
@@ -59,7 +57,7 @@
     {#if district }
         <form class='flex flex-col bg-gray-200 border border-gray-400 rounded-b p-4' on:input={onChange}>
             <fieldset {disabled}>
-                <div class='flex'>
+                <div class='flex gap-2'>
                     <Text class='w-64' bind:value={district.name} label='Name' required/>
                     <div class='grow'></div>
                     {#if $user.admin && !changed}

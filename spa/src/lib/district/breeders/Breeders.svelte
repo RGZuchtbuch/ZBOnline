@@ -15,28 +15,6 @@
 
     const route = meta();
 
-    function onAddBreeder() { // event
-
-        let breeder = {
-            id: null,
-            firstname: null,
-            infix: null,
-            lastname: null,
-            email: null,
-            districtId: district.id,
-            districtName: district.name,
-            clubId: null,
-            clubName: null,
-            start: Date.now(),
-            end: null,
-            active: true,
-            info: null
-        };
-        breeders.unshift(breeder);
-        breeders = breeders;
-    }
-
-
     function loadBreeders( district ) {
         api.district.breeders.get( district.id ).then( response => {
            breeders = response.breeders;
@@ -71,7 +49,9 @@
             <div class='w-16'>Inaktive</div> <input class='cursor-pointer' type='checkbox' bind:checked={showInactive}>
             <div class='grow'></div>
             {#if $user && $user.moderator}
-                <div class='cursor-pointer' title='Neues Mitglied' on:click={onAddBreeder}>[+]</div>
+                <div class='cursor-pointer' title='Neues Mitglied'>
+                    <a href={route.match+'/0/daten'}>[+]</a>
+                </div>
             {/if}
         </div>
 

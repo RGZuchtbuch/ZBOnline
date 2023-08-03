@@ -13,12 +13,13 @@
     export let spellcheck = true;
     export let invalid = false;
 
+    export let element;
     let classname = '';
     export { classname as class }
 
 
     function validate( value ) {
-        invalid = ( required && value && value.length === 0 );
+        invalid = ( required && ( value===null || value.length === 0 ) );
     }
 
     $: validate( value );
@@ -29,7 +30,7 @@
     {#if label}
         <label class='label' for='input'>{label}</label>
     {/if}
-    <input class='data' class:invalid id='input' type='text' {name} bind:value={value}
+    <input class='data' class:invalid id='input' type='text' {name} bind:value={value} bind:this={element}
            {minlength} {maxlength}
            {required} {disabled} {readonly} {pattern}
            {spellcheck}
