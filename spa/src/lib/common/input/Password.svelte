@@ -10,6 +10,7 @@
     export let minlength = 3;
     export let required = false;
     export let invalid = false;
+    export let element;
 
     let classname = '';
     export { classname as class }
@@ -38,16 +39,16 @@
     {#if label}
         <label class='label' for='input'>{label}</label>
     {/if}
-    <input class='data' class:invalid id='input' type='password' {name} bind:value={value}
+    <input class='data' class:invalid id='input' type='password' {name} bind:value={value} bind:this={element}
            {minlength} {maxlength}
            {required} {disabled} {readonly}
 
            on:focus={on.focus}
            on:blur={on.blur}
     >
-    {#if invalid && ! disabled}
-        <span class:invalid>{error}</span>
-    {/if}
+    <span class:invalid>
+        {#if invalid} {error} {:else} &nbsp; {/if}
+    </span>
 </div>
 
 <style>

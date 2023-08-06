@@ -2,8 +2,8 @@
     import {Route, meta, router} from 'tinro';
 
     import District from '../district/District.svelte';
-    import Districts from './DistrictsList.svelte';
-    import Articles from './ArticlesList.svelte';
+    import Districts from './Districts.svelte';
+    import Articles from '../article/Articles.svelte';
     import Standard from '../standard/Standard.svelte';
     import Log from './log/Log.svelte';
 
@@ -20,7 +20,7 @@
 
 <Route path='/' redirect={ route.match+'/verband'} />
 
-<Route path='/standard'> <Standard /> </Route>
+<Route path='/standard/*'> <Standard /> </Route>
 
 <Route path='/verband/*'>
 

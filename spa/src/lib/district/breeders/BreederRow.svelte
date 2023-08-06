@@ -9,7 +9,7 @@
     import Text from '../../common/input/Text.svelte';
 
     export let breeder = null;
-    export let showAll = false;
+    export let showInactive = false;
 
     let showDetails = false;
     let edit = false;
@@ -92,7 +92,7 @@
     }
 </script>
 
-{#if showAll || activeMember( breeder ) }
+{#if showInactive || activeMember( breeder ) }
     <div class='flex flex-row border-b border-gray-300 px-4 gap-x-1'>
         <div class='w-4'>{breeder.id}</div>
 
@@ -113,35 +113,5 @@
 
     </div>
 
-    {#if showDetails && details }
-        <form class='flex flex-col border border-gray-400 rounded m-4 p-2' on:input={onChange}>
-
-            <Text class='w-64' bind:value={details.firstname} label='Vorname' required/>
-            <Text class='w-64' bind:value={details.infix} label='Präfix' required/>
-            <Text class='w-64' bind:value={details.lastname} label='Nachname' required/>
-
-            <Text class='w-128' bind:value={details.email} label='Email Adresse'/>
-
-            <Select class='w-64' label='Ortsverein' bind:value={details.clubId} required>
-                {#if clubs}
-                    {#each clubs as club}
-                        <option class='bg-white' value={club.id} selected={club.id === details.clubId}> {club.name} </option>
-                    {/each}
-                {:else}
-                    <option class='' value={details.clubId} selected> {details.clubName} </option>
-                {/if}
-            </Select>
-            <div class='flex gap-2'>
-                <DateInput class='w-24' label='Mitglied seit' bind:value={details.start} required/>
-                <DateInput class='w-24' label='Mitglied bis' bind:value={details.end} />
-            </div>
-            <Text class='w-128' label='Info' bind:value={details.info} />
-
-            {#if changed}
-                <Button class='edit' on:click={onSubmit} label='' value='speichern' />
-            {/if}
-        </form>
-
-    {/if}
 {/if}
 

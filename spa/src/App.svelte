@@ -5,7 +5,7 @@
     import api from './js/api.js';
     import { standard, user } from './js/store.js'
 
-    import Article from './lib/info/Article.svelte';
+    import Article from './lib/article/Article.svelte';
     import NavigationBar from './lib/navigation/NavigationBar.svelte';
     import Menu from './lib/menu/Menu.svelte';
     import Home from './lib/info/Info.svelte';
@@ -18,11 +18,12 @@
     import Reset from './lib/login/Reset.svelte';
     import Logout from './lib/login/Logout.svelte';
     import Message from './lib/common/Message.svelte';
+    import Info from "./lib/info/Info.svelte";
 
 </script>
 
 <div class='w-full h-full flex flex-col'>
-    <img class='absolute w-32 m-2 ml-12 no-print' src='../assets/bdrg_logo_r.png' alt='BDRG Logo'>
+    <img class='absolute w-20 mt-4 ml-24 no-print' src='../assets/bdrg_logo_r.png' alt='BDRG Logo'>
 
     <div class='text-center no-print'>
         Das Rassegeflügel Zuchtbuch. Schönheit und Leistung durch Wissen.
@@ -32,11 +33,12 @@
 
     <div class='grow p-2 flex flex-row gap-2 relative min-h-0'>
 
+
         <Menu />
 
-        <div class='grow flex flex-col border rounded bg-white items-center p-4 print'>
+        <div class='grow flex flex-col border rounded bg-white items-center print'>
 
-            <Route path='/' > <Article id=1 /> /></Route>
+            <Route path='/' > <Info /> /></Route>
             <Route path='/zuchtbuch/*' let:meta>
                 <Route path='/'> <Article articleId=1 /> </Route>
                 <Route path='/:articleId' let:meta> <Article articleId={meta.params.articleId} /> </Route>

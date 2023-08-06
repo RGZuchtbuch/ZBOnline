@@ -5,7 +5,7 @@
 
     import Comment from '../common/Comment.svelte';
     import District from '../district/District.svelte';
-    import Districts from './districts/Districts.svelte';
+    import Districts from './Districts.svelte';
 
     const route = meta();
 

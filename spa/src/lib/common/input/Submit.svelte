@@ -3,6 +3,7 @@
     export let value = null;
     export let label = null;
     export let disabled = false;
+    export let element;
 
     let classname = '';
     export { classname as class }
@@ -19,7 +20,7 @@
     {#if label !== null}
         <label class='label' for='input'>{label}</label>
     {/if}
-    <input class='data cursor-pointer' class:disabled id='input' type='submit' {name} bind:value={value}
+    <input class='data cursor-pointer' class:disabled id='input' type='submit' {name} bind:value={value} bind:this={element}
            {disabled} readonly
             on:focus={on.focus}
             on:blur={on.blur}

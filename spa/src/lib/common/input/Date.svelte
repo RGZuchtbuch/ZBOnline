@@ -11,6 +11,7 @@
     export let max = settings.date.max;
     export let error = new Date( min ).getFullYear() + ' - ' + new Date( max ).getFullYear();
     export let valid = true;
+    export let element;
 
     let classname = '';
     export { classname as class }
@@ -41,17 +42,15 @@
         <label class='label' for='input'>{label}</label>
     {/if}
     <input class='data' class:invalid id='input' type='text' {name}
-           bind:value={input}
+           bind:value={input} bind:this={element}
            {disabled} {readonly}
            {required}
            on:focus={on.focus}
            on:blur={on.blur}
     >
-        <span class='invalid'>
-            {#if invalid && ! disabled}
-                {error}
-            {/if}
-        </span>
+    <span class:invalid>
+        {#if invalid} {error} {:else} &nbsp; {/if}
+    </span>
 </div>
 
 <style>

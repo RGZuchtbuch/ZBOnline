@@ -9,6 +9,7 @@
     export let readonly = false;
     export let required = false;
 
+    export let element;
 
     let classname = '';
     export { classname as class }
@@ -33,8 +34,8 @@
         <label class='label' for='input'>{label}</label>
     {/if}
 
-    <select class:invalid class:disabled id='input'
-            bind:value={value}
+    <select class:invalid id='input'
+            bind:value={value} bind:this={element}
             {name}
             {disabled} {readonly} {required}
             on:focus={on.focus}
@@ -44,9 +45,9 @@
             <slot></slot>
     </select>
 
-    {#if invalid && ! disabled}
-        <span class:invalid>{error}</span>
-    {/if}
+    <span class:invalid>
+        {#if invalid} {error} {:else} &nbsp; {/if}
+    </span>
 </div>
 
 <style>

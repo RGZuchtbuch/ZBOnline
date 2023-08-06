@@ -12,52 +12,59 @@
 
 </script>
 
-<div class='w-64 mt-32 p-4 border rounded flex flex-col no-print'>
-    {#if $user}
-        <h3>Hallo {$user.firstname}</h3>
-    {:else}
-        <h3>Hallo Besucher</h3>
-    {/if}
-    <hr>
-    <Route path='/zuchtbuch/*'>
-        <InfoMenu />
-    </Route>
-    <Route path='/standard/*'>
-        <StandardMenu />
 
-    </Route>
-    <Route path='/leistungen/*'>
-        <h4>Zuchtleistungen ←</h4>
-    </Route>
+<div class='menu no-print'>
+    <h3 class='title'> &nbsp; </h3>
 
-    {#if $user && $user.moderator.length > 0 }
+    <div class='header'> Menü für {$user ? $user.firstname : 'Besucher' } </div>
+    <div class='body scrollbar'>
+
+        <Route path='/zuchtbuch/*'> <InfoMenu /> </Route>
+        <Route path='/standard/*'> <StandardMenu /> </Route>
+        <Route path='/leistungen/*'> <h4>Zuchtleistungen ←</h4> </Route>
+
         <Route path='/obmann/*'>
-            <ModeratorMenu />
-            <Route path='/verband/:districtId/*' let:meta>
-                <DistrictMenu districtId={meta.params.districtId} />
+            {#if $user && $user.moderator.length > 0 }
+                <ModeratorMenu />
+                <Route path='/verband/:districtId/*' let:meta>
+                    <DistrictMenu districtId={meta.params.districtId} />
 
-                <Route path='/zuechter/:breederId/*' let:meta>
-                    <BreederMenu districtId={meta.params.districtId} breederId={meta.params.breederId} />
+                    <Route path='/zuechter/:breederId/*' let:meta>
+                        <BreederMenu districtId={meta.params.districtId} breederId={meta.params.breederId} />
+                    </Route>
                 </Route>
-            </Route>
+            {/if}
         </Route>
-    {/if}
-    {#if $user && $user.admin }
+
         <Route path='/admin/*' >
-            <AdminMenu />
+            {#if $user && $user.admin }
+                <AdminMenu />
 
-            <Route path='/verband/:districtId/*' let:meta>
-                <DistrictMenu districtId={meta.params.districtId}/>
+                <Route path='/verband/:districtId/*' let:meta>
+                    <DistrictMenu districtId={meta.params.districtId}/>
 
-                <Route path='/zuechter/:breederId/*' let:meta>
-                    <BreederMenu districtId={meta.params.districtId} breederId={meta.params.breederId} />
+                    <Route path='/zuechter/:breederId/*' let:meta>
+                        <BreederMenu districtId={meta.params.districtId} breederId={meta.params.breederId} />
+                    </Route>
                 </Route>
-            </Route>
+            {/if}
         </Route>
-    {/if}
 
+    </div>
 </div>
 
-<style>
 
+<style>
+    .menu {
+        @apply w-64 border rounded flex flex-col;
+    }
+    .title {
+        @apply text-center;
+    }
+    .header {
+        @apply border rounded-t border-gray-400 px-4 py-2 bg-header font-bold text-white text-center;
+    }
+    .body {
+        @apply border rounded-b border-gray-400 bg-gray-100 p-2 text-black overflow-y-scroll;
+    }
 </style>

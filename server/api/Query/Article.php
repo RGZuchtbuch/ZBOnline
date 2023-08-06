@@ -48,7 +48,7 @@ class Article extends Query
         $stmt = Query::prepare('
             SELECT id, title
             FROM article
-            ORDER BY title
+            ORDER BY `order`
         ');
         return Query::selectArray($stmt );
     }

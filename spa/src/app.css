@@ -35,6 +35,14 @@ p {
     @apply mt-2;
 }
 
+dt {
+    @apply font-bold;
+}
+
+dd {
+    @apply ml-8 mb-2
+}
+
 :root {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
@@ -45,42 +53,40 @@ p {
     @apply pl-1 h-4 text-gray-600 whitespace-nowrap;
 }
 
-input, textarea, select, option {
-    @apply h-6 rounded mb-1;
+input, option {
+    @apply h-6 px-2;
 }
 
-innput:read-only, select:read-only {
-    background-color: rgba(0, 0, 0, 0);
-}
-input:disabled, select:disabled {
-    background-color: rgba(1, 0, 0, 0);
-    @apply border-gray-600;
-}
-
-select:enabled {
-    @apply border-gray-600;
-    background: white;
-}
-select.disabled {
-    background: rgba(0,0,0,0);
-}
-input:enabled:read-write, select:enabled:read-write {
-    background-color: white;
-    @apply border-green-600;
-}
-
-.input > .data {
+select {
     @apply px-1;
-
 }
+
+input, textarea, select {
+    @apply border-b border-r border-gray-400 rounded mb-1 bg-gray-50;
+}
+
+input:enabled, textarea:enabled, select:enabled {
+    @apply bg-white border-green-400;
+}
+
+input.invalid, textarea.invalid, select.invalid {
+    @apply border-red-400;
+}
+
+
+
 .input > input.invalid, .input > select.invalid {
     @apply border-red-600;
 }
 
-.input > span.invalid {
+.input > span {
     font-size: 0.6rem;
     line-height: 0.6rem;
-    @apply pl-1 text-red-600;
+    @apply pl-1;
+}
+
+.input > span.invalid {
+    @apply text-red-600;
 }
 
 .circled {

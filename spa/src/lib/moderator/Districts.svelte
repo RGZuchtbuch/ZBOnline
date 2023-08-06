@@ -1,30 +1,29 @@
 <script>
-    import { createEventDispatcher } from 'svelte';
-    import {active, meta, router, Route} from 'tinro';
-    import api from '../../../js/api.js';
-    import { user } from '../../../js/store.js'
+    import { meta } from 'tinro';
+    import api from '../../js/api.js';
+    import { user } from '../../js/store.js'
 
-    import DistrictRow from './DistrictRow.svelte';
+    import List from "../common/List.svelte";
+
+    import DistrictsTree from "../districts/DistrictsTree.svelte";
+//    import {createEventDispatcher} from "svelte";
 
     let rootDistrict = null;
 
-    const dispatch = createEventDispatcher();
+//    const dispatch = createEventDispatcher();
     const route = meta();
 
 
     function loadDistricts() {
         api.district.descendants.get( 1 ).then( response => {
             rootDistrict = filter( response.district );
-            console.log("Admin districts root", rootDistrict );
         } );
     }
-
 
     function filter( sourceDistrict ) {
         let moderated = $user && sourceDistrict && sourceDistrict.moderatorId === $user.id
         let parentDistrict = { id:sourceDistrict.id, name:sourceDistrict.name, moderated:moderated, children:[] };
 
-        let childModerated = false;
         for( let child of sourceDistrict.children ) {
             const childDistrict = filter( child );
             if( moderated || childDistrict.moderated || childDistrict.children.length > 0 ) {
@@ -34,27 +33,20 @@
         return parentDistrict;
     }
 
-    // forward district select to parent
-    function onSelect( event ) {
-        dispatch( 'select', event.detail );
-    }
-
     $: loadDistricts( $user ); // if user changes by logout/login or exp
-
 </script>
 
 
-<h2 class='w-256 border border-gray-400 rounded-t p-2 bg-header text-center text-xl print'>Verbände für Obmann {$user.fullname} </h2>
-{#if rootDistrict}
-    <div class='w-256 bg-gray-100 overflow-y-scroll border rounded-b border-t-0 border-gray-400 px-4 scrollbar'>
-        <DistrictRow district={rootDistrict} open={true} />
+<List>
+    <div slot='title'>Obmann {$user.fullname}</div>
+    <div slot='header' >BDRG / LV / KV </div>
+    <div slot='body'>
+        {#if rootDistrict}
+            <DistrictsTree {rootDistrict} />
+        {/if}
     </div>
-{/if}
-
+</List>
 
 <style>
 
 </style>
-
-
-

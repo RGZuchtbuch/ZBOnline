@@ -11,6 +11,7 @@
     export let error = min+'..'+max;
     export let required = false;
     export let invalid = false;
+    export let element;
 
     let classname = '';
     export { classname as class }
@@ -22,13 +23,13 @@
         <label class='label text-left' for='input'>{label}</label>
     {/if}
     <input class='data' class:invalid id='input' type='number' {name}
-           bind:value={value}
+           bind:value={value} bind:this={element}
            {min} {max} {step}
            {disabled} {readonly} {required}
     >
-    {#if ! disabled && invalid }
-        <span class:invalid>{error}</span>
-    {/if}
+    <span class:invalid>
+        {#if invalid} {error} {:else} &nbsp; {/if}
+    </span>
 </div>
 
 <style>

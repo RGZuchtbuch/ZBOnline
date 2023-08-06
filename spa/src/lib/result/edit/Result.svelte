@@ -1,6 +1,6 @@
 <script>
     import api         from '../../../js/api.js';
-    import InputNumber from '../../common/input/Number.svelte';
+    import NumberInput from '../../common/input/Number.svelte';
 
     export let sectionId = null;
     export let result = null;
@@ -78,17 +78,17 @@
     <div class='w-4 pl-2'>&#10551; </div>
     <div class='w-64' class:hasResult>{result.name}</div>
 
-    <InputNumber class='w-14' bind:value={result.breeders} min=1 max=99999 error='1..99999' invalid={invalids.breeders} />
-    <InputNumber class='w-14' bind:value={result.pairs} min=1 max=99999 error='1..99999' invalid={invalids.pairs} />
+    <NumberInput class='w-14' bind:value={result.breeders} min=1 max=99999 error='1..99999' invalid={invalids.breeders} />
+    <NumberInput class='w-14' bind:value={result.pairs} min=1 max=99999 error='1..99999' invalid={invalids.pairs} />
 
     <div class='w-2'></div>
 
     {#if sectionId === 5}
         <div class='w-14'></div> <div class='w-14'></div> <div class='w-14'></div>
     {:else}
-        <InputNumber class='w-14' bind:value={result.layDames} min=1 max=999999 error='0..99999' invalid={invalids.layDames}/>
-        <InputNumber class='w-14' bind:value={result.layEggs} min=0 max=399 error='0..399' invalid={invalids.layEggs}/>
-        <InputNumber class='w-14' bind:value={result.layWeight} min=1 max=999 error='1..999' invalid={invalids.layWeight}/>
+        <NumberInput class='w-14' bind:value={result.layDames} min=1 max=999999 error='0..99999' invalid={invalids.layDames}/>
+        <NumberInput class='w-14' bind:value={result.layEggs} min=0 max=399 error='0..399' invalid={invalids.layEggs}/>
+        <NumberInput class='w-14' bind:value={result.layWeight} min=1 max=999 error='1..999' invalid={invalids.layWeight}/>
     {/if}
 
     <div class='w-2'></div>
@@ -96,17 +96,17 @@
     {#if sectionId === 5}
         <div class='w-14'></div>
         <div class='w-14'></div>
-        <InputNumber class='w-14' bind:value={result.broodHatched} min=0 max=99999 error='0..999999' invalid={invalids.broodHatched}/>
+        <NumberInput class='w-14' bind:value={result.broodHatched} min=0 max=99999 error='0..999999' invalid={invalids.broodHatched}/>
     {:else}
-        <InputNumber class='w-14' bind:value={result.broodEggs} min=1 max=99999 error='0..99999' invalid={invalids.broodEggs}/>
-        <InputNumber class='w-14' bind:value={result.broodFertile} min=0 max={result.broodEggs} error='0..{result.broodEggs}' invalid={invalids.broodFertile}/>
-        <InputNumber class='w-14' bind:value={result.broodHatched} min=0 max={(result.broodFertile==null ? result.broodEggs : result.broodFertile )} error='0..{result.broodFertile}' invalid={invalids.broodHatched}/>
+        <NumberInput class='w-14' bind:value={result.broodEggs} min=1 max=99999 error='0..99999' invalid={invalids.broodEggs}/>
+        <NumberInput class='w-14' bind:value={result.broodFertile} min=0 max={result.broodEggs} error='0..{result.broodEggs}' invalid={invalids.broodFertile}/>
+        <NumberInput class='w-14' bind:value={result.broodHatched} min=0 max={(result.broodFertile==null ? result.broodEggs : result.broodFertile )} error='0..{result.broodFertile}' invalid={invalids.broodHatched}/>
     {/if}
 
     <div class='w-2'></div>
 
-    <InputNumber class='w-14' bind:value={result.showCount} min=1 max=999999 error='1..99999' invalid={invalids.showCount}/>
-    <InputNumber class='w-14' bind:value={result.showScore} step=0.1 min=89 max=97 error='89..97' invalid={invalids.showScore}/>
+    <NumberInput class='w-14' bind:value={result.showCount} min=1 max=999999 error='1..99999' invalid={invalids.showCount}/>
+    <NumberInput class='w-14' bind:value={result.showScore} step=0.1 min=89 max=97 error='89..97' invalid={invalids.showScore}/>
 
     <div class='w-2'></div>
 

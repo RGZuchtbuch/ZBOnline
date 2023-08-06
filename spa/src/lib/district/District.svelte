@@ -3,7 +3,7 @@
     import api from '../../js/api.js';
 
     import Breeder from '../breeder/Breeder.svelte';
-    import Breeders from './breeders/Breeders.svelte';
+    import Breeders from './Breeders.svelte';
     import ResultsList from './results/DistrictResultsList.svelte';
     import ResultEdit from '../result/edit/Edit.svelte';
     import DistrictDetails from "./DistrictDetails.svelte";

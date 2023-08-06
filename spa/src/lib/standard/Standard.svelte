@@ -1,23 +1,22 @@
 <script>
+    import { meta, router, Route } from 'tinro';
     import api from '../../js/api.js';
-    import Sections from './sections/Sections.svelte';
-    import SectionRow from './sections/SectionRow.svelte';
+    import Sections from './sections.old/Sections.svelte';
+    import SectionRow from './sections.old/SectionRow.svelte';
+    import Breeds from "./Breeds.svelte";
+    import Breed from "./Breed.svelte";
 
-    let rootSection = null;
 
-
-    function loadStandard() {
-        api.standard.get().then( response => { rootSection = response.standard; } );
-    }
-
-    loadStandard();
 </script>
 
+<Route path='/'> <Breeds /> </Route>
+<Route path='/sparte/*'>
 
-<h2 class='w-256 border border-gray-400 rounded-t p-2 bg-header text-white text-center text-xl print'>BDRG Rassegeflügelstandard</h2>
-{#if rootSection}
-    <Sections sections={rootSection.children}/>
-{/if}
+    <Route path='/'> ? </Route>
+    <Route path='/:sectionId/rasse/:breedId' let:meta> <Breed params={meta.params} /> </Route>
+    <Route path='/:sectionId/rasse/:breedId/farbe/:colorId' let:meta> <Breed params={meta.params} /> </Route>
+
+</Route>
 
 
 <style>

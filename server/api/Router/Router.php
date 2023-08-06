@@ -47,6 +47,7 @@ class Router {
         $app->get('/results/districts', 'App\Controller\Result\Districts' ); // for map, , query with section/Breed/color,  year
         $app->get('/district/{id}/results', 'App\Controller\Result\District' ); // for showing
 
+        $app->get('/section/{id}', 'App\Controller\Section\Get' );
         $app->get('/section/{id}/children', 'App\Controller\Section\Children' );
         $app->get('/section/{id}/breeds', 'App\Controller\Section\Breeds' );
         $app->get('/section/{id}/descendants', 'App\Controller\Section\Descendants' );

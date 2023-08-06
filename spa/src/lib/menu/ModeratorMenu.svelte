@@ -5,7 +5,7 @@
 
 </script>
 
-<div class='flex flex-col'>
+<div class='flex flex-col no-print'>
     <h3>Obmann</h3>
     <ul>
         <li> <a href={route.match+'/verband'} title='Zur den zu verwalten Verbände'>→ Verbände </a> </li>

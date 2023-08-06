@@ -10,6 +10,7 @@
     export let error = 'Unvollständiger eMail Adresse';
     export let required = false;
     export let invalid = false;
+    export let element;
 
     let pattern = '[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$';
 
@@ -35,13 +36,13 @@
     {#if label}
         <label class='label' for='input'>{label}</label>
     {/if}
-    <input class='data' class:invalid id='input' type='text' {name} bind:value={value}
+    <input class='data' class:invalid id='input' type='text' {name} bind:value={value} bind:this={element}
            {minlength} {maxlength}
            {required} {disabled} {readonly}
     >
-    {#if invalid && ! disabled}
-        <span class:invalid>{error}</span>
-    {/if}
+    <span class:invalid>
+        {#if invalid} {error} {:else} &nbsp; {/if}
+    </span>
 </div>
 
 <style>

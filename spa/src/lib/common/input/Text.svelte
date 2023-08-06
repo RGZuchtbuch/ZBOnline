@@ -36,11 +36,10 @@
            {spellcheck}
     >
 
-    {#if invalid && ! disabled}
-        <span class:invalid>{error}</span>
-    {/if}
+    <span class:invalid>
+        {#if invalid} {error} {:else} &nbsp; {/if}
+    </span>
 </div>
 
 <style>
-
 </style>

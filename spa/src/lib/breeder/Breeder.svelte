@@ -2,12 +2,10 @@
     import {Route, router, meta} from 'tinro';
     import api from '../../js/api.js';
     import {txt} from '../../js/util.js';
-    import { newBreeder } from '../../js/template.js';
-    import Breeder from './account/Account.svelte';
     import Report from '../report/Report.svelte';
     import Reports from '../breeder/reports/Reports.svelte';
     import Results from './results/Results.svelte';
-    import Account from "./account/Account.svelte";
+    import Member from "./Member.svelte";
 
     export let breederId;
     export let districtId;
@@ -41,7 +39,7 @@
     <Route path='/' redirect={route.match+'/meldung'} />
 
     <Route path='/daten' let:meta>
-        <Account {breeder} />
+        <Member {breeder} />
     </Route>
     <Route path='/meldung/*' let:meta> Results
         <Route path='/' let:meta>

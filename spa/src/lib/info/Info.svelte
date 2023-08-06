@@ -1,7 +1,7 @@
 <script>
-    import Article from './Article.svelte';
+    import Article from '../article/Article.svelte';
 
 
 </script>
 
-<Article id={1} />
+<Article articleId={1} />

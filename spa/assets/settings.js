@@ -64,6 +64,6 @@ const MAXBUBBLE = 35;
 
 const STANDARDENABLED = true;
 const RESULTSENABLED = true;
-const BREEDERENABLED = true;
+const BREEDERENABLED = false;
 const MODERATORENABLED = true;
 const ADMINENABLED = true;

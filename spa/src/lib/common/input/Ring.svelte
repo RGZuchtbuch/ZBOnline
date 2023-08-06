@@ -7,6 +7,7 @@
     export let readonly = false;
     export let required = false;
     export let error = 'z.B. D 21 AZ 999';
+    export let element;
 
     let classname = '';
     export {classname as class}
@@ -70,15 +71,15 @@
         <label class='label' for='input'>{label}</label>
     {/if}
     <input class='data' class:invalid id='input' type='text' {name}
-           bind:value={input}
+           bind:value={input} bind:this={element}
            {disabled} {readonly}
            {required}
            spellcheck=false
            on:focus={on.focus}
            on:blur={on.blur}
     >
-    <span class='invalid'>
-        {#if invalid && !disabled} {error} {/if}
+    <span class:invalid>
+        {#if invalid} {error} {:else} &nbsp; {/if}
     </span>
 </div>
 

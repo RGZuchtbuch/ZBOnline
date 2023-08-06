@@ -6,6 +6,7 @@
     export let min = 2000;
     export let max = new Date().getFullYear();
     export let step = 1;
+    export let element;
 
     let classname = '';
     export { classname as class }
@@ -22,7 +23,7 @@
         <label class='label text-left' for='input'>{label} : {value}</label>
     {/if}
     <input class='data mb-1' type='range' id='input'
-        bind:value={value}
+        bind:value={value} bind:this={element}
         {min} {max} {step}
         on:blur={on.blur}
         on:focus={on.focus}

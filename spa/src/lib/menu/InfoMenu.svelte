@@ -19,7 +19,7 @@
 
 <div class='flex flex-col'>
 
-    <h4>Zuchtbuch Info {#if articles}{articles.length}{/if}</h4>
+    <h4>Zuchtbuch Infos</h4>
     {#if articles}
         <ul>
             {#each articles as article}

@@ -1,5 +1,6 @@
 <script>
     import api from '../../js/api.js';
+    import Page from "../common/Page.svelte";
 
     export let articleId = null;
 
@@ -17,16 +18,19 @@
 </script>
 
 
-    {#if article}
-        <h2 class=' w-256 rounded-t p-2 bg-header text-white text-center text-xl print'> {article.title} </h2>
-        <div class='w-256 bg-white overflow-y-scroll border border-gray-600 border-t-gray-400 rounded-b scrollbar p-8'>
-            {@html article.html}
-        </div>
-    {:else}
-        Seite wird geladen.....
-    {/if}
+{#if article}
+    <Page>
+        <div slot='title'> {article.title} </div>
+        <div slot='header'> - </div>
+        <div slot='body'> {@html article.html} </div>
+    </Page>
+{:else}
+    Seite wird geladen.....
+{/if}
 
 
 <style>
+
+
 
 </style>
