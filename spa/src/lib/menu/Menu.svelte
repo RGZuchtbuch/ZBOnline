@@ -10,10 +10,11 @@
     import StandardMenu from "./StandardMenu.svelte";
     import InfoMenu from "./InfoMenu.svelte";
 
+    // w-64 border rounded flex flex-col
 </script>
 
 
-<div class='menu no-print'>
+<div class='w-64 flex flex-col border rounded no-print'>
     <h3 class='title'> &nbsp; </h3>
 
     <div class='header'> Menü für {$user ? $user.firstname : 'Besucher' } </div>
@@ -56,7 +57,7 @@
 
 <style>
     .menu {
-        @apply w-64 border rounded flex flex-col;
+        @apply w-64 flex flex-col;
     }
     .title {
         @apply text-center;

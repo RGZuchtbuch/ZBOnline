@@ -31,7 +31,7 @@
         colorId = Number( params.colorId );
     }
 
-    function onToggleColorEdit() {
+    function onToggleEdit() {
         console.log( 'edit' );
         disabled = ! disabled;
         needFocus = true;
@@ -107,18 +107,18 @@
 
         <div slot='header' class='flex flex-row'>
             <div class='grow'>Rasse- und Farbschlägendaten</div>
-            {#if $user && $user.admin }
-                <div class='w-6 h-6 border-2 border-alert rounded bg-white align-middle text-center text-red-600 cursor-pointer'
-                     class:disabled on:click={onToggleColorEdit} title='Daten ändern'>&#9998;</div>
-            {/if}
         </div>
-
-
 
         <div slot='body' class='flex flex-col gap-2'>
             <div class='flex flex-row justify-evenly gap-2'>
                 <form class='grow flex flex-col border border-gray-600 rounded' on:change={onChange}>
-                    <div class='bg-header text-white text-center'>Rassebeschreibung</div>
+                    <div class='flex flex-row bg-header px-2 py-1 text-white'>
+                        <div class='grow text-center'>Rassebeschreibung</div>
+                        {#if $user && $user.admin }
+                            <div class='w-6 h-6 border-2 border-alert rounded bg-white align-middle text-center text-red-600 cursor-pointer'
+                                 class:disabled on:click={onToggleEdit} title='Daten ändern'>&#9998;</div>
+                        {/if}
+                    </div>
                     <fieldset class='p-2' {disabled}>
 
                         <TextInput class='w-full' label={'Name der Rasse'} bind:value={breed.name} error='Pflichtfeld' invalid={invalids.name} required/>
@@ -157,7 +157,7 @@
                     </fieldset>
                 </form>
 
-                <div class='w-64 flex flex-col gap-2'>
+                <div class='w-128 flex flex-col gap-2'>
                     <img class='border border-gray-400 rounded' src='assets/breeds/7972.png' />
 
                     <div class='flex flex-col border border-gray-600 rounded'>

@@ -33,8 +33,9 @@
 
     <div class='grow p-2 flex flex-row gap-2 relative min-h-0'>
 
-
+        <div class=''>
         <Menu />
+        </div>
 
         <div class='grow flex flex-col border rounded bg-white items-center print'>
 

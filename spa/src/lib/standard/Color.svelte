@@ -78,7 +78,13 @@
 
 {#if color }
     <div class='flex flex-col border border-gray-400 rounded'>
-        <div class='bg-header text-white text-center'>Farbenschläg</div>
+        <div class='flex flex-row px-2 py-1 bg-header text-white'>
+            <div class='grow text-center'>Farbenschläg</div>
+            {#if $user && $user.admin }
+                <div class='w-6 h-6 border-2 border-alert rounded bg-white align-middle text-center text-red-600 cursor-pointer'
+                     class:disabled on:click={onToggleEdit} title='Daten ändern'>&#9998;</div>
+            {/if}
+        </div>
         <form  class=''>
             <fieldset class='flex-flex-col p-2' {disabled}>
                 <TextInput class='w-128' label={'Name der Farbe'} bind:value={color.name} error='Pflichtfeld' invalid={invalids.name} required/>
