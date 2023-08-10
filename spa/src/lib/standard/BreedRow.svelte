@@ -4,14 +4,14 @@
     import ColorRow from './ColorRow.svelte';
     import {meta} from "tinro";
 
-    export let breed = null;
-
-    let open = false;
+    export let breed;
 
     const route = meta();
 
+    //breed.open = false;
+
     function onOpen() {
-        open = ! open;
+        breed.open = ! breed.open;
     }
 
 </script>
@@ -28,9 +28,9 @@
     </div>
 
 
-    {#if open}
+    {#if breed.open}
         {#each breed.colors as color }
-            <ColorRow color={color}/>
+            <ColorRow {breed} {color}/>
         {/each}
     {/if}
 </div>

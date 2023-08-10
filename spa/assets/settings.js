@@ -14,9 +14,6 @@ const settings = {
     api : {
         root: location.hostname === 'localhost' || location.hostname === '127.0.0.1' ? 'http://localhost:80/' : 'https://rgzuchtbuch.de/',
     },
-    cache : {
-        TIMEOUT : 5000 // should be 30 mins = 30 * 60000 = 1800000
-    },
     date : {
         min: '1850-01-01',
         max: (new Date().getFullYear()+1) + '-11-31',
@@ -33,7 +30,7 @@ const settings = {
     }
 }
 
-const CACHETIMEOUT = 10000; // 10 secs in dev mode
+const CACHETIMEOUT = 60000; // 60 secs in dev mode
 const CACHECHECKINTERVAL = 60000; // once a minute
 
 const MINYEAR = 1850;

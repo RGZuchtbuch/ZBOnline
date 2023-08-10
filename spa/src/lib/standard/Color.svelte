@@ -11,8 +11,9 @@
     import TextArea from "../common/input/TextArea.svelte";
     import CheckInput from "../common/input/CheckInput.svelte";
 
-    export let colorId;
+    export let params;
 
+    let colorId;
     let color;
 
     let invalids = {};
@@ -59,10 +60,10 @@
 
     function loadColor( id ) {
         console.log( 'Id', id );
-        if( ! isNaN( id ) ) { // no color selected in url
-            if (id === 0) {
+            if (id == 0) {
                 color = {
-                    id: 0, name: null, breedId: breedId,
+                    id: 0, name: null, breedId: params.breedId,
+                    aoc:false,
                     info: null
                 }
             } else {
@@ -70,21 +71,21 @@
                     color = response.color;
                 });
             }
-        }
     }
 
     console.log( 'P', colorId );
 
-    $: loadColor( colorId );
+    $: loadColor( params.colorId );
 </script>
+
 
 {#if color }
     <div class='w-full flex flex-col border border-gray-400 rounded'>
         <div class='flex flex-row px-2 py-1 bg-header text-white'>
             <div class='grow text-center'>Farbenschläg {color.name}</div>
             {#if $user && $user.admin }
-                <div class='w-6 h-6 border-2 border-alert rounded bg-white align-middle text-center text-red-600 cursor-pointer'
-                     class:disabled on:click={onToggleEdit} title='Daten ändern'>&#9998;</div>
+                <div class='w-6 text-center text-red-600 cursor-pointer'
+                     class:disabled on:click={onToggleEdit} title='Daten ändern'>[&#9998;]</div>
             {/if}
         </div>
         <form  class='' on:input={onChange}>
@@ -119,6 +120,6 @@
 
 <style>
     .disabled {
-        @apply text-green-600;
+        @apply text-white;
     }
 </style>

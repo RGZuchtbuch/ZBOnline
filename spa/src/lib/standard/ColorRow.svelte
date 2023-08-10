@@ -1,4 +1,5 @@
 <script>
+    import { meta } from 'tinro';
     import { user } from '../../js/store.js';
     import { txt }  from '../../js/util.js';
     import api from "../../js/api.js";
@@ -8,12 +9,15 @@
     import TextInput from '../common/input/Text.svelte';
     import TextArea from '../common/input/TextArea.svelte';
 
+    export let breed;
     export let color = null;
 
     let details = null;
     let showDetails = false;
     let edit = false;
     let changed = false;
+
+    let route = meta();
 
     function onDetails() {
         if( color ) {
@@ -57,7 +61,12 @@
 
     <div class='flex flex-row border-b border-gray-300 gap-x-1 my-1'>
         <div class='w-4'>⤷</div>
-        <div class='grow cursor-pointer'> {color.name} </div>
+        <div class='grow cursor-pointer'>
+            <a href={route.match+'/sparte/'+breed.sectionId+'/rasse/'+color.breedId+'/farbe/'+color.id}>
+                {color.name}
+            </a>
+        </div>
+
         <div class='grow'></div>
         <div class='w-12 text-xs'>[{color.id}]</div>
 

@@ -6,8 +6,10 @@
 
 <div class='flex flex-col'>
 
-    <h4>BDRG Rassestandard</h4>
+    <h3>BDRG Rassestandard</h3>
+
     <ul>
+        <li> <a href={route.match} title='Zu die Liste von Sparten, gruppen ung rassen'>→ Standard </a> </li>
     </ul>
 </div>
 

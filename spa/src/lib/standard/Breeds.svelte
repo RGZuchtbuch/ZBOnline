@@ -15,7 +15,12 @@
     const route = meta();
 
     function loadStandard() {
-        api.standard.get().then( response => { rootSection = response.standard; } );
+        api.standard.get().then( response => {
+            rootSection = response.standard;
+            rootSection.open = true;
+            console.log( 'RS', rootSection );
+        } );
+
     }
 
     loadStandard();
@@ -27,7 +32,7 @@
     <div slot='header' class='text-center'> Sparten / Gruppen / Rassen / Farbenschläge </div>
     <div slot='body'>
         {#if rootSection}
-            <SectionTree {rootSection} open=true />
+            <SectionTree {rootSection} />
         {/if}
     </div>
 </List>

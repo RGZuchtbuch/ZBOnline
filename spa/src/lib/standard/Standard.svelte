@@ -1,10 +1,9 @@
 <script>
     import { meta, router, Route } from 'tinro';
-    import api from '../../js/api.js';
-    import Sections from './sections.old/Sections.svelte';
-    import SectionRow from './sections.old/SectionRow.svelte';
+
     import Breeds from "./Breeds.svelte";
     import Breed from "./Breed.svelte";
+    import Color from "./Color.svelte";
 
 
 </script>
@@ -13,8 +12,13 @@
 <Route path='/sparte/*'>
 
     <Route path='/'> ? </Route>
-    <Route path='/:sectionId/rasse/:breedId' let:meta> <Breed params={meta.params} /> </Route>
-    <Route path='/:sectionId/rasse/:breedId/farbe/:colorId' let:meta> <Breed params={meta.params} /> </Route>
+    <Route path='/:sectionId/rasse/:breedId/*' let:meta>
+        <Breed params={meta.params} >
+            <Route path='/farbe/:colorId' let:meta>
+                <Color params={meta.params} />
+            </Route>
+        </Breed>
+    </Route>
 
 </Route>
 

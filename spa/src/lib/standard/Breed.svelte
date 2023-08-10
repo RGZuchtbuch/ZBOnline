@@ -1,6 +1,6 @@
 <script>
 
-    import {meta} from "tinro";
+    import {meta, Route } from "tinro";
     import api from "../../js/api.js";
     import {user} from "../../js/store.js";
 
@@ -8,8 +8,10 @@
     import Page from "../common/Page.svelte";
     import TextInput from '../common/input/Text.svelte';
     import TextArea from "../common/input/TextArea.svelte";
+    import Colors from "./Colors.svelte";
     import Color from "./Color.svelte";
     import {txt} from "../../js/util.js";
+
 
     export let params;
 
@@ -30,6 +32,9 @@
         sectionId = Number( params.sectionId );
         breedId = Number( params.breedId );
         colorId = Number( params.colorId );
+
+        loadSection( sectionId );
+        loadBreed( breedId );
     }
 
     function onToggleEdit() {
@@ -85,7 +90,8 @@
                 broodGroup:null, // pigeons
                 lay:null, layWeight:null, // layers
                 sireRing:null, dameRing:null, sireWeight:null, dameWeight:null,
-                info:null
+                info:null,
+                colors:[]
             }
         } else {
             api.breed.get(id).then(response => {
@@ -97,8 +103,7 @@
     console.log( 'P', params, colorId );
 
     $: update( params );
-    $: loadSection( sectionId );
-    $: loadBreed( breedId );
+
 </script>
 
 {#if section && breed }
@@ -114,8 +119,8 @@
                     <div class='flex flex-row bg-header px-2 py-1 text-white'>
                         <div class='grow text-center'>Rassebeschreibung</div>
                         {#if $user && $user.admin }
-                            <div class='w-6 h-6 border-2 border-alert rounded bg-white align-middle text-center text-red-600 cursor-pointer'
-                                 class:disabled on:click={onToggleEdit} title='Daten ändern'>&#9998;</div>
+                            <div class='w-6 text-center text-red-600 cursor-pointer'
+                                 class:disabled on:click={onToggleEdit} title='Daten ändern'>[&#9998;]</div>
                         {/if}
                     </div>
                     <fieldset class='p-2' {disabled}>
@@ -162,25 +167,10 @@
                 </form>
 
                 <div class='w-6/12 flex flex-col gap-2'>
-                    <img class='border border-gray-400 rounded' src='assets/breeds/7972.png' />
-
-                    <div class='flex flex-col border border-gray-600 rounded'>
-                        <div class='flex flex-row bg-header text-white text-center'>
-                            <div class='grow'>Farbenschläge</div>
-                            <div>[]</div>
-                        </div>
-                        <div class='flex-flex-col'>
-                            {#each breed.colors as color}
-                                <div class='mx-2 pl-2 border-b border-gray-300'> → <a href={'standard/sparte/'+sectionId+'/rasse/'+breedId+'/farbe/'+color.id}> {color.name} </a> </div>
-                            {/each}
-                        </div>
-
-                        {#if colorId}
-                            <Color {colorId} />
-                        {/if}
-                    </div>
+                    <img class='border border-gray-400 rounded' src='assets/breeds/7972.png' alt='Bild der Rasse, Hahn und Henne'/>
+                    <Colors {breed} />
+                    <slot>Farbe</slot>
                 </div>
-
             </div>
 
 
@@ -192,6 +182,6 @@
 
 <style>
     .disabled {
-        @apply text-green-600;
+        @apply text-white;
     }
 </style>

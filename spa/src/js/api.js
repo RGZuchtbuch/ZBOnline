@@ -243,7 +243,7 @@ export default {
     },
 
     standard: {
-        get: () => get( 'api/standard', 2500 ), //24 * 60 * 60 * 1000
+        get: () => get( 'api/standard' ), //24 * 60 * 60 * 1000
     },
 
     trend: {
@@ -376,7 +376,31 @@ function getHeaders() {
     return headers;
 }
 
-async function get( url, timeout = settings.cache.TIMEOUT ) {
+async function get( url, timeout = CACHETIMEOUT ) {
+    let cached = cache[url];
+    let now = new Date().getTime(); // in ms
+    if( cached && cached.timeout > now ) { // still fresh
+        return cached.promise;
+    } else {
+        let options = {
+            method: 'GET',
+            headers: getHeaders()
+        }
+
+        return fetch(settings.api.root + url, options) .then(response => {
+            if (response.ok) {
+                let promise = response.json();
+                cache[url] = { promise: promise, timeout: now + timeout };
+                return promise;
+            }
+            console.error('Fetch not ok, got null', response);
+            return null;
+        });
+    }
+
+}
+
+async function getOld( url, timeout = CACHETIMEOUT ) {
     let cached = cache[url];
     let now = new Date().getTime(); // in ms
     if( cached && cached.timeout > now ) { // still fresh
