@@ -9,6 +9,7 @@
     import TextInput from '../common/input/Text.svelte';
     import TextArea from "../common/input/TextArea.svelte";
     import Color from "./Color.svelte";
+    import {txt} from "../../js/util.js";
 
     export let params;
 
@@ -105,13 +106,11 @@
     <Page>
         <div slot='title'> Geflügelrasse {breed.name} </div>
 
-        <div slot='header' class='flex flex-row'>
-            <div class='grow'>Rasse- und Farbschlägendaten</div>
-        </div>
+        <div slot='header'>Rasse- und Farbschlägendaten</div>
 
         <div slot='body' class='flex flex-col gap-2'>
-            <div class='flex flex-row justify-evenly gap-2'>
-                <form class='grow flex flex-col border border-gray-600 rounded' on:change={onChange}>
+            <div class='grow flex flex-row justify-evenly gap-2'>
+                <form class='w-6/12 flex flex-col border border-gray-600 rounded' on:change={onChange}>
                     <div class='flex flex-row bg-header px-2 py-1 text-white'>
                         <div class='grow text-center'>Rassebeschreibung</div>
                         {#if $user && $user.admin }
@@ -146,6 +145,11 @@
                                 {#if ! disabled}
                                     <TextArea label='Info' bind:value={breed.info} />
                                 {/if}
+                                {#if breed.info}
+                                    <div>{@html txt(breed.info)}</div>
+                                {:else}
+                                    Rassebeschreibung steht noch nicht zur Verfügung
+                                {/if}
                                 <div>{@html breed.info}</div>
                                 <div class='h-4'></div>
 
@@ -157,24 +161,28 @@
                     </fieldset>
                 </form>
 
-                <div class='w-128 flex flex-col gap-2'>
+                <div class='w-6/12 flex flex-col gap-2'>
                     <img class='border border-gray-400 rounded' src='assets/breeds/7972.png' />
 
                     <div class='flex flex-col border border-gray-600 rounded'>
-                        <div class='bg-header text-white text-center'>Farbenschläge</div>
+                        <div class='flex flex-row bg-header text-white text-center'>
+                            <div class='grow'>Farbenschläge</div>
+                            <div>[]</div>
+                        </div>
                         <div class='flex-flex-col'>
                             {#each breed.colors as color}
                                 <div class='mx-2 pl-2 border-b border-gray-300'> → <a href={'standard/sparte/'+sectionId+'/rasse/'+breedId+'/farbe/'+color.id}> {color.name} </a> </div>
                             {/each}
                         </div>
+
+                        {#if colorId}
+                            <Color {colorId} />
+                        {/if}
                     </div>
                 </div>
 
             </div>
 
-            {#if colorId}
-                <Color {colorId} />
-            {/if}
 
         </div>
 

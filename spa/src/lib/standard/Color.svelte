@@ -3,11 +3,13 @@
     import {meta} from "tinro";
     import api from "../../js/api.js";
     import {user} from "../../js/store.js";
+    import {txt} from '../../js/util.js';
 
     import NumberInput from '../common/input/Number.svelte';
     import Page from "../common/Page.svelte";
     import TextInput from '../common/input/Text.svelte';
     import TextArea from "../common/input/TextArea.svelte";
+    import CheckInput from "../common/input/CheckInput.svelte";
 
     export let colorId;
 
@@ -77,20 +79,39 @@
 </script>
 
 {#if color }
-    <div class='flex flex-col border border-gray-400 rounded'>
+    <div class='w-full flex flex-col border border-gray-400 rounded'>
         <div class='flex flex-row px-2 py-1 bg-header text-white'>
-            <div class='grow text-center'>Farbenschläg</div>
+            <div class='grow text-center'>Farbenschläg {color.name}</div>
             {#if $user && $user.admin }
                 <div class='w-6 h-6 border-2 border-alert rounded bg-white align-middle text-center text-red-600 cursor-pointer'
                      class:disabled on:click={onToggleEdit} title='Daten ändern'>&#9998;</div>
             {/if}
         </div>
-        <form  class=''>
+        <form  class='' on:input={onChange}>
             <fieldset class='flex-flex-col p-2' {disabled}>
-                <TextInput class='w-128' label={'Name der Farbe'} bind:value={color.name} error='Pflichtfeld' invalid={invalids.name} required/>
+                <TextInput class='w-full' label={'Name der Farbe'} bind:value={color.name} error='Pflichtfeld' invalid={invalids.name} required/>
 
-                    <div>AOC {color.aoc}</div>
-                <div>{color.info}</div>
+
+                {#if ! disabled}
+                    <CheckInput class='w-16' label='AOC Klasse' bind:value={color.aoc} />
+                {/if}
+                {#if color.aoc}
+                    <div>AOC klasse</div>
+                {/if}
+
+                {#if ! disabled}
+                    <TextArea label='Info' bind:value={color.info} />
+                {/if}
+                {#if color.info}
+                    <div>{@html txt(color.info)}</div>
+                {:else}
+                    Farbenschlagbeschreibung steht noch nicht zur Verfügung
+                {/if}
+
+
+                {#if ! disabled && changed && ! invalids.form }
+                    <div class='bg-alert text-center font-bold text-white cursor-pointer' on:click={onSubmit}>&#10004; Speichern</div>
+                {/if}
             </fieldset>
         </form>
     </div>

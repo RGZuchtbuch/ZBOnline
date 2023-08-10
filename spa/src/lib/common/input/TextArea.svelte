@@ -38,7 +38,7 @@
     {#if label}
         <label class='label' for='input'>{label}</label>
     {/if}
-    <textarea class='data w-full h-32 p-4' class:invalid id='input' {name} bind:value bind:this={element}
+    <textarea class='data w-full h-32 p-4 scrollbar' class:invalid id='input' {name} bind:value bind:this={element}
            {required} {disabled} {readonly} {pattern}
             on:focus={on.focus}
             on:blur={on.blur}
