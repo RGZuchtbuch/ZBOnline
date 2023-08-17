@@ -3,12 +3,6 @@ import { user } from './store.js'
 
 //uses constants from js/setting.js { settings.cache.TIMEOUT, settings.api.root }
 
-let cache = {
-    promises: {} // url -> promise, time
-};
-
-let token = getToken();
-
 
 
 export default {
@@ -34,16 +28,19 @@ export default {
         get: ( breederId ) => get( 'api/breeder/'+breederId ),
         new: ( districtId ) => { // id being null
             return new Promise( ( resolve ) => {
-                // TODO, remember to delete cache for parent district
                 resolve( { breeder:{ id:null, name:null, email:null, districtId:districtId, clubId:null, start:new Date(), end:null, active:true, info:null }} );
             })
         },
         post: ( breeder ) => {
             return post( 'api/breeder', breeder );
         },
-        reports: {
-            get: (breederId) => get( 'api/breeder/'+breederId+'/reports' ),
+        pairs: {
+            get: (breederId) => get( 'api/breeder/'+breederId+'/pairs' ),
         },
+        pairsInYear: {
+            get: ( breederId, year ) => get( 'api/breeder/'+breederId+'/pairs/year/'+year ),
+        },
+
         results: {
             get: (breederId) => get( 'api/breeder/'+breederId+'/results' ),
         },
@@ -60,8 +57,6 @@ export default {
         },
         new: ( parentId ) => {
             return new Promise( ( resolve ) => {
-                // TODO, remember to delete cache for parent district
-                clear( 'api/district/'+parentId );
                 resolve( { id:null, parent:parentId, name:null, fullname:null, short:null, coordinates:null, children:[], moderators:[] } );
             })
         },
@@ -202,28 +197,19 @@ export default {
 //        },
     },
 
-
-    report: {
-        get: (id) => get('api/report/' + id),
+    pair: {
+        get: (id) => get('api/pair/' + id),
         post: (report) => { // for insert and update
-            // TODO adjust cache
-            return post( 'api/report', report );
+            return post( 'api/pair', report );
         },
-        delete: ( id ) => del( 'api/report/'+id ),
+        delete: ( id ) => del( 'api/pair/'+id ),
+
     },
 
     result: {
         get: ( id ) => get( 'api/result/'+id ),
         post: ( result ) => post( 'api/result', result ), // does insert or replace based on id ( null )
         delete: ( id ) => del( 'api/result/'+id ),
-
-//        breed: {
-//            get: ( districtId, breedId, year, group ) => get( 'api/district/'+districtId+'/results?/breed/'+breedId+'/district/'+districtId+'/year/'+year+'/group/'+group+'/results' ),
-//        },
-//        colors: {
-////            get: ( breedId, districtId, year, group ) => get( 'api/result/colors/'+breedId+'/district/'+districtId+'/year/'+year+'/group/'+group+'/results'),
-//            get: ( districtId, breedId, year, group ) => get( 'api/district/'+districtId+'/results?breed='+breedId+'&year='+year+'&group='+group ),
-//        },
     },
 
     section: {
@@ -267,7 +253,7 @@ export default {
             token = null;
             user.set( null ); // user or null
             window.sessionStorage.clear();
-            cache.promises = {}; // clear cache so it's not used by next user
+            cache.clear(); // clear cache so it's not used by next user
 
             return post('api/user/token', {email: email, password: password}).then( response => {
                 if( response ) {
@@ -277,7 +263,7 @@ export default {
                     decToken.user.exp = decToken.exp;
                     user.set( decToken.user ); // user or null
                     window.sessionStorage.setItem( 'token', token );
-                    cache.promises = {}; // not using previous users cache
+                    cache.clear(); // not using previous users cache
                     return { success:true }; // success
                 }
                 return { success: false };
@@ -290,7 +276,7 @@ export default {
             token = null;
             user.set( null ); // user or null
             window.sessionStorage.clear();
-            cache.promises = {}; // clear cache so it's not used by next user
+            cache.clear(); // clear cache so it's not used by next user
             return true; // always success
         },
         reset: ( email ) => get( 'api/user/reset/'+email ),
@@ -304,7 +290,7 @@ export default {
                     decToken.user.exp = decToken.exp;
                     user.set( decToken.user ); // user or null
                     window.sessionStorage.setItem( 'token', token );
-                    cache.promises = {}; // not using previous users cache
+                    cache.clear(); // not using previous users cache
                     return { success:true }; // success
                 }
                 return { success:false };
@@ -314,6 +300,37 @@ export default {
         },
     },
 }
+
+// private section **************
+
+let token = getToken();
+
+const cache = {
+    urls:{}, // url -> promise, due
+    get( url ) {
+        return this.urls[ url ];
+    },
+    put( url, promise, timeout ) {
+        const now = Date.now();
+        this.urls[ url ] = { promise:promise, due:now+timeout };
+    },
+    clear() {
+        this.urls = {};
+    },
+    update() {
+        let now = new Date().getTime(); // in ms
+        const toDelete = []; // collecte old, avoiding deleting while iterating
+        for( const url in this.urls ) { // check per url->promise and collect before delete
+            let cached = this.urls[ url ];
+            if( cached.due < now ) {
+                toDelete.push( url );
+            }
+        }
+        for( const url of toDelete ) { // delete collected from cache
+            delete this.urls[ url ];
+        }
+    }
+};
 
 /*
  * takes token from session storage and checks for expired, then returns null.
@@ -337,34 +354,6 @@ function getToken() {
     return token;
 }
 
-/**
- * clears item from cache if older than cacheTimout
- */
-setInterval(  () => {
-    let now = new Date().getTime(); // in ms
-    const toDelete = []; // collecte old, avoiding deleting while iterating
-    for( const url in cache ) { // check per url->promise and collect before delete
-        let request = cache[ url ];
-        const timeout = request.timeout;
-        if( timeout < now ) {
-            toDelete.push( url );
-        }
-    }
-    for( const url of toDelete ) { // delete collected from cache
-        delete cache[ url ];
-    }
-}, CACHECHECKINTERVAL ) // once a minute
-
-function clear( url ) {
-    let request = cache[ url ];
-    if( request ) {
-        console.log( 'Clearing cache for ', url );
-    } else {
-        console.log( 'NOT Clearing cache for', url );
-    }
-    delete cache[ url ];
-}
-
 function getHeaders() {
     let headers = {
         'Accept': 'application/data',
@@ -377,54 +366,30 @@ function getHeaders() {
 }
 
 async function get( url, timeout = CACHETIMEOUT ) {
-    let cached = cache[url];
-    let now = new Date().getTime(); // in ms
-    if( cached && cached.timeout > now ) { // still fresh
+    let cached = cache.get( url );
+    let now = Date.now(); //new Date().getTime(); // in ms
+    if( cached && cached.due > now ) { // cached and still fresh
         return cached.promise;
     } else {
         let options = {
             method: 'GET',
             headers: getHeaders()
         }
-
-        return fetch(settings.api.root + url, options) .then(response => {
+        let promise = fetch(settings.api.root + url, options).then( response => {
             if (response.ok) {
-                let promise = response.json();
-                cache[url] = { promise: promise, timeout: now + timeout };
-                return promise;
+                return response.json();
             }
             console.error('Fetch not ok, got null', response);
             return null;
         });
-    }
-
-}
-
-async function getOld( url, timeout = CACHETIMEOUT ) {
-    let cached = cache[url];
-    let now = new Date().getTime(); // in ms
-    if( cached && cached.timeout > now ) { // still fresh
-        return cached.promise;
-    } else {
-        let options = {
-            method: 'GET',
-            headers: getHeaders()
-        }
-        let promise = fetch(settings.api.root + url, options)
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                }
-                console.error('Fetch not ok, got null', response);
-                return null;
-            });
-        cache[url] = { promise: promise, timeout: now + timeout };
+        cache.put( url, promise, timeout );
         return promise;
     }
-
 }
 
 async function post( url, data ) {
+    cache.clear(); // empty cache on every post, bit raw, but it works fine
+
     let options = {
         method: 'POST',
         headers: getHeaders(),
@@ -440,6 +405,7 @@ async function post( url, data ) {
         });
 }
 
+/*
 async function put( url, data ) {
     let options = {
         method: 'PUT',
@@ -455,8 +421,10 @@ async function put( url, data ) {
             throw response;
         })
 }
+*/
 
 async function del( url, data ) {
+    cache.clear();
     let options = {
         method: 'DELETE',
         headers: getHeaders(),
@@ -471,6 +439,12 @@ async function del( url, data ) {
             throw response;
         });
 }
+
+
+/**
+ * clears item from cache if due
+ */
+setInterval(  cache.update, CACHECHECKINTERVAL ) // once a minute
 
 
 

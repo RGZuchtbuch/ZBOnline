@@ -84,8 +84,9 @@
         <div class='flex flex-row px-2 py-1 bg-header text-white'>
             <div class='grow text-center'>Farbenschläg {color.name}</div>
             {#if $user && $user.admin }
-                <div class='w-6 text-center text-red-600 cursor-pointer'
-                     class:disabled on:click={onToggleEdit} title='Daten ändern'>[&#9998;]</div>
+                <div class='w-6 border border-red-600 rounded text-center text-red-600 cursor-pointer' class:disabled on:click={onToggleEdit} title='Daten ändern'>
+                    &#9998;
+                </div>
             {/if}
         </div>
         <form  class='' on:input={onChange}>
@@ -120,6 +121,6 @@
 
 <style>
     .disabled {
-        @apply text-white;
+        @apply text-white border-white;
     }
 </style>

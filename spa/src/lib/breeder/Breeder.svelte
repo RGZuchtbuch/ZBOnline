@@ -2,9 +2,8 @@
     import {Route, router, meta} from 'tinro';
     import api from '../../js/api.js';
     import {txt} from '../../js/util.js';
-    import Report from '../report/Report.svelte';
-    import Reports from '../breeder/reports/Reports.svelte';
-    import Results from './results/Results.svelte';
+    import Pair from '../pair/Pair.svelte';
+    import BreederPairs from './Pairs.svelte';
     import Member from "./Member.svelte";
 
     export let breederId;
@@ -21,7 +20,8 @@
         } else { // new
             breeder = {
                 id:null, firstname:null, infix: null, lastname: null,
-                districtId: districtId, clubId: null,
+                district:{ id:districtId, name:null },
+                club:{ id:null, name:null },
                 start: Date.now(), end: null,
                 email: null,
                 info: null
@@ -36,17 +36,17 @@
 </script>
 
 {#if breeder}
-    <Route path='/' redirect={route.match+'/meldung'} />
+    <Route path='/' redirect={route.match+'/meldungen'} />
 
     <Route path='/daten' let:meta>
         <Member {breeder} />
     </Route>
-    <Route path='/meldung/*' let:meta> Results
+    <Route path='/meldungen/*' let:meta>
         <Route path='/' let:meta>
-            <Reports {breeder} />
+            <BreederPairs breederId={meta.params.breederId} />
         </Route>
 
-        <Route path='/:reportId' let:meta> <Report reportId={ +meta.params.reportId } /></Route>
+        <Route path='/:reportId' let:meta> <Pair params={meta.params}/></Route>
     </Route>
 
 

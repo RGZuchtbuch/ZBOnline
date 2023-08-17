@@ -16,6 +16,11 @@
     let classname = '';
     export { classname as class }
 
+    function validate( value ) {
+        invalid = ( required && ( value<min || value>max ) );
+    }
+
+    $: validate( value );
 </script>
 
 <div class='input {classname} flex flex-col gap-0'>

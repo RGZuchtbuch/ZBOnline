@@ -26,7 +26,7 @@
         <div class='grow'></div>
         <div class='w-12 text-xs'>[{rootSection.id}]</div>
         {#if $user && $user.admin && rootSection.children == 0 }
-            <div class='w-4'> <a href={route.match+'/sparte/'+rootSection.id+'/rasse/0'}> [+] </a> </div>
+            <a class='w-6' href={route.match+'/sparte/'+rootSection.id+'/rasse/0'}>✚</a>
         {/if}
     </div>
 

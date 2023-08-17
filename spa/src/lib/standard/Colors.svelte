@@ -19,15 +19,15 @@
 
 {#if breed }
     <div class='flex flex-col border border-gray-600 rounded'>
-        <div class='flex flex-row bg-header text-white text-center'>
+        <div class='flex flex-row bg-header text-white text-center px-2'>
             <div class='grow'>Farbenschläge</div>
             {#if $user && $user.admin }
-                <div class='w-6'> <a href={route.match+'/farbe/0'}> [+] </a> </div>
+                <a class='w-6 border rounded align-middle text-center' href={route.match+'/farbe/0'}>✚</a>
             {/if}
         </div>
         <div class='flex-flex-col'>
             {#each breed.colors as color}
-                <div class='mx-2 pl-2 border-b border-gray-300'> → <a href={route.match+'/farbe/'+color.id}> {color.name} </a> </div>
+                <a class='block mx-2 pl-2 border-b border-gray-300' href={route.match+'/farbe/'+color.id}> → {color.name} </a>
             {/each}
         </div>
 

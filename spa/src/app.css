@@ -99,7 +99,7 @@ input.invalid, textarea.invalid, select.invalid {
     line-height: 30px;
     text-align: center;
     font-size: 15px;
-    font-family: Verdana;
+    font-family: Verdana, serif;
 }
 
 

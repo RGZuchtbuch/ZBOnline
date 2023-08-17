@@ -34,7 +34,6 @@ export function calcColor( min, max, value, alpha ) {
         r = Math.round( 15 * 2 * ( 1 - relValue ) );
     }
     alpha = Math.round( 15 * alpha ); // range 0..1 to 0..15
-    console.log( 'CalcColor', relValue, r, g, alpha, '#'+r.toString(16)+g.toString(16)+'0'+alpha.toString(16));
     return '#'+r.toString(16)+g.toString(16)+'0'+alpha.toString(16); // only 1 char per color, like '#48f7' making '#4488ff77'
 }
 
@@ -48,7 +47,6 @@ export function toDate( input, min, max ) {
             input.match(/^(3[0-1]|[12][0-9]|0[1-9]|[1-9])[\.](1[0-2]|0[1-9]|[1-9])[\.]([0-9]{2})$/) ||  // 31.01.22 D
             input.match(/^(3[0-1]|[12][0-9]|0[1-9]|[1-9])[\-](1[0-2]|0[1-9]|[1-9])[\-]([0-9]{2})$/);    // 31-01-22 NL
         if (match) {
-            console.log('Match D', match);
             let year = Number(match[3]);
             let maxYear = max.getFullYear() % 100; // year in century
             year = max.getFullYear() - maxYear + year - (year <= maxYear ? 0 : 100);
@@ -67,7 +65,6 @@ export function toDate( input, min, max ) {
                 }
             }
         }
-        console.log('Date ', date, min, max);
         if (date && date >= min && date <= max) {
             return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate(); // iso
         }
@@ -86,6 +83,15 @@ export function formatDate(local, dateString ) { // local ignored for now, defau
     return null;
 }
 
+// get ring parts from ring string
+export function toRing( string ) {
+    const match = string.match(/^([a-zA-Z]+)[\ \.]*(\d{2})[\ \.]*([a-zA-Z]+)[\ \.]*(\d+)$/); // D 21 AZ 999
+    if( match ) {
+        return {country: match[1], year: match[2], code: match[3], number: match[4]}
+    }
+    return null;
+}
+
 
 
 
@@ -100,7 +106,6 @@ export function getProduction( days, eggs, dames ) {
     }
     const production = eggs/dames * fit/days; //fit * eggs/days/dames;
     if( production >= 0 && production <= 366 ) {
-        console.log( 'P', production );
         return production;
     }
     return null;
@@ -114,9 +119,9 @@ export function printDate( date ) {
     return null;
 }
 
-export function printPct( value, decimals = 0 ) {
-    return (value*100).toFixed( decimals )+'%';
-}
+//export function printPct( value, decimals = 0 ) {
+//    return (value*100).toFixed( decimals )+'%';
+//}
 
 export function dat( date ) { // expecting yyyy-mm-dd
     if( date ) {

@@ -21,7 +21,21 @@ class Breeders extends Controller
     public function process() : array // parent with direct children
     {
         $id = $this->args['id'];
-        $breeders = Query\District::breeders( $id );
+        $rows = Query\District::breeders( $id );
+        $breeders = [];
+        foreach( $rows as $row ) {
+            $breeders[] = [
+                'id'=>$row['id'],
+                'firstname'=>$row['firstname'],
+                'infix'=>$row['infix'],
+                'lastname'=>$row['lastname'],
+                'district'=>[ 'id'=>$row['districtId'], 'name'=>$row['districtName'] ],
+                'club'=>[ 'id'=>$row['clubId'], 'name'=>$row['clubName'] ],
+                'start'=>$row['start'],
+                'end'=>$row['end']
+            ];
+        }
+
 
         return [ 'breeders' => $breeders, 'id'=>$id ];
     }

@@ -33,7 +33,20 @@ class Get extends Controller
 
     public function process() : array
     {
-        return ['breeder' => $this->breeder ]; // already got if for auth
+        $row = $this->breeder; // already got it for auth
+        $breeder = [
+            'id'=>$row['id'],
+            'firstname'=>$row['firstname'],
+            'infix'=>$row['infix'],
+            'lastname'=>$row['lastname'],
+            'district'=>[ 'id'=>$row['districtId'], 'name'=>$row['districtName'] ],
+            'club'=>[ 'id'=>$row['clubId'], 'name'=>$row['clubName'] ],
+            'start'=>$row['start'],
+            'end'=>$row['end'],
+            'email'=>$row['email'],
+            'info'=> $row['info']
+        ];
+        return ['breeder' => $breeder ]; // already got if for auth
     }
 
 }

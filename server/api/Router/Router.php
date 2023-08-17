@@ -24,7 +24,9 @@ class Router {
 
 
         $app->get('/breeder/{id}', 'App\Controller\Breeder\Get');
-        $app->get('/breeder/{id}/results', 'App\Controller\Breeder\Results');
+        $app->get('/breeder/{id}/pairs', 'App\Controller\Breeder\Pairs');
+        $app->get('/breeder/{id}/pairs/year/{year}', 'App\Controller\Breeder\PairsInYear' ); // for selecting pair for parent ring in report
+//        $app->get('/breeder/{id}/results', 'App\Controller\Breeder\Results');
         $app->post('/breeder', 'App\Controller\Breeder\Post');
 
         $app->get( '/color/{id}', 'App\Controller\Color\Get');
@@ -40,6 +42,10 @@ class Router {
         $app->get('/log/next', 'App\Controller\Log\Next' );
 
         $app->post('/message', 'App\Controller\Message\Post' );
+
+        //options: ( breederId, year ) => get( 'api/report/options/breeder/'+breederId+'/year'+year ),
+        $app->get('/pair/{id}', 'App\Controller\Pair\Get' ); // for selecting pair for parent ring in report
+        $app->post('/pair', 'App\Controller\Pair\Post' );
 
 
         $app->post('/result', 'App\Controller\Result\Post' );

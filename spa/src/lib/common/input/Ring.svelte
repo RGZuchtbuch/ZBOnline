@@ -2,7 +2,7 @@
 
     export let value;
     export let label;
-    export let name;
+    export let name = '';
     export let disabled = false;
     export let readonly = false;
     export let required = false;

@@ -21,7 +21,7 @@ class Breeder extends Query
         return Query::select($stmt, $args);
     }
 
-    public static function new( string $firstname, ? string $infix, string $lastname, ? string $email, int $districtId, int $clubId, string $start, ? string $end, ? string $info, int $modifierId ) : ? int {
+    public static function new( string $firstname, ? string $infix, string $lastname, ? string $email, int $districtId, ? int $clubId, string $start, ? string $end, ? string $info, int $modifierId ) : ? int {
         $args = get_defined_vars();
         $stmt = Query::prepare( '
             INSERT INTO user ( firstname, infix, lastname, email, districtId, clubId, `start`, `end`, info, modifierId )
@@ -30,7 +30,7 @@ class Breeder extends Query
         return Query::insert( $stmt, $args );
     }
 
-    public static function set( int $id, string $firstname, ? string $infix, string $lastname, ? string $email, int $clubId, string $start, ? string $end, ? string $info, int $modifierId ) : bool {
+    public static function set( int $id, string $firstname, ? string $infix, string $lastname, ? string $email, ? int $clubId, string $start, ? string $end, ? string $info, int $modifierId ) : bool {
         $args = get_defined_vars();
         $stmt = Query::prepare('
             UPDATE user
@@ -49,7 +49,17 @@ class Breeder extends Query
         return Query::del($stmt, $args);
     }
 
-    public static function results( int $breederId ) : array {
-        return [];
+//    public static function results( int $breederId ) : array {
+//        return [];
+//    }
+    public static function pairs( int $breederId ) : array {
+        $args = get_defined_vars();
+        $stmt = Query::prepare('
+            SELECT id, `year`, `group`, sectionId, breedId, colorId, name   
+            FROM pair
+            WHERE breederId=:breederId
+            ORDER BY year, name
+        ');
+        return Query::selectArray($stmt, $args);
     }
 }

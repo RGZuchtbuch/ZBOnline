@@ -119,8 +119,8 @@
                     <div class='flex flex-row bg-header px-2 py-1 text-white'>
                         <div class='grow text-center'>Rassebeschreibung</div>
                         {#if $user && $user.admin }
-                            <div class='w-6 text-center text-red-600 cursor-pointer'
-                                 class:disabled on:click={onToggleEdit} title='Daten ändern'>[&#9998;]</div>
+                            <div class='w-6 border border-red-600 rounded text-center text-red-600 cursor-pointer'
+                                 class:disabled on:click={onToggleEdit} title='Daten ändern'>&#9998;</div>
                         {/if}
                     </div>
                     <fieldset class='p-2' {disabled}>
@@ -182,6 +182,6 @@
 
 <style>
     .disabled {
-        @apply text-white;
+        @apply text-white border-white;
     }
 </style>

@@ -53,7 +53,7 @@ abstract class Controller
                 throw new \Slim\Exception\HttpUnauthorizedException($request, 'Not Authorized');
             }
         } catch( Exception | Error $e ) {
-            throw new HttpBadRequestException( $this->request, $e->getMessage() );
+            throw new HttpBadRequestException( $this->request, $e->getTraceAsString() );
         }
     }
 

@@ -4,8 +4,8 @@
     import { user } from '../../js/store.js'
 
     import List from "../common/List.svelte";
-    import BreedersHeader from "../breeders/BreedersHeader.svelte";
-    import BreedersRow from "../breeders/BreedersRow.svelte";
+    import BreedersHeader from "./BreedersHeader.svelte";
+    import BreedersRow from "./BreedersRow.svelte";
     import Article from "../article/Article.svelte";
     import Page from "../common/Page.svelte";
 

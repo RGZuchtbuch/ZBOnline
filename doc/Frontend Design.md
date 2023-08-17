@@ -16,6 +16,7 @@
 * &#9998; Edit
 * &#10551; tree
 * &#8505; info / details ( in box )
+* &#10010; add / new
 
 optional
 

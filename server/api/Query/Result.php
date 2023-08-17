@@ -11,7 +11,7 @@ class Result extends Query
             FROM result
             WHERE id=:id
         ' );
-        return Query::selectArray( $stmt, $args );
+        return Query::select( $stmt, $args );
     }
 
     public static function new(
@@ -21,12 +21,12 @@ class Result extends Query
         ? int $layDames, ? float $layEggs, ? float $layWeight,
         ? int $broodEggs, ? int $broodFertile, ? int $broodHatched,
         ? int $showCount, ? float $showScore,
-        int $modifier
+        int $modifierId
     ) : ? int {
         $args = get_defined_vars();
         $stmt = Query::prepare( '
-            INSERT INTO result ( reportId, districtId, `year`, `group`, breedId, colorId, breeders, pairs, layDames, layEggs, layWeight, broodEggs, broodFertile, broodHatched, showCount, showScore, modifier ) 
-            VALUES ( :reportId, :districtId, :year, :group, :breedId, :colorId, :breeders, :pairs, :layDames, :layEggs, :layWeight, :broodEggs, :broodFertile, :broodHatched, :showCount, :showScore, :modifier )
+            INSERT INTO result ( reportId, districtId, `year`, `group`, breedId, colorId, breeders, pairs, layDames, layEggs, layWeight, broodEggs, broodFertile, broodHatched, showCount, showScore, modifierId ) 
+            VALUES ( :reportId, :districtId, :year, :group, :breedId, :colorId, :breeders, :pairs, :layDames, :layEggs, :layWeight, :broodEggs, :broodFertile, :broodHatched, :showCount, :showScore, :modifierId )
         ' );
         return Query::insert( $stmt, $args );
     }
@@ -39,12 +39,12 @@ class Result extends Query
         ? int $layDames, ? float $layEggs, ? float $layWeight,
         ? int $broodEggs, ? int $broodFertile, ? int $broodHatched,
         ? int $showCount, ? float $showScore,
-        int $modifier
+        int $modifierId
     ) : bool {
         $args = get_defined_vars();
         $stmt = Query::prepare( '
             UPDATE  result
-            SET reportId=:reportId, districtId=:districtId, `year`=:year, `group`=:group, breedId=:breedId, colorId=:colorId, breeders=:breeders, pairs=:pairs, layDames=:layDames, layEggs=:layEggs, layWeight=:layWeight, broodEggs=:broodEggs, broodFertile=:broodFertile, broodHatched=:broodHatched, showCount=:showCount, showScore=:showScore, modifier=:modifier
+            SET reportId=:reportId, districtId=:districtId, `year`=:year, `group`=:group, breedId=:breedId, colorId=:colorId, breeders=:breeders, pairs=:pairs, layDames=:layDames, layEggs=:layEggs, layWeight=:layWeight, broodEggs=:broodEggs, broodFertile=:broodFertile, broodHatched=:broodHatched, showCount=:showCount, showScore=:showScore, modifierId=:modifierId
             WHERE id=:id
         ' );
         return Query::update( $stmt, $args );

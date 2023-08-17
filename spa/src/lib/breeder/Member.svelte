@@ -25,14 +25,18 @@
         console.log( 'edit' );
         disabled = ! disabled;
         needFocus = true;
+        if( ! disabled ) {
+            loadClubs( breeder.district.id );
+        }
     }
 
     function onChange(event) {
         changed = true;
+        validate();
     }
 
     function validate() {
-        invalid = breeder.firstname === '' || breeder.lastname === '' || breeder.clubId === null || breeder.start === null;
+        invalid = ! breeder.firstname  || ! breeder.lastname || ! breeder.start;
     }
 
     function onSubmit(event) {
@@ -51,22 +55,18 @@
         });
     }
 
-
-
     onMount( () => {
         focusElement.focus();
     })
+
     afterUpdate( () => {
         if( needFocus ) {
             focusElement.focus();
             needFocus = false;
         }
-        validate(); // after all changes are in place, was not to in onChange !
     })
 
-    $: loadClubs( breeder.districtId );
 
-    console.log( "U", clubs );
 </script>
 
 <Page>
@@ -74,7 +74,7 @@
     <div slot='header' class='flex flex-row'>
         <div class='grow'>Mitgliedsdaten</div>
         {#if $user && ( $user.admin || $user.moderator.includes( breeder.districtId ) ) }
-            <div class='w-6 h-6 border-2 border-alert rounded bg-white align-middle text-center text-red-600 cursor-pointer' class:disabled on:click={onToggleEdit} title='Daten ändern'>&#9998;</div>
+            <div class='w-6 border rounded text-center text-red-600 cursor-pointer' class:disabled on:click={onToggleEdit} title='Daten ändern'>&#9998;</div>
         {/if}
     </div>
 
@@ -88,16 +88,16 @@
             </div>
             <div class='h-4'></div>
 
-            <Select class='w-64' label='Ortsverein' bind:value={breeder.clubId} error='Pflichtfeld' >
-                <option value={null}> ? </option>
-                {#if clubs}
+            {#if ! disabled && clubs}
+                <Select class='w-64'  bind:value={breeder.club.id}  label='Verein' >
+                    <option value={null}> ? </option>
                     {#each clubs as club}
-                        <option value={club.id}> {club.name} </option>
+                        <option value={club.id} >  {club.name} </option>
                     {/each}
-                {:else}
-                    <option class='' value={breeder.clubId} selected> {breeder.clubName} </option>
-                {/if}
-            </Select>
+                </Select>
+            {:else}
+                <Text class='w-64' value={breeder.club.name} label='Verein'/>
+            {/if}
 
             <div class='flex gap-2'>
                 <DateInput class='w-24' label='ZB-Mitglied seit' bind:value={breeder.start} required/>
@@ -109,8 +109,12 @@
 
             <TextArea class='' label='Info' bind:value={breeder.info} />
 
-            {#if ! disabled && changed && ! invalid }
-                <div class='bg-alert text-center font-bold text-white cursor-pointer' on:click={onSubmit}>Speichern</div>
+            {#if ! disabled}
+                {#if changed && ! invalid }
+                    <div class='bg-alert text-center font-bold text-white cursor-pointer' on:click={onSubmit}>Speichern</div>
+                {:else}
+                    <div class='bg-gray-300 text-center font-bold text-white cursor-pointer'>Kann (noch) nicht Speichern !</div>
+                {/if}
             {/if}
         </fieldset>
     </form>
@@ -118,6 +122,6 @@
 
 <style>
     .disabled {
-        @apply text-green-600;
+        @apply text-white;
     }
 </style>

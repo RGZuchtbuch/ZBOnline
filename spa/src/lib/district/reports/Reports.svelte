@@ -5,7 +5,7 @@
     import api from '../../../js/api.js';
     import {meta} from 'tinro';
 
-    import Reports from '../../report/Reports.svelte';
+    import Reports from '../../pairs/Pairs.svelte';
 
     export let promise = null;
 

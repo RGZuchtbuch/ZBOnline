@@ -23,9 +23,9 @@ class Post extends Controller
         $data = $this->data;
         $id = $data[ 'id' ] ?? null;
         if( $id ) {
-            Query\Breeder::set( $id, $data['firstname'], $data['infix'], $data['lastname'], $data['email'], $data['clubId'], $data['start'], $data['end'], $data['info'], $this->requester[ 'id' ] ); // note districtId and id do not change
+            Query\Breeder::set( $id, $data['firstname'], $data['infix'], $data['lastname'], $data['email'], $data['club']['id'], $data['start'], $data['end'], $data['info'], $this->requester[ 'id' ] ); // note districtId and id do not change
         } else {
-            $id = Query\Breeder::new( $data['firstname'], $data['infix'], $data['lastname'], $data['email'], $data['districtId'], $data['clubId'], $data['start'], $data['end'], $data['info'], $this->requester[ 'id' ] );
+            $id = Query\Breeder::new( $data['firstname'], $data['infix'], $data['lastname'], $data['email'], $data['district']['id'], $data['club']['id'], $data['start'], $data['end'], $data['info'], $this->requester[ 'id' ] );
         }
         return ['id' => $id];
     }

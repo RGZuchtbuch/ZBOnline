@@ -12,10 +12,11 @@ export function newBreeder( districtId ) {
     return template( { id:0, name:'a', districtId:districtId, clubId:null, email:'', password:'' } );
 }
 
-export function newParent( sex= '0.1' ) {
-    sex = sex === '1.0' || sex === '0.1' ? sex : '0.1'; // make sure it's valid or '0.1'
-    return template( { id:0, reportId:0, sex:sex, ring:null, score:null } );
-}
+// in Report/Parents
+//export function newParent( sex= '0.1' ) {
+//    sex = sex === '1.0' || sex === '0.1' ? sex : '0.1'; // make sure it's valid or '0.1'
+//    return template( { id:0, reportId:0, sex:sex, ring:null, score:null } );
+//}
 
 export function newLay() {
     return template({id: 0, reportId: 0, start: '2022-02-01', end: '2022-05-01', eggs: 50, weight: 46});
@@ -34,8 +35,9 @@ export function newShow() {
 }
 
 export function newReport( districtId, breederId )  {
+    console.log('Template', breederId);
     return template({
-        id: 0,
+        id: 0, t:9,
         breederId:breederId, districtId:districtId, year: new Date().getFullYear(), group: 'I',
         sectionId: 4, breedId: 1024, colorId: 8543,
         name: 'A', paired: '2021-12-31', notes: 'Test',
