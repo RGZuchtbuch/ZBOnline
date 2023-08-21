@@ -31,6 +31,7 @@ class Elder extends Query
             SELECT id, pairId, sex, ring, score
             FROM pair_elder
             WHERE pairId=:pairId
+            ORDER BY sex, ring
         ' );
         return Query::selectArray( $stmt, $args );
     }

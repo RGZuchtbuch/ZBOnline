@@ -18,7 +18,6 @@
     }
 
     function updateResult() {
-        console.log( 'Show a', pair.show );
         count = 0; // count nr of scores
         let total = 0; // for scores * points
         let keys = [89, 90, 91, 92, 3, 94, 95, 96, 97]; // dont need all keys from show !
@@ -32,7 +31,6 @@
             }
         }
         avgScore = count > 0 ? total / count : null; // to average score
-        console.log( 'Show b', pair.show );
     }
 
     $: update( pair );

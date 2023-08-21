@@ -46,7 +46,7 @@
             <BreederPairs breederId={meta.params.breederId} />
         </Route>
 
-        <Route path='/:reportId' let:meta> <Pair params={meta.params}/></Route>
+        <Route path='/:pairId' let:meta> <Pair params={meta.params}/></Route>
     </Route>
 
 

@@ -17,7 +17,12 @@
     export { classname as class }
 
     function validate( value ) {
-        invalid = ( required && ( value<min || value>max ) );
+        if( value ) {
+            invalid = value < min || value > max;
+        } else {
+            invalid = required;
+        }
+//        invalid = ( required && ( value<min || value>max ) );
     }
 
     $: validate( value );

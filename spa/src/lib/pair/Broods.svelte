@@ -5,9 +5,6 @@
     export let disabled;
 
     let layer;
-    //    export let broods;
-
-    console.log( 'Broods', pair.broods );
 
     function newBrood( pairId ) {
         return { id:0, pairId:pairId, start:null, eggs:null, fertile:null, hatched:null, ringed:null, chicks:[ newChick( pairId, 0 ), newChick( pairId, 0 ) ] };
@@ -18,19 +15,11 @@
     }
 
     function addBrood() {
-        console.log( 'Add Brood' );
         let brood = newBrood( pair.id );
-//        if( layer ) {
-//            brood = { index:Date.now(), start:null, eggs:null, fertile:null, hatched:null, ringed:null, chicks:[] };
-//        } else {
-//            brood = { index:Date.now(), start:null, eggs:2, fertile:2, hatched:null, ringed:null, chicks:[ null, null ] };
-//        }
         pair.broods = [...pair.broods, brood];
-        console.log( 'Add Brood', pair.broods );
     }
 
     function update( pair ) {
-        console.log( 'Pair', pair );
         layer = pair.sectionId !== 5; // type of brood depends on this
         if( ! pair.broods ) pair.broods = [];
         while( pair.broods.length < 2 ) { // want at least 2

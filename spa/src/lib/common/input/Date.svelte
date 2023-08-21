@@ -10,7 +10,7 @@
     export let min = settings.date.min;
     export let max = settings.date.max;
     export let error = new Date( min ).getFullYear() + ' - ' + new Date( max ).getFullYear();
-    export let valid = true;
+    export let invalid = false;
     export let element;
 
     let classname = '';
@@ -18,7 +18,7 @@
 
     let input = formatDate( 'D', value );
 //    let date = null;
-    let invalid = false;
+//    let invalid = false;
 
     let on = {
         focus: () => {},
@@ -28,11 +28,15 @@
     $: validate( input, min, max );
 
     function validate( input, min, max ) {
-        console.log( 'Check date', input, value );
-        value = toDate( input, min, max );
-        invalid = value ? false : required;
-        valid = ! invalid;
-        console.log( 'Checked date', input, value )
+        invalid = false;
+        if( input && input.length>0 ) {
+            value = toDate( input, min, max );
+            if( ! value ) invalid = true;
+        } else {
+            invalid = required;
+        }
+//        invalid = value ? false : required;
+        console.log( 'Date val', value, invalid )
     }
 
 </script>

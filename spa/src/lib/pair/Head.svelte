@@ -50,7 +50,6 @@
         invalid = ! pair.year || pair.year < MINYEAR || pair.year > MAXYEAR;
         invalid |= ! pair.name || pair.name.length < 1;
         invalid |= ! pair.group;
-        console.log( 'Invalid', invalid, pair);
     }
 
     $: setFocus( disabled ) // on switch to ! disabled
@@ -68,8 +67,8 @@
 
     <div class='flex flex-row p-2 gap-x-1'>
         <InputText class='w-32' label='Züchter' value={pair.breederId} readonly disabled/>
-        <InputNumber class='w-20' bind:element={focusElement} label='Jahr' name='year' bind:value={pair.year} min={MINYEAR} max={MAXYEAR} required/>
-        <InputText class='w-20' label='Name' bind:value={pair.name} error='Pflichtfeld' spellcheck=false required/>
+        <InputNumber class='w-20' bind:element={focusElement} label='Jahr' name='year' bind:value={pair.year} min={MINYEAR} max={MAXYEAR} required />
+        <InputText class='w-20' label='Name' bind:value={pair.name} error='Pflichtfeld' spellcheck=false required />
         <Select class='w-20' label='ZB Gruppe' bind:value={pair.group} placeholder='?' required>
             {#each ['I', 'II', 'III' ] as group}
                 <option value={group} selected={group === pair.group}>{group}</option>
@@ -79,7 +78,5 @@
 </div>
 
 <style>
-    .disabled {
-        @apply text-white;
-    }
+
 </style>

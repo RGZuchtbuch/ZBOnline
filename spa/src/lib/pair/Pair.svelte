@@ -18,16 +18,10 @@
 //    export let id;
     export let params;
 
-    let districtId; // from params
-    let breederId;
-    let reportId;
-
     let pair = null;
     let layer = true;
 
     let disabled = true;
-    let changed = false;
-    let invalid = false;
 
     const invalids = {
         head:false, breed:false, elders:false, lay:false, broods:false, show:false, notes:false
@@ -43,6 +37,7 @@
             lay: { id:0, reportId:0, start:null, end:null, eggs:null, weight:null},
             broods: [],
             show: { 89:null, 90:null, 91:null, 92:null, 93:null, 94:null, 95:null, 96:null, 97:null },
+            changed: false, invalid: false,
         };
     }
 
@@ -51,7 +46,7 @@
     }
 
     function onSubmit() {
-        changed = false;
+        pair.changed = false;
         disabled = true;
         api.pair.post( pair )
             .then( response => {
@@ -64,22 +59,21 @@
         if( id ) { // existing
             api.pair.get( id ).then(response => {
                 pair = response.pair;
+                if( pair.changed === undefined ) pair.changed = false;
+                if( pair.invalid === undefined ) pair.invalid = false;
                 console.log( 'Pair', pair );
             });
         } else { // new
-            pair = newReport( districtId, breederId );
+            pair = newReport( Number( params.districtId ), Number( params.breederId ) );
         }
     }
 
     function update( params ) {
-        reportId = Number(params.reportId);
-        districtId = Number(params.districtId);
-        breederId = Number(params.breederId);
-        loadPair(reportId); // async
+        loadPair( params.pairId ); // async
     }
 
     function onChange( event ) {
-        changed = true;
+        pair.changed = true;
 
         // count sires and dames
         if( pair && pair.parents && pair.lay ) {
@@ -103,12 +97,16 @@
     }
 
     function validate() {
-        invalid = ! pair.year;
-        console.log( 'Invalid', invalid, pair);
+        pair.invalid = false;
+        for( const key in invalids ) {
+            pair.invalid |= invalids[ key ];
+        }
+        console.log( 'Invalid', pair.invalid);
     }
 
 
     onMount( () => {
+        console.log( 'Mount', pair );
     })
 
     $: update( params );
@@ -119,14 +117,14 @@
 <Page>
     <div slot='title'> Zuchtbuch Meldung</div>
         <div slot='header' class='flex flex-row'>
-            <div class='grow'>Stamm / Paar Meldung {invalids.head}{invalids.breed}</div>
+            <div class='grow'>Stamm / Paar Meldung {pair.changed}:{pair.invalid}</div>
             {#if $user && ( $user.admin || $user.moderator.includes( pair.districtId ) ) }
                 <div class='w-6 border rounded text-center text-red-600 cursor-pointer' class:disabled on:click={onToggleEdit} title='Daten ändern'>&#9998;</div>
             {/if}
         </div>
 
 
-        <form slot='body' class='bg-gray-100' on:change={onChange} on:submit|preventDefault={onSubmit}>
+        <form slot='body' class='bg-gray-100' on:input={onChange} on:submit|preventDefault={onSubmit}>
 
             <fieldset class='flex flex-col gap-1' {disabled}>
 
@@ -152,7 +150,7 @@
 
 
                 {#if ! disabled}
-                    {#if changed && ! invalid }
+                    {#if pair.changed && ! pair.invalid }
                         <button type='submit' class='rounded border bg-alert text-center text-white cursor-pointer'>Meldung speichern</button>
                     {:else}
                         <button type='submit' class='rounded border bg-gray-400 text-center text-white cursor-pointer' disabled>Kann (noch) nicht speichern</button>

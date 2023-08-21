@@ -6,10 +6,18 @@
     export let disabled;
     export let invalid = false;
 
+    let breedId;
+
+    function update() {
+        breedId = pair.breedId;
+    }
 
     onMount( () => {
-        console.log( 'Breed', pair )
     })
+
+    $: update( pair );
+
+    // note: pair has sectionId, breedId and colorId
 
 </script>
 
@@ -21,7 +29,7 @@
     </div>
 
     <div class='flex flex-row p-2 gap-x-1'>
-        <BreedSelect class='flex flex-row p-2 gap-x-1' bind:sectionId={pair.sectionId} bind:breedId={pair.breedId} bind:colorId={pair.colorId} bind:invalid={invalid} {disabled}/>
+        <BreedSelect class='flex flex-row p-2 gap-x-1' bind:value={pair} bind:invalid={invalid} {disabled}/>
     </div>
 </div>
 <style></style>

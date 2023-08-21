@@ -8,21 +8,21 @@
     export let required = false;
     export let error = 'z.B. D 21 AZ 999';
     export let element;
+    export let invalid = false;
 
     let classname = '';
     export {classname as class}
 
     let input = value;
-    let invalid = false;
 
     const patterns = {
         default: ( input ) => {
-            console.log( 'Input D', input );
+//            console.log( 'Input D', input );
             const match = input.match(/^(\d\d?)[\ \.]*([a-zA-Z]+)[\ \.]*(\d+)$/); // 21 AZ 999, defaults to D
             return match ? 'D '+match[1]+' '+match[2].toUpperCase()+' '+match[3] : null;
         },
         EU: (input) => {
-            console.log( 'Input EU', input );
+//            console.log( 'Input EU', input );
             const match = input.match(/^([a-zA-Z]+)[\ \.]*(\d{2})[\ \.]*([a-zA-Z]+)[\ \.]*(\d+)$/); // D 21 AZ 999
             return match ? match[1].toUpperCase()+' '+match[2]+' '+match[3].toUpperCase()+' '+match[4] : null;
         }
@@ -35,10 +35,7 @@
         },
     }
 
-    $: clear( value ); // clear from outside
-    $: validate(input); // on input changed
-
-    function clear( value ) {
+    function update(value ) {
         if( value===null ) {
             input = value;
         }
@@ -47,28 +44,31 @@
     function validate(input) {
         if( input ) {
             invalid = true; // unless a match
+
             for (let key in patterns) {
-                console.log( 'Key', key );
                 const ring = patterns[key](input);
-                console.log( 'Ring', ring );
                 if (ring) {
-                    console.log( 'Found', ring );
                     value = ring;
                     invalid = false;
                     return;
-                   // break; // on match
+                } else {
+                    value = input;
+                    invalid = true;
                 }
             }
         } else {
             invalid = required;
+            value = input;
         }
     }
 
+    $: update( value ); // clear from outside
+    $: validate(input); // on input changed
 </script>
 
 <div class='input {classname} flex flex-col gap-0' title='Land Jahr Buchstaben Nummer : D 20 AZ 999'>
     {#if label}
-        <label class='label' for='input'>{label}</label>
+        <label class='label' for='input'>{label} : {invalid}</label>
     {/if}
     <input class='data' class:invalid id='input' type='text' {name}
            bind:value={input} bind:this={element}
