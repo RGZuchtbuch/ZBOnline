@@ -28,9 +28,9 @@
 
 <div class='input {classname} flex flex-col gap-0'>
     {#if label}
-        <label class='label' for='input'>{label}</label>
+        <label class='label text-left' for='input'>{label}</label>
     {/if}
-    <input class='data' class:invalid id='input' type='text' {name} bind:value={value} bind:this={element}
+    <input class='' class:invalid id='input' type='text' {name} bind:value={value} bind:this={element}
            {minlength} {maxlength}
            {required} {disabled} {readonly} {pattern}
            {spellcheck}

@@ -1,8 +1,10 @@
 <script>
+    import {onMount} from "svelte";
     import Brood from "./Brood.svelte";
 
     export let pair;
     export let disabled;
+    export let invalid = false;
 
     let layer;
 
@@ -19,7 +21,7 @@
         pair.broods = [...pair.broods, brood];
     }
 
-    function update( pair ) {
+    function init() {
         layer = pair.sectionId !== 5; // type of brood depends on this
         if( ! pair.broods ) pair.broods = [];
         while( pair.broods.length < 2 ) { // want at least 2
@@ -38,12 +40,22 @@
         }
     }
 
-    $: update( pair );
+    function onInput( event ) {
+        console.log( 'OnInput', event );
+        invalid = false;
+        for( const brood of pair.broods ) {
+            invalid ||= brood.invalid;
+        }
+    }
+
+    onMount( init );
+
+    //$: update( pair );
 
 </script>
 
 
-<div class='flex flex-col border rounded border-gray-400'>
+<fieldset class='flex flex-col border rounded border-gray-400' on:input={onInput}>
     <div class='flex flex-row bg-header px-2 py-1 text-center text-white'>
         <div class='grow'>Brutleistung</div>
         <div class='w-6 border rounded text-center text-white cursor-pointer' class:disabled on:click={addBrood} title='Brut/Nest hinzufügen'>✚</div>
@@ -57,7 +69,7 @@
         {/if}
     </div>
 
-</div>
+</fieldset>
 
 <style>
 

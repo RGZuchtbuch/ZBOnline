@@ -56,9 +56,9 @@
                     invalid = true;
                 }
             }
-        } else {
+        } else { // null or empty
             invalid = required;
-            value = input;
+            value = null;
         }
     }
 

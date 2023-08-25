@@ -1,5 +1,6 @@
 <script>
-    import { pct } from '../../js/util.js'
+    import {onMount} from "svelte";
+    import { pct, validator } from '../../js/util.js'
 
     import InputButton from '../common/input/Button.svelte';
     import InputDate from '../common/input/Date.svelte';
@@ -13,6 +14,14 @@
     export let nolabel = false;
     export let layer = true; // type of brood depends on this
     export let disabled;
+    export let invalid = false;
+
+    const invalids = {
+        start:false, eggs:false, fertile:false, hatched:false, ringed:false, chick:[false, false]
+    };
+
+    function init() {
+    }
 
 
     function getFertility( eggs, fertile ) {
@@ -30,30 +39,54 @@
         }
     }
 
+    function onInput( event ) {
+        invalid = false;
+        if( layer ) {
+            invalid =
+                validator( brood.start ).date().nullable().isInvalid() &&
+                validator( brood.eggs ).number().range( 0, 99999 ).nullable().isInvalid() &&
+                validator( brood.fertile ).number().range( 0, brood.eggs ).nullable().isInvalid() &&
+                validator( brood.hatched ).number().range( 0, brood.fertile ? brood.fertile : brood.eggs ).nullable().isInvalid() &&
+                validator( brood.ringed ).date().nullable().isInvalid();
+        } else {
+            invalid =
+                validator( brood.start ).date().nullable().isInvalid() &&
+                validator( brood.hatched ).number().range( 0, 2 ).nullable().isInvalid() &&
+                validator( brood.ringed ).date().nullable().isInvalid();
+            for( const chick of brood.chicks ) {
+                invalid ||= validator( chick.ring ).ring().nullable().isInvalid();
+                console.log( 'I', chick.ring, validator( chick.ring ).ring().nullable().isInvalid(), invalid );
+            }
+        }
+        brood.invalid = invalid;
+    }
+
+    //onMount( init );
+    $: init( brood );
+
 
 </script>
 
-{#if layer }
-    <div class='flex flex-row gap-x-1'>
+<fieldset class='flex flex-row gap-x-1' on:input={onInput}>
+    {invalid}
+    {#if layer }
         <div class='grow flex flex-row gap-x-1'>
-            <InputText class='w-8' label={nolabel ? '' : '#'} value={index+1} disabled readonly />
+            <InputText class='w-12' label={nolabel ? '' : '#'} value={index+1} disabled readonly />
             <InputDate class='w-24' label={nolabel ? '' : 'Am'} bind:value={brood.start} />
-            <InputNumber class='w-16' label={nolabel ? '' : 'Eingelegt'} bind:value={brood.eggs} min=1 max={99999} />
+            <InputNumber class='w-16' label={nolabel ? '' : 'Eingelegt*'} bind:value={brood.eggs} min=1 max={99999}/>
             <InputNumber class='w-16' label={nolabel ? '' : 'Befruchtet'} bind:value={brood.fertile} min=0 max={brood.eggs} error={0+' - '+brood.eggs} />
-            <InputNumber class='w-16' label={nolabel ? '' : 'Geschlüpft'} bind:value={brood.hatched} min=0 max={brood.fertile} error={0+' - '+brood.fertile} />
+            <InputNumber class='w-16' label={nolabel ? '' : 'Geschlüpft*'} bind:value={brood.hatched} min=0 max={brood.fertile ? brood.fertile : brood.eggs} error={0+' - '+brood.fertile} />
             <InputDate class='w-20' label={nolabel ? '' : 'Beringt am'} bind:value={brood.ringed} disabled={disabled || brood.hatched===0} />
         </div>
         <div class='flex flex-row gap-x-1'>
             <InputText class='w-16' label={nolabel ? '' : 'Befruchtung'} value={ getFertility( brood.eggs, brood.fertile )} disabled readonly />
             <InputText class='w-16' label={nolabel ? '' : 'Schlupf'} value={getHatching( brood )} disabled readonly />
         </div>
-    </div>
 
-{:else}
+    {:else}
 
-    <div class='flex flex-row gap-x-1'>
         <div class='grow flex flex-row gap-x-1'>
-            <InputNumber class='w-8' label={nolabel ? '' : '#'} value={index} disabled readonly />
+            <InputNumber class='w-12' label={nolabel ? '' : '#'} value={index+1} disabled readonly />
             <InputDate class='w-20' label={nolabel ? '' : 'Gelegt am'} bind:value={brood.start} />
             <InputNumber class='w-20' label={nolabel ? '' : 'Küken'} bind:value={brood.hatched} min=0 max=2 error='0 - 2' />
             <InputDate class='w-20' label={nolabel ? '' : 'Beringt am'} bind:value={brood.ringed} disabled={brood.hatched<=0} />
@@ -65,8 +98,8 @@
         <div class='flex flex-row gap-x-1'>
             <InputText class='w-16' label={nolabel ? '' : 'Schlupf'} value={getHatching( brood )} disabled readonly />
         </div>
-    </div>
-{/if}
+    {/if}
+</fieldset>
 
 
 <style>

@@ -72,7 +72,7 @@
         loadPair( params.pairId ); // async
     }
 
-    function onChange( event ) {
+    function onInput(event ) {
         pair.changed = true;
 
         // count sires and dames
@@ -124,7 +124,7 @@
         </div>
 
 
-        <form slot='body' class='bg-gray-100' on:input={onChange} on:submit|preventDefault={onSubmit}>
+        <form slot='body' class='bg-gray-100' on:input={onInput} on:submit|preventDefault={onSubmit}>
 
             <fieldset class='flex flex-col gap-1' {disabled}>
 

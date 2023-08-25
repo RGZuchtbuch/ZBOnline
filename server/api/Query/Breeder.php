@@ -40,7 +40,7 @@ class Breeder extends Query
         return Query::update($stmt, $args);
     }
 
-    public static function del( int $id ) : bool { // TODO use with case, as it's could be referred to from reports
+    public static function del( int $id ) : bool { // TODO use with care, as it's could be referred to from reports
         $args = get_defined_vars();
         $stmt = Query::prepare('
             DELETE FROM user 
@@ -52,7 +52,7 @@ class Breeder extends Query
 //    public static function results( int $breederId ) : array {
 //        return [];
 //    }
-    public static function pairs( int $breederId ) : array {
+    public static function pairs( int $breederId ) : array { // TODO move to pair!
         $args = get_defined_vars();
         $stmt = Query::prepare('
             SELECT id, `year`, `group`, sectionId, breedId, colorId, name   
