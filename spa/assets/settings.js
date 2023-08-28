@@ -14,10 +14,10 @@ const settings = {
     api : {
         root: location.hostname === 'localhost' || location.hostname === '127.0.0.1' ? 'http://localhost:80/' : 'https://rgzuchtbuch.de/',
     },
-    date : {
-        min: '1850-01-01',
-        max: (new Date().getFullYear()+1) + '-11-31',
-    },
+//    date : {
+//        min: '1850-01-01',
+//        max: (new Date().getFullYear()+1) + '-11-31',
+//    },
     select : {
         groups: ['I', 'II', 'III'], // for selects
         sections: [ // for selects
@@ -29,12 +29,19 @@ const settings = {
         years : generateYears(), //
     }
 }
+const WORKINPROGRESS = false; // use in case of work in progress and disable the website temporary.
+
+// switches from dev to production
+const APIROOT = location.hostname === 'localhost' || location.hostname === '127.0.0.1' ? 'http://localhost:80/' : 'https://rgzuchtbuch.de/';
 
 const CACHETIMEOUT = 60000; // 60 secs in dev mode
 const CACHECHECKINTERVAL = 60000; // once a minute
 
+const MINDATE = '1850-01-01';
+const MAXDATE = (new Date().getFullYear()+1) + '-11-31';
+
 const MINYEAR = 1850;
-const MAXYEAR = 2030;
+const MAXYEAR = 2099;
 
 const STARTYEAR = 2000;
 

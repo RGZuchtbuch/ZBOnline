@@ -7,13 +7,15 @@
     import api from '../../js/api.js';
 
     import Page from "../common/Page.svelte";
-    import ReportBreed from './Breed.svelte';
-    import ReportBroods from './Broods.svelte';
-    import ReportLay from './Lay.svelte';
-    import ReportNotes from './Notes.svelte';
-    import ReportElders from './Elders.svelte';
-    import ReportShow from './Show.svelte';
-    import ReportHead from "./Head.svelte";
+    import PairHead from "./Head.svelte";
+    import PairBreed from './Breed.svelte';
+    import PairBroods from './Broods.svelte';
+    import PairLay from './Lay.svelte';
+    import PairElders from './Elders.svelte';
+    import PairShow from './Show.svelte';
+    import PairNotes from './Notes.svelte';
+
+    //import {isNumber} from "chart.js/helpers";
 
 //    export let id;
     export let params;
@@ -27,14 +29,14 @@
         head:false, breed:false, elders:false, lay:false, broods:false, show:false, notes:false
     }
 
-    function newReport( districtId, breederId )  {
+    function newPair(districtId, breederId )  {
         return {
             id: 0, t:9,
             breederId:breederId, districtId:districtId, year: new Date().getFullYear(), group: 'I',
             sectionId: 4, breedId: 1024, colorId: 8543,
             name: 'A', paired: '2021-12-31', notes: 'Test',
             parents: [],
-            lay: { id:0, reportId:0, start:null, end:null, eggs:null, weight:null},
+            lay: { id:0, pairId:0, start:null, end:null, eggs:null, weight:null},
             broods: [],
             show: { 89:null, 90:null, 91:null, 92:null, 93:null, 94:null, 95:null, 96:null, 97:null },
             changed: false, invalid: false,
@@ -56,15 +58,16 @@
     }
 
     function loadPair( id ) {
-        if( id ) { // existing
-            api.pair.get( id ).then(response => {
+        console.log( id, Number.isInteger(id) );
+        if( id > 0 ) { // existing, note id could be '0' from param
+            api.pair.get( id ).then( response => {
                 pair = response.pair;
-                if( pair.changed === undefined ) pair.changed = false;
-                if( pair.invalid === undefined ) pair.invalid = false;
+//                if( pair.changed === undefined ) pair.changed = false;
+//                if( pair.invalid === undefined ) pair.invalid = false;
                 console.log( 'Pair', pair );
             });
         } else { // new
-            pair = newReport( Number( params.districtId ), Number( params.breederId ) );
+            pair = newPair( Number( params.districtId ), Number( params.breederId ) );
         }
     }
 
@@ -117,7 +120,7 @@
 <Page>
     <div slot='title'> Zuchtbuch Meldung</div>
         <div slot='header' class='flex flex-row'>
-            <div class='grow'>Stamm / Paar Meldung {pair.changed}:{pair.invalid}</div>
+            <div class='grow'>Stamm / Paar Meldung (c {pair.changed} : v {pair.invalid}</div>
             {#if $user && ( $user.admin || $user.moderator.includes( pair.districtId ) ) }
                 <div class='w-6 border rounded text-center text-red-600 cursor-pointer' class:disabled on:click={onToggleEdit} title='Daten ändern'>&#9998;</div>
             {/if}
@@ -128,23 +131,23 @@
 
             <fieldset class='flex flex-col gap-1' {disabled}>
 
-                <ReportHead {pair} bind:invalid={invalids.head} {disabled}/>
+                <PairHead {pair} bind:invalid={invalids.head} {disabled}/>
 
-                <ReportBreed {pair} bind:invalid={invalids.breed} {disabled}/>
+                <PairBreed {pair} bind:invalid={invalids.breed} {disabled}/>
 
                 {#if pair.sectionId }
 
-                    <ReportElders {pair} bind:invalid={invalids.elders} {disabled}/>
+                    <PairElders {pair} bind:invalid={invalids.elders} {disabled}/>
 
                     {#if pair.sectionId !== 5}
-                        <ReportLay {pair} bind:invalid={invalids.lay} {disabled}/>
+                        <PairLay {pair} bind:invalid={invalids.lay} {disabled}/>
                     {/if}
 
-                    <ReportBroods {pair} bind:invalid={invalids.broods} {disabled} />
+                    <PairBroods {pair} bind:invalid={invalids.broods} {disabled} />
 
-                    <ReportShow {pair} bind:invalid={invalids.show} {disabled} />
+                    <PairShow {pair} bind:invalid={invalids.show} {disabled} />
 
-                    <ReportNotes bind:notes={pair.notes} bind:invalid={invalids.notes} {disabled} />
+                    <PairNotes bind:notes={pair.notes} bind:invalid={invalids.notes} {disabled} />
 
                 {/if}
 

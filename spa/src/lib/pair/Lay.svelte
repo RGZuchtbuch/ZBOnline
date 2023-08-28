@@ -11,7 +11,8 @@
 
     let input;
 
-    function setDays( lay ) {
+    function setDays() {
+        console.log( 'Lay', pair.lay );
         if( input && input.lay ) {
             input.lay.days = null;
             if( input.lay.start && input.lay.end ) {
@@ -48,26 +49,29 @@
     }
 
     function validate() { // input
-        console.log( 'L val');
-        setDays( input.lay );
-        setResult( input.lay );
         invalid =
             ( input.lay.start && ! input.lay.days ) ||
             ( input.lay.start && ! input.lay.eggs ) ||
             input.lay.eggs < 0 || input.lay.eggs > (input.lay.days * pair.dames) ;
         // ||input.lay.days < 0 || input.lay.days > 365 || input.lay.result < 0 || input.lay.result > 366;
 
+        setDays( input.lay );
+        setResult( input.lay );
         pair = input;
+    }
+
+    function onInput( event ) {
+        validate();
     }
 
 
     $: update( pair );
-    $: validate( input );
+//    $: validate( input );
 
 
 </script>
 
-<div class='flex flex-col border rounded border-gray-400'>
+<fieldset class='flex flex-col border rounded border-gray-400' on:input={onInput}>
     <div class='flex flex-row bg-header px-2 py-1 text-center text-white'>
         <div class='grow'>Legeleistung</div>
         <div class='w-6'>{invalid}</div>
@@ -77,7 +81,7 @@
         <div class='flex flex-row p-2 gap-x-1'>
             <div class='grow flex flex-row gap-x-1'>
                 <InputDate class='w-24' label={'Gesammelt ab'} bind:value={input.lay.start} {disabled}/>
-                <InputDate class='w-24' label={'Gesammelt bis'} bind:value={input.lay.end} min={ input.lay.start } error='Wenigstens einen Tag sammeln!' {disabled}/>
+                <InputDate class='w-24' label={'Gesammelt bis'} bind:value={input.lay.end} min={ input.lay.start } error='Später als Start!' required={input.lay.start} {disabled}/>
                 <InputNumber class='w-16' label={'# Eierzahl'} bind:value={input.lay.eggs} min=0 max={input.lay.days * pair.dames} error='Unmöglich' {disabled} />
                 <InputNumber class='w-16' label={'∅ Gewicht'} bind:value={input.lay.weight} min=1 max=999 {disabled} />
             </div>
@@ -88,7 +92,7 @@
             </div>
         </div>
     {/if}
-</div>
+</fieldset>
 
 <style>
 

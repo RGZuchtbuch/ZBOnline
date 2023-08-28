@@ -29,10 +29,12 @@
             breeds = data.breeds;
         });
     }
-    function getColors(breedId) {
-        api.breed.colors.get( value.breedId ).then(data => {
-            colors = data.colors
-        });
+    function getColors() {
+        if( value.breedId > 0 ) {
+            api.breed.colors.get(value.breedId).then(data => {
+                colors = data.colors
+            });
+        }
     }
 
     function updateSection() {

@@ -1,8 +1,40 @@
 <script>
+    import {Route, meta, router} from 'tinro';
     import {user} from '../../js/store.js';
+    import {get as storeGet} from "svelte/store";
+
+    let remainingMessage = '?';
+    let blink = true;
+
+    function toTimeString( millis ) {
+        const hours = Math.floor( millis / (60*60*1000) );
+        millis %= 60*60*1000;
+        const minutes = Math.floor( millis / (60*1000) );
+        millis %= 60*1000;
+        const seconds = Math.floor( millis / 1000 );
+        return hours+':'+(minutes < 10 ? '0':'')+minutes+':'+(seconds<10?'0':'')+seconds;
+//        return hours+':'+minutes+':'+seconds;
+    }
+
+    function expired() {
+        if( $user ) {
+            const exp = new Date( $user.exp * 1000 ); // needs millis io secs
+            const now = new Date(); // millis
+            const millis = exp - now;
+            remainingMessage = toTimeString( millis );
+            if( millis < 1 * 60 * 60 * 1000 ) { // last hour
+                blink = ! blink;
+            }
+            if( millis < 1 ) {
+                router.goto('/anmelden');
+            }
+        }
+    }
+
+    setInterval( expired, 1000 );
 </script>
 
-<div class='border border-gray-400 bg-header px-2 py-1 flex flex-row gap-2 no-print'>
+<div class='border border-gray-400 bg-header px-2 py-1 flex flex-row gap-2 text-white no-print'>
     <div class='w-48'></div>
     <div class='grow gap-x-4 pl-8'>
         <a href='/zuchtbuch'>Das Zuchtbuch</a>
@@ -12,9 +44,9 @@
         {#if MODERATORENABLED && $user && $user.moderator.length > 0 } <a href='/obmann'>Obmann</a> {/if}
         {#if ADMINENABLED && $user && $user.admin } <a href='/admin'>Admin</a> {/if}
     </div>
-    <div class='w-48'>
+    <div class='w-64'>
         {#if $user}
-            <a href='/abmelden'>Abmelden</a>
+            <a href='/abmelden'>Abmelden</a> {#if blink}({remainingMessage}){/if}
         {:else}
             <a href='/anmelden'>Anmelden</a>
         {/if}

@@ -1,4 +1,5 @@
 <script>
+    import { onMount } from "svelte";
 
     export let value = null;
     export let label = null;
@@ -16,7 +17,7 @@
     let classname = '';
     export { classname as class }
 
-    function validate( value ) {
+    function validate() {
         if( value ) {
             invalid = value < min || value > max;
         } else {
@@ -25,7 +26,13 @@
 //        invalid = ( required && ( value<min || value>max ) );
     }
 
-    $: validate( value );
+    function onInput( event ) {
+        validate();
+    }
+
+    onMount( () => validate() )
+
+    $: validate( min, max, required );
 </script>
 
 <div class='input {classname} flex flex-col gap-0'>
@@ -36,6 +43,7 @@
            bind:value={value} bind:this={element}
            {min} {max} {step}
            {disabled} {readonly} {required}
+           on:input={onInput}
     >
     <span class:invalid>
         {#if invalid} {error} {:else} &nbsp; {/if}

@@ -1,7 +1,7 @@
 import jwt_decode from 'jwt-decode';
 import { user } from './store.js'
 
-//uses constants from js/setting.js { settings.cache.TIMEOUT, settings.api.root }
+//uses constants from js/setting.js
 
 
 
@@ -12,7 +12,6 @@ export default {
         getAll: () => get( 'api/articles' ),
         post:   ( article ) => post( 'api/article', article ),
     },
-
 
     breed: {
         get: (id) => get( 'api/breed/'+id ),
@@ -135,6 +134,7 @@ export default {
 
     /**
      * provides the array of ZB groups, could be extended to own table in db with info text
+     * in code (planned to ) replaced by local adhoc array or in settings.
      */
     groups: {
         get: () => {
@@ -375,7 +375,7 @@ async function get( url, timeout = CACHETIMEOUT ) {
             method: 'GET',
             headers: getHeaders()
         }
-        let promise = fetch(settings.api.root + url, options).then( response => {
+        let promise = fetch(APIROOT + url, options).then( response => {
             if (response.ok) {
                 return response.json();
             }
@@ -395,7 +395,7 @@ async function post( url, data ) {
         headers: getHeaders(),
         body: JSON.stringify( data ),
     }
-    return fetch( settings.api.root+url, options )
+    return fetch( APIROOT + url, options )
         .then( response => {
             if( response.ok ) {
                 return response.json();
@@ -413,7 +413,7 @@ async function put( url, data ) {
         body: JSON.stringify( data ),
     }
     console.log( 'PUT', url, data );
-    return fetch( settings.api.root+url, options )
+    return fetch( APIROOT + url, options )
         .then( response => {
             if( response.ok ) {
                 return response.json();
@@ -430,8 +430,7 @@ async function del( url, data ) {
         headers: getHeaders(),
         body: JSON.stringify( data ),
     }
-    console.log('DELETE', url, data );
-    return fetch( settings.api.root+url, options)
+    return fetch( APIROOT + url, options)
         .then( response => {
             if( response.ok ) {
                 return response.json();
@@ -442,9 +441,12 @@ async function del( url, data ) {
 
 
 /**
- * clears item from cache if due
+ * timers:
+ * 1. clears item from cache if due
  */
-setInterval(  cache.update, CACHECHECKINTERVAL ) // once a minute
+setInterval(  cache.update, CACHECHECKINTERVAL ); // once a minute
+
+
 
 
 

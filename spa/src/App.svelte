@@ -22,6 +22,8 @@
 
 </script>
 
+
+
 <div class='w-full h-full flex flex-col'>
     <img class='absolute w-20 mt-4 ml-24 no-print' src='../assets/bdrg_logo_r.png' alt='BDRG Logo'>
 

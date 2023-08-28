@@ -104,7 +104,7 @@ class District extends Query
         $args = get_defined_vars();
         $stmt = Query::prepare("
             SELECT 
-                   result.id, result.reportId, :districtId AS districtId, :year AS `year`, :group AS `group`,             
+                   result.id, result.pairId, :districtId AS districtId, :year AS `year`, :group AS `group`,             
                    breed.id AS breedId, null AS colorId, 'Gesamte Farbenschläge' AS name,  
                    result.breeders, result.pairs,
                    result.layDames, result.layEggs, result.layWeight,
@@ -126,7 +126,7 @@ class District extends Query
     public static function colorResults( int $districtId, int $breedId, int $year, string $group ) : array {
         $args = get_defined_vars();
         $stmt = Query::prepare("
-            SELECT result.id, result.reportId, :districtId AS districtId, :year AS `year`, :group AS `group`,
+            SELECT result.id, result. pairId, :districtId AS districtId, :year AS `year`, :group AS `group`,
                    breed.id AS breedId, color.id AS colorId, color.name,
                    result.breeders, result.pairs,
                    result.layDames, result.layEggs, result.layWeight,
