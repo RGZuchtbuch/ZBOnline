@@ -1,7 +1,10 @@
 <script>
     export let notes;
     export let disabled;
+    export let invalid = false;
 
+
+    invalid = false; // always
 </script>
 
 <div class='flex flex-col my-2'>

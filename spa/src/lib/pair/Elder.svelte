@@ -9,19 +9,21 @@
     import ReadText from '../read/Text.svelte';
     import Select from '../common/input/Select.svelte';
 
-    //export let pair;
+    export let pair;
     export let breederId;
     export let elder;
+    export let index;
     export let nolabel = false;
     export let disabled = true;
     export let invalid = false;
 
     let input;
     let ancestorPairs = null
+    let ancestorResults = null;
 
     let invalids = { sex:false, ring:false, score:false, ancestors:false };
 
-    function getEldersReportOptions( string ) {
+    function getPotentialAncestorPairs( string ) {
         if( string ) {
             const ring = toRing(string);
             if( ring ) {
@@ -32,38 +34,52 @@
         }
     }
 
-    function getResultsForElderPair( pairId ) {
-        // TODO
-    }
-
     function update() {
         if( input !== elder ) { // to avoid cycles
             input = elder;
+            console.log( 'input', input );
         }
     }
 
     function validate() {
-        console.log('Validate Elder input', input );
-
         invalid = false;
         for( let key in invalids ) {
             invalid |= invalids[key];
         }
+        invalid = Boolean( invalid );
         elder = input;
     }
+    function updateAncestorResults() {
+        if (input.pair && ancestorPairs) {
+            for (let aPair of ancestorPairs) {
+                if (aPair.id === input.pair) { // selected
+                    console.log( 'aPair', aPair );
+                    if( pair.sectionId === 5 ) {
+                        ancestorResults = 'Küken '+aPair.broodHatched+', Schau '+aPair.showScore.toFixed(1);
+                    } else {
+                        ancestorResults =
+                            'Legen ' + aPair.layEggs + ' von ' + aPair.layWeight + 'g, ' +
+                            'Bruten ' + aPair.broodEggs + ' / ' + aPair.broodFertile + ' / ' + aPair.broodHatched + ', ' +
+                            'Schau ' + aPair.showScore.toFixed(1);
+                    }
+                    return;
+                }
+            }
+        }
+    }
 
-    $: getEldersReportOptions( elder.ring );
-    $: getResultsForElderPair( elder.pair );
+    $: getPotentialAncestorPairs( elder.ring );
 
     $: update( elder ); // should be before validate to ensure defined input
     $: validate( input  );
+    $: updateAncestorResults( ancestorPairs )
 
-console.log( 'BI', breederId );
 </script>
 
-{invalid} : {invalids.ring }
+
 <div class='flex flex-row gap-x-1' >
     <div class='grow flex flex-row gap-x-1'>
+        <InputText class='w-8' label={nolabel ? '' : '#'} value={index+1} disabled readonly />
         <Select class='w-16' label={nolabel ? '' : 'Sex'} bind:value={input.sex} title='Hahn (1.0) oder Henne (0.1)' {disabled} required>
             {#each ['1.0', '0.1'] as sex }
                 <option value={sex}>{sex}</option>
@@ -74,21 +90,20 @@ console.log( 'BI', breederId );
 
         <div class='w-8 self-center text-center'> ← </div>
 
-
         <Select class='w-32' label={nolabel ? '' : 'Aus Stamm / Paar'} bind:value={input.pair} {disabled} >
             <option value={null}> ? </option>
             {#if ancestorPairs}
-                {#each ancestorPairs as ancestorPair }
-                    <option value={ancestorPair.id} > {ancestorPair.breederId+':'+ancestorPair.year+':'+ancestorPair.name} </option>
+                {#each ancestorPairs as aPair }
+                    <option value={aPair.id} selected={aPair.id === input.pair} > {aPair.id} {aPair.breederId+':'+aPair.year+':'+aPair.name} </option>
                 {/each}
             {/if}
         </Select>
 
     </div>
 
-    {#if input.pair}
+    {#if ancestorResults }
         <div class='flex flex-row gap-x-1'>
-            <InputText class='grow' label={nolabel ? '' : 'Stamm Leistungen'} value='Todo 160 49, 90% 80%, 94.1' readonly disabled/>
+            <InputText class='w-96' label={nolabel ? '' : 'Stamm / Paar Leistungen'} value={ancestorResults} readonly disabled/>
         </div>
     {/if}
 </div>

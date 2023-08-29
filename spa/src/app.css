@@ -73,8 +73,6 @@ input.invalid, textarea.invalid, select.invalid {
     @apply border-red-400;
 }
 
-
-
 .input > input.invalid, .input > select.invalid {
     @apply border-red-600;
 }

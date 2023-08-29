@@ -7,7 +7,7 @@ class Elder extends Query
     public static function get( $id ) {
         $args = get_defined_vars();
         $stmt = Query::prepare( '
-            SELECT id, pairId, sex, ring, score
+            SELECT id, pairId, sex, ring, score, pair
             FROM pair_elder
             WHERE id=:id
         ' );
@@ -28,7 +28,7 @@ class Elder extends Query
     public static function getForPair( $pairId ) {
         $args = get_defined_vars();
         $stmt = Query::prepare( '
-            SELECT id, pairId, sex, ring, score
+            SELECT id, pairId, sex, ring, score, pair
             FROM pair_elder
             WHERE pairId=:pairId
             ORDER BY sex, ring

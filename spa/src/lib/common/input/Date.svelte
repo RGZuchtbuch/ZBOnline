@@ -34,8 +34,6 @@
             value = null;
             invalid = required;
         }
-//        invalid = value ? false : required;
-        console.log( 'Date val', value, invalid )
     }
 
     function onInput( event ) {
@@ -44,8 +42,6 @@
     }
 
     $: validate( min, max, required );
-
-//    $: validate( input, min, max );
 
 </script>
 

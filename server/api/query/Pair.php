@@ -50,13 +50,17 @@ class Pair extends Query
 
 
     // for results page
-    public static function options( int $breederId, int $year ) {
+    public static function forYear(int $breederId, int $year ) {
         $args = get_defined_vars();
         $stmt = Query::prepare( " 
-            SELECT id, breederId, `year`, name 
+            SELECT pair.id, pair.breederId, pair.year, pair.name, 
+				layEggs, layWeight, 
+				broodEggs, broodFertile, broodHatched,
+				showCount, showScore
             FROM pair
-            WHERE breederId=:breederId AND `year`=:year
-            ORDER BY breederId, name
+            LEFT JOIN result ON result.pairId = pair.id
+            WHERE pair.breederId=:breederId AND pair.year=:year
+            ORDER BY name
         " );
         return Query::selectArray( $stmt, $args );
     }

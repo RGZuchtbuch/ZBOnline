@@ -219,12 +219,24 @@ export function validator( value ) {
             return worker;
         },
         empty: () => {
-            value.length === 0;
+            valid &= value === null || value.length === 0;
             return worker;
         },
         nullable: () => { // should be last !
             valid = value === null ? true : valid;
             return worker;
+        },
+        isNull( other ) {
+            valid &= other === null;
+            return worker;
+        },
+        notNull( other ) {
+            valid &= other !== null;
+            return worker;
+        },
+
+        isValid: () => {
+            return valid;
         },
         isInvalid: () => {
             return ! valid;

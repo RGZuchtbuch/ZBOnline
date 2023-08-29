@@ -66,7 +66,7 @@ class Post extends Controller
     private function updateLay( & $pair ) {
         Query\Lay::delForPair( $pair['id'] );
         $lay = $pair[ 'lay' ];
-        if( $lay && $lay['start'] && $lay['end'] && $lay[ 'eggs' ] ) { // only if valid
+        if( $pair['sectionId'] !== 5 && $lay && $lay['start'] && $lay['end'] && $lay[ 'eggs' ] ) { // only if valid
             Query\Lay::new($pair['id'], $lay['start'], $lay['end'], $lay['eggs'], $lay['dames'], $lay['weight'], $this->requester['id'] );
         }
     }
@@ -128,14 +128,28 @@ class Post extends Controller
             $showScore = $showTotalScore / $showCount;
         }
 
-        Query\Result::new(
-            $pair['id'], $pair['districtId'], $pair['year'],
-            $pair['group'], $pair['breedId'], $pair['colorId'],
-            1, 1,
-            $pair['lay']['dames'], $pair['lay']['eggs'], $pair['lay']['weight'],
-            $broodEggs, $broodFertile, $broodHatched,
-            $showCount, $showScore,
-            $this->requester['id']
-        );
+        if( $pair['sectionId'] === 5 ) { // pidgeon, no lay
+            Query\Result::new(
+                $pair['id'], $pair['districtId'], $pair['year'],
+                $pair['group'], $pair['breedId'], $pair['colorId'],
+                1, 1,
+                null, null, null,
+                2, null, $broodHatched,
+                $showCount, $showScore,
+                $this->requester['id']
+            );
+
+        } else { // layers
+            Query\Result::new(
+                $pair['id'], $pair['districtId'], $pair['year'],
+                $pair['group'], $pair['breedId'], $pair['colorId'],
+                1, 1,
+                $pair['lay']['dames'], $pair['lay']['eggs'], $pair['lay']['weight'],
+                $broodEggs, $broodFertile, $broodHatched,
+                $showCount, $showScore,
+                $this->requester['id']
+            );
+
+        }
     }
 }

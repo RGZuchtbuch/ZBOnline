@@ -68,9 +68,9 @@
 
 <div class='flex flex-col border rounded border-gray-400'>
     <div class='flex flex-row bg-header px-2 py-1 text-center text-white'>
-        <div class='grow' >Abstammung [{input.sires}.{input.dames}] {#if layer}Leger{/if} {invalid}</div>
+        <div class='grow' >Abstammung [{input.sires}.{input.dames}]</div>
         {#if layer}
-            <div class='w-6 border rounded text-center text-white cursor-pointer' class:disabled on:click={addElder} title='Elterntier hinzufügen'>✚</div>
+            <button type='button' class='w-6 border rounded bg-header text-center text-white cursor-pointer' class:disabled title='Elterntier hinzufügen' on:click={addElder}>✚</button>
         {/if}
     </div>
 
@@ -79,7 +79,7 @@
         <InputDate class='w-24' label={'Angepaart am'} bind:value={input.paired} {disabled} />
         {#if input.elders}
             {#each input.elders as elder, index }
-                <Elder breederId={input.breederId} bind:elder={elder} nolabel={index > 0} bind:invalid={elder.invalid} {disabled}/>
+                <Elder breederId={input.breederId} {pair} bind:elder={elder} {index} nolabel={index > 0} bind:invalid={elder.invalid} {disabled}/>
             {/each}
         {/if}
     </div>

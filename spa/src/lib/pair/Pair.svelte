@@ -21,6 +21,8 @@
     export let params;
 
     let pair = null;
+    let changed = false;
+    let invalid = false;
     let layer = true;
 
     let disabled = true;
@@ -39,7 +41,6 @@
             lay: { id:0, pairId:0, start:null, end:null, eggs:null, weight:null},
             broods: [],
             show: { 89:null, 90:null, 91:null, 92:null, 93:null, 94:null, 95:null, 96:null, 97:null },
-            changed: false, invalid: false,
         };
     }
 
@@ -48,12 +49,12 @@
     }
 
     function onSubmit() {
-        pair.changed = false;
+        changed = false;
         disabled = true;
         api.pair.post( pair )
             .then( response => {
                 pair.id = response.id;
-                pair = pair;
+//                pair = pair;
             });
     }
 
@@ -62,8 +63,8 @@
         if( id > 0 ) { // existing, note id could be '0' from param
             api.pair.get( id ).then( response => {
                 pair = response.pair;
-//                if( pair.changed === undefined ) pair.changed = false;
-//                if( pair.invalid === undefined ) pair.invalid = false;
+                changed = false;
+                invalid = false;
                 console.log( 'Pair', pair );
             });
         } else { // new
@@ -75,43 +76,24 @@
         loadPair( params.pairId ); // async
     }
 
-    function onInput(event ) {
+    function onInput( event ) { // only for signal;ling changes, as input is faster that sveltes value update !
         pair.changed = true;
-
-        // count sires and dames
-        if( pair && pair.parents && pair.lay ) {
-            pair.lay.sires = 0;
-            pair.lay.dames = 0;
-            for( let parent of pair.parents ) {
-                if( parent.ring ) {
-                    if (parent.sex === '1.0') {
-                        pair.lay.sires++;
-                    } else {
-                        pair.lay.dames++;
-                    }
-                }
-            }
-
-            layer = pair.sectionId !== 5;
-            pair = pair; // trigger
-        }
-
-        validate()
     }
 
     function validate() {
-        pair.invalid = false;
-        for( const key in invalids ) {
-            pair.invalid |= invalids[ key ];
+        if( pair ) {
+            invalid = false;
+            for (const key in invalids) {
+                invalid |= invalids[key];
+            }
         }
-        console.log( 'Invalid', pair.invalid);
     }
-
 
     onMount( () => {
         console.log( 'Mount', pair );
     })
 
+    $: validate( invalids );
     $: update( params );
 
 </script>
@@ -120,32 +102,32 @@
 <Page>
     <div slot='title'> Zuchtbuch Meldung</div>
         <div slot='header' class='flex flex-row'>
-            <div class='grow'>Stamm / Paar Meldung (c {pair.changed} : v {pair.invalid}</div>
+            <div class='grow'>Stamm / Paar Meldung (c {changed} : i {invalid}</div>
             {#if $user && ( $user.admin || $user.moderator.includes( pair.districtId ) ) }
                 <div class='w-6 border rounded text-center text-red-600 cursor-pointer' class:disabled on:click={onToggleEdit} title='Daten ändern'>&#9998;</div>
             {/if}
         </div>
 
 
-        <form slot='body' class='bg-gray-100' on:input={onInput} on:submit|preventDefault={onSubmit}>
+        <form slot='body' class='bg-gray-100' on:submit|preventDefault={onSubmit} on:input={onInput}>
 
             <fieldset class='flex flex-col gap-1' {disabled}>
 
-                <PairHead {pair} bind:invalid={invalids.head} {disabled}/>
+                <PairHead bind:pair={pair} bind:invalid={invalids.head} {disabled}/>
 
-                <PairBreed {pair} bind:invalid={invalids.breed} {disabled}/>
+                <PairBreed bind:pair={pair} bind:invalid={invalids.breed} {disabled}/>
 
                 {#if pair.sectionId }
 
-                    <PairElders {pair} bind:invalid={invalids.elders} {disabled}/>
+                    <PairElders bind:pair={pair} bind:invalid={invalids.elders} {disabled}/>
 
                     {#if pair.sectionId !== 5}
-                        <PairLay {pair} bind:invalid={invalids.lay} {disabled}/>
+                        <PairLay bind:pair={pair} bind:invalid={invalids.lay} {disabled}/>
                     {/if}
 
-                    <PairBroods {pair} bind:invalid={invalids.broods} {disabled} />
+                    <PairBroods bind:pair={pair} bind:invalid={invalids.broods} {disabled} />
 
-                    <PairShow {pair} bind:invalid={invalids.show} {disabled} />
+                    <PairShow bind:pair={pair} bind:invalid={invalids.show} {disabled} />
 
                     <PairNotes bind:notes={pair.notes} bind:invalid={invalids.notes} {disabled} />
 

@@ -23,7 +23,6 @@
         } else {
             invalid = required;
         }
-//        invalid = ( required && ( value<min || value>max ) );
     }
 
     function onInput( event ) {
@@ -57,6 +56,10 @@
 
     .invalid {
         @apply border-red-600;
+    }
+
+    input:read-only {
+        @apply border-gray-200 bg-none;
     }
 
 </style>

@@ -42,4 +42,7 @@
 </div>
 
 <style>
+    input:read-only {
+        @apply border-gray-200 bg-none;
+    }
 </style>

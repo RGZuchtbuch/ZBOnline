@@ -22,7 +22,7 @@ class PairsInYear extends Controller
     {
         $id = $this->args['id'];
         $year = $this->args['year'];
-        $pairs = Query\Pair::options( $id, $year );
+        $pairs = Query\Pair::forYear( $id, $year );
 
         return [ 'pairs' => $pairs ];
     }

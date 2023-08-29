@@ -39,7 +39,6 @@
     }
 
     function update() { // pair
-        console.log( 'L init', pair );
         if( input !== pair ) {
             input = pair;
             if (!input.lay) {
@@ -74,7 +73,7 @@
 <fieldset class='flex flex-col border rounded border-gray-400' on:input={onInput}>
     <div class='flex flex-row bg-header px-2 py-1 text-center text-white'>
         <div class='grow'>Legeleistung</div>
-        <div class='w-6'>{invalid}</div>
+        <div class='w-6'></div>
     </div>
 
     {#if pair.lay }
@@ -82,13 +81,13 @@
             <div class='grow flex flex-row gap-x-1'>
                 <InputDate class='w-24' label={'Gesammelt ab'} bind:value={input.lay.start} {disabled}/>
                 <InputDate class='w-24' label={'Gesammelt bis'} bind:value={input.lay.end} min={ input.lay.start } error='Später als Start!' required={input.lay.start} {disabled}/>
-                <InputNumber class='w-16' label={'# Eierzahl'} bind:value={input.lay.eggs} min=0 max={input.lay.days * pair.dames} error='Unmöglich' {disabled} />
+                <InputNumber class='w-16' label={'# Eierzahl'} bind:value={input.lay.eggs} min=0 max={input.lay.days * pair.dames} error={'0 .. '+input.lay.days * pair.dames} required={input.lay.start} {disabled} />
                 <InputNumber class='w-16' label={'∅ Gewicht'} bind:value={input.lay.weight} min=1 max=999 {disabled} />
             </div>
             <div class='flex flex-row gap-x-1'>
                 <InputNumber class='w-16' label='Tagen' value={input.lay.days} disabled readonly/>
                 <InputNumber class='w-16' label='# Hennen' value={pair.dames} disabled readonly/>
-                <InputText class='w-16' label='Eier / Jahr' value={input.lay.production} disabled readonly />
+                <InputNumber class='w-16' label='Eier / Jahr' value={input.lay.production} disabled readonly />
             </div>
         </div>
     {/if}

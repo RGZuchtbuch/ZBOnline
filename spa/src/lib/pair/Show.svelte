@@ -1,6 +1,7 @@
 <script>
     import {onMount} from "svelte";
     import InputNumber from '../common/input/Number.svelte';
+    import InputText from '../common/input/Text.svelte';
 
     export let pair;
     export let disabled;
@@ -58,15 +59,15 @@
 
     <div class='grow flex flex-row p-2 gap-x-1'>
         {#if pair.show}
-            <InputNumber class='w-12' label={'U/O'} name='count' bind:value={pair.show['89']} min=0 max=999 />
-            <InputNumber class='w-12' label={'90'} name='count' bind:value={pair.show['90']} min=0 max=999 {disabled}/>
-            <InputNumber class='w-12' label={'91'} name='count' bind:value={pair.show['91']} min=0 max=999 {disabled}/>
-            <InputNumber class='w-12' label={'92'} name='count' bind:value={pair.show['92']} min=0 max=999 {disabled}/>
-            <InputNumber class='w-12' label={'93'} name='count' bind:value={pair.show['93']} min=0 max=999 {disabled}/>
-            <InputNumber class='w-12' label={'94'} name='count' bind:value={pair.show['94']} min=0 max=999 {disabled}/>
-            <InputNumber class='w-12' label={'95'} name='count' bind:value={pair.show['95']} min=0 max=999 {disabled}/>
-            <InputNumber class='w-12' label={'96'} name='count' bind:value={pair.show['96']} min=0 max=999 {disabled}/>
-            <InputNumber class='w-12' label={'97'} name='count' bind:value={pair.show['97']} min=0 max=999 {disabled}/>
+            <InputNumber class='w-16' label={'U/O'} name='count' bind:value={pair.show['89']} min=0 max=999 />
+            <InputNumber class='w-16' label={'90'} name='count' bind:value={pair.show['90']} min=0 max=999 {disabled}/>
+            <InputNumber class='w-16' label={'91'} name='count' bind:value={pair.show['91']} min=0 max=999 {disabled}/>
+            <InputNumber class='w-16' label={'92'} name='count' bind:value={pair.show['92']} min=0 max=999 {disabled}/>
+            <InputNumber class='w-16' label={'93'} name='count' bind:value={pair.show['93']} min=0 max=999 {disabled}/>
+            <InputNumber class='w-16' label={'94'} name='count' bind:value={pair.show['94']} min=0 max=999 {disabled}/>
+            <InputNumber class='w-16' label={'95'} name='count' bind:value={pair.show['95']} min=0 max=999 {disabled}/>
+            <InputNumber class='w-16' label={'96'} name='count' bind:value={pair.show['96']} min=0 max=999 {disabled}/>
+            <InputNumber class='w-16' label={'97'} name='count' bind:value={pair.show['97']} min=0 max=999 {disabled}/>
             <div class='grow'></div>
             <InputNumber class='w-16' label={'# Tiere'} value={ count } disabled readonly />
             <InputNumber class='w-16' label={'∅ Note'} value={ avgScore ? avgScore.toFixed(1) : null } disabled readonly />
