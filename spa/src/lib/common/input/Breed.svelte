@@ -1,7 +1,7 @@
 <script>
     import {onMount} from 'svelte';
     import api from "../../../js/api.js";
-    import Select from '../input/Select.svelte';
+    import Select from './Select.svelte';
 
     export let value = { sectionId:null, breedId:null, colorId:null };
 
@@ -93,6 +93,10 @@
         validate();
     }
 
+    function onInput() {
+        console.log( 'BreedSelect', value );
+    }
+
     onMount(() => {
     })
 
@@ -106,39 +110,39 @@
 </script>
 
 
-<div class='flex flex-col'>
-    <div class='flex flex-row gap-x-1'>
 
-        <Select class='w-48' label='Sparte' bind:value={value.sectionId} error='Pflichtfeld' on:change={updateSection} {disabled} required>
+<fieldset class='flex flex-row gap-x-1' on:input={onInput}>
+
+    <Select class='w-48' label='Sparte' bind:value={value.sectionId} error='Pflichtfeld' on:change={updateSection} {disabled} required>
+        <option value={null}></option>
+        {#each sections as section }
+            <option value={section.id} selected={section.id === value.sectionId}>{section.name}</option>
+        {/each}
+    </Select>
+
+    <Select class='w-64' label={'Rasse'} bind:value={value.breedId} error='Pflichtfeld' on:change={updateBreed} {disabled} required>
+        <option value={null}></option>
+        {#each breeds as breed }
+            <option value={breed.id} selected={breed.id === value.breedId}>{breed.name}</option>
+        {/each}
+    </Select>
+
+    {#if value.sectionId !== 5 }
+        <Select class='w-48' label='Farbe' bind:value={value.colorId} error='Pflichtfeld' on:change={updateColor} {disabled} required>
             <option value={null}></option>
-            {#each sections as section }
-                <option value={section.id} selected={section.id === value.sectionId}>{section.name}</option>
+            {#each colors as color }
+                <option value={color.id} selected={color.id === value.colorId}>{color.name}</option>
             {/each}
         </Select>
-
-        <Select class='w-64' label={'Rasse'} bind:value={value.breedId} error='Pflichtfeld' on:change={updateBreed} {disabled} required>
+    {:else}
+        <Select class='w-48' label='Farbe' bind:value={value.colorId} error='Pflichtfeld' on:change={updateColor} {disabled}>
             <option value={null}></option>
-            {#each breeds as breed }
-                <option value={breed.id} selected={breed.id === value.breedId}>{breed.name}</option>
+            {#each colors as color }
+                <option value={color.id} selected={color.id === value.colorId}>{color.name}</option>
             {/each}
         </Select>
+    {/if}
+</fieldset>
 
-        {#if value.sectionId !== 5 }
-            <Select class='w-48' label='Farbe' bind:value={value.colorId} error='Pflichtfeld' on:change={updateColor} {disabled} required>
-                <option value={null}></option>
-                {#each colors as color }
-                    <option value={color.id} selected={color.id === value.colorId}>{color.name}</option>
-                {/each}
-            </Select>
-        {:else}
-            <Select class='w-48' label='Farbe' bind:value={value.colorId} error='Pflichtfeld' on:change={updateColor} {disabled}>
-                <option value={null}></option>
-                {#each colors as color }
-                    <option value={color.id} selected={color.id === value.colorId}>{color.name}</option>
-                {/each}
-            </Select>
-        {/if}
-    </div>
-</div>
 
 <style></style>

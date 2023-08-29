@@ -1,6 +1,6 @@
 <script>
     import api from '../../js/api.js';
-    import {toRing} from '../../js/util.js';
+    import {dec, pct, toRing} from '../../js/util.js';
     import InputButton from '../common/input/Button.svelte';
     import InputDate from '../common/input/Date.svelte';
     import InputNumber from '../common/input/Number.svelte';
@@ -18,8 +18,9 @@
     export let invalid = false;
 
     let input;
-    let ancestorPairs = null
-    let ancestorResults = null;
+    let aPairs = null
+    let aResults = { eggs:null, weight:null, fertility:null, hatching:null, score:null };
+
 
     let invalids = { sex:false, ring:false, score:false, ancestors:false };
 
@@ -28,7 +29,7 @@
             const ring = toRing(string);
             if( ring ) {
                 api.breeder.pairsInYear.get( breederId, ring.year).then(response => {
-                    ancestorPairs = response.pairs;
+                    aPairs = response.pairs;
                 })
             }
         }
@@ -48,19 +49,17 @@
         }
         invalid = Boolean( invalid );
         elder = input;
+        console.log('E', invalid, invalids);
     }
     function updateAncestorResults() {
-        if (input.pair && ancestorPairs) {
-            for (let aPair of ancestorPairs) {
+        if (input.pair && aPairs) {
+            for (let aPair of aPairs) {
                 if (aPair.id === input.pair) { // selected
                     console.log( 'aPair', aPair );
                     if( pair.sectionId === 5 ) {
-                        ancestorResults = 'Küken '+aPair.broodHatched+', Schau '+aPair.showScore.toFixed(1);
+                        aResults = { chicks:dec(aPair.broodHatched), show:dec(aPair.showScore, 1) };
                     } else {
-                        ancestorResults =
-                            'Legen ' + aPair.layEggs + ' von ' + aPair.layWeight + 'g, ' +
-                            'Bruten ' + aPair.broodEggs + ' / ' + aPair.broodFertile + ' / ' + aPair.broodHatched + ', ' +
-                            'Schau ' + aPair.showScore.toFixed(1);
+                        aResults = { eggs:dec(aPair.layEggs), weight:dec(aPair.layWeight), fertility:pct(aPair.broodFertile, aPair.broodEggs), hatching:pct(aPair.broodHatched, aPair.broodEggs), score:dec(aPair.showScore, 1) }
                     }
                     return;
                 }
@@ -71,8 +70,8 @@
     $: getPotentialAncestorPairs( elder.ring );
 
     $: update( elder ); // should be before validate to ensure defined input
-    $: validate( input  );
-    $: updateAncestorResults( ancestorPairs )
+    $: validate( invalids );
+    $: updateAncestorResults( aPairs )
 
 </script>
 
@@ -86,25 +85,38 @@
             {/each}
         </Select>
         <InputRing class='w-32' label={nolabel ? '' : 'Ring [D J Bs Nr]'} bind:value={input.ring} bind:invalid={invalids.ring} {disabled}/>
-        <InputNumber class='w-16' label={nolabel ? '' : '∅ Note'} bind:value={input.score} min=89 max=97 step=0.1 {disabled} />
+        <InputNumber class='w-16' label={nolabel ? '' : '∅ Note'} bind:value={input.score} min=89 max=97 step=0.1 bind:invalid={invalids.score} {disabled} />
 
         <div class='w-8 self-center text-center'> ← </div>
 
         <Select class='w-32' label={nolabel ? '' : 'Aus Stamm / Paar'} bind:value={input.pair} {disabled} >
             <option value={null}> ? </option>
-            {#if ancestorPairs}
-                {#each ancestorPairs as aPair }
+            {#if aPairs}
+                {#each aPairs as aPair }
                     <option value={aPair.id} selected={aPair.id === input.pair} > {aPair.id} {aPair.breederId+':'+aPair.year+':'+aPair.name} </option>
                 {/each}
             {/if}
         </Select>
-
     </div>
 
-    {#if ancestorResults }
-        <div class='flex flex-row gap-x-1'>
-            <InputText class='w-96' label={nolabel ? '' : 'Stamm / Paar Leistungen'} value={ancestorResults} readonly disabled/>
-        </div>
+    {#if aResults }
+        {#if pair.sectionId == 5 }
+            <div class='flex flex-row gap-x-1'>
+                <div class='w-16'></div>
+                <div class='w-16'></div>
+                <div class='w-16'></div>
+                <InputText class='w-16' label={nolabel ? '' : 'Küken'} value={aResults.hatching} readonly disabled/>
+                <InputText class='w-16' label={nolabel ? '' : '∅ Note'} value={aResults.score} readonly disabled/>
+            </div>
+        {:else}
+            <div class='flex flex-row gap-x-1'>
+                <InputText class='w-16' label={nolabel ? '' : '# Eier /J'} value={aResults.eggs} readonly disabled/>
+                <InputText class='w-16' label={nolabel ? '' : '∅ Gewicht'} value={aResults.weight} readonly disabled/>
+                <InputText class='w-16' label={nolabel ? '' : '% Befruchtet'} value={aResults.fertility} readonly disabled/>
+                <InputText class='w-16' label={nolabel ? '' : '% Geschlüpft'} value={aResults.hatching} readonly disabled/>
+                <InputText class='w-16' label={nolabel ? '' : '∅ Note'} value={aResults.score} readonly disabled/>
+            </div>
+        {/if}
     {/if}
 </div>
 

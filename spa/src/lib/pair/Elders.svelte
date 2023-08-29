@@ -68,7 +68,7 @@
 
 <div class='flex flex-col border rounded border-gray-400'>
     <div class='flex flex-row bg-header px-2 py-1 text-center text-white'>
-        <div class='grow' >Abstammung [{input.sires}.{input.dames}]</div>
+        <div class='grow' class:invalid>Abstammung [{input.sires}.{input.dames}]</div>
         {#if layer}
             <button type='button' class='w-6 border rounded bg-header text-center text-white cursor-pointer' class:disabled title='Elterntier hinzufügen' on:click={addElder}>✚</button>
         {/if}
@@ -89,5 +89,7 @@
 
 
 <style>
-
+    .invalid {
+        @apply text-red-800;
+    }
 </style>

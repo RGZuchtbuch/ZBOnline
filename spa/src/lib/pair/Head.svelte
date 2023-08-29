@@ -3,9 +3,7 @@
     import {afterUpdate, onMount} from 'svelte';
     import {active, meta, router, Route} from 'tinro';
 
-    import {user} from "../../js/store.js";
-    import api from '../../js/api.js';
-    import { newReport } from '../../js/template.js';
+    import {txt} from '../../js/util.js';
 
     import InputDate   from '../common/input/Date.svelte';
     import InputNumber from '../common/input/Number.svelte';
@@ -66,7 +64,7 @@
 
 
     <div class='flex flex-row p-2 gap-x-1'>
-        <InputText class='w-32' label='Züchter' value={pair.breederId} readonly disabled/>
+        <InputText class='w-64' label='Züchter' value={txt(pair.breeder.firstname)+' '+txt(pair.breeder.infix)+' '+txt(pair.breeder.lastname)} readonly disabled/>
         <InputNumber class='w-20' bind:element={focusElement} label='Jahr' name='year' bind:value={pair.year} min={MINYEAR} max={MAXYEAR} required />
         <InputText class='w-20' label='Name' bind:value={pair.name} error='Pflichtfeld' spellcheck=false required />
         <Select class='w-20' label='ZB Gruppe' bind:value={pair.group} placeholder='?' required>

@@ -77,7 +77,9 @@
     }
 
     function onInput( event ) { // only for signal;ling changes, as input is faster that sveltes value update !
-        pair.changed = true;
+        changed = true;
+        console.log('Form on:input', pair);
+    //    validate();
     }
 
     function validate() {
@@ -87,6 +89,7 @@
                 invalid |= invalids[key];
             }
         }
+        console.log( 'Validate', pair );
     }
 
     onMount( () => {
@@ -95,14 +98,16 @@
 
     $: validate( invalids );
     $: update( params );
+    $: console.log( 'Form Update', pair )
 
 </script>
 
 {#if pair}
-<Page>
-    <div slot='title'> Zuchtbuch Meldung</div>
+    <Page>
+        <div slot='title'> Zuchtbuch Meldung</div>
+
         <div slot='header' class='flex flex-row'>
-            <div class='grow'>Stamm / Paar Meldung (c {changed} : i {invalid}</div>
+            <div class='grow' class:invalid>Stamm / Paar Meldung</div>
             {#if $user && ( $user.admin || $user.moderator.includes( pair.districtId ) ) }
                 <div class='w-6 border rounded text-center text-red-600 cursor-pointer' class:disabled on:click={onToggleEdit} title='Daten ändern'>&#9998;</div>
             {/if}
@@ -135,7 +140,7 @@
 
 
                 {#if ! disabled}
-                    {#if pair.changed && ! pair.invalid }
+                    {#if changed && ! invalid }
                         <button type='submit' class='rounded border bg-alert text-center text-white cursor-pointer'>Meldung speichern</button>
                     {:else}
                         <button type='submit' class='rounded border bg-gray-400 text-center text-white cursor-pointer' disabled>Kann (noch) nicht speichern</button>
@@ -150,5 +155,8 @@
 <style>
     .disabled {
         @apply text-white;
+    }
+    .invalid {
+        @apply text-red-800;
     }
 </style>

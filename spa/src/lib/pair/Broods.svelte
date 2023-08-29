@@ -22,18 +22,15 @@
         pair.broods = [...pair.broods, brood];
     }
 
-    function init() {
+    function update() {
+        console.log( 'UpdatePair in Broods', pair );
         layer = pair.sectionId !== 5; // type of brood depends on this
         if( ! pair.broods ) pair.broods = [];
         while( pair.broods.length < 2 ) { // want at least 2
             addBrood( pair.id );
         }
-        if( layer ) {
-            //
-        } else {
+        if( ! layer ) {
             for (const brood of pair.broods) {
-                //brood.eggs = 2;
-                //brood.fertile = null;
                 while (brood.chicks.length < 2) {
                     brood.chicks = [...brood.chicks, newChick( pair.id, brood.id )]
                 }
@@ -53,14 +50,16 @@
         }
     }
 
-    onMount( init );
+    //onMount( init );
+
+    $: update( pair );
 
 </script>
 
 
 <fieldset class='flex flex-col border rounded border-gray-400' on:input={onInput}>
     <div class='flex flex-row bg-header px-2 py-1 text-center text-white'>
-        <div class='grow'>Brutleistung</div>
+        <div class='grow' class:invalid>Brutleistung</div>
         <button type='button' class='w-6 border rounded bg-header text-center text-white cursor-pointer' class:disabled title='Brut/Nest hinzufügen' on:click={addBrood}>✚</button>
     </div>
 
@@ -75,5 +74,7 @@
 </fieldset>
 
 <style>
-
+    .invalid {
+        @apply text-red-800;
+    }
 </style>

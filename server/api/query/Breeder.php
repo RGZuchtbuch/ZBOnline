@@ -49,6 +49,21 @@ class Breeder extends Query
         return Query::del($stmt, $args);
     }
 
+
+
+
+    public static function getName( int $id ) : ? array {
+        $args = get_defined_vars();
+        $stmt = Query::prepare('
+            SELECT id, firstname, infix, lastname
+            FROM user
+            WHERE id=:id
+        ');
+        return Query::select($stmt, $args);
+    }
+
+
+
 //    public static function results( int $breederId ) : array {
 //        return [];
 //    }

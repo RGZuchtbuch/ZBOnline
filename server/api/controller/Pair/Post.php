@@ -144,7 +144,7 @@ class Post extends Controller
                 $pair['id'], $pair['districtId'], $pair['year'],
                 $pair['group'], $pair['breedId'], $pair['colorId'],
                 1, 1,
-                $pair['lay']['dames'], $pair['lay']['eggs'], $pair['lay']['weight'],
+                $pair['dames'], $pair['lay']['production'], $pair['lay']['weight'],
                 $broodEggs, $broodFertile, $broodHatched,
                 $showCount, $showScore,
                 $this->requester['id']

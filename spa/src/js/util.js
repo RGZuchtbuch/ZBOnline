@@ -147,7 +147,6 @@ export function getProduction( days, eggs, dames ) {
     } else {
         fit = 274;
     }
-    console.log( "DEDF", days, eggs, dames, fit );
     const production = eggs/dames * fit/days; //fit * eggs/days/dames;
     if( production >= 0 && production <= 366 ) {
         return production;

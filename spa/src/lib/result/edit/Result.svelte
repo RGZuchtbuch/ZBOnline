@@ -36,13 +36,12 @@
 
         invalids.form = false;
         for( let invalid in invalids ) {
-            console.log( invalid, invalids[ invalid ] );
             if( invalids[ invalid ] ) {
                 invalids.form = true;
             }
         }
         invalids = invalids;
-        console.log( 'OnFormChange', invalids.form );
+        console.log( 'OnFormChange', result.breeders, invalids.form );
     }
 
     function onSave() {
