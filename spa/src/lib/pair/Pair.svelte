@@ -41,6 +41,7 @@
             lay: { id:0, pairId:0, start:null, end:null, eggs:null, weight:null},
             broods: [],
             show: { 89:null, 90:null, 91:null, 92:null, 93:null, 94:null, 95:null, 96:null, 97:null },
+            breeder: { firstname:null, infix:null, lastname:null },
         };
     }
 
@@ -69,6 +70,7 @@
             });
         } else { // new
             pair = newPair( Number( params.districtId ), Number( params.breederId ) );
+            disabled = false; // ready to edit
         }
     }
 

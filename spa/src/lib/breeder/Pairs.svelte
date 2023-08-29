@@ -10,7 +10,7 @@
 
     export let breederId;
     let breeder;
-    let reports;
+    let pairs;
 
     const route = meta();
 
@@ -18,14 +18,14 @@
         console.log( 'load reports for breeder' );
         api.breeder.pairs.get( breederId ).then(response => {
             breeder = response.breeder;
-            reports = response.reports;
-            console.log( 'BreederReports', reports );
+            pairs = response.reports;
+            console.log( 'BreederReports', pairs );
         })
     }
 
     function update( breederId ) {
         breeder = null;
-        reports = null;
+        pairs = null;
         loadReports( breederId );
     }
 
@@ -34,12 +34,12 @@
 
     $: update( breederId )
 
-    console.log( 'Breeder Reports', reports );
+    console.log( 'Breeder Reports', pairs );
 
 </script>
 
-{#if reports}
-    <Reports title={'Meldungen für Züchter {txt(breeder.firstname)} {txt(breeder.infix)} {txt(breeder.lastname)}'} {reports} />
+{#if pairs}
+    <Reports title={`Meldungen für Züchter ${txt(breeder.firstname)} ${txt(breeder.infix)} ${txt(breeder.lastname)}`} {pairs} />
 {/if}
 
 
