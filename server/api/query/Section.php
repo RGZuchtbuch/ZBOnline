@@ -9,7 +9,7 @@ use Slim\Exception\HttpNotImplementedException;
 class Section extends Query
 {
 
-    public static function new( string $name, int $sectionId, int $broodGroup, int $lay, int $eggWeight, int $sireRing, int $dameRing, int $sireWeight, int $dameWeight, string $info ) : ? int {
+    public static function new( string $name, int $sectionId, int $broodGroup, int $lay, int $eggWeight, int $sireRing, int $dameRing, int $sireWeight, int $dameWeight, string $info, int $modifierId ) : ? int {
         throw new HttpNotImplementedException( null, "oops" );
     }
 
@@ -24,7 +24,7 @@ class Section extends Query
     }
 
 
-    public static function set( int $id, string $name, int $sectionId, int $broodGroup, int $lay, int $eggWeight, int $sireRing, int $dameRing, int $sireWeight, int $dameWeight, string $info ) : bool {
+    public static function set( int $id, string $name, int $sectionId, int $broodGroup, int $lay, int $eggWeight, int $sireRing, int $dameRing, int $sireWeight, int $dameWeight, string $info, int $modifierId ) : bool {
         throw new HttpNotImplementedException( null, "oops" );
     }
 

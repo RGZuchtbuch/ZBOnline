@@ -12,12 +12,12 @@ class District extends Query
     public static function new(
         int $parentId, string $name, ? string $fullname, ? string $short, // parentId cannot change
         ? float $latitude, ? float $longitude,
-        string $level, ? int $moderatorId, int $modifier
+        string $level, ? int $moderatorId, int $modifierId
     ) : ? int {
         $args = get_defined_vars();
         $stmt = Query::prepare( '
-            INSERT INTO district ( parentId, name, fullname, short, latitude, longitude, level, moderatorId, modifier )
-            VALUES ( :parentId, :name, :fullname, :short, :latitude, :longitude, :level, :moderatorId, :modifier )
+            INSERT INTO district ( parentId, name, fullname, short, latitude, longitude, level, moderatorId, modifierId )
+            VALUES ( :parentId, :name, :fullname, :short, :latitude, :longitude, :level, :moderatorId, :modifierId )
         ' );
         return Query::insert( $stmt, $args );
     }
@@ -36,12 +36,12 @@ class District extends Query
         int $id,
         string $name, ? string $fullname, ? string $short,
         ? float $latitude, ? float $longitude,
-        string $level, ? int $moderatorId, int $modifier
+        string $level, ? int $moderatorId, int $modifierId
     ) : bool {
         $args = get_defined_vars();
         $stmt = Query::prepare('
             UPDATE district
-            SET name=:name, fullname=:fullname, short=:short, latitude=:latitude, longitude=:longitude, level=:level, moderatorId=:moderatorId, modifier=:modifier
+            SET name=:name, fullname=:fullname, short=:short, latitude=:latitude, longitude=:longitude, level=:level, moderatorId=:moderatorId, modifierId=:modifierId
             WHERE id=:id  
         ');
         return Query::update($stmt, $args);
