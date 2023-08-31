@@ -14,7 +14,6 @@
     const dispatch = createEventDispatcher();
 
     function loadLog() {
-        console.log( 'Load Articles from ', from );
         api.log.getNext( from, count ).then( response => {
             logs = response.logs;
         })

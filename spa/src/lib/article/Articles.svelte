@@ -14,7 +14,6 @@
     const dispatch = createEventDispatcher();
 
     function loadArticles() {
-        console.log( 'Load Articles' );
         api.article.getAll().then( response => {
             articles = response.articles;
         })

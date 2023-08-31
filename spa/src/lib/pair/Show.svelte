@@ -35,7 +35,6 @@
             }
             if( value !== null && ( value < 0 || value > 999 ) ) {
                 invalid = true;
-                console.log( 'Show', value, typeof value, value != null, ( value < 0 || value > 999 ), pair.show.invalid );
             }
         }
         avgScore = count > 0 ? total / count : null; // to average score

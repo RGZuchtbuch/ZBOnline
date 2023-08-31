@@ -60,13 +60,11 @@
     }
 
     function loadPair( id ) {
-        console.log( id, Number.isInteger(id) );
         if( id > 0 ) { // existing, note id could be '0' from param
             api.pair.get( id ).then( response => {
                 pair = response.pair;
                 changed = false;
                 invalid = false;
-                console.log( 'Pair', pair );
             });
         } else { // new
             pair = newPair( Number( params.districtId ), Number( params.breederId ) );
@@ -80,8 +78,6 @@
 
     function onInput( event ) { // only for signal;ling changes, as input is faster that sveltes value update !
         changed = true;
-        console.log('Form on:input', pair);
-    //    validate();
     }
 
     function validate() {
@@ -91,16 +87,13 @@
                 invalid |= invalids[key];
             }
         }
-        console.log( 'Validate', pair );
     }
 
     onMount( () => {
-        console.log( 'Mount', pair );
     })
 
     $: validate( invalids );
     $: update( params );
-    $: console.log( 'Form Update', pair )
 
 </script>
 

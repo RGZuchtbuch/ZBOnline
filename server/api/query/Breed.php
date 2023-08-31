@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Query;
+namespace App\query;
 
 use Slim\Exception\HttpNotImplementedException;
 
@@ -20,8 +20,9 @@ class Breed extends Query
     {
         $args = get_defined_vars();
         $stmt = Query::prepare('
-            SELECT id, name, sectionId, broodGroup, lay, layWeight, sireRing, dameRing, sireWeight, dameWeight, info
+            SELECT id, name, sectionId, broodGroup, lay, layWeight, sireRing, dameRing, sireWeight, dameWeight, info, section.layers AS layer
             FROM breed
+            LEFT JOIN section ON section.id = breed.sectionId
             WHERE id=:id
         ');
         return Query::select($stmt, $args);

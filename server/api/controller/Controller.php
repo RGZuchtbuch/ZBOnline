@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Controller;
+namespace App\controller;
 
-use App\Controller\User\Token;
-use App\Query;
+use App\controller\user\Token;
+use App\query;
 use Exception;
 use HttpException;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -41,7 +41,7 @@ abstract class Controller
 
             // start processing
             if ($authorized) {
-                $json = $this->getCache();
+                $json = CACHE_ENABLED ? $this->getCache() : NULL;
                 if ($json == NUll) {
                     $data = $this->process();
                     $json = json_encode($data, JSON_UNESCAPED_SLASHES);
@@ -96,6 +96,7 @@ abstract class Controller
         //obfuscate passwords
         $requesterId = $this->requester ? $this->requester['id'] : null;
         $method = $request->getMethod();
+        //$uri = $request->getUri();
         $path = $request->getUri()->getPath();
         $query = $request->getUri()->getQuery();
         $body = $request->getBody();
@@ -106,7 +107,7 @@ abstract class Controller
             $body = json_encode( $object );
         }
 
-        Query\Log::new(
+        query\Log::new(
             $method,
             $path,
             $query,

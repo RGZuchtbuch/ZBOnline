@@ -38,7 +38,6 @@
     function update() {
         if( input !== elder ) { // to avoid cycles
             input = elder;
-            console.log( 'input', input );
         }
     }
 
@@ -49,13 +48,11 @@
         }
         invalid = Boolean( invalid );
         elder = input;
-        console.log('E', invalid, invalids);
     }
     function updateAncestorResults() {
         if (input.pair && aPairs) {
             for (let aPair of aPairs) {
                 if (aPair.id === input.pair) { // selected
-                    console.log( 'aPair', aPair );
                     if( pair.sectionId === 5 ) {
                         aResults = { chicks:dec(aPair.broodHatched), show:dec(aPair.showScore, 1) };
                     } else {

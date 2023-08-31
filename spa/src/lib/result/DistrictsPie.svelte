@@ -29,7 +29,7 @@
                 promise.then(response => {
                     const districts = response.districts;
 //                    let data = districts.map( district => district.breeders ); // get array of breeders
-                    let data = districts.map( district => type.forPie( district)[0] );
+                    let data = districts.map( district => type.pie( district)[0] );
                     let datasets = [ { data:data } ];
                     let labels = districts.map( district => district.name ); // get array of names
 

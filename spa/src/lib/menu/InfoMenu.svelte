@@ -7,10 +7,8 @@
     const route = meta();
 
     function loadArticles() {
-        console.log( "load" );
         api.article.getAll().then( response => {
             articles = response.articles;
-            console.log( articles );
         })
     }
 

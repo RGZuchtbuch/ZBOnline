@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Query;
+namespace App\query;
 
-use App\Controller\Controller;
+use App\controller\Controller;
 use Slim\Exception\HttpNotImplementedException;
 
 class Breeder extends Query

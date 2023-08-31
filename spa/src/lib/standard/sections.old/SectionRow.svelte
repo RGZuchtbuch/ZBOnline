@@ -6,13 +6,11 @@
     export let open = false;
 
     function onOpen() {
-        console.log( 'Open', open);
         open = ! open;
     }
 
     function onAddBreed() {
         if( section ) {
-            console.log('Add');
             let newBreed = { id:null, name:'Neu', sectionId:section.id, broodGroup:null, lay:null, layWeight:null, sireRing:null, dameRing:null, sireWeight:null, dameWeight:null, info:null, colors: [] }
             section.breeds.splice(0, 0, newBreed);
             section = section;

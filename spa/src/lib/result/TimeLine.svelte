@@ -52,7 +52,7 @@
             // fill label;s and datasets depending on rows
             years.forEach( row => {
                 labels.push( row.year );
-                let values = type.extract( row );
+                let values = type.time( row );
 
                 for( let i=0; i<values.length; i++ ) {
                     if( datasets.length < i+1 ) {

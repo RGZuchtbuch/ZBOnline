@@ -17,7 +17,6 @@
 
     const patterns = {
         default: ( input ) => {
-//            console.log( 'Input D', input );
             const match = input.match(/^(\d\d?)[\ \.]*([a-zA-Z]+)[\ \.]*(\d+)$/); // 21 AZ 999, defaults to D
             return match ? 'D '+match[1]+' '+match[2].toUpperCase()+' '+match[3] : null;
         },

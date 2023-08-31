@@ -19,12 +19,10 @@
 
     function onOpen() {
         open = ! open;
-//        loadDetails();
     }
 
     function onAddColor() {
         if( breed ) {
-            console.log('Add Color');
             let newColor = { id:null, name:'Neu', breedId:breed.id, aoc:null, info:null }
             breed.colors.splice(0, 0, newColor); // insert as first
             breed = breed;
@@ -39,32 +37,22 @@
         }
     }
 
-    function onEdit() {
-        console.log( 'Edit', edit );
-        edit = ! edit;
-    }
-
     function onChange() {
         changed = true;
-        console.log( 'Changed' );
     }
 
     function onSubmit() {
         changed = false;
-//        edit = false;
         breed.name = details.name;
         api.breed.post( details ).then( response => {
             if( ! details.id ) { // new
                 details.id = response.id;
                 breed.id = response.id;
             }
-            console.log( 'Response', response );
         })
-        console.log( 'Submit' );
     }
 
     function loadDetails() {
-        console.log( 'Load Breed Details', breed );
         if( breed ) {
             if( breed.id === null ) { // new
                 details = Object.assign( {}, breed ); // get from new breed

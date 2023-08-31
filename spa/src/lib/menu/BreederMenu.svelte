@@ -10,9 +10,7 @@
     const route = meta();
 
     function loadBreeder( id ) {
-        console.log('ID', id);
         if( id > 0 ) {
-            console.log('ID', id);
             api.breeder.get(id).then( response => {
                 breeder = response.breeder;
             });

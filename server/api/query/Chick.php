@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Query;
+namespace App\query;
 
 class Chick extends Query
 {

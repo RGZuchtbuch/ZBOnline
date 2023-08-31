@@ -33,8 +33,4 @@
         @apply absolute backdrop-blur-md w-256 top-0 bottom-0 flex flex-col py-6 justify-center cursor-pointer;
     }
 
-    ol {
-        @apply list-inside list-disc;
-    }
-
 </style>

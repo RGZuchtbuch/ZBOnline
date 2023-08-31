@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Query;
+namespace App\query;
 
 use http\Exception\InvalidArgumentException;
 use Slim\Exception\HttpNotFoundException;
@@ -111,7 +111,7 @@ class District extends Query
                    result.broodEggs, result.broodFertile, result.broodHatched,
                    result.showCount, result.showScore
             FROM breed
-            LEFT JOIN result ON result.breedId = breed.id AND result.colorId IS NULL
+            LEFT JOIN result ON result.breedId = breed.id AND result.colorId IS NULL AND result.pairId IS NULL
                 AND result.districtId = :districtId
                 AND result.year = :year
                 AND result.group = :group  
@@ -126,7 +126,7 @@ class District extends Query
     public static function colorResults( int $districtId, int $breedId, int $year, string $group ) : array {
         $args = get_defined_vars();
         $stmt = Query::prepare("
-            SELECT result.id, result. pairId, :districtId AS districtId, :year AS `year`, :group AS `group`,
+            SELECT result.id, result.pairId, :districtId AS districtId, :year AS `year`, :group AS `group`,
                    breed.id AS breedId, color.id AS colorId, color.name,
                    result.breeders, result.pairs,
                    result.layDames, result.layEggs, result.layWeight,
@@ -134,7 +134,7 @@ class District extends Query
                    result.showCount, result.showScore
             FROM breed
             LEFT JOIN color ON color.breedId = breed.id    
-            LEFT JOIN result ON result.breedId = breed.id AND result.colorId = color.id
+            LEFT JOIN result ON result.breedId = breed.id AND result.colorId = color.id AND result.pairId IS NULL
                 AND result.districtId = :districtId
                 AND result.year = :year
                 AND result.group = :group             
@@ -156,7 +156,7 @@ class District extends Query
                 SUM( result.broodEggs) AS broodEggs, SUM( broodFertile ) AS broodFertile, SUM( broodHatched ) AS broodHatched,
                 SUM( result.showCount ) AS showCount, AVG( showScore ) AS showScore
             FROM breed
-            LEFT JOIN result ON result.breedId = breed.id
+            LEFT JOIN result ON result.breedId = breed.id AND result.pairId IS NULL
                 AND result.districtId = :districtId
                 AND result.year = :year
                 AND result.group = :group

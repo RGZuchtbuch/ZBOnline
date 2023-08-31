@@ -28,7 +28,6 @@
         api.user.password( email, token, password ).then( response => {
             success = response.success;
             if( response.success ) {
-                console.log( "Set pasword succesfully, wolcome" )
                 router.goto( '/' );
             }
         });
@@ -39,8 +38,6 @@
     }
 
     $: checkInvalid( invalids );
-
-    console.log( email, token );
 
 </script>
 

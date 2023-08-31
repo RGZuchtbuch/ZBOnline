@@ -23,7 +23,6 @@
     }
 
     function update() {
-        console.log( 'UpdatePair in Broods', pair );
         layer = pair.sectionId !== 5; // type of brood depends on this
         if( ! pair.broods ) pair.broods = [];
         while( pair.broods.length < 2 ) { // want at least 2
@@ -40,7 +39,6 @@
 
     function onInput( event ) {
         validate();
-        console.log( 'I', invalids );
     }
 
     function validate() {
@@ -49,8 +47,6 @@
             invalid |= value;
         }
     }
-
-    //onMount( init );
 
     $: update( pair );
 

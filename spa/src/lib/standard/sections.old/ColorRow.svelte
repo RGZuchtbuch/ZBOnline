@@ -26,29 +26,23 @@
             }
         }
         showDetails = ! showDetails;
-        console.log( 'Details', showDetails );
     }
 
     function onEdit() {
-        console.log( 'Edit', edit );
         edit = ! edit;
     }
 
     function onChange() {
         changed = true;
-        console.log( 'Changed' );
     }
 
     function onSubmit() {
         changed = false;
-//        edit = false;
         color.name = details.name;
         api.color.post( details ).then( response => {
             details.id = response.id;
             color.id = response.id;
-            console.log( 'Response', response );
         })
-        console.log( 'Submit color' );
     }
 
 </script>

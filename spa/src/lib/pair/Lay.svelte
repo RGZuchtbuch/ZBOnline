@@ -15,7 +15,6 @@
 
 
     function setDays() {
-        console.log( 'Lay', pair.lay );
         pair.lay.days = null;
         if( pair.lay.start && pair.lay.end ) {
             const startDate = new Date( pair.lay.start );

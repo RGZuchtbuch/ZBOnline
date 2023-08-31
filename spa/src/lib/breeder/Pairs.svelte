@@ -15,11 +15,9 @@
     const route = meta();
 
     function loadReports( breederId ) {
-        console.log( 'load reports for breeder' );
         api.breeder.pairs.get( breederId ).then(response => {
             breeder = response.breeder;
             pairs = response.reports;
-            console.log( 'BreederReports', pairs );
         })
     }
 
@@ -33,8 +31,6 @@
     });
 
     $: update( breederId )
-
-    console.log( 'Breeder Reports', pairs );
 
 </script>
 

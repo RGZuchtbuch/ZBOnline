@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Query;
+namespace App\query;
 
 use http\Exception\InvalidArgumentException;
 use Slim\Exception\HttpNotFoundException;

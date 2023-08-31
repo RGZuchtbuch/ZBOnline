@@ -56,9 +56,6 @@
 
 
 <style>
-    .menu {
-        @apply w-64 flex flex-col;
-    }
     .title {
         @apply text-center;
     }

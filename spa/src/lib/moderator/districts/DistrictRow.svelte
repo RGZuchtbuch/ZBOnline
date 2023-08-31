@@ -44,7 +44,6 @@
     }
 
     function onToggleEdit() {
-        console.log( 'edit' );
         edit = ! edit;
         if( edit ) {
             api.district.breeders.get(district.id).then(response => {
@@ -54,7 +53,6 @@
     }
 
     function onAddChild() {
-        console.log( 'Add Child' );
         district.children.splice( 0, 0, {
             id:null, parentId:district.id, name:'Neu', children: [],
             editable:true, // to make it show
@@ -72,7 +70,6 @@
     }
 
     function onSubmit() {
-        console.log( 'Submit district', district );
         api.district.post( details ).then( response => {
            details.id = response.id;
            district.id = response.id;
@@ -84,7 +81,6 @@
 
     function onDistrict( district ) {
         moderated = district.moderated;
-//        moderated = $user && ( parentModerated || $user.id === district.moderatorId ) // took out admin for testing
     }
 
     $: onDistrict( district );

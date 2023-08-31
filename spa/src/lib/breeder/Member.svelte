@@ -12,7 +12,6 @@
 
     export let breeder;
 
-    console.log( 'B', breeder )
     let disabled = breeder.id !== null; // enabled if new breeder
     let needFocus = true;
     let clubs = null;
@@ -22,7 +21,6 @@
     let focusElement; // to set focus to for starters
 
     function onToggleEdit() {
-        console.log( 'edit' );
         disabled = ! disabled;
         needFocus = true;
         if( ! disabled ) {
@@ -40,7 +38,6 @@
     }
 
     function onSubmit(event) {
-        console.log( 'Submit Breeder account');
         disabled = true;
         api.breeder.post( breeder ).then( response => {
             const id = response.id;

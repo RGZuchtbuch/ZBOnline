@@ -38,7 +38,6 @@
     }
 
     function onToggleEdit() {
-        console.log( 'edit' );
         disabled = ! disabled;
         needFocus = true;
     }
@@ -59,7 +58,6 @@
 
         invalids.form = false; // totals
         for( let invalid in invalids ) {
-            console.log( invalid, invalids[ invalid ] );
             if( invalids[ invalid ] ) {
                 invalids.form = true;
             }

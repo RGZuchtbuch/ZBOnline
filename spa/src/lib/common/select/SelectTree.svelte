@@ -8,7 +8,6 @@
 
     function onClick( node ) {
         return ( event ) => {
-            console.log('Clicked', node.name);
             if( onSelect ) {
                 onSelect( node );
             }

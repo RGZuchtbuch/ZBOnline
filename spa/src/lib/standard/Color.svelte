@@ -25,7 +25,6 @@
     let route = meta();
 
     function onToggleEdit() {
-        console.log( 'edit' );
         disabled = ! disabled;
         needFocus = true;
     }
@@ -38,18 +37,15 @@
 
         invalids.form = false; // totals
         for( let invalid in invalids ) {
-            console.log( invalid, invalids[ invalid ] );
             if( invalids[ invalid ] ) {
                 invalids.form = true;
             }
         }
         invalids = invalids; // trigger
-        console.log( 'OnColorFormChange', invalids.form, invalids.lay );
     }
 
 
     function onSubmit(event) {
-        console.log( 'Submit Breed');
         disabled = true;
         api.color.post( color ).then( response => {
             color.id = response.id;
@@ -59,23 +55,21 @@
 
 
     function loadColor( id ) {
-        console.log( 'Id', id );
-            if (id == 0) {
-                color = {
-                    id: 0, name: null, breedId: params.breedId,
-                    aoc:false,
-                    info: null
-                }
-            } else {
-                api.color.get(id).then(response => {
-                    color = response.color;
-                });
+        if (id == 0) {
+            color = {
+                id: 0, name: null, breedId: params.breedId,
+                aoc:false,
+                info: null
             }
+        } else {
+            api.color.get(id).then(response => {
+                color = response.color;
+            });
+        }
     }
 
-    console.log( 'P', colorId );
-
     $: loadColor( params.colorId );
+
 </script>
 
 

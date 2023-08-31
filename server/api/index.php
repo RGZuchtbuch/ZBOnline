@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 use Slim\Factory\AppFactory;
-use App\Router;
+use App\router;
 // allow cross origin from all, could use Slim for this ?
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers:  Accept, Authorization, Content-Type, Origin, X-Requested-With');
@@ -30,7 +30,7 @@ $app->add(function ($req, $res, $next) {
 */
 $app->setBasePath("/api"); // as the api lives here... else not found.
 
-App\Router\Router::register( $app );
+App\router\Router::register( $app );
 
 $app->run();
 

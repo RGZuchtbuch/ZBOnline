@@ -12,7 +12,6 @@
     onMount( () => {
     });
 
-    console.log( 'Reports', pairs );
 </script>
 
 

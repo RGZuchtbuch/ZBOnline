@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Controller;
+namespace App\controller;
 
 use App\Model;
-use App\Controller\Controller;
+use App\controller\Controller;
 use Exception;
 use http\Exception\InvalidArgumentException;
 use PDOException;

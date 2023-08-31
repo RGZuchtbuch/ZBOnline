@@ -28,7 +28,6 @@
     }
 
     function onSubmit() {
-        console.log( 'Submit district', district );
         disabled = true;
         api.district.post( district ).then( response => {
             district.id = response.id;

@@ -27,12 +27,9 @@
     }
 
     function loadBreeds() {
-        console.log( 'loadBreeds', sectionId, year, group );
         breeds = []; // empty
         if( sectionId === 5 ) group = 'I'; // pigeons don't have group, so defaults to 'I' locally
         if( sectionId && year && group ) { // on change of any reload all
-            console.log( 'Ready to get');
-//            api.section.breeds.get( sectionId )
             api.district.results.section.get( districtId, sectionId, year, group ).then( response => {
                 breeds = response.results }
             );
@@ -65,26 +62,20 @@
                 (result.showCount === null && result.showScore === null) ||
                 (result.showCount > 0 && result.showCount < 999999);
 
-            console.log( 'Showcount valid', valid );
             return valid;
         }
     }
 
     const showCount = (result) => {
-        console.log('v');
         return () => {
-            console.log('validate showcount');
             const valid =
                 (result.showCount === null && result.showScore === null) ||
                 (result.showCount > 0 && result.showCount < 999999);
-
-            console.log('Showcount valid', valid);
             return valid;
         }
     }
 
     function onQuery( route ) {
-        console.log( 'OnQuery');
         sectionId = route.query.section ? Number( route.query.section ) : 3;
         year = route.query.year ? Number( route.query.year ) : new Date().getFullYear();
         group = route.query.group && [ 'I', 'II', 'III' ].includes( route.query.group ) ? route.query.group : 'I';
@@ -105,7 +96,6 @@
 
     function onOpen( breed ) {
         return ( event ) => {
-            console.log('Open');
             if (breed.open) {
                 let changed = false;
                 for (let result of breed.colors) {
@@ -119,10 +109,8 @@
                 }
 
             } else { // to open
-                console.log('Fetch', breed, districtId, sectionId, year, group);
                 if (sectionId === 5) group = 'I'; // pigeons don't have group, so defaults to 'I' locally
                 if (breed.id && districtId && sectionId && year && group) {
-                    console.log('Getting Breed results');
                     api.district.results.breed.get(districtId, sectionId, breed.id, year, group)
                         .then(response => {
                             breed.colors = response.results
@@ -139,7 +127,6 @@
             if( result.changed !== true ) {
                 changeCounter++
                 result.changed = true; // changing the data object here !
- //               breeds = breeds; // trigger to redraw
             }
         }
     }
@@ -149,7 +136,6 @@
             let value = e.target.value;
             if( value ) {
                 result.broodEggs = value * 2;
-                //result.broodFertile = result.broodEggs;
             } else {
                 result.broodEggs = null;
                 result.broodFertile = null;
@@ -159,26 +145,19 @@
 
     function onSave( result ) {
         return ( event ) => {
-            console.log('Saved', result );
             result.changed = false; // asap
 
             api.result.post( result ).then( ( response ) => {
                 result.id = response.id; // new id when inserted
                 changeCounter--;
-//                breeds = breeds; // trigger
             } );
         }
     }
 
     function onSubmit( event ) {
-        console.log( 'Submit' );
     }
 
     $: onQuery( $router );
-//    $: getDistrict( districtId );
-//    $: getBreeds( sectionId, year, group );
-
-    console.log( 'ResultInputHeader here');
 
 </script>
 

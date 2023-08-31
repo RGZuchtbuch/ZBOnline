@@ -12,11 +12,12 @@
 * &#8853; Open
 * &#8854; Close
 * &#8855; Exit
-* &#8856; Not available etc
-* &#9998; Edit
-* &#10551; tree
-* &#8505; info / details ( in box )
-* &#10010; add / new
+* ⊘ &#8856; Not available etc
+* ✎ &#9998; Edit
+* ⤷ &#10551; tree
+* ℹ &#8505; info / details ( in box )
+* ✚ &#10010; add / new
+* · &centerdot; used in hierarchy in select
 
 optional
 

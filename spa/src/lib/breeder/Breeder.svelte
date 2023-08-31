@@ -26,7 +26,6 @@
                 email: null,
                 info: null
             };;
-            console.log( 'New breeder', breeder );
             router.goto( route.match+'/daten' );
         }
     }

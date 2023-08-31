@@ -71,7 +71,7 @@
                 labels.push(district.name);
                 coords.push( gpsToPx( 380, 512, 5.7, 15.0, 47.5, 55.0, district.longitude, district.latitude ) );
                 titles.push( type.title( district ) );
-                let values = type.extract( district );
+                let values = type.map( district );
                 for (let i=0; i<values.length; i++) {
                     if (datasets.length < i + 1) {
                         datasets.push({ data: [] })

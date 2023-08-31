@@ -33,12 +33,10 @@
 
     function onSubmit() {
         if( ! invalid ) {
-            console.log( 'Sending message', districtId, from, name, subject, message, confirm);
             sending = true;
             api.message.post( districtId, from, name, subject, message, confirm ).then(response => { // note confirm is antibot
                 success = response.success;
                 if (success) {
-                    console.log('Message send', districtId, from, message );
                     router.goto(route.from);
                     sending = false;
                 }
@@ -57,7 +55,6 @@
     }
 
     $: loadDistrict( districtId );
-    $: console.log( 'CF', confirm );
 
 </script>
 
@@ -83,9 +80,7 @@
 </Modal>
 
 <style>
-    .error {
-        @apply text-red-600;
-    }
+
     h2 {
         @apply rounded;
     }

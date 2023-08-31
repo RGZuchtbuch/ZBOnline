@@ -26,54 +26,74 @@
         2: {
             id: 2,
             label: 'Zuchten',
-            extract: (result) => [result.breeders],
-            forPie: (result) => [result.breeders],
-            title: (result) => result.breeders ? ` meldete ${dec(result.breeders)} Zuchten` : ' hat keine Daten',
+//            extract: (result) => [result.breeders],
+//            forPie: (result) => [result.breeders],
+            map: (result) => [result.breeders],
+            time: (result) => [result.breeders],
+            pie: (result) => [result.breeders],
+            title: (result) => result.breeders ? ` ${dec(result.breeders)} demeldete Zuchten` : ' hat keine Daten',
             tooltip: 'Meldende Mitglieder',
         },
         3: {
             id: 3,
             label: 'Stämme',
-            extract: (result) => [result.pairs],
-            forPie: (result) => [result.pairs],
-            title: (result) => result.pairs ? ` meldete ${dec(result.pairs)} Stämme` : ' hat keine Daten',
+//            extract: (result) => [result.pairs],
+//            forPie: (result) => [result.pairs],
+            map: (result) => [result.pairs],
+            time: (result) => [result.pairs],
+            pie: (result) => [result.pairs],
+            title: (result) => result.pairs ? ` ${dec(result.pairs)} gemeldete Stämme / Paare` : ' hat keine Daten',
             tooltip: 'Stämme oder Paare (Tauben)',
         },
         10: {
             id: 10,
             label: 'Legeleistung',
-            extract: (result) => [result.layEggs],
-            forPie: (result) => [result.layEggs],
-            title: (result) =>  result.layEggs ? ` legten ⌀ ${dec(result.layEggs)} Eier im Jahr` : ' hat keine Daten',
-            tooltip: 'Nicht fär Tauben',
+//            extract: (result) => [result.layEggs],
+//            forPie: (result) => [result.layEggs],
+            map: (result) => [result.layEggs],
+            time: (result) => [result.layEggs],
+            pie: (result) => [result.layEggs],
+            title: (result) =>  result.layEggs ? ` Legeleistung ⌀ ${dec(result.layEggs)} Eier im Jahr` : ' hat keine Daten',
+            tooltip: 'Nur für Leger',
         },
+
         20: {
             id: 20,
             label: 'Brutleistung Leger',
-            extract: (result) => [result.broodHatched, result.broodFertile, result.broodEggs], // for map and chart
-            forPie: (result) => [ 100 * result.broodHatched / result.broodEggs], // for pie
+//            extract: (result) => [result.broodHatched, result.broodFertile, result.broodEggs], // for map and chart
+//            forPie: (result) => [ 100 * result.broodHatched / result.broodEggs], // for pie
+            map: (result) => [result.broodHatched, result.broodFertile, result.broodEggs], // for map and chart
+            time: (result) => [result.broodHatched, result.broodFertile, result.broodEggs], // for map and chart
+            pie: (result) => [ 100 * result.broodHatched / result.broodEggs], // for pie
             title: (result) => result.broodEggs ?
-                ` von ${dec(result.broodEggs)} war ${pct(result.broodFertile, result.broodEggs, 0)} befruchtet und es schlüpften ${pct(result.broodHatched, result.broodEggs, 0)}` :
+                ` Eingelegt ${dec(result.broodEggs)} Eier, ${pct(result.broodFertile, result.broodEggs, 0)} waren befruchtet und es schlüpften ${pct(result.broodHatched, result.broodEggs, 0)}` :
                 ' hat keine Daten',
-            tooltip: 'Nur für Hühner',
+            tooltip: 'Nur für Leger',
         },
         21: {
             id: 21,
             label: 'Brutleistung Tauben',
-            extract: (result) => [ result.broodHatched/result.pairs ], // for map and chart
-            forPie: (result) => [ result.broodHatched/result.pairs ], // for pie
-            title: (result) => result.pairs ?
-                ` aus ${dec(result.pairs)} schlüpften ${dec(result.broodHatched)} Küken also ${dec(result.broodHatched/result.pairs)} Küken / Paar` :
+//            extract: (result) => [ result.nonLayerPairs ? result.chicks / result.nonLayerPairs : 0 ], // for map and chart
+//            forPie: (result) => [ result.nonLayerPairs ? result.chicks / result.nonLayerPairs : 0 ], // for pie
+            map: (result) => [ result.nonLayerPairs ? result.chicks / result.nonLayerPairs : 0 ], // for map and chart
+            time: (result) => [  result.nonLayerPairs ? result.chicks / result.nonLayerPairs : 0  ], // for map and chart
+            pie: (result) => [ result.nonLayerPairs ? result.chicks / result.nonLayerPairs : 0 ], // for pie
+            title: (result) => result.nonLayerPairs ?
+                ` Bei ${dec(result.nonLayerPairs)} Paare schlüpften ${dec(result.chicks)} Küken also ${dec(result.chicks/result.nonLayerPairs,1)} Küken / Paar` :
                 ` hat keine Daten`,
-            tooltip: 'Nur für Hühner',
+            tooltip: 'Nur für Tauben',
         },
+
         30: {
             id: 30,
             label: 'Schauleistung',
             min: 89,
             max: 97,
-            extract: (result) => [result.showScore],
-            forPie: (result) => [result.showScore],
+//            extract: (result) => [result.showScore],
+//            forPie: (result) => [result.showScore],
+            map: (result) => [result.showScore ? result.showScore : 89 ],
+            time: (result) => [result.showScore ? result.showScore : 89 ],
+            pie: (result) => [result.showScore ? result.showScore : 89 ],
             title: (result) => result.showCount ? ` ${result.showCount} Tiere erhielten ⌀ ${dec(result.showScore, 1)} Punkte` : ' hat keine Daten',
             tooltip: 'Bewertungen der Tiere (u), 90 (b) .. 97 (v) Punkte',
         },
@@ -135,7 +155,7 @@
         if( section && section.children ) {
             for( const child of section.children ) {
 //                prepareSections( sections, child, '\xA0\xA0\xA0'+prepend );
-                prepareSections( sections, child, '   '+prepend ); // alt 255
+                prepareSections( sections, child, '·  '+prepend ); // alt 255
             }
         }
         return sections;
@@ -199,38 +219,15 @@
 
 
 <Route path='/*' let:meta>
-    <div class='w-256 flex bg-header rounded-t no-print'>
-        <h2 class='grow border border-gray-400 text-white text-center text-xl print'>Leistungen</h2>
-        <div class='w-8 justify-center m-2 circled bg-alert cursor-pointer' on:click={onHelp}>?</div>
+    <div class='w-256 flex no-print'>
+        <h2 class='grow text-center text-2xl print'>Zuchtleistungen</h2>
+        <div class='w-8 justify-center m-2 circled bg-alert cursor-pointer no-print' on:click={onHelp}>?</div>
     </div>
 
-    <div class='w-256 bg-gray-100 overflow-y-scroll border rounded-b border-t-0 border-gray-400 scrollbar print-no-border'>
-        <div class='flex flex-row bg-header px-4 gap-x-2 no-print'>
-            <div class='w-8 font-semibold' >Filter</div>:
-            <Select class='w-52' label='Sparte' value={sectionId} on:change={onSection}>
-                {#each sections as section}
-                    <option value={section.id} selected={section.id === sectionId}> {section.name} </option>
-                {/each}
-            </Select>
-
-            <Select class='w-64' label={'Rasse'} value={breedId} on:change={onBreed}>
-                <option value={null} title='Alle Rassen in der gewählten Sparte'> * </option>
-                {#each breeds as breed}
-                    <option value={breed.id} selected={breed.id === breedId}> {breed.name} </option>
-                {/each}
-            </Select>
-
-            <Select class='w-60' label={'Farbe'} value={colorId} on:change={onColor}>
-                <option value={null} title='Alle farben der gewählten Rasse'> * </option>
-                {#each colors as color}
-                    <option value={color.id} selected={color.id === colorId}>{color.name}</option>
-                {/each}
-            </Select>
-        </div>
-
-        <div class='flex flex-row bg-header px-4 gap-x-2 no-print'>
-            <div class='w-8 font-semibold' >Was</div>:
-            <Select class='w-52' label='Was sehen' value={typeId} on:change={onType}>
+    <div class='w-256 flex flex-col border rounded-t border-gray-400 bg-header p-2 gab-2 no-print'>
+        <div class='flex flex-row px-4 gap-x-2'>
+            <div class='w-8 font-semibold text-white' >Was</div>:
+            <Select class='w-64' label='Was sehen' value={typeId} on:change={onType}>
                 {#each Object.values( types ) as type, i }
                     <option value={ type.id } title={ type.tooltip }> { type.label }</option>
                 {/each}
@@ -245,13 +242,38 @@
                 {/if}
             </Select>
 
-            <Select class='w-32' bind:value={year} label='Jahr'>
+            <Select class='w-20' bind:value={year} label='Jahr'>
                 {#each years as option}
                     <option value={option}>{option}</option>
                 {/each}
             </Select>
         </div>
 
+        <div class='flex flex-row px-4 gap-x-2'>
+            <div class='w-8 font-semibold text-white' >Filter</div>:
+            <Select class='w-64' label='Sparte' value={sectionId} on:change={onSection}>
+                {#each sections as section}
+                    <option value={section.id} selected={section.id === sectionId}> {section.name} </option>
+                {/each}
+            </Select>
+
+            <Select class='w-64' label={'Rasse'} value={breedId} on:change={onBreed}>
+                <option value={null} title='Alle Rassen in der gewählten Sparte'> * </option>
+                {#each breeds as breed}
+                    <option value={breed.id} selected={breed.id === breedId}> {breed.name} </option>
+                {/each}
+            </Select>
+
+            <Select class='w-64' label={'Farbe'} value={colorId} on:change={onColor}>
+                <option value={null} title='Alle farben der gewählten Rasse'> * </option>
+                {#each colors as color}
+                    <option value={color.id} selected={color.id === colorId}>{color.name}</option>
+                {/each}
+            </Select>
+        </div>
+    </div>
+
+    <div class='w-256 bg-gray-100 overflow-y-scroll border rounded-b border-gray-400 scrollbar print-no-border'>
 
         {#if districts && districtId && year && sectionId}
             {#if true}

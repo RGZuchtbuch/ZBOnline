@@ -11,7 +11,6 @@
     }
 
     function onInput() {
-        console.log( 'Breed', pair );
     }
 
     onMount( () => {

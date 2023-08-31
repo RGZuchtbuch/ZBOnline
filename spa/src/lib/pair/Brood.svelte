@@ -37,7 +37,6 @@
     }
 
     function onInput( event ) {
-        console.log('OnInput Brood');
         validate();
     }
 
@@ -57,16 +56,11 @@
                 validator( brood.ringed ).date().nullable().isInvalid();
             for( const chick of brood.chicks ) {
                 invalid ||= validator( chick.ring ).ring().nullable().isInvalid();
-                console.log( 'I', chick.ring, validator( chick.ring ).ring().nullable().isInvalid(), invalid );
             }
         }
-//        invalid = invalid;
-        console.log('B i', invalid, validator( brood.fertile ).number().range( 0, brood.eggs ).nullable().isInvalid() );
     }
 
     onMount( validate );
-    //$: init( brood );
-
 
 </script>
 

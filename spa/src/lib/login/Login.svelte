@@ -29,7 +29,6 @@
             api.user.login(email, password).then(response => {
                 success = response.success;
                 if (success) {
-                    console.log($user)
                     router.goto(route.from);
                 }
             });
@@ -38,20 +37,12 @@
 
     function onForgot( event ) {
         forgot = ! forgot;
-        console.log( 'Forgot', forgot );
     }
 
     function onResetPassword( event ) {
-        console.log( event.target.disabled );
-        if( event.target.disabled )
-            console.log( 'Disabled' )
-        else
-            console.log( 'Enabled' );
         event.target.disabled = true;
-        console.log( "Reset password requested");
         api.user.reset( email ).then( response => {
             if( response.success ) {
-                console.log( "Reset succesfull" )
                 event.target.disabled = false;
                 router.goto( route.from );
             }

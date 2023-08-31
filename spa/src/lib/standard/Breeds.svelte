@@ -18,7 +18,6 @@
         api.standard.get().then( response => {
             rootSection = response.standard;
             rootSection.open = true;
-            console.log( 'RS', rootSection );
         } );
 
     }

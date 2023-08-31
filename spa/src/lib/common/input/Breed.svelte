@@ -38,7 +38,6 @@
     }
 
     function updateSection() {
-//        console.log('SectionChange', value.sectionId);
         if (value.sectionId) {
             getBreeds();
             colors = [];
@@ -52,7 +51,6 @@
     }
 
     function updateBreed() {
-//        console.log('BreedChange', breedId);
         if ( value.breedId ) {
             api.breed.colors.get( value.breedId ).then(data => {
                 colors = data.colors
@@ -69,24 +67,14 @@
     }
 
     function validate() {
-//        console.log('SelectBreed val', value.sectionId, value.breedId, value.colorId );
         if ( value.sectionId === 5 ) {
             invalid = ! value.sectionId || ! value.breedId;
         } else {
             invalid = ! value.sectionId || ! value.breedId || ! value.colorId;
         }
- //       if( ! invalid ) {
- //           value.sectionId = sectionId;
- //           value.breedId = breedId;
- //           value.colorId = colorId
- //       }
     }
 
     function update() {
-//        console.log( 'SelectBreed update', value );
-        //sectionId = value.sectionId;
-        //breedId = value.breedId;
-       // colorId = value.colorId;
         getSections(); // only once
         getBreeds( value.sectionId ); // after getSection
         getColors( value.breedId ); // after getBreeds !
@@ -94,16 +82,12 @@
     }
 
     function onInput() {
-        console.log( 'BreedSelect', value );
     }
 
     onMount(() => {
     })
 
     $: update(value); // from extern
-//    $: updateSection( sectionId );
-//    $: updateBreed( breedId );
-//    $: updateColor( colorId );
 
     // need to take care of up[date from the url vs change in the form. Therefore the extern and intern step
     // solution with color not nice, but works.
