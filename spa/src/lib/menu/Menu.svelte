@@ -14,8 +14,8 @@
 </script>
 
 
-<div class='w-64 flex flex-col border rounded no-print'>
-    <h3 class='title'> &nbsp; </h3>
+<div class='w-64 mt-12 flex flex-col border rounded no-print'>
+
 
     <div class='header'> Menü für {$user ? $user.firstname : 'Besucher' } </div>
     <div class='body scrollbar'>

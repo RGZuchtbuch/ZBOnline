@@ -38,7 +38,7 @@ class Post extends Controller
             if( query\Result::set( // change
                 $result['id'],
                 $result['pairId'], $result['districtId'], $result['year'], $result['group'],
-                $result['breedId'], $result['colorId'], $breed['layer'],
+                $result['breedId'], $result['colorId'],
                 $result['breeders'], $result['pairs'],
                 $result['layDames'], $result['layEggs'], $result['layWeight'],
                 $result['broodEggs'], $result['broodFertile'], $result['broodHatched'],
@@ -51,7 +51,7 @@ class Post extends Controller
         if( $result['id'] == null && $result['breeders'] != null ) { // new
             $id = query\Result::new(
                 $result['pairId'], $result['districtId'], $result['year'], $result['group'],
-                $result['breedId'], $result['colorId'], $breed['layer'],
+                $result['breedId'], $result['colorId'],
                 $result['breeders'], $result['pairs'],
                 $result['layDames'], $result['layEggs'], $result['layWeight'],
                 $result['broodEggs'], $result['broodFertile'], $result['broodHatched'],

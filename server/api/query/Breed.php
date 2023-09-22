@@ -20,10 +20,10 @@ class Breed extends Query
     {
         $args = get_defined_vars();
         $stmt = Query::prepare('
-            SELECT id, name, sectionId, broodGroup, lay, layWeight, sireRing, dameRing, sireWeight, dameWeight, info, section.layers AS layer
+            SELECT breed.id, breed.name, sectionId, broodGroup, lay, layWeight, sireRing, dameRing, sireWeight, dameWeight, info, section.layers AS layer
             FROM breed
             LEFT JOIN section ON section.id = breed.sectionId
-            WHERE id=:id
+            WHERE breed.id=:id
         ');
         return Query::select($stmt, $args);
     }

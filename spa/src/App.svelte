@@ -25,8 +25,9 @@
 
 
 <div class='w-full h-full flex flex-col'>
-    <img class='absolute w-20 mt-4 ml-24 no-print' src='../assets/bdrg_logo_r.png' alt='BDRG Logo'>
-
+    <a href='/'>
+        <img class='absolute w-20 mt-4 ml-24 no-print' src='../assets/bdrg_logo_r.png' alt='BDRG Logo'>
+    </a>
     <div class='text-center no-print'>
         Das Rassegeflügel Zuchtbuch. Schönheit und Leistung durch Wissen.
     </div>
@@ -36,12 +37,12 @@
     <div class='grow p-2 flex flex-row gap-2 relative min-h-0'>
 
         <div class=''>
-        <Menu />
+            <Menu />
         </div>
 
         <div class='grow flex flex-col border rounded bg-white items-center print'>
 
-            <Route path='/' > <Info /> /></Route>
+            <Route path='/' redirect='/zuchtbuch/1'/>
             <Route path='/zuchtbuch/*' let:meta>
                 <Route path='/'> <Article articleId=1 /> </Route>
                 <Route path='/:articleId' let:meta> <Article articleId={meta.params.articleId} /> </Route>
