@@ -76,6 +76,27 @@
         }
     }
 
+    function onSection( id ) {
+        return (event) => {
+            router.location.query.set( 'section',id );
+        }
+    }
+
+    function onBreed( sectionId, breedId ) {
+        return (event) => {
+            router.location.query.set( 'section', sectionId );
+            router.location.query.set( 'breed', breedId );
+        }
+    }
+
+    function onColor( sectionId, breedId, colorId ) {
+        return (event) => {
+            router.location.query.set( 'section', sectionId );
+            router.location.query.set( 'breed', breedId );
+            router.location.query.set( 'color', colorId );
+        }
+    }
+
     $: calcTotals( results );
 
 </script>
@@ -87,7 +108,9 @@
 
             <Comment>TOP HEADERS</Comment>
 
-            <h2 class='p-2 bg-header text-center text-white text-xl'>Sparte {section.name}</h2>
+            <h2 class='p-2 bg-header text-center text-white text-xl' on:click={onSection( section.id )} >
+                Sparte {section.name}
+            </h2>
             <div class='flex flex-row px-2 gap-x-1 font-bold'>
                 <div class='w-56 text-center'>Gruppe / Rasse / Farbe</div>
                 <div class='grow flex flex-row justify-evenly'>
@@ -99,7 +122,7 @@
             </div>
 
             {#each section.subsections as subsection}
-                <div class='flex flex-row bg-gray-300 mt-4 px-2 gap-x-4 font-bold text-xl text-left'>
+                <div class='flex flex-row bg-gray-300 mt-4 px-2 gap-x-4 font-bold text-xl text-left' on:click={onSection( subsection.id )}>
                     {subsection.name}
                 </div>
 
@@ -133,7 +156,9 @@
                 <Comment>BREEDS, RSEULTS AND COLOR RESULTS</Comment>
                 {#each subsection.breeds as breed, i}
                     <div class='flex flex-row mt-1 px-2 gap-x-1 bg-gray-100'>
-                        <div class='w-56 text-left text-base font-semibold'>{breed.name}</div>
+                        <div class='w-56 text-left text-base font-semibold' on:click={onBreed( section.id, breed.id )}>
+                            {breed.name}
+                        </div>
                         {#if section.id === 5 && breed.result}
                             <div class='grow flex justify-evenly text-sm'>
                                 <div class='flex w-28 justify-evenly'>
@@ -162,7 +187,9 @@
                     {#each breed.colors as color}
                         {#if section.id !== 5 && color.result}
                             <div class='flex flex-row px-2 gap-x-1 print-no-break'>
-                                <div class='w-56 pl-4'>&#10551; {color.name}</div>
+                                <div class='w-56 pl-4' on:click={onColor( section.id, breed.id, color.id )}>
+                                    &#10551; {color.name}
+                                </div>
                                 <div class='grow flex justify-evenly text-sm'>
                                     <div class='flex w-28 justify-evenly'>
                                         <div class='td' title='Zahl der Zuchten / Züchter'>{dec( color.result.breeders )}</div>
