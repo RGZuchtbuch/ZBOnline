@@ -12,7 +12,7 @@
 
     export let breeder;
 
-    let disabled = breeder.id !== null; // enabled if new breeder
+    let disabled = true; // enabled if new breeder
     let needFocus = true;
     let clubs = null;
     let changed = false; // form changed
@@ -47,13 +47,31 @@
     }
 
     function loadClubs( id ) {
-        api.district.clubs.get( id ).then( response => {
-            clubs = response.clubs;
-        });
+        api.district.descendants.get( breeder.district.id ).then( response => {
+            clubs = filterClubs( response.district );
+            console.log( 'Clubs', clubs );
+        })
+    }
+
+    function filterClubs( district, resultClubs ) {
+        if( ! resultClubs ) { // init
+            resultClubs = [];
+        }
+        if( district.level === 'OV' ) {
+            resultClubs.push( district )
+        }
+        for( const child of district.children ) {
+            filterClubs( child, resultClubs );
+        }
+        return resultClubs;
     }
 
     onMount( () => {
+        console.log( "OO" );
         focusElement.focus();
+        if( breeder.id === null ) {
+            onToggleEdit();
+        }
     })
 
     afterUpdate( () => {
@@ -62,6 +80,9 @@
             needFocus = false;
         }
     })
+
+
+
 
 
 </script>
@@ -86,14 +107,14 @@
             <div class='h-4'></div>
 
             {#if ! disabled && clubs}
-                <Select class='w-64'  bind:value={breeder.club.id}  label='Verein' >
+                <Select class='w-64'  bind:value={breeder.club.id}  label='Ortsverein' >
                     <option value={null}> ? </option>
                     {#each clubs as club}
                         <option value={club.id} >  {club.name} </option>
                     {/each}
                 </Select>
             {:else}
-                <Text class='w-64' value={breeder.club.name} label='Verein'/>
+                <Text class='w-64' value={breeder.club.name} label='Ortsverein'/>
             {/if}
 
             <div class='flex gap-2'>

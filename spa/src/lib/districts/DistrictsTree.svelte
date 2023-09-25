@@ -15,10 +15,11 @@
     let breeders = null;
 
     const route    = meta();
+
 </script>
 
 <div class='flex flex-col pl-4'>
-    {#if rootDistrict.moderated || rootDistrict.children.length > 0 }
+    {#if rootDistrict && ( rootDistrict.moderated || rootDistrict.children.length > 0 ) }
         <div class='flex border-b border-gray-300 my-2'>
             <div class='w-6'>&#10551;</div>
 
@@ -30,7 +31,7 @@
         </div>
     {/if}
 
-    {#if true || open}
+    {#if rootDistrict && ( true || open )}
         {#each rootDistrict.children as childDistrict}
             <svelte:self rootDistrict={childDistrict} />
         {/each}

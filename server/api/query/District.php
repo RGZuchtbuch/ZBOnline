@@ -10,7 +10,7 @@ class District extends Query
 {
 
     public static function new(
-        int $parentId, string $name, ? string $fullname, ? string $short, // parentId cannot change
+        int $parentId, string $name, string $fullname, string $short, // parentId cannot change
         ? float $latitude, ? float $longitude,
         string $level, ? int $moderatorId, int $modifierId
     ) : ? int {
@@ -75,22 +75,25 @@ class District extends Query
         return Query::selectArray( $stmt, $args );
     }
 
-    public static function children( int $id ) : array {
+    // select children
+    public static function children( int $parentId ) : array {
         $args = get_defined_vars();
         $stmt = Query::prepare('
-            SELECT id, parentId, name FROM district WHERE id=:id
-            UNION
-            SELECT id, parentId, name FROM district WHERE parentId=:id
+            SELECT id, parentId, name, level
+            FROM district 
+            WHERE parentId=:parentId
             ORDER BY name
         ');
         return Query::selectArray( $stmt, $args );
     }
 
+    // select root and 2 level descendants
     public static function descendants( int $districtId ) : array {
         $args = get_defined_vars();
         $stmt = Query::prepare( "
-            SELECT DISTINCT child.* FROM district AS parent
-                LEFT JOIN district AS child ON child.id = parent.id OR child.parentId = parent.id
+            SELECT DISTINCT child.parentId, child.id, child.short, child.name, child.fullname, child.level, child.moderatorId 
+            FROM district AS parent
+            LEFT JOIN district AS child ON child.id = parent.id OR child.parentId = parent.id
             WHERE parent.id=:districtId OR parent.parentId=:districtId
             ORDER BY name
         ");

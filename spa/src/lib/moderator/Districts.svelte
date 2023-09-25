@@ -17,6 +17,7 @@
     function loadDistricts() {
         api.district.descendants.get( 1 ).then( response => {
             rootDistrict = filter( response.district );
+            console.log('LoadRoot', response.district );
         } );
     }
 

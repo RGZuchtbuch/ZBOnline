@@ -4,9 +4,11 @@
 
     import Breeder from '../breeder/Breeder.svelte';
     import Breeders from '../breeders/Breeders.svelte';
-    import ResultsList from './results/DistrictResultsList.svelte';
+    import ResultsList from './DistrictResultsList.svelte';
     import ResultEdit from '../result/edit/Edit.svelte';
-    import DistrictDetails from "./DistrictDetails.svelte";
+    import DistrictDetails from './DistrictDetails.svelte';
+    import Club from '../club/Club.svelte';
+    import ClubsList from '../club/ClubsList.svelte';
 
     export let districtId = null;
     let district = null;
@@ -20,15 +22,13 @@
     let route = meta();
 
     $: loadDistrict( districtId );
-
+    console.log( route );
 </script>
 
 {#if district}
-    <Route path='/' redirect={route.match+'/zuechter'} />
 
-    <Route path='/daten' let:meta>
-        <DistrictDetails {districtId} />
-    </Route>
+    <Route path='/' redirect={route.match+'/leistung'} />
+
     <Route path='/zuechter/*' let:meta>
         <Route path='/' let:meta>
             <Breeders {district} />
@@ -43,4 +43,14 @@
         <Route path='/' let:meta> <ResultsList districtId={ +meta.params.districtId } /> </Route>
         <Route path='/edit' let:meta> <ResultEdit districtId={ +meta.params.districtId }  /></Route>
     </Route>
+
+    <Route path='/daten' let:meta>
+        <DistrictDetails {districtId} />
+    </Route>
+
+    <Route path='/verein/*' let:meta>
+        <Route path='/' let:meta> <ClubsList {districtId} /> </Route>
+        <Route path='/:clubId/*' let:meta > <Club districtId={ +meta.params.districtId } clubId={ +meta.params.clubId } /> </Route>
+    </Route>
+
 {/if}

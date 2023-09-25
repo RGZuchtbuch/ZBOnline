@@ -4,7 +4,7 @@
     import {txt} from '../../js/util.js';
     import Pair from '../pair/Pair.svelte';
     import BreederPairs from './Pairs.svelte';
-    import Member from "./Member.svelte";
+    import BreederDetails from "./BreederDetails.svelte";
 
     export let breederId;
     export let districtId;
@@ -26,7 +26,7 @@
                 email: null,
                 info: null
             };;
-            router.goto( route.match+'/daten' );
+            //router.goto( route.match+'/daten' );
         }
     }
 
@@ -38,7 +38,7 @@
     <Route path='/' redirect={route.match+'/meldungen'} />
 
     <Route path='/daten' let:meta>
-        <Member {breeder} />
+        <BreederDetails {breeder} />
     </Route>
     <Route path='/meldungen/*' let:meta>
         <Route path='/' let:meta>

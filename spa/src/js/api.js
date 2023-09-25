@@ -75,6 +75,10 @@ export default {
                 return get( 'api/district/'+districtId+'/breeders');
             }
         },
+
+        /*
+        * return direct children of district, not grandchildren etc
+        */
         children: {
             get: (districtId) => {
                 return get( 'api/district/'+districtId+'/children' );

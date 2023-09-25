@@ -8,6 +8,7 @@
     import Select from '../common/input/Select.svelte';
     import Text from '../common/input/Text.svelte';
     import Page from "../common/Page.svelte";
+    import Districts from '../districts/DistrictsList.svelte';
 
     export let districtId;
 
@@ -15,6 +16,7 @@
     let disabled = true;
     let changed = false;
     let members = null; // for selecting obmann
+    let childDistricts = null;
 
     const route    = meta();
     const dispatch = createEventDispatcher();
@@ -47,7 +49,6 @@
         })
     }
 
-
     $: loadDistrict( districtId );
     $: loadMembers( districtId );
 </script>
@@ -78,16 +79,16 @@
                     <Number class='w-32' bind:value={district.longitude}  label='Längegrad O' min={MINLONGITUDE} max={MAXLONGITUDE} required />
                 </div>
 
-                    <Select class='w-128' bind:value={district.moderatorId} label='Obmann' >
-                        {#if members}
-                            <option value={null}></option>
-                            {#each members as member}
-                                <option value={member.id} selected={district.moderatorId == member.id ? 'selected' : '' }>
-                                    {txt(member.lastname)}, {txt(member.firstname)} {txt(member.infix)}
-                                </option>
-                            {/each}
-                        {/if}
-                    </Select>
+                <Select class='w-128' bind:value={district.moderatorId} label='Zuchtbuch Obmann' >
+                    {#if members}
+                        <option value={null}></option>
+                        {#each members as member}
+                            <option value={member.id} selected={district.moderatorId == member.id ? 'selected' : '' }>
+                                {txt(member.lastname)}, {txt(member.firstname)} {txt(member.infix)}
+                            </option>
+                        {/each}
+                    {/if}
+                </Select>
 
                 {#if ! disabled && changed}
                     <div class='bg-alert text-center font-bold text-white cursor-pointer' on:click={onSubmit}>Speichern</div>

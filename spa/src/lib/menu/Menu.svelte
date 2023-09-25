@@ -4,8 +4,9 @@
     import api from '../../js/api.js';
     import {txt} from '../../js/util.js';
     import AdminMenu from "./AdminMenu.svelte";
-    import DistrictMenu from "./DistrictMenu.svelte";
     import BreederMenu from "./BreederMenu.svelte";
+    import ClubMenu from "./ClubMenu.svelte";
+    import DistrictMenu from "./DistrictMenu.svelte";
     import ModeratorMenu from "./ModeratorMenu.svelte";
     import StandardMenu from "./StandardMenu.svelte";
     import InfoMenu from "./InfoMenu.svelte";
@@ -32,6 +33,10 @@
 
                     <Route path='/zuechter/:breederId/*' let:meta>
                         <BreederMenu districtId={meta.params.districtId} breederId={meta.params.breederId} />
+                    </Route>
+
+                    <Route path='/verein/:clubId/*' let:meta>
+                        <ClubMenu districtId={meta.params.districtId} clubId={meta.params.clubId} />
                     </Route>
                 </Route>
             {/if}

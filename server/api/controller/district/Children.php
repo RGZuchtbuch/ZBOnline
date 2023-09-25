@@ -17,8 +17,7 @@ class Children extends Controller
     public function process() : array // parent with direct children
     {
         $id = $this->args['id'];
-        $districts = query\District::children( $id );
-        $root = $this->tree( $districts );
-        return [ 'district' => $root ];
+        $children = query\District::children( $id );
+        return [ 'children' => $children ];
     }
 }

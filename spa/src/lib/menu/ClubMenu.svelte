@@ -4,7 +4,10 @@
 
 
     export let districtId;
+    export let clubId;
+
     let district;
+    let club;
 
     const route = meta();
 
@@ -13,19 +16,22 @@
             district = response.district;
         })
     }
+    function loadClub( id ) {
+        api.district.get( id ).then( response => {
+            club = response.district;
+        })
+    }
 
     $: loadDistrict( districtId );
+    $: loadClub( clubId );
 </script>
 
 <div class='flex flex-col'>
-    {#if districtId && district}
-        <h3>Verband {district.short}</h3>
+    {#if club }
+        <h3>Verein {club.short}</h3>
         <ul>
-            <li> <a href={route.match+'/leistung'} title='Zur Verbandsdaten'>→ Leistungen </a> </li>
-            <li> <a href={route.match+'/leistung/edit'} title='Zur Verbandsdaten'>→ Eingeben </a> </li>
-            <li> <a href={route.match+'/zuechter'} title='Zur Verbandsdaten'>→ Züchter </a> </li>
-            <li> <a href={route.match+'/verein'} title='Zu den Vereinen'>→ Vereine</a> </li>
             <li> <a href={route.match+'/daten'} title='Zur Verbandsdaten'>→ Daten </a> </li>
+
 
         </ul>
     {/if}

@@ -134,7 +134,7 @@
     }
 
     function loadDistricts() {
-        api.district.children.get( 1 ).then( response => { // bdrg (1) is fixed root
+        api.district.descendants.get( 1 ).then( response => { // bdrg (1) is fixed root
             rootDistrict = response.district;
             districts = {};
             districts[ rootDistrict.id ] = rootDistrict;
