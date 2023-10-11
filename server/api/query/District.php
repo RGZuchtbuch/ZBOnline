@@ -210,13 +210,12 @@ class District extends Query
         return Query::selectArray( $stmt, $args );
     }
 
-    public static function countResults( int $districtId ) : int {
+    public static function countBreeders( int $districtId ) : int {
         $args = get_defined_vars();
         $stmt = Query::prepare("
             SELECT COUNT(*) AS count
-            FROM result
-            WHERE districtId = :districtId                
-            GROUP BY districtId
+            FROM user
+            WHERE districtId = :districtId OR clubId = :districtId              
         ");
         $row = Query::select( $stmt, $args );
         if( $row ) {
@@ -230,8 +229,21 @@ class District extends Query
         $stmt = Query::prepare("
             SELECT COUNT(*) AS count
             FROM district
-            WHERE parentId = :districtId                
-            GROUP BY parentId
+            WHERE parentId = :districtId
+        ");
+        $row = Query::select( $stmt, $args );
+        if( $row ) {
+            return $row['count'];
+        }
+        return 0;
+    }
+
+    public static function countResults( int $districtId ) : int {
+        $args = get_defined_vars();
+        $stmt = Query::prepare("
+            SELECT COUNT(*) AS count
+            FROM result
+            WHERE districtId = :districtId
         ");
         $row = Query::select( $stmt, $args );
         if( $row ) {

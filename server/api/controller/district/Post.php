@@ -7,6 +7,7 @@ use App\controller\Controller;
 use Error;
 use Exception;
 use http\Exception\InvalidArgumentException;
+use Slim\Exception\HttpBadRequestException;
 use Slim\Exception\HttpInternalServerErrorException;
 use Slim\Exception\HttpNotFoundException;
 
@@ -37,15 +38,12 @@ class Post extends Controller
             }
             return ['id' => $id];
         } else {
-            $countResults = query\District::countresults( $id );
-            if( ! $countResults ) {
-                $countChildren = query\District::countChildren( $id );
-                if( ! $countChildren ) {
-                    $deleted = query\District::del($id);
-                    return ['id'=>null];
-                }
+            if( query\District::countresults( $id ) || query\District::countChildren( $id ) || query\District::countBreeders( $id ) ) {
+                throw new HttpBadRequestException( $this->request, 'cannot delete district that has children or results' );
+            } else {
+                $deleted = query\District::del($id);
+                return ['id' => null];
             }
-            return ['id' => $id, 'success'=>false, 'error'=>'cannot delete district that has children or results'];
         }
     }
 }
