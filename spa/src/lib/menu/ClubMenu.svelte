@@ -30,7 +30,7 @@
     {#if club }
         <h3>Verein {club.short}</h3>
         <ul>
-            <li> <a href={route.match+'/daten'} title='Zur Verbandsdaten'>→ Daten </a> </li>
+            <li> <a href={route.match+'/daten'} title='Zur Vereinsdaten'>→ Vereinsdaten </a> </li>
 
 
         </ul>

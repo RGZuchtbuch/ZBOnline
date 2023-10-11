@@ -16,12 +16,16 @@
     let disabled = true;
     let changed = false;
     let members = null; // for selecting obmann
+    let submitError = false;
 
     const route    = meta();
     const dispatch = createEventDispatcher();
 
     function onToggleEdit() {
         disabled = ! disabled;
+        if( ! disabled ) {
+            submitError = false;
+        }
     }
 
     function onChange( event ) {
@@ -31,8 +35,15 @@
     function onSubmit() {
         disabled = true;
         api.district.post( club ).then( response => {
-            club.id = response.id;
-            changed = false;
+            console.log( 'R', response);
+            if( response ) {
+                console.log( 'RS', response);
+                club.id = response.id;
+                changed = false;
+            } else {
+                console.log( 'RE', response);
+                submitError = true;
+            }
         });
     }
 
@@ -65,6 +76,10 @@
                     {:else}
                         <div class='bg-alert text-center font-bold text-white cursor-pointer' on:click={onSubmit}>Löschen !</div>
                     {/if}
+                {/if}
+
+                {#if submitError}
+                    <div class='bg-alert text-center font-bold text-white'>Fehler: Verband/Verein hat noch Mitglieder, Leistungen oder vereine</div>
                 {/if}
             </fieldset>
         </form>
