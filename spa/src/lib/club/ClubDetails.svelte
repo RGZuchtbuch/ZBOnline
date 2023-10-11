@@ -60,7 +60,11 @@
                 <Text class='w-24' bind:value={club.short} label='Name abk.' required/>
 
                 {#if ! disabled && changed}
-                    <div class='bg-alert text-center font-bold text-white cursor-pointer' on:click={onSubmit}>Speichern</div>
+                    {#if club.name}
+                        <div class='bg-alert text-center font-bold text-white cursor-pointer' on:click={onSubmit}>Speichern</div>
+                    {:else}
+                        <div class='bg-alert text-center font-bold text-white cursor-pointer' on:click={onSubmit}>Löschen !</div>
+                    {/if}
                 {/if}
             </fieldset>
         </form>

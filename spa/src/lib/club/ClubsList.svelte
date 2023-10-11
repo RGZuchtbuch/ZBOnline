@@ -30,7 +30,7 @@
 
 </script>
 
-aa
+
 {#if district}
     <List>
         <div slot='title'>{district.name} - Vereine</div>
@@ -40,7 +40,9 @@ aa
                 {#each district.clubs as club }
                     <div class='flex flex-row border-b border-gray-300 my-2 gap-x-4'>
                         <div class='w-6'>→</div>
-                        <a class='cursor-pointer' href={route.match+'/'+club.id} title='Zum Verein'>{club.name}</a>
+                        <a class='w-64 cursor-pointer' href={route.match+'/'+club.id} title='Zum Verein'>{club.name}</a>
+                        <div class='w-16'>{club.short}</div>
+                        <div class='grow'>{club.fullname}</div>
                     </div>
                 {/each}
             {:else}

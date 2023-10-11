@@ -46,9 +46,14 @@ class District extends Query
         ');
         return Query::update($stmt, $args);
     }
-
-    public static function del( int $id ) : bool {
-        throw new HttpNotImplementedException( null, "oops" );
+    public static function del( int $id ) {
+        $args = get_defined_vars();
+        $stmt = Query::prepare( '
+            DELETE 
+            FROM district
+            WHERE id=:id
+        ' );
+        return Query::delete( $stmt, $args );
     }
 
     /**
@@ -203,5 +208,35 @@ class District extends Query
         ");
 
         return Query::selectArray( $stmt, $args );
+    }
+
+    public static function countResults( int $districtId ) : int {
+        $args = get_defined_vars();
+        $stmt = Query::prepare("
+            SELECT COUNT(*) AS count
+            FROM result
+            WHERE districtId = :districtId                
+            GROUP BY districtId
+        ");
+        $row = Query::select( $stmt, $args );
+        if( $row ) {
+            return $row['count'];
+        }
+        return 0;
+    }
+
+    public static function countChildren( int $districtId ) : int {
+        $args = get_defined_vars();
+        $stmt = Query::prepare("
+            SELECT COUNT(*) AS count
+            FROM district
+            WHERE parentId = :districtId                
+            GROUP BY parentId
+        ");
+        $row = Query::select( $stmt, $args );
+        if( $row ) {
+            return $row['count'];
+        }
+        return 0;
     }
 }
