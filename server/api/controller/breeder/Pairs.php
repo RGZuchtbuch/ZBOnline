@@ -25,8 +25,8 @@ class Pairs extends Controller
     {
         $breederId = $this->args['id'] ?? null;
         $breeder = query\Breeder::get( $breederId );
-        $reports = query\Breeder::pairs( $breederId );
-        return [ 'breeder'=>$breeder, 'reports'=>$reports ];
+        $pairs = query\Breeder::pairs( $breederId );
+        return [ 'breeder'=>$breeder, 'pairs'=>$pairs ];
     }
 
 }

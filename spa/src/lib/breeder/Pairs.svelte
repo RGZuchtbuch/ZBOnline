@@ -5,7 +5,7 @@
     import api from '../../js/api.js';
     import {meta} from 'tinro';
 
-    import Reports from '../pairs/Pairs.svelte';
+    import Pairs from '../pairs/Pairs.svelte';
     import List from "../common/List.svelte";
 
     export let breederId;
@@ -14,17 +14,17 @@
 
     const route = meta();
 
-    function loadReports( breederId ) {
+    function loadPairs( breederId ) {
         api.breeder.pairs.get( breederId ).then(response => {
             breeder = response.breeder;
-            pairs = response.reports;
+            pairs = response.pairs;
         })
     }
 
     function update( breederId ) {
         breeder = null;
         pairs = null;
-        loadReports( breederId );
+        loadPairs( breederId );
     }
 
     onMount( () => {
@@ -35,7 +35,7 @@
 </script>
 
 {#if pairs}
-    <Reports title={`Meldungen für Züchter ${txt(breeder.firstname)} ${txt(breeder.infix)} ${txt(breeder.lastname)}`} {pairs} />
+    <Pairs title={`Meldungen für Züchter ${txt(breeder.firstname)} ${txt(breeder.infix)} ${txt(breeder.lastname)}`} {pairs} />
 {/if}
 
 

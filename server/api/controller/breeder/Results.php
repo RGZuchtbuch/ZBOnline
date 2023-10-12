@@ -8,6 +8,8 @@ use http\Exception\InvalidArgumentException;
 use Slim\Exception\HttpBadRequestException;
 use Slim\Exception\HttpNotFoundException;
 
+
+// TODO obsolete ?
 class Results extends Controller
 {
     public function authorized(): bool
