@@ -34,6 +34,7 @@ class Post extends Controller
                 query\Pair::set($pair['id'], $pair['breederId'], $pair['districtId'], $pair['year'], $pair['group'], $pair['sectionId'], $pair['breedId'], $pair['colorId'], $pair['name'], $pair['paired'], $pair['notes'], $this->requester['id']);
             } else { // id being 0 for new
                 $id = query\Pair::new($pair['breederId'], $pair['districtId'], $pair['year'], $pair['group'], $pair['sectionId'], $pair['breedId'], $pair['colorId'], $pair['name'], $pair['paired'], $pair['notes'], $this->requester['id']);
+                $pair['id'] = $id; // continue with new id
             }
             // TODO for all parts...
             $this->updateElders($pair);
@@ -79,16 +80,26 @@ class Post extends Controller
 
         if( isset( $pair['broods'] ) ) {
             $broods = & $pair['broods'];
+
             foreach( $broods as & $brood ) {
                 if( $pair['sectionId'] === 5 ) {
                     $brood['eggs'] = 2;
                     $brood['fertile'] = null;
-                }
-                if( $brood['eggs'] && $brood['hatched'] && ( $brood['hatched'] <= ( $brood['fertile'] ? $brood['fertile'] : $brood['eggs'] ) ) ) {
+                    if( $brood['hatched'] !== null && $brood['hatched'] >= 0 && $brood['hatched'] <= $brood['eggs'] ) {
+                        $brood['id'] = query\Brood::new( $pair['id'], $brood['start'], $brood['eggs'], $brood['fertile'], $brood['hatched'], $this->requester['id'] );
+
+                        foreach( $brood['chicks'] as & $chick ) {
+                            if( $chick['ring'] ) {
+                                query\Chick::new($pair['id'], $brood['id'], $chick['ring'], $brood['ringed'], $this->requester['id']);
+                            }
+                        }
+                    }
+                } else if( $brood['eggs'] != null && $brood['hatched'] != null && ( $brood['hatched'] <= ( $brood['fertile'] != null ? $brood['fertile'] : $brood['eggs'] ) ) ) {
                     $brood['id'] = query\Brood::new( $pair['id'], $brood['start'], $brood['eggs'], $brood['fertile'], $brood['hatched'], $this->requester['id'] );
+
                     foreach( $brood['chicks'] as & $chick ) {
                         if( $chick['ring'] ) {
-                            query\Chick::new($pair['id'], $brood['id'], $chick['ring'], $this->requester['id']);
+                            query\Chick::new($pair['id'], $brood['id'], $chick['ring'], $brood['ringed'], $this->requester['id']);
                         }
                     }
                 }
@@ -130,10 +141,10 @@ class Post extends Controller
             $showScore = $showTotalScore / $showCount;
         }
 
-        if( $pair['sectionId'] === 5 ) { // pidgeon, no lay
+        if( $pair['sectionId'] === 5 ) { // pidgeon, no lay, no color
             query\Result::new(
                 $pair['id'], $pair['districtId'], $pair['year'],
-                $pair['group'], $pair['breedId'], $pair['colorId'],
+                $pair['group'], $pair['breedId'], null,
                 1, 1,
                 null, null, null,
                 2, null, $broodHatched,

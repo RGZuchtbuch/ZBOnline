@@ -36,7 +36,7 @@
             id: 0, t:9,
             breederId:breederId, districtId:districtId, year: new Date().getFullYear(), group: 'I',
             sectionId: 4, breedId: 1024, colorId: 8543,
-            name: 'A', paired: '2021-12-31', notes: 'Test',
+            name: 'A', paired: '2023-01-01', notes: 'Notiezen :',
             parents: [],
             lay: { id:0, pairId:0, start:null, end:null, eggs:null, weight:null},
             broods: [],

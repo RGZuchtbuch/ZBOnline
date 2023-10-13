@@ -153,7 +153,7 @@
                     </div>
                 </div>
 
-                <Comment>BREEDS, RSEULTS AND COLOR RESULTS</Comment>
+                <Comment>BREEDS, RESULTS AND COLOR RESULTS</Comment>
                 {#each subsection.breeds as breed, i}
                     <div class='flex flex-row mt-1 px-2 gap-x-1 bg-gray-100'>
                         <div class='w-56 text-left text-base font-semibold' on:click={onBreed( section.id, breed.id )}>

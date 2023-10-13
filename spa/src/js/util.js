@@ -102,7 +102,7 @@ export function toDate( input, min, max ) {
             return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate(); // iso
         }
     }
-    return null;
+    return false;
 }
 
 export function formatDate(local, dateString ) { // local ignored for now, default to 'D'
@@ -211,6 +211,7 @@ export function validator( value ) {
         },
         date:  () => {
             valid &= ! isNaN( Date.parse( value ) );
+            console.log( "Date", value, valid, Date.parse( value ) );
             return worker;
         },
         ring: () => {

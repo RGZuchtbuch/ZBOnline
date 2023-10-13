@@ -41,23 +41,22 @@
     }
 
     function validate() {
-        invalid = false;
+        invalid = false ||
+            validator( brood.start ).date().nullable().isInvalid() ||
+            validator( brood.ringed ).date().nullable().isInvalid();
         if( layer ) {
-            invalid =
-                validator( brood.start ).date().nullable().isInvalid() ||
+            invalid |=
                 validator( brood.eggs ).number().range( 0, 99999 ).nullable().isInvalid() ||
                 validator( brood.fertile ).number().range( 0, brood.eggs ).nullable().isInvalid() ||
-                validator( brood.hatched ).number().range( 0, brood.fertile ? brood.fertile : brood.eggs ).nullable().isInvalid() ||
-                validator( brood.ringed ).date().nullable().isInvalid();
+                validator( brood.hatched ).number().range( 0, brood.fertile ? brood.fertile : brood.eggs ).nullable().isInvalid();
         } else {
-            invalid =
-                validator( brood.start ).date().nullable().isInvalid() ||
-                validator( brood.hatched ).number().range( 0, 2 ).nullable().isInvalid() ||
-                validator( brood.ringed ).date().nullable().isInvalid();
+            invalid |=
+                validator( brood.hatched ).number().range( 0, 2 ).nullable().isInvalid();
             for( const chick of brood.chicks ) {
                 invalid ||= validator( chick.ring ).ring().nullable().isInvalid();
             }
         }
+        console.log("Validate", brood.ringed, invalid, validator( brood.ringed ).date().isInvalid(), validator( brood.ringed ).date().nullable().isInvalid() );
     }
 
     onMount( validate );
@@ -87,14 +86,15 @@
             <InputNumber class='w-20' label={nolabel ? '' : 'Küken'} bind:value={brood.hatched} min=0 max=2 error='0 - 2' />
             <InputDate class='w-20' label={nolabel ? '' : 'Beringt am'} bind:value={brood.ringed} disabled={brood.hatched<=0} />
             {#if brood.chicks}
-                <InputRing class='32' label={nolabel ? '' : 'Ring Küken #1'} bind:value={brood.chicks[0].ring}/>
-                <InputRing class='32' label={nolabel ? '' : 'Ring Küken #2'} bind:value={brood.chicks[1].ring}/>
+                <InputRing class='32' label={nolabel ? '' : 'Ring Küken #1'} bind:value={brood.chicks[0].ring} disabled={brood.hatched<1}/>
+                <InputRing class='32' label={nolabel ? '' : 'Ring Küken #2'} bind:value={brood.chicks[1].ring} disabled={brood.hatched<2}/>
             {/if}
         </div>
         <div class='flex flex-row gap-x-1'>
             <InputText class='w-16' label={nolabel ? '' : 'Schlupf'} value={getHatching( brood )} disabled readonly />
         </div>
     {/if}
+
 </fieldset>
 
 

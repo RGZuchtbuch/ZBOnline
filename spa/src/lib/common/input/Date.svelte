@@ -1,7 +1,7 @@
 <script>
     import { toDate, formatDate } from '../../../js/util.js'
 
-    export let value;
+    export let value; // in iso 2023-10-13
     export let label = null;
     export let name = null;
     export let disabled = false;
@@ -16,9 +16,7 @@
     let classname = '';
     export { classname as class }
 
-    let input = formatDate( 'D', value );
-//    let date = null;
-//    let invalid = false;
+    let input = formatDate( 'D', value ); // german
 
     let on = {
         focus: () => {},
@@ -27,21 +25,22 @@
 
     function validate() {
         invalid = false;
-        if( input && input.length>0 ) {
-            value = toDate( input, min, max );
-            if( ! value ) invalid = true;
-        } else {
-            value = null;
+        if( input && input.length > 0 ) { // any input
+            value = toDate( input, min, max ); // valid date
+            invalid = ! value; // t/f
+        } else { // empty -< null
+            value = null; // no input
             invalid = required;
         }
     }
 
-    function onInput( event ) {
-        input = event.target.value;
-        validate();
-    }
+//    function onInput( event ) {
+        //input = event.target.value;
+//        validate();
+//    }
 
-    $: validate( min, max, required );
+
+    $: validate( input, min, max, required );
 
 </script>
 
@@ -55,7 +54,6 @@
            {required}
            on:focus={on.focus}
            on:blur={on.blur}
-           on:input={onInput}
     >
     <span class:invalid>
         {#if invalid} {error} {:else} &nbsp; {/if}

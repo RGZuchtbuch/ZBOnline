@@ -14,11 +14,11 @@ class Chick extends Query
         return Query::select( $stmt, $args );
     }
 
-    public static function new( int $pairId, ? int $broodId, string $ring, int $modifierId ) : ? int {
+    public static function new( int $pairId, ? int $broodId, string $ring, ? string $ringed, int $modifierId ) : ? int {
         $args = get_defined_vars();
         $stmt = Query::prepare( '
-            INSERT INTO pair_chicks ( pairId, broodId, ring, modifierId ) 
-            VALUES ( :pairId, :broodId, :ring, :modifierId )
+            INSERT INTO pair_chicks ( pairId, broodId, ring, ringed, modifierId ) 
+            VALUES ( :pairId, :broodId, :ring, :ringed, :modifierId )
         ' );
         return Query::insert( $stmt, $args );
     }
