@@ -18,10 +18,11 @@ class Get extends Controller
 
     public function process() : array
     {
-        $id = $this->args['id'];
-        $breed = query\User::get( $id );
-        if( ! $breed ) throw new HttpNotFoundException( );
-        $breed['colors'] = query\Breed::colors( $id );
-        return [ 'Breed'=>$breed ];
+        return []; // not user and should not be withour auth.
+//        $id = $this->args['id'];
+//        $user = query\User::get( $id );
+//        if( ! $user ) throw new HttpNotFoundException( );
+//        $breed['colors'] = query\Breed::colors( $id );
+//        return [ 'Breed'=>$breed ];
     }
 }

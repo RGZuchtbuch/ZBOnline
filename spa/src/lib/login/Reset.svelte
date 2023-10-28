@@ -20,8 +20,15 @@
     function checkInvalid() {
         invalid = false;
         for( let key in invalids ) {
-            invalid = invalid || invalids[ key ];
+            invalid |= invalids[ key ];
         }
+        invalid |= ! checkPassword( password );
+    }
+
+    function checkPassword( password ) {
+        // min 8 chars, having a-z, A-Z, 0-9 and one that is not a-z,A-Z, 0-9 : should match backends check !
+        let regex = /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})/;
+        return regex.test( password );
     }
 
     function onSubmit() {
@@ -37,7 +44,7 @@
         router.goto( route.from );
     }
 
-    $: checkInvalid( invalids );
+    $: checkInvalid( invalids, password );
 
 </script>
 
@@ -47,13 +54,16 @@
             <h2 class='grow '>Paswort ändern</h2>
             <div class='cursor-pointer mr-2' on:click={cancel}>&#8855;</div>
         </div>
-            <EmailInput class='' label='eMail' bind:value={email} bind:invalid={invalids.email} disabled/>
-            <PasswordInput class='' label='Password' bind:value={password} bind:invalid={invalids.password} required/>
+        <EmailInput class='' label='eMail' bind:value={email} bind:invalid={invalids.email} disabled />
+        <div class='italic text-xs'>Das Passwort braucht minimal 8 Zeichen, kleine und große Buchstaben [a-z][A-Z], eine Nummer [0-9] und ein Sonderzeichen [!@#$%^&*(),.:;]</div>
+        <PasswordInput class='' label='Password' bind:value={password} bind:invalid={invalids.password} required/>
 
-            {#if ! invalids.email && ! invalids.password }
-                <Submit value='Ich wil herein' disabled={invalid} />
-            {/if}
-            {#if ! success} <div class='error'>Nicht erfolgreich</div> {/if}
+        {#if invalid}
+            <Submit value='Passwort zu einfach !' disabled />
+        {:else}
+            <Submit value='Ich wil herein' />
+        {/if}
+        {#if ! success} <div class='error'>Nicht erfolgreich</div> {/if}
     </form>
 
 </Modal>

@@ -75,32 +75,28 @@ class Post extends Controller
     }
 
     private function updateBroods( & $pair ) {
-        query\Chick::delForPair( $pair['id'] );
-        query\Brood::delForPair( $pair['id'] );
+        query\Chick::delForPair( $pair['id'] ); // remove all for pair to reinsert
+        query\Brood::delForPair( $pair['id'] ); // idem
 
         if( isset( $pair['broods'] ) ) {
             $broods = & $pair['broods'];
 
             foreach( $broods as & $brood ) {
-                if( $pair['sectionId'] === 5 ) {
+                if( $pair['sectionId'] === 5 ) { // pigeons
                     $brood['eggs'] = 2;
                     $brood['fertile'] = null;
                     if( $brood['hatched'] !== null && $brood['hatched'] >= 0 && $brood['hatched'] <= $brood['eggs'] ) {
                         $brood['id'] = query\Brood::new( $pair['id'], $brood['start'], $brood['eggs'], $brood['fertile'], $brood['hatched'], $this->requester['id'] );
-
-                        foreach( $brood['chicks'] as & $chick ) {
-                            if( $chick['ring'] ) {
-                                query\Chick::new($pair['id'], $brood['id'], $chick['ring'], $brood['ringed'], $this->requester['id']);
-                            }
-                        }
                     }
-                } else if( $brood['eggs'] != null && $brood['hatched'] != null && ( $brood['hatched'] <= ( $brood['fertile'] != null ? $brood['fertile'] : $brood['eggs'] ) ) ) {
-                    $brood['id'] = query\Brood::new( $pair['id'], $brood['start'], $brood['eggs'], $brood['fertile'], $brood['hatched'], $this->requester['id'] );
+                } else { // layers
+                    if( $brood['eggs'] != null && $brood['hatched'] != null && ( $brood['hatched'] <= ( $brood['fertile'] != null ? $brood['fertile'] : $brood['eggs'] ) ) ) {
+                        $brood['id'] = query\Brood::new( $pair['id'], $brood['start'], $brood['eggs'], $brood['fertile'], $brood['hatched'], $this->requester['id'] );
+                    }
+                }
 
-                    foreach( $brood['chicks'] as & $chick ) {
-                        if( $chick['ring'] ) {
-                            query\Chick::new($pair['id'], $brood['id'], $chick['ring'], $brood['ringed'], $this->requester['id']);
-                        }
+                foreach( $brood['chicks'] as & $chick ) { // save all chicks ( 2 x pigeon )
+                    if( $chick['ring'] ) {
+                        query\Chick::new($pair['id'], $brood['id'], $chick['ring'], $brood['ringed'], $this->requester['id']);
                     }
                 }
             }

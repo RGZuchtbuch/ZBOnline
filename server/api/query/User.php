@@ -68,7 +68,7 @@ class User extends Query
         $args = [ 'email'=>$email, 'hash'=>$hash ];
         $stmt = Query::prepare('
             UPDATE user
-            SET hash=:hash, modifierId=NULL
+            SET hash=:hash, modifierId=0
             WHERE email=:email
         ');
         return Query::update($stmt, $args);

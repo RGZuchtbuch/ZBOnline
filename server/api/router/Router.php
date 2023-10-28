@@ -49,7 +49,8 @@ class Router {
         $app->post('/pair', 'App\controller\pair\Post' );
 
 
-        $app->post('/result', 'App\controller\result\Post' );
+        $app->post('/result', 'App\controller\result\Post' ); // save one result
+        $app->get('/result/district/{districtId}/year/{year}', 'App\controller\result\Result'); // one result for district and year, section, breed, color, group in query
         $app->get('/results/years', 'App\controller\result\Years' ); // for trend, query with section/Breed/color,  year
         $app->get('/results/districts', 'App\controller\result\Districts' ); // for map, , query with section/Breed/color,  year
 

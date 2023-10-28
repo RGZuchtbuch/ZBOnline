@@ -276,6 +276,7 @@ export default {
             });
 
         },
+
         logout: () => {
             token = null;
             user.set( null ); // user or null
@@ -283,6 +284,7 @@ export default {
             cache.clear(); // clear cache so it's not used by next user
             return true; // always success
         },
+
         reset: ( email ) => get( 'api/user/reset/'+email ),
 
         password: ( email, resetToken, password ) => {

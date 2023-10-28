@@ -5,10 +5,10 @@
     import { calcColor, pct } from '../../js/util.js';
     import Select from '../common/input/Select.svelte';
     import Button from "../common/input/Button.svelte";
-    import DistrictsPie from './DistrictsPie.svelte';
+    import ShowPie from './ShowPie.svelte';
     import SectionsPie from './SectionsPie.svelte';
     import DistrictsMap from './DistrictsMap.svelte';
-    import TimeLine from './TimeLine.svelte';
+    import TimeLine from './HorTimeLine.svelte';
     import DistrictList from './DistrictList.svelte';
     import Help from './Help.svelte';
     import ScrollDiv from '../common/ScrollDiv.svelte';
@@ -276,6 +276,8 @@
     <div class='w-256 bg-gray-100 overflow-y-scroll border rounded-b border-gray-400 scrollbar print-no-border'>
 
         {#if districts && districtId && year && sectionId}
+
+
             {#if true}
             <div class='flex'>
                 <h2 class='grow text-center' >Das Zuchtbuch : {districts[ districtId ].name} in {year}</h2>
@@ -287,11 +289,18 @@
             </div>
             {/if}
 
+
+            <div class='flex flex-row justify-between'>
+                <div>a</div>
+                <div>b</div>
+                <div>c</div>
+            </div>
+
             {#if true}
 
             <div class='flex flex-row border border-gray-600 gap-x-8 justify-evenly'>
                 <SectionsPie {districtId} {year} type={types[typeId]}/>
-                <DistrictsPie {districtId} {year} {sectionId} {breedId} {colorId} type={types[typeId]} />
+               s<ShowPie {districtId} {year} {sectionId} {breedId} {colorId} type={types[typeId]} />s
             </div>
             <h3 class='text-center'>{types[typeId].label}</h3>
             <div class='flex flex-row flex-wrap justify-evenly'>

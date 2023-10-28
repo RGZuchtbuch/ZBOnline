@@ -50,7 +50,9 @@
             api.district.results.get( districtId, year ).then( response => {
                 const results = response.results;
                 countBreeders( results );
+                //console.log( "Pie results", results );
                 let data = results.sections.map( section => section.count ); // get array of counts
+                //let data = [1,2,3];
                 let datasets = [ { data:data } ];
                 let labels = results.sections.map( section => section.name ); // get array of names
 

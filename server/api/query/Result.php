@@ -2,6 +2,8 @@
 
 namespace App\query;
 
+use Exception;
+
 class Result extends Query
 {
     public static function get( $id ) {
@@ -416,6 +418,50 @@ class Result extends Query
             WHERE pairId=:pairId
         ' );
         return Query::delete( $stmt, $args );
+    }
+
+    public static function result(int $districtId, int $year, ? int $sectionId, ? int $breedId, ? int $colorId, ? int $group ) :array {
+        $args = get_defined_vars();
+        $stmt = Query::prepare('
+            SELECT count(*), districtId, `year`, 
+                sectionId, breedId, colorId, `group`,
+                CAST( SUM( result.breeders ) AS UNSIGNED ) AS breeders,
+                CAST( SUM( result.breeders * breed.lay ) / result.breeders AS DOUBLE ) AS lay,
+                # CAST( SUM( IF( layer AND breeders AND breed.lay, breeders * breed.lay, NULL ) ) / SUM( IF( layer AND breeders AND breed.lay, breeders, NULL ) ) AS DOUBLE ) AS laySoll, breed.lay ) /  , 
+                result.layEggs, breed.layWeight, result.layWeight,
+                result.broodEggs, result.broodFertile, result.broodHatched,
+                result.showCount, result.showScore
+            FROM result
+            LEFT JOIN breed ON breed.id = result.breedId
+            
+            WHERE districtId IN (
+                SELECT DISTINCT child.id 
+                FROM district AS parent
+                LEFT JOIN district AS child ON child.parentId=parent.id OR child.id=parent.id 
+                WHERE parent.id=:districtId OR parent.parentId=:districtId
+            ) 
+            AND `year` = :year	                
+
+            AND (
+                :sectionId IS NULL
+                OR breed.sectionId IN (
+                    SELECT DISTINCT child.id 
+                    FROM section AS parent 
+                    LEFT JOIN section AS child ON child.parentId=parent.id OR child.id=parent.id
+                    WHERE parent.id=:sectionId OR parent.parentId=:sectionId
+                )
+            )    
+            AND (
+                :breedId IS NULL
+                OR breed.id = :breedId
+            )
+            AND (
+                :colorId IS NULL
+                OR colorId = :colorId
+            )
+            GROUP BY districtId, `year` 
+        ');
+        return Query::selectArray($stmt, $args);
     }
 
 }

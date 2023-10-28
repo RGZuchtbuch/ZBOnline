@@ -153,7 +153,6 @@
                                 {:else}
                                     Rassebeschreibung steht noch nicht zur Verfügung
                                 {/if}
-                                <div>{@html breed.info}</div>
                                 <div class='h-4'></div>
 
                         </div>

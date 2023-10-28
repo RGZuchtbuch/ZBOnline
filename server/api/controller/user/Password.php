@@ -11,6 +11,10 @@ use Firebase\JWT\Key;
 use http\Exception\InvalidArgumentException;
 use Slim\Exception\HttpNotFoundException;
 
+
+/**
+ * reset password with generated reset token
+ */
 class Password extends Controller
 {
 
@@ -31,7 +35,7 @@ class Password extends Controller
         if( $data ) {
             $tokenEmail = $data['email'] ?? null;
             $tokenId = $data['id'] ?? null; // should be null to distinguish from login token!
-            if ( ! $tokenId && $email && $tokenEmail && $email == $tokenEmail ) {
+            if ( ! $tokenId && $email && $tokenEmail && $email == $tokenEmail && $this->checkPassword( $password ) ) {
                 $success = query\User::setPassword($email, $password);
                 if ($success) {
                     $user = query\User::getByEmail($email);
@@ -45,6 +49,12 @@ class Password extends Controller
             }
         }
         throw new HttpNotFoundException( $this->request, "Invalid reset token");
+    }
+
+    private function checkPassword( $password ) : bool {
+        // // an a-z, A-Z, 0-9 and one that is not a-z,A-Z, 0-9
+        $regex = "/(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})/";
+        return preg_match( $regex, $password) === 1;
     }
 
 }
