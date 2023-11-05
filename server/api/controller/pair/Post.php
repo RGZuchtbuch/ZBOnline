@@ -89,7 +89,10 @@ class Post extends Controller
                         $brood['id'] = query\Brood::new( $pair['id'], $brood['start'], $brood['eggs'], $brood['fertile'], $brood['hatched'], $this->requester['id'] );
                     }
                 } else { // layers
-                    if( $brood['eggs'] != null && $brood['hatched'] != null && ( $brood['hatched'] <= ( $brood['fertile'] != null ? $brood['fertile'] : $brood['eggs'] ) ) ) {
+                    if( $brood['eggs'] !== null && $brood['eggs'] > 0 && $brood['hatched'] !== null && $brood['hatched'] >=0 &&
+                        ( $brood['hatched'] <= ( $brood['fertile'] !== null && $brood['fertile'] >= 0 ?  $brood['fertile'] :  $brood['eggs'] ) ) ) {
+//                  if( $brood['eggs'] != null && $brood['hatched'] != null && ( $brood['hatched'] <= ( $brood['fertile'] != null ? $brood['fertile'] : $brood['eggs'] ) ) ) {
+
                         $brood['id'] = query\Brood::new( $pair['id'], $brood['start'], $brood['eggs'], $brood['fertile'], $brood['hatched'], $this->requester['id'] );
                     }
                 }
@@ -120,10 +123,10 @@ class Post extends Controller
         $broodFertile = null;
         $broodHatched = null;
         foreach( $broods as & $brood ) {
-            if( $brood['eggs'] && $brood['hatched'] ) {
+            if( $brood['eggs'] !== null && $brood['eggs'] > 0 && $brood['hatched'] !== null && $brood['hatched'] >= 0 ) {
                 $broodEggs += $brood['eggs'];
                 $broodHatched += $brood['hatched'];
-                if( $brood['fertile'] ) {
+                if( $brood['fertile'] !== null && $brood['fertile'] >=0 ) {
                     $broodFertile += $brood['fertile'];
                 }
             }
