@@ -290,17 +290,26 @@
             {/if}
 
 
-            <div class='flex flex-row justify-between'>
-                <div>a</div>
-                <div>b</div>
-                <div>c</div>
+            <div class='flex flex-row justify-around'>
+                <div>
+                    <div>Legeleisting</div>
+                    <div>Todo</div>
+                </div>
+                <div>
+                    <div>Brutleistung</div>
+                    <div>Todo</div>
+                </div>
+                <div>
+                    <div>Schauleistung</div>
+                    <div>Todo</div>
+                </div>
             </div>
 
             {#if true}
 
             <div class='flex flex-row border border-gray-600 gap-x-8 justify-evenly'>
                 <SectionsPie {districtId} {year} type={types[typeId]}/>
-               s<ShowPie {districtId} {year} {sectionId} {breedId} {colorId} type={types[typeId]} />s
+                <ShowPie {districtId} {year} {sectionId} {breedId} {colorId} type={types[typeId]} />
             </div>
             <h3 class='text-center'>{types[typeId].label}</h3>
             <div class='flex flex-row flex-wrap justify-evenly'>
