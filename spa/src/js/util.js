@@ -184,7 +184,6 @@ export function dec( value, decimals ) {
 }
 
 export function pct(a, b, dec=1 ) {
-    console.log( a, b, dec );
     if( a != null && b != null && b !== 0 ) {
         return (100 * a / b).toFixed( dec )+'%';
     }

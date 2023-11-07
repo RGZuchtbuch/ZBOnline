@@ -1,6 +1,6 @@
 <script>
 
-    import api from "../../js/api.js";
+    import api from "../../../js/api.js";
     import { BarController, BarElement, CategoryScale, Chart, Colors, LinearScale, Tooltip } from 'chart.js';
 
     export let districtId = null;

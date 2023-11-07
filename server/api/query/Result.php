@@ -420,48 +420,71 @@ class Result extends Query
         return Query::delete( $stmt, $args );
     }
 
-    public static function result(int $districtId, int $year, ? int $sectionId, ? int $breedId, ? int $colorId, ? int $group ) :array {
+    /**
+     *
+     */
+    public static function result( ? int $districtId, ? int $year, ? int $sectionId, ? int $breedId, ? int $colorId, ? int $group ) : ? array {
         $args = get_defined_vars();
         $stmt = Query::prepare('
-            SELECT count(*), districtId, `year`, 
-                sectionId, breedId, colorId, `group`,
-                CAST( SUM( result.breeders ) AS UNSIGNED ) AS breeders,
-                CAST( SUM( result.breeders * breed.lay ) / result.breeders AS DOUBLE ) AS lay,
-                # CAST( SUM( IF( layer AND breeders AND breed.lay, breeders * breed.lay, NULL ) ) / SUM( IF( layer AND breeders AND breed.lay, breeders, NULL ) ) AS DOUBLE ) AS laySoll, breed.lay ) /  , 
-                result.layEggs, breed.layWeight, result.layWeight,
-                result.broodEggs, result.broodFertile, result.broodHatched,
-                result.showCount, result.showScore
+            SELECT count(*) AS results, 
+                :districtId AS districtId, 
+                :year       AS `year`, 
+                :sectionId  AS sectionId,
+                :breedId    AS breedId, 
+                :colorId    AS colorId, 
+                :group      AS `group`, 
+                
+                CAST( SUM( result.breeders ) AS UNSIGNED ) AS breeders,               
+                # lay eggs
+                CAST( SUM( IF( result.layEggs > 0, result.breeders, 0 ) ) AS UNSIGNED ) AS layBreeders,  
+                CAST( SUM( IF( result.layEggs > 0, result.breeders * breed.lay, 0 ) ) / SUM( IF( result.layEggs > 0, result.breeders, 0 ) ) AS DOUBLE ) AS layShould,  
+                CAST( SUM( IF( result.layEggs > 0, result.breeders * result.layEggs / breed.lay, 0 ) ) / SUM( IF( result.layEggs > 0, result.breeders, 0 ) ) AS DOUBLE ) AS layEggs,  
+                # layweight
+                CAST( SUM( IF( result.layWeight > 0, result.breeders, 0 ) ) AS UNSIGNED ) AS layWeightBreeders,  
+                CAST( SUM( IF( result.layWeight > 0, result.breeders * breed.layWeight, 0 ) ) / SUM( IF( result.layWeight > 0, result.breeders, 0 ) ) AS DOUBLE ) AS layWeightShould, 
+                CAST( SUM( IF( result.layWeight > 0, result.breeders * result.layWeight / breed.layWeight, 0 ) ) / SUM( IF( result.layWeight > 0, result.breeders, 0 ) ) AS DOUBLE ) AS layWeight,  
+
+#                CAST( SUM( IF( result.broodEggs > 0, result.breeders, 0 ) ) AS UNSIGNED ) AS broodBreeders,
+#                CAST( SUM( result.broodEggs ) AS UNSIGNED ) AS broodEggs,  
+#                CAST( SUM( IF( result.broodFertile IS NOT NULL, result.breeders * result.broodFertile / result.broodEggs, 0 ) ) / SUM( IF( result.broodFertile IS NOT NULL, result.breeders, 0 ) ) AS DOUBLE ) AS broodFertile,
+#                CAST( SUM( IF( result.broodHatched IS NOT NULL, result.breeders * result.broodHatched / result.broodEggs, 0 ) ) / SUM( IF( result.broodHatched IS NOT NULL, result.breeders, 0 ) ) AS DOUBLE ) AS broodHatched,        
+                # brood layers
+                CAST( SUM( IF( section.layers = 1 AND result.broodEggs > 0, result.breeders, 0 ) ) AS UNSIGNED ) AS broodLayersBreeders,
+                CAST( SUM( IF( section.layers = 1, result.broodEggs, 0 ) ) AS UNSIGNED ) AS broodLayerEggs,  
+                CAST( SUM( IF( section.layers = 1 AND result.broodFertile IS NOT NULL, result.breeders * result.broodFertile / result.broodEggs, 0 ) ) / SUM( IF( section.layers = 1 AND result.broodFertile IS NOT NULL, result.breeders, 0 ) ) AS DOUBLE ) AS broodFertile,
+                CAST( SUM( IF( section.layers = 1 AND result.broodHatched IS NOT NULL, result.breeders * result.broodHatched / result.broodEggs, 0 ) ) / SUM( IF( section.layers = 1 AND result.broodHatched IS NOT NULL, result.breeders, 0 ) ) AS DOUBLE ) AS broodHatched,
+                # brood pigeons
+                CAST( SUM( IF( section.layers = 0 AND result.broodEggs > 0, result.breeders, 0 ) ) AS UNSIGNED ) AS broodPigeonBreeders,
+                CAST( SUM( IF( section.layers = 0, result.broodEggs, 0 ) ) AS UNSIGNED ) AS broodPigeonEggs,  
+                CAST( SUM( IF( section.layers = 0 AND result.pairs > 0 AND result.broodHatched IS NOT NULL, result.breeders * result.broodHatched / result.pairs, 0 ) ) / SUM( IF( section.layers = 0 AND result.pairs > 0 AND result.broodHatched IS NOT NULL, result.breeders, 0 ) ) AS DOUBLE ) AS broodPigeonProduction,               
+                # show  
+                CAST( SUM( IF( result.showCount > 0, result.breeders, 0 ) ) AS UNSIGNED ) AS showBreeders,
+                CAST( SUM( result.showCount ) AS UNSIGNED ) AS showCount,  
+                CAST( SUM( IF( result.showScore IS NOT NULL, result.breeders * result.showScore, 0 ) ) / SUM( IF( result.showScore IS NOT NULL, result.breeders, 0 ) ) AS DOUBLE ) AS showScore
             FROM result
             LEFT JOIN breed ON breed.id = result.breedId
+            LEFT JOIN section ON section.id = breed.sectionId                
+            LEFT JOIN color ON color.id = result.colorId
             
-            WHERE districtId IN (
+            WHERE ( :districtId IS NULL OR districtId IN (
                 SELECT DISTINCT child.id 
                 FROM district AS parent
                 LEFT JOIN district AS child ON child.parentId=parent.id OR child.id=parent.id 
                 WHERE parent.id=:districtId OR parent.parentId=:districtId
-            ) 
-            AND `year` = :year	                
-
-            AND (
-                :sectionId IS NULL
-                OR breed.sectionId IN (
-                    SELECT DISTINCT child.id 
-                    FROM section AS parent 
-                    LEFT JOIN section AS child ON child.parentId=parent.id OR child.id=parent.id
-                    WHERE parent.id=:sectionId OR parent.parentId=:sectionId
-                )
-            )    
-            AND (
-                :breedId IS NULL
-                OR breed.id = :breedId
-            )
-            AND (
-                :colorId IS NULL
-                OR colorId = :colorId
-            )
-            GROUP BY districtId, `year` 
+            ))
+            AND ( :year IS NULL OR `year` = :year )                
+            AND ( :sectionId IS NULL OR breed.sectionId IN (
+                SELECT DISTINCT child.id 
+                FROM section AS parent 
+                LEFT JOIN section AS child ON child.parentId=parent.id OR child.id=parent.id
+                WHERE parent.id=:sectionId OR parent.parentId=:sectionId
+            ))
+            AND ( :breedId IS NULL OR result.breedId = :breedId )
+            AND ( :colorId IS NULL OR result.colorId = :colorId )
+            AND ( :group   IS NULL OR result.group   = :group )
+            # GROUP BY result.districtId, result.year 
         ');
-        return Query::selectArray($stmt, $args);
+        return Query::select($stmt, $args); // returns null, no results found, or single result
     }
 
 }

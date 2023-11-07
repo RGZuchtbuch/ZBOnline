@@ -13,6 +13,11 @@
     import Help from './Help.svelte';
     import ScrollDiv from '../common/ScrollDiv.svelte';
 
+    import LayBar from './temp/LayBar.svelte';
+    import BroodBarLayers from './temp/BroodBarLayers.svelte';
+    import BroodBarPigeons from './temp/BroodBarPigeons.svelte';
+    import ShowBar from './temp/ShowBar.svelte';
+
     const route = meta();
     const types = { // what options to show
         /*
@@ -292,16 +297,14 @@
 
             <div class='flex flex-row justify-around'>
                 <div>
-                    <div>Legeleisting</div>
-                    <div>Todo</div>
+                    <LayBar {districtId} {year} {sectionId} {breedId} {colorId}></LayBar>
+                </div>
+                <div class='flex flex-row gap-x-4'>
+                    <BroodBarLayers {districtId} {year} {sectionId} {breedId} {colorId}></BroodBarLayers>
+                    <BroodBarPigeons {districtId} {year} {sectionId} {breedId} {colorId}></BroodBarPigeons>
                 </div>
                 <div>
-                    <div>Brutleistung</div>
-                    <div>Todo</div>
-                </div>
-                <div>
-                    <div>Schauleistung</div>
-                    <div>Todo</div>
+                    <ShowBar {districtId} {year} {sectionId} {breedId} {colorId}></ShowBar>
                 </div>
             </div>
 

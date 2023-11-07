@@ -3,7 +3,12 @@ import { user } from './store.js'
 
 //uses constants from js/setting.js
 
-
+function when( value, output ) {
+    if( value !== null ) {
+        return output;
+    }
+    return '';
+}
 
 export default {
 
@@ -214,6 +219,16 @@ export default {
         get: ( id ) => get( 'api/result/'+id ),
         post: ( result ) => post( 'api/result', result ), // does insert or replace based on id ( null )
         delete: ( id ) => del( 'api/result/'+id ),
+        districtYear: ( districtId, year, sectionId, breedId, colorId, group ) => {
+            let params = {};
+
+            if( sectionId ) params.section = sectionId;
+            if( breedId ) params.breed = breedId;
+            if( colorId ) params.color = colorId;
+            if( group ) params.group = group;
+            let query = new URLSearchParams( params );
+            return get( 'api/result/district/'+districtId+'/year/'+year+'?'+query.toString() );
+        }
     },
 
     section: {

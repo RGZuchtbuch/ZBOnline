@@ -42,7 +42,8 @@ class Result extends Controller
 
         $debug = [];
         if( $districtId && $year ) { // TODO when used, only case 1, last is found for district results.
-            return query\Result::result( $districtId, $year, $sectionId, $breedId, $colorId, $group );
+            $result = query\Result::result( $districtId, $year, $sectionId, $breedId, $colorId, $group );
+            return [ 'result'=>$result ];
         }
     }
 
