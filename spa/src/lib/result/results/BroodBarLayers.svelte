@@ -42,8 +42,8 @@
         let datasets = [
             {
                 data: [ 100*result.broodFertile, 100*result.broodHatched ],
-                backgroundColor: [ '#8f88' ],
-                borderColor: [ '#444' ],
+                backgroundColor: [ '#CEC8' ],
+                borderColor: [ '#283' ],
                 borderWidth: 1,
             }
         ];

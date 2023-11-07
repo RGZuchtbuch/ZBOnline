@@ -1,6 +1,6 @@
 <script>
 
-    import api from "../../js/api.js";
+    import api from "../../../js/api.js";
 //    import {BarController, BarElement, CategoryScale, Chart, Colors, LinearScale, Tooltip} from "chart.js";
     import { Chart, ArcElement, DoughnutController, Tooltip} from 'chart.js';
 
@@ -69,7 +69,7 @@
 </script>
 
     <div class='flex flex-col' >
-        <h5> {type.label} / LVx</h5>
+        <h5> {type.label} / LV</h5>
         <canvas id='districtspie' bind:this={canvas} width='256px' height='128px'></canvas>
     </div>
 

@@ -38,18 +38,15 @@
         console.log( 'Lay Result', result );
 
 
-        let labels = [ 'Eier %', 'Gewicht %' ];
+        let labels = [ '∅ Bewertung' ];
         let datasets = [
             {
-                data: [ 100*result.layEggs, 100*result.layWeight ],
-                backgroundColor: [ '#FFCD5680' ],
-                borderColor: [ '#444' ],
+                data: [ result.showScore ],
+                backgroundColor: [ '#94CBF080' ],
+                borderColor: [ '#238' ],
                 borderWidth: 1,
             }
         ];
-
-
-
 
         if( chart ) {
             chart.data.labels = labels;
@@ -72,8 +69,8 @@
                     },
                     scales: {
                         y: {
-                            min: 0,
-                            max: 160,
+                            min: 89,
+                            max: 97,
                         }
                     }
                 }
@@ -90,9 +87,9 @@
 </script>
 
 <div class='flex flex-col' >
-    <h5>Legeleistung Leger / Soll</h5>
-    <canvas bind:this={canvas} width='192px' height='256px'></canvas>
-    <div></div>
+    <h5>Schauleistung Alle</h5>
+    <canvas bind:this={canvas} width='128px' height='256px'></canvas>
+    <div> </div>
 </div>
 
 <style></style>

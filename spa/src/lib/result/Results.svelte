@@ -5,7 +5,7 @@
     import { calcColor, pct } from '../../js/util.js';
     import Select from '../common/input/Select.svelte';
     import Button from "../common/input/Button.svelte";
-    import ShowPie from './ShowPie.svelte';
+    import ShowPie from './old/ShowPie.svelte';
     import SectionsPie from './SectionsPie.svelte';
     import DistrictsMap from './DistrictsMap.svelte';
     import TimeLine from './HorTimeLine.svelte';
@@ -13,10 +13,10 @@
     import Help from './Help.svelte';
     import ScrollDiv from '../common/ScrollDiv.svelte';
 
-    import LayBar from './temp/LayBar.svelte';
-    import BroodBarLayers from './temp/BroodBarLayers.svelte';
-    import BroodBarPigeons from './temp/BroodBarPigeons.svelte';
-    import ShowBar from './temp/ShowBar.svelte';
+    import LayBar from './results/LayBar.svelte';
+    import BroodBarLayers from './results/BroodBarLayers.svelte';
+    import BroodBarPigeons from './results/BroodBarPigeons.svelte';
+    import ShowBar from './results/ShowBar.svelte';
 
     const route = meta();
     const types = { // what options to show

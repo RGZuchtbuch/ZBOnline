@@ -3,6 +3,7 @@
 namespace App\query;
 
 use PDO;
+use PDOException;
 use PDOStatement;
 
 class Query
@@ -42,13 +43,15 @@ class Query
      * @param array $args
      * @return 1st row or |null on empty
      */
-    protected static function select( PDOStatement  & $stmt, array & $args = [] ): ? array {
+    protected static function select( PDOStatement  & $stmt, array & $args = [] ) {
         if( $stmt->execute( $args ) ) {
             $data = $stmt->fetch(); // get first row
             if( $data ) { // could be false
                 return $data;
             }
         }
+//        $errors = Query::getPdo()->errorInfo();
+//        throw new PDOException( $errors[0] );
         return null;
     }
 
@@ -57,7 +60,7 @@ class Query
      * @param array $args
      * @return array of all rows found or empty array
      */
-    protected static function selectArray(PDOStatement & $stmt, array & $args = [] ) : array { // array of objects, could be empty
+    protected static function selectArray(PDOStatement & $stmt, array & $args = [] ) : ? array { // array of objects, could be empty
         if ($stmt->execute($args)) {
             return $stmt->fetchAll();
         }

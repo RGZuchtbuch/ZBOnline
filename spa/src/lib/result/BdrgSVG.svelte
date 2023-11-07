@@ -82,7 +82,7 @@
 
 <style>
     g {
-        fill:#ccdccc;
+        fill: #CEC8;
         fill-opacity:1;
         stroke:#329d2e;
         stroke-width:0.1;

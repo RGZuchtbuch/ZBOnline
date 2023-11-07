@@ -146,7 +146,7 @@ class Post extends Controller
                 $pair['group'], $pair['breedId'], null,
                 1, 1,
                 null, null, null,
-                2, null, $broodHatched,
+                $broodEggs, null, $broodHatched,
                 $showCount, $showScore,
                 $this->requester['id']
             );

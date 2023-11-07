@@ -4,7 +4,7 @@ namespace App\query;
 
 class Lay extends Query
 {
-    public static function get( $id ) {
+    public static function get( $id ) : ? array {
         $args = get_defined_vars();
         $stmt = Query::prepare( '
             SELECT id, pairId, start, end, eggs, dames, weight
@@ -25,7 +25,7 @@ class Lay extends Query
 
     // no set as al renewed at report save
 
-    public static function getForPair( $pairId ) {
+    public static function getForPair( $pairId ) : ? array {
         $args = get_defined_vars();
         $stmt = Query::prepare( '
             SELECT id, pairId, start, end, eggs, dames, weight

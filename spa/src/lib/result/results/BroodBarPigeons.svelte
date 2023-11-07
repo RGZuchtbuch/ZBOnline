@@ -42,8 +42,8 @@
         let datasets = [
             {
                 data: [ result.broodPigeonProduction ],
-                backgroundColor: [ '#8f88' ],
-                borderColor: [ '#444' ],
+                backgroundColor: [ '#CEC8' ],
+                borderColor: [ '#283' ],
                 borderWidth: 1,
             }
         ];

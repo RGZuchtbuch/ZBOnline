@@ -22,9 +22,9 @@ class Get extends Controller
         $pair = query\Pair::get( $id );
         if( $pair ) {
             $pair['breeder'] = query\Breeder::getName($pair['breederId']);
-            $pair['elders'] = query\Elder::getForPair($pair['id']);
-            $pair['lay'] = query\Lay::getForPair($pair['id']);
-            $pair['broods'] = query\Brood::getForPair( $pair['id'] );
+            $pair['elders']  = query\Elder::getForPair($pair['id']);
+            $pair['lay']     = query\Lay::getForPair($pair['id']);
+            $pair['broods']  = query\Brood::getForPair( $pair['id'] );
             foreach( $pair['broods'] as & $brood ) {
                 $brood['chicks'] = query\Chick::getForBrood( $brood['id'] );
             }
