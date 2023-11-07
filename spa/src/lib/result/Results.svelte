@@ -312,7 +312,7 @@
 
             <div class='flex flex-row border border-gray-600 gap-x-8 justify-evenly'>
                 <SectionsPie {districtId} {year} type={types[typeId]}/>
-                <ShowPie {districtId} {year} {sectionId} {breedId} {colorId} type={types[typeId]} />
+
             </div>
             <h3 class='text-center'>{types[typeId].label}</h3>
             <div class='flex flex-row flex-wrap justify-evenly'>
