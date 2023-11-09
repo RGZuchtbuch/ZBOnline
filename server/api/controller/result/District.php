@@ -42,21 +42,24 @@ class District extends Controller
         $debug = [];
         if( $districtId ) { // TODO when used, only case 1, last is found for district results.
             $district = query\District::get( $districtId );
-            if( $sectionId && $breedId && $year && $group) { // 3
+            if( $sectionId && $breedId && $year && $group) { // 3 for opening breed in moderator→edit
                 $debug[] = 'breed && sectionId = '.$sectionId;
-                if( $sectionId == 5 ) {
+                if( $sectionId == 5 ) { // for breed for pigeons
                     $debug[] = 'pigeon '.$sectionId;
                     $results = query\District::breedResult($districtId, $breedId, $year, $group); // per breed (5) or colors
-                } else {
+                } else { // pfor breed er color for layers
                     $debug[] = 'other '.$sectionId;
                     $results = query\District::colorResults($districtId, $breedId, $year, $group); // per breed (5) or colors
                 }
-            } else if( $sectionId && $year && $group) { // 2
+            } else if( $sectionId && $year && $group) { // 2, results for all breeds in section
                 $debug[] = 'section '.$sectionId;
                 $results = query\District::sectionResults( $districtId, $sectionId, $year, $group );
             } else if( $year ) { // 1, for results listing
                 $debug[] = 1;
-                $results = $this->resultsTree( query\District::results( $districtId, $year ) );
+
+                //                $results = $this->resultsTree( query\District::results( $districtId, $year ) );
+                $results = $this->resultsTree( query\Result::resultsDistrictYear( $districtId, $year ) );
+
             } else {
                 throw new HttpBadRequestException( $this->request, "wrong arguments");
             }
@@ -65,14 +68,16 @@ class District extends Controller
         return [ 'district'=>$district, 'results'=>$results, 'debug'=>$debug ];
     }
 
+    // turns table into hierarchy
     private function resultsTree( $results ) : array
     {
         $tree = [ 'sections'=>[] ];
-        $sectionId = 0;
-        $subsectionId = 0;
+
+        $sectionId = 0; // last SectionId
+        $subsectionId = 0; // last subSection
         $section = null;
         $subsection = null;
-        $breedId = 0;
+        $breedId = 0; // lastBreed
         $breed = null;
 
         foreach ($results as $row) {
@@ -95,7 +100,7 @@ class District extends Controller
                 $subsection[ 'breeds' ][] = & $breed; // new Breed array
             }
             $result = [
-                'id'=>$row['id'], 'breeders'=>$row['breeders'], 'pairs'=>$row['pairs'],
+                'id'=>$row['resultId'], 'breeders'=>$row['breeders'], 'pairs'=>$row['pairs'],
                 'layDames'=>$row['layDames'], 'layEggs'=>$row['layEggs'], 'layWeight'=>$row['layWeight'],
                 'broodEggs'=>$row['broodEggs'], 'broodFertile'=>$row['broodFertile'], 'broodHatched'=>$row['broodHatched'],
                 'showCount'=>$row['showCount'], 'showScore'=>$row['showScore']

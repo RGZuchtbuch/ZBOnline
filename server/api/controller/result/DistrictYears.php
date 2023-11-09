@@ -8,7 +8,7 @@ use App\query\Cache;
 use http\Exception\InvalidArgumentException;
 use Slim\Exception\HttpNotFoundException;
 
-class Years extends Controller
+class DistrictYears extends Controller
 {
     public function authorized(): bool
     {
@@ -26,17 +26,25 @@ class Years extends Controller
     public function process() : array
     {
         $districtId = $this->query[ 'district' ];
-        $colorId = $this->query[ 'color' ] ?? null;
-        $breedId = $this->query[ 'breed' ] ?? null;
-        $sectionId = $this->query[ 'section' ] ?? null;
-        $years = [];
+        $sectionId  = $this->query[ 'section' ] ?? null;
+        $breedId    = $this->query[ 'breed' ] ?? null;
+        $colorId    = $this->query[ 'color' ] ?? null;
+        $group      = $this->query[ 'group' ] ?? null;
+        $years      = [];
+
+        $years = query\Result::resultsDistrictYears( $districtId, $sectionId, $breedId, $colorId, $group );
+/*
         if( $colorId ) {
-            $years = query\Result::yearsForColor( $districtId, $colorId );
+//            $years = query\Result::yearsForColor( $districtId, $colorId );
+            $years = query\Result::resultsDistrictYears( $districtId,null, null, $colorId, null );
         } else if( $breedId ) {
-            $years = query\Result::yearsForBreed( $districtId, $breedId );
+//            $years = query\Result::yearsForBreed( $districtId, $breedId );
+            $years = query\Result::resultsDistrictYears( $districtId,null, $breedId, null, null );
         } else if( $sectionId ) {
-            $years = query\Result::yearsForSection( $districtId, $sectionId );
+//            $years = query\Result::yearsForSection( $districtId, $sectionId );
+            $years = query\Result::resultsDistrictYears( $districtId, $sectionId, null, null, null );
         }
+*/
         return ['years' => $years];
     }
 

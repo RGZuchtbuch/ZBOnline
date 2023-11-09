@@ -5,6 +5,7 @@ namespace App\router;
 use Slim\App;
 
 class Router {
+
 /*
     public static function registerN( App $app ) {
 
@@ -51,8 +52,9 @@ class Router {
 
         $app->post('/result', 'App\controller\result\Post' ); // save one result
         $app->get('/result/district/{districtId}/year/{year}', 'App\controller\result\Result'); // one result for district and year, section, breed, color, group in query
-        $app->get('/results/years', 'App\controller\result\Years' ); // for trend, query with section/Breed/color,  year
-        $app->get('/results/districts', 'App\controller\result\Districts' ); // for map, , query with section/Breed/color,  year
+
+        $app->get('/results/years', 'App\controller\result\DistrictYears' ); // NEW, for trend, query with section/Breed/color,  year
+        $app->get('/results/districts', 'App\controller\result\YearDistricts' ); // for map, , query with section/Breed/color,  year
 
         $app->get('/section/{id}', 'App\controller\section\Get' );
         $app->get('/section/{id}/children', 'App\controller\section\Children' );
@@ -65,6 +67,7 @@ class Router {
         $app->post('/user/token', 'App\controller\user\Token' );
         $app->post('/user/password', 'App\controller\user\Password' );
 
+        $app->get('/test', 'App\controller\Test' ); // test, query has year, district, section, breed, color and group
     }
 };
 

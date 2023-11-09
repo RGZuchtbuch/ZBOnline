@@ -1,6 +1,6 @@
 <?php
 
-namespace App\controller\result;
+namespace App\controller;
 
 use App\query;
 use App\controller\Controller;
@@ -9,7 +9,7 @@ use http\Exception\InvalidArgumentException;
 use Slim\Exception\HttpBadRequestException;
 use Slim\Exception\HttpNotFoundException;
 
-class Result extends Controller
+class Test extends Controller
 {
     public function authorized(): bool
     {
@@ -17,11 +17,11 @@ class Result extends Controller
     }
 
     public function getCache() : ? string {
-        return Cache::getJson( 'results', $this->getCacheParams() );
+        return Cache::getJson( 'resultsx', $this->getCacheParams() );
     }
 
     public function setCache( ? string $json ) : bool {
-        return Cache::replace( 'results', $this->getCacheParams(), $json );
+        return Cache::replace( 'resultsx', $this->getCacheParams(), $json );
     }
 
     /**
@@ -32,19 +32,16 @@ class Result extends Controller
      */
     public function process() : array // parent with direct children
     {
-        $districtId = $this->args['districtId'] ?? null;
-        $year = $this->args['year'] ?? null;
+        $districtId = $this->query['district'] ?? null;
+        $year       = $this->query['year'] ?? null;
 
-        $sectionId = $this->query[ 'section' ] ?? null;
-        $breedId = $this->query[ 'breed' ] ?? null;
-        $colorId = $this->query[ 'color' ] ?? null;
-        $group = $this->query[ 'group' ] ?? null;
+//        $sectionId  = $this->query[ 'section' ] ?? null;
+//        $breedId    = $this->query[ 'breed' ] ?? null;
+//        $colorId    = $this->query[ 'color' ] ?? null;
+//        $group      = $this->query[ 'group' ] ?? null;
 
-        $debug = [];
-        if( $districtId && $year ) { // TODO when used, only case 1, last is found for district results.
-            $result = query\Result::resultDistrictYear( $districtId, $year, $sectionId, $breedId, $colorId, $group );
-            return [ 'result'=>$result ];
-        }
+        $results = query\Result::resultsDistrictYear( $districtId, $year );
+        return [ 'results'=>$results ];
     }
 
 

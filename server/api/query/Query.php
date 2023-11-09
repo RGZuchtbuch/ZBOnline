@@ -2,6 +2,8 @@
 
 namespace App\query;
 
+use Error;
+use Exception;
 use PDO;
 use PDOException;
 use PDOStatement;
@@ -50,8 +52,6 @@ class Query
                 return $data;
             }
         }
-//        $errors = Query::getPdo()->errorInfo();
-//        throw new PDOException( $errors[0] );
         return null;
     }
 

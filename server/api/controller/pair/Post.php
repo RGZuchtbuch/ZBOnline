@@ -142,7 +142,7 @@ class Post extends Controller
 
         if( $pair['sectionId'] === 5 ) { // pidgeon, no lay, no color
             query\Result::new(
-                $pair['id'], $pair['districtId'], $pair['year'],
+                $pair['id'], $pair['breederId'], $pair['districtId'], $pair['year'],
                 $pair['group'], $pair['breedId'], null,
                 1, 1,
                 null, null, null,
@@ -153,7 +153,7 @@ class Post extends Controller
 
         } else { // layers
             query\Result::new(
-                $pair['id'], $pair['districtId'], $pair['year'],
+                $pair['id'], $pair['breederId'], $pair['districtId'], $pair['year'],
                 $pair['group'], $pair['breedId'], $pair['colorId'],
                 1, 1,
                 $pair['dames'], $pair['lay']['production'], $pair['lay']['weight'],

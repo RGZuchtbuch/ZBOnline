@@ -41,7 +41,7 @@
         let labels = [ 'Befruchtet %', 'Geschlupft %' ];
         let datasets = [
             {
-                data: [ 100*result.broodFertile, 100*result.broodHatched ],
+                data: [ 100*result.broodLayerFertile, 100*result.broodLayerHatched ],
                 backgroundColor: [ '#CEC8' ],
                 borderColor: [ '#283' ],
                 borderWidth: 1,

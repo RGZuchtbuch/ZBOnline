@@ -35,7 +35,7 @@
     }
 
     function updateChart( result ) {
-        console.log( 'Lay Result', result );
+        console.log( 'Lay Result', result, result.breeders );
 
 
         let labels = [ 'Eier %', 'Gewicht %' ];

@@ -8,7 +8,7 @@ use App\query\Cache;
 use http\Exception\InvalidArgumentException;
 use Slim\Exception\HttpNotFoundException;
 
-class Districts extends Controller
+class YearDistricts extends Controller
 {
     public function authorized(): bool
     {
@@ -26,11 +26,13 @@ class Districts extends Controller
 
     public function process() : array
     {
-        $year = $this->query[ 'year' ];
-        $sectionId = $this->query[ 'section' ] ?? null;
-        $breedId = $this->query[ 'breed' ] ?? null;
-        $colorId = $this->query[ 'color' ] ?? null;
-        $districts = [];
+        $year      = $this->query[ 'year' ];
+        $sectionId = $this->query[ 'section' ] ?? null; // provided or null
+        $breedId   = $this->query[ 'breed' ] ?? null;
+        $colorId   = $this->query[ 'color' ] ?? null;
+        $group     = $this->query[ 'group' ] ?? null;
+        $districts = query\Result::resultsYearDistricts( $year, $sectionId, $breedId, $colorId, $group );
+/*
         if( $colorId ) {
             $districts = query\Result::districtsForColor( $year, $colorId );
         } else if( $breedId ) {
@@ -38,6 +40,7 @@ class Districts extends Controller
         } else if( $sectionId ) {
             $districts = query\Result::districtsForSection( $year, $sectionId );
         }
+*/
         return ['districts' => $districts ];
     }
 

@@ -53,7 +53,10 @@ abstract class Controller
                 throw new \Slim\Exception\HttpUnauthorizedException($request, 'Not Authorized');
             }
         } catch( Exception | Error $e ) {
-            throw new HttpBadRequestException( $this->request, $e->getTraceAsString() );
+            $message = '** Controller reports error: <br> File: '.$e->getFile().' line: '.$e->getLine().'<br> Message: '.$e->getMessage().'<br><br> Trace: '.$e->getTraceAsString();
+            $response = $response->withStatus( 500 )->withHeader( 'Content-Type', 'text/html'); // new response with 500
+            $response->getBody()->write( $message );
+            return $response;
         }
     }
 

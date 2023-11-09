@@ -179,14 +179,18 @@ class District extends Query
 
         return Query::selectArray( $stmt, $args );
     }
-
+/*
     public static function results( int $districtId, int $year ) : array {
         $args = get_defined_vars();
         $stmt = Query::prepare("
             SELECT COUNT(*),
                 result.districtId AS districtId, section.id AS sectionId, subsection.id AS subsectionId, section.name AS sectionName, section.order, subsection.name AS subsectionName, subsection.order AS subsectionOrder,
                 result.id, result.breedId, breed.name AS breedName, result.colorId, color.name AS colorName,
-                CAST( SUM( result.breeders ) AS UNSIGNED ) AS breeders, CAST( SUM( result.pairs ) AS UNSIGNED ) AS pairs,
+
+#                CAST( SUM( result.breeders ) AS UNSIGNED ) AS breeders,
+                CAST( SUM( IF( breederId IS NULL, breeders, 0 ) ) + COUNT( DISTINCT breederId ) AS UNSIGNED ) AS breeders, 
+
+                CAST( SUM( result.pairs ) AS UNSIGNED ) AS pairs,
                 CAST( SUM( result.layDames ) AS UNSIGNED ) AS layDames, AVG( result.layEggs ) AS layEggs, AVG( result.layWeight ) AS layWeight,
                 CAST( SUM( result.broodEggs ) AS UNSIGNED ) AS broodEggs, CAST( SUM( result.broodFertile ) AS UNSIGNED ) AS broodFertile, CAST( SUM( result.broodHatched ) AS UNSIGNED ) AS broodHatched, 
                 CAST( SUM( result.showCount ) AS UNSIGNED ) AS showCount, AVG( result.showScore ) AS showScore
@@ -209,7 +213,7 @@ class District extends Query
 
         return Query::selectArray( $stmt, $args );
     }
-
+*/
     public static function countBreeders( int $districtId ) : int {
         $args = get_defined_vars();
         $stmt = Query::prepare("

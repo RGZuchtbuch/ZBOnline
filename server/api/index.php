@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Log\LoggerInterface;
 use Slim\Factory\AppFactory;
 use App\router;
 // allow cross origin from all, could use Slim for this ?
@@ -17,7 +19,9 @@ ob_start('ob_gzhandler'); // needs check if header has Accept-Encoding: gzip
 $app = AppFactory::create();
 
 $app->addRoutingMiddleware();
-$app->addErrorMiddleware(true, true, true );
+
+// Add Error Middleware
+$errorMiddleware = $app->addErrorMiddleware(true, true, true);
 
 /* TODO does not work as replace for lines 7-10
 $app->add(function ($req, $res, $next) {
