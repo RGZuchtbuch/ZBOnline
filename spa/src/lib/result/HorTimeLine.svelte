@@ -37,6 +37,7 @@
             if( promise ) {
                 promise.then(response => {
                     years = response.years;
+                    console.log('Years', years );
                 });
             }
         }

@@ -32,7 +32,7 @@
             <div class='w-28 text-center'>Schauleistung</div>
 
             {#if saveCount > 0 }
-                <div class='px-4 rounded bg-alert text-white'> # { saveCount }</div>
+                <div class='px-4 rounded bg-alert text-white' title='Zahl der nicht gespeicherte Eingaben'> # { saveCount }</div>
             {/if}
         {/if}
     </div>

@@ -99,12 +99,15 @@ class District extends Controller
                 $breed = [ 'id'=>$breedId, 'name'=>$row[ 'breedName' ], 'colors'=>[] ];
                 $subsection[ 'breeds' ][] = & $breed; // new Breed array
             }
-            $result = [
+            $result = $row;
+            $result['id'] = $row['resultId'];
+/*            $result = [
                 'id'=>$row['resultId'], 'breeders'=>$row['breeders'], 'pairs'=>$row['pairs'],
-                'layDames'=>$row['layDames'], 'layEggs'=>$row['layEggs'], 'layWeight'=>$row['layWeight'],
+                'layDames'=>$row['layDames'], 'layShould'=>$row['layShould'], 'layEggs'=>$row['layEggs'], 'layWeightShould'=>$row['layWeightShould'], 'layWeight'=>$row['layWeight'],
                 'broodEggs'=>$row['broodEggs'], 'broodFertile'=>$row['broodFertile'], 'broodHatched'=>$row['broodHatched'],
                 'showCount'=>$row['showCount'], 'showScore'=>$row['showScore']
             ];
+*/
             if( $row['colorId'] === null ) {
                 $breed[ 'result' ] = $result;
             } else {

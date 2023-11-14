@@ -1,14 +1,12 @@
 <script>
     import {Route, router, meta} from 'tinro';
     import api from '../../js/api.js';
-    import {dec} from '../../js/util.js';
-    import { calcColor, pct } from '../../js/util.js';
+    import { calcColor, dec, pct } from '../../js/util.js';
     import Select from '../common/input/Select.svelte';
     import Button from "../common/input/Button.svelte";
     import ShowPie from './old/ShowPie.svelte';
     import SectionsPie from './SectionsPie.svelte';
     import DistrictsMap from './DistrictsMap.svelte';
-    import TimeLine from './HorTimeLine.svelte';
     import DistrictList from './DistrictList.svelte';
     import Help from './Help.svelte';
     import ScrollDiv from '../common/ScrollDiv.svelte';
@@ -17,6 +15,8 @@
     import BroodBarLayers from './results/BroodBarLayers.svelte';
     import BroodBarPigeons from './results/BroodBarPigeons.svelte';
     import ShowBar from './results/ShowBar.svelte';
+
+    import TimeLine from './results/Trend.svelte';
 
     const route = meta();
     const types = { // what options to show
@@ -39,17 +39,15 @@
             title: (result) => result.breeders ? ` ${dec(result.breeders)} demeldete Zuchten` : ' hat keine Daten',
             tooltip: 'Meldende Mitglieder',
         },
-        3: {
-            id: 3,
-            label: 'Stämme',
-//            extract: (result) => [result.pairs],
-//            forPie: (result) => [result.pairs],
-            map: (result) => [result.pairs],
-            time: (result) => [result.pairs],
-            pie: (result) => [result.pairs],
-            title: (result) => result.pairs ? ` ${dec(result.pairs)} gemeldete Stämme / Paare` : ' hat keine Daten',
-            tooltip: 'Stämme oder Paare (Tauben)',
-        },
+//        3: {
+//            id: 3,
+//            label: 'Stämme',
+//            map: (result) => [result.pairs],
+//            time: (result) => [result.pairs],
+//            pie: (result) => [result.pairs],
+//            title: (result) => result.pairs ? ` ${dec(result.pairs)} gemeldete Stämme / Paare` : ' hat keine Daten',
+//            tooltip: 'Stämme oder Paare (Tauben)',
+//        },
         10: {
             id: 10,
             label: 'Legeleistung',
@@ -67,9 +65,9 @@
             label: 'Brutleistung Leger',
 //            extract: (result) => [result.broodHatched, result.broodFertile, result.broodEggs], // for map and chart
 //            forPie: (result) => [ 100 * result.broodHatched / result.broodEggs], // for pie
-            map: (result) => [result.broodHatched, result.broodFertile, result.broodEggs], // for map and chart
-            time: (result) => [result.broodHatched, result.broodFertile, result.broodEggs], // for map and chart
-            pie: (result) => [ 100 * result.broodHatched / result.broodEggs], // for pie
+            map: (result) => [result.broodLayerHatched, result.broodLayerFertile, result.broodLayerEggs], // for map and chart
+            time: (result) => [result.broodLayerHatched, result.broodLayerFertile, result.broodLayerEggs], // for map and chart
+            pie: (result) => [ 100 * result.broodLayerHatched / result.broodLayerEggs], // for pie
             title: (result) => result.broodEggs ?
                 ` Eingelegt ${dec(result.broodEggs)} Eier, ${pct(result.broodFertile, result.broodEggs, 0)} waren befruchtet und es schlüpften ${pct(result.broodHatched, result.broodEggs, 0)}` :
                 ' hat keine Daten',
@@ -226,7 +224,7 @@
 <Route path='/*' let:meta>
     <div class='w-256 flex no-print'>
         <h2 class='grow text-center text-2xl print'>Zuchtleistungen</h2>
-        <div class='w-8 justify-center m-2 circled bg-alert cursor-pointer no-print' on:click={onHelp}>?</div>
+        <div class='w-8 justify-center m-2 circled bg-alert text-white cursor-pointer no-print' on:click={onHelp} title='Anleitung'>?</div>
     </div>
 
     <div class='w-256 flex flex-col border rounded-t border-gray-400 bg-header p-2 gab-2 no-print'>
@@ -316,7 +314,7 @@
             </div>
             <h3 class='text-center'>{types[typeId].label}</h3>
             <div class='flex flex-row flex-wrap justify-evenly'>
-                    <TimeLine bind:year={year} {districtId} {sectionId} {breedId} {colorId} type={types[typeId]} />
+                    <TimeLine bind:year={year} {districtId} {sectionId} {breedId} {colorId} {typeId} />
                     <DistrictsMap bind:districtId={districtId} {year} {sectionId} {breedId} {colorId} type={types[typeId]} />
             </div>
             {/if}

@@ -11,6 +11,8 @@
     export let required = false;
     export let invalid = false;
     export let element;
+    export let title = null;
+
 
     let pattern = '[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$';
 
@@ -32,7 +34,7 @@
 
 </script>
 
-<div class='input {classname} flex flex-col gap-0'>
+<div class='input {classname} flex flex-col gap-0' {title}>
     {#if label}
         <label class='label' for='input'>{label}</label>
     {/if}

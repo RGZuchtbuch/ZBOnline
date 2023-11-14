@@ -4,6 +4,7 @@
     export let label = null;
     export let disabled = false;
     export let element;
+    export let title = 'Speichern';
 
     let classname = '';
     export { classname as class }
@@ -16,7 +17,7 @@
 
 </script>
 
-<div class='input cursor-pointer {classname} flex flex-col gap-0'>
+<div class='input cursor-pointer {classname} flex flex-col gap-0' {title}>
     {#if label !== null}
         <label class='label' for='input'>{label}</label>
     {/if}

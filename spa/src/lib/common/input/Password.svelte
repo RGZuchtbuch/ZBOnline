@@ -11,6 +11,7 @@
     export let required = false;
     export let invalid = false;
     export let element;
+    export let title = 'Passwort';
 
     let classname = '';
     export { classname as class }
@@ -35,7 +36,7 @@
 
 </script>
 
-<div class='input {classname} flex flex-col gap-0'>
+<div class='input {classname} flex flex-col gap-0' {title}>
     {#if label}
         <label class='label' for='input'>{label}</label>
     {/if}

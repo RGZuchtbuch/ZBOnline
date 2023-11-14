@@ -5,6 +5,8 @@
     export let disabled = false;
     export let alert = false
     export let element;
+    export let title = null;
+
 
     let classname = '';
     export { classname as class }
@@ -19,7 +21,7 @@
 
 </script>
 
-<div class='input {classname}' class:alert>
+<div class='input {classname}' class:alert {title}>
     {#if label !== null}
         <label class='label' for='input'>{label}</label>
     {/if}

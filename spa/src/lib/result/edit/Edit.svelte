@@ -58,7 +58,7 @@
 <div class='w-256 flex rounded-t'>
     <div class='w-8'></div>
     <h2 class='grow text-center'>Eingabe Leistungen {district ? district.name : '...'}</h2>
-    <div class='w-8 justify-center m-2 circled bg-alert cursor-pointer' on:click={onHelp}>?</div>
+    <div class='w-8 justify-center m-2 circled bg-alert cursor-pointer text-white' on:click={onHelp} title='Anleitung'>?</div>
 </div>
 
 
@@ -68,7 +68,7 @@
 
 <div class='w-256 bg-gray-200 overflow-y-scroll border border-t-gray-400 rounded-b scrollbar'>
     {#each breeds as breed }
-        <Breed {districtId} {sectionId} {breed} {year} {group} bind:saveCount/>
+        <Breed {districtId} {sectionId} {breed} {year} {group} bind:saveCount title='Wähle zum Eingeben' />
     {/each}
 </div>
 {#if help}

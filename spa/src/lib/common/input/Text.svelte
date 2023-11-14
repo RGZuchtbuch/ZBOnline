@@ -12,6 +12,7 @@
     export let pattern = null;
     export let spellcheck = true;
     export let invalid = false;
+    export let title = null;
 
     export let element;
     let classname = '';
@@ -26,7 +27,7 @@
 
 </script>
 
-<div class='input {classname} flex flex-col gap-0'>
+<div class='input {classname} flex flex-col gap-0' {title}>
     {#if label}
         <label class='label text-left' for='input'>{label}</label>
     {/if}

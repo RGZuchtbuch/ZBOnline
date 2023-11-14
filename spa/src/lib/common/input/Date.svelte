@@ -12,6 +12,7 @@
     export let error = new Date( min ).getFullYear() + ' - ' + new Date( max ).getFullYear();
     export let invalid = false;
     export let element;
+    export let title = null;
 
     let classname = '';
     export { classname as class }
@@ -44,7 +45,7 @@
 
 </script>
 
-<div class='input {classname} flex flex-col gap-0' title='Datum : 31.1.2021'>
+<div class='input {classname} flex flex-col gap-0' title={title || 'Datum : 31.1.2021'}>
     {#if label}
         <label class='label' for='input'>{label} {required?'*':''}</label>
     {/if}

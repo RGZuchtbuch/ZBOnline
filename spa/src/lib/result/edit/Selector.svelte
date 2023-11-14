@@ -45,19 +45,19 @@
 
 
 <div class='w-256 flex flex-row rounded-t bg-header gap-x-4 justify-center'>
-    <Select label="Jahr" bind:value={year} on:change={onYear}>
+    <Select label="Jahr" bind:value={year} on:change={onYear} title='Leistungsjahr'>
         {#each years as year}
             <option value={year}>{year}</option>
         {/each}
     </Select>
 
-    <Select label="Sparte" bind:value={sectionId} on:change={onSection}>
+    <Select label="Sparte" bind:value={sectionId} on:change={onSection} title='Sparte zum Eingeben'>
         {#each sections as section}
             <option value={section.id}>{section.name}</option>
         {/each}
     </Select>
 
-    <Select label="Gruppe" bind:value={group} on:change={onGroup} disabled={sectionId === 5}>
+    <Select label="Gruppe" bind:value={group} on:change={onGroup} disabled={sectionId === 5} title='Zuchtbuchgruppe I, II oder III'>
         {#each groups as group}
             <option value={group}>{group}</option>
         {/each}

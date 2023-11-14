@@ -7,6 +7,7 @@
     export let breed = null;
     export let year = null;
     export let group = null;
+    export let title = null;
 
     export let saveCount = 0;
 
@@ -53,7 +54,7 @@
 
 
 <div class='flex flex-row px-2 gap-x-1'>
-    <div class='w-64 cursor-pointer whitespace-nowrap' class:hasResults on:click={onOpen} >
+    <div class='w-64 cursor-pointer whitespace-nowrap' class:hasResults on:click={onOpen} {title}>
         {breed.name} {#if breed.results } <span class='text-xs'>({breed.results})</span> {/if}
     </div>
 

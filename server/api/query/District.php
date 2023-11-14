@@ -160,11 +160,12 @@ class District extends Query
           		breed.id, breed.name, 
           		COUNT( result.id ) AS results, :districtId AS districtId, :year AS `year`, :group AS `group`, 
                 SUM( breeders ) AS breeders, SUM( pairs ) AS pairs,
-                SUM( result.layDames ) AS layDames, AVG( layEggs ) AS layEggs, AVG( result.layWeight ) AS layWeight,
+                SUM( result.layDames ) AS layDames, AVG( result.layEggs ) AS layEggs, AVG( result.layWeight ) AS layWeight,
                 SUM( result.broodEggs) AS broodEggs, SUM( broodFertile ) AS broodFertile, SUM( broodHatched ) AS broodHatched,
                 SUM( result.showCount ) AS showCount, AVG( showScore ) AS showScore
             FROM breed
-            LEFT JOIN result ON result.breedId = breed.id AND result.pairId IS NULL
+            LEFT JOIN result 
+                ON result.breedId = breed.id AND result.pairId IS NULL
                 AND result.districtId = :districtId
                 AND result.year = :year
                 AND result.group = :group

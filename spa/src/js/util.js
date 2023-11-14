@@ -174,18 +174,17 @@ export function dat( date ) { // expecting yyyy-mm-dd
     return '';
 }
 
-export function dec( value, decimals ) {
+export function dec( value, decimals = 0 ) {
     if( value == null ) { // incl undefined
         return '';
     }
     value = +value; // make sure its a number
-    decimals = decimals || 0;
     return value.toFixed( decimals )
 }
 
-export function pct(a, b, dec=1 ) {
+export function pct(a, b, decimals=1 ) {
     if( a != null && b != null && b !== 0 ) {
-        return (100 * a / b).toFixed( dec )+'%';
+        return (100 * a / b).toFixed( decimals )+'%';
     }
     return '';
 }

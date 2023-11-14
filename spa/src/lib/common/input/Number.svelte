@@ -13,6 +13,7 @@
     export let required = false;
     export let invalid = false;
     export let element;
+    export let title = null;
 
     let classname = '';
     export { classname as class }
@@ -34,7 +35,7 @@
     $: validate( min, max, required );
 </script>
 
-<div class='input {classname} flex flex-col gap-0'>
+<div class='input {classname} flex flex-col gap-0' {title}>
     {#if label}
         <label class='label text-left' for='input'>{label}</label>
     {/if}

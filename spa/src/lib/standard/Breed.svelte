@@ -49,7 +49,7 @@
 //        invalids.layDames     = result.layDames !== null && ( result.layDames < 1 || result.layDames > 999999 );
 
         invalids.name       = breed.name === null || breed.name.length < 3;
-        invalids.lay        = breed.lay !== null && ( breed.lay < 1 || breed.lay > 366 );
+        invalids.layEggs    = breed.layEggs !== null && ( breed.layEggs < 1 || breed.layEggs > 366 );
         invalids.layWeight  = breed.layWeight !== null && ( breed.layWeight < 1 || breed.layWeight > 9999 );
         invalids.sireWeight = breed.sireWeight !== null && ( breed.sireWeight < 1 || breed.sireWeight > 99999 );
         invalids.dameWeight = breed.dameWeight !== null && ( breed.dameWeight < 1 || breed.dameWeight > 99999 );
@@ -63,7 +63,7 @@
             }
         }
         invalids = invalids; // trigger
-        console.log( 'OnBreedFormChange', invalids.form, invalids.lay );
+        console.log( 'OnBreedFormChange', invalids.form, invalids.layEggs );
     }
 
     function onSubmit(event) {
@@ -129,7 +129,7 @@
 
                                 {#if section.layers}
                                     <div class='flex flex-row gap-x-2'>
-                                        <NumberInput class='w-20' label={'Legeleistung'} bind:value={breed.lay} min=1 max=366 error='1..366' invalid={invalids.lay} />
+                                        <NumberInput class='w-20' label={'Legeleistung'} bind:value={breed.layEggs} min=1 max=366 error='1..366' invalid={invalids.layEggs} />{breed.layEggs}
                                         <NumberInput class='w-20' label={'Eiergewicht g.'} bind:value={breed.layWeight} min=1 max=9999 error='1..9999' invalid={invalids.layWeight} />
                                     </div>
 
@@ -164,7 +164,7 @@
                 </form>
 
                 <div class='w-6/12 flex flex-col gap-2'>
-                    <img class='border border-gray-400 rounded' src='assets/breeds/7972.png' alt='Bild der Rasse, Hahn und Henne'/>
+                    <img class='w-full border border-gray-400 rounded' src={'assets/breeds/'+breed.id+'.png'} alt='Bild der Rasse, Hahn und Henne fehlt noch'/>
                     <Colors {breed} />
                     <slot>Farbe</slot>
                 </div>
@@ -181,4 +181,5 @@
     .disabled {
         @apply text-white border-white;
     }
+
 </style>
