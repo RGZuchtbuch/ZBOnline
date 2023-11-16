@@ -59,8 +59,8 @@
             label: 'Brutleistung Tauben',
             map: (result) => [ result.broodPigeonProduction ], // for map and chart
             title: (result) => result.broodPigeonBreeders ?
-                ` Bei ${dec(result.nonLayerPairs)} Paare schlüpften ${dec(result.chicks)} Küken also ${dec(result.broodPigeonProduction,1)} Küken / Paar` :
-                ` keine Angaben`,
+                ` Bei ${dec(result.nonLayerPairs)} Paare schlüpften ${dec(result.chicks)} Küken also ${dec(result.broodPigeonProduction,1)} Küken / Paar`
+                : ` keine Angaben`,
             getMax: districts => Math.max( ...districts.map( district => district.broodPigeonProduction ) ),
             getMin: districts => 0,
         },
@@ -69,7 +69,9 @@
             id: 30,
             label: 'Schauleistung',
             map: (result) => [result.showScore ? result.showScore : 89 ],
-            title: (result) => result.showCount ? ` ${result.showCount} Tiere erhielten ⌀ ${dec(result.showScore, 1)} Punkte` : ' hat keine Daten',
+            title: (result) => result.showCount
+                ? ` ${result.showCount} Tiere erhielten ⌀ ${dec(result.showScore, 1)} Punkte`
+                : ` keine Angaben`,
             tooltip: 'Bewertungen der Tiere (u), 90 (b) .. 97 (v) Punkte',
             getMax: districts => 97,
             getMin: districts => 89,

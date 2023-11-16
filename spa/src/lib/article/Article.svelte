@@ -7,10 +7,8 @@
     let article = null;
 
     function loadArticle( id ) {
-        console.log( "ArticleId", id );
         api.article.get( id ).then( response => {
             article = response.article;
-            console.log( 'Article', article );
         });
     }
 
