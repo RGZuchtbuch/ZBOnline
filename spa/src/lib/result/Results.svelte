@@ -6,7 +6,7 @@
     import Button from "../common/input/Button.svelte";
     import ShowPie from './old/ShowPie.svelte';
     import SectionsPie from './SectionsPie.svelte';
-    import DistrictsMap from './DistrictsMap.svelte';
+//    import DistrictsMap from './DistrictsMap.svelte';
     import DistrictList from './DistrictList.svelte';
     import Help from './Help.svelte';
     import ScrollDiv from '../common/ScrollDiv.svelte';
@@ -17,93 +17,14 @@
     import ShowBar from './results/ShowBar.svelte';
 
     import TimeLine from './results/Trend.svelte';
+    import DistrictsMap from './results/Map.svelte';
 
     const route = meta();
-    const types = { // what options to show
-        /*
-                1: {
-                    id: 1,
-                    label: 'Mitglieder',
-                    extract: (result) => [result.members],
-                    title: (result) => ` hat ${dec(result.members)} Mitglieder`
-                },
-         */
-        2: {
-            id: 2,
-            label: 'Zuchten',
-//            extract: (result) => [result.breeders],
-//            forPie: (result) => [result.breeders],
-            map: (result) => [result.breeders],
-            time: (result) => [result.breeders],
-            pie: (result) => [result.breeders],
-            title: (result) => result.breeders ? ` ${dec(result.breeders)} demeldete Zuchten` : ' hat keine Daten',
-            tooltip: 'Meldende Mitglieder',
-        },
-//        3: {
-//            id: 3,
-//            label: 'Stämme',
-//            map: (result) => [result.pairs],
-//            time: (result) => [result.pairs],
-//            pie: (result) => [result.pairs],
-//            title: (result) => result.pairs ? ` ${dec(result.pairs)} gemeldete Stämme / Paare` : ' hat keine Daten',
-//            tooltip: 'Stämme oder Paare (Tauben)',
-//        },
-        10: {
-            id: 10,
-            label: 'Legeleistung',
-//            extract: (result) => [result.layEggs],
-//            forPie: (result) => [result.layEggs],
-            map: (result) => [result.layEggs],
-            time: (result) => [result.layEggs],
-            pie: (result) => [result.layEggs],
-            title: (result) =>  result.layEggs ? ` Legeleistung ⌀ ${dec(result.layEggs)} Eier im Jahr` : ' hat keine Daten',
-            tooltip: 'Nur für Leger',
-        },
-
-        20: {
-            id: 20,
-            label: 'Brutleistung Leger',
-//            extract: (result) => [result.broodHatched, result.broodFertile, result.broodEggs], // for map and chart
-//            forPie: (result) => [ 100 * result.broodHatched / result.broodEggs], // for pie
-            map: (result) => [result.broodLayerHatched, result.broodLayerFertile, result.broodLayerEggs], // for map and chart
-            time: (result) => [result.broodLayerHatched, result.broodLayerFertile, result.broodLayerEggs], // for map and chart
-            pie: (result) => [ 100 * result.broodLayerHatched / result.broodLayerEggs], // for pie
-            title: (result) => result.broodEggs ?
-                ` Eingelegt ${dec(result.broodEggs)} Eier, ${pct(result.broodFertile, result.broodEggs, 0)} waren befruchtet und es schlüpften ${pct(result.broodHatched, result.broodEggs, 0)}` :
-                ' hat keine Daten',
-            tooltip: 'Nur für Leger',
-        },
-        21: {
-            id: 21,
-            label: 'Brutleistung Tauben',
-//            extract: (result) => [ result.nonLayerPairs ? result.chicks / result.nonLayerPairs : 0 ], // for map and chart
-//            forPie: (result) => [ result.nonLayerPairs ? result.chicks / result.nonLayerPairs : 0 ], // for pie
-            map: (result) => [ result.nonLayerPairs ? result.chicks / result.nonLayerPairs : 0 ], // for map and chart
-            time: (result) => [  result.nonLayerPairs ? result.chicks / result.nonLayerPairs : 0  ], // for map and chart
-            pie: (result) => [ result.nonLayerPairs ? result.chicks / result.nonLayerPairs : 0 ], // for pie
-            title: (result) => result.nonLayerPairs ?
-                ` Bei ${dec(result.nonLayerPairs)} Paare schlüpften ${dec(result.chicks)} Küken also ${dec(result.chicks/result.nonLayerPairs,1)} Küken / Paar` :
-                ` hat keine Daten`,
-            tooltip: 'Nur für Tauben',
-        },
-
-        30: {
-            id: 30,
-            label: 'Schauleistung',
-            min: 89,
-            max: 97,
-//            extract: (result) => [result.showScore],
-//            forPie: (result) => [result.showScore],
-            map: (result) => [result.showScore ? result.showScore : 89 ],
-            time: (result) => [result.showScore ? result.showScore : 89 ],
-            pie: (result) => [result.showScore ? result.showScore : 89 ],
-            title: (result) => result.showCount ? ` ${result.showCount} Tiere erhielten ⌀ ${dec(result.showScore, 1)} Punkte` : ' hat keine Daten',
-            tooltip: 'Bewertungen der Tiere (u), 90 (b) .. 97 (v) Punkte',
-        },
-    }
+    const types = [ {id:2, name:'Zuchten'}, {id:10, name:'Legeleistung'}, {id:20, name:'Brutleistung Leger'}, {id:21, name:'Brutleistung Tauben'}, {id:30, name:'Schauleistung'}];
 
     //set by query
-    let typeId = null;
+    let typeId = 2;
+    let type = types.find( item => item.id = typeId );
     let year = null;
     let rootDistrict = null;
     let districtId = null;
@@ -131,6 +52,9 @@
         sectionId = Number( route.query.section ) || 2;
         breedId = Number( route.query.breed ) || null;
         colorId = Number( route.query.color ) || null;
+
+        type = types.find( item => item.id = typeId );
+
 
         loadBreeds();
         loadColors();
@@ -231,8 +155,8 @@
         <div class='flex flex-row px-4 gap-x-2'>
             <div class='w-8 font-semibold text-white' >Was</div>:
             <Select class='w-64' label='Was sehen' value={typeId} on:change={onType}>
-                {#each Object.values( types ) as type, i }
-                    <option value={ type.id } title={ type.tooltip }> { type.label }</option>
+                {#each types as item }
+                    <option value={ item.id }> { item.name }</option>
                 {/each}
             </Select>
 
@@ -309,13 +233,13 @@
             {#if true}
 
             <div class='flex flex-row border border-gray-600 gap-x-8 justify-evenly'>
-                <SectionsPie {districtId} {year} type={types[typeId]}/>
+                <SectionsPie {districtId} {year} {typeId}/>
 
             </div>
-            <h3 class='text-center'>{types[typeId].label}</h3>
+            <h3 class='text-center'>{type.name} {typeId}</h3>
             <div class='flex flex-row flex-wrap justify-evenly'>
                     <TimeLine bind:year={year} {districtId} {sectionId} {breedId} {colorId} {typeId} />
-                    <DistrictsMap bind:districtId={districtId} {year} {sectionId} {breedId} {colorId} type={types[typeId]} />
+                    <DistrictsMap bind:districtId={districtId} {year} {sectionId} {breedId} {colorId} {typeId} />
             </div>
             {/if}
             {#if true}

@@ -69,7 +69,6 @@
                             }
                         }
                     }
-                    console.log( 'SubSec LayShould', subTotal.layShould, subTotal.layers );
                     subTotal.layShould = subTotal.layers ? subTotal.layShould / subTotal.layers : null;
                     subTotal.layEggs = subTotal.layers ? subTotal.layEggs / subTotal.layers : null; // to avg
                     subTotal.layWeightShould = subTotal.layWeighters ? subTotal.layWeightShould / subTotal.layWeighters : null;

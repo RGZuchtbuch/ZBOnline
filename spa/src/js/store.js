@@ -12,4 +12,6 @@ export const user = writable( null ); // keeping loggedin user
 
 export const standard = writable( {standard:[] } );
 
+//export const resultType = { 2: 'Zuchten' }
+
 

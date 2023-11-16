@@ -1,16 +1,16 @@
 <script>
 
     import {meta, Route } from "tinro";
-    import api from "../../js/api.js";
-    import {user} from "../../js/store.js";
+    import api         from "../../js/api.js";
+    import {user}      from "../../js/store.js";
+    import {txt}       from "../../js/util.js";
 
     import NumberInput from '../common/input/Number.svelte';
-    import Page from "../common/Page.svelte";
-    import TextInput from '../common/input/Text.svelte';
-    import TextArea from "../common/input/TextArea.svelte";
-    import Colors from "./Colors.svelte";
-    import Color from "./Color.svelte";
-    import {txt} from "../../js/util.js";
+    import Image       from '../common/Image.svelte';
+    import Page        from "../common/Page.svelte";
+    import TextInput   from '../common/input/Text.svelte';
+    import TextArea    from "../common/input/TextArea.svelte";
+    import Colors      from "./Colors.svelte";
 
 
     export let params;
@@ -129,7 +129,7 @@
 
                                 {#if section.layers}
                                     <div class='flex flex-row gap-x-2'>
-                                        <NumberInput class='w-20' label={'Legeleistung'} bind:value={breed.layEggs} min=1 max=366 error='1..366' invalid={invalids.layEggs} />{breed.layEggs}
+                                        <NumberInput class='w-20' label={'Legeleistung'} bind:value={breed.layEggs} min=1 max=366 error='1..366' invalid={invalids.layEggs} />
                                         <NumberInput class='w-20' label={'Eiergewicht g.'} bind:value={breed.layWeight} min=1 max=9999 error='1..9999' invalid={invalids.layWeight} />
                                     </div>
 
@@ -164,7 +164,7 @@
                 </form>
 
                 <div class='w-6/12 flex flex-col gap-2'>
-                    <img class='w-full border border-gray-400 rounded' src={'assets/breeds/'+breed.id+'.png'} alt='Bild der Rasse, Hahn und Henne fehlt noch'/>
+                    <Image class='w-full border border-gray-400 rounded' src={'assets/breeds/'+breed.id+'.png'} alt={breed.name} title={breed.name}/>
                     <Colors {breed} />
                     <slot>Farbe</slot>
                 </div>
@@ -172,8 +172,6 @@
 
 
         </div>
-
-
     </Page>
 {/if}
 

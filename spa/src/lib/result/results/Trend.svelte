@@ -17,50 +17,6 @@
     let canvas = null;
     let chart = null;
 
-const types = { // what options to show
-    2: {
-        label: 'Zuchten',
-        values: (year) => [year.breeders],
-        title: (year) => year.breeders ? ` Insgesammt ${dec(year.breeders)} gemeldete Zuchten` : ' hat keine Daten',
-//        tooltip: 'Meldende Mitglieder',
-        tooltip: ( context ) => dec( context.raw ),
-
-    },
-    10: {
-        label: 'Legeleistung %',
-        values: (year) => [ 100 * year.layEggs ],
-        title: (year) =>  year.layBreeders ? ` Legeleistung SOLL ⌀ ${dec(year.layShould)} und IST ⌀ ${dec(year.layEggs)} Eier im Jahr` : ' hat keine Daten',
-//        tooltip: 'Nur für Leger',
-        tooltip: ( context ) => dec( context.raw, 1 )+'% von ⌀ '+dec( data[ context.dataIndex ].layShould )+' Eiern im Jahr',
-    },
-
-    20: {
-        id: 20,
-        label: 'Brutleistung Leger',
-        values: (result) => [result.broodLayerHatched, result.broodLayerFertile, result.broodLayerEggs],
-        title: (result) => result.broodEggs ?
-            ` Eingelegt ${dec(result.broodEggs)} Eier, ${pct(result.broodFertile, result.broodEggs, 0)} waren befruchtet und es schlüpften ${pct(result.broodHatched, result.broodEggs, 0)}` :
-            ' hat keine Daten',
-        tooltip: ( context ) => 'Nur für Leger',
-    },
-    21: {
-        id: 21,
-        label: 'Brutleistung Tauben',
-        values: (result) => [  result.nonLayerPairs ? result.chicks / result.nonLayerPairs : 0  ], // for map and chart
-        title: (result) => result.nonLayerPairs ?
-            ` Bei ${dec(result.nonLayerPairs)} Paare schlüpften ${dec(result.chicks)} Küken also ${dec(result.chicks/result.nonLayerPairs,1)} Küken / Paar` :
-            ` hat keine Daten`,
-//        tooltip: ( context ) => dec( context.raw, 1 )+'% of '+dec( data[ context.dataIndex ].layShould );'Nur für Tauben',
-    },
-
-    30: {
-        id: 30, label: 'Schauleistung', min: 89, max: 97,
-        values: (result) => [result.showScore ? result.showScore : 89 ],
-        title: (result) => result.showCount ? ` ${result.showCount} Tiere erhielten ⌀ ${dec(result.showScore, 1)} Punkte` : ' hat keine Daten',
-        tooltip: 'Bewertungen der Tiere (u), 90 (b) .. 97 (v) Punkte',
-    },
-}
-
     function updateDistrict(districtId ) { // get district info
         api.district.get( districtId ).then( response => {
             district = response.district;
@@ -81,7 +37,6 @@ const types = { // what options to show
             if( promise ) {
                 promise.then(response => {
                     data = response.years;
-                    console.log('Years', data );
                 });
             }
         }
@@ -95,23 +50,37 @@ const types = { // what options to show
         return labels;
     }
 
-    function extractDatasets( years, type ) { // 2,3,10,20,21,30
-        let datasets = [];
-        years.forEach( year => {
-            let label = type.label;
-            let values = type.values( year ); // could be multiple values to show per year
+    const datasetGenerators = {
+        2 : ( years ) => [
+            {label: 'Zuchten #', data: years.map( year => year.breeders ), borderWidth: 1, categoryPercentage: (0.75), tooltip:(context) => dec(context.raw) + ' gemeldete Zuchten' }
+        ],
+        10 : ( years ) => [
+            {label: 'Eier %',    data: years.map( year => 100 * year.layEggs ),   borderWidth: 1, categoryPercentage: (0.75), tooltip: (context) => dec( context.raw, 1 )+'% von ⌀ '+dec( data[ context.dataIndex ].layShould )+' Ei/J' },
+            {label: 'Gewicht %', data: years.map( year => 100 * year.layWeight ), borderWidth: 1, categoryPercentage: (0.75), tooltip:(context) =>  dec( context.raw, 1 )+'% von ⌀ '+dec( data[ context.dataIndex ].layWeightShould )+' g' }
+        ],
+        20 : ( years ) => [
+            {label: 'Befruchtet %', data: years.map( year => 100 * year.broodLayerFertile ), borderWidth: 1, categoryPercentage: (0.75), tooltip: (context) => dec( context.raw, 1 )+'% von '+dec( data[ context.dataIndex ].broodLayerEggs )+' eingelegte Eier' },
+            {label: 'Küken %',      data: years.map( year => 100 * year.broodLayerHatched ), borderWidth: 1, categoryPercentage: (0.75), tooltip: (context) => dec( context.raw, 1 )+'% von '+dec( data[ context.dataIndex ].broodLayerEggs )+' eingelegte Eier' }
+        ],
+        21 : ( years ) => [
+            {label: 'Küken pro Paar', data: years.map( year => year.broodPigeonProduction ), borderWidth: 1, categoryPercentage: (0.75), tooltip:(context) => dec(context.raw, 1) + ' mit '+dec( data[ context.dataIndex ].broodPigeonChicks )+' Küken aus '+dec( data[ context.dataIndex ].broodPigeonChicks / data[ context.dataIndex ].broodPigeonProduction )+' Paare in  '+data[ context.dataIndex ].broodPigeonBreeders+' Zuchten' }
+        ],
+        30 : ( years ) => [
+            {label: '⌀ Bewertung', data: years.map( year => year.showScore ), borderWidth: 1, categoryPercentage: (0.75), tooltip:(context) => dec(context.raw, 1) + ' auf '+dec( data[ context.dataIndex ].showCount )+' Tieren' }
+        ],
+    }
 
-            for( let i=0; i<values.length; i++ ) { // for each value
-                const value = values[i];
-                if( datasets.length < i+1 ) { // dataset not available yet, create it
-                    console.log( 'Type', type );
-                    datasets.push( { label:label, data:[], borderWidth:1, categoryPercentage:(0.75), tooltip:type.tooltip } )
-                }
-                datasets[i].data.push( value );
-            }
-        } );
-        console.log( 'Datasets', datasets );
-        return datasets;
+    const scales = {
+        2:  {},
+        10: { min:0, max:140 },
+        20: { min:0, max:100 },
+        21: {},
+        30: { min: 89, max: 97 },
+    }
+
+    function extractDatasets( years, typeId ) {
+        const generator = datasetGenerators[ typeId ];
+        return generator( years );
     }
 
     function refreshChart( labels, datasets, min, max, start ) {
@@ -130,7 +99,7 @@ const types = { // what options to show
             context,
             {
                 type: 'bar',
-                data: {labels: labels, datasets: datasets},
+                data: { labels: labels, datasets: datasets },
                 options : {
                     responsive : false, // not dyn change
                     indexAxis : 'x', // years labels along x axis
@@ -151,93 +120,18 @@ const types = { // what options to show
     }
 
     function updateChart(years, typeId ) {
-        const type = types[ typeId ];
+        const scale = scales[ typeId ];
         if( years ) {
             const context = canvas.getContext( '2d' );
-
-            let labels = extractLabels( years, type );
-            let datasets = extractDatasets( years, type );
-
+            let labels = extractLabels( years, typeId );
+            let datasets = extractDatasets( years, typeId );
             if( chart ) {
-                refreshChart( labels, datasets, type.min, type.max, 2012 );
+                refreshChart( labels, datasets, scale.min, scale.max, 2012 );
             } else {
-                createChart( labels, datasets, type.min, type.max, 2012 );
-/*
-                chart = new Chart( context, {
-                    type:'bar',
-                    data: {
-                        labels:labels,
-                        datasets:datasets,
-                    },
-                    options: {
-                        responsive: false,
-                        //maintainAspectRatio: false, // added due to shrinking problem
-                        indexAxis:'x',
-                        plugins: {
-                            tooltip: { // on mouse hover
-                                callbacks: {
-                                    label: function(context, data) {
-                                        const value = context.parsed.x; // mind x as we swapped x and y
-                                        let label = context.dataset.label || '';
-
-                                        if (label) {
-                                            label += ': ';
-                                        }
-
-                                        if (context.parsed.x !== null) {
-                                            const datasetIndex = context.datasetIndex;
-                                            const lastDatasetIndex = chart.data.datasets.length -1;
-                                            if( datasetIndex < lastDatasetIndex ) {
-                                                const max = chart.data.datasets[ lastDatasetIndex ].data[context.dataIndex];
-                                                if( max > 0 ) {
-                                                    label += pct( value, max, 1)+' of '+max;
-                                                } else {
-                                                    label += '?'
-                                                }
-                                            } else {
-                                                label += datasetIndex === 0 ? value : 'Total '+value;
-                                            }
-                                        }
-                                        return label;
-                                    }
-                                }
-                            },
-                            legend: {
-                                display: false,
-                            }
-                        },
-                        scales: {
-                            x: {
-                                //stacked:true,
-                                position:'bottom',
-                                min:2012,
-                            },
-                            y: {
-                                min:type.min,
-                                max:type.max,
-                                reverse:false, // last to first year
-                                stacked:false,
-                                onClick: ( event, elements ) => console.log( 'Click', elements )
-                            },
-
-
-                        },
-                        onClick: ( event, elements ) => {
-                            console.log( 'Click', event, elements );
-                            if( elements && elements.length > 0 ) {
-                                const label = labels[ elements[0].index ];
-                                year = Number( label );
-                            }
-                        }
-                    }
-                });
-
- */
+                createChart( labels, datasets, scale.min, scale.max, 2012 );
             }
         }
     }
-
-//    const dispatch = createEventDispatcher();
 
     Chart.register( Colors, BarController, BarElement, CategoryScale, LinearScale, Tooltip );
 

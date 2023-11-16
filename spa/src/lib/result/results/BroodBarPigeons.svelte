@@ -23,21 +23,15 @@
     }
 
     function updateData( districtId, year, sectionId, breedId, colorId, group ) {
-        console.log( "A");
         if( districtId && year ) { // at least
             let a =  api.result.districtYear(districtId, year, sectionId, breedId, colorId, group);
-            console.log( a );
             return a;
         }
-        console.log( 'Oops' );
         return null;
 
     }
 
     function updateChart( result ) {
-        console.log( 'Lay Result', result );
-
-
         let labels = [ 'Küken / Paar' ];
         let datasets = [
             {

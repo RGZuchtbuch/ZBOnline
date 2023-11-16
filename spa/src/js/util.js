@@ -25,18 +25,20 @@ export function gpsToPx( width, height, west, east, south, north, lon, lat ) {
 }
 
 
-export function calcColor( min, max, value, alpha ) {
+export function calcColor( min, max, value, alpha = 1, blue = 0 ) {
     const relValue = (value-min)/(max-min);
-    const mid = (min+max)/2;
+    //const mid = (min+max)/2;
     let r = 15;
     let g = 15;
+    let b = Math.round( Math.min( 15*blue,  15 ) ); // default 0
+    let a = Math.round( Math.min( 15*alpha, 15 ) ); // default 1
     if( relValue < 0.5 ) { // get color on scale 0.15
         g = Math.round( 15 * 2 * relValue );
     } else {
         r = Math.round( 15 * 2 * ( 1 - relValue ) );
     }
-    alpha = Math.round( 15 * alpha ); // range 0..1 to 0..15
-    return '#'+r.toString(16)+g.toString(16)+'0'+alpha.toString(16); // only 1 char per color, like '#48f7' making '#4488ff77'
+    //alpha = Math.round( 15 * alpha ); // range 0..1 to 0..15
+    return '#'+r.toString(16)+g.toString(16)+b.toString(16)+a.toString(16); // only 1 char per color, like '#48f7' making '#4488ff77'
 }
 
 export function isDate( value ) {

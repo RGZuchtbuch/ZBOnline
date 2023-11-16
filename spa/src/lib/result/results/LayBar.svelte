@@ -23,21 +23,15 @@
     }
 
     function updateData( districtId, year, sectionId, breedId, colorId, group ) {
-        console.log( "A");
         if( districtId && year ) { // at least
             let a =  api.result.districtYear(districtId, year, sectionId, breedId, colorId, group);
-            console.log( a );
             return a;
         }
-        console.log( 'Oops' );
         return null;
 
     }
 
     function updateChart( result ) {
-        console.log( 'Lay Result', result, result.breeders );
-
-
         let labels = [ 'Eier %', 'Gewicht %' ];
         let datasets = [
             {
@@ -47,10 +41,6 @@
                 borderWidth: 1,
             }
         ];
-
-
-
-
         if( chart ) {
             chart.data.labels = labels;
             chart.data.datasets = datasets;
