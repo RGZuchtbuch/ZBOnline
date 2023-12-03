@@ -5,7 +5,8 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use Slim\Factory\AppFactory;
 use App\router;
-// allow cross origin from all, could use Slim for this ?
+
+// allow cross-origin from all, could use Slim for this ?
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers:  Accept, Authorization, Content-Type, Origin, X-Requested-With');
 header('Access-Control-Allow-Methods:  GET, POST, PUT, DELETE');

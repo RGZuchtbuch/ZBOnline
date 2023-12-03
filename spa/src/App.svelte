@@ -23,59 +23,60 @@
 </script>
 
 
-
-<div class='w-full h-full flex flex-col'>
-    <a href='/'>
-        <img class='absolute w-20 mt-4 ml-24 no-print' src='../assets/bdrg_logo_r.png' alt='BDRG Logo'>
-    </a>
-    <div class='text-center no-print'>
-        Das Rassegeflügel Zuchtbuch. Schönheit und Leistung durch Wissen.
-    </div>
-
-    <NavigationBar />
-
-    <div class='grow p-2 flex flex-row gap-2 relative min-h-0'>
-
-        <div class=''>
-            <Menu />
+<Route path='/*' >
+    <div class='w-full h-full flex flex-col'>
+        <a href='/'>
+            <img class='absolute w-20 mt-4 ml-24 no-print' src='../assets/bdrg_logo_r.png' alt='BDRG Logo'>
+        </a>
+        <div class='text-center no-print'>
+            Das Rassegeflügel Zuchtbuch. Schönheit und Leistung durch Wissen.
         </div>
 
-        <div class='grow flex flex-col border rounded bg-white items-center print'>
+        <NavigationBar />
 
-            <Route path='/' redirect='/zuchtbuch/1'/>
-            <Route path='/zuchtbuch/*' let:meta>
-                <Route path='/'> <Article articleId=1 /> </Route>
-                <Route path='/:articleId' let:meta> <Article articleId={meta.params.articleId} /> </Route>
-            </Route>
-            <Route path='/standard/*' > <Standard /> </Route>
-            <Route path='/leistungen/*' > <Results /> </Route>
-            <Route path='/obmann/*' > <Moderator /> </Route>
+        <div class='grow p-2 flex flex-row gap-2 relative min-h-0'>
 
-            <Route path='/admin/*' > <Admin /> </Route>
-
-            <Route path='/anmelden'> <Login /> </Route>
-            <Route path='/reset'> <Reset /> </Route>
-            <Route path='/abmelden'> <Logout /> </Route>
-
-            <Route path='/kontakt/:districtId' let:meta> <Message districtId={meta.params.districtId} /> </Route>
-        </div>
-
-        {#if false}
-            <div class='w-48 border rounded flex flex-col no-print'>
-                <h2>Info</h2>
-                <div>
-                    {#if $user}
-                        {#if $user.admin} <div>Administrator</div>{/if}
-                        {#if $user.moderator.length>0} <div>Obmann</div>{/if}
-                        <div>{$user.fullname}</div>
-                        <div>Bis { new Date( $user.exp * 1000 ).toLocaleString( 'de') }</div>
-                    {/if}
-                </div>
+            <div class=''>
+                <Menu />
             </div>
-        {/if}
-    </div>
 
-</div>
+            <div class='grow flex flex-col border rounded bg-white items-center print'>
+
+                <Route path='/' redirect='/zuchtbuch/1'/>
+                <Route path='/zuchtbuch/*' let:meta>
+                    <Route path='/'> <Article articleId=1 /> </Route>
+                    <Route path='/:articleId' let:meta> <Article articleId={meta.params.articleId} /> </Route>
+                </Route>
+                <Route path='/standard/*' > <Standard /> </Route>
+                <Route path='/leistungen/*' > <Results /> </Route>
+                <Route path='/obmann/*' > <Moderator /> </Route>
+
+                <Route path='/admin/*' > <Admin /> </Route>
+
+                <Route path='/anmelden'> <Login /> </Route>
+                <Route path='/reset'> <Reset /> </Route>
+                <Route path='/abmelden'> <Logout /> </Route>
+
+                <Route path='/kontakt/:districtId' let:meta> <Message districtId={meta.params.districtId} /> </Route>
+            </div>
+
+            {#if false}
+                <div class='w-48 border rounded flex flex-col no-print'>
+                    <h2>Info</h2>
+                    <div>
+                        {#if $user}
+                            {#if $user.admin} <div>Administrator</div>{/if}
+                            {#if $user.moderator.length>0} <div>Obmann</div>{/if}
+                            <div>{$user.fullname}</div>
+                            <div>Bis { new Date( $user.exp * 1000 ).toLocaleString( 'de') }</div>
+                        {/if}
+                    </div>
+                </div>
+            {/if}
+        </div>
+
+    </div>
+</Route>
 
 <style>
 

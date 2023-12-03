@@ -10,6 +10,7 @@
     const dispatch = createEventDispatcher();
 
     let years = getYears();
+
     let sections = [ // for selects
         {id: 3, name: 'Groß & Wassergeflügel'},
         {id: 11, name: 'Hühner (Groß)'}, { id: 12, name: 'Zwerghühner' }, {id: 13, name: 'Wachteln'},
@@ -34,12 +35,11 @@
     function getYears() {
         const thisYear = new Date().getFullYear();
         const years = [];
-        for( let year=thisYear; year>=2000; year-- ) {
+        for( let year=thisYear; year>=STARTYEAR; year-- ) {
             years.push( year );
         }
         return years;
     }
-
 </script>
 
 

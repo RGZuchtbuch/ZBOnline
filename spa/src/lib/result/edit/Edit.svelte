@@ -9,7 +9,7 @@
 
     export let districtId = null;
 
-    let year = null ;
+    let year = null; // set in onQuery
     let sectionId = null;
     let group = null
 
@@ -56,13 +56,13 @@
 </script>
 
 <div class='w-256 flex rounded-t'>
-    <div class='w-8'></div>
+    <div class='w-8'>{year}</div>
     <h2 class='grow text-center'>Eingabe Leistungen {district ? district.name : '...'}</h2>
     <div class='w-8 justify-center m-2 circled bg-alert cursor-pointer text-white' on:click={onHelp} title='Anleitung'>?</div>
 </div>
 
 
-<Selector bind:year bind:sectionId bind:group/>
+<Selector bind:year bind:sectionId bind:group/> {year}
 
 <Header {saveCount} />
 

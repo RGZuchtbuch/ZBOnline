@@ -114,6 +114,12 @@
                         x: { position:'bottom', min:start },
                         y: { min:min, max:max },
                     },
+                    onClick: ( event, elements ) => { // change year on bar click
+                        if( elements && elements.length > 0 ) {
+                            const label = labels[ elements[0].index ];
+                            year = Number( label );
+                        }
+                    }
                 }
             }
         )

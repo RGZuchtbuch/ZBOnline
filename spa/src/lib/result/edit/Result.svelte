@@ -78,7 +78,7 @@
     <div class='w-64' class:hasResult>{result.name}</div>
 
     <NumberInput class='w-14' bind:value={result.breeders} min=1 max=99999 error='1..99999' title='Zahl der Zuchten/Züchter, leer lassen zum Löschen' invalid={invalids.breeders} />
-    <NumberInput class='w-14' bind:value={result.pairs} min=1 max=99999 error='1..99999' title='Zahl der Stämme/Paare' invalid={invalids.pairs} />
+    <NumberInput class='w-14' bind:value={result.pairs} min=1 max=99999 error={ (result.breeders ? result.breeders : '1')+'..99999'} title='Zahl der Stämme/Paare' invalid={invalids.pairs} />
 
     <div class='w-2'></div>
 

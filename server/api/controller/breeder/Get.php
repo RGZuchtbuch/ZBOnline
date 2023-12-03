@@ -18,6 +18,7 @@ class Get extends Controller
     public function authorized(): bool
     {
         if ($this->requester && $this->args) {
+
             $id = $this->args['id'] ?? null; // null if not exists
             $this->breeder = query\Breeder::get($id); // preget
             if ($this->breeder) {

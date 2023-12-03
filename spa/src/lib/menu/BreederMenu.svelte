@@ -24,6 +24,7 @@
     }
 
     $: loadBreeder( breederId );
+
 </script>
 
 <div class='flex flex-col'>

@@ -14,7 +14,11 @@ class Results extends Controller
 {
     public function authorized(): bool
     {
-        return true;
+        if( $this->requester ) {
+            if( $this->requester['admin'] ) return true; // admin
+            if( count( $this->requester[ 'moderator' ] ) > 0 ) return true; // a moderator
+        }
+        return false;
     }
 
     /**

@@ -9,7 +9,7 @@
     export let readonly = false;
     export let required = false;
 
-    export let element;
+    export let element = null;
 
     let classname = '';
     export { classname as class }
@@ -23,7 +23,7 @@
 
     $: validate( value )
 
-    function validate() {
+    function validate( value ) {
         invalid = required ? value===null : false;
     }
 
