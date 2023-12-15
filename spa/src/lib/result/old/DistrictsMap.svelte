@@ -1,11 +1,11 @@
 <script>
     import { createEventDispatcher } from 'svelte';
     import { draw, fade } from 'svelte/transition';
-    import api from "../../js/api.js";
-    import { calcColor, gpsToPx, pct} from '../../js/util.js';
+    import api from "../../../js/api.js";
+    import { calcColor, gpsToPx, pct} from '../../../js/util.js';
     import BdrgSVG from './BdrgSVG.svelte';
 
-    import Select from '../common/input/Select.svelte';
+    import Select from '../../common/input/Select.svelte';
 //    import DistrictsMap from "./DistrictsMap.svelte";
 
     export let type;
@@ -103,7 +103,7 @@
     const dispatch = createEventDispatcher();
 
     $: loadDistricts( year, sectionId, breedId, colorId );
-    $: showMap( districts, type );
+    $: showMap( districts );
 
 </script>
 

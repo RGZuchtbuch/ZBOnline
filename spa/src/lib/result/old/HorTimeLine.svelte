@@ -1,7 +1,7 @@
 <script>
 //    import { createEventDispatcher } from 'svelte';
-    import api from "../../js/api.js";
-    import { pct } from '../../js/util.js';
+    import api from "../../../js/api.js";
+    import { pct } from '../../../js/util.js';
     import { BarController, BarElement, CategoryScale, Chart, Colors, LinearScale, Tooltip } from 'chart.js';
 
     export let type = null;

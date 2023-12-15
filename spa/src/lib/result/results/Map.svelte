@@ -137,7 +137,8 @@
                 titles.push( type.title( district ) );
                 let values = type.map( district );
 
-                colors[ district.id ] = calcColor( type.min, type.max, values[0], 0.25, 0 );
+                console.log('Value', values[0] );
+                colors[ district.id ] = values[0] === null ? '#DDD4' : calcColor( type.min, type.max, values[0], 0.25, 0 );
 
                 for (let i=0; i<values.length; i++) {
                     if (datasets.length < i + 1) {

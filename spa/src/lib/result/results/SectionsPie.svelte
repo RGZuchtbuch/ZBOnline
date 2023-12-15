@@ -1,9 +1,9 @@
 <script>
 
-    import api from "../../js/api.js";
+    import api from "../../../js/api.js";
 //    import {BarController, BarElement, CategoryScale, Chart, Colors, LinearScale, Tooltip} from "chart.js";
     import { Chart, ArcElement, DoughnutController, Legend, Tooltip} from 'chart.js';
-    import {dec, pct} from "../../js/util.js";
+    import {dec, pct} from "../../../js/util.js";
 
     export let districtId = null;
     export let year = null;

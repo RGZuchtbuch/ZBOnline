@@ -1,15 +1,10 @@
 <script>
     import {Route, router, meta} from 'tinro';
     import api from '../../js/api.js';
-    import { calcColor, dec, pct } from '../../js/util.js';
     import Select from '../common/input/Select.svelte';
-    import Button from "../common/input/Button.svelte";
-    import ShowPie from './old/ShowPie.svelte';
-    import SectionsPie from './SectionsPie.svelte';
-//    import DistrictsMap from './DistrictsMap.svelte';
+    import SectionsPie from './results/SectionsPie.svelte';
     import DistrictList from './DistrictList.svelte';
     import Help from './Help.svelte';
-    import ScrollDiv from '../common/ScrollDiv.svelte';
 
     import LayBar from './results/LayBar.svelte';
     import BroodBarLayers from './results/BroodBarLayers.svelte';
