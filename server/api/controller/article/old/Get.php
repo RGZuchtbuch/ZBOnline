@@ -1,10 +1,9 @@
 <?php
 
-namespace App\controller\article;
+namespace App\controller\article\old;
 
-use App\query;
 use App\controller\Controller;
-use App\query\Cache;
+use App\query;
 use Slim\Exception\HttpNotFoundException;
 
 class Get extends Controller

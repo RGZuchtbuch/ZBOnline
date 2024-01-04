@@ -11,7 +11,7 @@
 //    export let moderator = null;
 
     let district = null;
-    let year = new Date().getFullYear();
+    let year = new Date().getFullYear()-1;
     let results = null;
 
 
@@ -39,7 +39,7 @@
     <h2 class='w-256 text-center'>Verband {#if district} {district.name} {/if} → Leistungen {year}</h2>
     <Range class='w-228 px-8' label='Jahr' bind:value={year} min={STARTYEAR} max={new Date().getFullYear()} step={1} title='Schieben um das Jahr zu wählen'/>
     <ScrollDiv>
-        <ResultsList class='' {results} />
+        <ResultsList {results} />
     </ScrollDiv>
 {:else}
     NOT AUTORIZED

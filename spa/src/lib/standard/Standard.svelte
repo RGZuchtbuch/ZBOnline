@@ -1,4 +1,5 @@
 <script>
+    import { slide } from 'svelte/transition';
     import { meta, router, Route } from 'tinro';
 
     import Breeds from "./Breeds.svelte";
@@ -8,7 +9,11 @@
 
 </script>
 
-<Route path='/'> <Breeds /> </Route>
+<Route path='/'>
+    <Breeds />
+</Route>
+
+
 <Route path='/sparte/*'>
 
     <Route path='/'> ? </Route>

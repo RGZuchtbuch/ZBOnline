@@ -1,11 +1,9 @@
 <?php
 
-namespace App\controller\color;
+namespace App\controller\color\old;
 
-use App\query;
 use App\controller\Controller;
-use http\Exception\InvalidArgumentException;
-use Slim\Exception\HttpNotFoundException;
+use App\query;
 
 class Get extends Controller
 {

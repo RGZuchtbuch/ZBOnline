@@ -53,6 +53,7 @@ export default {
     color: {
         get: ( id ) => get( 'api/color/'+id ),
         post:( color ) => post( 'api/color', color ),
+        delete:( id ) => del( 'api/color/'+id ),
     },
 
     district: {

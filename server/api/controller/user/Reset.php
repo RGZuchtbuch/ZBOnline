@@ -29,7 +29,7 @@ class Reset extends Controller
         $email = $this->args['email'];
 
         if( $email ) {
-            $resetToken = Token::encode( [ 'email'=>$email ] );
+            $resetToken = GetToken::encode( [ 'email'=>$email ] );
             $servername = $_SERVER['SERVER_NAME'];
 
 

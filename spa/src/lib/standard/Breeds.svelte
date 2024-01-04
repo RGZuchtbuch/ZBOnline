@@ -6,18 +6,18 @@
     import List from "../common/List.svelte";
 
     import DistrictsTree from "../districts/DistrictsTree.svelte";
-    import SectionTree from "./SectionTree.svelte";
+    import SectionRow from "./SectionRow.svelte";
 //    import {createEventDispatcher} from "svelte";
 
-    let rootSection = null;
+    let section = null;
 
 //    const dispatch = createEventDispatcher();
     const route = meta();
 
     function loadStandard() {
         api.standard.get().then( response => {
-            rootSection = response.standard;
-            rootSection.open = true;
+            section = response.standard;
+            section.open = true;
         } );
 
     }
@@ -30,8 +30,8 @@
     <div slot='title'> BDRG Rassegeflügelstandard </div>
     <div slot='header' class='text-center'> Sparten / Gruppen / Rassen / Farbenschläge </div>
     <div slot='body'>
-        {#if rootSection}
-            <SectionTree {rootSection} />
+        {#if section}
+            <SectionRow {section} open={true}/>
         {/if}
     </div>
 </List>

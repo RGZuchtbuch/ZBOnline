@@ -30,7 +30,7 @@ class Password extends Controller
         $resetToken = $this->data['token'];
         $password = $this->data['password'];
 
-        $decodedResetToken = Token::decode( $resetToken );
+        $decodedResetToken = GetToken::decode( $resetToken );
         $data = $decodedResetToken['user'] ?? null;
         if( $data ) {
             $tokenEmail = $data['email'] ?? null;
@@ -42,7 +42,7 @@ class Password extends Controller
                     if ($user) {
                         $user['fullname'] = $user['firstname'] . ' ' . ($user['infix'] ? $user['infix'] . ' ' : '') . $user['lastname'];
                         $user['moderator'] = array_column(query\Moderator::districts($user['id']), 'id');
-                        $token = Token::encode($user);
+                        $token = GetToken::encode($user);
                         return ['token' => $token];
                     }
                 }

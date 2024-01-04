@@ -1,9 +1,9 @@
 <?php
 
-namespace App\controller\color;
+namespace App\controller\color\old;
 
-use App\query;
 use App\controller\Controller;
+use App\query;
 
 class Post extends Controller
 {

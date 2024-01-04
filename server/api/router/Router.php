@@ -3,6 +3,7 @@
 namespace App\router;
 
 use Slim\App;
+use App\controller;
 
 class Router {
 
@@ -15,23 +16,35 @@ class Router {
     public static function register( App $app ) {
         $app->get('/', 'App\controller\Index');
 
-        $app->get('/article/{id}', 'App\controller\article\Get' );
-        $app->get('/articles', 'App\controller\article\Articles' );
-        $app->post( '/article', 'App\controller\article\Post');
+		$app->any('/test/{id}', 'App\controller\article\Article' );
 
-        $app->get('/breed/{id}', 'App\controller\breed\Get');
-        $app->get('/breed/{id}/colors', 'App\controller\breed\Colors');
-        $app->post( '/breed', 'App\controller\breed\Post');
+//        $app->get('/article/{id}', 'App\controller\article\Get' );
+//        $app->post( '/article', 'App\controller\article\Post');
+//		$app->any( '/article/{id}', 'App\controller\article\Article' );
+		$app->any( '/article[/{id}]', controller\article\Article::class );
+		//$app->post( '/article', controller\article\Article::class );
+
+		$app->get('/articles', controller\article\Articles::class );
+
+		$app->any('/breed[/{id}]', controller\breed\Breed::class );
+		$app->get('/breed/{id}/colors', controller\breed\Colors::class );
+//        $app->get('/breed/{id}', 'App\controller\breed\Get');
+//        $app->get('/breed/{id}/colors', 'App\controller\breed\Colors');
+//        $app->post( '/breed', 'App\controller\breed\Post');
 
 
-        $app->get('/breeder/{id}', 'App\controller\breeder\Get');
+//        $app->get('/breeder/{id}', 'App\controller\breeder\Get');
+//		$app->post('/breeder', 'App\controller\breeder\Post');
+		$app->any('/breeder[/{id}]', controller\breeder\Breeder::class );
+
         $app->get('/breeder/{id}/pairs', 'App\controller\breeder\Pairs');
         $app->get('/breeder/{id}/pairs/year/{year}', 'App\controller\breeder\PairsInYear' ); // for selecting pair for parent ring in report
 //        $app->get('/breeder/{id}/results', 'App\controller\breeder\Results');
-        $app->post('/breeder', 'App\controller\breeder\Post');
 
-        $app->get( '/color/{id}', 'App\controller\color\Get');
-        $app->post( '/color', 'App\controller\color\Post');
+//        $app->get( '/color/{id}', 'App\controller\color\Get');
+//        $app->post( '/color', 'App\controller\color\Post');
+		$app->any( '/color[/{id}]', controller\color\Color::class );
+		//$app->any( '/color', controller\color\Color::class );
 
         $app->get('/district/{id}', 'App\controller\district\Get' );
         $app->post('/district', 'App\controller\district\Post' );
@@ -64,7 +77,7 @@ class Router {
         $app->get('/standard', 'App\controller\standard\Get' );
 
         $app->get('/user/reset/{email}', 'App\controller\user\Reset' );
-        $app->post('/user/token', 'App\controller\user\Token' );
+        $app->post('/user/token', 'App\controller\user\GetToken' );
         $app->post('/user/password', 'App\controller\user\Password' );
 
         $app->get('/test', 'App\controller\Test' ); // test, query has year, district, section, breed, color and group

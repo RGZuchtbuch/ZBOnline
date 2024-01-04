@@ -1,11 +1,9 @@
 <?php
 
-namespace App\controller\breeder;
+namespace App\controller\breeder\old;
 
-use App\query;
 use App\controller\Controller;
-use http\Exception\InvalidArgumentException;
-use Slim\Exception\HttpNotFoundException;
+use App\query;
 
 class Post extends Controller
 {

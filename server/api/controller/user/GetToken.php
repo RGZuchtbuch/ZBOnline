@@ -5,12 +5,13 @@ namespace App\controller\user;
 
 use App\query;
 use App\controller\Controller;
+use App\controller\Token;
 use DateTimeImmutable;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Slim\Exception\HttpNotFoundException;
 
-class Token extends Controller
+class GetToken extends Controller
 {
 
 
@@ -28,8 +29,9 @@ class Token extends Controller
         if( $id ) {
             $user = query\User::get( $id );
             $user[ 'fullname' ] = $user[ 'firstname' ].' '.($user[ 'infix' ] ? $user[ 'infix' ].' ':'').$user[ 'lastname' ];
-            $user[ 'moderator' ] = array_column( query\Moderator::districts( $id ), 'id' );
-            $token = $this->encode( $user );
+			$user[ 'moderator' ] = array_column( query\Moderator::districts( $id ), 'id' );
+			//$user[ 'moderates' ] = array_column( query\Moderator::districts( $id ), 'id' );
+            $token = Token::encode( $user );
             return [ 'token' => $token ];
         }
         throw new HttpNotFoundException( $this->request, "Invalid credentials");

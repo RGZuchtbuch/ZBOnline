@@ -1,0 +1,153 @@
+<script>
+    import { createEventDispatcher, getContext, setContext, onMount, onDestroy } from 'svelte';
+    import { writable } from 'svelte/store';
+
+    let className = '';
+    export { className as class };
+
+    export let autosave = false;
+
+    export let valid = true; // if valid, only save when changed and valid
+    export let changed = false; // if form data changed
+    export let disabled = false; // disable editing form
+
+    //export let errorMessage = 'System error on post, warn administrator !';
+
+    const dispatch = createEventDispatcher();
+
+    const state = writable( { disabled:disabled, changed:false, valid:true, validators:[], error:false } ); // store in context
+    //let error = false; // when post failes
+    let formElement; // the formelement
+    let saveTimeout = null; // timer
+    let validateTimeout = null; // timer
+
+    setContext( 'state', state );
+
+//    let help = localStorage.getItem( 'help' );
+
+    window.addEventListener( 'beforeunload', beforeUnload ); // when tab is left by user
+//    localStorage.setItem('help', 'init' );
+
+    function beforeUnload( event ) { // needs keepalive in post !
+//        console.log( 'BeforeUnload' );
+//        alert( 'Unload' );
+//        localStorage.setItem('help', 'before' );
+        if( $state.changed ) { // show dialog
+//            event.preventDefault(); // triggers dialog;
+//            event.returnValue = true;
+            trySubmit();
+            console.log('Form submit on leave');
+        }
+    }
+    function trySubmit() { // called by submit or autosave timeout
+//        console.log( 'TrySubmit' );
+        if( $state.changed && $state.valid ) {
+//            console.log( 'Fire submit' );
+            $state.changed = changed = false; // after post success
+            dispatch( 'submit' ); // let outside do the actual submit
+            return true; // submitted
+        } else {
+            return false; // no submit
+        }
+    }
+
+    function validate() { // all registered validators, triggered by timeout
+        let tempValid = true;
+        for (const validator of $state.validators) { // all registered validators
+            tempValid = validator() && tempValid; // call first otherwise call will be skipped after first false
+        }
+        $state.valid = valid = tempValid;
+    }
+
+
+    function onDisabled( dummy ) {
+        $state.disabled = disabled;
+    }
+    function onInput( event ) { // called after children got input and init validate and autosave
+        if( ! $state.changed ) {
+            $state.changed = changed = true;
+            localStorage.setItem('help', 'changed' );
+        }
+        $state.valid = valid = undefined; // to be validated...
+        clearTimeout( validateTimeout );
+        clearTimeout( saveTimeout );
+        validateTimeout = setTimeout( validate, 500 ); // validate n ms after last input
+        saveTimeout = setTimeout( trySubmit, 2500 ); // try save n ms after last input
+        console.log( 'FormData', Object.fromEntries( new FormData( formElement )));
+    }
+
+    function onSubmit( event ) { // enter or submit button
+        event.preventDefault();
+        if( $state.changed ) {
+            validate();
+            trySubmit();
+        }
+    }
+    onMount( () => {
+        validate(); // check on init errors
+        formElement.addEventListener('input', onInput); // each keystroke in form
+        formElement.addEventListener('submit', onSubmit); // catching enter
+    });
+
+    onDestroy( () => {
+        // should save all unsaved...
+        //alert('Saving all');
+    })
+
+    $: onDisabled( disabled );
+
+</script>
+
+
+<form bind:this={formElement} class:valid>
+    <fieldset class='{className}' {disabled}>
+        <slot />
+    </fieldset>
+</form>
+
+<style>
+    form {
+        padding : 0.25em;
+        margin: 0.25em;
+    }
+
+    fieldset {
+        border: 0;
+        margin: 0.25em;
+    }
+
+    form :global(label.name) {
+        font-size: 0.6em;
+        color: grey;
+        text-align: left;
+        padding-left: 0.5em;
+    }
+    form :global(.input) {
+        color: black;
+        border: solid 1px red;
+        border-radius: 0.25em;
+        padding: 0.35em;
+    }
+    form :global(.valid) {
+        border: solid 1px grey;
+    }
+    form :global(label.error) {
+        color: red;
+        font-size: 0.6em;
+        text-align: left;
+        padding-left: 0.5em;
+    }
+
+
+    form .error {
+        visibility: visible;
+    }
+
+    .hidden {
+        color: red;
+        font-size: 0.8em;
+        text-align: center;
+        visibility: hidden;
+    }
+
+</style>

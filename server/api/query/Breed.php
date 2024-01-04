@@ -6,7 +6,19 @@ use Slim\Exception\HttpNotImplementedException;
 
 class Breed extends Query
 {
-    public static function new( string $name, int $sectionId, ? int $broodGroup, ? int $layEggs, ? int $layWeight, ? int $sireRing, ? int $dameRing, ? int $sireWeight, ? int $dameWeight, ? string $info, int $modifierId ) : ? int
+	public static function get( int $id ) : ? array
+	{
+		$args = get_defined_vars();
+		$stmt = Query::prepare('
+            SELECT breed.id, breed.name, sectionId, broodGroup, layEggs, layWeight, sireRing, dameRing, sireWeight, dameWeight, info, section.layers AS layer
+            FROM breed
+            LEFT JOIN section ON section.id = breed.sectionId
+            WHERE breed.id=:id
+        ');
+		return Query::select($stmt, $args);
+	}
+
+	public static function new( string $name, int $sectionId, ? int $broodGroup, ? int $layEggs, ? int $layWeight, ? int $sireRing, ? int $dameRing, ? int $sireWeight, ? int $dameWeight, ? string $info, int $modifierId ) : ? int
     {
         $args = get_defined_vars();
         $stmt = Query::prepare( '
@@ -16,17 +28,7 @@ class Breed extends Query
         return Query::insert( $stmt, $args ); // returns id
     }
 
-    public static function get( int $id ) : ? array
-    {
-        $args = get_defined_vars();
-        $stmt = Query::prepare('
-            SELECT breed.id, breed.name, sectionId, broodGroup, layEggs, layWeight, sireRing, dameRing, sireWeight, dameWeight, info, section.layers AS layer
-            FROM breed
-            LEFT JOIN section ON section.id = breed.sectionId
-            WHERE breed.id=:id
-        ');
-        return Query::select($stmt, $args);
-    }
+
 
     public static function set( int $id, string $name, int $sectionId, ? int $broodGroup, ? int $layEggs, ? int $layWeight, ? int $sireRing, ? int $dameRing, ? int $sireWeight, ? int $dameWeight, ? string $info, int $modifierId ) : bool
     {

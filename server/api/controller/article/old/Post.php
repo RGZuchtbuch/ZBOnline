@@ -1,9 +1,9 @@
 <?php
 
-namespace App\controller\article;
+namespace App\controller\article\old;
 
-use App\query;
 use App\controller\Controller;
+use App\query;
 
 class Post extends Controller
 {

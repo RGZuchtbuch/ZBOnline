@@ -13,8 +13,8 @@
     export let spellcheck = true;
     export let invalid = false;
     export let title = null;
+    export let element = null;
 
-    export let element;
     let classname = '';
     export { classname as class }
 

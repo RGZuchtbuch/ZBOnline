@@ -21,8 +21,12 @@ $app = AppFactory::create();
 
 $app->addRoutingMiddleware();
 
-// Add Error Middleware
-$errorMiddleware = $app->addErrorMiddleware(true, true, true);
+// Add Error Middleware depending on dev or production
+if( $_SERVER[ 'REMOTE_ADDR' ] === '::1' ) { // locahost
+	$errorMiddleware = $app->addErrorMiddleware(true, true, true);
+} else {
+	$errorMiddleware = $app->addErrorMiddleware(false, true, true);
+}
 
 /* TODO does not work as replace for lines 7-10
 $app->add(function ($req, $res, $next) {

@@ -43,6 +43,7 @@
             <div class='grow flex flex-col border rounded bg-white items-center print'>
 
                 <Route path='/' redirect='/zuchtbuch/1'/>
+
                 <Route path='/zuchtbuch/*' let:meta>
                     <Route path='/'> <Article articleId=1 /> </Route>
                     <Route path='/:articleId' let:meta> <Article articleId={meta.params.articleId} /> </Route>

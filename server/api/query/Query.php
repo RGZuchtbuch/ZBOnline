@@ -43,7 +43,7 @@ class Query
     /**
      * @param PDOStatement $stmt
      * @param array $args
-     * @return 1st row or |null on empty
+     * @return 1st row or null on empty
      */
     protected static function select( PDOStatement  & $stmt, array & $args = [] ) {
         if( $stmt->execute( $args ) ) {

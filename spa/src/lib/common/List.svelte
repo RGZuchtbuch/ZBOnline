@@ -1,4 +1,7 @@
-<script></script>
+<script>
+	import { slide } from 'svelte/transition';
+</script>
+
 
 <h3 class='title'> <slot name='title'> <span>Title ?</span> </slot> </h3>
 <div class='header'> <slot name='header'> <span>Header ?</span> </slot> </div>

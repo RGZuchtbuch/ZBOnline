@@ -2,7 +2,7 @@
 
 namespace App\controller;
 
-use App\controller\user\Token;
+use App\controller\Token;
 use App\query;
 use Exception;
 use HttpException;
