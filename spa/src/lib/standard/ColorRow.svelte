@@ -2,7 +2,6 @@
     import { slide } from 'svelte/transition';
     import { meta } from 'tinro';
     import { user } from '../../js/store.js';
-    import { txt }  from '../../js/util.js';
     import dic from '../../js/dictionairy.js';
     import validator from '../../js/validator.js';
     import api from "../../js/api.js";

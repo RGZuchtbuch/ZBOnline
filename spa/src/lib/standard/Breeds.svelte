@@ -1,17 +1,13 @@
 <script>
     import { meta } from 'tinro';
     import api from '../../js/api.js';
-    import { user } from '../../js/store.js'
 
     import List from "../common/List.svelte";
 
-    import DistrictsTree from "../districts/DistrictsTree.svelte";
     import SectionRow from "./SectionRow.svelte";
-//    import {createEventDispatcher} from "svelte";
 
     let section = null;
 
-//    const dispatch = createEventDispatcher();
     const route = meta();
 
     function loadStandard() {

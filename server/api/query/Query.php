@@ -70,7 +70,7 @@ class Query
     /**
      * @param PDOStatement $stmt
      * @param array $args
-     * @return id of newly inserted row or null on failure
+     * @return int id of newly inserted row or null on failure
      */
     protected static function insert( PDOStatement & $stmt, array & $args ) : ? int { // returns new id
         return $stmt->execute( $args ) ? Query::lastInsertId() : null;
@@ -97,7 +97,7 @@ class Query
     /**
      * @param string|null $name
      * needs to called right after an insert statement, Query::insert already does so
-     * @return last inserted id,
+     * @return int last inserted id,
      */
     protected static function lastInsertId( ? string $name = null ) : int {
         return Query::getPdo()->lastInsertId( $name );

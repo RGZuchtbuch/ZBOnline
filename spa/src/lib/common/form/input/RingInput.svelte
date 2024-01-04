@@ -1,5 +1,5 @@
 <script>
-	import {toRing} from '../../js/Validate.js';
+	import {toRing} from '../../../../js/validator.js';
 	import TextInput from './TextInput.svelte';
 
 	let inputElement = null;

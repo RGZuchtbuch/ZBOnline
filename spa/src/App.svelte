@@ -2,13 +2,11 @@
     //  import logo from './assets/svelte.png'
     import {Route} from 'tinro';
 
-    import api from './js/api.js';
-    import { standard, user } from './js/store.js'
+    import { user } from './js/store.js'
 
     import Article from './lib/article/Article.svelte';
     import NavigationBar from './lib/navigation/NavigationBar.svelte';
     import Menu from './lib/menu/Menu.svelte';
-    import Home from './lib/info/Info.svelte';
     import Admin from './lib/admin/Admin.svelte';
     import Moderator from './lib/moderator/Moderator.svelte';
     import Results from './lib/result/Results.svelte';
@@ -18,7 +16,6 @@
     import Reset from './lib/login/Reset.svelte';
     import Logout from './lib/login/Logout.svelte';
     import Message from './lib/common/Message.svelte';
-    import Info from "./lib/info/Info.svelte";
 
 </script>
 

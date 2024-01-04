@@ -2,6 +2,7 @@
 
 namespace App\query;
 
+use http\Exception\BadMethodCallException;
 use Slim\Exception\HttpNotImplementedException;
 
 class Breed extends Query
@@ -42,7 +43,8 @@ class Breed extends Query
     }
 
     public static function del( int $id ) : bool {
-        throw new HttpNotImplementedException( null, "oops" );
+        //throw new HttpNotImplementedException( null, "oops" );
+		throw new BadMethodCallException( );
     }
 
     public static function all() : array {

@@ -1,5 +1,5 @@
 <script>
-    import { createEventDispatcher, getContext, setContext, onMount, onDestroy } from 'svelte';
+    import { createEventDispatcher, setContext, onMount, onDestroy } from 'svelte';
     import { writable } from 'svelte/store';
 
     let className = '';

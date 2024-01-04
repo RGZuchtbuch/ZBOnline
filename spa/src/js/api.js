@@ -3,13 +3,6 @@ import { user } from './store.js'
 
 //uses constants from js/setting.js
 
-function when( value, output ) {
-    if( value !== null ) {
-        return output;
-    }
-    return '';
-}
-
 export default {
 
     article: {

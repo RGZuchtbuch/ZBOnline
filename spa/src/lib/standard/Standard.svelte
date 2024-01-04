@@ -1,6 +1,5 @@
 <script>
-    import { slide } from 'svelte/transition';
-    import { meta, router, Route } from 'tinro';
+    import { Route } from 'tinro';
 
     import Breeds from "./Breeds.svelte";
     import Breed from "./Breed.svelte";

@@ -1,5 +1,4 @@
 <script>
-	import { slide } from 'svelte/transition';
 </script>
 
 
