@@ -9,5 +9,7 @@ export default defineConfig({
   build: {
     outDir: '../server',
   },
-  plugins: [svelte()],
+  plugins: [
+      svelte()
+  ],
 })

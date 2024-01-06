@@ -1,4 +1,5 @@
 <script>
+    import { createEventDispatcher } from 'svelte';
     import { slide } from 'svelte/transition';
     import {meta} from "tinro";
     import api from '../../js/api.js';
@@ -15,9 +16,12 @@
 
     export let breed;
 
+    export let open = false;
+
     let edit = false;
 
     const route = meta();
+    const dispatch = createEventDispatcher();
 
     const validate = { // for validating Form fields
         name:       (v) => validator(v).string().length(2,128).orNull().isValid(),
@@ -29,13 +33,14 @@
 
     function  onAddColor() {
         const color = { id:0, breedId:breed.id, name:'Farbe', info:null, aoc:false };
-        breed.colors = [ color, ...breed.colors ]; // add null, colorrow will provide defaults if so
+        breed.colors = [ color, ...breed.colors ]; // add default
+        breed.open = true;
     }
     function onEdit() {
         edit = ! edit;
     }
     function onOpen() {
-        breed.open = ! breed.open;
+        dispatch( 'open', breed );
     }
 
     function onSubmit() { // triggered by form's autosave
@@ -115,7 +120,7 @@
     {/if}
 
 
-    {#if breed.open}
+    {#if open}
         <div class='flex flex-col' transition:slide>
             {#each breed.colors as color }
                 <ColorRow {breed} {color}/>

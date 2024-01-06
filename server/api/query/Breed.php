@@ -43,8 +43,13 @@ class Breed extends Query
     }
 
     public static function del( int $id ) : bool {
-        //throw new HttpNotImplementedException( null, "oops" );
-		throw new BadMethodCallException( );
+		$args = get_defined_vars();
+		$stmt = Query::prepare('
+			DELETE 
+			FROM breed
+			WHERE id=:id
+        ');
+		return Query::delete($stmt, $args);
     }
 
     public static function all() : array {

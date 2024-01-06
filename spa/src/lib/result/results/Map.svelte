@@ -37,7 +37,7 @@
         10: {
             id: 10,
             label: 'Legeleistung',
-            map: (result) => [100*result.layEggs],
+            map: (result) => [result.layEggs === null ? null : 100*result.layEggs],
             title: (result) =>  result.layEggs
                 ? ` Legeleistung ⌀ ${dec( 100*result.layEggs)}% Eier/Jahr`
                 : ' keine Angaben',
@@ -47,7 +47,7 @@
         20: {
             id: 20,
             label: 'Brutleistung Leger',
-            map: (result) => [ 100*result.broodLayerHatched, 100*result.broodLayerFertile], // for map and chart
+            map: (result) => [ result.broodLayerHatched === null ? null : 100*result.broodLayerHatched, result.broodLayerFertile === null ? null : 100*result.broodLayerFertile], // for map and chart
             title: (result) => result.broodLayerEggs > 0
                     ? ` Eingelegt ${dec(result.broodLayerEggs)} Eier, ${dec(100 * result.broodLayerFertile)}% waren befruchtet und es schlüpften ${dec(100*result.broodLayerHatched)}%`
                     : ' keine Angaben',
@@ -57,7 +57,7 @@
         21: {
             id: 21,
             label: 'Brutleistung Tauben',
-            map: (result) => [ result.broodPigeonProduction ], // for map and chart
+            map: (result) => [ result.broodPigeonProduction === null ? null : result.broodPigeonProduction ], // for map and chart
             title: (result) => result.broodPigeonBreeders ?
                 ` Bei ${dec(result.nonLayerPairs)} Paare schlüpften ${dec(result.chicks)} Küken also ${dec(result.broodPigeonProduction,1)} Küken / Paar`
                 : ` keine Angaben`,
@@ -68,7 +68,7 @@
         30: {
             id: 30,
             label: 'Schauleistung',
-            map: (result) => [result.showScore ? result.showScore : 89 ],
+            map: (result) => [ result.showScore === null ? null : result.showScore ],
             title: (result) => result.showCount
                 ? ` ${result.showCount} Tiere erhielten ⌀ ${dec(result.showScore, 1)} Punkte`
                 : ` keine Angaben`,

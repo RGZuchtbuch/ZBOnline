@@ -4,18 +4,43 @@
     import { meta } from 'tinro';
     import { user } from '../../js/store.js';
     import BreedRow from './BreedRow.svelte';
+    import NumberInput from '../common/form/input/NumberInput.svelte';
+    import FormStatus from '../common/form/Status.svelte';
+    import TextInput from '../common/form/input/TextInput.svelte';
+    import Form from '../common/form/Form.svelte';
 
     export let section = null;
     export let open = false;
 
+    let openedBreed = null;
     let openedChild = null;
+    let edit = false;
+
 
     const dispatch = createEventDispatcher();
     const route = meta();
 
+    function  onAddBreed() {
+        const breed = { id:0, sectionId:section.id, name:'Rasse...', layEggs:null, layWeight:null, sireWeight:null, dameWeight:null, sireRing:null, dameRing:null, broodGroup:0, info:null, aoc:false, colors:[] };
+        section.breeds = [ breed, ...section.breeds ]; // add default breed
+        open = true;
+    }
+    function onEdit() {
+        edit = ! edit;
+    }
+
     function onOpen() {
         //section.open = ! section.open;
         dispatch( 'open', section );
+    }
+
+    function onOpenBreed( event ) {
+        const breed = event.detail;
+        if( openedBreed === breed ) { // close on opened or open on closed
+            openedBreed = null;
+        } else {
+            openedBreed = event.detail;
+        }
     }
 
     function onOpenChild( event ) {
@@ -38,9 +63,11 @@
         </button>
         <div class='grow'></div>
         <div class='w-12 text-xs'>[{section.id}]</div>
+
         {#if $user && $user.admin && section.children.length === 0 }
-            <a class='w-6' href={route.match+'/sparte/'+section.id+'/rasse/0'}>✚</a>
+            <button type='button' on:click={onAddBreed} title='Rasse hinzufügen'> (✚) </button>
         {/if}
+
     </div>
 
     {#if open }
@@ -49,7 +76,7 @@
                 <svelte:self section={childSection} on:open={onOpenChild} open={childSection === openedChild}/>
             {/each}
             {#each section.breeds as breed }
-                <BreedRow {breed}/>
+                <BreedRow {breed} on:open={onOpenBreed} open={ breed === openedBreed}/>
             {/each}
         </div>
     {/if}

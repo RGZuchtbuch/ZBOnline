@@ -7,14 +7,14 @@ export default {
 
     article: {
         get:    (id) => get('api/article/' + id),
-        getAll: () => get( 'api/articles' ),
         post:   ( article ) => post( 'api/article', article ),
+        getAll: () => get( 'api/articles' ),
     },
 
     breed: {
-        get: (id) => get( 'api/breed/'+id ),
-
-        post:( breed ) => post( 'api/breed', breed ),
+        get:    ( id )     => get( 'api/breed/'+id ),
+        post:   ( breed ) => post( 'api/breed', breed ),
+        delete: ( id )    => del( 'api/breed/'+id ),
 
         colors : {
             get: ( breedId ) => get( `api/breed/${breedId}/colors`)

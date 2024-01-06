@@ -195,7 +195,7 @@
         </div>
     </div>
 
-    <div class='w-256 bg-gray-100 overflow-y-scroll border rounded-b border-gray-400 scrollbar print-no-border'>
+    <div class='w-256 bg-white overflow-y-scroll border rounded-b border-gray-400 scrollbar print-no-border'>
 
         {#if districts && districtId && year && sectionId}
 
@@ -227,7 +227,7 @@
 
             {#if true}
 
-            <div class='flex flex-row border border-gray-600 gap-x-8 justify-evenly'>
+            <div class='flex flex-row gap-x-8 justify-evenly'>
                 <SectionsPie {districtId} {year} {typeId}/>
 
             </div>

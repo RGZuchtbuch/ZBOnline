@@ -4,6 +4,7 @@ namespace App\controller\breed;
 
 use App\controller\BaseController;
 use App\query;
+use Slim\Exception\HttpBadRequestException;
 use Slim\Exception\HttpNotFoundException;
 
 class Breed extends BaseController
@@ -31,6 +32,19 @@ class Breed extends BaseController
 	}
 
 	// delete not supported, could be if not use in colors, results etc.
+	protected function delete() {
+		$id = $this->args[ 'id' ];
+		// only is no colors
+		$colors = query\Breed::colors( $id );
+		if( count( $colors ) === 0 ) { // only delete if no more colours
+			$success = query\Breed::del( $id );
+			if( $success ) {
+				return [ 'success' => true];
+			}
+			throw new HttpNotFoundException( $this->request );
+		}
+		throw new HttpBadRequestException( $this->request, 'Could not delete breed, its use for colors or pairs' );
+	}
 
 	protected function canRead() : bool {
 		return true;

@@ -6,6 +6,7 @@ namespace App\controller;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpMethodNotAllowedException;
+use Slim\Exception\HttpNotImplementedException;
 
 class BaseController
 {
@@ -32,7 +33,7 @@ class BaseController
 		else if ( $method === 'PUT' && $this->canWrite() ) $result = $this->put();
 		else if ( $method === 'POST' && $this->canWrite() ) $result = $this->post();
 		else if ( $method === 'DELETE' && $this->canWrite() ) $result = $this->delete();
-		else throw new HttpMethodNotAllowedException( $request );
+		else throw new HttpNotImplementedException( $request );
 
 		$json = json_encode( $result, JSON_UNESCAPED_SLASHES );
 		$response->getBody()->write( $json );
@@ -40,16 +41,16 @@ class BaseController
 	}
 
 	protected function get() {
-		throw new HttpMethodNotAllowedException( $this->request );
+		throw new HttpNotImplementedException( $this->request );
 	}
 	protected function put() {
-		throw new HttpMethodNotAllowedException( $this->request );
+		throw new HttpNotImplementedException( $this->request );
 	}
 	protected function post() {
-		throw new HttpMethodNotAllowedException( $this->request );
+		throw new HttpNotImplementedException( $this->request );
 	}
 	protected function delete() {
-		throw new HttpMethodNotAllowedException( $this->request );
+		throw new HttpNotImplementedException( $this->request );
 	}
 
 	protected function canRead() : bool {

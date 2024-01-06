@@ -3,7 +3,7 @@
     import {active, meta, router, Route} from 'tinro';
     import api from '../../js/api.js';
     import { user } from '../../js/store.js'
-    import ResultList from './ResultsList.svelte';
+    import ResultList from './ResultsTable.svelte';
 
     export let districtId = null;
     export let year = null;
