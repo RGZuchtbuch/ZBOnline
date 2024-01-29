@@ -1,5 +1,6 @@
 <script>
     import {Route, router, meta} from 'tinro';
+    import { slide } from 'svelte/transition';
     import api from '../../js/api.js';
     import Select from '../common/input/Select.svelte';
     import SectionsPie from './results/SectionsPie.svelte';
@@ -195,22 +196,17 @@
         </div>
     </div>
 
-    <div class='w-256 bg-white overflow-y-scroll border rounded-b border-gray-400 scrollbar print-no-border'>
+    <div class='w-256 bg-white overflow-y-scroll border rounded-b border-gray-400 scrollbar print-no-border print-no-scrollbar'>
 
         {#if districts && districtId && year && sectionId}
-
-
-            {#if true}
             <div class='flex'>
                 <h2 class='grow text-center' >Das Zuchtbuch : {districts[ districtId ].name} in {year}</h2>
+
                 <div class='flex flex-col p-2 no-print'>
                     <div class='text-sm'>eMail am Obmann</div>
                     <a class='p-1 bg-alert rounded text-xl text-black text-center' href={'/kontakt/'+districtId}>&#9993;</a>
-
                 </div>
             </div>
-            {/if}
-
 
             <div class='flex flex-row justify-around'>
                 <div>
@@ -227,11 +223,11 @@
 
             {#if true}
 
-            <div class='flex flex-row gap-x-8 justify-evenly'>
+            <div class='flex flex-row m-2 border border-gray-400 gap-x-8 justify-evenly'>
                 <SectionsPie {districtId} {year} {typeId}/>
 
             </div>
-            <h3 class='text-center'>{type.name} {typeId}</h3>
+            <h2 class='text-center'>{type.name}</h2>
             <div class='flex flex-row flex-wrap justify-evenly'>
                     <TimeLine bind:year={year} {districtId} {sectionId} {breedId} {colorId} {typeId} />
                     <DistrictsMap bind:districtId={districtId} {year} {sectionId} {breedId} {colorId} {typeId} />
@@ -250,7 +246,6 @@
     {#if help}
         <Help on:help={onHelp} />
     {/if}
-
 </Route>
 
 

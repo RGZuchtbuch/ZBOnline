@@ -53,7 +53,7 @@
 
 </script>
 
-<div class='flex flex-col pl-8'>
+<div class='flex flex-col pl-4'>
 
     <div class='flex flex-row border-b border-gray-300 gap-x-1 my-1'>
         <div class='w-4'>⤷</div>
@@ -68,7 +68,7 @@
         {/if}
 
         <div class='grow'></div>
-        <div class='w-12 text-xs'>[{color.id}]</div>
+        <small class='w-12 text-right'>[{color.id}]</small>
         {#if $user && $user.admin }
             <button type='button' on:click={onEdit} title='Farbendaten ändern'> (e) </button>
         {/if}

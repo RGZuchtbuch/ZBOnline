@@ -7,6 +7,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpMethodNotAllowedException;
 use Slim\Exception\HttpNotImplementedException;
+use Slim\Exception\HttpUnauthorizedException;
 
 class BaseController
 {
@@ -33,7 +34,7 @@ class BaseController
 		else if ( $method === 'PUT' && $this->canWrite() ) $result = $this->put();
 		else if ( $method === 'POST' && $this->canWrite() ) $result = $this->post();
 		else if ( $method === 'DELETE' && $this->canWrite() ) $result = $this->delete();
-		else throw new HttpNotImplementedException( $request );
+		else throw new HttpUnauthorizedException( $request );
 
 		$json = json_encode( $result, JSON_UNESCAPED_SLASHES );
 		$response->getBody()->write( $json );

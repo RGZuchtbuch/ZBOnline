@@ -10,11 +10,13 @@ use Slim\Exception\HttpNotFoundException;
 class Breed extends BaseController
 {
 	protected function get() {
-		$id = $this->args[ 'id' ];
-		$breed = query\Breed::get( $id );
-		if( $breed ) {
-			$breed['colors'] = query\Breed::colors( $id );
-			return ['breed' => $breed];
+		$id = $this->args[ 'id' ] ?? null;
+		if( $id ) {
+			$breed = query\Breed::get($id);
+			if ( $breed ) {
+				$breed['colors'] = query\Breed::colors($id);
+				return ['breed' => $breed];
+			}
 		}
 		throw new HttpNotFoundException( $this->request, 'Breed not found' );
 	}
@@ -26,8 +28,8 @@ class Breed extends BaseController
 		} else {
 			$id = query\Breed::new( $data['name'], $data['sectionId'], $data['broodGroup'], $data['layEggs'], $data['layWeight'], $data['sireRing'], $data['dameRing'], $data['sireWeight'], $data['dameWeight'], null, $this->requester->getId() ); // $data['info']
 		}
-//		query\Cache::del( 'standard' );
-//		query\Cache::del( 'results' );
+		query\Cache::del( 'standard' );
+		query\Cache::del( 'results' );
 		return ['id' => $id];
 	}
 

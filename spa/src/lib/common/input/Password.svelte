@@ -10,7 +10,7 @@
     export let minlength = 3;
     export let required = false;
     export let invalid = false;
-    export let element;
+    export let element = null;
     export let title = 'Passwort';
 
     let classname = '';
@@ -38,14 +38,16 @@
 
 <div class='input {classname} flex flex-col gap-0' {title}>
     {#if label}
-        <label class='label' for='input'>{label}</label>
+        <label class='label' for='pwdinput'>{label}</label>
     {/if}
-    <input class='data' class:invalid id='input' type='password' {name} bind:value={value} bind:this={element}
+    <input class='data' class:invalid id='pwdinput' type='password' {name} bind:value={value} bind:this={element}
            {minlength} {maxlength}
            {required} {disabled} {readonly}
 
            on:focus={on.focus}
            on:blur={on.blur}
+           autocomplete='on'
+
     >
     <span class:invalid>
         {#if invalid} {error} {:else} &nbsp; {/if}

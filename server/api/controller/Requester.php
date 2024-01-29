@@ -18,7 +18,7 @@ class Requester
 					$payload = GetToken::decode( $token );
 					if( $payload ) {
 						$user = $payload[ 'user' ];
-						return new Requester( $user[ 'id' ], $user[ 'admin' ], $user[ 'moderator' ] );
+						return new Requester( $user[ 'id' ], $user[ 'admin' ], $user[ 'moderator' ] ); // valid user
 					}
 				}
 			}

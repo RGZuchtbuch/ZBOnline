@@ -63,28 +63,27 @@
 
 </script>
 
-<div class='flex flex-col pl-8' transition:slide>
+<div class='flex flex-col pl-6' transition:slide>
     <div class='flex flex-row gap-x-1 border-b border-gray-300 my-1'>
         <div class='w-4'>⤷</div>
         <button type='button' class='font-semibold cursor-pointer' on:click={onOpen}>
             {breed.name} ({breed.colors.length})
         </button>
         <div class='grow px-2 flex gap-x-2 justify-end italic'>
-
-            <div class='flex gap-x-1'>
-                <div class='w-16 text-right'>{#if breed.layEggs}{dec(breed.layEggs)} <small>e/j</small>{/if}</div>
-                <div class='w-16 text-right'>{#if breed.layEggs}{dec(breed.layWeight)} <small>g</small>{/if}</div>
-            </div>
-            <div class='flex gap-x-1'>
-                <div class='w-12 text-right'>{#if breed.sireWeight}{dec(breed.sireWeight)}{/if}</div>.
-                <div class='w-16 text-left'>{#if breed.dameWeight}{dec(breed.dameWeight)} <small>g</small>{/if}</div>
-            </div>
-            <div class='flex gap-x-1'>
-                <div class='w-12 text-right'>{#if breed.sireRing}{dec(breed.sireRing)}{/if}</div>.
-                <div class='w-16 text-left'>{#if breed.dameRing}{dec(breed.dameRing)} <small>mm</small>{/if}</div>
+            <div class='flex w-28 justify-evenly'>
+                <div class='text-right'>{#if breed.layEggs}{dec(breed.layEggs)} <small>e/j  </small>{/if}</div>
+                <div class='text-right'>{#if breed.layWeight}á {dec(breed.layWeight)} <small>g</small>{/if}</div>
+            </div>|
+            <div class='flex w-28 justify-evenly'>
+                <div class='text-right'>{#if breed.sireWeight}<small>♂</small>{dec(breed.sireWeight)}{/if}</div>.
+                <div class='text-left'>{#if breed.dameWeight}<small>♀</small>{dec(breed.dameWeight)} <small>g</small>{/if}</div>
+            </div>|
+            <div class='flex w-28 justify-evenly'>
+                <div class='text-right'>{#if breed.sireRing}<small>♂</small>{dec(breed.sireRing)}{/if}</div>.
+                <div class='text-left'>{#if breed.dameRing}<small>♀</small>{dec(breed.dameRing)}  <small>mm</small>{/if}</div>
             </div>
         </div>
-        <small class='w-12 text-2xs'>[{breed.id}]</small>
+        <small class='w-12 text-right'>[{breed.id}]</small>
 
         {#if $user && $user.admin }
             <button type='button' on:click={onEdit} title='Rassedaten ändern'> (e) </button>

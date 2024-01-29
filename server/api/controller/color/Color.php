@@ -25,8 +25,8 @@ class Color extends BaseController
 		} else {
 			$id = query\Color::new( $data['name'], $data['breedId'], $data['aoc'], null, $this->requester->getId() ); // $data['info'],
 		}
-//		query\Cache::del( 'standard' );
-//		query\Cache::del( 'results' );
+		query\Cache::del( 'standard' );
+		query\Cache::del( 'results' );
 		return ['id' => $id ];
 	}
 

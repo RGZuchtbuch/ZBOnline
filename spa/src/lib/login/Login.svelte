@@ -8,7 +8,7 @@
     import PasswordInput from '../common/input/Password.svelte';
     import Submit from '../common/input/Submit.svelte';
 
-    let email = '';
+    let email = 'email';
     let password = '';
     let success = true;
     let invalids = { email:false, password:false };
@@ -68,10 +68,10 @@
         </div>
 
         <div class='flex flex-col gap-4 rounded-b bg-gray-200 gap-4 p-4'>
-            <EmailInput class='' label='eMail *' bind:value={email} bind:invalid={invalids.email} required/>
+            <EmailInput label='eMail *' bind:value={email} bind:invalid={invalids.email} required/>
 
             {#if ! forgot}
-                <PasswordInput class='' label='Passwort *' bind:value={password} bind:invalid={invalids.password} required/>
+                <PasswordInput label='Passwort *' bind:value={password} bind:invalid={invalids.password} required/>
             {/if}
 
             {#if forgot }

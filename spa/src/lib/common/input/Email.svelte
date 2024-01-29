@@ -10,7 +10,7 @@
     export let error = 'Unvollständiger eMail Adresse';
     export let required = false;
     export let invalid = false;
-    export let element;
+    export let element = null;
     export let title = null;
 
 
@@ -27,7 +27,7 @@
         } else {
             invalid = required;
         }
-        console.log('EMail invalid', value, invalid );
+//        console.log('EMail invalid', value, invalid );
     }
 
     $: validate( value );
@@ -36,9 +36,9 @@
 
 <div class='input {classname} flex flex-col gap-0' {title}>
     {#if label}
-        <label class='label' for='input'>{label}</label>
+        <label class='label' for='emailinput'>{label}</label>
     {/if}
-    <input class='data' class:invalid id='input' type='text' {name} bind:value={value} bind:this={element}
+    <input class='data' class:invalid id='emailinput' type='text' {name} bind:value={value} bind:this={element}
            {minlength} {maxlength}
            {required} {disabled} {readonly}
     >

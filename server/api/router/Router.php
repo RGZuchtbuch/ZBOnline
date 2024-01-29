@@ -28,6 +28,12 @@ class Router {
 
 		$app->any('/breed[/{id}]', controller\breed\Breed::class );
 		$app->get('/breed/{id}/colors', controller\breed\Colors::class );
+
+		//$app->get('/bresed', 'App\controller\Breed:list' );
+//		$app->get('/bresed/{id}', 'App\controller\Breed:get' );
+//		$app->get('/bresed/{id}/colors', 'App\controller\Breed::getColors' );
+//        $app->get('/breed/{id}', 'App\controller\Breed::getColors');
+
 //        $app->get('/breed/{id}', 'App\controller\breed\Get');
 //        $app->get('/breed/{id}/colors', 'App\controller\breed\Colors');
 //        $app->post( '/breed', 'App\controller\breed\Post');

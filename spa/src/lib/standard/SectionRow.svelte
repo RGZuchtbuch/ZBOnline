@@ -8,6 +8,7 @@
     import FormStatus from '../common/form/Status.svelte';
     import TextInput from '../common/form/input/TextInput.svelte';
     import Form from '../common/form/Form.svelte';
+    import {dec} from '../../js/util.js';
 
     export let section = null;
     export let open = false;
@@ -61,8 +62,16 @@
         <button type='button' class='grow font-bold text-left cursor-pointer' on:click={onOpen}>
             {section.name} ({section.children.length + section.breeds.length })
         </button>
-        <div class='grow'></div>
-        <div class='w-12 text-xs'>[{section.id}]</div>
+        <div class='grow px-2 flex gap-x-2 justify-end font-bold italic text-sm'>
+            {#if open && section.breeds.length > 0}
+                <div class='w-28 text-center'>Eier u.Gewicht</div>
+                |
+                <div class='w-28 text-center'>Wiegen</div>
+                |
+                <div class='w-28 text-center'>Ring</div>
+            {/if}
+        </div>
+        <small class='w-12 text-right'>[{section.id}]</small>
 
         {#if $user && $user.admin && section.children.length === 0 }
             <button type='button' on:click={onAddBreed} title='Rasse hinzufügen'> (✚) </button>

@@ -11,10 +11,14 @@ use Slim\Exception\HttpNotFoundException;
 // provides district detail with it's moderator details
 class Get extends Controller
 {
-    public function authorized(): bool
-    {
-        return true;
-    }
+	public function authorized(): bool //admin, moderator
+	{
+		if( $this->requester ) {
+			if( $this->requester['admin'] ) return true; // admin
+			if( count( $this->requester[ 'moderator' ] ) > 0 ) return true; // a moderator
+		}
+		return false;
+	}
 
     public function process() : array
     {

@@ -20,9 +20,11 @@
     let help = false; // triggered in selector
 
     function onQuery( route ) {
-        console.log( 'Query changed' );
+        const now = new Date();
+        console.log( 'Query changed', now.getMonth() );
         sectionId = route.query.section ? Number( route.query.section ) : 3; // get from route or 3
-        year      = route.query.year   ? Number( route.query.year )    : new Date().getFullYear();
+        // year is query year or lastyear during spring or current year
+        year      = route.query.year   ? Number( route.query.year )    : now.getMonth() < 4 ? now.getFullYear()-1 : now.getFullYear();
         group     = route.query.group  && ['I', 'II', 'III'].includes( route.query.group ) ? route.query.group : 'I';
         saveCount = 0;
         loadDistrict();
@@ -56,7 +58,6 @@
 </script>
 
 <div class='w-256 flex rounded-t'>
-    <div class='w-8'>{year}</div>
     <h2 class='grow text-center'>Eingabe Leistungen {district ? district.name : '...'}</h2>
     <div class='w-8 justify-center m-2 circled bg-alert cursor-pointer text-white' on:click={onHelp} title='Anleitung'>?</div>
 </div>

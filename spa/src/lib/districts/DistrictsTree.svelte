@@ -2,7 +2,8 @@
     import {meta} from "tinro";
     import { dat, txt } from '../../js/util.js';
     import {createEventDispatcher} from "svelte";
-    import api from "../../js/api.js";
+    import api from '../../js/api.js';
+    import {user} from '../../js/store.js';
 
     export let rootDistrict = null;
 
@@ -16,6 +17,8 @@
 
     const route    = meta();
 
+    console.log('User', $user )
+
 </script>
 
 <div class='flex flex-col pl-4'>
@@ -27,6 +30,9 @@
                 <a class='cursor-pointer' href={route.match+'/'+rootDistrict.id} title='Zum Verband'>{rootDistrict.name}</a>
             {:else}
                 <div class='text-gray-400 cursor-not-allowed' title='Kein zugang' >{rootDistrict.name}</div>
+            {/if}
+            {#if $user.admin}
+                <small class='grow text-right'>[{rootDistrict.id}]</small>
             {/if}
         </div>
     {/if}

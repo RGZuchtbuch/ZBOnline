@@ -29,6 +29,7 @@ h5 {
 
 small {
     @apply text-xs;
+    @apply text-xs;
 }
 
 hr {
@@ -148,5 +149,12 @@ input.invalid, textarea.invalid, select.invalid {
 
     .print-no-border {
         border: none;
+    }
+    .print-no-scrollbar {
+        overflow:hidden;
+    }
+
+    .print-no-break {
+        break-inside: avoid;
     }
 }

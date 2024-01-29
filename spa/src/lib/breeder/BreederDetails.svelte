@@ -39,8 +39,9 @@
 
     function onSubmit(event) {
         disabled = true;
+        breeder.clubId = breeder.club.id || null; // as club is selected needs syncing
         api.breeder.post( breeder ).then( response => {
-            const id = response.id;
+            const id = response.id; // new or existing
             breeder.id = id;
             changed = false;
         })
@@ -66,8 +67,11 @@
         return resultClubs;
     }
 
+    function findClub( clubId ) {
+
+    }
+
     onMount( () => {
-        console.log( "OO" );
         focusElement.focus();
         if( breeder.id === null ) {
             onToggleEdit();
@@ -107,14 +111,14 @@
             <div class='h-4'></div>
 
             {#if ! disabled && clubs}
-                <Select class='w-64'  bind:value={breeder.club.id}  label='Ortsverein' >
+                <Select class='w-64'  bind:value={breeder.club}  label='Ortsverein' >
                     <option value={null}> ? </option>
                     {#each clubs as club}
-                        <option value={club.id} >  {club.name} </option>
+                        <option value={club} selected={club.id === breeder.clubId}>  {club.name} </option>
                     {/each}
                 </Select>
             {:else}
-                <Text class='w-64' value={breeder.club.name} label='Ortsverein'/>
+                <Text class='w-64' value={txt( breeder.club ? breeder.club.name : null )} label='Ortsverein'/>
             {/if}
 
             <div class='flex gap-2'>

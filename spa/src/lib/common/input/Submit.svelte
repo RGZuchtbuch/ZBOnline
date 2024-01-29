@@ -3,7 +3,7 @@
     export let value = null;
     export let label = null;
     export let disabled = false;
-    export let element;
+    export let element = null;
     export let title = 'Speichern';
 
     let classname = '';

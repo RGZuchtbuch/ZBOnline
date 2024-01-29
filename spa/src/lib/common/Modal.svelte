@@ -1,6 +1,9 @@
 <script>
     export let label=null;
 
+    let classname = '';
+    export { classname as class }
+
 //background: rgba( 255, 255, 255, 0.75 );
 </script>
 
