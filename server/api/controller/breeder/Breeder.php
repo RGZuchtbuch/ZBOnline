@@ -13,7 +13,7 @@ class Breeder extends BaseController
 		$id = $this->args[ 'id' ] ?? null;
 		$breeder = query\Breeder::get( $id );
 		if( $breeder ) {
-			$breeder[ 'club' ] = $breeder[ 'clubId' ] ? query\District::get( $breeder[ 'clubId' ] ) : null;
+//			$breeder[ 'club' ] = $breeder[ 'clubId' ] ? query\District::get( $breeder[ 'clubId' ] ) : null;
 			$breeder[ 'district' ] = $breeder[ 'districtId' ] ? query\District::get( $breeder[ 'districtId' ] ) : null;
 			return ['breeder' => $breeder];
 		}
@@ -24,9 +24,9 @@ class Breeder extends BaseController
 		$data = $this->data;
 		$id = $data[ 'id' ] ?? null;
 		if( $id ) {
-			query\Breeder::set( $id, $data['firstname'], $data['infix'], $data['lastname'], $data['email'], $data['clubId'], $data['start'], $data['end'], $data['info'], $this->requester->getId() ); // note districtId and id do not change
+			query\Breeder::set( $id, $data['firstname'], $data['infix'], $data['lastname'], $data['email'], $data['club'], $data['start'], $data['end'], $data['info'], $this->requester->getId() ); // note districtId and id do not change
 		} else {
-			$id = query\Breeder::new( $data['firstname'], $data['infix'], $data['lastname'], $data['email'], $data['districtId'], $data['clubId'], $data['start'], $data['end'], $data['info'], $this->requester->getId() );
+			$id = query\Breeder::new( $data['firstname'], $data['infix'], $data['lastname'], $data['email'], $data['districtId'], $data['club'], $data['start'], $data['end'], $data['info'], $this->requester->getId() );
 		}
 //		query\Cache::del( 'results' );
 		return ['id' => $id];

@@ -40,10 +40,10 @@
 
 <div class='{className}'>
 	{#if label}
-		<label class='name' for='number'> {label} </label>
+		<label class='name' for='radio'> {label} </label>
 	{/if}
 	<slot />
-	<label class='error' class:valid for='number'>{error}</label>
+	<label class='error' class:valid for='radio'>{error}</label>
 </div>
 
 <style>

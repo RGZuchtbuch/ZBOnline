@@ -6,8 +6,9 @@
     import BreederPairs from './Pairs.svelte';
     import BreederDetails from "./BreederDetails.svelte";
 
-    export let breederId;
-    export let districtId;
+    export let breederId
+    export let districtId;;
+
     let breeder = null;
     let route = meta();
 
@@ -19,8 +20,10 @@
             });
         } else { // new
             breeder = {
-                id:null, firstname:null, infix: null, lastname: null,
+                id:null, firstname:null, infix: null, lastname:null, active:true,
+                districtId: districtId,
                 district:{ id:districtId, name:null },
+                clubId:null,
                 club:{ id:null, name:null },
                 start: Date.now(), end: null,
                 email: null,

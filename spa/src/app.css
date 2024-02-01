@@ -58,13 +58,10 @@ dd {
     @apply pl-1 h-4 text-gray-600 whitespace-nowrap;
 }
 
-input, option {
-    @apply h-6 px-1;
+input, select, option {
+    @apply h-6 py-0 px-1;
 }
 
-select {
-    @apply px-1;
-}
 
 input, textarea, select {
     @apply border-b border-r border-gray-400 rounded mb-1 bg-gray-50;

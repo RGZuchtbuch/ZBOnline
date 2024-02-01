@@ -42,7 +42,7 @@
     {#if label}
         <label class='name' for='number'>{label}</label>
     {/if}
-    <input class='number' {name} class:valid bind:this={element} type='number' bind:value={value}
+    <input class='input number right' {name} class:valid bind:this={element} type='number' bind:value={value}
            {step} {min} {max} {title} {disabled}
            on:input on:change on:focus on:blur
     />
@@ -54,7 +54,7 @@
         display:flex;
         flex-direction: column;
     }
-    input {
+    right {
         text-align: right;
     }
     .error.valid {

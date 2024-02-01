@@ -35,7 +35,7 @@
         </Route>
 
         <Route path='/:breederId/*' let:meta >
-            <Breeder districtId={ meta.params.districtId } breederId={ meta.params.breederId } moderator={true} edit={true} />
+            <Breeder districtId={ meta.params.districtId } breederId={ meta.params.breederId } />
         </Route>
     </Route>
 

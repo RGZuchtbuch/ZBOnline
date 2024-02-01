@@ -39,11 +39,11 @@
 
 </script>
 
-<div class='{className} {title}'>
+<div class='{className} {title} bg-yellow-300'>
     {#if label}
         <label class='name' for='number'>{label}</label>
     {/if}
-    <select class='input' {name} class:valid bind:this={element} bind:value={value} on:input on:change on:focus on:blur >
+    <select class='input bg-red-300' {name} class:valid bind:this={element} bind:value={value} on:input on:change on:focus on:blur >
         <slot />
     </select>
     <label class='error' class:valid for='number'>{error}</label>

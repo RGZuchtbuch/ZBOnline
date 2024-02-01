@@ -9,7 +9,7 @@
     export let title = null;
     export let label = null;
     export let value = null;
-    export let placeholder = 'Something';
+    export let placeholder = null;
     export let error = 'Invalid'; // message on invalid
     export let validator = null;
     export let disabled = false;
@@ -53,7 +53,7 @@
         display:flex;
         flex-direction: column;
     }
-    input {
+    left {
         text-align: left;
     }
     .error.valid {

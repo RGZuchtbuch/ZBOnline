@@ -20,20 +20,18 @@
 	const state = getContext( 'state'); // store
 	let date = toDate( value );
 
-	let localeValue = date.getDate()+'.'+(date.getMonth()+1)+'.'+date.getFullYear(); // D
+	let localeValue = date ? date.getDate()+'.'+(date.getMonth()+1)+'.'+date.getFullYear() : null; // D
 
 	let component = null;
 
 	function onInput( event ) {
 		const date = toDate( localeValue );
-		if( date !== null ) {
-			value = date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate(); // to iso
-		}
+    	value = date ? date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate() : localeValue; // valid date or faulty input
 	}
 
-	function onBlur( event ) {
+	function onBlur( event ) { // format valid date
 		const date = toDate( value );
-		if( date ) localeValue = date.getDate().toString().padStart( 2, '0' )+'.'+(date.getMonth()+1).toString().padStart( 2, '0' )+'.'+date.getFullYear().toString().padStart(4, '0'); // to formatted locale
+		localeValue = date ? date.getDate().toString().padStart( 2, '0' )+'.'+(date.getMonth()+1).toString().padStart( 2, '0' )+'.'+date.getFullYear().toString().padStart(4, '0') : null; // to formatted locale
 	}
 
 	onMount( () => {
@@ -50,5 +48,14 @@
 <TextInput class={className} bind:value={localeValue} bind:this={component}
    bind:element={element} {name} {label} {placeholder} {title} {error} {validator} {disabled}
    on:input on:change on:focus on:blur
-/>{value}
+/>
+{value}
+
+<style>
+    right {
+        text-align: right;
+    }
+</style>
+
+
 

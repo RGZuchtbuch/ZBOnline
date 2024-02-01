@@ -73,7 +73,7 @@
         clearTimeout( saveTimeout );
         validateTimeout = setTimeout( validate, 500 ); // validate n ms after last input
         saveTimeout = setTimeout( trySubmit, 2500 ); // try save n ms after last input
-        console.log( 'FormData', Object.fromEntries( new FormData( formElement )));
+
     }
 
     function onSubmit( event ) { // enter or submit button
@@ -126,7 +126,7 @@
         color: black;
         border: solid 1px red;
         border-radius: 0.25em;
-        padding: 0.35em;
+        padding: 0.0em 0.35em;
     }
     form :global(.valid) {
         border: solid 1px grey;
