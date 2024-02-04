@@ -3,44 +3,87 @@
 namespace App\controller\article;
 
 use App\controller\BaseController;
-use App\query;
-use Slim\Exception\HttpMethodNotAllowedException;
+use App\controller\Requester;
+use App\model;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Exception\HttpBadRequestException;
 use Slim\Exception\HttpNotFoundException;
+use Slim\Exception\HttpUnauthorizedException;
 
 class Article extends BaseController
 {
 
-	protected function get() {
-		$article = query\Article::get( $this->args[ 'id' ] );
-		if( $article ) {
-			return ['article' => $article];
+	public function get( Request $request, Response $response, array $args ) : Response {
+		$id = $args[ 'id' ];
+		if( is_numeric( $id ) ) {
+			$article = model\Article::get($id);
+			if ($article) {
+				$response->getBody()->write(json_encode(['article' => $article], JSON_UNESCAPED_SLASHES));
+				return $response;
+			}
+			throw new HttpNotFoundException($request, 'Article not found');
 		}
-		throw new HttpNotFoundException( $this->request, 'Article not found' );
+		throw new HttpBadRequestException( $request, 'Bad id' );
+	}
 
-	}
-	protected function post() {
-		$data = $this->data;
-		$id = $data[ 'id' ] ?? null;// get it or null
-		if( $id ) { // 1...
-			query\Article::set( $id, $data['title'], $data['html'], $this->requester->getId() );
-		} else { // no id yet, so new
-			$id = query\Article::new( $data['title'], $data['html'], $this->requester->getId() );
+	public function new( Request $request, Response $response, array $args ) : Response {
+		$requester = new Requester( $request );
+		if( $requester->isAdmin() ) {
+			$body = $request->getParsedBody();
+			if( $body ) {
+				$id = model\Article::new( $body['title'], $body['html'], $requester->getId() );
+				if( $id ) {
+					$response->getBody()->write(json_encode(['id' => $id], JSON_UNESCAPED_SLASHES));
+					return $response;
+				}
+				throw new HttpBadRequestException( $request, 'Bad body' );
+			}
 		}
-		return [ 'id' => $id ];
+		throw new HttpUnauthorizedException( $request, 'Cannot do this');
 	}
-	protected function delete() {
-		$id = $this->args[ 'id' ];
-		if( $id ) {
-			$ok = query\Article::del( $id );
-			return [ 'id'=>$id, 'deleted'=>$ok ];
+
+	public function set( Request $request, Response $response, array $args ) : Response {
+		$requester = new Requester( $request );
+		if( $requester->isAdmin() ) {
+			$id = $args[ 'id' ] ?? null;
+			$body = $request->getParsedBody();
+			if( is_numeric( $id ) && $body ) {
+				$updated = model\Article::set( $id, $body['title'], $body['html'], $requester->getId() );
+				if( $updated ) {
+					$response->getBody()->write(json_encode(['id' => $id], JSON_UNESCAPED_SLASHES));
+					return $response;
+				}
+				throw new HttpNotFoundException( $request, 'Cannot update');
+			}
+			throw new HttpBadRequestException( $request, 'Bad id or body');
 		}
-		throw new HttpNotFoundException( $this->request );
+		throw new HttpUnauthorizedException( $request, 'not Admin');
 	}
-	protected function canRead() : bool {
-		return true;
+
+	public function del( Request $request, Response $response, array $args ) : Response {
+		$requester = new Requester( $request );
+		if( $requester->isAdmin() ) {
+			$id = $args[ 'id' ] ?? null;
+			if( $id ) {
+				$deleted = model\Article::del( $id );
+				if( $deleted ) {
+					$response->getBody()->write(json_encode([ 'id'=>$id, 'deleted'=>true ], JSON_UNESCAPED_SLASHES));
+					return $response;
+				}
+				throw new HttpNotFoundException( $request, 'Cannot delete');
+			}
+			throw new HttpBadRequestException( $request, 'Cannot delete');
+		}
+		throw new HttpUnauthorizedException( $request, 'not Admin');
 	}
-	protected function canWrite() : bool {
-		return $this->requester->isAdmin();
+
+// ****************************************
+	public function getAll( Request $request, Response $response, array $args ) : Response {
+		$articles = model\Article::getAll();
+		$response->getBody()->write( json_encode( [ 'articles' => $articles ], JSON_UNESCAPED_SLASHES ) );
+		return $response;
 	}
+
 
 }

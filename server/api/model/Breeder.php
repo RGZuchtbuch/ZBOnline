@@ -1,6 +1,6 @@
 <?php
 
-namespace App\query;
+namespace App\model;
 
 use App\controller\Controller;
 use Slim\Exception\HttpNotImplementedException;

@@ -1,11 +1,11 @@
 <?php
 
-namespace App\query;
+namespace App\model;
 
 use http\Exception\BadMethodCallException;
 use Slim\Exception\HttpNotImplementedException;
 
-class Breed extends Query
+class Breed
 {
 	public static function get( int $id ) : ? array
 	{
@@ -19,7 +19,7 @@ class Breed extends Query
 		return Query::select($stmt, $args);
 	}
 
-	public static function new( string $name, int $sectionId, ? int $broodGroup, ? int $layEggs, ? int $layWeight, ? int $sireRing, ? int $dameRing, ? int $sireWeight, ? int $dameWeight, ? string $info, int $modifierId ) : ? int
+	public static function new(string $name, int $sectionId, ? int $broodGroup, ? int $layEggs, ? int $layWeight, ? int $sireRing, ? int $dameRing, ? int $sireWeight, ? int $dameWeight, ? string $info, int $modifierId ) : ? int
     {
         $args = get_defined_vars();
         $stmt = Query::prepare( '
@@ -31,7 +31,7 @@ class Breed extends Query
 
 
 
-    public static function set( int $id, string $name, int $sectionId, ? int $broodGroup, ? int $layEggs, ? int $layWeight, ? int $sireRing, ? int $dameRing, ? int $sireWeight, ? int $dameWeight, ? string $info, int $modifierId ) : bool
+    public static function set(int $id, string $name, int $sectionId, ? int $broodGroup, ? int $layEggs, ? int $layWeight, ? int $sireRing, ? int $dameRing, ? int $sireWeight, ? int $dameWeight, ? string $info, int $modifierId ) : bool
     {
         $args = get_defined_vars();
         $stmt = Query::prepare( '
@@ -42,7 +42,8 @@ class Breed extends Query
         return Query::update( $stmt, $args );
     }
 
-    public static function del( int $id ) : bool {
+    public static function delete( int $id ) : bool
+	{
 		$args = get_defined_vars();
 		$stmt = Query::prepare('
 			DELETE 
@@ -51,6 +52,8 @@ class Breed extends Query
         ');
 		return Query::delete($stmt, $args);
     }
+
+
 
     public static function all() : array {
         $stmt = Query::prepare('

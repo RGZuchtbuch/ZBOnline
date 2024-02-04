@@ -2,8 +2,8 @@
 
 namespace App\controller\result;
 
-use App\query;
-use App\query\Cache;
+use App\model;
+use App\model\Cache;
 use App\controller\Controller;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpInternalServerErrorException;
@@ -27,15 +27,15 @@ class Post extends Controller
 
         if( $result['breeders'] == null ) { // delete result if breeders is empty
             if( $result['id'] != null ) { // if exists
-                query\Result::del( $result['id'] );
+                model\Result::del( $result['id'] );
             }
             return ['id' => null]; // ends here
         }
 
-        $breed = query\Breed::get( $result['breedId']);
+        $breed = model\Breed::get( $result['breedId']);
 
         if( $result['id'] != null && $result['breeders'] != null ) { // set
-            if( query\Result::set( // change
+            if( model\Result::set( // change
                 $result['id'],
                 $result['pairId'], $result['districtId'], $result['year'], $result['group'],
                 $result['breedId'], $result['colorId'],
@@ -49,7 +49,7 @@ class Post extends Controller
         }
 
         if( $result['id'] == null && $result['breeders'] != null ) { // new
-            $id = query\Result::new(
+            $id = model\Result::new(
                 $result['pairId'], $result['districtId'], $result['year'], $result['group'],
                 $result['breedId'], $result['colorId'],
                 $result['breeders'], $result['pairs'],

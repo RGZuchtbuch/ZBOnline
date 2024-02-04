@@ -2,9 +2,9 @@
 
 namespace App\controller\result;
 
-use App\query;
+use App\model;
 use App\controller\Controller;
-use App\query\Cache;
+use App\model\Cache;
 use http\Exception\InvalidArgumentException;
 use Slim\Exception\HttpBadRequestException;
 use Slim\Exception\HttpNotFoundException;
@@ -41,24 +41,24 @@ class District extends Controller
         $results = null;
         $debug = [];
         if( $districtId ) { // TODO when used, only case 1, last is found for district results.
-            $district = query\District::get( $districtId );
+            $district = model\District::get( $districtId );
             if( $sectionId && $breedId && $year && $group) { // 3 for opening breed in moderator→edit
                 $debug[] = 'breed && sectionId = '.$sectionId;
                 if( $sectionId == 5 ) { // for breed for pigeons
                     $debug[] = 'pigeon '.$sectionId;
-                    $results = query\District::breedResult($districtId, $breedId, $year, $group); // per breed (5) or colors
+                    $results = model\District::breedResult($districtId, $breedId, $year, $group); // per breed (5) or colors
                 } else { // pfor breed er color for layers
                     $debug[] = 'other '.$sectionId;
-                    $results = query\District::colorResults($districtId, $breedId, $year, $group); // per breed (5) or colors
+                    $results = model\District::colorResults($districtId, $breedId, $year, $group); // per breed (5) or colors
                 }
             } else if( $sectionId && $year && $group) { // 2, results for all breeds in section
                 $debug[] = 'section '.$sectionId;
-                $results = query\District::sectionResults( $districtId, $sectionId, $year, $group );
+                $results = model\District::sectionResults( $districtId, $sectionId, $year, $group );
             } else if( $year ) { // 1, for results listing
                 $debug[] = 1;
 
                 //                $results = $this->resultsTree( query\District::results( $districtId, $year ) );
-                $results = $this->resultsTree( query\Result::resultsDistrictYear( $districtId, $year ) );
+                $results = $this->resultsTree( model\Result::resultsDistrictYear( $districtId, $year ) );
 
             } else {
                 throw new HttpBadRequestException( $this->request, "wrong arguments");

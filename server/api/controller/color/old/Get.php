@@ -3,7 +3,7 @@
 namespace App\controller\color\old;
 
 use App\controller\Controller;
-use App\query;
+use App\model;
 
 class Get extends Controller
 {
@@ -15,7 +15,7 @@ class Get extends Controller
     public function process() : array
     {
         $id = $this->args['id'];
-        $color = query\Color::get( $id );
+        $color = model\Color::get( $id );
         return [ 'color'=>$color ];
     }
 }

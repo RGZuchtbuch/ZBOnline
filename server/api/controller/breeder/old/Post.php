@@ -3,7 +3,7 @@
 namespace App\controller\breeder\old;
 
 use App\controller\Controller;
-use App\query;
+use App\model;
 
 class Post extends Controller
 {
@@ -21,9 +21,9 @@ class Post extends Controller
         $data = $this->data;
         $id = $data[ 'id' ] ?? null;
         if( $id ) {
-            query\Breeder::set( $id, $data['firstname'], $data['infix'], $data['lastname'], $data['email'], $data['club']['id'], $data['start'], $data['end'], $data['info'], $this->requester[ 'id' ] ); // note districtId and id do not change
+            model\Breeder::set( $id, $data['firstname'], $data['infix'], $data['lastname'], $data['email'], $data['club']['id'], $data['start'], $data['end'], $data['info'], $this->requester[ 'id' ] ); // note districtId and id do not change
         } else {
-            $id = query\Breeder::new( $data['firstname'], $data['infix'], $data['lastname'], $data['email'], $data['district']['id'], $data['club']['id'], $data['start'], $data['end'], $data['info'], $this->requester[ 'id' ] );
+            $id = model\Breeder::new( $data['firstname'], $data['infix'], $data['lastname'], $data['email'], $data['district']['id'], $data['club']['id'], $data['start'], $data['end'], $data['info'], $this->requester[ 'id' ] );
         }
         return ['id' => $id];
     }

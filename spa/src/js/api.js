@@ -6,9 +6,11 @@ import { user } from './store.js'
 export default {
 
     article: {
-        get:    (id) => get('api/article/' + id),
+        get:    ( id ) => get('api/article/'+id ),
         post:   ( article ) => post( 'api/article', article ),
-        getAll: () => get( 'api/articles' ),
+        put:    ( article ) => put( 'api/article/'+article.id, article ),
+        del:    ( id ) => del( 'api/article'+id ),
+        getAll: () => get( 'api/article' ),
     },
 
     breed: {

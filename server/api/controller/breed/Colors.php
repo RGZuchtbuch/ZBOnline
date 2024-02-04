@@ -2,7 +2,7 @@
 
 namespace App\controller\breed;
 
-use App\query;
+use App\model;
 use App\controller\BaseController;
 use Slim\Exception\HttpNotFoundException;
 
@@ -10,7 +10,7 @@ class Colors extends BaseController
 {
 	protected function get() : array {
 		$id = $this->args[ 'id' ];
-		$colors = query\Breed::colors( $id );
+		$colors = model\Breed::colors( $id );
 		return [ 'colors'=>$colors ];
 	}
 

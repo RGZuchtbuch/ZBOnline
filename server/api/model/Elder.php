@@ -1,24 +1,24 @@
 <?php
 
-namespace App\query;
+namespace App\model;
 
-class Brood extends Query
+class Elder extends Query
 {
     public static function get( $id ) {
         $args = get_defined_vars();
         $stmt = Query::prepare( '
-            SELECT id, pairId, start, eggs, fertile, hatched
-            FROM pair_brood
+            SELECT id, pairId, sex, ring, score, pair
+            FROM pair_elder
             WHERE id=:id
         ' );
         return Query::select( $stmt, $args );
     }
 
-    public static function new( int $pairId, ? string $start, string $eggs, ? float $fertile, ? int $hatched, int $modifierId ) : ? int {
+    public static function new( int $pairId, string $sex, string $ring, ? float $score, ? int $pair, int $modifierId ) : ? int {
         $args = get_defined_vars();
         $stmt = Query::prepare( '
-            INSERT INTO pair_brood ( pairId, start, eggs, fertile, hatched, modifierId ) 
-            VALUES ( :pairId, :start, :eggs, :fertile, :hatched, :modifierId )
+            INSERT INTO pair_elder ( pairId, sex, ring, score, pair, modifierId ) 
+            VALUES ( :pairId, :sex, :ring, :score, :pair, :modifierId )
         ' );
         return Query::insert( $stmt, $args );
     }
@@ -28,10 +28,10 @@ class Brood extends Query
     public static function getForPair( $pairId ) {
         $args = get_defined_vars();
         $stmt = Query::prepare( '
-            SELECT id, pairId, start, eggs, fertile, hatched
-            FROM pair_brood
+            SELECT id, pairId, sex, ring, score, pair
+            FROM pair_elder
             WHERE pairId=:pairId
-            ORDER BY start
+            ORDER BY sex, ring
         ' );
         return Query::selectArray( $stmt, $args );
     }
@@ -40,10 +40,14 @@ class Brood extends Query
         $args = get_defined_vars();
         $stmt = Query::prepare( '
             DELETE 
-            FROM pair_brood
+            FROM pair_elder
             WHERE pairId=:pairId
         ' );
         return Query::delete( $stmt, $args );
     }
+
+
+
+
 
 }

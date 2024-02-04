@@ -2,9 +2,9 @@
 
 namespace App\controller\result;
 
-use App\query;
+use App\model;
 use App\controller\Controller;
-use App\query\Cache;
+use App\model\Cache;
 use http\Exception\InvalidArgumentException;
 use Slim\Exception\HttpNotFoundException;
 
@@ -31,7 +31,7 @@ class YearDistricts extends Controller
         $breedId   = $this->query[ 'breed' ] ?? null;
         $colorId   = $this->query[ 'color' ] ?? null;
         $group     = $this->query[ 'group' ] ?? null;
-        $districts = query\Result::resultsYearDistricts( $year, $sectionId, $breedId, $colorId, $group );
+        $districts = model\Result::resultsYearDistricts( $year, $sectionId, $breedId, $colorId, $group );
 /*
         if( $colorId ) {
             $districts = query\Result::districtsForColor( $year, $colorId );

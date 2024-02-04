@@ -2,7 +2,7 @@
 
 namespace App\controller\user;
 
-use App\query;
+use App\model;
 use App\controller\Controller;
 //use App\controller\user\Token;
 use DateTimeImmutable;
@@ -36,12 +36,12 @@ class Password extends Controller
             $tokenEmail = $data['email'] ?? null;
             $tokenId = $data['id'] ?? null; // should be null to distinguish from login token!
             if ( ! $tokenId && $email && $tokenEmail && $email == $tokenEmail && $this->checkPassword( $password ) ) {
-                $success = query\User::setPassword($email, $password);
+                $success = model\User::setPassword($email, $password);
                 if ($success) {
-                    $user = query\User::getByEmail($email);
+                    $user = model\User::getByEmail($email);
                     if ($user) {
                         $user['fullname'] = $user['firstname'] . ' ' . ($user['infix'] ? $user['infix'] . ' ' : '') . $user['lastname'];
-                        $user['moderator'] = array_column(query\Moderator::districts($user['id']), 'id');
+                        $user['moderator'] = array_column(model\Moderator::districts($user['id']), 'id');
                         $token = GetToken::encode($user);
                         return ['token' => $token];
                     }

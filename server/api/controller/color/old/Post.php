@@ -3,7 +3,7 @@
 namespace App\controller\color\old;
 
 use App\controller\Controller;
-use App\query;
+use App\model;
 
 class Post extends Controller
 {
@@ -18,12 +18,12 @@ class Post extends Controller
         $data = $this->data;
         $id = $data[ 'id' ] ?? null;
         if( $id ) {
-            query\Color::set( $id, $data['name'], $data['breedId'], $data['aoc'], $data['info'], $this->requester[ 'id' ] );
+            model\Color::set( $id, $data['name'], $data['breedId'], $data['aoc'], $data['info'], $this->requester[ 'id' ] );
         } else {
-            $id = query\Color::new( $data['name'], $data['breedId'], $data['aoc'], $data['info'], $this->requester[ 'id' ] );
+            $id = model\Color::new( $data['name'], $data['breedId'], $data['aoc'], $data['info'], $this->requester[ 'id' ] );
         }
-        query\Cache::del( 'standard' );
-        query\Cache::del( 'results' );
+        model\Cache::del( 'standard' );
+        model\Cache::del( 'results' );
         return ['id' => $id];
     }
 }

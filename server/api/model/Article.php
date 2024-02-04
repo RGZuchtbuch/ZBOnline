@@ -1,11 +1,11 @@
 <?php
 
-namespace App\query;
+namespace App\model;
 
 use http\Exception\InvalidArgumentException;
 use Slim\Exception\HttpNotFoundException;
 
-class Article extends Query
+class Article
 {
 	public static function get( int $id ) : ? array {
 		$args = get_defined_vars();

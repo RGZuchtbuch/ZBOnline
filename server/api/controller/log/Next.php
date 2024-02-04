@@ -2,7 +2,7 @@
 
 namespace App\controller\log;
 
-use App\query;
+use App\model;
 use App\controller\Controller;
 use Exception;
 use http\Exception\InvalidArgumentException;
@@ -18,7 +18,7 @@ class Next extends Controller
 
     public function process() : array
     {
-        $logs = query\Log::next( $this->query['from'], $this->query['count'] );
+        $logs = model\Log::next( $this->query['from'], $this->query['count'] );
         return [ 'logs' => $logs ];
     }
 }

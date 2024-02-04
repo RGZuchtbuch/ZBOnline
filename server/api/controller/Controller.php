@@ -3,7 +3,7 @@
 namespace App\controller;
 
 use App\controller\Token;
-use App\query;
+use App\model;
 use Exception;
 use HttpException;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -110,7 +110,7 @@ abstract class Controller
             $body = json_encode( $object );
         }
 
-        query\Log::new(
+        model\Log::new(
             $method,
             $path,
             $query,

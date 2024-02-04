@@ -16,32 +16,49 @@ class Router {
     public static function register( App $app ) {
         $app->get('/', 'App\controller\Index');
 
-		$app->any('/test/{id}', 'App\controller\article\Article' );
+		$app->get(		'/article/{id}', 		[ controller\article\Article::class, 'get' ] );
+		$app->post(		'/article', 				[ controller\article\Article::class, 'new' ] );
+		$app->put(		'/article', 				[ controller\article\Article::class, 'set' ] );
+		$app->delete(	'/article', 				[ controller\article\Article::class, 'del' ] );
 
-//        $app->get('/article/{id}', 'App\controller\article\Get' );
+		$app->get(		'/article', 				[ controller\article\Article::class, 'getAll' ] );
+
+	//		$app->get('/article/{id}', 'App\controller\article\Get' );
 //        $app->post( '/article', 'App\controller\article\Post');
 //		$app->any( '/article/{id}', 'App\controller\article\Article' );
-		$app->any( '/article[/{id}]', controller\article\Article::class );
+//		$app->any( '/article[/{id}]', controller\article\Article::class );
 		//$app->post( '/article', controller\article\Article::class );
 
-		$app->get('/articles', controller\article\Articles::class );
+//		$app->get('/articles', controller\article\Articles::class );
 
-		$app->any('/breed[/{id}]', controller\breed\Breed::class );
-		$app->get('/breed/{id}/colors', controller\breed\Colors::class );
 
-		//$app->get('/bresed', 'App\controller\Breed:list' );
-//		$app->get('/bresed/{id}', 'App\controller\Breed:get' );
-//		$app->get('/bresed/{id}/colors', 'App\controller\Breed::getColors' );
-//        $app->get('/breed/{id}', 'App\controller\Breed::getColors');
+		$app->get( 		'/breed/{id}',			[ controller\breed\Breed::class, 'get' ] );
+		$app->post(		'/breed', 				[ controller\breed\Breed::class, 'new' ] );
+		$app->put( 		'/breed/{id}', 			[ controller\breed\Breed::class, 'set' ] );
+		$app->delete(	'/breed/{id}',			[ controller\breed\Breed::class, 'del' ] );
 
-//        $app->get('/breed/{id}', 'App\controller\breed\Get');
-//        $app->get('/breed/{id}/colors', 'App\controller\breed\Colors');
-//        $app->post( '/breed', 'App\controller\breed\Post');
+		$app->get( 		'/breed', 				[ controller\breed\Breed::class, 'getAll' ] );
+		$app->get( 		'/breed/{id}/colors', 	[ controller\breed\Breed::class, 'getColors' ] );
+
+//		$app->any('/breed[/{id}]', controller\breed\Breed::class );
+//		$app->any('/breed[/{id}]', controller\breed\Breed::class );
+//		$app->get('/breed/{id}/colors', controller\breed\Colors::class );
+
+
+
+
+		$app->get( 		'/breeder/{id}',			[ controller\breeder\Breeder::class, 'get' ] );
+		$app->post(		'/breeder', 				[ controller\breeder\Breeder::class, 'new' ] );
+		$app->put( 		'/breeder/{id}', 		[ controller\breeder\Breeder::class, 'set' ] );
+		$app->delete(	'/breeder/{id}',			[ controller\breeder\Breeder::class, 'del' ] );
+
+		$app->get( 		'/breeder', 				[ controller\breeder\Breeder::class, 'getAll' ] );
+		$app->get( 		'/breeder/{id}/colors', 	[ controller\breeder\Breeder::class, 'getColors' ] );
 
 
 //        $app->get('/breeder/{id}', 'App\controller\breeder\Get');
 //		$app->post('/breeder', 'App\controller\breeder\Post');
-		$app->any('/breeder[/{id}]', controller\breeder\Breeder::class );
+//		$app->any('/breeder[/{id}]', controller\breeder\Breeder::class );
 
         $app->get('/breeder/{id}/pairs', 'App\controller\breeder\Pairs');
         $app->get('/breeder/{id}/pairs/year/{year}', 'App\controller\breeder\PairsInYear' ); // for selecting pair for parent ring in report

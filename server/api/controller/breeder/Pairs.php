@@ -2,7 +2,7 @@
 
 namespace App\controller\breeder;
 
-use App\query;
+use App\model;
 use App\controller\Controller;
 use http\Exception\InvalidArgumentException;
 use Slim\Exception\HttpBadRequestException;
@@ -28,8 +28,8 @@ class Pairs extends Controller
     public function process() : array // parent with direct children
     {
         $breederId = $this->args['id'] ?? null;
-        $breeder = query\Breeder::get( $breederId );
-        $pairs = query\Breeder::pairs( $breederId );
+        $breeder = model\Breeder::get( $breederId );
+        $pairs = model\Breeder::pairs( $breederId );
         return [ 'breeder'=>$breeder, 'pairs'=>$pairs ];
     }
 

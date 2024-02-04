@@ -2,7 +2,7 @@
 
 namespace App\controller\pair;
 
-use App\query;
+use App\model;
 use App\controller\Controller;
 use http\Exception\InvalidArgumentException;
 use Slim\Exception\HttpNotFoundException;
@@ -23,16 +23,16 @@ class Get extends Controller
     public function process() : array
     {
         $id = $this->args['id'];
-        $pair = query\Pair::get( $id );
+        $pair = model\Pair::get( $id );
         if( $pair ) {
-            $pair['breeder'] = query\Breeder::getName($pair['breederId']);
-            $pair['elders']  = query\Elder::getForPair($pair['id']);
-            $pair['lay']     = query\Lay::getForPair($pair['id']);
-            $pair['broods']  = query\Brood::getForPair( $pair['id'] );
+            $pair['breeder'] = model\Breeder::getName($pair['breederId']);
+            $pair['elders']  = model\Elder::getForPair($pair['id']);
+            $pair['lay']     = model\Lay::getForPair($pair['id']);
+            $pair['broods']  = model\Brood::getForPair( $pair['id'] );
             foreach( $pair['broods'] as & $brood ) {
-                $brood['chicks'] = query\Chick::getForBrood( $brood['id'] );
+                $brood['chicks'] = model\Chick::getForBrood( $brood['id'] );
             }
-            $pair['show'] = query\Show::getForPair( $pair['id'] );
+            $pair['show'] = model\Show::getForPair( $pair['id'] );
         }
         return ['pair' => $pair];
     }

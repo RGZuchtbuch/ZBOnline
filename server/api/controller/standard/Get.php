@@ -2,9 +2,9 @@
 
 namespace App\controller\standard;
 
-use App\query;
+use App\model;
 use App\controller\Controller;
-use App\query\Cache;
+use App\model\Cache;
 use Exception;
 use http\Exception\InvalidArgumentException;
 use PDOException;
@@ -27,9 +27,9 @@ class Get extends Controller
 
     public function process() : array
     {
-        $sections = query\Section::descendants(2);
-        $breeds = query\Breed::all();
-        $colors = query\Color::all();
+        $sections = model\Section::descendants(2);
+        $breeds = model\Breed::all();
+        $colors = model\Color::all();
         $standard = $this->toStandardTree($sections, $breeds, $colors);
         return ['standard' => $standard ];
     }

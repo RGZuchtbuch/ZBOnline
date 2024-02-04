@@ -3,7 +3,7 @@
 namespace App\controller\breeder\old;
 
 use App\controller\Controller;
-use App\query;
+use App\model;
 
 class Delete extends Controller
 {
@@ -13,7 +13,7 @@ class Delete extends Controller
     {
         if( $this->requester && $this->args ) {
             if( $this->requester['admin'] ) return true; // admin
-            $breeder = query\Breeder::get( $this->args[ 'id' ] );
+            $breeder = model\Breeder::get( $this->args[ 'id' ] );
             if( in_array( $breeder[ 'districtId' ], $this->requester[ 'moderator' ] ) ) return true; // moderator
         }
         return false;
@@ -22,7 +22,7 @@ class Delete extends Controller
     public function process() : array
     {
         $id = $this->args['id'];
-        $removed = query\Breeder::del( $id );
+        $removed = model\Breeder::del( $id );
         return [ 'id'=>$removed ];
     }
 }

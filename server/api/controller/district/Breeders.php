@@ -2,7 +2,7 @@
 
 namespace App\controller\district;
 
-use App\query;
+use App\model;
 use App\controller\Controller;
 use http\Exception\InvalidArgumentException;
 use Slim\Exception\HttpNotFoundException;
@@ -21,7 +21,7 @@ class Breeders extends Controller
     public function process() : array // parent with direct children
     {
         $id = $this->args['id'];
-        $rows = query\District::breeders( $id );
+        $rows = model\District::breeders( $id );
         $breeders = [];
         foreach( $rows as $row ) {
             $breeders[] = [

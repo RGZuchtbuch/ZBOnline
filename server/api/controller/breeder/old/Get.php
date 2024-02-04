@@ -3,7 +3,7 @@
 namespace App\controller\breeder\old;
 
 use App\controller\Controller;
-use App\query;
+use App\model;
 use Slim\Exception\HttpNotFoundException;
 
 class Get extends Controller
@@ -15,7 +15,7 @@ class Get extends Controller
         if ($this->requester && $this->args) {
 
             $id = $this->args['id'] ?? null; // null if not exists
-            $this->breeder = query\Breeder::get($id); // preget
+            $this->breeder = model\Breeder::get($id); // preget
             if ($this->breeder) {
                 if ($this->requester['admin']) return true; // admin
                 if (in_array($this->breeder['districtId'], $this->requester['moderator'])) return true; // moderator

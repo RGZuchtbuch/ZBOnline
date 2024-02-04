@@ -2,9 +2,9 @@
 
 namespace App\controller\result;
 
-use App\query;
+use App\model;
 use App\controller\Controller;
-use App\query\Cache;
+use App\model\Cache;
 use http\Exception\InvalidArgumentException;
 use Slim\Exception\HttpBadRequestException;
 use Slim\Exception\HttpNotFoundException;
@@ -42,7 +42,7 @@ class Result extends Controller
 
         $debug = [];
         if( $districtId && $year ) { // TODO when used, only case 1, last is found for district results.
-            $result = query\Result::resultDistrictYear( $districtId, $year, $sectionId, $breedId, $colorId, $group );
+            $result = model\Result::resultDistrictYear( $districtId, $year, $sectionId, $breedId, $colorId, $group );
             return [ 'result'=>$result ];
         }
     }

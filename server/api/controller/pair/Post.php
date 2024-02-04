@@ -3,7 +3,7 @@
 namespace App\controller\pair;
 
 use App\controller\Controller;
-use App\query;
+use App\model;
 use Exception;
 use PDOException;
 use Slim\Exception\HttpNotFoundException;
@@ -22,18 +22,18 @@ class Post extends Controller
 
     public function process() : array
     {
-        query\Cache::del( 'results' );
+        model\Cache::del( 'results' );
 
-        query\Query::begin(); // begin transaction
+        model\Query::begin(); // begin transaction
         try {
-            query\Cache::del('pairs'); // clear cache
-            query\Cache::del('results');
+            model\Cache::del('pairs'); // clear cache
+            model\Cache::del('results');
             $pair = $this->data;
             $id = $pair['id'] ?? null;
             if ($id) {
-                query\Pair::set($pair['id'], $pair['breederId'], $pair['districtId'], $pair['year'], $pair['group'], $pair['sectionId'], $pair['breedId'], $pair['colorId'], $pair['name'], $pair['paired'], $pair['notes'], $this->requester['id']);
+                model\Pair::set($pair['id'], $pair['breederId'], $pair['districtId'], $pair['year'], $pair['group'], $pair['sectionId'], $pair['breedId'], $pair['colorId'], $pair['name'], $pair['paired'], $pair['notes'], $this->requester['id']);
             } else { // id being 0 for new
-                $id = query\Pair::new($pair['breederId'], $pair['districtId'], $pair['year'], $pair['group'], $pair['sectionId'], $pair['breedId'], $pair['colorId'], $pair['name'], $pair['paired'], $pair['notes'], $this->requester['id']);
+                $id = model\Pair::new($pair['breederId'], $pair['districtId'], $pair['year'], $pair['group'], $pair['sectionId'], $pair['breedId'], $pair['colorId'], $pair['name'], $pair['paired'], $pair['notes'], $this->requester['id']);
                 $pair['id'] = $id; // continue with new id
             }
             // TODO for all parts...
@@ -44,22 +44,22 @@ class Post extends Controller
 
             $this->updateResult( $pair );
 
-            query\Query::commit();
+            model\Query::commit();
             return ['id' => $id];
         } catch( PDOException $e ) {
-            query\Query::rollback();
+            model\Query::rollback();
             throw $e; //new HttpInternalServerErrorException( $this->request, $e->getTraceAsString().'<br><br><br>'.$e->getMessage() );
         }
         //return ['id' => null];
     }
 
     private function updateElders( & $pair ) {
-        query\Elder::delForPair( $pair['id'] );
+        model\Elder::delForPair( $pair['id'] );
         $elders = $pair['elders'];
         if( $elders ) {
             foreach( $elders as & $elder ) {
                 if( $elder['sex'] && $elder['ring'] ) {
-                    query\Elder::new( $pair['id'], $elder['sex'], $elder['ring'], $elder['score'], $elder['pair'], $this->requester['id'] );
+                    model\Elder::new( $pair['id'], $elder['sex'], $elder['ring'], $elder['score'], $elder['pair'], $this->requester['id'] );
                 }
             }
         }
@@ -67,16 +67,16 @@ class Post extends Controller
     }
 
     private function updateLay( & $pair ) {
-        query\Lay::delForPair( $pair['id'] );
+        model\Lay::delForPair( $pair['id'] );
         $lay = $pair[ 'lay' ];
         if( $pair['sectionId'] !== 5 && $lay && $lay['start'] && $lay['end'] && $lay[ 'eggs' ] ) { // only if valid
-            query\Lay::new($pair['id'], $lay['start'], $lay['end'], $lay['eggs'], $lay['dames'], $lay['weight'], $this->requester['id'] );
+            model\Lay::new($pair['id'], $lay['start'], $lay['end'], $lay['eggs'], $lay['dames'], $lay['weight'], $this->requester['id'] );
         }
     }
 
     private function updateBroods( & $pair ) {
-        query\Chick::delForPair( $pair['id'] ); // remove all for pair to reinsert
-        query\Brood::delForPair( $pair['id'] ); // idem
+        model\Chick::delForPair( $pair['id'] ); // remove all for pair to reinsert
+        model\Brood::delForPair( $pair['id'] ); // idem
 
         if( isset( $pair['broods'] ) ) {
             $broods = & $pair['broods'];
@@ -86,20 +86,20 @@ class Post extends Controller
                     $brood['eggs'] = 2;
                     $brood['fertile'] = null;
                     if( $brood['hatched'] !== null && $brood['hatched'] >= 0 && $brood['hatched'] <= $brood['eggs'] ) {
-                        $brood['id'] = query\Brood::new( $pair['id'], $brood['start'], $brood['eggs'], $brood['fertile'], $brood['hatched'], $this->requester['id'] );
+                        $brood['id'] = model\Brood::new( $pair['id'], $brood['start'], $brood['eggs'], $brood['fertile'], $brood['hatched'], $this->requester['id'] );
                     }
                 } else { // layers
                     if( $brood['eggs'] !== null && $brood['eggs'] > 0 && $brood['hatched'] !== null && $brood['hatched'] >=0 &&
                         ( $brood['hatched'] <= ( $brood['fertile'] !== null && $brood['fertile'] >= 0 ?  $brood['fertile'] :  $brood['eggs'] ) ) ) {
 //                  if( $brood['eggs'] != null && $brood['hatched'] != null && ( $brood['hatched'] <= ( $brood['fertile'] != null ? $brood['fertile'] : $brood['eggs'] ) ) ) {
 
-                        $brood['id'] = query\Brood::new( $pair['id'], $brood['start'], $brood['eggs'], $brood['fertile'], $brood['hatched'], $this->requester['id'] );
+                        $brood['id'] = model\Brood::new( $pair['id'], $brood['start'], $brood['eggs'], $brood['fertile'], $brood['hatched'], $this->requester['id'] );
                     }
                 }
 
                 foreach( $brood['chicks'] as & $chick ) { // save all chicks ( 2 x pigeon )
                     if( $chick['ring'] ) {
-                        query\Chick::new($pair['id'], $brood['id'], $chick['ring'], $brood['ringed'], $this->requester['id']);
+                        model\Chick::new($pair['id'], $brood['id'], $chick['ring'], $brood['ringed'], $this->requester['id']);
                     }
                 }
             }
@@ -108,15 +108,15 @@ class Post extends Controller
 
 
     private function updateShow( & $pair ) {
-        query\Show::delForPair( $pair['id'] );
+        model\Show::delForPair( $pair['id'] );
         $show = $pair[ 'show' ] ?? null;
         if( $show ) { // only if valid
-            query\Show::new($pair['id'], $show['89'], $show['90'], $show['91'], $show['92'], $show['93'], $show['94'], $show['95'], $show['96'], $show['97'], $this->requester['id'] );
+            model\Show::new($pair['id'], $show['89'], $show['90'], $show['91'], $show['92'], $show['93'], $show['94'], $show['95'], $show['96'], $show['97'], $this->requester['id'] );
         }
     }
 
     private function updateResult( & $pair ) {
-        query\Result::delForPair( $pair['id'] );
+        model\Result::delForPair( $pair['id'] );
 
         $broods = & $pair['broods'];
         $broodEggs = null;
@@ -141,7 +141,7 @@ class Post extends Controller
         }
 
         if( $pair['sectionId'] === 5 ) { // pidgeon, no lay, no color
-            query\Result::new(
+            model\Result::new(
                 $pair['id'], $pair['districtId'], $pair['year'],
                 $pair['group'], $pair['breedId'], null,
                 1, 1,
@@ -152,7 +152,7 @@ class Post extends Controller
             );
 
         } else { // layers
-            query\Result::new(
+            model\Result::new(
                 $pair['id'], $pair['districtId'], $pair['year'],
                 $pair['group'], $pair['breedId'], $pair['colorId'],
                 1, 1,

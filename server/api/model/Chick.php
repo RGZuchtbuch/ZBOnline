@@ -1,37 +1,37 @@
 <?php
 
-namespace App\query;
+namespace App\model;
 
-class Elder extends Query
+class Chick extends Query
 {
     public static function get( $id ) {
         $args = get_defined_vars();
         $stmt = Query::prepare( '
-            SELECT id, pairId, sex, ring, score, pair
-            FROM pair_elder
+            SELECT id, pairId, broodId, ring
+            FROM pair_chicks
             WHERE id=:id
         ' );
         return Query::select( $stmt, $args );
     }
 
-    public static function new( int $pairId, string $sex, string $ring, ? float $score, ? int $pair, int $modifierId ) : ? int {
+    public static function new( int $pairId, ? int $broodId, string $ring, ? string $ringed, int $modifierId ) : ? int {
         $args = get_defined_vars();
         $stmt = Query::prepare( '
-            INSERT INTO pair_elder ( pairId, sex, ring, score, pair, modifierId ) 
-            VALUES ( :pairId, :sex, :ring, :score, :pair, :modifierId )
+            INSERT INTO pair_chicks ( pairId, broodId, ring, ringed, modifierId ) 
+            VALUES ( :pairId, :broodId, :ring, :ringed, :modifierId )
         ' );
         return Query::insert( $stmt, $args );
     }
 
-    // no set as all renewed at report save
+    // no set as al renewed at report save
 
-    public static function getForPair( $pairId ) {
+    public static function getForBrood( int $broodId ) {
         $args = get_defined_vars();
         $stmt = Query::prepare( '
-            SELECT id, pairId, sex, ring, score, pair
-            FROM pair_elder
-            WHERE pairId=:pairId
-            ORDER BY sex, ring
+            SELECT id, pairId, broodId, ring
+            FROM pair_chicks
+            WHERE broodId=:broodId
+            ORDER BY ring
         ' );
         return Query::selectArray( $stmt, $args );
     }
@@ -40,13 +40,11 @@ class Elder extends Query
         $args = get_defined_vars();
         $stmt = Query::prepare( '
             DELETE 
-            FROM pair_elder
+            FROM pair_chicks
             WHERE pairId=:pairId
         ' );
         return Query::delete( $stmt, $args );
     }
-
-
 
 
 

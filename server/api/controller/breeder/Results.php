@@ -2,7 +2,7 @@
 
 namespace App\controller\breeder;
 
-use App\query;
+use App\model;
 use App\controller\Controller;
 use http\Exception\InvalidArgumentException;
 use Slim\Exception\HttpBadRequestException;
@@ -31,7 +31,7 @@ class Results extends Controller
     {
         $breederId = $this->args['id'] ?? null;
 
-        $results = query\Breeder::results( $breederId );
+        $results = model\Breeder::results( $breederId );
         return [ 'results'=>$results ];
     }
 

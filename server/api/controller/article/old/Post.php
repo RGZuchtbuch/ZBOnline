@@ -3,7 +3,7 @@
 namespace App\controller\article\old;
 
 use App\controller\Controller;
-use App\query;
+use App\model;
 
 class Post extends Controller
 {
@@ -18,9 +18,9 @@ class Post extends Controller
         $data = $this->data;
         $id = $data[ 'id' ] ?? null;// get it or null
         if( $id ) {
-            query\Article::set( $id, $data['title'], $data['html'], $this->requester[ 'id' ] );
+            model\Article::set( $id, $data['title'], $data['html'], $this->requester[ 'id' ] );
         } else {
-            $id = query\Article::new( $data['title'], $data['html'], $this->requester[ 'id' ] );
+            $id = model\Article::new( $data['title'], $data['html'], $this->requester[ 'id' ] );
         }
         return ['id' => $id];
     }

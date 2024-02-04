@@ -2,13 +2,13 @@
 
 namespace App\controller\article;
 
-use App\query;
+use App\model;
 use App\controller\BaseController;
 
 class Articles extends BaseController
 {
 	protected function get() {
-		$articles = query\Article::getAll();
+		$articles = model\Article::getAll();
 		return [ 'articles' => $articles ];
 	}
 

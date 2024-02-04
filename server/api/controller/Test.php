@@ -2,9 +2,9 @@
 
 namespace App\controller;
 
-use App\query;
+use App\model;
 use App\controller\Controller;
-use App\query\Cache;
+use App\model\Cache;
 use http\Exception\InvalidArgumentException;
 use Slim\Exception\HttpBadRequestException;
 use Slim\Exception\HttpNotFoundException;
@@ -40,7 +40,7 @@ class Test extends Controller
 //        $colorId    = $this->query[ 'color' ] ?? null;
 //        $group      = $this->query[ 'group' ] ?? null;
 
-        $results = query\Result::resultsDistrictYear( $districtId, $year );
+        $results = model\Result::resultsDistrictYear( $districtId, $year );
         return [ 'results'=>$results ];
     }
 

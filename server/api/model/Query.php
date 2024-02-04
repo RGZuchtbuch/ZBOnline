@@ -1,6 +1,6 @@
 <?php
 
-namespace App\query;
+namespace App\model;
 
 use Error;
 use Exception;
@@ -45,7 +45,7 @@ class Query
      * @param array $args
      * @return 1st row or null on empty
      */
-    protected static function select( PDOStatement  & $stmt, array & $args = [] ) {
+    public static function select( PDOStatement  & $stmt, array & $args = [] ) {
         if( $stmt->execute( $args ) ) {
             $data = $stmt->fetch(); // get first row
             if( $data ) { // could be false
@@ -60,7 +60,7 @@ class Query
      * @param array $args
      * @return array of all rows found or empty array
      */
-    protected static function selectArray(PDOStatement & $stmt, array & $args = [] ) : ? array { // array of objects, could be empty
+	public static function selectArray(PDOStatement & $stmt, array & $args = [] ) : ? array { // array of objects, could be empty
         if ($stmt->execute($args)) {
             return $stmt->fetchAll();
         }
@@ -72,7 +72,7 @@ class Query
      * @param array $args
      * @return int id of newly inserted row or null on failure
      */
-    protected static function insert( PDOStatement & $stmt, array & $args ) : ? int { // returns new id
+	public static function insert( PDOStatement & $stmt, array & $args ) : ? int { // returns new id
         return $stmt->execute( $args ) ? Query::lastInsertId() : null;
     }
 
@@ -81,7 +81,7 @@ class Query
      * @param array $args
      * @return bool true on success
      */
-    protected static function update( PDOStatement & $stmt, array & $args ) : bool {
+	public static function update( PDOStatement & $stmt, array & $args ) : bool {
         return $stmt->execute( $args );
     }
 
@@ -90,7 +90,7 @@ class Query
      * @param array $args
      * @return bool, true on success
      */
-    protected static function delete(PDOStatement & $stmt, array & $args ) : bool {
+    public static function delete(PDOStatement & $stmt, array & $args ) : bool {
         return $stmt->execute( $args );
     }
 
@@ -99,7 +99,7 @@ class Query
      * needs to called right after an insert statement, Query::insert already does so
      * @return int last inserted id,
      */
-    protected static function lastInsertId( ? string $name = null ) : int {
+	public static function lastInsertId( ? string $name = null ) : int {
         return Query::getPdo()->lastInsertId( $name );
     }
 

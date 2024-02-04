@@ -3,7 +3,7 @@
 namespace App\controller\article\old;
 
 use App\controller\Controller;
-use App\query;
+use App\model;
 use Slim\Exception\HttpNotFoundException;
 
 class Get extends Controller
@@ -15,7 +15,7 @@ class Get extends Controller
 
     public function process() : array
     {
-        $article = query\Article::get( $this->args[ 'id' ] );
+        $article = model\Article::get( $this->args[ 'id' ] );
         if( $article ) {
             return ['article' => $article];
         }

@@ -2,7 +2,7 @@
 
 namespace App\controller\message;
 
-use App\query;
+use App\model;
 use App\controller\Controller;
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
@@ -23,9 +23,9 @@ class Post extends Controller
     {
         $data = $this->data;
         if( $data['confirm'] === false ) { // simple antibot
-            $district = query\District::get( $data['districtId'] );
+            $district = model\District::get( $data['districtId'] );
             if ($district) {
-                $moderator = query\Moderator::get($district['moderatorId']);
+                $moderator = model\Moderator::get($district['moderatorId']);
                 if ($moderator) {
                     $success = $this->sendMail($moderator['email'], $data['from'], $data['name'], $data['subject'], $data['message']);
                     return ['success' => $success]; // servname for debug

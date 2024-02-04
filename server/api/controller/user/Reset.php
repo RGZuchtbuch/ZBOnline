@@ -2,7 +2,7 @@
 
 namespace App\controller\user;
 
-use App\query;
+use App\model;
 use App\controller\Controller;
 //use App\controller\user\Token;
 

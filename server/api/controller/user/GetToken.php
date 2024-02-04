@@ -3,7 +3,7 @@
 namespace App\controller\user;
 
 
-use App\query;
+use App\model;
 use App\controller\Controller;
 use App\controller\Token;
 use DateTimeImmutable;
@@ -25,12 +25,11 @@ class GetToken extends Controller
         $email = $this->data['email'];
         $password = $this->data[ 'password' ];
 
-        $id = query\User::authenticate( $email, $password );
+        $id = model\User::authenticate( $email, $password );
         if( $id ) {
-            $user = query\User::get( $id );
+            $user = model\User::get( $id );
             $user[ 'fullname' ] = $user[ 'firstname' ].' '.($user[ 'infix' ] ? $user[ 'infix' ].' ':'').$user[ 'lastname' ];
-			$user[ 'moderator' ] = array_column( query\Moderator::districts( $id ), 'id' );
-			//$user[ 'moderates' ] = array_column( query\Moderator::districts( $id ), 'id' );
+			$user[ 'moderator' ] = array_column( model\Moderator::districts( $id ), 'id' );
             $token = Token::encode( $user );
             return [ 'token' => $token ];
         }

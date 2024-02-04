@@ -2,7 +2,7 @@
 
 namespace App\controller\breeder;
 
-use App\query;
+use App\model;
 use App\controller\Controller;
 use http\Exception\InvalidArgumentException;
 use Slim\Exception\HttpNotFoundException;
@@ -22,7 +22,7 @@ class PairsInYear extends Controller
     {
         $id = $this->args['id'];
         $year = $this->args['year'];
-        $pairs = query\Pair::forYear( $id, $year );
+        $pairs = model\Pair::forYear( $id, $year );
 
         return [ 'pairs' => $pairs ];
     }

@@ -6,7 +6,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
 use App\controller\BaseController;
-use App\query;
+use App\model;
 use Slim\Exception\HttpBadRequestException;
 use Slim\Exception\HttpNotFoundException;
 
@@ -29,7 +29,7 @@ class Breed
 {
 
 	static function list(Request $request, Response $response, array $args ) : Response {
-		$breeds = query\Breed::all();
+		$breeds = model\Breed::all();
 		write( $response, [ 'breeds'=>$breeds ] );
 		return $response;
 	}
@@ -37,9 +37,9 @@ class Breed
 	static function get(Request $request, Response $response, array $args ) : Response {
 		$id = getArg( $args, 'id' );
 		if( $id ) {
-			$breed = query\Breed::get($id);
+			$breed = model\Breed::get($id);
 			if ( $breed ) {
-				$breed['colors'] = query\Breed::colors($id);
+				$breed['colors'] = model\Breed::colors($id);
 
 				write( $response, [ 'breed'=>$breed ] );
 //				$response->getBody()->write( json_encode( [ 'breed'=>$breed ], JSON_UNESCAPED_SLASHES ) );
@@ -53,7 +53,7 @@ class Breed
 	static public function getColors( Request $request, Response $response, array $args ) : Response {
 		$id = getArg( $args, 'id' );
 		if( $id ) {
-			$colors = query\Breed::colors($id);
+			$colors = model\Breed::colors($id);
 
 			write( $response, [ 'colors'=>$colors ] );
 			return $response;

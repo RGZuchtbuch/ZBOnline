@@ -5,10 +5,22 @@ namespace App\controller;
 use DateTimeImmutable;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
+use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpNotFoundException;
 
 class Token
 {
+	private ? Requester $requester = null;
+	public function __construct( Request $request ) {
+		$bearer = Token::getBearer( $request );
+		$payload = Token::decode( $bearer );
+		$this->requester = $payload ? new Requester($payload['user']) : null;
+	}
+
+	public function getRequester() : ? array {
+		return $this->payload;
+	}
+
 	public static function encode( array $data ) : string {
 		$issuer = 'RG Zuchtbuch Online';
 		$issued = new DateTimeImmutable();
@@ -30,4 +42,15 @@ class Token
 		return $payload;
 		// may throw ExpiredException $e
 	}
+
+	private static function getBearer(Request $request ) : ? string {
+	$authorization = $request->getHeaderLine( 'Authorization' );
+	if( $authorization && !empty( $authorization ) ) {
+		$header = trim($authorization);
+		if (preg_match('/Bearer\s(\S+)/', $header, $matches )) { // get token part of header
+			return $matches[1];
+		}
+	}
+	return null;
+}
 }

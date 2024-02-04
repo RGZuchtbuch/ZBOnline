@@ -2,7 +2,7 @@
 
 namespace App\controller\district;
 
-use App\query;
+use App\model;
 use App\controller\Controller;
 use Error;
 use Exception;
@@ -24,7 +24,7 @@ class Post extends Controller
 
     public function process() : array
     {
-        query\Cache::del('results');
+        model\Cache::del('results');
 
         $data = $this->data;
         $id = $data['id'] ?? null; // as provided or null if not defined
@@ -32,16 +32,16 @@ class Post extends Controller
 
         if ($name) { // not null or empty
             if ($id) {
-                query\District::set($data['id'], $data['name'], $data['fullname'], $data['short'], $data['latitude'], $data['longitude'], $data['level'], $data['moderatorId'], $this->requester['id']);
+                model\District::set($data['id'], $data['name'], $data['fullname'], $data['short'], $data['latitude'], $data['longitude'], $data['level'], $data['moderatorId'], $this->requester['id']);
             } else {
-                $id = query\District::new($data['parentId'], $data['name'], $data['fullname'], $data['short'], $data['latitude'], $data['longitude'], $data['level'], $data['moderatorId'], $this->requester['id']);
+                $id = model\District::new($data['parentId'], $data['name'], $data['fullname'], $data['short'], $data['latitude'], $data['longitude'], $data['level'], $data['moderatorId'], $this->requester['id']);
             }
             return ['id' => $id];
         } else {
-            if( query\District::countresults( $id ) || query\District::countChildren( $id ) || query\District::countBreeders( $id ) ) {
+            if( model\District::countresults( $id ) || model\District::countChildren( $id ) || model\District::countBreeders( $id ) ) {
                 throw new HttpBadRequestException( $this->request, 'cannot delete district that has children or results' );
             } else {
-                $deleted = query\District::del($id);
+                $deleted = model\District::del($id);
                 return ['id' => null];
             }
         }
