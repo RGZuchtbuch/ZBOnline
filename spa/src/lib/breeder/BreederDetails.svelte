@@ -38,18 +38,13 @@
         email:      (v) => validator(v).email().orNull().isValid(),
         start:      (v) => validator(v).date().orNull().isValid(),
         end:        (v) => validator(breeder.end).date().after( breeder.start ).orNull().isValid(),
-
-//        eggs:       (v) => validator(v).number().range(1,366).orNull().isValid(),
-//        eggWeight:  (v) => validator(v).number().range(1,9999).orNull().isValid(),
-//        weight:     (v) => validator(v).number().range(1,99999).orNull().isValid(),
-//        ring:       (v) => validator(v).number().range(1,99).orNull().isValid(),
     }
 
     function onToggleEdit() {
         disabled = ! disabled;
         needFocus = true;
         if( ! disabled ) {
-            loadClubs( breeder.district.id );
+            //loadClubs( breeder.district.id ); // TODO  !!!!!!!!!!!!!!
         }
     }
 
@@ -64,13 +59,16 @@
 
     function onSubmit(event) {
         console.log('Submit');
-        //disabled = true;
-        //breeder.club = clubs.find( club => club.id === breeder.clubId );
-        api.breeder.post( breeder ).then( response => {
-            const id = response.id; // new or existing
-            breeder.id = id;
-            changed = false;
-        })
+        if( breeder.id > 0 ) {
+            api.breeder.update( breeder.id, breeder ).then( response => {
+                changed = false;
+            });
+        } else {
+            api.breeder.create(breeder).then(response => {
+                breeder.id = response.id;
+                changed = false;
+            });
+        }
     }
 
 /*

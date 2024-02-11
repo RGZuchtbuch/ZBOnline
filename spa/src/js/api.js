@@ -7,16 +7,18 @@ export default {
 
     article: {
         get:    ( id ) => get('api/article/'+id ),
-        post:   ( article ) => post( 'api/article', article ),
-        put:    ( article ) => put( 'api/article/'+article.id, article ),
-        del:    ( id ) => del( 'api/article'+id ),
+        create: ( article ) => post( 'api/article', article ),
+        update: ( id, article ) => put( 'api/article', id, article ),
+        del:    ( id ) => del( 'api/article', id ),
+
         getAll: () => get( 'api/article' ),
     },
 
     breed: {
-        get:    ( id )     => get( 'api/breed/'+id ),
-        post:   ( breed ) => post( 'api/breed', breed ),
-        delete: ( id )    => del( 'api/breed/'+id ),
+        get:    ( id )         => get( 'api/breed/'+id ),
+        create: (breed )     => post( 'api/breed', breed ),
+        update: ( id, breed )=> put( 'api/breed', id, breed ),
+        //delete: ( id )       => del( 'api/breed/'+id ),
 
         colors : {
             get: ( breedId ) => get( `api/breed/${breedId}/colors`)
@@ -24,17 +26,19 @@ export default {
     },
 
     breeder: {
-        get: ( breederId ) => get( 'api/breeder/'+breederId ),
-        new: ( districtId ) => { // id being null
-            return new Promise( ( resolve ) => {
-                resolve( { breeder:{ id:null, name:null, email:null, districtId:districtId, clubId:null, start:new Date(), end:null, active:true, info:null }} );
-            })
-        },
-        post: ( breeder ) => {
-            return post( 'api/breeder', breeder );
-        },
+//        new: ( districtId ) => { // id being null
+//            return new Promise( ( resolve ) => {
+//                resolve( { breeder:{ id:null, name:null, email:null, districtId:districtId, clubId:null, start:new Date(), end:null, active:true, info:null }} );
+//            })
+//        },
+
+        get: ( id ) => get( 'api/breeder/'+id ),
+        create: (breeder ) => post( 'api/breeder', breeder ),
+        update: ( id, breeder ) => put( 'api/breeder', id, breeder ),
+        //delete: ( id )       => del( 'api/breed/'+id ),
+
         pairs: {
-            get: (breederId) => get( 'api/breeder/'+breederId+'/pairs' ),
+            get: (breederId) => get( 'api/breeder/'+breederId+'/pair' ),
         },
         pairsInYear: {
             get: ( breederId, year ) => get( 'api/breeder/'+breederId+'/pairs/year/'+year ),
@@ -46,50 +50,38 @@ export default {
     },
 
     color: {
-        get: ( id ) => get( 'api/color/'+id ),
-        post:( color ) => post( 'api/color', color ),
-        delete:( id ) => del( 'api/color/'+id ),
+        get:    ( id ) => get( 'api/color/'+id ),
+        create: ( color ) => post( 'api/color', color ),
+        update: ( id, color ) => put( 'api/color', id, color ),
+        //delete: ( id ) => del( 'api/color/'+id ),
     },
 
     district: {
-        get: ( districtId ) => {
-            return get( 'api/district/'+districtId );
-        },
-        new: ( parentId ) => {
-            return new Promise( ( resolve ) => {
-                resolve( { id:null, parent:parentId, name:null, fullname:null, short:null, coordinates:null, children:[], moderators:[] } );
-            })
-        },
-        post: ( district ) => { // save, insert on id=null or update
-            return post( 'api/district', district );
-        },
-        delete: ( districtId ) => {
-            //return del( 'api/district/'+districtId ); // TODO delete or better disable !
-        },
-
-//        tree: (parentId) => {
-//            return get('api/district/'+parentId+'/tree');
+        get: ( districtId ) => get( 'api/district/'+districtId ),
+//        new: ( parentId ) => {
+//            return new Promise( ( resolve ) => {
+//                resolve( { id:null, parent:parentId, name:null, fullname:null, short:null, coordinates:null, children:[], moderators:[] } );
+//            })
 //        },
+        post:   ( district ) => post( 'api/district', district ),
+        update: ( id, district ) => put( 'api/district', id, district ),
+        //delete: ( districtId ) => del( 'api/district/'+districtId ), // TODO delete or better disable !
 
         breeders: {
-            get: (districtId) => {
-                return get( 'api/district/'+districtId+'/breeders');
-            }
+            get: (districtId) => get( 'api/district/'+districtId+'/breeders'),
         },
 
         /*
         * return direct children of district, not grandchildren etc
         */
         children: {
-            get: (districtId) => {
-                return get( 'api/district/'+districtId+'/children' );
-            }
+            get: (districtId) => get( 'api/district/'+districtId+'/children' ),
         },
 
         /**
          * returns array of clubs within district hierarchy incl root id
          */
-        clubs: {
+        clubs: { // TODO obsolete ?
             get: ( districtId ) => {
                 return new Promise( resolve => {
                     get( 'api/district/'+districtId+'/descendants' ).then( response => {
@@ -114,21 +106,18 @@ export default {
          * returns the district hierarchie incl given root id
           */
         descendants: {
-            get: ( districtId ) => {
-                return get( 'api/district/'+districtId+'/descendants');
-            }
+            get: ( districtId ) => get( 'api/district/'+districtId+'/descendants'),
         },
 
         results: { // showing results for district, all sections etc
-            //get: (districtId, sectionId, year, group) => get('api/district/' + districtId + '/section/' + sectionId + '/year/' + year + '/group/' + group + '/results/full'),
-            get: (districtId, year) => {
-                return get( 'api/district/'+districtId+'/results?year='+year );
-            },
+            get: (districtId, year) => get( 'api/district/'+districtId+'/results?year='+year ),
+
             section: {// to edit section's breeds results
                 get: ( districtId, sectionId, year, group ) => {
                     return get( 'api/district/'+districtId+'/results?section='+sectionId+'&year='+year+'&group='+group );
                 }
             },
+
             breed: { // to edit breed's colors results
                 get: ( districtId, sectionId, breedId, year, group ) => {
                     return get( 'api/district/'+districtId+'/results?section='+sectionId+'&breed='+breedId+'&year='+year+'&group='+group );
@@ -165,7 +154,7 @@ export default {
         },
     },
 
-    message: {
+    message: { // TODO ??
         post: ( districtId, from, name, subject, message, confirm ) => {
             const data = { districtId:districtId, from:from, name:name, subject:subject, message:message, confirm:confirm };
             return post( 'api/message', data );
@@ -373,8 +362,8 @@ function getToken() {
 
 function getHeaders() {
     let headers = {
-        'Accept': 'application/data',
-        'Content-Type': 'application/data'
+        'Accept': 'application/json', // expected response
+        'Content-Type': 'application/json' // send body
     }
     if( token ) {
         headers[ 'Authorization'] = 'Bearer '+token;
@@ -383,25 +372,25 @@ function getHeaders() {
 }
 
 async function get( url, timeout = CACHETIMEOUT ) {
-    let cached = cache.get( url );
-    let now = Date.now(); //new Date().getTime(); // in ms
-    if( cached && cached.due > now ) { // cached and still fresh
-        return cached.promise;
-    } else {
+//    let cached = cache.get( url );
+//    let now = Date.now(); //new Date().getTime(); // in ms
+//    if( cached && cached.due > now ) { // cached and still fresh
+//        return cached.promise;
+//    } else {
         let options = {
             method: 'GET',
             headers: getHeaders()
         }
-        let promise = fetch(APIROOT + url, options).then( response => {
+        let promise = fetch(APIROOT+url, options).then( response => {
             if (response.ok) {
                 return response.json();
             }
-            console.error('Fetch not ok, got null', response);
+            console.error('Fetch not ok', response);
             return null;
         });
         cache.put( url, promise, timeout );
         return promise;
-    }
+//    }
 }
 
 async function post( url, data ) {
@@ -412,42 +401,40 @@ async function post( url, data ) {
         headers: getHeaders(),
         body: JSON.stringify( data ),
     }
-    return fetch( APIROOT + url, options )
-        .then( response => {
-            if( response.ok ) {
-                return response.json();
-            }
-            console.error('Fetch not ok, got null', response);
-            return null;
-        });
+    return fetch( APIROOT + url, options ).then( response => {
+        if( response.ok ) {
+            return response.json();
+        }
+        console.error('Post Fetch not ok', response);
+        return null;
+    });
 }
 
-/*
-async function put( url, data ) {
+async function put( url, id, data ) {
+    cache.clear(); // empty cache on every post, bit raw, but it works fine
+
     let options = {
         method: 'PUT',
         headers: getHeaders(),
         body: JSON.stringify( data ),
     }
-    console.log( 'PUT', url, data );
-    return fetch( APIROOT + url, options )
+    return fetch( APIROOT + url+'/'+id, options )
         .then( response => {
             if( response.ok ) {
                 return response.json();
             }
-            throw response;
-        })
+            console.error('Put Fetch not ok', response);
+            return null;
+        });
 }
-*/
 
-async function del( url, data ) {
+async function del( url, id ) {
     cache.clear();
     let options = {
         method: 'DELETE',
-        headers: getHeaders(),
-        body: JSON.stringify( data ),
+        headers: getHeaders()
     }
-    return fetch( APIROOT + url, options)
+    return fetch( APIROOT + url + '/' + id, options)
         .then( response => {
             if( response.ok ) {
                 return response.json();

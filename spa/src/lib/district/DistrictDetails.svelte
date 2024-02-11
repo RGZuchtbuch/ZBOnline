@@ -31,10 +31,17 @@
 
     function onSubmit() {
         disabled = true;
-        api.district.post( district ).then( response => {
-            district.id = response.id;
-            changed = false;
-        });
+        if( district.id > 0 ) {
+            api.district.put( district.id, district ).then(response => {
+                changed = false;
+            });
+
+        } else {
+            api.district.post(district).then(response => {
+                district.id = response.id;
+                changed = false;
+            });
+        }
     }
 
     function loadDistrict( id ) {

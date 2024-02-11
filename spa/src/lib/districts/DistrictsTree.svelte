@@ -24,7 +24,7 @@
 <div class='flex flex-col pl-4'>
     {#if rootDistrict && ( rootDistrict.moderated || rootDistrict.children.length > 0 ) }
         <div class='flex border-b border-gray-300 my-2'>
-            <div class='w-6'>&#10551;</div>
+            <div class='w-8'>&#10551;</div>
 
             {#if rootDistrict.moderated}
                 <a class='cursor-pointer' href={route.match+'/'+rootDistrict.id} title='Zum Verband'>{rootDistrict.name}</a>

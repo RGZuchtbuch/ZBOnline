@@ -9,7 +9,7 @@
     import DistrictMenu from "./DistrictMenu.svelte";
     import ModeratorMenu from "./ModeratorMenu.svelte";
     import StandardMenu from "./StandardMenu.svelte";
-    import InfoMenu from "./InfoMenu.svelte";
+    import InfoMenu from "./ArticleMenu.svelte";
 
     // w-64 border rounded flex flex-col
 </script>

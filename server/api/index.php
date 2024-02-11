@@ -19,10 +19,11 @@ ob_start('ob_gzhandler'); // needs check if header has Accept-Encoding: gzip
 
 $app = AppFactory::create();
 
-$app->addRoutingMiddleware();
+$app->addRoutingMiddleware();     // enable router
+$app->addBodyParsingMiddleware(); // for request->getParsedBody
 
 // Add Error Middleware depending on dev or production
-if( $_SERVER[ 'REMOTE_ADDR' ] === '::1' ) { // locahost
+if( $_SERVER[ 'REMOTE_ADDR' ] === '::1' ) { // localhost
 	$errorMiddleware = $app->addErrorMiddleware(true, true, true);
 } else {
 	$errorMiddleware = $app->addErrorMiddleware(false, true, true);

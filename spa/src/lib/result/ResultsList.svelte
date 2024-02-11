@@ -131,13 +131,13 @@
 
 
 <div class='print'>
-    {#if results}
+    {#if results && results.length > 0 }
         {#each results.sections as section}
             <div>
-                <Comment>TOP HEADERS</Comment>
+                <!-- TOP HEADERS -->
 
                 <h2 class='p-2 bg-header text-center text-white text-xl' on:click={onSection( section.id )} >
-                    Sparte {section.name}
+                    Sparte {section.name} XX
                 </h2>
                 <div class='flex flex-row px-2 gap-x-1 font-bold'>
                     <div class='w-64 text-center'>Gruppe / Rasse / Farbe</div>
@@ -156,7 +156,7 @@
                                 {subsection.name}
                             </div>
 
-                            <Comment>SUB HEADERS</Comment>
+                            <!-- Subsections header -->
                             <div class='flex flex-row bg-gray-300 px-2 gap-x-1 text-xs'>
                                 <div class='w-64 text-left'>Rasse & Farbe</div>
                                 <div class='grow flex flex-row justify-evenly'>
@@ -185,7 +185,7 @@
                             </div>
                         </div>
 
-                        <Comment>BREEDS, RESULTS AND COLOR RESULTS</Comment>
+                        <!-- BREEDS, RESULTS AND COLOR RESULTS -->
                         {#each subsection.breeds as breed, i}
                             <div class='flex flex-row mt-1 px-2 gap-x-1 bg-gray-100 print-no-break'>
                                 <div class='w-64 text-left text-base font-semibold' on:click={onBreed( section.id, breed.id )}>

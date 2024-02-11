@@ -8,6 +8,7 @@ use App\model;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpBadRequestException;
+use Slim\Exception\HttpInternalServerErrorException;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Exception\HttpNotImplementedException;
 use Slim\Exception\HttpUnauthorizedException;
@@ -33,16 +34,21 @@ class Breed extends BaseController
 		if( $requester->isAdmin() ) {
 			$body = $request->getParsedBody();
 			if( $body ) {
-				$id = model\Breed::new($body['name'], $body['sectionId'], $body['broodGroup'], $body['layEggs'], $body['layWeight'], $body['sireRing'], $body['dameRing'], $body['sireWeight'], $body['dameWeight'], null, $requester->getId()); // $data['info']
-				if( $id ) {
-					model\Cache::del('standard');
-					model\Cache::del('results');
+				$section = model\Section::get( $body[ 'sectionId' ] );
+				if( $section ) {
+					$id = model\Breed::new($body['name'], $body['sectionId'], $body['broodGroup'], $body['layEggs'], $body['layWeight'], $body['sireRing'], $body['dameRing'], $body['sireWeight'], $body['dameWeight'], null, $requester->getId()); // $data['info']
+					if ($id) {
+						model\Cache::del('standard');
+						model\Cache::del('results');
 
-					$response->getBody()->write(json_encode(['id' => $id], JSON_UNESCAPED_SLASHES));
-					return $response;
+						$response->getBody()->write(json_encode(['id' => $id], JSON_UNESCAPED_SLASHES));
+						return $response;
+					}
+					throw new HttpInternalServerErrorException($request, 'Error creating new breed');
 				}
-				throw  new HttpBadRequestException( $request, 'Bad id or body' );
+				throw  new HttpBadRequestException( $request, 'Section does not exist' );
 			}
+			throw  new HttpBadRequestException( $request, 'Missing body' );
 		}
 		throw new HttpUnauthorizedException( $request, 'Cannot do this');
 	}

@@ -4,7 +4,7 @@
 
     import Breeder from '../breeder/Breeder.svelte';
     import Breeders from '../breeders/Breeders.svelte';
-    import ResultsList from './DistrictResultsList.svelte';
+    import DistrictResults from './DistrictResults.svelte';
     import ResultEdit from '../result/edit/Edit.svelte';
     import DistrictDetails from './DistrictDetails.svelte';
     import Club from '../club/Club.svelte';
@@ -22,7 +22,6 @@
     let route = meta();
 
     $: loadDistrict( districtId );
-    console.log( route );
 </script>
 
 {#if district}
@@ -40,7 +39,7 @@
     </Route>
 
     <Route path='/leistung/*' let:meta>
-        <Route path='/' let:meta> <ResultsList districtId={ +meta.params.districtId } /> </Route>
+        <Route path='/' let:meta> <DistrictResults districtId={ +meta.params.districtId } /> </Route>
         <Route path='/edit' let:meta> <ResultEdit districtId={ +meta.params.districtId }  /></Route>
     </Route>
 

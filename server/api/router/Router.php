@@ -40,12 +40,6 @@ class Router {
 		$app->get( 		'/breed', 				[ controller\breed\Breed::class, 'getAll' ] );
 		$app->get( 		'/breed/{id}/colors', 	[ controller\breed\Breed::class, 'getColors' ] );
 
-//		$app->any('/breed[/{id}]', controller\breed\Breed::class );
-//		$app->any('/breed[/{id}]', controller\breed\Breed::class );
-//		$app->get('/breed/{id}/colors', controller\breed\Colors::class );
-
-
-
 
 		$app->get( 		'/breeder/{id}',			[ controller\breeder\Breeder::class, 'get' ] );
 		$app->post(		'/breeder', 				[ controller\breeder\Breeder::class, 'new' ] );
@@ -53,20 +47,30 @@ class Router {
 		$app->delete(	'/breeder/{id}',			[ controller\breeder\Breeder::class, 'del' ] );
 
 		$app->get( 		'/breeder', 				[ controller\breeder\Breeder::class, 'getAll' ] );
-		$app->get( 		'/breeder/{id}/colors', 	[ controller\breeder\Breeder::class, 'getColors' ] );
+		$app->get( 		'/breeder/{id}/pair', 	[ controller\breeder\Breeder::class, 'getPairs' ] );
+		$app->get( 		'/breeder/{id}/year/{year}/pair', 	[ controller\breeder\Breeder::class, 'getPairsInYear' ] ); // TODO not used?
+
+
+		$app->get( 		'/color/{id}', [controller\color\Color::class, 'get' ]);
+		$app->post( 	'/color', [controller\color\Color::class, 'new' ]);
+		$app->put( 		'/color/{id}', [controller\color\Color::class, 'set' ]);
+
 
 
 //        $app->get('/breeder/{id}', 'App\controller\breeder\Get');
 //		$app->post('/breeder', 'App\controller\breeder\Post');
 //		$app->any('/breeder[/{id}]', controller\breeder\Breeder::class );
 
-        $app->get('/breeder/{id}/pairs', 'App\controller\breeder\Pairs');
-        $app->get('/breeder/{id}/pairs/year/{year}', 'App\controller\breeder\PairsInYear' ); // for selecting pair for parent ring in report
+//        $app->get('/breeder/{id}/pairs', 'App\controller\breeder\Pairs');
+//        $app->get('/breeder/{id}/pairs/year/{year}', 'App\controller\breeder\PairsInYear' ); // for selecting pair for parent ring in report
 //        $app->get('/breeder/{id}/results', 'App\controller\breeder\Results');
 
 //        $app->get( '/color/{id}', 'App\controller\color\Get');
 //        $app->post( '/color', 'App\controller\color\Post');
-		$app->any( '/color[/{id}]', controller\color\Color::class );
+
+//		$app->delete( '/color/{id}', controller\color\Color::class, 'del' ); // only if not used.
+		// /color not supported
+
 		//$app->any( '/color', controller\color\Color::class );
 
         $app->get('/district/{id}', 'App\controller\district\Get' );

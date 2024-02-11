@@ -7,6 +7,7 @@
     let article = null;
 
     function loadArticle( id ) {
+        article = null; // to force redraw
         api.article.get( id ).then( response => {
             article = response.article;
         });

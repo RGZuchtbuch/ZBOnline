@@ -23,7 +23,7 @@
     const route    = meta();
     const dispatch = createEventDispatcher();
 
-
+    let open = false;
     function onToggleOpen() {
         open = ! open;
     }
@@ -52,13 +52,20 @@
     }
 
     function onSubmit() {
-        console.log( 'Submit article', article );
-        api.article.post( details ).then( response => {
-            details.id = response.id;
-            article.id = response.id;
-            article.title = details.title;
-            edit = false;
-        });
+        console.log('Submit article', article);
+        if (article.id) {
+            api.article.update( details.id, details ).then(response => {
+                article.title = details.title;
+            });
+
+        } else {
+            api.article.create( details ).then(response => {
+                details.id = response.id;
+                article.id = response.id;
+                article.title = details.title;
+            });
+        }
+        edit = false;
         changed = false;
     }
 </script>

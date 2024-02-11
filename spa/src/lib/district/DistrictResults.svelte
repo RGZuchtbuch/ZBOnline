@@ -3,7 +3,7 @@
     import { meta } from 'tinro';
     import api from '../../js/api.js';
     import { user } from '../../js/store.js'
-    import ResultsList from '../result/ResultsList.svelte';
+    import ResultsTable from './DistrictResultsTable.svelte';
     import Range from '../common/input/Range.svelte';
     import ScrollDiv from '../common/ScrollDiv.svelte';
 
@@ -35,14 +35,12 @@
 
 </script>
 
-{#if $user}
+{#if district && results}
     <h2 class='w-256 text-center'>Verband {#if district} {district.name} {/if} → Leistungen {year}</h2>
     <Range class='w-228 px-8' label='Jahr' bind:value={year} min={STARTYEAR} max={new Date().getFullYear()} step={1} title='Schieben um das Jahr zu wählen'/>
     <ScrollDiv>
-        <ResultsList {results} />
+        <ResultsTable {results} />
     </ScrollDiv>
-{:else}
-    NOT AUTORIZED
 {/if}
 
 

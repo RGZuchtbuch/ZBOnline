@@ -3,7 +3,7 @@
     import {active, meta, router, Route} from 'tinro';
     import api from '../../js/api.js';
     import { user } from '../../js/store.js'
-    import ResultList from './ResultsTable.svelte';
+    import ResultTable from './ResultsTable.svelte';
 
     export let districtId = null;
     export let year = null;
@@ -35,7 +35,7 @@
 
 {#if district && year }
     <h2 class='text-center'>Verband {#if district} {district.name} {/if} → Leistungen {year}</h2>
-    <ResultList {results} />
+    <ResultTable {results} />
 {/if}
 
 

@@ -36,16 +36,22 @@
     function onSubmit() {
         //edit = false;
         if( color.name ) {
-            api.color.post( color ).then( response => {
-                color.id = response.id; // in case of new id
-            })
+            if( color.id > 0 ) { // not null and not null
+                api.color.update( color.id, color ).then(response => {
+                    color.id = response.id; // in case of new id
+                })
+            } else { // new
+                api.color.create( color ).then(response => {
+                    color.id = response.id; // in case of new id
+                })
+            }
         } else { // should remove, hmm take care
             if( color.id ) {
-                api.color.delete(color.id).then( response => {
-                    if( response.success ) {
-
-                    }
-                } )
+                //api.color.delete(color.id).then( response => {
+                //    if( response.success ) {
+                //    }
+                //} )
+                console.log( 'Color delete not enabled');
             }
         }
         console.log( 'Submit color' );

@@ -1,6 +1,7 @@
 <script>
     import api from '../../js/api.js';
     import {meta} from "tinro";
+    import { user } from '../../js/store.js';
 
 
     export let districtId;
@@ -27,12 +28,13 @@
         <div class='h-2'></div>
         <ul>
             <li> <a href={route.match+'/zuechter'} title='Zur Verbandsdaten'>→ Züchter </a> </li>
-            <li> <a href={route.match+'/verein'} title='Zu den Vereinen'>→ Vereine</a> </li>
         </ul>
         <div class='h-2'></div>
-        <ul>
-            <li> <a href={route.match+'/daten'} title='Zur Verbandsdaten'>→ Verbandsdaten </a> </li>
-        </ul>
+        {#if $user.admin}
+            <ul>
+                <li> <a href={route.match+'/daten'} title='Zur Verbandsdaten'>→ Verbandsdaten </a> </li>
+            </ul>
+        {/if}
     {/if}
 </div>
 

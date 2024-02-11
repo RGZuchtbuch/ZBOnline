@@ -22,11 +22,11 @@ class Color extends Query
         ' );
         return Query::insert( $stmt, $args );
     }
-    public static function set( int $id, string $name, int $breedId, ? int $aoc, ? string $info, int $modifierId ) : ? int {
+    public static function set( int $id, string $name, ? int $aoc, ? string $info, int $modifierId ) : ? int { // cannot change breed
         $args = get_defined_vars();
         $stmt = Query::prepare( '
             UPDATE color
-            SET name=:name, breedId=:breedId, aoc=:aoc, info=:info, modifierId=:modifierId
+            SET name=:name, aoc=:aoc, info=:info, modifierId=:modifierId
             WHERE id=:id
         ' );
         return Query::update( $stmt, $args );

@@ -69,10 +69,17 @@
     function onSubmit(event) {
         console.log( 'Submit Breed');
         disabled = true;
-        api.breed.post( breed ).then( response => {
-            breed.id = response.id;
-            changed = false;
-        })
+        if( breed.id ) {
+            api.breed.update( breed.id, breed ).then(response => {
+                breed.id = response.id;
+                changed = false;
+            });
+        } else {
+            api.breed.create( breed ).then(response => {
+                breed.id = response.id;
+                changed = false;
+            });
+        }
     }
 
     function loadSection( id ) {

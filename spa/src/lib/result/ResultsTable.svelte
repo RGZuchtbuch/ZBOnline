@@ -6,7 +6,7 @@
 
     import Comment from '../common/Comment.svelte';
 
-    export let results = [];
+    export let results;
 
     const route = meta();
 
@@ -52,7 +52,8 @@
     }
 
     function calcTotals( results ) {
-        if( results ) {
+        if( results && results.length > 0 ) {
+            console.log( 'Results', results )
             for( const section of results.sections ) {
                 let total = { breeders:0, pairs:0, layDames:0, layers:0, layShould:0, layEggs:0, layWeighters:0, layWeightShould:0, layWeight:0, brooders:0, broodEggs:0, broodFertile:0, broodHatched:0, broodChicks:0, broodResult:0, showers:0, showCount:0, showScore:0 };
                 for( const subSection of section.subsections ) {
@@ -127,11 +128,15 @@
 
     $: calcTotals( results );
 
+    console.log( "Results", results );
+
 </script>
 
 
 <div class='print'>
-    {#if results}
+    {#if results} OO {:else} AA {/if}
+    {#if results }
+        OO{results.sections.length}OO
         {#each results.sections as section}
             <table class='w-full p-2'>
                 <thead>
@@ -323,9 +328,9 @@
                         </tr>
 
                     {/each}
-                    <tr> <!-- total section -->
+                    <!-- total section -->
+                    <tr>
                         <th>
-
                             <div class='flex flex-row bg-header text-white px-2 gap-x-1 justify-evenly font-bold text-sm italic border-y border-gray-800'>
                                 <div class='w-64'>Gesamt {section.name}</div>
                                 <div class='grow flex justify-evenly text-sm'>
@@ -353,8 +358,6 @@
                                             <div class='th' title='Anteil geschlüpfte Küken'>{pct( section.total.broodHatched, 1 )}</div>
                                         {/if}
                                     </div>
-
-
 
                                     <div class='flex w-28 justify-evenly'>
                                         <div class='td' title='Zahl der ausgestellten Tieren'>{dec( section.total.showCount )}</div>

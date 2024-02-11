@@ -8,6 +8,7 @@ use App\model;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpBadRequestException;
+use Slim\Exception\HttpInternalServerErrorException;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Exception\HttpUnauthorizedException;
 
@@ -37,8 +38,9 @@ class Article extends BaseController
 					$response->getBody()->write(json_encode(['id' => $id], JSON_UNESCAPED_SLASHES));
 					return $response;
 				}
-				throw new HttpBadRequestException( $request, 'Bad body' );
+				throw new HttpInternalServerErrorException( $request, 'Oops, error creating new article' );
 			}
+			throw new HttpBadRequestException( $request, 'Missing body' );
 		}
 		throw new HttpUnauthorizedException( $request, 'Cannot do this');
 	}

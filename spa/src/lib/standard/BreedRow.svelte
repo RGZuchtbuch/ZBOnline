@@ -46,9 +46,13 @@
     function onSubmit() { // triggered by form's autosave
         //edit = false;
         if( breed.name ) {
-            api.breed.post( breed ).then( response => {
-                breed.id = response.id; // in case of new id
-            })
+            if( breed.id ) {
+                api.breed.update( breed.id, breed );
+            } else {
+                api.breed.create( breed ).then( response => {
+                    breed.id = response.id; // in case of new id
+                });
+            }
         } else { // should remove, hmm take care
             if( breed.id ) {
                 api.breed.delete( breed.id ).then( response => {

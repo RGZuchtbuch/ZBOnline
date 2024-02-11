@@ -48,7 +48,14 @@ class Breeder extends Query
     }
 
 
-
+	public static function getAll() : array {
+		$args = get_defined_vars();
+		$stmt = Query::prepare('
+            SELECT id, firstname, infix, lastname, email, districtId, club, start, end, info
+            FROM user
+        ');
+		return Query::selectArray($stmt, $args);
+	}
 
     public static function getName( int $id ) : ? array {
         $args = get_defined_vars();
@@ -65,7 +72,7 @@ class Breeder extends Query
 //    public static function results( int $breederId ) : array {
 //        return [];
 //    }
-    public static function pairs( int $breederId ) : array { // TODO move to pair!
+    public static function getPairs( int $breederId ) : array { // TODO move to pair!
         $args = get_defined_vars();
         $stmt = Query::prepare('
             SELECT pair.id, pair.year, pair.group, pair.sectionId, 
@@ -80,4 +87,19 @@ class Breeder extends Query
         ');
         return Query::selectArray($stmt, $args);
     }
+
+	public static function getPairsInYear( int $breederId, int $year ) {
+		$args = get_defined_vars();
+		$stmt = Query::prepare( " 
+            SELECT pair.id, pair.breederId, pair.year, pair.name, 
+				layEggs, layWeight, 
+				broodEggs, broodFertile, broodHatched,
+				showCount, showScore
+            FROM pair
+            LEFT JOIN result ON result.pairId = pair.id
+            WHERE pair.breederId=:breederId AND pair.year=:year
+            ORDER BY pair.year, name
+        " );
+		return Query::selectArray( $stmt, $args );
+	}
 }

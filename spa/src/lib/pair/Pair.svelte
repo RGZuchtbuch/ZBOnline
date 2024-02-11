@@ -31,7 +31,7 @@
         head:false, breed:false, elders:false, lay:false, broods:false, show:false, notes:false
     }
 
-    function newPair(districtId, breederId )  {
+    function newPair( districtId, breederId )  {
         return {
             id: 0, t:9,
             breederId:breederId, districtId:districtId, year: new Date().getFullYear(), group: 'I',
@@ -50,13 +50,17 @@
     }
 
     function onSubmit() {
-        changed = false;
         disabled = true;
-        api.pair.post( pair )
-            .then( response => {
-                pair.id = response.id;
-//                pair = pair;
+        if( pair.id > 0 ) {
+            api.pair.put( pair.id, pair ).then( response => {
+                changed = false;
             });
+        } else{
+            api.pair.post( pair ).then(response => {
+                pair.id = response.id;
+                changed = false;
+            });
+        }
     }
 
     function loadPair( id ) {
@@ -76,10 +80,11 @@
         loadPair( params.pairId ); // async
     }
 
-    function onInput( event ) { // only for signal;ling changes, as input is faster that sveltes value update !
+    function onInput( event ) { // only for signalling changes, as input is faster that sveltes value update !
         changed = true;
     }
 
+    // TODO should become new form
     function validate() {
         if( pair ) {
             invalid = false;

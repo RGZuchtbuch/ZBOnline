@@ -47,7 +47,7 @@
 
     function onSubmit(event) {
         disabled = true;
-        api.color.post( color ).then( response => {
+        api.color.create( color ).then(response => {
             color.id = response.id;
             changed = false;
         })
