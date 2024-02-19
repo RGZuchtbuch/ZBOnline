@@ -8,8 +8,8 @@ export default {
     article: {
         get:    ( id ) => get('api/article/'+id ),
         create: ( article ) => post( 'api/article', article ),
-        update: ( id, article ) => put( 'api/article', id, article ),
-        del:    ( id ) => del( 'api/article', id ),
+        update: ( id, article ) => put( 'api/article/'+id, article ),
+        del:    ( id ) => del( 'api/article/'+id ),
 
         getAll: () => get( 'api/article' ),
     },
@@ -17,8 +17,8 @@ export default {
     breed: {
         get:    ( id )         => get( 'api/breed/'+id ),
         create: (breed )     => post( 'api/breed', breed ),
-        update: ( id, breed )=> put( 'api/breed', id, breed ),
-        //delete: ( id )       => del( 'api/breed/'+id ),
+        update: ( id, breed )=> put( 'api/breed/'+id, breed ),
+        delete: ( id )       => del( 'api/breed/'+id ),
 
         colors : {
             get: ( breedId ) => get( `api/breed/${breedId}/colors`)
@@ -34,7 +34,7 @@ export default {
 
         get: ( id ) => get( 'api/breeder/'+id ),
         create: (breeder ) => post( 'api/breeder', breeder ),
-        update: ( id, breeder ) => put( 'api/breeder', id, breeder ),
+        update: ( id, breeder ) => put( 'api/breeder/'+id, breeder ),
         //delete: ( id )       => del( 'api/breed/'+id ),
 
         pairs: {
@@ -52,35 +52,36 @@ export default {
     color: {
         get:    ( id ) => get( 'api/color/'+id ),
         create: ( color ) => post( 'api/color', color ),
-        update: ( id, color ) => put( 'api/color', id, color ),
-        //delete: ( id ) => del( 'api/color/'+id ),
+        update: ( id, color ) => put( 'api/color/'+id, color ),
+        delete: ( id ) => del( 'api/color/'+id ),
     },
 
     district: {
-        get: ( districtId ) => get( 'api/district/'+districtId ),
+        get: ( id ) => get( 'api/district/'+id ),
 //        new: ( parentId ) => {
 //            return new Promise( ( resolve ) => {
 //                resolve( { id:null, parent:parentId, name:null, fullname:null, short:null, coordinates:null, children:[], moderators:[] } );
 //            })
 //        },
         post:   ( district ) => post( 'api/district', district ),
-        update: ( id, district ) => put( 'api/district', id, district ),
+        update: ( id, district ) => put( 'api/district/'+id, district ),
         //delete: ( districtId ) => del( 'api/district/'+districtId ), // TODO delete or better disable !
 
         breeders: {
-            get: (districtId) => get( 'api/district/'+districtId+'/breeders'),
+            get: (id) => get( 'api/district/'+id+'/breeders'),
         },
 
         /*
         * return direct children of district, not grandchildren etc
         */
         children: {
-            get: (districtId) => get( 'api/district/'+districtId+'/children' ),
+            get: (id) => get( 'api/district/'+id+'/children' ),
         },
 
         /**
          * returns array of clubs within district hierarchy incl root id
          */
+/*
         clubs: { // TODO obsolete ?
             get: ( districtId ) => {
                 return new Promise( resolve => {
@@ -101,7 +102,7 @@ export default {
 
             }
         },
-
+*/
         /**
          * returns the district hierarchie incl given root id
           */
@@ -172,18 +173,18 @@ export default {
                     let moderator = responses[0];
                     moderator.district = responses[1].district;
                     moderator.users = responses[2].users;
-                    clear('api/district/' + districtId);
+                    //clear('api/district/' + districtId);
                     return moderator;
                 });
         },
         post: ( districtId, moderatorId ) => {
             let data = { user:moderatorId, district:districtId };
-            clear('api/district/' + districtId);
+            //clear('api/district/' + districtId);
             return post('api/moderator', data );
         },
         delete: ( districtId, moderatorId ) => {
             let data = { user:moderatorId, district:districtId };
-            clear('api/district/' + districtId);
+            //clear('api/district/' + districtId);
             return del('api/moderator', data );
         },
 //        districts: ( moderatorId ) => {
@@ -371,6 +372,9 @@ function getHeaders() {
     return headers;
 }
 
+
+/**** FETYCH OPERATIONS ****/
+
 async function get( url, timeout = CACHETIMEOUT ) {
 //    let cached = cache.get( url );
 //    let now = Date.now(); //new Date().getTime(); // in ms
@@ -410,7 +414,7 @@ async function post( url, data ) {
     });
 }
 
-async function put( url, id, data ) {
+async function put( url, data ) {
     cache.clear(); // empty cache on every post, bit raw, but it works fine
 
     let options = {
@@ -418,7 +422,7 @@ async function put( url, id, data ) {
         headers: getHeaders(),
         body: JSON.stringify( data ),
     }
-    return fetch( APIROOT + url+'/'+id, options )
+    return fetch( APIROOT + url, options )
         .then( response => {
             if( response.ok ) {
                 return response.json();
@@ -428,13 +432,13 @@ async function put( url, id, data ) {
         });
 }
 
-async function del( url, id ) {
+async function del( url ) {
     cache.clear();
     let options = {
         method: 'DELETE',
         headers: getHeaders()
     }
-    return fetch( APIROOT + url + '/' + id, options)
+    return fetch( APIROOT + url, options)
         .then( response => {
             if( response.ok ) {
                 return response.json();

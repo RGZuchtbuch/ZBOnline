@@ -29,9 +29,6 @@
 //    localStorage.setItem('help', 'init' );
 
     function beforeUnload( event ) { // needs keepalive in post !
-//        console.log( 'BeforeUnload' );
-//        alert( 'Unload' );
-//        localStorage.setItem('help', 'before' );
         if( $state.changed ) { // show dialog
 //            event.preventDefault(); // triggers dialog;
 //            event.returnValue = true;
@@ -72,7 +69,7 @@
         clearTimeout( validateTimeout );
         clearTimeout( saveTimeout );
         validateTimeout = setTimeout( validate, 500 ); // validate n ms after last input
-        saveTimeout = setTimeout( trySubmit, 2500 ); // try save n ms after last input
+        saveTimeout = setTimeout( trySubmit, 2000 ); // try save n ms after last input
 
     }
 

@@ -35,7 +35,7 @@ class Pair extends Query
     }
 
 
-    public static function del( int $id ) {
+    public static function del( int $id ) : bool {
         $args = get_defined_vars();
         $stmt = Query::prepare( '
             DELETE 
@@ -50,6 +50,24 @@ class Pair extends Query
 
 
     // for results page
+    public static function allWithBreed( int $id ) : array {
+        $args = get_defined_vars();
+        $stmt = Query::prepare( '
+            SELECT id, breedId
+            FROM pair
+            WHERE breedId=:id
+        ' );
+        return Query::selectArray( $stmt, $args );
+    }
 
+    public static function allWithColor( int $id ) : array {
+        $args = get_defined_vars();
+        $stmt = Query::prepare( '
+                SELECT id, colorId
+                FROM pair
+                WHERE colorId=:id
+            ' );
+        return Query::selectArray( $stmt, $args );
+    }
 
 }

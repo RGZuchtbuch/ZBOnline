@@ -1,4 +1,5 @@
 <script>
+    import {createEventDispatcher} from 'svelte';
     import { slide } from 'svelte/transition';
     import { meta } from 'tinro';
     import { user } from '../../js/store.js';
@@ -9,21 +10,19 @@
     import Form from '../common/form/Form.svelte';
     import TextInput from '../common/form/input/TextInput.svelte';
     import FormStatus from '../common/form/Status.svelte';
+    import CheckBoxInput from '../common/form/input/CheckBoxInput.svelte';
 
     export let breed;
     export let color = null;
 
     let edit = false;
     let changed = false;
+    let toRemove = false;
 
+    const dispatch = createEventDispatcher();
     let route = meta();
 
-    if( color === null ) color = { id:0, breedId:breed.id, name:'?', info:null, aoc:false }; // default is null
-
-    function onChange() {
-        changed = true;
-        console.log( 'Changed' );
-    }
+    //if( color === null ) color = { id:0, breedId:breed.id, name:'?', info:null, aoc:false }; // default is null
 
     const validate = {
         name: (v)=> validator(v).string().length(2,128).orNull().isValid(),
@@ -34,11 +33,12 @@
     }
 
     function onSubmit() {
+        console.log( 'Submit ', color );
         //edit = false;
         if( color.name ) {
             if( color.id > 0 ) { // not null and not null
                 api.color.update( color.id, color ).then(response => {
-                    color.id = response.id; // in case of new id
+                    // nothing to do, really
                 })
             } else { // new
                 api.color.create( color ).then(response => {
@@ -46,12 +46,12 @@
                 })
             }
         } else { // should remove, hmm take care
-            if( color.id ) {
-                //api.color.delete(color.id).then( response => {
-                //    if( response.success ) {
-                //    }
-                //} )
-                console.log( 'Color delete not enabled');
+            console.log( 'CR', toRemove, color);
+            if( color.id && color.name == null && toRemove ) {
+                edit = false;
+                api.color.delete(color.id).then( response => {
+                    dispatch( 'removed', color );
+                } )
             }
         }
         console.log( 'Submit color' );
@@ -59,38 +59,40 @@
 
 </script>
 
-<div class='flex flex-col pl-4'>
+<div class='flex flex-col pl-8' transition:slide>
+    {#if color}
+        <div class='flex flex-row border-b border-gray-300 gap-x-1 my-1'>
+            <div class='w-4'></div>
 
-    <div class='flex flex-row border-b border-gray-300 gap-x-1 my-1'>
-        <div class='w-4'>⤷</div>
-        {#if color.name}
-            <div class='grow cursor-pointer'>
+            <div class='grow cursor-auto' title={dic.title.color}>
                 {color.name}
             </div>
-        {:else}
-            <div title={dic.title.deleted}>
-                ---------------
+
+            <div class='flex text-xs text-red-600'>
+                {#if $user && $user.admin }
+                    <button class='w-4' type='button' on:click={onEdit} title={dic.title.change}>(e)</button>
+                    <div class='w-4'></div>
+                {/if}
+            </div>
+            <small class='w-10 text-gray-400 text-right cursor-auto' title={dic.title.colorId}>[{color.id}]</small>
+
+        </div>
+        {#if edit}
+            <div class='pl-4' transition:slide>
+                <Form class='flex flex-col' on:submit={onSubmit}>
+                    <div class='flex'>
+                        <div>Farbe ändern. leerlassen ist löschen</div>
+                        <FormStatus />
+                    </div>
+                    <div class='flex'>
+                        <TextInput class='w-128' label='Farbe' bind:value={color.name} error='pflichtfeld' validator={validate.name} />
+                        <div class='grow' />
+
+                        <CheckBoxInput class='w-12' label='Löschen' bind:value={toRemove} disabled={ color.name != null }/>
+                    </div>
+                </Form>
             </div>
         {/if}
-
-        <div class='grow'></div>
-        <small class='w-12 text-right'>[{color.id}]</small>
-        {#if $user && $user.admin }
-            <button type='button' on:click={onEdit} title='Farbendaten ändern'> (e) </button>
-        {/if}
-
-    </div>
-    {#if edit}
-        <div class='pl-4' transition:slide>
-            <Form class='flex flex-col' on:submit={onSubmit}>
-                <div class='flex'>
-                    <div>Farbe ändern. leerlassen ist löschen</div>
-                    <FormStatus />
-                </div>
-                <TextInput class='w-128' label='Farbe' bind:value={color.name} error='pflichtfeld' validator={validate.name} />
-            </Form>
-        </div>
     {/if}
-
 </div>
 

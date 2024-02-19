@@ -32,10 +32,10 @@ class Router {
 //		$app->get('/articles', controller\article\Articles::class );
 
 
-		$app->get( 		'/breed/{id}',			[ controller\breed\Breed::class, 'get' ] );
-		$app->post(		'/breed', 				[ controller\breed\Breed::class, 'new' ] );
-		$app->put( 		'/breed/{id}', 			[ controller\breed\Breed::class, 'set' ] );
-		$app->delete(	'/breed/{id}',			[ controller\breed\Breed::class, 'del' ] );
+		$app->get( 		'/breed/{id}',			[ controller\breed\Breed::class, 'read' ] );
+		$app->post(		'/breed', 				[ controller\breed\Breed::class, 'create' ] );
+		$app->put( 		'/breed/{id}', 			[ controller\breed\Breed::class, 'update' ] );
+		$app->delete(	'/breed/{id}',			[ controller\breed\Breed::class, 'delete' ] );
 
 		$app->get( 		'/breed', 				[ controller\breed\Breed::class, 'getAll' ] );
 		$app->get( 		'/breed/{id}/colors', 	[ controller\breed\Breed::class, 'getColors' ] );
@@ -51,10 +51,10 @@ class Router {
 		$app->get( 		'/breeder/{id}/year/{year}/pair', 	[ controller\breeder\Breeder::class, 'getPairsInYear' ] ); // TODO not used?
 
 
-		$app->get( 		'/color/{id}', [controller\color\Color::class, 'get' ]);
-		$app->post( 	'/color', [controller\color\Color::class, 'new' ]);
-		$app->put( 		'/color/{id}', [controller\color\Color::class, 'set' ]);
-
+		$app->get( 		'/color/{id}', [controller\color\Color::class, 'read' ]);
+		$app->post( 	'/color', [controller\color\Color::class, 'create' ]);
+		$app->put( 		'/color/{id}', [controller\color\Color::class, 'update' ]);
+        $app->delete(   '/color/{id}', [controller\color\Color::class, 'delete' ]);
 
 
 //        $app->get('/breeder/{id}', 'App\controller\breeder\Get');

@@ -2,7 +2,7 @@
 
 namespace App\model;
 
-class Color extends Query
+class Color
 {
 	public static function get( int $id ) : ? array {
 		$args = get_defined_vars();

@@ -75,7 +75,7 @@ class Result extends Query
     }
 
     /**
-     *
+     * REPORTS, the bigguns
      */
     public static function resultDistrictYear(? int $districtId, ? int $year, ? int $sectionId, ? int $breedId, ? int $colorId, ? int $group ) : ? array {
         $args = get_defined_vars();
@@ -150,7 +150,6 @@ class Result extends Query
         ');
         return Query::select($stmt, $args); // returns null, no results found, or single result
     }
-
     public static function resultsDistrictYear( int $districtId, int $year ) : ? array {
         $args = get_defined_vars();
         $stmt = Query::prepare("
@@ -228,7 +227,6 @@ class Result extends Query
 
         return Query::selectArray( $stmt, $args );
     }
-//    public static function resultsDistrictYears(  int $districtId, ? int $sectionId, ? int $breedId, ? int $colorId, ? int $group ) : ? array {
     public static function resultsDistrictYears( int $districtId, ? int $sectionId, ? int $breedId, ? int $colorId, ? string $group ) : ? array {
         $startYear = START_YEAR;
         $args = get_defined_vars();
@@ -406,5 +404,26 @@ class Result extends Query
         ');
         return Query::selectArray($stmt, $args); // returns null, no results found, or single result
     }
+
+    public static function allWithBreed( int $id ) : array {
+        $args = get_defined_vars();
+        $stmt = Query::prepare( '
+            SELECT id, breedId
+            FROM result
+            WHERE breedId=:id
+        ' );
+        return Query::selectArray( $stmt, $args );
+    }
+
+    public static function allWithColor( int $id ) : array {
+        $args = get_defined_vars();
+        $stmt = Query::prepare( '
+            SELECT id, colorId
+            FROM result
+            WHERE colorId=:id
+        ' );
+        return Query::selectArray( $stmt, $args );
+    }
+
 
 }

@@ -16,7 +16,7 @@ use Slim\Exception\HttpUnauthorizedException;
 class Breed extends BaseController
 {
 
-	public function get( Request $request, Response $response, array $args ) : Response {
+	public function read( Request $request, Response $response, array $args ) : Response {
 		$id = $args[ 'id' ];
 		if( is_numeric( $id ) ) {
 			$breed = model\Breed::get($id);
@@ -29,7 +29,7 @@ class Breed extends BaseController
 		throw new HttpBadRequestException( $request, 'Bad id' );
 	}
 
-	public function new( Request $request, Response $response, array $args ) : Response {
+	public function create( Request $request, Response $response, array $args ) : Response {
 		$requester = new Requester( $request );
 		if( $requester->isAdmin() ) {
 			$body = $request->getParsedBody();
@@ -53,7 +53,7 @@ class Breed extends BaseController
 		throw new HttpUnauthorizedException( $request, 'Cannot do this');
 	}
 
-	public function set( Request $request, Response $response, array $args ) : Response {
+	public function update( Request $request, Response $response, array $args ) : Response {
 		$requester = new Requester( $request );
 		if( $requester->isAdmin() ) {
 			$id = $args[ 'id' ] ?? null;
@@ -73,9 +73,31 @@ class Breed extends BaseController
 		throw new HttpUnauthorizedException( $request, 'Cannot do this');
 	}
 
-	public function del( Request $request, Response $response, array $args ) : Response {
-		throw new HttpNotImplementedException( $request, 'Oops' );
-	}
+//	public function del( Request $request, Response $response, array $args ) : Response {
+//		throw new HttpNotImplementedException( $request, 'Oops' );
+//	}
+
+    public static function delete( Request $request, Response $response, array $args ) : Response {
+        $requester = new Requester( $request );
+        if( $requester->isAdmin() ) {
+            $id = $args[ 'id' ] ?? null;
+            if( $id && is_numeric( $id ) ) {
+                $breed = model\Breed::get( $id );
+                if ($breed) {
+                    if( ! model\Breed::colors( $id ) && ! model\Pair::allWithBreed( $id ) && ! model\Result::allWithBreed( $id ) ) { // no more color, pair of result using it
+                        $success = model\Breed::delete( $id );
+                        $response->getBody()->write(json_encode(['success' => $success, 'id'=>$id ], JSON_UNESCAPED_SLASHES));
+                        return $response;
+                    }
+                    throw new HttpBadRequestException($request, 'Breed in use for Color, Pair or Result');
+                }
+                throw new HttpBadRequestException($request, 'Breed not found');
+            }
+            throw new HttpBadRequestException($request, 'Bad id');
+        }
+        throw new HttpUnauthorizedException( $request, 'Cannot do this');
+//		throw new HttpNotImplementedException( $request, 'not implemented yet, should only be possible if not used.');
+    }
 
 //****************************
 	public function getAll( Request $request, Response $response, array $args ) : Response {

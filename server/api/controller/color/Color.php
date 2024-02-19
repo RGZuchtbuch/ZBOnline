@@ -17,7 +17,7 @@ class Color extends BaseController
 {
 
 
-	public function get( Request $request, Response $response, array $args ) : Response {
+	public static function read( Request $request, Response $response, array $args ) : Response {
 		$id = $args[ 'id' ];
 		if( is_numeric( $id ) ) {
 			$color = model\Color::get($id);
@@ -30,6 +30,7 @@ class Color extends BaseController
 		throw new HttpBadRequestException( $request, 'Bad id' );
 	}
 
+/*
 	protected function post() {
 		$data = $this->data;
 		$id = $data[ 'id' ] ?? null;// get it or null
@@ -42,8 +43,9 @@ class Color extends BaseController
 		model\Cache::del( 'results' );
 		return ['id' => $id ];
 	}
+*/
 
-	public function new( Request $request, Response $response, array $args ) : Response {
+	public static function create( Request $request, Response $response, array $args ) : Response {
 		$requester = new Requester( $request );
 		if( $requester->isAdmin() ) { // only admin can do this
 			$body = $request->getParsedBody();
@@ -64,7 +66,7 @@ class Color extends BaseController
 		throw new HttpUnauthorizedException( $request, 'Cannot do this');
 	}
 
-	public function set( Request $request, Response $response, array $args ) : Response {
+	public static function update( Request $request, Response $response, array $args ) : Response {
 		$requester = new Requester( $request );
 		if( $requester->isAdmin() ) {
 			$id = $args[ 'id' ] ?? null;
@@ -73,7 +75,7 @@ class Color extends BaseController
 				if ($body) {
 					$updated = model\Color::set($id, $body['name'], $body['aoc'], null, $requester->getId());
 					if ($updated) {
-						$response->getBody()->write(json_encode(['id' => $id], JSON_UNESCAPED_SLASHES));
+						$response->getBody()->write(json_encode(['id' => $id, 'updated'=>$updated], JSON_UNESCAPED_SLASHES));
 						return $response;
 					}
 					throw new HttpNotFoundException($request, 'Cannot update');
@@ -86,8 +88,28 @@ class Color extends BaseController
 		throw new HttpUnauthorizedException( $request, 'Cannot do this');
 	}
 
-	public function del( Request $request, Response $response, array $args ) : Response {
-		throw new HttpNotImplementedException( $request, 'not implemented yet, should only be possible if not used.');
+	public static function delete( Request $request, Response $response, array $args ) : Response {
+        $requester = new Requester( $request );
+        if( $requester->isAdmin() ) {
+            $id = $args[ 'id' ] ?? null;
+            if( $id && is_numeric( $id ) ) {
+                $color = model\Color::get( $id );
+                if ($color) {
+                    $pairs = model\Pair::allWithColor( $id );
+                    $results = model\Result::allWithColor( $id );
+                    if( ! $pairs && ! $results ) { // not used in either
+                        $success = model\Color::del( $id );
+                        $response->getBody()->write(json_encode(['success' => $success, 'id'=>$id], JSON_UNESCAPED_SLASHES));
+                       return $response;
+                   }
+                    throw new HttpBadRequestException($request, 'Color in use');
+                }
+                throw new HttpBadRequestException($request, 'Color not found');
+            }
+            throw new HttpBadRequestException($request, 'Bad id');
+        }
+        throw new HttpUnauthorizedException( $request, 'Cannot do this');
+//		throw new HttpNotImplementedException( $request, 'not implemented yet, should only be possible if not used.');
 	}
 
 // ****************************************
