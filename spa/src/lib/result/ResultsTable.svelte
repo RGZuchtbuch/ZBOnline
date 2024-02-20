@@ -207,7 +207,7 @@
                                 <div class='grow text-left'>Gruppe / Rasse / Farbe</div>
                                 <div class='flex flex-row justify-evenly gap-x-6'>
                                     <div class='w-14 text-center'>Zuchten</div>
-                                    <div class='w-28 text-center text-center'> {#if section.id === 5}-{:else}Legeleistung{/if} </div>
+                                    <div class='w-28 text-center'> {#if section.id === 5}-{:else}Legeleistung{/if} </div>
                                     <div class='w-40 text-center'>Brutleistung</div>
                                     <div class='w-28 text-center'>Schauleistung</div>
                                 </div>
