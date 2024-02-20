@@ -15,7 +15,7 @@
     import TextInput from '../common/form/input/TextInput.svelte';
 
     import ColorRow from './ColorRow.svelte';
-    import Toggle from '../common/OpenClose.svelte';
+    import Toggler from '../common/OpenClose.svelte';
 
     export let breed;
 
@@ -88,7 +88,7 @@
 <div class='flex flex-col pl-6' transition:slide>
     {#if breed}
         <div class='flex flex-row gap-x-1 border-b border-gray-300 my-1'>
-            <Toggle bind:open={open} enabled={breed.colors.length > 0} class='text-orange-600'/>
+            <Toggler bind:open={open} enabled={breed.colors.length > 0} class='text-orange-600'/>
 
             <div class='font-semibold' title={dic.title.breed}>
                 {breed.name}

@@ -208,29 +208,34 @@
                 </div>
             </div>
 
-            <div class='flex flex-row justify-around'>
-                <div>
-                    <LayBar {districtId} {year} {sectionId} {breedId} {colorId}></LayBar>
-                </div>
-                <div class='flex flex-row gap-x-4'>
-                    <BroodBarLayers {districtId} {year} {sectionId} {breedId} {colorId}></BroodBarLayers>
-                    <BroodBarPigeons {districtId} {year} {sectionId} {breedId} {colorId}></BroodBarPigeons>
-                </div>
-                <div>
-                    <ShowBar {districtId} {year} {sectionId} {breedId} {colorId}></ShowBar>
+            <div class='flex flex-col m-2 border border-gray-400'>
+                <h2 class='text-center'>Leistungen</h2>
+                <div class='flex flex-row justify-around'>
+                    <div>
+                        <LayBar {districtId} {year} {sectionId} {breedId} {colorId}></LayBar>
+                    </div>
+                    <div class='flex flex-row gap-x-4'>
+                        <BroodBarLayers {districtId} {year} {sectionId} {breedId} {colorId}></BroodBarLayers>
+                        <BroodBarPigeons {districtId} {year} {sectionId} {breedId} {colorId}></BroodBarPigeons>
+                    </div>
+                    <div>
+                        <ShowBar {districtId} {year} {sectionId} {breedId} {colorId}></ShowBar>
+                    </div>
                 </div>
             </div>
-
             {#if true}
 
             <div class='flex flex-row m-2 border border-gray-400 gap-x-8 justify-evenly'>
                 <SectionsPie {districtId} {year} {typeId}/>
 
             </div>
-            <h2 class='text-center'>{type.name}</h2>
-            <div class='flex flex-row flex-wrap justify-evenly'>
-                    <TimeLine bind:year={year} {districtId} {sectionId} {breedId} {colorId} {typeId} />
-                    <DistrictsMap bind:districtId={districtId} {year} {sectionId} {breedId} {colorId} {typeId} />
+
+            <div class='flex flex-col m-2 border border-gray-400'>
+                <h2 class='text-center'>{type.name}</h2>
+                <div class='flex flex-row flex-wrap justify-evenly'>
+                        <TimeLine bind:year={year} {districtId} {sectionId} {breedId} {colorId} {typeId} />
+                        <DistrictsMap bind:districtId={districtId} {year} {sectionId} {breedId} {colorId} {typeId} />
+                </div>
             </div>
             {/if}
             {#if true}

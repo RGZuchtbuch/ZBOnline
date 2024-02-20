@@ -107,7 +107,7 @@
 
         // TODO, following still needed ?
         if( districts ) {
-            max = {};
+            max = { breeders:null, pairs:null, lay:null, brood:null, show:null };
             max.breeders = Math.max( ...districts.map( district => district.breeders ) ); // max of array of all breeders
             max.pairs = Math.max( ...districts.map( district => district.pairs ) );
             max.lay = 365;
@@ -137,7 +137,6 @@
                 titles.push( type.title( district ) );
                 let values = type.map( district );
 
-                console.log('Value', values[0] );
                 colors[ district.id ] = values[0] === null ? '#DDD4' : calcColor( type.min, type.max, values[0], 0.25, 0 );
 
                 for (let i=0; i<values.length; i++) {

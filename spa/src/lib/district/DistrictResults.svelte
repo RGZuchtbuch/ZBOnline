@@ -3,7 +3,7 @@
     import { meta } from 'tinro';
     import api from '../../js/api.js';
     import { user } from '../../js/store.js'
-    import ResultsTable from './DistrictResultsTable.svelte';
+    import ResultsTable from '../result/ResultsTable.svelte';
     import Range from '../common/input/Range.svelte';
     import ScrollDiv from '../common/ScrollDiv.svelte';
 

@@ -4,6 +4,7 @@
     import {createEventDispatcher} from "svelte";
     import api from '../../js/api.js';
     import {user} from '../../js/store.js';
+    import Toggler from '../common/OpenClose.svelte';
 
     export let district = null;
     export let open = false;
@@ -21,11 +22,7 @@
 
 <div class='flex flex-col pl-8'>
     <div class='flex border-b border-gray-300 my-2'>
-        <div class='w-6 cursor-pointer' on:click={toggleOpen}>
-            {#if 0 < district.children.length}
-                {#if open}▲{:else}▼{/if}
-            {/if}
-        </div>
+        <Toggler bind:open={open} enabled={district.children.length > 0} class='text-orange-600'/>
         <a class='cursor-pointer' href={route.match+'/'+district.id} title='Zum Verband'>{district.name} </a>
         <small class='w-8 text-center'> [{district.children.length}]</small>
         <div class='grow'></div>

@@ -186,7 +186,7 @@ export function dec( value, decimals = 0 ) {
 
 export function pct(a, b, decimals=1 ) {
     if( a != null && b != null && b !== 0 ) {
-        return (100 * a / b).toFixed( decimals )+'%';
+        return (100 * a / b).toFixed( decimals )+'﹪';
     }
     return '';
 }

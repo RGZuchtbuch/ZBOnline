@@ -13,12 +13,13 @@
 * &#8854; Close
 * &#8855; Exit
 * ⊘ &#8856; Not available etc
-* ✎ &#9998; Edit
+* ✎ &#9998; ✍ Edit
 * ⤷ &#10551; tree
 * ℹ &#8505; info / details ( in box )
 * ✚ &#10010; add / new
 * · &centerdot; used in hierarchy in select
 
+* ⠇ ⁝ for inline menu
 optional
 
 * &#10551; tree
