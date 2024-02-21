@@ -70,12 +70,12 @@
         console.log( 'Submit Breed');
         disabled = true;
         if( breed.id ) {
-            api.breed.update( breed.id, breed ).then(response => {
+            api.breed.put( breed.id, breed ).then(response => {
                 breed.id = response.id;
                 changed = false;
             });
         } else {
-            api.breed.create( breed ).then(response => {
+            api.breed.post( breed ).then(response => {
                 breed.id = response.id;
                 changed = false;
             });

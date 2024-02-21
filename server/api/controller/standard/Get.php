@@ -28,8 +28,8 @@ class Get extends Controller
     public function process() : array
     {
         $sections = model\Section::descendants(2);
-        $breeds = model\Breed::all();
-        $colors = model\Color::all();
+        $breeds = model\Breed::get();
+        $colors = model\Color::get();
         $standard = $this->toStandardTree($sections, $breeds, $colors);
         return ['standard' => $standard ];
     }

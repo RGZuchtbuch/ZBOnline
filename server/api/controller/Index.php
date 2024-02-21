@@ -15,7 +15,11 @@ class Index
 {
 
     public function __invoke( Request $request, Response $response, array $args ) : Response {
-        $response->getBody()->write( "Here the index of the RGZuchtbuch API will be listed" );
+		$api = [];
+		$api[] = [ 'url'=>'/standard', '?'=>'provides complete bdrg standard tree of sections, subsections, breeds and colors' ];
+		$api[] = [ 'url'=>'/district', '?'=>'provides complete bdrg districts tree' ];
+
+		$response->getBody()->write(json_encode(['api' => $api], JSON_UNESCAPED_SLASHES));
         return $response;
     }
 

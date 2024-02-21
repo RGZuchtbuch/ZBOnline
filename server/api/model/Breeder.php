@@ -9,14 +9,23 @@ class Breeder extends Query
 {
 
 
-    public static function get( int $id ) : ? array {
-        $args = get_defined_vars();
-        $stmt = Query::prepare('
-            SELECT id, firstname, infix, lastname, email, districtId, club, start, end, info
-            FROM user
-            WHERE id=:id
-        ');
-        return Query::select($stmt, $args);
+    public static function get( int $id = null ) : ? array {
+		if( $id ) {
+			$args = get_defined_vars();
+			$stmt = Query::prepare('
+				SELECT id, firstname, infix, lastname, email, districtId, club, start, end, info
+				FROM user
+				WHERE id=:id
+			');
+			return Query::select($stmt, $args);
+		} else { // list
+			$stmt = Query::prepare('
+				SELECT id, firstname, infix, lastname, email, districtId, club, start, end, info
+				FROM user
+				ORDER BY lastname, infix, firstname
+			');
+			return Query::selectArray($stmt );
+		}
     }
 
     public static function new( string $firstname, ? string $infix, string $lastname, ? string $email, int $districtId, ? string $club, string $start, ? string $end, ? string $info, int $modifierId ) : ? int {

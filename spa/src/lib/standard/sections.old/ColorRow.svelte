@@ -39,7 +39,7 @@
     function onSubmit() {
         changed = false;
         color.name = details.name;
-        api.color.create( details ).then(response => {
+        api.color.post( details ).then(response => {
             details.id = response.id;
             color.id = response.id;
         })

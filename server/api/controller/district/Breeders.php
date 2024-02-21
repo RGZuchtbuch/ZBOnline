@@ -29,6 +29,7 @@ class Breeders extends Controller
                 'firstname'=>$row['firstname'],
                 'infix'=>$row['infix'],
                 'lastname'=>$row['lastname'],
+
                 'district'=>[ 'id'=>$row['districtId'], 'name'=>$row['districtName'] ],
                 'club'=>[ 'id'=>$row['clubId'], 'name'=>$row['clubName'] ],
                 'start'=>$row['start'],

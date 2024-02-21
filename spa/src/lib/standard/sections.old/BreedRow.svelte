@@ -44,7 +44,7 @@
     function onSubmit() {
         changed = false;
         breed.name = details.name;
-        api.breed.create( details ).then(response => {
+        api.breed.post( details ).then(response => {
             if( ! details.id ) { // new
                 details.id = response.id;
                 breed.id = response.id;

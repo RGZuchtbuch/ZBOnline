@@ -54,12 +54,12 @@
     function onSubmit() {
         console.log('Submit article', article);
         if (article.id) {
-            api.article.update( details.id, details ).then(response => {
+            api.article.put( details.id, details ).then(response => {
                 article.title = details.title;
             });
 
         } else {
-            api.article.create( details ).then(response => {
+            api.article.post( details ).then(response => {
                 details.id = response.id;
                 article.id = response.id;
                 article.title = details.title;

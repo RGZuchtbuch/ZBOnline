@@ -6,31 +6,44 @@ use http\Exception\InvalidArgumentException;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Exception\HttpNotImplementedException;
 
-class Section extends Query
+class Section
 {
 
-    public static function new( string $name, int $sectionId, int $broodGroup, int $lay, int $eggWeight, int $sireRing, int $dameRing, int $sireWeight, int $dameWeight, string $info, int $modifierId ) : ? int {
-        throw new HttpNotImplementedException( null, "oops" );
+    public static function get( int $id = null ) : ? array {
+		if( $id ) {
+			$args = get_defined_vars();
+			$stmt = Query::prepare('
+				SELECT id, name, parentId, layers, `order`
+				FROM section
+				WHERE id=:id
+			');
+			return Query::select($stmt, $args);
+		} else {
+			$stmt = Query::prepare('
+				SELECT id, name, parentId, layers, `order`
+				FROM section
+				ORDER BY `order`, name
+			');
+			return Query::selectArray($stmt);
+		}
     }
 
-    public static function get( int $id ) : ? array {
-        $args = get_defined_vars();
-        $stmt = Query::prepare('
-            SELECT id, name, parentId, layers, `order`
-            FROM section
-            WHERE id=:id
-        ');
-        return Query::select($stmt, $args);
-    }
+	public static function new( string $name, int $sectionId, int $broodGroup, int $lay, int $eggWeight, int $sireRing, int $dameRing, int $sireWeight, int $dameWeight, string $info, int $modifierId ) : ? int {
+		throw new HttpNotImplementedException( null, "oops" );
+	}
 
-
-    public static function set( int $id, string $name, int $sectionId, int $broodGroup, int $lay, int $eggWeight, int $sireRing, int $dameRing, int $sireWeight, int $dameWeight, string $info, int $modifierId ) : bool {
+	public static function set( int $id, string $name, int $sectionId, int $broodGroup, int $lay, int $eggWeight, int $sireRing, int $dameRing, int $sireWeight, int $dameWeight, string $info, int $modifierId ) : bool {
         throw new HttpNotImplementedException( null, "oops" );
     }
 
     public static function del( int $id ) : bool {
         throw new HttpNotImplementedException( null, "oops" );
     }
+
+
+
+
+
 
     public static function breeds( int $sectionId ) : array {
         $args = get_defined_vars();
@@ -59,7 +72,7 @@ class Section extends Query
         return Query::selectArray($stmt, $args);
     }
 
-    public static function descendants( int $sectionId ) : array {
+    public static function descendants( int $sectionId ) : array { // including root
         $args = get_defined_vars();
         $stmt = Query::prepare( "
             SELECT DISTINCT child.id, child.parentId, child.name, child.layers, child.order FROM section AS parent

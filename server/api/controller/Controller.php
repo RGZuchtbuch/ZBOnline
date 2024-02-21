@@ -2,14 +2,12 @@
 
 namespace App\controller;
 
-use App\controller\Token;
 use App\model;
+use App\model\Token;
+use Error;
 use Exception;
-use HttpException;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Slim\Exception\HttpBadRequestException;
-use Error;
 
 
 //$controller = null; // not used...

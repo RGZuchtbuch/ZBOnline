@@ -60,11 +60,11 @@
     function onSubmit(event) {
         console.log('Submit');
         if( breeder.id > 0 ) {
-            api.breeder.update( breeder.id, breeder ).then( response => {
+            api.breeder.put( breeder.id, breeder ).then(response => {
                 changed = false;
             });
         } else {
-            api.breeder.create(breeder).then(response => {
+            api.breeder.post(breeder).then(response => {
                 breeder.id = response.id;
                 changed = false;
             });

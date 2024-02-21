@@ -7,15 +7,25 @@ use Slim\Exception\HttpNotFoundException;
 
 class Article
 {
-	public static function get( int $id ) : ? array {
-		$args = get_defined_vars();
-		$stmt = Query::prepare('
-            SELECT id, title, html
-            FROM article
-            WHERE id=:id
-        ');
-		return Query::select($stmt, $args);
+	public static function get( int $id = null ) : ? array {
+		if( $id ) {
+			$args = get_defined_vars();
+			$stmt = Query::prepare('
+				SELECT id, title, html
+				FROM article
+				WHERE id=:id
+			');
+			return Query::select($stmt, $args);
+		} else {
+			$stmt = Query::prepare('
+				SELECT id, title
+				FROM article
+				ORDER BY level
+			');
+			return Query::selectArray($stmt );
+		}
 	}
+
     public static function new( string $title, string $html, $modifierId ) : ? int {
         $args = get_defined_vars();
         $stmt = Query::prepare( '
@@ -40,17 +50,4 @@ class Article
         ' );
 		return Query::delete( $stmt, $args );
     }
-
-
-
-    // for list, without html
-    public static function getAll() : array {
-        $stmt = Query::prepare('
-            SELECT id, title
-            FROM article
-            ORDER BY level
-        ');
-        return Query::selectArray($stmt );
-    }
-
 }

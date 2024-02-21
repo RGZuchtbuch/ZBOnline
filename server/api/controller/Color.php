@@ -1,10 +1,9 @@
 <?php
 
-namespace App\controller\color;
+namespace App\controller;
 
-use App\controller\BaseController;
-use App\controller\Requester;
 use App\model;
+use App\model\Requester;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpBadRequestException;
@@ -13,37 +12,28 @@ use Slim\Exception\HttpNotFoundException;
 use Slim\Exception\HttpNotImplementedException;
 use Slim\Exception\HttpUnauthorizedException;
 
-class Color extends BaseController
+class Color
 {
 
 
-	public static function read( Request $request, Response $response, array $args ) : Response {
-		$id = $args[ 'id' ];
-		if( is_numeric( $id ) ) {
-			$color = model\Color::get($id);
-			if ($color) {
-				$response->getBody()->write(json_encode(['color' => $color], JSON_UNESCAPED_SLASHES));
-				return $response;
-			}
-			throw new HttpNotFoundException($request, 'Color not found');
-		}
-		throw new HttpBadRequestException( $request, 'Bad id' );
-	}
-
-/*
-	protected function post() {
-		$data = $this->data;
-		$id = $data[ 'id' ] ?? null;// get it or null
+	public static function get( Request $request, Response $response, array $args ) : Response {
+		$id = $args[ 'id' ] ?? null;
 		if( $id ) {
-			model\Color::set( $id, $data['name'], $data['breedId'], $data['aoc'], null, $this->requester->getId() ); // $data['info']
+			if (is_numeric($id)) {
+				$color = model\Color::get($id);
+				if ($color) {
+					$response->getBody()->write(json_encode(['color' => $color], JSON_UNESCAPED_SLASHES));
+					return $response;
+				}
+				throw new HttpNotFoundException($request, 'Color not found');
+			}
+			throw new HttpBadRequestException($request, 'Bad id');
 		} else {
-			$id = model\Color::new( $data['name'], $data['breedId'], $data['aoc'], null, $this->requester->getId() ); // $data['info'],
+			$colors = model\Color::get();
+			$response->getBody()->write( json_encode( [ 'colors' => $colors ], JSON_UNESCAPED_SLASHES ) );
+			return $response;
 		}
-		model\Cache::del( 'standard' );
-		model\Cache::del( 'results' );
-		return ['id' => $id ];
 	}
-*/
 
 	public static function create( Request $request, Response $response, array $args ) : Response {
 		$requester = new Requester( $request );
@@ -113,7 +103,6 @@ class Color extends BaseController
 	}
 
 // ****************************************
-//	public function getAll( Request $request, Response $response, array $args ) : Response {} // not supported
 
 
 }

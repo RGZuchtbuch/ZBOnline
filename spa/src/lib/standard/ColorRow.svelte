@@ -37,11 +37,11 @@
         //edit = false;
         if( color.name ) {
             if( color.id > 0 ) { // not null and not null
-                api.color.update( color.id, color ).then(response => {
+                api.color.put( color.id, color ).then(response => {
                     // nothing to do, really
                 })
             } else { // new
-                api.color.create( color ).then(response => {
+                api.color.post( color ).then(response => {
                     color.id = response.id; // in case of new id
                 })
             }

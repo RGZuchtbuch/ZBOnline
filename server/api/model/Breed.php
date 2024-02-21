@@ -7,19 +7,28 @@ use Slim\Exception\HttpNotImplementedException;
 
 class Breed
 {
-	public static function get( int $id ) : ? array
+	public static function get( int $id = null ) : ? array
 	{
-		$args = get_defined_vars();
-		$stmt = Query::prepare('
-            SELECT breed.id, breed.name, sectionId, broodGroup, layEggs, layWeight, sireRing, dameRing, sireWeight, dameWeight, info, section.layers AS layer
-            FROM breed
-            LEFT JOIN section ON section.id = breed.sectionId
-            WHERE breed.id=:id
-        ');
-		return Query::select($stmt, $args);
+		if( $id ) {
+			$args = get_defined_vars();
+			$stmt = Query::prepare('
+				SELECT breed.id, breed.name, sectionId, broodGroup, layEggs, layWeight, sireRing, dameRing, sireWeight, dameWeight, info, section.layers AS layer
+				FROM breed
+				LEFT JOIN section ON section.id = breed.sectionId
+				WHERE breed.id=:id
+			');
+			return Query::select($stmt, $args);
+		} else { // list
+			$stmt = Query::prepare('
+				SELECT id, name, sectionId, broodGroup, layEggs, layWeight, sireRing, dameRing, sireWeight, dameWeight
+				FROM breed
+				ORDER BY name
+			');
+			return Query::selectArray($stmt );
+		}
 	}
 
-	public static function new(string $name, int $sectionId, ? int $broodGroup, ? int $layEggs, ? int $layWeight, ? int $sireRing, ? int $dameRing, ? int $sireWeight, ? int $dameWeight, ? string $info, int $modifierId ) : ? int
+	public static function post(string $name, int $sectionId, ? int $broodGroup, ? int $layEggs, ? int $layWeight, ? int $sireRing, ? int $dameRing, ? int $sireWeight, ? int $dameWeight, ? string $info, int $modifierId ) : ? int
     {
         $args = get_defined_vars();
         $stmt = Query::prepare( '
@@ -31,7 +40,7 @@ class Breed
 
 
 
-    public static function set(int $id, string $name, int $sectionId, ? int $broodGroup, ? int $layEggs, ? int $layWeight, ? int $sireRing, ? int $dameRing, ? int $sireWeight, ? int $dameWeight, ? string $info, int $modifierId ) : bool
+    public static function put(int $id, string $name, int $sectionId, ? int $broodGroup, ? int $layEggs, ? int $layWeight, ? int $sireRing, ? int $dameRing, ? int $sireWeight, ? int $dameWeight, ? string $info, int $modifierId ) : bool
     {
         $args = get_defined_vars();
         $stmt = Query::prepare( '
@@ -55,14 +64,6 @@ class Breed
 
 
 
-    public static function all() : array {
-        $stmt = Query::prepare('
-            SELECT id, name, sectionId, broodGroup, layEggs, layWeight, sireRing, dameRing, sireWeight, dameWeight
-            FROM breed
-            ORDER BY name
-        ');
-        return Query::selectArray($stmt );
-    }
 
 
     public static function colors( int $id ) : array {

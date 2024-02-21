@@ -1,10 +1,9 @@
 <?php
 
-namespace App\controller\article;
+namespace App\controller;
 
-use App\controller\BaseController;
-use App\controller\Requester;
 use App\model;
+use App\model\Requester;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpBadRequestException;
@@ -12,23 +11,29 @@ use Slim\Exception\HttpInternalServerErrorException;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Exception\HttpUnauthorizedException;
 
-class Article extends BaseController
+class Article
 {
 
-	public function get( Request $request, Response $response, array $args ) : Response {
-		$id = $args[ 'id' ];
-		if( is_numeric( $id ) ) {
-			$article = model\Article::get($id);
-			if ($article) {
-				$response->getBody()->write(json_encode(['article' => $article], JSON_UNESCAPED_SLASHES));
-				return $response;
+	public static function get( Request $request, Response $response, array $args ) : Response {
+		$id = $args[ 'id' ] ?? null;
+		if( $id ) { // specific article
+			if( is_numeric( $id ) ) {
+				$article = model\Article::get( $id );
+				if ($article) {
+					$response->getBody()->write(json_encode(['article' => $article], JSON_UNESCAPED_SLASHES));
+					return $response;
+				}
+				throw new HttpNotFoundException($request, 'Article not found');
 			}
-			throw new HttpNotFoundException($request, 'Article not found');
+			throw new HttpBadRequestException( $request, 'Bad id' );
+		} else { // list
+			$articles = model\Article::get();
+			$response->getBody()->write( json_encode( [ 'articles' => $articles ], JSON_UNESCAPED_SLASHES ) );
+			return $response;
 		}
-		throw new HttpBadRequestException( $request, 'Bad id' );
 	}
 
-	public function new( Request $request, Response $response, array $args ) : Response {
+	public static function post( Request $request, Response $response, array $args ) : Response {
 		$requester = new Requester( $request );
 		if( $requester->isAdmin() ) {
 			$body = $request->getParsedBody();
@@ -45,7 +50,7 @@ class Article extends BaseController
 		throw new HttpUnauthorizedException( $request, 'Cannot do this');
 	}
 
-	public function set( Request $request, Response $response, array $args ) : Response {
+	public static function put( Request $request, Response $response, array $args ) : Response {
 		$requester = new Requester( $request );
 		if( $requester->isAdmin() ) {
 			$id = $args[ 'id' ] ?? null;
@@ -63,11 +68,11 @@ class Article extends BaseController
 		throw new HttpUnauthorizedException( $request, 'not Admin');
 	}
 
-	public function del( Request $request, Response $response, array $args ) : Response {
+	public static function delete( Request $request, Response $response, array $args ) : Response {
 		$requester = new Requester( $request );
 		if( $requester->isAdmin() ) {
 			$id = $args[ 'id' ] ?? null;
-			if( $id ) {
+			if( $id && is_numeric( $id ) ) {
 				$deleted = model\Article::del( $id );
 				if( $deleted ) {
 					$response->getBody()->write(json_encode([ 'id'=>$id, 'deleted'=>true ], JSON_UNESCAPED_SLASHES));
@@ -80,12 +85,6 @@ class Article extends BaseController
 		throw new HttpUnauthorizedException( $request, 'not Admin');
 	}
 
-// ****************************************
-	public function getAll( Request $request, Response $response, array $args ) : Response {
-		$articles = model\Article::getAll();
-		$response->getBody()->write( json_encode( [ 'articles' => $articles ], JSON_UNESCAPED_SLASHES ) );
-		return $response;
-	}
-
+	/** other getters **/
 
 }

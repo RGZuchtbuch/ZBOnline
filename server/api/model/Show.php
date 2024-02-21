@@ -2,16 +2,25 @@
 
 namespace App\model;
 
-class Show extends Query
+class Show
 {
-    public static function get( $id ) {
-        $args = get_defined_vars();
-        $stmt = Query::prepare( '
-            SELECT id, pairId, `89`, `90`, `91`, `92`, `93`, `94`, `95`, `96`, `97`
-            FROM pair_show
-            WHERE id=:id
-        ' );
-        return Query::select( $stmt, $args );
+	public static function get( int $id = null ) : ? array {
+		if( $id ) {
+			$args = get_defined_vars();
+			$stmt = Query::prepare('
+				SELECT id, pairId, `89`, `90`, `91`, `92`, `93`, `94`, `95`, `96`, `97`
+				FROM pair_show
+				WHERE id=:id
+			');
+			return Query::select($stmt, $args);
+		} else {
+			$stmt = Query::prepare('
+				SELECT id, pairId, `89`, `90`, `91`, `92`, `93`, `94`, `95`, `96`, `97`
+				FROM pair_show
+				ORDER BY pairId
+			');
+			return Query::selectArray($stmt );
+		}
     }
 
     public static function new( int $pairId, ? int $p89, ? int $p90, ? int $p91, ? int $p92, ? int $p93, ? int $p94, ? int $p95, ? int $p96, ? int $p97, int $modifierId ) : ? int {
@@ -25,17 +34,17 @@ class Show extends Query
 
     // no set as al renewed at report save
 
-    public static function getForPair( $pairId ) {
+    public static function getForPair( $pairId ) : ? array {
         $args = get_defined_vars();
         $stmt = Query::prepare( '
             SELECT id, pairId, `89`, `90`, `91`, `92`, `93`, `94`, `95`, `96`, `97`
             FROM pair_show
             WHERE pairId=:pairId
         ' );
-        return Query::select( $stmt, $args );
+        return Query::select( $stmt, $args ); // null or one per pair
     }
 
-    public static function delForPair(int $pairId ) {
+    public static function delForPair(int $pairId ) : bool {
         $args = get_defined_vars();
         $stmt = Query::prepare( '
             DELETE 

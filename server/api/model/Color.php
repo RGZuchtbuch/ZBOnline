@@ -4,14 +4,24 @@ namespace App\model;
 
 class Color
 {
-	public static function get( int $id ) : ? array {
-		$args = get_defined_vars();
-		$stmt = Query::prepare('
-            SELECT id, name, breedId, aoc, info
-            FROM color
-            WHERE id=:id
-        ');
-		return Query::select($stmt, $args);
+
+	public static function get( int $id = null ) : ? array {
+		if( $id ) { // index
+			$args = get_defined_vars();
+			$stmt = Query::prepare('
+				SELECT id, name, breedId, aoc, info
+				FROM color
+				WHERE id=:id
+			');
+			return Query::select($stmt, $args);
+		} else { // by id
+			$stmt = Query::prepare('
+				SELECT id, name, breedId, aoc
+				FROM color
+				ORDER BY name;
+			');
+			return Query::selectArray($stmt );
+		}
 	}
 
     public static function new( string $name, int $breedId, ? int $aoc, ? string $info, int $modifierId ) : ? int {
@@ -44,13 +54,6 @@ class Color
 
 
 
-    public static function all() : array {
-        $stmt = Query::prepare('
-            SELECT id, name, breedId, aoc
-            FROM color
-            ORDER BY name;
-        ');
-        return Query::selectArray($stmt );
-    }
+
 
 }

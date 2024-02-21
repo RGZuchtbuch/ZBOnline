@@ -1,10 +1,9 @@
 <?php
 
-namespace App\controller\breeder;
+namespace App\controller;
 
-use App\controller\BaseController;
-use App\controller\Requester;
 use App\model;
+use App\model\Requester;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpBadRequestException;
@@ -13,34 +12,46 @@ use Slim\Exception\HttpNotFoundException;
 use Slim\Exception\HttpNotImplementedException;
 use Slim\Exception\HttpUnauthorizedException;
 
-class Breeder extends BaseController
+class Breeder
 {
 
-	public function get( Request $request, Response $response, array $args ) : Response {
+	public static function get( Request $request, Response $response, array $args ) : Response {
 		$id = $args[ 'id' ] ?? null;
-		if( is_numeric( $id ) ) {
-			$requester = new Requester( $request );
-			$breeder = model\Breeder::get($id);
-			if( $breeder ) {
-				$districtId = $breeder[ 'districtId' ] ?? null;
-				if( $requester->isAdmin() || $requester->isModerating( $districtId ) || $requester->hasId( $id ) ) { //admin of the moderator or self
-					$response->getBody()->write(json_encode(['breeder' => $breeder], JSON_UNESCAPED_SLASHES));
-					return $response;
+		if( $id ) { // breeder
+			if( is_numeric( $id ) ) {
+				$requester = new Requester( $request );
+				$breeder = model\Breeder::get($id);
+				if( $breeder ) {
+					$districtId = $breeder[ 'districtId' ] ?? null;
+					if( $requester->isAdmin() || $requester->isModerating( $districtId ) || $requester->hasId( $id ) ) { //admin of the moderator or self
+						$response->getBody()->write(json_encode(['breeder' => $breeder], JSON_UNESCAPED_SLASHES));
+						return $response;
+					}
+					throw new HttpUnauthorizedException( $request, 'Cannot do this' );
 				}
-				throw new HttpUnauthorizedException( $request, 'Cannot do this' );
+				throw new HttpNotFoundException($request, 'Not found');
 			}
-			throw new HttpNotFoundException($request, 'Breeder not found');
+			throw new HttpBadRequestException( $request, 'Bad id provided' );
+		} else { // list
+			$requester = new Requester( $request );
+			if( $requester->isAdmin() ) { // only admin
+				$breeders = model\Breeder::getAll();
+				$response->getBody()->write(json_encode(['breeders' => $breeders], JSON_UNESCAPED_SLASHES));
+				return $response;
+			} else {
+				throw new HttpUnauthorizedException($request, 'Not Admin');
+			}
 		}
-		throw new HttpBadRequestException( $request, 'Bad id provided' );
+
 	}
 
-	public function new( Request $request, Response $response, array $args ) : Response {
+	public static function post( Request $request, Response $response, array $args ) : Response {
 		$requester = new Requester( $request );
 		$body = $request->getParsedBody();
 		if( $body ) {
 			$district = model\District::get( $body[ 'districtId' ] );
 			if( $district ) {
-				if ($requester->isAdmin() || $requester->isModerating( $district['id'] )) { //admin of the moderator
+				if ($requester->isAdmin() || $requester->isModerating( $district['id'] )) { //admin or the moderator
 					$id = model\Breeder::new($body['firstname'], $body['infix'], $body['lastname'], $body['email'], $body['districtId'], $body['club'], $body['start'], $body['end'], $body['info'], $requester->getId());
 					if ($id) {
 						$response->getBody()->write(json_encode(['id' => $id], JSON_UNESCAPED_SLASHES));
@@ -55,7 +66,7 @@ class Breeder extends BaseController
 		throw new HttpBadRequestException( $request, 'Missing body' );
 	}
 
-	public function set( Request $request, Response $response, array $args ) : Response {
+	public static function put( Request $request, Response $response, array $args ) : Response {
 		$requester = new Requester( $request );
 		$id = $args[ 'id' ] ?? null;
 		$body = $request->getParsedBody();
@@ -74,25 +85,14 @@ class Breeder extends BaseController
 		throw new HttpBadRequestException($request, 'Bad id or body');
 	}
 
-	public function del( Request $request, Response $response, array $args ) : Response {
+	public static function delete( Request $request, Response $response, array $args ) : Response {
 		throw new HttpNotImplementedException( $request );
 	}
 
-// ****************************************
-	public function getAll( Request $request, Response $response, array $args ) : Response {
-		$requester = new Requester( $request );
-		if( $requester->isAdmin() ) { // only admin
-			$breeders = model\Breeder::getAll();
-			$response->getBody()->write(json_encode(['breeders' => $breeders], JSON_UNESCAPED_SLASHES));
-			return $response;
-		} else {
-			throw new HttpUnauthorizedException($request, 'not Admin');
-		}
-	}
+	/** other getters **/
 
 
-
-	public function getPairs( Request $request, Response $response, array $args ) : Response {
+	public static function pairs( Request $request, Response $response, array $args ) : Response {
 		$id = $args[ 'id' ] ?? null;
 		if( is_numeric( $id ) ) {
 			$requester = new Requester( $request );
@@ -111,7 +111,7 @@ class Breeder extends BaseController
 		throw new HttpBadRequestException( $request, 'Bad id provided' );
 	}
 
-	public function getPairsInYear( Request $request, Response $response, array $args ) : Response {
+	public static function readPairsInYear( Request $request, Response $response, array $args ) : Response {
 		$id = $args[ 'id' ] ?? null;
 		$year = $args[ 'year' ] ?? null;
 		if( is_numeric( $id ) && is_numeric( $year ) ) {

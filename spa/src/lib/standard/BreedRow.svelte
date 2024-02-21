@@ -55,9 +55,9 @@
         //edit = false;
         if( breed.name ) {
             if( breed.id ) {
-                api.breed.update( breed.id, breed );
+                api.breed.put( breed.id, breed );
             } else {
-                api.breed.create( breed ).then( response => {
+                api.breed.post( breed ).then(response => {
                     breed.id = response.id; // in case of new id
                 });
             }

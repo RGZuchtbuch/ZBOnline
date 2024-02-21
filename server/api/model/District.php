@@ -6,31 +6,39 @@ use http\Exception\InvalidArgumentException;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Exception\HttpNotImplementedException;
 
-class District extends Query
+class District
 {
+	public static function get( int $id = null ) : ? array {
+		if( $id ) {
+			$args = get_defined_vars();
+			$stmt = Query::prepare( '
+				SELECT district.* 
+				FROM district
+				WHERE id=:id
+			' );
+			return Query::select($stmt, $args);
+		} else {
+			$stmt = Query::prepare( '
+				SELECT id, parentId, name, fullname, short, level, latitude, longitude, moderatorId  
+				FROM district
+				ORDER BY name
+			' );
+			return Query::selectArray($stmt );
+		}
+    }
 
-    public static function new(
-        int $parentId, string $name, string $fullname, string $short, // parentId cannot change
-        ? float $latitude, ? float $longitude,
-        string $level, ? int $moderatorId, int $modifierId
-    ) : ? int {
-        $args = get_defined_vars();
-        $stmt = Query::prepare( '
+	public static function new(
+		int $parentId, string $name, string $fullname, string $short, // parentId cannot change
+		? float $latitude, ? float $longitude,
+		string $level, ? int $moderatorId, int $modifierId
+	) : ? int {
+		$args = get_defined_vars();
+		$stmt = Query::prepare( '
             INSERT INTO district ( parentId, name, fullname, short, latitude, longitude, level, moderatorId, modifierId )
             VALUES ( :parentId, :name, :fullname, :short, :latitude, :longitude, :level, :moderatorId, :modifierId )
         ' );
-        return Query::insert( $stmt, $args );
-    }
-
-    public static function get( int $id ) : ? array {
-        $args = get_defined_vars();
-        $stmt = Query::prepare( '
-            SELECT district.* 
-            FROM district
-            WHERE id=:id
-        ' );
-        return Query::select($stmt, $args);
-    }
+		return Query::insert( $stmt, $args );
+	}
 
     public static function set(
         int $id,
@@ -55,6 +63,11 @@ class District extends Query
         ' );
         return Query::delete( $stmt, $args );
     }
+
+
+
+
+
 
     /**
      * @param int $districtId
@@ -180,41 +193,7 @@ class District extends Query
 
         return Query::selectArray( $stmt, $args );
     }
-/*
-    public static function results( int $districtId, int $year ) : array {
-        $args = get_defined_vars();
-        $stmt = Query::prepare("
-            SELECT COUNT(*),
-                result.districtId AS districtId, section.id AS sectionId, subsection.id AS subsectionId, section.name AS sectionName, section.order, subsection.name AS subsectionName, subsection.order AS subsectionOrder,
-                result.id, result.breedId, breed.name AS breedName, result.colorId, color.name AS colorName,
 
-#                CAST( SUM( result.breeders ) AS UNSIGNED ) AS breeders,
-                CAST( SUM( IF( breederId IS NULL, breeders, 0 ) ) + COUNT( DISTINCT breederId ) AS UNSIGNED ) AS breeders, 
-
-                CAST( SUM( result.pairs ) AS UNSIGNED ) AS pairs,
-                CAST( SUM( result.layDames ) AS UNSIGNED ) AS layDames, AVG( result.layEggs ) AS layEggs, AVG( result.layWeight ) AS layWeight,
-                CAST( SUM( result.broodEggs ) AS UNSIGNED ) AS broodEggs, CAST( SUM( result.broodFertile ) AS UNSIGNED ) AS broodFertile, CAST( SUM( result.broodHatched ) AS UNSIGNED ) AS broodHatched, 
-                CAST( SUM( result.showCount ) AS UNSIGNED ) AS showCount, AVG( result.showScore ) AS showScore
-            
-            FROM result
-            LEFT JOIN breed ON breed.id = result.breedId
-            LEFT JOIN color ON color.id = result.colorId
-            LEFT JOIN section AS subsection ON subsection.id = breed.sectionId
-            LEFT JOIN section ON section.id = subsection.parentId
-            
-            WHERE result.year=:year AND result.districtId IN (
-                SELECT child.id FROM district AS parent
-                    LEFT JOIN district AS child ON child.id = parent.id OR child.parentId = parent.id
-                WHERE parent.id=:districtId OR parent.parentId = :districtId                
-            )
-            
-            GROUP BY subsection.order, breed.name, color.name
-            ORDER BY subsection.order, breed.name, color.name
-        ");
-
-        return Query::selectArray( $stmt, $args );
-    }
-*/
     public static function countBreeders( int $districtId ) : int {
         $args = get_defined_vars();
         $stmt = Query::prepare("

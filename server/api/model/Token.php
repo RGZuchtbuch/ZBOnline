@@ -1,12 +1,11 @@
 <?php
 
-namespace App\controller;
+namespace App\model;
 
 use DateTimeImmutable;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Slim\Exception\HttpNotFoundException;
 
 class Token
 {

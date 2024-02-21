@@ -7,8 +7,8 @@ export default {
 
     article: {
         get:    ( id ) => get('api/article/'+id ),
-        create: ( article ) => post( 'api/article', article ),
-        update: ( id, article ) => put( 'api/article/'+id, article ),
+        post: (article ) => post( 'api/article', article ),
+        put: (id, article ) => put( 'api/article/'+id, article ),
         del:    ( id ) => del( 'api/article/'+id ),
 
         getAll: () => get( 'api/article' ),
@@ -16,8 +16,8 @@ export default {
 
     breed: {
         get:    ( id )         => get( 'api/breed/'+id ),
-        create: (breed )     => post( 'api/breed', breed ),
-        update: ( id, breed )=> put( 'api/breed/'+id, breed ),
+        post: (breed )     => post( 'api/breed', breed ),
+        put: (id, breed )=> put( 'api/breed/'+id, breed ),
         delete: ( id )       => del( 'api/breed/'+id ),
 
         colors : {
@@ -33,8 +33,8 @@ export default {
 //        },
 
         get: ( id ) => get( 'api/breeder/'+id ),
-        create: (breeder ) => post( 'api/breeder', breeder ),
-        update: ( id, breeder ) => put( 'api/breeder/'+id, breeder ),
+        post: (breeder ) => post( 'api/breeder', breeder ),
+        put: (id, breeder ) => put( 'api/breeder/'+id, breeder ),
         //delete: ( id )       => del( 'api/breed/'+id ),
 
         pairs: {
@@ -51,20 +51,15 @@ export default {
 
     color: {
         get:    ( id ) => get( 'api/color/'+id ),
-        create: ( color ) => post( 'api/color', color ),
-        update: ( id, color ) => put( 'api/color/'+id, color ),
+        post: (color ) => post( 'api/color', color ),
+        put: (id, color ) => put( 'api/color/'+id, color ),
         delete: ( id ) => del( 'api/color/'+id ),
     },
 
     district: {
         get: ( id ) => get( 'api/district/'+id ),
-//        new: ( parentId ) => {
-//            return new Promise( ( resolve ) => {
-//                resolve( { id:null, parent:parentId, name:null, fullname:null, short:null, coordinates:null, children:[], moderators:[] } );
-//            })
-//        },
         post:   ( district ) => post( 'api/district', district ),
-        update: ( id, district ) => put( 'api/district/'+id, district ),
+        put: (id, district ) => put( 'api/district/'+id, district ),
         //delete: ( districtId ) => del( 'api/district/'+districtId ), // TODO delete or better disable !
 
         breeders: {

@@ -3,9 +3,9 @@
 namespace App\controller\user;
 
 
-use App\model;
 use App\controller\Controller;
-use App\controller\Token;
+use App\model;
+use App\model\Token;
 use DateTimeImmutable;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
