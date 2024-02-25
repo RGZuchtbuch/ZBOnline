@@ -1,10 +1,10 @@
 <script>
     import {meta} from "tinro";
-    import { dat, txt } from '../../js/util.js';
+    import { dat, txt } from '../../../js/util.js';
     import {createEventDispatcher} from "svelte";
-    import api from '../../js/api.js';
-    import {user} from '../../js/store.js';
-    import Toggler from '../common/OpenClose.svelte';
+    import api from '../../../js/api.js';
+    import {user} from '../../../js/store.js';
+    import Toggler from '../../common/OpenClose.svelte';
 
     export let district = null;
     export let open = false;

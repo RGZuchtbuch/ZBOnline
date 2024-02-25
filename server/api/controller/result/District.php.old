@@ -68,7 +68,7 @@ class District extends Controller
         return [ 'district'=>$district, 'results'=>$results, 'debug'=>$debug ];
     }
 
-    // turns table into hierarchy
+    // turns table into hierarchy for list report
     private function resultsTree( $results ) : array
     {
         $tree = [ 'sections'=>[] ];

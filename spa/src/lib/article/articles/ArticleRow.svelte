@@ -2,14 +2,14 @@
     //    import {Router} from 'tinro'; // Router store
     import { createEventDispatcher } from 'svelte';
     import {meta} from "tinro";
-    import api from '../../js/api.js';
-    import {user} from '../../js/store.js';
-    import {txt} from '../../js/util.js';
-    import Button from '../common/input/Button.svelte';
-    import NumberInput from '../common/input/Number.svelte';
-    import Select from '../common/input/Select.svelte';
-    import TextInput from '../common/input/Text.svelte';
-    import TextArea from '../common/input/TextArea.svelte';
+    import api from '../../../js/api.js';
+    import {user} from '../../../js/store.js';
+    import {txt} from '../../../js/util.js';
+    import Button from '../../common/input/Button.svelte';
+    import NumberInput from '../../common/input/Number.svelte';
+    import Select from '../../common/input/Select.svelte';
+    import TextInput from '../../common/input/Text.svelte';
+    import TextArea from '../../common/input/TextArea.svelte';
 
     export let article = null;
     export let show = false;

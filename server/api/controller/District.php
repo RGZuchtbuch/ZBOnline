@@ -113,7 +113,7 @@ class District
 		if( is_numeric( $id ) ) {
 			$districts = model\district::descendants($id); // get all districts including root
 			if( $districts ) {
-				$rootDistrict = ToolBox::tree($districts);
+				$rootDistrict = ToolBox::toTree($districts);
 				if ($rootDistrict) {
 					$response->getBody()->write(json_encode(['district' => & $rootDistrict], JSON_UNESCAPED_SLASHES));
 					return $response;
@@ -123,6 +123,60 @@ class District
 			throw new HttpNotFoundException($request, 'root district not found');
 		}
 		throw new HttpBadRequestException( $request, 'Bad id' );
+	}
+
+	public static function results( Request $request, Response $response, array $args ) : Response {
+		$id = ToolBox::toInt( $args[ 'id' ] );
+		$query = $request->getQueryParams();
+		$year = ToolBox::toInt( $query[ 'year' ] ?? null );
+		$sectionId = ToolBox::toInt( $query[ 'section' ] ?? null );
+		$group = $query[ 'group' ] ?? null;
+		if( $id && $year && $sectionId && $group ) { // all not null and > 0 as all id's should
+			$results = model\District::sectionResults( $id, $sectionId, $year, $group );
+			if( $results != null ) {
+				$response->getBody()->write(json_encode( [ 'results' => & $results ], JSON_UNESCAPED_SLASHES));
+				return $response;
+			}
+			throw new HttpInternalServerErrorException($request, 'Hmm no results, should at least be empty array, warn admin');
+		}
+		throw new HttpBadRequestException( $request, 'Bad arguments values' );
+	}
+
+	public static function breedResults( Request $request, Response $response, array $args ) : Response {
+		$id = ToolBox::toInt( $args[ 'id' ] );
+		$breedId = ToolBox::toInt($args[ 'breed' ] ?? null );
+		$query = $request->getQueryParams();
+			$year = ToolBox::toInt($query[ 'year' ] ?? null );
+			$sectionId = ToolBox::toInt($query[ 'section' ] ?? null );
+			$group = $query[ 'group' ] ?? null;
+		if( $id && $year && $sectionId && $breedId && $group ) { // all not null and > 0 or filled string
+			$results = $sectionId == 5 ? // == as sectionId is text
+				model\District::breedResult($id, $breedId, $year, $group) :
+				model\District::colorResults($id, $breedId, $year, $group);
+			if( $results != null ) {
+				$response->getBody()->write(json_encode( [ 'results' => & $results ], JSON_UNESCAPED_SLASHES));
+				return $response;
+			}
+			throw new HttpInternalServerErrorException($request, 'Hmm no results, should at least be empty array, warn admin');
+		}
+		throw new HttpBadRequestException( $request, 'Bad arguments values' );
+	}
+
+	// returns section/subsection/breed/color tree results for generating table
+	public static function report( Request $request, Response $response, array $args ) : Response {
+		$id = $args[ 'id' ];
+		$year = $args[ 'year' ];
+		if( is_numeric( $id ) && is_numeric( $year ) ) {
+			$results = model\Result::resultsDistrictYear( $id, $year );
+
+			$report = ToolBox::toReportTree( $results );
+			if( $report ) {
+				$response->getBody()->write(json_encode( [ 'report' => & $report ], JSON_UNESCAPED_SLASHES));
+				return $response;
+			}
+			throw new HttpInternalServerErrorException($request, 'No root district... wierd, please inform admin');
+		}
+		throw new HttpBadRequestException( $request, 'Bad id or year' );
 	}
 
 }

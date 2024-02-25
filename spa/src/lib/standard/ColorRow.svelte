@@ -25,7 +25,7 @@
     //if( color === null ) color = { id:0, breedId:breed.id, name:'?', info:null, aoc:false }; // default is null
 
     const validate = {
-        name: (v)=> validator(v).string().length(2,128).orNull().isValid(),
+        name: (v)=> validator(v).string().length(2,128).orNullIf( toRemove ).isValid(),
     }
 
     function onEdit() {

@@ -112,7 +112,7 @@ class Section
 		$id = $args[ 'id' ] ?? null;
 		if( is_numeric( $id ) ) {
 			$descendants = model\Section::descendants( $id );
-			$root = ToolBox::tree( $descendants );
+			$root = ToolBox::toTree( $descendants );
 			$response->getBody()->write(json_encode(['section' => $root], JSON_UNESCAPED_SLASHES));
 			return $response;
 		}

@@ -4,10 +4,7 @@
 
     import {meta, router} from 'tinro';
 
-    export let results;
-
-
-
+    export let report;
 
     function addTo( sum, result ) {
         result.broods = result.broodEggs ? result.broodEggs / 2 : null; // for pigeons
@@ -136,16 +133,16 @@
     onMount( () => {
     });
 
-    $: calcTotals( results );
+    $: calcTotals( report );
 
-    console.log( "Results", results );
+    console.log( "Report", report );
 
 </script>
 
 
 <div class='print'>
-    {#if results }
-        {#each results.sections as section}
+    {#if report }
+        {#each report.sections as section}
             <table class='w-full p-2'>
                 <thead>
                     <!-- totals -->
@@ -183,15 +180,15 @@
                                 <div class='grow'>Gesamt</div>
                                 <div class='flex justify-evenly text-sm gap-x-6'>
                                     <div class='flex w-14 justify-evenly'>
-                                        <div class='td' title='Zahl der Zuchten / Züchter'>{dec( results.total.breeders )}</div>
+                                        <div class='td' title='Zahl der Zuchten / Züchter'>{dec( report.total.breeders )}</div>
                                     </div>
                                     <div class='w-28'></div>
 
                                     <div class='w-40'></div>
 
                                     <div class='flex w-28 justify-evenly'>
-                                        <div class='td' title='Zahl der ausgestellten Tieren'>{dec( results.total.showCount )}</div>
-                                        <div class='td' title='Durchschnitt Bewertungsnote'>{dec( results.total.showScore, 1 )}</div>
+                                        <div class='td' title='Zahl der ausgestellten Tieren'>{dec( report.total.showCount )}</div>
+                                        <div class='td' title='Durchschnitt Bewertungsnote'>{dec( report.total.showScore, 1 )}</div>
                                     </div>
                                 </div>
                             </div>
@@ -454,7 +451,7 @@
             </table>
             <div class='print-break text-center'> - </div>
         {/each}
-        {#if results.sections.length === 0 }
+        {#if report.sections.length === 0 }
             <h2 class='p-2 bg-header text-center text-xl'>Leider keine Daten für dieses Jahr</h2>
         {/if}
 

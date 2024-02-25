@@ -35,7 +35,7 @@ class Color
 		}
 	}
 
-	public static function create( Request $request, Response $response, array $args ) : Response {
+	public static function post( Request $request, Response $response, array $args ) : Response {
 		$requester = new Requester( $request );
 		if( $requester->isAdmin() ) { // only admin can do this
 			$body = $request->getParsedBody();
@@ -56,7 +56,7 @@ class Color
 		throw new HttpUnauthorizedException( $request, 'Cannot do this');
 	}
 
-	public static function update( Request $request, Response $response, array $args ) : Response {
+	public static function put( Request $request, Response $response, array $args ) : Response {
 		$requester = new Requester( $request );
 		if( $requester->isAdmin() ) {
 			$id = $args[ 'id' ] ?? null;

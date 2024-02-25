@@ -3,14 +3,14 @@
     import {active, meta, router, Route} from 'tinro';
     import api from '../../js/api.js';
     import { user } from '../../js/store.js'
-    import ResultsTable from './ResultsTable.svelte';
+    import Report from './Report.svelte';
 
     export let districtId = null;
     export let year = null;
 //    export let moderator = null;
 
     let district = null;
-    let results = null;
+    let report = null;
 
 
     function handle( districtId, year ) {
@@ -18,8 +18,10 @@
             api.district.get( districtId ).then( response => {
                 district = response.district;
             })
-            api.district.results.get( districtId, year ).then( response => {
-                results = response.results;
+            api.district.report.get( districtId, year ).then( response => {
+                report = response.report;
+                console.log( "DistrictReport fetched", response );
+
             })
         }
     }
@@ -31,13 +33,15 @@
 
     $: handle( districtId, year );
 
+    console.log( "DistrictReport", report );
+
 </script>
 
 <div class='flex flex-col m-2 border border-gray-400'>
 {#if district && year }
     <h2 class='text-center'>Verband {#if district} {district.name} {/if} → Leistungsdaten {year}</h2>
-    {#if results}
-        <ResultsTable {results} />
+    {#if report}
+        <Report {report} />
     {/if}
 {/if}
 </div>

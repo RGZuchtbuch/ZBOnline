@@ -29,7 +29,8 @@
     const dispatch = createEventDispatcher();
 
     const validate = { // for validating Form fields
-        name:       (v) => validator(v).string().length(2,128).orNull().isValid(),
+        //name:       (v) => validator(v).string().length(2,128).orNull().isValid(),
+        name:       (v)=> validator(v).string().length(2,128).orNullIf( toRemove ).isValid(),
         eggs:       (v) => validator(v).number().range(1,366).orNull().isValid(),
         eggWeight:  (v) => validator(v).number().range(1,9999).orNull().isValid(),
         weight:     (v) => validator(v).number().range(1,99999).orNull().isValid(),
@@ -54,7 +55,7 @@
     function onSubmit() { // triggered by form's autosave
         //edit = false;
         if( breed.name ) {
-            if( breed.id ) {
+            if( breed.id > 0 ) {
                 api.breed.put( breed.id, breed );
             } else {
                 api.breed.post( breed ).then(response => {
@@ -62,7 +63,7 @@
                 });
             }
         } else { // should remove, hmm take care
-            if( breed.id && toRemove && breed.colors.length === 0) { // stored breed and no colors
+            if( breed.id && breed.name == null && toRemove && breed.colors.length === 0) { // stored breed and no colors
                 edit = false;
                 api.breed.delete( breed.id ).then( response => {
                     dispatch( 'removed', breed );

@@ -17,8 +17,6 @@
 
     const route    = meta();
 
-    console.log('User', $user )
-
 </script>
 
 <div class='flex flex-col pl-4'>

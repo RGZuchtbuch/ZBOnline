@@ -64,8 +64,7 @@
         const index = section.breeds.indexOf( breed ); // find it
         if( index >= 0 ) { // found
             section.breeds.splice(index, 1); // remove it
-            section.breeds = section.breeds;
-
+            section = section;
         }
     }
 

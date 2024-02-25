@@ -96,13 +96,13 @@
         type = types[ typeId ];
         if( districtId ) {
             api.district.results.get( districtId, year ).then( response => {
-                const results = response.results;
-                countBreeders( results );
+                const report = response.report;
+                countBreeders( report );
                 //console.log( "Pie results", results );
-                let data = results.sections.map( section => section.count ); // get array of counts
+                let data = report.sections.map( section => section.count ); // get array of counts
                 //let data = [1,2,3];
                 let datasets = [ { data:data } ];
-                let labels = results.sections.map( section => section.name ); // get array of names
+                let labels = report.sections.map( section => section.name ); // get array of names
 
                 if( chart ) {
                     chart.data.labels = labels;

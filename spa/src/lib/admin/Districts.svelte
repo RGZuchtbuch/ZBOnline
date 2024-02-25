@@ -5,7 +5,7 @@
 
     import List from "../common/List.svelte";
 
-    import DistrictsTree from ".//DistrictsAdminTree.svelte";
+    import DistrictsTree from "./districts/DistrictsAdminTree.svelte";
 //    import {createEventDispatcher} from "svelte";
 
     let district = null;

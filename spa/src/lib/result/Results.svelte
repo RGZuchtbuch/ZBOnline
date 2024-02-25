@@ -4,7 +4,7 @@
     import api from '../../js/api.js';
     import Select from '../common/input/Select.svelte';
     import SectionsPie from './results/SectionsPie.svelte';
-    import DistrictList from './DistrictList.svelte';
+    import DistrictReport from './DistrictReport.svelte';
     import Help from './Help.svelte';
 
     import LayBar from './results/LayBar.svelte';
@@ -243,7 +243,7 @@
             <div class='print-break'></div>
             {/if}
             <div class='border rounded print'>
-                <DistrictList districtId={districtId} year={year} />
+                <DistrictReport districtId={districtId} year={year} />
             </div>
         {/if}
     </div>

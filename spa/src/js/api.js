@@ -74,49 +74,32 @@ export default {
         },
 
         /**
-         * returns array of clubs within district hierarchy incl root id
-         */
-/*
-        clubs: { // TODO obsolete ?
-            get: ( districtId ) => {
-                return new Promise( resolve => {
-                    get( 'api/district/'+districtId+'/descendants' ).then( response => {
-                        const clubs = [];
-                        let root = response.district;
-                        let districts = [ root ];
-                        for( let index=0; index < districts.length; index++ ) {
-                            const district = districts[ index ];
-                            if( district.level==='OV' ) {
-                                clubs.push( district );
-                            }
-                            districts = districts.concat( district.children );
-                        }
-                        resolve( { clubs:clubs } );
-                    })
-                })
-
-            }
-        },
-*/
-        /**
          * returns the district hierarchie incl given root id
           */
         descendants: {
             get: ( districtId ) => get( 'api/district/'+districtId+'/descendants'),
         },
 
-        results: { // showing results for district, all sections etc
-            get: (districtId, year) => get( 'api/district/'+districtId+'/results?year='+year ),
+        report: {
+            get: (id, year) => {
+                console.log( 'district.report');
+                return get( 'api/district/'+id+'/year/'+year+'/report' )
+            },
+        },
 
-            section: {// to edit section's breeds results
+        results: { // showing results for district, all sections etc
+            get: (districtId, year) => get( 'api/district/'+districtId+'/year/'+year+'/report' ),
+
+            section: {// for edit list sections breed ( with extra like nr of results )
                 get: ( districtId, sectionId, year, group ) => {
                     return get( 'api/district/'+districtId+'/results?section='+sectionId+'&year='+year+'&group='+group );
                 }
             },
 
-            breed: { // to edit breed's colors results
+            breed: { // to edit breed's breed ( pigeon ) or colors ( layers ) results
                 get: ( districtId, sectionId, breedId, year, group ) => {
-                    return get( 'api/district/'+districtId+'/results?section='+sectionId+'&breed='+breedId+'&year='+year+'&group='+group );
+                    return get( 'api/district/'+districtId+'/breed/'+breedId+'/results?section='+sectionId+'&year='+year+'&group='+group );
+//                    return get( 'api/district/'+districtId+'/results?section='+sectionId+'&breed='+breedId+'&year='+year+'&group='+group );
                 },
             }
         },
