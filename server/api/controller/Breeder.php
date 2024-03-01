@@ -50,7 +50,7 @@ class Breeder
 		$body = $request->getParsedBody();
 		if( $body ) {
 			$district = model\District::get( $body[ 'districtId' ] );
-			if( $district ) {
+			if( $requester && $district ) {
 				if ($requester->isAdmin() || $requester->isModerating( $district['id'] )) { //admin or the moderator
 					$id = model\Breeder::new($body['firstname'], $body['infix'], $body['lastname'], $body['email'], $body['districtId'], $body['club'], $body['start'], $body['end'], $body['info'], $requester->getId());
 					if ($id) {

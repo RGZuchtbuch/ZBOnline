@@ -105,7 +105,7 @@ class Breed
 	/** other getters **/
 
 
-	public function colors( Request $request, Response $response, array $args ) : Response {
+	public static function colors( Request $request, Response $response, array $args ) : Response {
 		$id = $args[ 'id' ] ?? null;
 		if( is_numeric( $id ) ) {
 			$colors = model\Breed::colors( $id );

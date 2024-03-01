@@ -40,8 +40,10 @@ export default {
         pairs: {
             get: (breederId) => get( 'api/breeder/'+breederId+'/pair' ),
         },
-        pairsInYear: {
-            get: ( breederId, year ) => get( 'api/breeder/'+breederId+'/pairs/year/'+year ),
+        year : {
+            pairs: {
+                get: ( breederId, year ) => get( 'api/breeder/'+breederId+'/year/'+year+'/pair' ),
+            },
         },
 
         results: {

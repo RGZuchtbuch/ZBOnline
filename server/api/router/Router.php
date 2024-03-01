@@ -38,8 +38,8 @@ class Router {
 		$app->delete('/breeder/{id}', 	'App\controller\Breeder::delete');
 
 
-		$app->get(   '/breeder/{id}/pair', 'App\controller\Breeder::pair');
-		$app->get(   '/breeder/{id}/year/{year}/pair', 'App\controller\Breeder::yearPair'); // TODO not used?
+		$app->get(   '/breeder/{id}/pair', 'App\controller\Breeder::pairs');
+		$app->get(   '/breeder/{id}/year/{year}/pair', 'App\controller\Breeder::yearPair'); // USE FOR PARENT PAIR!
 
 		// get /color not supported, too much data
 		$app->get(   '/color/{id}', 		'App\controller\::get');
@@ -61,6 +61,11 @@ class Router {
 		$app->get(	'/district/{id}/results', 'App\controller\District::results' ); // having year, section and group in query. For obmann edit
 		$app->get(	'/district/{id}/breed/{breed}/results', 'App\controller\District::breedResults' ); // having year, section and group in query. For obmann edit
 
+		$app->get(	'/pair/{id}', 'App\controller\Pair::get' ); // for selecting pair for parent ring in report
+		$app->post(	'/pair', 'App\controller\Pair::post' );
+		// no put.
+		$app->delete('/pair/{id}', 'App\controller\Pair::delete' );
+
 
 		$app->get('/section',                 'App\controller\Section::get' );
 		$app->get('/section/{id}',            'App\controller\Section::get' );
@@ -68,22 +73,23 @@ class Router {
 		$app->get('/section/{id}/children',   'App\controller\Section::children' );
 		$app->get('/section/{id}/descendants','App\controller\Section::descendants' );
 
+		$app->post('/message',                'App\controller\Message::post' ); // send message to obmann
+
 
 
 /*********************/
 ///		$app->get(	'/district/{id}/results',    'App\controller\result\District' ); // for showing
-
 //		$app->get('/section/{id}/children', 'App\controller\section\Children' );
 //		$app->get('/section/{id}/breeds', 'App\controller\section\Breeds' );
 //		$app->get('/section/{id}/descendants', 'App\controller\section\Descendants' );
 
         $app->get('/log/next', 'App\controller\log\Next' );
 
-        $app->post('/message', 'App\controller\message\Post' ); // send message to obmann
+//        $app->post('/message', 'App\controller\message\Post' ); // send message to obmann
 
         //options: ( breederId, year ) => get( 'api/report/options/breeder/'+breederId+'/year'+year ),
-        $app->get(	'/pair/{id}', 'App\controller\pair\Get' ); // for selecting pair for parent ring in report
-        $app->post(	'/pair', 'App\controller\pair\Post' );
+//        $app->get(	'/pair/{id}', 'App\controller\pair\Get' ); // for selecting pair for parent ring in report
+//        $app->post(	'/pair', 'App\controller\pair\Post' );
 
 
         $app->post('/result', 'App\controller\result\Post' ); // save one result

@@ -20,7 +20,7 @@ class District
 		if( $id ) {
 			if( is_numeric( $id ) ) {
 				$district = model\District::get($id);
-				if ($district) {
+				if ( $district ) {
 					$response->getBody()->write(json_encode(['district' => $district], JSON_UNESCAPED_SLASHES));
 					return $response;
 				}

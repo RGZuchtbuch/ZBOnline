@@ -65,7 +65,7 @@
             <div class='w-8 justify-center m-2 circled bg-alert cursor-pointer' on:click={cancel}>X</div>
         </div>
         <div class='flex flex-col gap-4 rounded-b bg-gray-200 gap-4 p-4'>
-            <div>An {#if district}{district.moderator.firstname} {txt(district.moderator.infix)} {district.moderator.lastname}{/if}</div>
+            <div>Am Obmann</div>
             <EmailInput class='' label='eMail *' bind:value={from} bind:invalid={invalids.from} required />
             <TextInput label='Ihr Name *' error='Unvollständiger Name' bind:value={name} bind:invalid={invalids.name} required />
             <TextInput label='Betrifft *' error='Unvollständig' bind:value={subject} bind:invalid={invalids.subject} required />
