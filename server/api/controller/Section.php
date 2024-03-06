@@ -91,7 +91,7 @@ class Section
 	public static function breeds( Request $request, Response $response, array $args ) : Response {
 		$id = $args[ 'id' ] ?? null;
 		if( is_numeric( $id ) ) {
-			$breeds = model\Section::breeds( $id );
+			$breeds = model\Section::getBreeds( $id );
 			$response->getBody()->write(json_encode(['breeds' => $breeds], JSON_UNESCAPED_SLASHES));
 			return $response;
 		}
@@ -101,7 +101,7 @@ class Section
 	public static function children( Request $request, Response $response, array $args ) : Response {
 		$id = $args[ 'id' ] ?? null;
 		if( is_numeric( $id ) ) {
-			$children = model\Section::children( $id );
+			$children = model\Section::getChildren( $id );
 			$response->getBody()->write(json_encode(['sections' => $children], JSON_UNESCAPED_SLASHES));
 			return $response;
 		}
@@ -111,7 +111,7 @@ class Section
 	public static function descendants( Request $request, Response $response, array $args ) : Response {
 		$id = $args[ 'id' ] ?? null;
 		if( is_numeric( $id ) ) {
-			$descendants = model\Section::descendants( $id );
+			$descendants = model\Section::getDescendants( $id );
 			$root = ToolBox::toTree( $descendants );
 			$response->getBody()->write(json_encode(['section' => $root], JSON_UNESCAPED_SLASHES));
 			return $response;

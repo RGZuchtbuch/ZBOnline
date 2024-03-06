@@ -8,7 +8,7 @@
     import InputText from '../common/input/Text.svelte';
     import ReadText from '../read/Text.svelte';
     import Select from '../common/input/Select.svelte';
-    import Elder from "./Elder.svelte";
+    import Elder from "./Parent.svelte";
 
     export let pair;
     export let layer = true;

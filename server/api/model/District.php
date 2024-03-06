@@ -73,7 +73,7 @@ class District
      * @param int $districtId
      * @return array of breeders in district incl descendants
      */
-    public static function breeders( int $districtId ) : array {
+    public static function getBreeders(int $districtId ) : array {
         $args = get_defined_vars();
         $stmt = Query::prepare( "
             SELECT 
@@ -94,7 +94,7 @@ class District
     }
 
     // select children
-    public static function children( int $parentId ) : array {
+    public static function getChildren(int $parentId ) : array {
         $args = get_defined_vars();
         $stmt = Query::prepare('
             SELECT id, parentId, name, level
@@ -106,7 +106,7 @@ class District
     }
 
     // select root and 2 level descendants
-    public static function descendants( int $districtId ) : array {
+    public static function getDescendants(int $districtId ) : array {
         $args = get_defined_vars();
         $stmt = Query::prepare( "
             SELECT DISTINCT child.parentId, child.id, child.short, child.name, child.fullname, child.level, child.moderatorId 
@@ -121,7 +121,7 @@ class District
     /*
      * getting results for pigeons for results edit
      */
-    public static function breedResult( int $districtId, int $breedId, int $year, string $group ) : array {
+    public static function getBreedResult(int $districtId, int $breedId, int $year, string $group ) : array {
         $args = get_defined_vars();
         $stmt = Query::prepare("
             SELECT 
@@ -144,7 +144,7 @@ class District
     /*
      * get result for a breed's colors, so for non pigeons edit
      */
-    public static function colorResults( int $districtId, int $breedId, int $year, string $group ) : array {
+    public static function getColorResults(int $districtId, int $breedId, int $year, string $group ) : array {
         $args = get_defined_vars();
         $stmt = Query::prepare("
             SELECT result.id, result.pairId, :districtId AS districtId, :year AS `year`, :group AS `group`,
@@ -165,7 +165,7 @@ class District
         return Query::selectArray( $stmt, $args );
     }
 
-    public static function sectionResults( int $districtId, int $sectionId, int $year, string $group ) : array {
+    public static function getSectionResults(int $districtId, int $sectionId, int $year, string $group ) : array {
         $args = get_defined_vars();
 
         $stmt = Query::prepare("
@@ -194,7 +194,7 @@ class District
         return Query::selectArray( $stmt, $args );
     }
 
-    public static function countBreeders( int $districtId ) : int {
+    public static function getCountBreeders(int $districtId ) : int {
         $args = get_defined_vars();
         $stmt = Query::prepare("
             SELECT COUNT(*) AS count
@@ -208,7 +208,7 @@ class District
         return 0;
     }
 
-    public static function countChildren( int $districtId ) : int {
+    public static function getCountChildren(int $districtId ) : int {
         $args = get_defined_vars();
         $stmt = Query::prepare("
             SELECT COUNT(*) AS count
@@ -222,7 +222,7 @@ class District
         return 0;
     }
 
-    public static function countResults( int $districtId ) : int {
+    public static function getCountResults(int $districtId ) : int {
         $args = get_defined_vars();
         $stmt = Query::prepare("
             SELECT COUNT(*) AS count

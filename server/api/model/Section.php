@@ -45,7 +45,7 @@ class Section
 
 
 
-    public static function breeds( int $sectionId ) : array {
+    public static function getBreeds(int $sectionId ) : array {
         $args = get_defined_vars();
         $stmt = Query::prepare( "
             SELECT 
@@ -62,7 +62,7 @@ class Section
         return Query::selectArray( $stmt, $args );
     }
 
-    public static function children( int $id ) : array {
+    public static function getChildren( int $id ) : array {
         $args = get_defined_vars();
         $stmt = Query::prepare('
             SELECT id, name, parentId, layers, `order`
@@ -72,7 +72,7 @@ class Section
         return Query::selectArray($stmt, $args);
     }
 
-    public static function descendants( int $sectionId ) : array { // including root
+    public static function getDescendants( int $sectionId ) : array { // including root
         $args = get_defined_vars();
         $stmt = Query::prepare( "
             SELECT DISTINCT child.id, child.parentId, child.name, child.layers, child.order FROM section AS parent

@@ -27,7 +27,7 @@ class Get extends Controller
 
     public function process() : array
     {
-        $sections = model\Section::descendants(2);
+        $sections = model\Section::getDescendants(2);
         $breeds = model\Breed::get();
         $colors = model\Color::get();
         $standard = $this->toStandardTree($sections, $breeds, $colors);

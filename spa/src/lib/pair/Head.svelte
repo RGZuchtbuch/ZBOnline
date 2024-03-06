@@ -14,7 +14,7 @@
     import ReportBroods from './Broods.svelte';
     import ReportLay from './Lay.svelte';
     import ReportNotes from './Notes.svelte';
-    import ReportParents from './Elders.svelte';
+    import ReportParents from './Parents.svelte';
     import ReportShow from './Show.svelte';
     import Page from "../common/Page.svelte";
 

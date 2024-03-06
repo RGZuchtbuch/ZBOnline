@@ -42,7 +42,7 @@ class Result extends Controller
 
         $debug = [];
         if( $districtId && $year ) { // TODO when used, only case 1, last is found for district results.
-            $result = model\Result::resultDistrictYear( $districtId, $year, $sectionId, $breedId, $colorId, $group );
+            $result = model\Result::getResultDistrictYear( $districtId, $year, $sectionId, $breedId, $colorId, $group );
             return [ 'result'=>$result ];
         }
     }

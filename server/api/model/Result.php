@@ -79,7 +79,7 @@ class Result extends Query
      */
 
 	// for charts, one result for current district and year ( filtered for s,b,c )
-    public static function resultDistrictYear( int $districtId, int $year, ? int $sectionId, ? int $breedId, ? int $colorId, ? int $group ) : ? array {
+    public static function getResultDistrictYear(int $districtId, int $year, ? int $sectionId, ? int $breedId, ? int $colorId, ? int $group ) : ? array {
         $args = get_defined_vars();
         $stmt = Query::prepare('
             SELECT count(*) AS results, 
@@ -154,7 +154,7 @@ class Result extends Query
     }
 
 	// for results district trend
-    public static function resultsDistrictYears( int $districtId, ? int $sectionId, ? int $breedId, ? int $colorId, ? string $group ) : ? array {
+    public static function getResultsDistrictYears(int $districtId, ? int $sectionId, ? int $breedId, ? int $colorId, ? string $group ) : ? array {
         $startYear = START_YEAR;
         $args = get_defined_vars();
         $stmt = Query::prepare('
@@ -248,7 +248,7 @@ class Result extends Query
     }
 
 	// for results year districts map
-    public static function resultsYearDistricts( int $year, ? int $sectionId, ? int $breedId, ? int $colorId, ? string $group ) : ? array {
+    public static function getResultsYearDistricts(int $year, ? int $sectionId, ? int $breedId, ? int $colorId, ? string $group ) : ? array {
         $startYear = START_YEAR;
         $args = get_defined_vars();
         $stmt = Query::prepare('
@@ -333,7 +333,7 @@ class Result extends Query
     }
 
 	// for use in district year report
-	public static function resultsDistrictYear(int $districtId, int $year ) : ? array {
+	public static function getResultsDistrictYear(int $districtId, int $year ) : ? array {
 		$args = get_defined_vars();
 		$stmt = Query::prepare("
             SELECT COUNT(*),
@@ -412,7 +412,7 @@ class Result extends Query
 	}
 
 	// for checking before deleting breed that might have results or pairs yet
-    public static function allWithBreed( int $id ) : array {
+    public static function getAllWithBreed(int $id ) : array {
         $args = get_defined_vars();
         $stmt = Query::prepare( '
             SELECT id, breedId
@@ -423,7 +423,7 @@ class Result extends Query
     }
 
 	// for checking before deleting color that might have results or pairs
-    public static function allWithColor( int $id ) : array {
+    public static function getAllWithColor(int $id ) : array {
         $args = get_defined_vars();
         $stmt = Query::prepare( '
             SELECT id, colorId

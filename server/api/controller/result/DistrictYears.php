@@ -32,7 +32,7 @@ class DistrictYears extends Controller
         $group      = $this->query[ 'group' ] ?? null;
         $years      = [];
 
-        $years = model\Result::resultsDistrictYears( $districtId, $sectionId, $breedId, $colorId, $group );
+        $years = model\Result::getResultsDistrictYears( $districtId, $sectionId, $breedId, $colorId, $group );
 /*
         if( $colorId ) {
 //            $years = query\Result::yearsForColor( $districtId, $colorId );

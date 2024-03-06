@@ -66,7 +66,7 @@ class Breed
 
 
 
-    public static function colors( int $id ) : array {
+    public static function getColors(int $id ) : array {
         $args = get_defined_vars();
         $stmt = Query::prepare('
             SELECT id, name, breedId

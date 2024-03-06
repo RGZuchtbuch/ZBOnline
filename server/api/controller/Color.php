@@ -86,7 +86,7 @@ class Color
                 $color = model\Color::get( $id );
                 if ($color) {
                     $pairs = model\Pair::allWithColor( $id );
-                    $results = model\Result::allWithColor( $id );
+                    $results = model\Result::getAllWithColor( $id );
                     if( ! $pairs && ! $results ) { // not used in either
                         $success = model\Color::del( $id );
                         $response->getBody()->write(json_encode(['success' => $success, 'id'=>$id], JSON_UNESCAPED_SLASHES));

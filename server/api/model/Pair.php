@@ -46,9 +46,6 @@ class Pair extends Query
     }
 
 
-
-
-
     // for results page
     public static function allWithBreed( int $id ) : array {
         $args = get_defined_vars();
@@ -72,11 +69,11 @@ class Pair extends Query
 
 	//*** Parents ***//
 
-	public static function newParent( int $pairId, int $parentId, ? int $score, int $modifierId ) : ? int {
+	public static function newParent( int $pairId, string $sex, string $ring, ? int $score, ? int $parentsPairId, int $modifierId ) : ? int {
 		$args = get_defined_vars();
 		$stmt = Query::prepare( '
-            INSERT INTO pairs_x_parents ( pairId, animalId, score, modifierId ) 
-            VALUES ( :pairId, :parentId, :score, :modifierId )
+            INSERT INTO pair_parent ( pairId, sex, ring, score, parentsPairId, modifierId ) 
+            VALUES ( :pairId, :sex, :parentId, :score, :parentsPairId, :modifierId )
         ' );
 		return Query::insert( $stmt, $args );
 	}
@@ -86,12 +83,10 @@ class Pair extends Query
 	public static function getParents( $pairId ) {
 		$args = get_defined_vars();
 		$stmt = Query::prepare( '
-            SELECT id, year, sex, ring, animal.pairId, animal.broodId
-            FROM animal
-            LEFT JOIN pairs_x_parents 
-            ON pairs_x_parents.animalId = animal.id 
-            WHERE pairs_x_parents.pairId = :pairId
-            ORDER BY sex, year, ring
+            SELECT id, pairId, sex, ring, score, parentsPairId
+            FROM pair_parent  
+            WHERE pairId = :pairId
+            ORDER BY sex, ring
         ' );
 		return Query::selectArray( $stmt, $args );
 	}
@@ -100,7 +95,7 @@ class Pair extends Query
 		$args = get_defined_vars();
 		$stmt = Query::prepare( '
             DELETE 
-            FROM pairs_x_parents
+            FROM pair_parent
             WHERE pairId=:pairId
         ' );
 		return Query::delete( $stmt, $args );
@@ -175,6 +170,41 @@ class Pair extends Query
         ' );
 		return Query::delete( $stmt, $args );
 	}
+
+
+	//*** Brood chicks ***//
+
+	public static function newChick( int $pairId, ? int $broodId, ? string $ringed, string $ring, int $modifierId ) : ? int {
+		$args = get_defined_vars();
+		$stmt = Query::prepare( '
+            INSERT INTO pair_chick ( pairId, broodId, ringed, ring, modifierId ) 
+            VALUES ( :pairId, :broodId, :ringed, :ring, :modifierId )
+        ' );
+		return Query::insert( $stmt, $args );
+	}
+
+	// no set as all renewed at report save
+
+	public static function getChicks( $pairId ) {
+		$args = get_defined_vars();
+		$stmt = Query::prepare( '
+            SELECT id, pairId, broodId, ringed, ring
+            FROM pair_chick
+            WHERE pairId=:pairId
+        ' );
+		return Query::selectArray( $stmt, $args );
+	}
+
+	public static function delChicks( int $pairId ) {
+		$args = get_defined_vars();
+		$stmt = Query::prepare( '
+            DELETE 
+            FROM pair_chick
+            WHERE pairId=:pairId
+        ' );
+		return Query::delete( $stmt, $args );
+	}
+
 
 
 	//*** Show ***//

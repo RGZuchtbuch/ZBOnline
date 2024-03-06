@@ -27,9 +27,9 @@ class Pair
 					$pair['lay']     = model\Pair::getLay($pair['id']);
 					$pair['broods']  = model\Pair::getBroods( $pair['id'] );
 					foreach( $pair['broods'] as & $brood ) {
-						$brood['chicks'] = model\Animal::getForBrood( $brood['id'] );
+						$brood['chicks'] = model\Pair::getChicks( $brood['id'] );
 					}
-					$pair['show'] = model\Show::getForPair( $pair['id'] );
+					$pair['show'] = model\Pair::getShow( $pair['id'] );
 					$response->getBody()->write(json_encode([ 'pair' => $pair ], JSON_UNESCAPED_SLASHES));
 					return $response;
 				}
@@ -44,13 +44,13 @@ class Pair
 	public static function post( Request $request, Response $response, array $args ) : Response
 	{
 		$id = $args['id'] ?? null;
-		$body = $request->getParsedBody();
-		if ($body) {
+		$pair = $request->getParsedBody();
+		if ($pair) {
 			$requester = new Requester($request);
-			if ($requester && ($requester->isAdmin() || $requester->isModerating($body['districtId']) || $requester->hasId($body['breederId']))) {
+			if ($requester && ($requester->isAdmin() || $requester->isModerating($pair['districtId']) || $requester->hasId($pair['breederId']))) {
 				Query::begin();
-				$id = Pair::postPair( $id, $body, $requester );
-				if ($id && Pair::postParents( $id, $body[ 'parents' ], $requester ) && Pair::postLay( $id, $body['lay'], $requester ) && Pair::postBroods( $id, $body['broods'], $requester ) && Pair::postShow($id, $body['show'], $requester )) {
+				$id = Pair::postPair( $id, $pair, $requester );
+				if ($id && Pair::postParents( $id, $pair[ 'parents' ], $requester ) && Pair::postLay( $id, $pair['lay'], $requester ) && Pair::postBroods( $id, $pair['broods'], $requester ) && Pair::postShow($id, $pair['show'], $requester ) && Pair::postResult( $id, $pair, $requester ))  {
 					Query::commit();
 					$response->getBody()->write(json_encode(['id' => $id], JSON_UNESCAPED_SLASHES));
 					return $response;
@@ -106,38 +106,101 @@ class Pair
 		}
 	}
 
-	public static function postParents( int $pairId, array $parents, Requester $requester ) : bool
+	public static function postParents( int $parentsPairId, array $parents, Requester $requester ) : bool
 	{
 		$success = true;
-		model\Pair::delParents( $pairId ); // remove existing parent links to replace by new once
+		$succes &= model\Pair::delParents( $parentsPairId ); // remove existing parent links to replace by new once
 		foreach ($parents as $parent) {
-			$animalId = $parent['id'] ?? null; // animal exists
-			if ($animalId == null) {
-				$animalId = model\Animal::new( $parent['sex'], $parent['ring'], $parent['pairId'], null, $requester[ 'id' ] );
-				$success &= $animalId && model\Pair::newParent($pairId, $animalId, $parent['score'], $requester['id']);
-			} else {
-				$success &= model\Pair::newParent( $pairId, $animalId, $parent[ 'score' ], $requester[ 'id' ] );
-			}
+			// note pairId is this parents parents and parentPair is the pair this parent is parent. to be consistent with pair_child
+			$success &= model\Pair::newParent( $parent[ 'pairId' ], $parent[ 'sex' ], $parent[ 'ring' ], $parent[ 'score' ], $parentsPairId, $requester[ 'id' ] );
 		}
 		return $success;
 	}
 
 	public static function postLay( int $pairId, array $lay, Requester $requester ) : bool {
-		model\Pair::delLay( $pairId ); //remove evt existing
-		return model\Pair::newLay( $pairId, $lay['start'], $lay['end'], $lay['eggs'], $lay['dames'], $lay['weight'], $lay['modifierId'] );
+		$success = true;
+		$success &= model\Pair::delLay( $pairId ); //remove evt existing
+		$success &= model\Pair::newLay( $pairId, $lay['start'], $lay['end'], $lay['eggs'], $lay['dames'], $lay['weight'], $lay['modifierId'] );
+		return $success;
 	}
 
 	public static function postBroods( int $pairId, array $broods, Requester $requester ) : bool {
 		$success = true;
-		model\Pair::delBroods( $pairId ); // remove existing parent links to replace by new once
+		$success &= model\Pair::delBroods( $pairId ); // remove existing parent links to replace by new once
+		$success &= model\Pair::delChicks( $pairId );
 		foreach ($broods as $brood) {
-			$success &= model\Pair::newBrood( $pairId, $brood['start'], $brood['eggs'], $brood['fertile'], $brood['hatched'], $requester['id']);
+			$broodId = model\Pair::newBrood( $pairId, $brood['start'], $brood['eggs'], $brood['fertile'], $brood['hatched'], $requester['id']);
+			if( $broodId ) {
+				foreach ($brood[ 'chicks' ] as $chick ) {
+					$success &= model\Pair::newChick($pairId, $broodId, $brood['ringed'], $chick['ring'], $requester['id'] );
+				}
+			}
+			$success &= $broodId;
+		}
+		return $success; // all is well
+	}
+
+	public static function postShow( int $pairId, array $show, Requester $requester ) : bool {
+		$success = true;
+		$success &= model\Pair::delShow( $pairId ); //remove evt existing
+		$success &= model\Pair::newShow( $pairId, $show['89'], $show['90'], $show['91'], $show['92'], $show['93'], $show['94'], $show['95'], $show['96'], $show['97'], $show['modifierId'] );
+		return $success;
+	}
+
+	public static function postResult( int $pairId, array $pair, Requester $requester ) : bool {
+		$success = true;
+		$success &= model\Result::delForPair( $pairId );
+
+		// summarize broods
+		$broods = & $pair['broods'];
+		$broodEggs = null;
+		$broodFertile = null;
+		$broodHatched = null;
+		foreach( $broods as & $brood ) {
+			if( $brood['eggs'] !== null && $brood['eggs'] > 0 && $brood['hatched'] !== null && $brood['hatched'] >= 0 ) {
+				$broodEggs += $brood['eggs'];
+				$broodHatched += $brood['hatched'];
+				if( $brood['fertile'] !== null && $brood['fertile'] >=0 ) {
+					$broodFertile += $brood['fertile'];
+				}
+			}
+		}
+
+		// summerize show
+		$show = & $pair['show'];
+		$showCount = $show['89']+$show['90']+$show['91']+$show['92']+$show['93']+$show['94']+$show['95']+$show['96']+$show['97']; // null or count if any
+		$showScore = null;
+		if( $showCount > 0 ) {
+			$showTotalScore = 89 * $show['89'] + 90 * $show['90'] + 91 * $show['91'] + 92 * $show['92'] + 93 * $show['93'] + 94 * $show['94'] + 95 * $show['95'] + 96 * $show['96'] + 97 * $show['97'];
+			$showScore = $showTotalScore / $showCount;
+		}
+
+		// save pigeon or layer
+		if( $pair['sectionId'] === 5 ) { // pigeon, no lay, no color
+			$success &= model\Result::new(
+				$pair['id'], $pair['districtId'], $pair['year'],
+				$pair['group'], $pair['breedId'], null,
+				1, 1,
+				null, null, null,
+				$broodEggs, null, $broodHatched,
+				$showCount, $showScore,
+				$requester['id']
+			);
+
+		} else { // layers
+			$success &= model\Result::new(
+				$pair['id'], $pair['districtId'], $pair['year'],
+				$pair['group'], $pair['breedId'], $pair['colorId'],
+				1, 1,
+				$pair['dames'], $pair['lay']['production'], $pair['lay']['weight'],
+				$broodEggs, $broodFertile, $broodHatched,
+				$showCount, $showScore,
+				$requester['id']
+			);
+
 		}
 		return $success;
 	}
-	public static function postShow( int $pairId, array $show, Requester $requester ) : bool {
-		model\Pair::delShow( $pairId ); //remove evt existing
-		return model\Pair::newShow( $pairId, $show['89'], $show['90'], $show['91'], $show['92'], $show['93'], $show['94'], $show['95'], $show['96'], $show['97'], $show['modifierId'] );
-	}
+
 
 }

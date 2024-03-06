@@ -91,7 +91,7 @@ class District
 	public static function breeders( Request $request, Response $response, array $args ) : Response {
 		$id = $args[ 'id' ];
 		if( is_numeric( $id ) ) {
-			$breeders = model\District::breeders( $id );
+			$breeders = model\District::getBreeders( $id );
 			$response->getBody()->write(json_encode(['breeders' => $breeders], JSON_UNESCAPED_SLASHES));
 			return $response;
 		}
@@ -101,7 +101,7 @@ class District
 	public static function children(Request $request, Response $response, array $args ) : Response {
 		$id = $args[ 'id' ];
 		if( is_numeric( $id ) ) {
-			$children = model\District::children( $id );
+			$children = model\District::getChildren( $id );
 			$response->getBody()->write(json_encode(['children' => $children], JSON_UNESCAPED_SLASHES));
 			return $response;
 		}
@@ -111,7 +111,7 @@ class District
 	public static function descendants( Request $request, Response $response, array $args ) : Response {
 		$id = $args[ 'id' ];
 		if( is_numeric( $id ) ) {
-			$districts = model\district::descendants($id); // get all districts including root
+			$districts = model\district::getDescendants($id); // get all districts including root
 			if( $districts ) {
 				$rootDistrict = ToolBox::toTree($districts);
 				if ($rootDistrict) {
@@ -132,7 +132,7 @@ class District
 		$sectionId = ToolBox::toInt( $query[ 'section' ] ?? null );
 		$group = $query[ 'group' ] ?? null;
 		if( $id && $year && $sectionId && $group ) { // all not null and > 0 as all id's should
-			$results = model\District::sectionResults( $id, $sectionId, $year, $group );
+			$results = model\District::getSectionResults( $id, $sectionId, $year, $group );
 			if( $results != null ) {
 				$response->getBody()->write(json_encode( [ 'results' => & $results ], JSON_UNESCAPED_SLASHES));
 				return $response;
@@ -151,8 +151,8 @@ class District
 			$group = $query[ 'group' ] ?? null;
 		if( $id && $year && $sectionId && $breedId && $group ) { // all not null and > 0 or filled string
 			$results = $sectionId == 5 ? // == as sectionId is text
-				model\District::breedResult($id, $breedId, $year, $group) :
-				model\District::colorResults($id, $breedId, $year, $group);
+				model\District::getBreedResult($id, $breedId, $year, $group) :
+				model\District::getColorResults($id, $breedId, $year, $group);
 			if( $results != null ) {
 				$response->getBody()->write(json_encode( [ 'results' => & $results ], JSON_UNESCAPED_SLASHES));
 				return $response;
@@ -167,7 +167,7 @@ class District
 		$id = $args[ 'id' ];
 		$year = $args[ 'year' ];
 		if( is_numeric( $id ) && is_numeric( $year ) ) {
-			$results = model\Result::resultsDistrictYear( $id, $year );
+			$results = model\Result::getResultsDistrictYear( $id, $year );
 
 			$report = ToolBox::toReportTree( $results );
 			if( $report ) {

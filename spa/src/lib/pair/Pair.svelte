@@ -1,17 +1,21 @@
 <script>
 
     import {afterUpdate, onMount} from 'svelte';
+    import { slide } from 'svelte/transition';
+    import dic from '../../js/dictionairy.js';
     import {active, meta, router, Route} from 'tinro';
 
     import {user} from "../../js/store.js";
     import api from '../../js/api.js';
 
     import Page from "../common/Page.svelte";
+    import Form from '../common/form/Form.svelte';
+    import FormStatus from '../common/form/Status.svelte';
     import PairHead from "./Head.svelte";
     import PairBreed from './Breed.svelte';
     import PairBroods from './Broods.svelte';
     import PairLay from './Lay.svelte';
-    import PairElders from './Elders.svelte';
+    import PairElders from './Parents.svelte';
     import PairShow from './Show.svelte';
     import PairNotes from './Notes.svelte';
 
@@ -113,10 +117,13 @@
             {/if}
         </div>
 
+        <div slot='body' class='pl-4' transition:slide>
+            <Form>
+                <div class='flex'>
+                    <div>Züchter Meldung ändern</div>
+                    <FormStatus />
+                </div>
 
-        <form slot='body' class='bg-gray-100' on:submit|preventDefault={onSubmit} on:input={onInput}>
-
-            <fieldset class='flex flex-col gap-1' {disabled}>
 
                 <PairHead bind:pair={pair} bind:invalid={invalids.head} {disabled}/>
 
@@ -146,9 +153,8 @@
                         <button type='submit' class='rounded border bg-gray-400 text-center text-white cursor-pointer' disabled>Kann (noch) nicht speichern</button>
                     {/if}
                 {/if}
-
-            </fieldset>
-        </form>
+            </Form>
+        </div>
     </Page>
 {/if}
 

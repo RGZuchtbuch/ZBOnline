@@ -1,15 +1,13 @@
 <script>
     import { afterUpdate, onMount } from 'svelte';
     import { slide } from 'svelte/transition';
-    import dic from '../../js/dictionairy.js';
-    import {txt} from '../../js/util.js';
-    import Button from '../common/input/Button.svelte';
-    import Select from '../common/input/Select.svelte';
-    import Text from '../common/input/Text.svelte';
+
     import api from "../../js/api.js";
-    import TextArea from "../common/input/TextArea.svelte";
-    import Page from "../common/Page.svelte";
+    import dic from '../../js/dictionairy.js';
     import {user} from "../../js/store.js";
+    import {txt} from '../../js/util.js';
+
+    import Page from "../common/Page.svelte";
 
     import Form from '../common/form/Form.svelte';
     import FormStatus from '../common/form/Status.svelte';

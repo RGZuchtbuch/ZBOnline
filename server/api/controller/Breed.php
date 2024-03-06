@@ -88,7 +88,7 @@ class Breed
             if( $id && is_numeric( $id ) ) {
                 $breed = model\Breed::get( $id );
                 if ($breed) {
-                    if( ! model\Breed::colors( $id ) && ! model\Pair::allWithBreed( $id ) && ! model\Result::allWithBreed( $id ) ) { // no more color, pair of result using it
+                    if( ! model\Breed::getColors( $id ) && ! model\Pair::allWithBreed( $id ) && ! model\Result::getAllWithBreed( $id ) ) { // no more color, pair of result using it
                         $success = model\Breed::delete( $id );
                         $response->getBody()->write(json_encode(['success' => $success, 'id'=>$id ], JSON_UNESCAPED_SLASHES));
                         return $response;
@@ -108,7 +108,7 @@ class Breed
 	public static function colors( Request $request, Response $response, array $args ) : Response {
 		$id = $args[ 'id' ] ?? null;
 		if( is_numeric( $id ) ) {
-			$colors = model\Breed::colors( $id );
+			$colors = model\Breed::getColors( $id );
 			if ($colors) {
 				$response->getBody()->write(json_encode(['colors' => $colors], JSON_UNESCAPED_SLASHES));
 				return $response;
