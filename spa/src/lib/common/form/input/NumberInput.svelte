@@ -14,8 +14,8 @@
     export let max = null; // allow for numbers <= max
     export let error = 'Invalid'; // message on invalid
     export let validator = null;
+    export let disabled = false;
 
-    let disabled = false;
     let valid = true;
 
     const state = getContext( 'state'); // store
@@ -25,16 +25,15 @@
         return valid;
     }
 
-    function onInput( event ) {
-    }
     onMount( () => { // catch input and register validator
-        element.addEventListener( 'input', onInput );
         if( validator ) $state.validators.push( validate ); // add this.validate with it's context
     });
     onDestroy( () => { // remove validator
         let index = $state.validators.indexOf( validate );
         if( index >= 0 ) $state.validators.splice( index, 1 ); // remove this validator;
     });
+
+    value = Number( value );
 
 </script>
 

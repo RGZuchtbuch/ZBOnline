@@ -39,7 +39,7 @@ class Router {
 
 
 		$app->get(   '/breeder/{id}/pair', 'App\controller\Breeder::pairs');
-		$app->get(   '/breeder/{id}/year/{year}/pair', 'App\controller\Breeder::yearPair'); // USE FOR PARENT PAIR!
+		$app->get(   '/breeder/{id}/year/{year}/pair', 'App\controller\Breeder::yearPairs'); // USE FOR PARENT PAIR!
 
 		// get /color not supported, too much data
 		$app->get(   '/color/{id}', 		'App\controller\::get');

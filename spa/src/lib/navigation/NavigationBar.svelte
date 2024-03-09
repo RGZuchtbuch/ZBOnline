@@ -36,7 +36,6 @@
 
     setInterval( expired, 1000 );
 
-    $: console.log( 'user', $user );
 </script>
 
 <div class='w-full border border-gray-400 bg-header px-2 py-1 flex flex-row gap-2 text-white no-print'>

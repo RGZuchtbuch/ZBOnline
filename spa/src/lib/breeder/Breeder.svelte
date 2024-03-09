@@ -38,19 +38,17 @@
 </script>
 
 {#if breeder}
-    <Route path='/' redirect={route.match+'/meldungen'} />
+    <Route path='/' redirect={route.match+'/meldung'} />
 
     <Route path='/daten' let:meta>
         <BreederDetails {breeder} />
     </Route>
-    <Route path='/meldungen/*' let:meta>
+    <Route path='/meldung/*' let:meta>
         <Route path='/' let:meta>
             <BreederPairs breederId={meta.params.breederId} />
         </Route>
 
-        <Route path='/:pairId' let:meta> <Pair params={meta.params}/></Route>
+        <Route path='/:pairId' let:meta> <Pair id={meta.params.pairId} districtId={meta.params.districtId} breederId={meta.params.breederId}/></Route>
     </Route>
-
-
 
 {/if}

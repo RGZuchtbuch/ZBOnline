@@ -4,6 +4,7 @@
     import { slide } from 'svelte/transition';
     import dic from '../../js/dictionairy.js';
     import {active, meta, router, Route} from 'tinro';
+    import validator from '../../js/validator.js';
 
     import {user} from "../../js/store.js";
     import api from '../../js/api.js';
@@ -12,35 +13,37 @@
     import Form from '../common/form/Form.svelte';
     import FormStatus from '../common/form/Status.svelte';
     import PairHead from "./Head.svelte";
-    import PairBreed from './Breed.svelte';
     import PairBroods from './Broods.svelte';
     import PairLay from './Lay.svelte';
-    import PairElders from './Parents.svelte';
+    import PairParents from './Parents.svelte';
     import PairShow from './Show.svelte';
     import PairNotes from './Notes.svelte';
+    import {newBreed} from "../../js/template.js";
 
     //import {isNumber} from "chart.js/helpers";
 
 //    export let id;
-    export let params;
+    export let id = 0;
+    export let districtId = null;
+    export let breederId = null;
 
     let pair = null;
+    let breeder = null;
     let changed = false;
     let invalid = false;
     let layer = true;
 
     let disabled = true;
 
-    const invalids = {
-        head:false, breed:false, elders:false, lay:false, broods:false, show:false, notes:false
-    }
+    const route = meta();
 
-    function newPair( districtId, breederId )  {
+    function newPair()  {
+        console.log( 'From route', districtId, breederId );
         return {
             id: 0, t:9,
             breederId:breederId, districtId:districtId, year: new Date().getFullYear(), group: 'I',
             sectionId: 4, breedId: 1024, colorId: 8543,
-            name: 'A', paired: '2023-01-01', notes: 'Notiezen :',
+            name: 'Neu', paired: '2023-01-01', notes: 'Info...',
             parents: [],
             lay: { id:0, pairId:0, start:null, end:null, eggs:null, weight:null},
             broods: [],
@@ -67,42 +70,30 @@
         }
     }
 
-    function loadPair( id ) {
-        if( id > 0 ) { // existing, note id could be '0' from param
+    function updatePair( districtId, breederId, id ) {
+        if( id > 0 && breederId > 0 ) { // existing, note id could be '0' from param
             api.pair.get( id ).then( response => {
                 pair = response.pair;
-                changed = false;
-                invalid = false;
+                api.breeder.get( pair.breederId ).then( response => {
+                    pair.breeder = response.breeder;
+                });
             });
         } else { // new
-            pair = newPair( Number( params.districtId ), Number( params.breederId ) );
+            pair = newPair();
+            api.breeder.get( pair.breederId ).then( response => {
+                pair.breeder = response.breeder;
+            });
             disabled = false; // ready to edit
         }
     }
 
-    function update( params ) {
-        loadPair( params.pairId ); // async
-    }
-
-    function onInput( event ) { // only for signalling changes, as input is faster that sveltes value update !
-        changed = true;
-    }
-
-    // TODO should become new form
-    function validate() {
-        if( pair ) {
-            invalid = false;
-            for (const key in invalids) {
-                invalid |= invalids[key];
-            }
-        }
-    }
 
     onMount( () => {
     })
 
-    $: validate( invalids );
-    $: update( params );
+//    $: validate( invalids );
+    $: updatePair( districtId, breederId, id );
+
 
 </script>
 
@@ -125,25 +116,23 @@
                 </div>
 
 
-                <PairHead bind:pair={pair} bind:invalid={invalids.head} {disabled}/>
+                <PairHead bind:pair={pair}/>
 
-                <PairBreed bind:pair={pair} bind:invalid={invalids.breed} {disabled}/>
+                {#if pair.sectionId && pair.breedId && ( pair.colorId || pair.sectionId === 5 ) }
+                    <div  transition:slide>
 
-                {#if pair.sectionId }
+                        <PairParents bind:pair={pair} />
+                        {#if pair.sectionId !== 5} <!-- Layers -->
+                            <PairLay bind:pair={pair} />
+                        {/if}
+                        <PairBroods bind:pair={pair} />
+                    <!--
 
-                    <PairElders bind:pair={pair} bind:invalid={invalids.elders} {disabled}/>
-
-                    {#if pair.sectionId !== 5}
-                        <PairLay bind:pair={pair} bind:invalid={invalids.lay} {disabled}/>
-                    {/if}
-
-                    <PairBroods bind:pair={pair} bind:invalid={invalids.broods} {disabled} />
-
-                    <PairShow bind:pair={pair} bind:invalid={invalids.show} {disabled} />
-
-                    <PairNotes bind:notes={pair.notes} bind:invalid={invalids.notes} {disabled} />
-
+                        <PairShow bind:pair={pair} />
+                     -->
+                    </div>
                 {/if}
+                <PairNotes bind:notes={pair.notes} {disabled} />
 
 
                 {#if ! disabled}

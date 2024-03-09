@@ -31,8 +31,8 @@
     {#if districtId && breederId && breeder}
         <h4 class='whitespace-nowrap'> Züchter {txt(breeder.firstname).charAt(0)}. {txt(breeder.infix)} {txt(breeder.lastname)} </h4>
         <ul>
-            <li> <a href={route.match+'/meldungen'} title='Zur Züchter Daten'>→ Meldungen </a> </li>
-            <li> <a href={route.match+'/meldungen/0'} title='Zur Züchter Daten'>→ Melden </a> </li>
+            <li> <a href={route.match+'/meldung'} title='Zur Züchter Daten'>→ Meldungen </a> </li>
+            <li> <a href={route.match+'/meldung/0'} title='Zur Züchter Daten'>→ Melden </a> </li>
             <li> <a href={route.match+'/daten'} title='Zur Züchter Daten'>→ Daten </a> </li>
         </ul>
     {/if}

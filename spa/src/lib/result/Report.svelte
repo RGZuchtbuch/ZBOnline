@@ -73,7 +73,6 @@
     }
 
     function calcTotals( results ) {
-        console.log( 'Calculating Results', results )
         if( results ) {
             const resultsSum = { breeders:0, pairs:0, layDames:0, layers:0, layShould:0, layEggs:0, layWeighters:0, layWeightShould:0, layWeight:0, brooders:0, broodEggs:0, broodFertile:0, broodHatched:0, broodChicks:0, broodResult:0, showers:0, showCount:0, showScore:0 };
             for( const section of results.sections ) {
@@ -100,11 +99,9 @@
                     subsection.total = avgTotal( subsectionSum );
                 }
                 section.total = avgTotal( sectionSum );
-                console.log( 'Section total', section);
             }
             results.total = avgTotal( resultsSum );
         }
-        console.log( 'Calculated Results', results )
     }
 
     function onSection( id ) {
@@ -134,8 +131,6 @@
     });
 
     $: calcTotals( report );
-
-    console.log( "Report", report );
 
 </script>
 

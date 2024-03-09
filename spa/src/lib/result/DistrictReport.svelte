@@ -20,8 +20,6 @@
             })
             api.district.report.get( districtId, year ).then( response => {
                 report = response.report;
-                console.log( "DistrictReport fetched", response );
-
             })
         }
     }
@@ -32,8 +30,6 @@
     })
 
     $: handle( districtId, year );
-
-    console.log( "DistrictReport", report );
 
 </script>
 

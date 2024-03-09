@@ -39,7 +39,7 @@
 
 </script>
 
-<div class='{className} {title} bg-yellow-300'>
+<div class='{className}'>
     {#if label}
         <label class='name' for='number'>{label}</label>
     {/if}

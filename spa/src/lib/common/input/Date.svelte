@@ -1,5 +1,5 @@
 <script>
-    import { toDate, formatDate } from '../../../js/util.js'
+    import { toDate, formatDate, dat } from '../../../js/util.js'
 
     export let value; // in iso 2023-10-13
     export let label = null;
@@ -17,7 +17,7 @@
     let classname = '';
     export { classname as class }
 
-    let input = formatDate( 'D', value ); // german
+    let input = dat( value ); //
 
     let on = {
         focus: () => {},

@@ -1,4 +1,6 @@
 <script>
+
+    import TextArea from '../common/form/input/TextAreaInput.svelte';
     export let notes;
     export let disabled;
     export let invalid = false;
@@ -8,10 +10,13 @@
 </script>
 
 <div class='flex flex-col my-2'>
-    <h4>Notizen</h4>
+    <div class='flex flex-row bg-header px-2 py-1 text-center text-white'>
+        <div class='grow'>Notizen</div>
+        <div class='w-6'></div>
+    </div>
 
-    <div class='flex flex-row gap-x-1'>
-        <textarea class='grow' label={'Notizen'} bind:value={notes} {disabled}/>
+    <div class='flex flex-row p-2 gap-x-1'>
+        <TextArea class='grow' label={'Notizen'} bind:value={notes} />
     </div>
 </div>
 

@@ -1,7 +1,6 @@
 <script>
-	import {toDate} from '../../../../js/validator.js';
-	import TextInput from './TextInput.svelte';
 	import {getContext, onMount} from 'svelte';
+	import TextInput from './TextInput.svelte';
 
 	export let element = null;
 

@@ -1,16 +1,22 @@
 <script>
     import { dec, getProduction, toDate } from '../../js/util.js'
+    import validator from '../../js/validator.js';
 
-    import InputDate from '../common/input/Date.svelte';
-    import InputNumber from '../common/input/Number.svelte';
+    import InputDate from '../common/form/input/DateInput.svelte';
+    import InputNumber from '../common/form/input/NumberInput.svelte';
     import InputText from '../common/input/Text.svelte';
 
     export let pair;
-    export let invalid = false;
-    export let disabled;
+
+    const validate = {
+        start:      (v) => validator(v).date().between( (pair.year-1)+'-10-01', (pair.year)+'-09-30' ).orNull().isValid(), // 1-10 → 30-09
+        end:        (v) => validator(v).date().between( (pair.year-1)+'-10-01', (pair.year)+'-09-30' ).orNullIf( ! pair.lay.start ).isValid(), // 1-10 → 30-09
+        eggs:       (v) => validator(v).number().range( 0, 366 ).orNull().isValid(),
+        weight:     (v) => validator(v).number().range( 1.0, 9999.0 ).orNull().isValid(),
+    }
 
     function newLay() {
-        return { start:null, end:null, eggs:null, dames:null, weight:null, days:null, result:null };
+        return { pairId:pair.id, start:null, end:null, eggs:null, dames:null, weight:null, days:null, result:null };
     }
 
 
@@ -35,51 +41,37 @@
         }
     }
 
-    function update() { // pair
+    function update( pair ) { // pair
         if (!pair.lay) {
             pair.lay = newLay();
         }
         setDays();
         setProduction();
-        validate();
-    }
-
-    function validate() { // input
-        invalid =
-            ( pair.lay.start && ! pair.lay.days ) ||
-            ( pair.lay.start && ! pair.lay.eggs ) ||
-            pair.lay.eggs < 0 || pair.lay.eggs > (pair.lay.days * pair.dames) ;
-    }
-
-    function onInput( event ) {
-        //validate();
     }
 
 
     $: update( pair );
-//    $: validate( input );
-
 
 </script>
 
-<fieldset class='flex flex-col border rounded border-gray-400' on:input={onInput}>
+<fieldset class='flex flex-col border rounded border-gray-400' >
     <div class='flex flex-row bg-header px-2 py-1 text-center text-white'>
-        <div class='grow' class:invalid>Legeleistung</div>
+        <div class='grow'>Legeleistung</div>
         <div class='w-6'></div>
     </div>
 
     {#if pair.lay }
         <div class='flex flex-row p-2 gap-x-1'>
             <div class='grow flex flex-row gap-x-1'>
-                <InputDate class='w-24' label={'Gesammelt ab'} bind:value={pair.lay.start} {disabled}/>
-                <InputDate class='w-24' label={'Gesammelt bis'} bind:value={pair.lay.end} min={ pair.lay.start } error='Später als Start!' required={pair.lay.start} {disabled}/>
-                <InputNumber class='w-16' label={'# Eierzahl'} bind:value={pair.lay.eggs} min=0 max={pair.lay.days * pair.dames} error={'0 .. '+pair.lay.days * pair.dames} required={pair.lay.start} {disabled} />
-                <InputNumber class='w-16' label={'∅ Gewicht'} bind:value={pair.lay.weight} min=1 max=999 {disabled} />
+                <InputDate class='w-24' label={'Gesammelt ab'} bind:value={pair.lay.start} error='Falsches Datum' validator={validate.start} />
+                <InputDate class='w-24' label={'Gesammelt bis'} bind:value={pair.lay.end} error='Falsches Datum' validator={validate.end} />
+                <InputNumber class='w-16' label={'# Eierzahl'} bind:value={pair.lay.eggs} error={'0 .. '+pair.lay.days * pair.dames} validator={validate.eggs} />
+                <InputNumber class='w-16' label={'∅ Gewicht'} bind:value={pair.lay.weight} step={0.1} validator={validate.weight} />
             </div>
             <div class='flex flex-row gap-x-1'>
-                <InputNumber class='w-16' label='Tagen' value={pair.lay.days} disabled readonly/>
-                <InputNumber class='w-16' label='# Hennen' value={pair.dames} disabled readonly/>
-                <InputNumber class='w-16' label='Eier / Jahr' value={dec(pair.lay.production)} disabled readonly />
+                <InputNumber class='w-16' label='Tagen' value={pair.lay.days} disabled/>
+                <InputNumber class='w-16' label='# Hennen' value={pair.dames} disabled />
+                <InputNumber class='w-16' label='Eier / Jahr' value={dec(pair.lay.production, 1)} disabled />
             </div>
         </div>
     {/if}

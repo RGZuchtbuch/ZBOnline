@@ -41,7 +41,7 @@ const MINDATE = '1850-01-01';
 const MAXDATE = (new Date().getFullYear()+1) + '-11-31';
 
 const MINYEAR = 1850;
-const MAXYEAR = 2099;
+const MAXYEAR = new Date().getFullYear() + 1;
 
 const STARTYEAR = 2000;
 

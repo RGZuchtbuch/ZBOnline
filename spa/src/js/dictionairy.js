@@ -10,6 +10,7 @@ export default {
 	},
 	error: {
 		required	: 'Pflichtfeld',
+		error 		: 'Fehler',
 	},
 	label: {
 		name		: 'Name',

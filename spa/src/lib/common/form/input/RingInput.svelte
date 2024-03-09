@@ -1,5 +1,6 @@
 <script>
-	import {toRing} from '../../../../js/validator.js';
+    import dic from '../../../../js/dictionairy.js';
+	import {toRing} from '../../../../js/util.js';
 	import TextInput from './TextInput.svelte';
 
 	let inputElement = null;
@@ -10,14 +11,14 @@
 	export let title = 'Ring D19 AB 678';
 	export let label = null;
 	export let value = null;
-	export let error = '!'; // message on invalid
+	export let error = dic.error.error; // message on invalid
 	export let validator = null;
 
 	export let disabled = false;
 
 	function onBlur( event ) {
 		const tempValue = toRing( value );
-		if( tempValue ) value = tempValue.country+tempValue.year+' '+tempValue.code+' '+tempValue.number;
+		if( tempValue ) value = tempValue.country+' '+ (tempValue.year%100) +' '+tempValue.code+' '+tempValue.number;
 	}
 </script>
 

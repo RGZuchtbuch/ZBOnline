@@ -111,7 +111,7 @@ class Breeder
 		throw new HttpBadRequestException( $request, 'Bad id provided' );
 	}
 
-	public static function readPairsInYear( Request $request, Response $response, array $args ) : Response {
+	public static function yearPairs( Request $request, Response $response, array $args ) : Response {
 		$id = $args[ 'id' ] ?? null;
 		$year = $args[ 'year' ] ?? null;
 		if( is_numeric( $id ) && is_numeric( $year ) ) {

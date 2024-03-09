@@ -83,10 +83,7 @@ export default {
         },
 
         report: {
-            get: (id, year) => {
-                console.log( 'district.report');
-                return get( 'api/district/'+id+'/year/'+year+'/report' )
-            },
+            get: (id, year) => get( 'api/district/'+id+'/year/'+year+'/report' ),
         },
 
         results: { // showing results for district, all sections etc
@@ -244,7 +241,6 @@ export default {
                 if( response ) {
                     token = response.token;
                     const decToken = jwt_decode(token);
-                    console.log( 'Token', decToken );
                     decToken.user.exp = decToken.exp;
                     user.set( decToken.user ); // user or null
                     window.sessionStorage.setItem( 'token', token );

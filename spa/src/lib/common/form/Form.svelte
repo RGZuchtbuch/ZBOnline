@@ -125,6 +125,10 @@
         border-radius: 0.25em;
         padding: 0.0em 0.35em;
     }
+    form :global(.input:disabled) {
+        color: black;
+        background-color: #EEE;
+    }
     form :global(.valid) {
         border: solid 1px grey;
     }

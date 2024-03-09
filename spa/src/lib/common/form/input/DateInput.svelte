@@ -1,10 +1,9 @@
 <script>
-	import {toDate} from '../../../../js/validator.js';
-	import TextInput from './TextInput.svelte';
 	import {getContext, onMount} from 'svelte';
+	import {toDate} from '../../../../js/util.js';
+	import TextInput from './TextInput.svelte';
 
 	export let element = null;
-
 	let className = '';
 	export { className as class };
 	export let name = null;
@@ -35,11 +34,8 @@
 	}
 
 	onMount( () => {
-		console.log( 'DI E', element );
 		element.addEventListener( 'input', onInput );
 		element.addEventListener( 'blur', onBlur );
-
-		console.log( 'C', component );
 	})
 
 </script>
@@ -49,7 +45,6 @@
    bind:element={element} {name} {label} {placeholder} {title} {error} {validator} {disabled}
    on:input on:change on:focus on:blur
 />
-{value}
 
 <style>
     right {

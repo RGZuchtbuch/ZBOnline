@@ -6,6 +6,7 @@
     import dic from '../../js/dictionairy.js';
     import {user} from "../../js/store.js";
     import {txt} from '../../js/util.js';
+    import validator from '../../js/validator.js';
 
     import Page from "../common/Page.svelte";
 
@@ -18,7 +19,7 @@
     import TextAreaInput from '../common/form/input/TextAreaInput.svelte';
     import TextInput from '../common/form/input/TextInput.svelte';
     import ToggleInput from '../common/form/input/ToggleInput.svelte';
-    import validator from '../../js/validator.js';
+
 
     export let breeder;
 

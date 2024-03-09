@@ -1,9 +1,14 @@
-import {isNumber} from "chart.js/helpers";
+/**
+ * Collection of helper functions
+ */
 
+/****** MAP ******/
+
+// for use with map
 function mercY( lat ) {
     return Math.log( Math.tan( Math.PI/4 + lat/2 ) );
 }
-
+// for use with map, mercator coords ( google maps ) to pixel
 export function gpsToPx( width, height, west, east, south, north, lon, lat ) {
 
     west = west * Math.PI/180;
@@ -23,8 +28,7 @@ export function gpsToPx( width, height, west, east, south, north, lon, lat ) {
     let y = (yMax - mercY( lat ) )*yFactor;
     return { x:x, y:y };
 }
-
-
+// calc color for value in range ( map )
 export function calcColor( min, max, value, alpha = 1, blue = 0 ) {
     const relValue = (value-min)/(max-min);
     //const mid = (min+max)/2;
@@ -41,72 +45,91 @@ export function calcColor( min, max, value, alpha = 1, blue = 0 ) {
     return '#'+r.toString(16)+g.toString(16)+b.toString(16)+a.toString(16); // only 1 char per color, like '#48f7' making '#4488ff77'
 }
 
+
+
+/******* for forms and more *******/
+
+// validity check
 export function isDate( value ) {
-    let date = null;
-
-    // try convert date to 2023-08-24 format, is success, we have a valid date.
-    let match =
-        value.match(/^(3[0-1]|[12][0-9]|0[1-9]|[1-9])[\.](1[0-2]|0[1-9]|[1-9])[\.]([0-9]{2})$/) ||  // 31.01.22 D
-        value.match(/^(3[0-1]|[12][0-9]|0[1-9]|[1-9])[\-](1[0-2]|0[1-9]|[1-9])[\-]([0-9]{2})$/);    // 31-01-22 NL
-    if (match) {
-        let year = Number(match[3]); // needs to be extended to full year
-        const currentYear = Date.now().getFullYear();
-        let maxYear = ( max.getFullYear() + 1 ) % 100; // year in century
-        year = currentYear - ( currentYear + 1 ) % 100 + year - (year <= maxYear ? 0 : 100);
-        date = new Date(year, match[2] - 1, match[1]);
-    } else {
-        match =
-            value.match(/^(3[0-1]|[12][0-9]|0[1-9]|[1-9])[\.](1[0-2]|0[1-9]|[1-9])[\.]([0-9]{4})$/) ||      // 31.01.2022 D
-            value.match(/^(3[0-1]|[12][0-9]|0[1-9]|[1-9])[\-](1[0-2]|0[1-9]|[1-9])[\-]([0-9]{4})$/);        // 31-01-2022 NL
-        if (match) {
-            date = new Date(match[3], match[2]-1, match[1]);
-        } else {
-            match =
-                value.match(/^([0-9]{4})[\-\.](1[0-2]|0[1-9]|[1-9])[\-\.](3[0-1]|[12][0-9]|0[1-9]|[1-9])$/);    // 2022-7-22 ISO
-            if (match) {
-                date = new Date(match[1], match[2]-1, match[3]);
-            }
-        }
+    let date = toDate( value );
+    return date !== null;
+}
+export function isEmail( value ) {
+    if( value ) {
+        return value.match( '[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$' ) !== null; // a.a@a.aa
     }
-    return date && ! isNaN( date.valueOf() );
-
+    return false; // match failed
+}
+export function isNumber( value ) {
+    return value !== undefined && value !== null && ! isNaN(value);
+}
+export function isString( value ) {
+    return value !== undefined && value !== null;
+}
+export function isRing( value ) {
+    return toRing( value ) !== null; // match failed
 }
 
-export function toDate( input, min, max ) {
-    if( input && max ) {
-        min = new Date(min);
-        max = new Date(max);
-
-        let date = null;
-        let match =
-            input.match(/^(3[0-1]|[12][0-9]|0[1-9]|[1-9])[\.](1[0-2]|0[1-9]|[1-9])[\.]([0-9]{2})$/) ||  // 31.01.22 D
-            input.match(/^(3[0-1]|[12][0-9]|0[1-9]|[1-9])[\-](1[0-2]|0[1-9]|[1-9])[\-]([0-9]{2})$/);    // 31-01-22 NL
+// convert to type if can or null
+export function toDate( input, yearsAhead = 10 ) {
+    if( input ) {
+        let match = input.match(/^(3[0-1]|[12][0-9]|0[1-9]|[1-9])[\.\-](1[0-2]|0[1-9]|[1-9])[\.\-]([0-9]{2})$/);  // 31.01.22 D or 31-01-22
         if (match) {
-            let year = Number(match[3]);
-            let maxYear = max.getFullYear() % 100; // year in century
-            year = max.getFullYear() - maxYear + year - (year <= maxYear ? 0 : 100);
-            date = new Date(year, match[2] - 1, match[1]);
+            const year = shortToFullYear( match[3] );
+            return new Date( year, match[2] - 1, match[1]);
         } else {
             match =
-                input.match(/^(3[0-1]|[12][0-9]|0[1-9]|[1-9])[\.](1[0-2]|0[1-9]|[1-9])[\.]([0-9]{4})$/) ||      // 31.01.2022 D
-                input.match(/^(3[0-1]|[12][0-9]|0[1-9]|[1-9])[\-](1[0-2]|0[1-9]|[1-9])[\-]([0-9]{4})$/);        // 31-01-2022 NL
+                input.match(/^(3[0-1]|[12][0-9]|0[1-9]|[1-9])[\.\-](1[0-2]|0[1-9]|[1-9])[\.\-]([0-9]{4})$/);     // 31.01.2022 D or 31-01-2022 NL
             if (match) {
-                date = new Date(match[3], match[2]-1, match[1]);
+                return new Date(match[3], match[2]-1, match[1]);
             } else {
                 match =
                     input.match(/^([0-9]{4})[\-\.](1[0-2]|0[1-9]|[1-9])[\-\.](3[0-1]|[12][0-9]|0[1-9]|[1-9])$/);    // 2022-7-22 ISO
                 if (match) {
-                    date = new Date(match[1], match[2]-1, match[3]);
+                    return new Date(match[1], match[2]-1, match[3]);
                 }
             }
         }
-        if (date && date >= min && date <= max) {
-            return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate(); // iso
+    }
+    return null;
+}
+export function toNumber( value ) {
+    return value !== undefined && value !== null && ! isNaN(value) ? Number( value ) : null;
+}
+export function toRing( value ) { // returns object for ring
+    if( value ) {
+        // try eu type ring  default D '23 AZ 999' or with country 'D 23 AZ 999' or 'NL 23 H 1985' with long or short year
+
+        let match = value.match(/^(\d{2})[\ \.]*([a-zA-Z]+)[\ \.]*(\d+)$/); // 21 AZ 999
+        if (match) {
+            return {country: 'D', year: shortToFullYear(match[1]), code: match[2].toUpperCase(), number: match[3]}
+        } else {
+            match = value.match(/^([a-zA-Z]+)[\ \.]*(\d{2})[\ \.]*([a-zA-Z]+)[\ \.]*(\d+)$/); // D 21 AZ 999
+            if (match) {
+                return { country: match[1].toUpperCase(), year: shortToFullYear(match[2]), code: match[3].toUpperCase(), number: match[4] }
+            } else {
+                match = value.match(/^(\d{4})[\ \.]*([a-zA-Z]+)[\ \.]*(\d+)$/); // 2021 AZ 999
+                if (match) {
+                    return { country: 'D', year: match[1], code: match[2].toUpperCase(), number: match[3] }
+                }
+                match = value.match(/^([a-zA-Z]+)[\ \.]*(\d{4})[\ \.]*([a-zA-Z]+)[\ \.]*(\d+)$/); // D 2021 AZ 999
+                if (match) {
+                    return { country: match[1].toUpperCase(), year: match[2], code: match[3].toUpperCase(), number: match[4] }
+                }
+            }
         }
     }
-    return false;
+    return null;
+}
+export function toString( value ) {
+    return value !== undefined && value !== null ? String( value ) : null;
 }
 
+export function shortToFullYear( shortYear ) { // for use with date conversion and rings
+    const currentCentury = Math.floor( new Date().getFullYear() / 100 );
+    const tryYear = 100 * currentCentury + Number( shortYear );
+    return tryYear > MAXYEAR ? tryYear - 100 : tryYear;
+}
 export function formatDate(local, dateString ) { // local ignored for now, default to 'D'
     if( dateString ) {
         const date = new Date( dateString );
@@ -118,28 +141,7 @@ export function formatDate(local, dateString ) { // local ignored for now, defau
     return null;
 }
 
-
-export function isRing( value ) {
-    return toRing( value ) !== null; // match failed
-}
-// get ring parts from ring string
-export function toRing( value ) {
-    if( value ) {
-        // try eu type ring 'D 23 AZ 999' or 'NL 23 H 1985'
-        let match = value.match(/^([a-zA-Z]+)[\ \.]*(\d{2})[\ \.]*([a-zA-Z]+)[\ \.]*(\d+)$/); // D 21 AZ 999
-        if (match) {
-            return {country: match[1], year: match[2], code: match[3], number: match[4]}
-        } else { // try defaul D ring
-            match = value.match(/^(\d\d?)[\ \.]*([a-zA-Z]+)[\ \.]*(\d+)$/); // 21 AZ 999
-            if (match) {
-                return {country: 'D', year: match[1], code: match[2], number: match[3]}
-            }
-        }
-    }
-    return null;
-}
-
-
+// eggs count to egg production, experimental
 export function getProduction( days, eggs, dames ) {
     let fit;
     if( days > 365 ) {
@@ -156,26 +158,15 @@ export function getProduction( days, eggs, dames ) {
     return null;
 }
 
-export function printDate( date ) {
-    if( date ) {
-        date = new Date(date);
-        return date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
-    }
-    return null;
-}
 
-//export function printPct( value, decimals = 0 ) {
-//    return (value*100).toFixed( decimals )+'%';
-//}
-
-export function dat( date ) { // expecting yyyy-mm-dd
+/****** print helpers ******/
+export function dat( date ) { // expecting yyyy-mm-dd from db
     if( date ) {
         date = new Date(date);
         return date.toLocaleDateString('de-DE', {year: 'numeric', month: '2-digit', day: '2-digit'});
     }
     return '';
 }
-
 export function dec( value, decimals = 0 ) {
     if( value == null ) { // incl undefined
         return '';
@@ -183,18 +174,18 @@ export function dec( value, decimals = 0 ) {
     value = +value; // make sure its a number
     return value.toFixed( decimals )
 }
-
 export function pct(a, b, decimals=1 ) {
     if( a != null && b != null && b !== 0 ) {
         return (100 * a / b).toFixed( decimals )+'﹪';
     }
     return '';
 }
-
 export function txt( text ) {
     return text ? text : '';
 }
 
+/* moved to validator.js */
+//TODO remove
 export function validator( value ) {
     let valid = true;
     const worker = {
@@ -212,7 +203,6 @@ export function validator( value ) {
         },
         date:  () => {
             valid &= ! isNaN( Date.parse( value ) );
-            console.log( "Date", value, valid, Date.parse( value ) );
             return worker;
         },
         ring: () => {
@@ -246,3 +236,4 @@ export function validator( value ) {
     return worker;
 
 }
+

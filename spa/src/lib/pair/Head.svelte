@@ -1,32 +1,29 @@
 <script>
 
-    import {afterUpdate, onMount} from 'svelte';
+    import {afterUpdate, getContext, onDestroy, onMount} from 'svelte';
     import {active, meta, router, Route} from 'tinro';
-
     import {txt} from '../../js/util.js';
+    import validator from '../../js/validator.js';
 
-    import InputDate   from '../common/input/Date.svelte';
-    import InputNumber from '../common/input/Number.svelte';
-    import InputText   from '../common/input/Text.svelte';
-    import InputRing from '../common/input/Ring.svelte';
-    import Select from '../common/input/Select.svelte';
-    import ReportBreed from './Breed.svelte';
-    import ReportBroods from './Broods.svelte';
-    import ReportLay from './Lay.svelte';
-    import ReportNotes from './Notes.svelte';
-    import ReportParents from './Parents.svelte';
-    import ReportShow from './Show.svelte';
-    import Page from "../common/Page.svelte";
+    import InputNumber from '../common/form/input/NumberInput.svelte';
+    import InputText   from '../common/form/input/TextInput.svelte';
+    import Select from '../common/form/input/Select.svelte';
+
+    import BreedSelect from '../common/form/input/BreedSelect.svelte';
 
 //    export let id;
     export let pair;
-    export let disabled = true;
-    export let invalid = false;
-
-    let layer = pair.sectionId === 5;
+//    export let disabled = true;
 
     let needFocus = true;
-    let focusElement;
+    let focusElement = null;
+
+    const state = getContext( 'state'); // form state
+
+    const validate = {
+        year:       (v) => validator(v).number().range(MINYEAR, MAXYEAR).isValid(),
+        name:       (v) => validator(v).string().length(1,16).isValid(),
+    }
 
     onMount( () => {
     })
@@ -44,14 +41,8 @@
         }
     }
 
-    function validate( pair ) {
-        invalid = ! pair.year || pair.year < MINYEAR || pair.year > MAXYEAR;
-        invalid |= ! pair.name || pair.name.length < 1;
-        invalid |= ! pair.group;
-    }
-
-    $: setFocus( disabled ) // on switch to ! disabled
-    $: validate( pair );
+//    $: setFocus( disabled ) // on switch to ! disabled
+//    $: validate( pair );
 
 </script>
 
@@ -59,20 +50,21 @@
 <div class='flex flex-col border rounded border-gray-400'>
     <div class='flex flex-row bg-header px-2 py-1 text-center text-white'>
         <div class='grow'>Stamm / Paar (#{pair.id})</div>
-        <div class='w-6'>{invalid}</div>
+        <div class='w-6'></div>
     </div>
 
 
-    <div class='flex flex-row p-2 gap-x-1'>
-        <InputText class='w-64' label='Züchter' value={txt(pair.breeder.firstname)+' '+txt(pair.breeder.infix)+' '+txt(pair.breeder.lastname)} readonly disabled/>
-        <InputNumber class='w-20' bind:element={focusElement} label='Jahr' name='year' bind:value={pair.year} min={MINYEAR} max={MAXYEAR} required />
-        <InputText class='w-20' label='Name' bind:value={pair.name} error='Pflichtfeld' spellcheck=false required />
-        <Select class='w-20' label='ZB Gruppe' bind:value={pair.group} placeholder='?' required>
+    <div class='flex flex-row px-2 gap-x-1'>
+        <InputText class='w-64' label='Züchter' value={txt(pair.breeder.firstname)+' '+txt(pair.breeder.infix)+' '+txt(pair.breeder.lastname)} disabled/>
+        <InputNumber class='w-20' bind:element={focusElement} label='Jahr' name='year' bind:value={pair.year} validator={validate.year}/>
+        <InputText class='w-20' label='Name' bind:value={pair.name} error='* 1..16 bs' validator={validate.name} />
+        <Select class='w-20' label='ZB Gruppe' bind:value={pair.group} >
             {#each ['I', 'II', 'III' ] as group}
                 <option value={group} selected={group === pair.group}>{group}</option>
             {/each}
         </Select>
     </div>
+    <BreedSelect class='flex flex-row p-2 gap-x-1' bind:value={pair} />
 </div>
 
 <style>
