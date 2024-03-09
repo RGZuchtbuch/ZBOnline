@@ -1,5 +1,6 @@
 <script>
     import { getContext,  onDestroy, onMount } from 'svelte';
+    import dic from '../../../../js/dictionairy.js';
 
     export let element = null;
 
@@ -10,7 +11,7 @@
     export let label = null;
     export let value = null;
     export let placeholder = null;
-    export let error = 'Invalid'; // message on invalid
+    export let error = dic.error.error; // message on invalid
     export let validator = null;
     export let disabled = false;
     let valid = true;

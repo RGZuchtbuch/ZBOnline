@@ -2,6 +2,7 @@
     import api from '../../js/api.js';
     import {dec, pct, toRing} from '../../js/util.js';
     import validator from '../../js/validator.js';
+
     import InputNumber from '../common/form/input/NumberInput.svelte';
     import InputRing from '../common/form/input/RingInput.svelte';
     import InputText from '../common/form/input/TextInput.svelte';
@@ -12,10 +13,8 @@
     export let parent; // target
     export let pair;
     export let nolabel = false; // for list of
-    //export let disabled = true;
 
     let ringObject = null; // to only load parentsPairs if year changed
-
     let ancestorPairs = null; // optional parent pairs
     let parentsPairResults = { eggs:null, weight:null, fertility:null, hatching:null, score:null }; // and their results
 

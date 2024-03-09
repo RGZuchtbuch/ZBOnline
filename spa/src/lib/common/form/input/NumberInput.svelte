@@ -1,5 +1,6 @@
 <script>
     import { getContext,  onDestroy, onMount } from 'svelte';
+    import dic from '../../../../js/dictionairy.js';
 
     export let element = null;
 
@@ -12,7 +13,7 @@
     export let step = 1;
     export let min = null; // allow for numbers >= min
     export let max = null; // allow for numbers <= max
-    export let error = 'Invalid'; // message on invalid
+    export let error = 'Fehler'; // message on invalid
     export let validator = null;
     export let disabled = false;
 
@@ -32,8 +33,6 @@
         let index = $state.validators.indexOf( validate );
         if( index >= 0 ) $state.validators.splice( index, 1 ); // remove this validator;
     });
-
-    value = Number( value );
 
 </script>
 

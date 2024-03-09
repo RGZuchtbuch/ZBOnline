@@ -6,24 +6,19 @@
 
 //    let layer;
 
-    function newBrood( pairId ) {
-        return { pairId:pairId, start:null, eggs:null, fertile:null, hatched:null, ringed:null, chicks:[ newChick( pairId, 0 ), newChick( pairId, 0 ) ] };
+    function addBrood( pairId ) {
+        const brood = { pairId:pairId, start:null, eggs:null, fertile:null, hatched:null, ringed:null, chicks:[ newChick( pairId, 0 ), newChick( pairId, 0 ) ] };
+        pair.broods = [ ...pair.broods, brood ];
+        console.log( 'Broods', brood, pair.broods );
     }
 
     function newChick( pairId, broodId ) {
         return {pairId:pairId, broodId:broodId, ring:null};
     }
 
-    function addBrood( pairId) {
-        let brood = newBrood( pairId );
-        pair.broods = [...pair.broods, brood];
-    }
-
     function update( pair ) {
-//        layer = pair.sectionId !== 5; // type of brood depends on this
-        //if( ! pair.broods ) pair.broods = [];
         while( pair.broods.length < 2 ) { // want at least 2
-            addBrood( pair.id );
+            addBrood( pair.id )
         }
 /*
         if( pair.sectionId !== 5 ) {
@@ -38,6 +33,8 @@
 
     $: update( pair );
 
+    console.log( 'BS', pair.broods );
+
 </script>
 
 
@@ -50,7 +47,7 @@
     <div class='flex flex-col p-2 gap-x-1'>
         {#if pair.broods}
             {#each pair.broods as brood, index }
-                <Brood {index} {brood} {pair} nolabel={index>0}/>
+                <Brood bind:brood={brood} {index} {pair} nolabel={index>0}/>
             {/each}
         {/if}
     </div>

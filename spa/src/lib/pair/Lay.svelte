@@ -10,7 +10,7 @@
 
     const validate = {
         start:      (v) => validator(v).date().between( (pair.year-1)+'-10-01', (pair.year)+'-09-30' ).orNull().isValid(), // 1-10 → 30-09
-        end:        (v) => validator(v).date().between( (pair.year-1)+'-10-01', (pair.year)+'-09-30' ).orNullIf( ! pair.lay.start ).isValid(), // 1-10 → 30-09
+        end:        (v) => validator(v).date().between( pair.lay.start, (pair.year)+'-09-30' ).orNullIf( ! pair.lay.start ).isValid(), // 1-10 → 30-09
         eggs:       (v) => validator(v).number().range( 0, 366 ).orNull().isValid(),
         weight:     (v) => validator(v).number().range( 1.0, 9999.0 ).orNull().isValid(),
     }

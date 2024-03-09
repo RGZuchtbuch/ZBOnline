@@ -126,9 +126,9 @@
                             <PairLay bind:pair={pair} />
                         {/if}
                         <PairBroods bind:pair={pair} />
+                        <PairShow bind:pair={pair} />
                     <!--
 
-                        <PairShow bind:pair={pair} />
                      -->
                     </div>
                 {/if}

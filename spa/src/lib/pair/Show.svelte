@@ -1,16 +1,17 @@
 <script>
     import {onMount} from "svelte";
-    import InputNumber from '../common/input/Number.svelte';
-    import InputText from '../common/input/Text.svelte';
+    import validator from '../../js/validator.js';
+
+    import InputNumber from '../common/form/input/NumberInput.svelte';
 
     export let pair;
-    export let disabled;
-    export let invalid = false;
 
     let count = 0;
     let avgScore = null;
 
-
+    const validate = {
+        count:      v => validator(v).number().range( 0, 999 ).orNull().isValid(),
+    }
 
 
     function init() {
@@ -21,7 +22,6 @@
     }
 
     function updateResult() {
-        invalid = false; // until proven otherwise
         count = 0; // count nr of scores
         let total = 0; // for scores * points
         let keys = [89, 90, 91, 92, 3, 94, 95, 96, 97]; // dont need all keys from show !
@@ -33,12 +33,9 @@
             } else {
                 //pair.show[key] = null; //no value or 0
             }
-            if( value !== null && ( value < 0 || value > 999 ) ) {
-                invalid = true;
-            }
         }
         avgScore = count > 0 ? total / count : null; // to average score
-        pair = pair;
+        pair = pair; // rerender
     }
 
     function onInput( event ) {
@@ -52,24 +49,24 @@
 
 <fieldset class='flex flex-col border rounded border-gray-400' on:input={onInput}>
     <div class='flex flex-row bg-header px-2 py-1 text-center text-white'>
-        <div class='grow' class:invalid>Schauleistung</div>
+        <div class='grow'>Schauleistung</div>
         <div class='w-6'></div>
     </div>
 
     <div class='grow flex flex-row p-2 gap-x-1'>
         {#if pair.show}
-            <InputNumber class='w-16' label={'U/O'} name='count' bind:value={pair.show['89']} min=0 max=999 />
-            <InputNumber class='w-16' label={'90'} name='count' bind:value={pair.show['90']} min=0 max=999 {disabled}/>
-            <InputNumber class='w-16' label={'91'} name='count' bind:value={pair.show['91']} min=0 max=999 {disabled}/>
-            <InputNumber class='w-16' label={'92'} name='count' bind:value={pair.show['92']} min=0 max=999 {disabled}/>
-            <InputNumber class='w-16' label={'93'} name='count' bind:value={pair.show['93']} min=0 max=999 {disabled}/>
-            <InputNumber class='w-16' label={'94'} name='count' bind:value={pair.show['94']} min=0 max=999 {disabled}/>
-            <InputNumber class='w-16' label={'95'} name='count' bind:value={pair.show['95']} min=0 max=999 {disabled}/>
-            <InputNumber class='w-16' label={'96'} name='count' bind:value={pair.show['96']} min=0 max=999 {disabled}/>
-            <InputNumber class='w-16' label={'97'} name='count' bind:value={pair.show['97']} min=0 max=999 {disabled}/>
+            <InputNumber class='w-16 pr-2' label={'U/O'} bind:value={pair.show['89']} validator={validate.count} />
+            <InputNumber class='w-16' label={'90'} bind:value={pair.show['90']} validator={validate.count} />
+            <InputNumber class='w-16' label={'91'} bind:value={pair.show['91']} validator={validate.count} />
+            <InputNumber class='w-16' label={'92'} bind:value={pair.show['92']} validator={validate.count} />
+            <InputNumber class='w-16' label={'93'} bind:value={pair.show['93']} validator={validate.count} />
+            <InputNumber class='w-16' label={'94'} bind:value={pair.show['94']} validator={validate.count} />
+            <InputNumber class='w-16' label={'95'} bind:value={pair.show['95']} validator={validate.count} />
+            <InputNumber class='w-16' label={'96'} bind:value={pair.show['96']} validator={validate.count} />
+            <InputNumber class='w-16' label={'97'} bind:value={pair.show['97']} validator={validate.count} />
             <div class='grow'></div>
-            <InputNumber class='w-16' label={'# Tiere'} value={ count } disabled readonly />
-            <InputNumber class='w-16' label={'∅ Note'} value={ avgScore ? avgScore.toFixed(1) : null } disabled readonly />
+            <InputNumber class='w-16' label={'# Tiere'} value={ count } disabled />
+            <InputNumber class='w-16' label={'∅ Note'} value={ avgScore ? avgScore.toFixed(1) : null } disabled />
         {/if}
     </div>
 </fieldset>

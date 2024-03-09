@@ -17,9 +17,9 @@
     const validate = {
         date:      (v) => validator(v).date().between( (pair.year-1)+'-12-01', (pair.year)+'-09-30' ).orNull().isValid(), // 1-10 → 30-09
         eggs:      (v) => validator(v).number().range( 1, 999 ).orNull().isValid(),
-        fertile:   (v) => validator(v).number().if( v <= brood.eggs ).isValid(),
-        hatched:   (v) => validator(v).number().if( v <= brood.fertile !== null ? brood.fertile : brood.eggs ).isValid(),
-        ringed:    (v) => validator(v).date().between( (pair.year)+'-01-01', (pair.year)+'-09-30' ).orNull().isValid(), // 1-10 → 30-09
+        fertile:   (v) => validator(v).number().range( 0, brood.eggs ).orNull().isValid(),
+        hatched:   (v) => validator(v).number().range( 0, brood.fertile === null ? brood.eggs : brood.fertile ).orNullIf( brood.eggs === null ).isValid(),
+        ringed:    (v) => validator(v).date().if( brood.hatched > 0 ).between( brood.start, (pair.year)+'-09-30' ).orNull().isValid(), // 1-10 → 30-09
         ring1:     (v) => validator(v).ring().if( brood.hatched >= 1 ).orNull().isValid(),
         ring2:     (v) => validator(v).ring().if( brood.hatched >= 2 ).orNull().isValid(),
     }
@@ -48,10 +48,10 @@
         <div class='grow flex flex-row gap-x-1'>
             <InputText class='w-8' label={nolabel ? '' : '#'} value={index+1} disabled />
             <InputDate class='w-24' label={nolabel ? '' : 'Am'} bind:value={brood.start} validator={validate.date} />
-            <InputNumber class='w-16' label={nolabel ? '' : 'Eingelegt*'} bind:value={brood.eggs} validator={validate.eggs} />{brood.eggs}
-            <InputNumber class='w-16' label={nolabel ? '' : 'Befruchtet'} bind:value={brood.fertile} error={0+' - '+brood.eggs} validator={validate.fertile} />
-            <InputNumber class='w-16' label={nolabel ? '' : 'Geschlüpft*'} bind:value={brood.hatched} error={0+' - '+brood.fertile} validator={validate.hatched} />
-            <InputDate class='w-20' label={nolabel ? '' : 'Beringt am'} bind:value={brood.ringed} validator={validate.ringed} />
+            <InputNumber class='w-16' label={nolabel ? '' : 'Eingelegt*'} bind:value={brood.eggs} validator={validate.eggs} />
+            <InputNumber class='w-16' label={nolabel ? '' : 'Befruchtet'} bind:value={brood.fertile} error='Fehler' validator={validate.fertile} />
+            <InputNumber class='w-16' label={nolabel ? '' : 'Geschlüpft*'} bind:value={brood.hatched} error='Fehler' validator={validate.hatched} />
+            <InputDate class='w-24 pl-2' label={nolabel ? '' : 'Beringt am'} bind:value={brood.ringed} validator={validate.ringed} />
         </div>
         <div class='flex flex-row gap-x-1'>
             <InputText class='w-16' label={nolabel ? '' : 'Befruchtung'} value={ getFertility( brood.eggs, brood.fertile )} disabled />

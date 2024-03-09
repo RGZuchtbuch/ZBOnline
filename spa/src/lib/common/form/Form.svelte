@@ -128,6 +128,7 @@
     form :global(.input:disabled) {
         color: black;
         background-color: #EEE;
+        border: solid 1px #DDD;
     }
     form :global(.valid) {
         border: solid 1px grey;

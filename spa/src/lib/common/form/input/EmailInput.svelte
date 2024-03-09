@@ -1,5 +1,6 @@
 <script>
 	import {getContext, onMount} from 'svelte';
+    import dic from '../../../../js/dictionairy.js';
 	import TextInput from './TextInput.svelte';
 
 	export let element = null;
@@ -11,7 +12,7 @@
 	export let label = null;
 	export let value = null;
 	export let placeholder = null;
-	export let error = 'invalid format'; // message on invalid
+	export let error = dic.error.error; // message on invalid
 	export let validator = null;
 
 	export let disabled = false;
