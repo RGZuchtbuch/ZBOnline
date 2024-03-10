@@ -12,12 +12,12 @@
 //    let input;
 
     const validate = {
-        date:       (v) => validator(v).date().isValid(),
+        date:       (v) => validator(v).date().orNull().isValid(),
     }
 
     function addParent() {
 //        if( ! pair.parents ) pair.parents = []; // needed ?
-        pair.parents = [...pair.parents, { pairId:pair.id, sex:pair.parents.length === 0 ? '1.0' : '0.1', ring:null, score:null, parentsPair:null } ];
+        pair.parents = [...pair.parents, { pairId:pair.id, sex:pair.parents.length === 0 ? '1.0' : '0.1', ring:null, score:null, parentsPairId:null } ];
     }
 
     function setSiresAndDames( pair ) {

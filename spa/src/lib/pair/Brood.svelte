@@ -39,8 +39,6 @@
         }
     }
 
-    console.log( 'B', brood )
-
 </script>
 
 <fieldset class='flex flex-row gap-x-1'>

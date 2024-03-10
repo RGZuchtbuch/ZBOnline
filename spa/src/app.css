@@ -29,7 +29,6 @@ h5 {
 
 small {
     @apply text-xs;
-    @apply text-xs;
 }
 
 hr {
@@ -57,16 +56,16 @@ dd {
     line-height: 0.9rem;
     @apply pl-1 h-4 text-gray-600 whitespace-nowrap;
 }
-
+/*
 input, select, option {
     @apply h-6 py-0 px-1;
 }
-
-
+*/
+/*
 input, textarea, select {
     @apply border-b border-r border-gray-400 rounded mb-1 bg-gray-50;
 }
-
+*/
 input:enabled, textarea:enabled, select:enabled {
     @apply bg-white border-green-400;
 }

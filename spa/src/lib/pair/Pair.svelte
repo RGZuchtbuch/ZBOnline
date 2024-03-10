@@ -18,12 +18,8 @@
     import PairParents from './Parents.svelte';
     import PairShow from './Show.svelte';
     import PairNotes from './Notes.svelte';
-    import {newBreed} from "../../js/template.js";
 
-    //import {isNumber} from "chart.js/helpers";
-
-//    export let id;
-    export let id = 0;
+    export let id = 0; // pairId
     export let districtId = null;
     export let breederId = null;
 
@@ -40,12 +36,12 @@
     function newPair()  {
         console.log( 'From route', districtId, breederId );
         return {
-            id: 0, t:9,
+            id: 0,
             breederId:breederId, districtId:districtId, year: new Date().getFullYear(), group: 'I',
-            sectionId: 4, breedId: 1024, colorId: 8543,
+            sectionId: 12, breedId: 1024, colorId: 8543,
             name: 'Neu', paired: '2023-01-01', notes: 'Info...',
             parents: [],
-            lay: { id:0, pairId:0, start:null, end:null, eggs:null, weight:null},
+            lay: { start:null, end:null, eggs:null, weight:null },
             broods: [],
             show: { 89:null, 90:null, 91:null, 92:null, 93:null, 94:null, 95:null, 96:null, 97:null },
             breeder: { firstname:null, infix:null, lastname:null },
@@ -57,18 +53,20 @@
     }
 
     function onSubmit() {
-        disabled = true;
-        if( pair.id > 0 ) {
+        //disabled = true;
+        // TODO check on delete like by having a checkbox for delete
+        if( pair.id > 0 ) { // existing
             api.pair.put( pair.id, pair ).then( response => {
                 changed = false;
             });
-        } else{
+        } else { // new
             api.pair.post( pair ).then(response => {
                 pair.id = response.id;
                 changed = false;
             });
         }
     }
+
 
     function updatePair( districtId, breederId, id ) {
         if( id > 0 && breederId > 0 ) { // existing, note id could be '0' from param
@@ -109,7 +107,7 @@
         </div>
 
         <div slot='body' class='pl-4' transition:slide>
-            <Form>
+            <Form {disabled} on:submit={onSubmit}>
                 <div class='flex'>
                     <div>Züchter Meldung ändern</div>
                     <FormStatus />

@@ -9,7 +9,6 @@
     function addBrood( pairId ) {
         const brood = { pairId:pairId, start:null, eggs:null, fertile:null, hatched:null, ringed:null, chicks:[ newChick( pairId, 0 ), newChick( pairId, 0 ) ] };
         pair.broods = [ ...pair.broods, brood ];
-        console.log( 'Broods', brood, pair.broods );
     }
 
     function newChick( pairId, broodId ) {
@@ -20,20 +19,9 @@
         while( pair.broods.length < 2 ) { // want at least 2
             addBrood( pair.id )
         }
-/*
-        if( pair.sectionId !== 5 ) {
-            for (const brood of pair.broods) {
-                while (brood.chicks.length < 2) {
-                    brood.chicks = [...brood.chicks, newChick( pair.id, brood.id )]
-                }
-            }
-        }
- */
     }
 
     $: update( pair );
-
-    console.log( 'BS', pair.broods );
 
 </script>
 

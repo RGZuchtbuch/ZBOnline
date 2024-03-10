@@ -62,8 +62,8 @@ class Router {
 		$app->get(	'/district/{id}/breed/{breed}/results', 'App\controller\District::breedResults' ); // having year, section and group in query. For obmann edit
 
 		$app->get(	'/pair/{id}', 'App\controller\Pair::get' ); // for selecting pair for parent ring in report
-		$app->post(	'/pair', 'App\controller\Pair::post' );
-		// no put.
+        $app->post(	'/pair', 'App\controller\Pair::post' );
+        $app->put(	'/pair/{id}', 'App\controller\Pair::post' ); // same as post, correct
 		$app->delete('/pair/{id}', 'App\controller\Pair::delete' );
 
 

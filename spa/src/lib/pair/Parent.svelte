@@ -16,7 +16,8 @@
 
     let ringObject = null; // to only load parentsPairs if year changed
     let ancestorPairs = null; // optional parent pairs
-    let parentsPairResults = { eggs:null, weight:null, fertility:null, hatching:null, score:null }; // and their results
+    let ancestorPair = null;
+//    let parentsPairResults = { eggs:null, weight:null, fertility:null, hatching:null, score:null }; // and their results
 
 
     const validate = {
@@ -25,17 +26,31 @@
         points:     (v) => validator(v).number().range( 89.0, 97.0 ).orNull().isValid(),
     }
 
-    function getPotentialAncestorPairs( ring ) {
+    function getAncestorPairs( ring ) {
         let newRingObject = toRing( ring ); // decode input
         if( newRingObject && ( ! ringObject || ringObject.year !== newRingObject.year ) ) { // first time or valid ring and changed
             ringObject = newRingObject;
             api.breeder.year.pairs.get(pair.breederId, ringObject.year).then(response => {
                 ancestorPairs = response.pairs;
+                console.log( ancestorPairs );
             })
         }
     }
 
-    $: getPotentialAncestorPairs( parent.ring );
+    function getAncestor( ancestorPairs, parentsPairId ) {
+        if( parentsPairId && ancestorPairs ) {
+            for (const pair of ancestorPairs) {
+                if (pair.id === parentsPairId) {
+                    console.log("AnPair", pair );
+                    return pair;
+                }
+            }
+        }
+        return null; // not found
+    }
+
+    $: getAncestorPairs( parent.ring );
+    $: ancestorPair = getAncestor( ancestorPairs, parent.parentsPairId ); // after loaded ancestors or changed ancestorId
 
 </script>
 
@@ -49,7 +64,7 @@
             {/each}
         </Select>
         <InputRing class='w-32' label={nolabel ? '' : 'Ring [D J Bs Nr]'} bind:value={parent.ring} validator={validate.ring}/>
-        <InputNumber class='w-16' label={nolabel ? '' : '∅ Note'} bind:value={parent.score} step={0.1} validator={validate.points}/>
+        <InputNumber class='w-16' label={nolabel ? '' : '∅ Note'} bind:value={parent.score} step={1} validator={validate.points}/>
 
         <div class='w-8 self-center text-center'> ← </div>
 
@@ -57,28 +72,28 @@
             <option value={null}> ? </option>
             {#if ancestorPairs}
                 {#each ancestorPairs as ancestorPair }
-                    <option value={ancestorPair.id} selected={ancestorPair.id === parent.parentsPairId} > {ancestorPair.year+':'+ancestorPair.name} </option>
+                    <option value={ancestorPair.id} selected={ancestorPair.id === parent.parentsPairId} > {ancestorPair.year+':'+ancestorPair.name} {ancestorPair.id}</option>
                 {/each}
             {/if}
         </Select>
     </div>
 
-    {#if parentsPairResults }
+    {#if ancestorPair }
         {#if pair.sectionId === 5 }
             <div class='flex flex-row gap-x-1'>
                 <div class='w-16'></div>
                 <div class='w-16'></div>
                 <div class='w-16'></div>
-                <InputText class='w-16' label={nolabel ? '' : 'Küken'} value={parentsPairResults.hatching} readonly disabled/>
-                <InputText class='w-16' label={nolabel ? '' : '∅ Note'} value={parentsPairResults.score} readonly disabled/>
+                <InputText class='w-16' label={nolabel ? '' : 'Küken'} value={ancestorPair.broodHatched} disabled/>
+                <InputText class='w-16' label={nolabel ? '' : '∅ Note'} value={ancestorPair.showScore} disabled/>
             </div>
         {:else}
             <div class='flex flex-row gap-x-1'>
-                <InputText class='w-16' label={nolabel ? '' : '# Eier /J'} value={parentsPairResults.eggs} readonly disabled/>
-                <InputText class='w-16' label={nolabel ? '' : '∅ Gewicht'} value={parentsPairResults.weight} readonly disabled/>
-                <InputText class='w-16' label={nolabel ? '' : '% Befruchtet'} value={parentsPairResults.fertility} readonly disabled/>
-                <InputText class='w-16' label={nolabel ? '' : '% Geschlüpft'} value={parentsPairResults.hatching} readonly disabled/>
-                <InputText class='w-16' label={nolabel ? '' : '∅ Note'} value={parentsPairResults.score} readonly disabled/>
+                <InputText class='w-16' label={nolabel ? '' : '# Eier /J'} value={ancestorPair.layEggs} disabled/>
+                <InputText class='w-16' label={nolabel ? '' : '∅ Gewicht'} value={ancestorPair.layWeight} disabled/>
+                <InputText class='w-16' label={nolabel ? '' : '% Befruchtet'} value={pct( ancestorPair.broodFertile, ancestorPair.broodEggs)} disabled/>
+                <InputText class='w-16' label={nolabel ? '' : '% Geschlüpft'} value={pct( ancestorPair.broodHatched, ancestorPair.broodEggs)} disabled/>
+                <InputText class='w-16' label={nolabel ? '' : '∅ Note'} value={ancestorPair.showScore} disabled/>
             </div>
         {/if}
     {/if}

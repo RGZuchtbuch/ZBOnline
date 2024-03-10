@@ -68,12 +68,13 @@ class Pair extends Query
     }
 
 	//*** Parents ***//
+// $s = model\Pair::newParent( $parent[ 'pairId' ], $parent[ 'sex' ], $parent[ 'ring' ], $parent[ 'score' ], $parent[ 'parentsPairId' ], $requester->getId());
 
-	public static function newParent( int $pairId, string $sex, string $ring, ? int $score, ? int $parentsPairId, int $modifierId ) : ? int {
+    public static function newParent( int $pairId, string $sex, string $ring, ? float $score, ? int $parentsPairId, int $modifierId ) : ? int {
 		$args = get_defined_vars();
 		$stmt = Query::prepare( '
             INSERT INTO pair_parent ( pairId, sex, ring, score, parentsPairId, modifierId ) 
-            VALUES ( :pairId, :sex, :parentId, :score, :parentsPairId, :modifierId )
+            VALUES ( :pairId, :sex, :ring, :score, :parentsPairId, :modifierId )
         ' );
 		return Query::insert( $stmt, $args );
 	}
@@ -152,7 +153,7 @@ class Pair extends Query
 		return Query::selectArray( $stmt, $args );
 	}
 
-	public static function newBrood( int $pairId, ? string $start, string $eggs, ? float $fertile, ? int $hatched, int $modifierId ) : ? int {
+	public static function newBrood( int $pairId, ? string $start, int $eggs, ? int $fertile, int $hatched, int $modifierId ) : ? int {
 		$args = get_defined_vars();
 		$stmt = Query::prepare( '
             INSERT INTO pair_brood ( pairId, start, eggs, fertile, hatched, modifierId ) 

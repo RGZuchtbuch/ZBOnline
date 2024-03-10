@@ -113,13 +113,28 @@
         margin: 0.25em;
     }
 
-    form :global(label.name) {
+    form :global(label.name) { /* for inputs label */
         font-size: 0.6em;
         color: grey;
         text-align: left;
         padding-left: 0.5em;
     }
+
+/*
+    input, select, option {
+        @apply h-6 py-0 px-1;
+    }
+
+ */
+    form :global( input select ) {
+        height: 1.5em;
+    }
+    form :global( textarea ) {
+        height: 6em;
+    }
     form :global(.input) {
+        padding: 0em 0.25em;
+        margin: 0.0em;
         color: black;
         border: solid 1px red;
         border-radius: 0.25em;
@@ -133,11 +148,11 @@
     form :global(.valid) {
         border: solid 1px grey;
     }
-    form :global(label.error) {
+    form :global(label.error) { /* for inputs error label */
         color: red;
         font-size: 0.6em;
         text-align: left;
-        padding-left: 0.5em;
+        padding: 0.0em 0.5em;
     }
 
 

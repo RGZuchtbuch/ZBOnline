@@ -1,11 +1,13 @@
 <script>
     import {meta} from "tinro";
-    import { dat, txt } from '../../js/util.js';
-    import {createEventDispatcher} from "svelte";
-    import api from '../../js/api.js';
-    import {user} from '../../js/store.js';
+    import Toggler from '../common/OpenClose.svelte';
 
-    export let rootDistrict = null;
+    export let district = null;
+    export let open = false;
+
+    function toggleOpen() {
+        open = ! open;
+    }
 
     let moderated = false;
     let show = false;
@@ -19,26 +21,24 @@
 
 </script>
 
-<div class='flex flex-col pl-4'>
-    {#if rootDistrict && ( rootDistrict.moderated || rootDistrict.children.length > 0 ) }
+{#if district}
+    <div class='flex flex-col pl-8'>
         <div class='flex border-b border-gray-300 my-2'>
-            <div class='w-8'>&#10551;</div>
-
-            {#if rootDistrict.moderated}
-                <a class='cursor-pointer' href={route.match+'/'+rootDistrict.id} title='Zum Verband'>{rootDistrict.name}</a>
-            {:else}
-                <div class='text-gray-400 cursor-not-allowed' title='Kein zugang' >{rootDistrict.name}</div>
-            {/if}
-            {#if $user.admin}
-                <small class='grow text-right'>[{rootDistrict.id}]</small>
-            {/if}
+            <Toggler bind:open={open} enabled={district.children.length > 0} class='text-orange-600'/>
+            <a class='cursor-pointer' href={route.match+'/'+district.id} title='Zum Verband'>{district.name} </a>
+            <small class='w-8 text-center'> [{district.children.length}]</small>
+            <div class='grow'></div>
+            <small class='w-8 text-right'>[{district.id}]</small>
         </div>
-    {/if}
 
-    {#if rootDistrict && ( true || open )}
-        {#each rootDistrict.children as childDistrict}
-            <svelte:self rootDistrict={childDistrict} />
-        {/each}
-    {/if}
+        {#if district && ( open )}
+            {#each district.children as childDistrict}
+                <svelte:self district={childDistrict} />
+            {/each}
+        {/if}
 
-</div>
+    </div>
+{/if}
+
+
+

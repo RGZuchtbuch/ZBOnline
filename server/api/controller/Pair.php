@@ -43,16 +43,26 @@ class Pair
 	// only pair
 	public static function post( Request $request, Response $response, array $args ) : Response
 	{
-		$id = $args['id'] ?? null;
+		$id = $args['id'] ?? null; // case of put existing
 		$pair = $request->getParsedBody();
 		if ($pair) {
 			$requester = new Requester($request);
-			if ($requester && ($requester->isAdmin() || $requester->isModerating($pair['districtId']) || $requester->hasId($pair['breederId']))) {
+			if ( $requester && ($requester->isAdmin() || $requester->isModerating($pair['districtId']) || $requester->hasId($pair['breederId']) ) ) {
 				Query::begin();
-				$id = Pair::postPair( $id, $pair, $requester );
-				if ($id && Pair::postParents( $id, $pair[ 'parents' ], $requester ) && Pair::postLay( $id, $pair['lay'], $requester ) && Pair::postBroods( $id, $pair['broods'], $requester ) && Pair::postShow($id, $pair['show'], $requester ) && Pair::postResult( $id, $pair, $requester ))  {
+                $id = Pair::postPair( $id, $pair, $requester );
+//				if ($id && Pair::postParents( $id, $pair[ 'parents' ], $requester ) && Pair::postLay( $id, $pair['lay'], $requester ) && Pair::postBroods( $id, $pair['broods'], $requester ) && Pair::postShow($id, $pair['show'], $requester ) && Pair::postResult( $id, $pair, $requester ))  {
+//                $success = $id && Pair::postParents( $id, $pair[ 'parents' ], $requester );
+//                if( $success ) {
+                $pair['lay']['dames'] = $pair['dames']; // redundant but handy
+                if( $id &&
+                    Pair::postParents( $id, $pair[ 'parents' ], $requester ) &&
+                    Pair::postLay( $id, $pair['lay'], $requester ) &&
+                    Pair::postBroods( $id, $pair['broods'], $requester ) &&
+                    Pair::postShow($id, $pair['show'], $requester ) &&
+                    Pair::postResult( $id, $pair, $requester )
+                ) {
 					Query::commit();
-					$response->getBody()->write(json_encode(['id' => $id], JSON_UNESCAPED_SLASHES));
+					$response->getBody()->write( json_encode([ 'id' => $id ], JSON_UNESCAPED_SLASHES) );
 					return $response;
 				} else {
 					Query::rollback();
@@ -94,11 +104,12 @@ class Pair
 
 
 	/** helpers **/
+
 	public static function postPair( ? int $id, array $body, Requester $requester ) : int {
 		if( $id == null ) { //
-			return model\Pair::new($body['breederId'], $body['districtId'], $body['year'], $body['group'], $body['sectionId'], $body['breedId'], $body['colorId'], $body['name'], $body['paired'], $body['notes'], $requester['id']);
+			return model\Pair::new($body['breederId'], $body['districtId'], $body['year'], $body['group'], $body['sectionId'], $body['breedId'], $body['colorId'], $body['name'], $body['paired'], $body['notes'], $requester->getId());
 		} else {
-			$success = model\Pair::set($body['id'], $body['breederId'], $body['districtId'], $body['year'], $body['group'], $body['sectionId'], $body['breedId'], $body['colorId'], $body['name'], $body['paired'], $body['notes'], $requester['id']);
+			$success = model\Pair::set($body['id'], $body['breederId'], $body['districtId'], $body['year'], $body['group'], $body['sectionId'], $body['breedId'], $body['colorId'], $body['name'], $body['paired'], $body['notes'], $requester->getId());
 			if( $success ) {
 				return $id;
 			}
@@ -106,50 +117,49 @@ class Pair
 		}
 	}
 
-	public static function postParents( int $parentsPairId, array $parents, Requester $requester ) : bool
+	public static function postParents( int $pairId, array $parents, Requester $requester ) : bool
 	{
-		$success = true;
-		$succes &= model\Pair::delParents( $parentsPairId ); // remove existing parent links to replace by new once
-		foreach ($parents as $parent) {
-			// note pairId is this parents parents and parentPair is the pair this parent is parent. to be consistent with pair_child
-			$success &= model\Pair::newParent( $parent[ 'pairId' ], $parent[ 'sex' ], $parent[ 'ring' ], $parent[ 'score' ], $parentsPairId, $requester[ 'id' ] );
+		$success = model\Pair::delParents( $pairId ); // remove existing parent links to replace by new once
+		foreach ($parents as & $parent) {
+            if( $parent['ring'] ) {
+                // note pairId is this parents parents and parentPair is the pair this parent is parent. to be consistent with pair_child
+                $success = $success && model\Pair::newParent($pairId, $parent['sex'], $parent['ring'], $parent['score'], $parent['parentsPairId'], $requester->getId());
+            }
 		}
 		return $success;
 	}
 
 	public static function postLay( int $pairId, array $lay, Requester $requester ) : bool {
-		$success = true;
-		$success &= model\Pair::delLay( $pairId ); //remove evt existing
-		$success &= model\Pair::newLay( $pairId, $lay['start'], $lay['end'], $lay['eggs'], $lay['dames'], $lay['weight'], $lay['modifierId'] );
-		return $success;
+        if( $lay['start'] && $lay['end'] && $lay['eggs'] ) {
+            return model\Pair::delLay($pairId) && model\Pair::newLay($pairId, $lay['start'], $lay['end'], $lay['eggs'], $lay['dames'], $lay['weight'], $requester->getId());
+        }
+        return true;
 	}
 
 	public static function postBroods( int $pairId, array $broods, Requester $requester ) : bool {
-		$success = true;
-		$success &= model\Pair::delBroods( $pairId ); // remove existing parent links to replace by new once
-		$success &= model\Pair::delChicks( $pairId );
-		foreach ($broods as $brood) {
-			$broodId = model\Pair::newBrood( $pairId, $brood['start'], $brood['eggs'], $brood['fertile'], $brood['hatched'], $requester['id']);
-			if( $broodId ) {
-				foreach ($brood[ 'chicks' ] as $chick ) {
-					$success &= model\Pair::newChick($pairId, $broodId, $brood['ringed'], $chick['ring'], $requester['id'] );
-				}
-			}
-			$success &= $broodId;
+		$success = model\Pair::delBroods( $pairId ) && model\Pair::delChicks( $pairId ); // remove broods and chicks
+		foreach ($broods as & $brood) {
+            if( $brood['eggs'] && $brood['hatched'] ) {
+                $broodId = model\Pair::newBrood($pairId, $brood['start'], $brood['eggs'], $brood['fertile'], $brood['hatched'], $requester->getId());
+                $success = $success && $broodId;
+                if ($broodId) {
+                    foreach ($brood['chicks'] as $chick) {
+                        if ($chick['ring']) {
+                            $success = $success && model\Pair::newChick($pairId, $broodId, $brood['ringed'], $chick['ring'], $requester->getId());
+                        }
+                    }
+                }
+            }
 		}
 		return $success; // all is well
 	}
 
 	public static function postShow( int $pairId, array $show, Requester $requester ) : bool {
-		$success = true;
-		$success &= model\Pair::delShow( $pairId ); //remove evt existing
-		$success &= model\Pair::newShow( $pairId, $show['89'], $show['90'], $show['91'], $show['92'], $show['93'], $show['94'], $show['95'], $show['96'], $show['97'], $show['modifierId'] );
-		return $success;
+		return model\Pair::delShow( $pairId ) && model\Pair::newShow( $pairId, $show['89'], $show['90'], $show['91'], $show['92'], $show['93'], $show['94'], $show['95'], $show['96'], $show['97'], $requester->getId() );
 	}
 
 	public static function postResult( int $pairId, array $pair, Requester $requester ) : bool {
-		$success = true;
-		$success &= model\Result::delForPair( $pairId );
+		$success = model\Result::delForPair( $pairId );
 
 		// summarize broods
 		$broods = & $pair['broods'];
@@ -177,25 +187,25 @@ class Pair
 
 		// save pigeon or layer
 		if( $pair['sectionId'] === 5 ) { // pigeon, no lay, no color
-			$success &= model\Result::new(
-				$pair['id'], $pair['districtId'], $pair['year'],
+            $success = $success && model\Result::new(
+				$pairId, $pair['districtId'], $pair['year'],
 				$pair['group'], $pair['breedId'], null,
 				1, 1,
 				null, null, null,
 				$broodEggs, null, $broodHatched,
 				$showCount, $showScore,
-				$requester['id']
+                $requester->getId()
 			);
 
 		} else { // layers
-			$success &= model\Result::new(
-				$pair['id'], $pair['districtId'], $pair['year'],
+            $success = $success && model\Result::new(
+				$pairId, $pair['districtId'], $pair['year'],
 				$pair['group'], $pair['breedId'], $pair['colorId'],
 				1, 1,
 				$pair['dames'], $pair['lay']['production'], $pair['lay']['weight'],
 				$broodEggs, $broodFertile, $broodHatched,
 				$showCount, $showScore,
-				$requester['id']
+                $requester->getId()
 			);
 
 		}

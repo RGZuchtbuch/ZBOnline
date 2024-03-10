@@ -1,5 +1,6 @@
 <script>
     import {onMount} from "svelte";
+    import dic from '../../js/dictionairy.js';
     import validator from '../../js/validator.js';
 
     import InputNumber from '../common/form/input/NumberInput.svelte';
@@ -18,13 +19,13 @@
         if( ! pair.show ) {
             pair.show = { 89:null, 90:null, 91:null, 92:null, 93:null, 94:null, 95:null, 96:null, 97:null };
         }
-        updateResult();
     }
 
-    function updateResult() {
+    function update( pair ) {
+
         count = 0; // count nr of scores
         let total = 0; // for scores * points
-        let keys = [89, 90, 91, 92, 3, 94, 95, 96, 97]; // dont need all keys from show !
+        let keys = [89, 90, 91, 92, 93, 94, 95, 96, 97]; // only need these keys from show !
         for (let key of keys) {
             let value = pair.show[key];
             if (value) { // not null or 0
@@ -38,18 +39,16 @@
         pair = pair; // rerender
     }
 
-    function onInput( event ) {
-        updateResult();
-    }
 
     onMount( init )
     //$: update( pair );
+    $: update( pair );
 
 </script>
 
-<fieldset class='flex flex-col border rounded border-gray-400' on:input={onInput}>
+<fieldset class='flex flex-col border rounded border-gray-400'>
     <div class='flex flex-row bg-header px-2 py-1 text-center text-white'>
-        <div class='grow'>Schauleistung</div>
+        <div class='grow'>Schauleistung <small class='align-top' title={dic.info.pair.show}>&#9432;</small></div>
         <div class='w-6'></div>
     </div>
 

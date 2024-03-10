@@ -171,11 +171,9 @@ export default {
 
     pair: {
         get: (id) => get('api/pair/' + id),
-        post: (report) => { // for insert and update
-            return post( 'api/pair', report );
-        },
+        post: (pair) => post( 'api/pair',pair ),
+        put: (id, pair) => put( 'api/pair/'+id, pair ),
         delete: ( id ) => del( 'api/pair/'+id ),
-
     },
 
     result: {

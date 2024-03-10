@@ -121,7 +121,7 @@ class Breeder
 				$districtId = $breeder[ 'districtId' ] ?? null;
 				if( $requester->isAdmin() || $requester->isModerating( $districtId ) || $requester->hasId( $id ) ) { //admin of the moderator or self
 					$pairs = model\Breeder::getPairsInYear( $id, $year );
-					$response->getBody()->write(json_encode([ 'breeder'=>$breeder, 'pairs' => $pairs], JSON_UNESCAPED_SLASHES));
+					$response->getBody()->write(json_encode([ 'pairs' => $pairs ], JSON_UNESCAPED_SLASHES));
 					return $response;
 				}
 				throw new HttpUnauthorizedException( $request, 'Cannot do this' );

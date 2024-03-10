@@ -42,4 +42,10 @@ export default {
 		user		: 'Benutzer',
 	},
 
+	info: {
+		pair: {
+			show: 'Gib die Zahl der Bewertungen pro Punktzahl ein.',
+		}
+	}
+
 }

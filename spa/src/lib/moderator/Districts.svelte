@@ -6,9 +6,11 @@
     import List from "../common/List.svelte";
 
     import DistrictsTree from "../districts/DistrictsTree.svelte";
+
+//    import DistrictsTree from '../admin/districts/DistrictsAdminTree.svelte';
 //    import {createEventDispatcher} from "svelte";
 
-    let rootDistrict = null;
+    let district = null;
 
 //    const dispatch = createEventDispatcher();
     const route = meta();
@@ -16,7 +18,7 @@
 
     function loadDistricts( user ) {
         api.district.descendants.get( 1 ).then( response => {
-            rootDistrict = filter( response.district );
+            district = filter( response.district );
         } );
     }
 
@@ -41,8 +43,8 @@
     <div slot='title'>Obmann {$user.fullname}</div>
     <div slot='header' >BDRG / LV / KV </div>
     <div slot='body'>
-        {#if rootDistrict}
-            <DistrictsTree {rootDistrict} />
+        {#if district}
+            <DistrictsTree {district} open={true}/>
         {/if}
     </div>
 </List>
