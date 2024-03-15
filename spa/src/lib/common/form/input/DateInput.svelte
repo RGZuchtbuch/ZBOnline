@@ -17,7 +17,7 @@
 
 	export let disabled = false;
 
-	const state = getContext( 'state'); // store
+	const state = getContext( 'form'); // store
 	let date = toDate( value );
 
 	let localeValue = date ? date.getDate()+'.'+(date.getMonth()+1)+'.'+date.getFullYear() : null; // D

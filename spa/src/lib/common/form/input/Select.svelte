@@ -17,7 +17,7 @@
     let valid = true;
     let dirty = false; // unvalidated, for changed element vs all others for validation
 
-    const state = getContext( 'state'); // store
+    const state = getContext( 'form'); // store
 
 //    $state.validators.push( validate );
 

@@ -1,6 +1,8 @@
 <script>
     import {onMount} from "svelte";
     import Brood from "./Brood.svelte";
+    import InputDate from '../common/form/input/DateInput.svelte';
+    import FormStatus from '../common/form/Status.svelte';
 
     export let pair;
 
@@ -32,6 +34,9 @@
         <button type='button' class='w-6 border rounded bg-header text-center text-white cursor-pointer' title='Brut/Nest hinzufügen' on:click={addBrood}>✚</button>
     </div>
 
+    <div class='flex justify-end'>
+        <FormStatus />
+    </div>
     <div class='flex flex-col p-2 gap-x-1'>
         {#if pair.broods}
             {#each pair.broods as brood, index }

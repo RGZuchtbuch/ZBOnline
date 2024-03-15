@@ -65,6 +65,8 @@ const MAXLONGITUDE = 15;
 
 const MAXBUBBLE = 35;
 
+const LAYERS = 4;
+const PIGEONS = 5; // section id
 
 const STANDARDENABLED = true;
 const RESULTSENABLED = true;

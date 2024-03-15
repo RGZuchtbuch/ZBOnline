@@ -59,7 +59,7 @@
     {:else}
 
         <div class='grow flex flex-row gap-x-1'>
-            <InputNumber class='w-8' label={nolabel ? '' : '#'} value={index+1} disabled/>
+            <InputText class='w-8' label={nolabel ? '' : '#'} value={index+1} disabled/>
             <InputDate class='w-20' label={nolabel ? '' : 'Gelegt am'} bind:value={brood.start} validator={validate.date} />
             <InputNumber class='w-20' label={nolabel ? '' : 'Küken'} bind:value={brood.hatched} error='0 - 2'  validator={validate.hatched}/>
             <InputDate class='w-20' label={nolabel ? '' : 'Beringt am'} bind:value={brood.ringed} validator={validate.ringed} />

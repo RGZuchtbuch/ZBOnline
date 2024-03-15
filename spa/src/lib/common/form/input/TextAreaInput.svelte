@@ -17,7 +17,7 @@
     let valid = true;
 //    let dirty = false; // unvalidated, for changed element vs all others for validation
 
-    const state = getContext( 'state'); // store
+    const state = getContext( 'form'); // store
 
     function validate() { // called from form with this context
         if( validator ) valid = validator( value ); // only if dirty or was invalid, only the active, dirty input can become invalid by design!

@@ -2,6 +2,7 @@
 
     import TextArea from '../common/form/input/TextAreaInput.svelte';
     import Brood from "./Brood.svelte";
+    import FormStatus from '../common/form/Status.svelte';
     export let notes;
     export let disabled;
     export let invalid = false;
@@ -17,6 +18,9 @@
         <div class='w-6'></div>
     </div>
 
+    <div class='flex justify-end'>
+        <FormStatus />
+    </div>
     <div class='flex flex-col p-2 gap-x-1'>
         <TextArea class='grow' label={'Notizen'} bind:value={notes} />
     </div>

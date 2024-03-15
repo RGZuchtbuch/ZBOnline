@@ -1,12 +1,14 @@
 <script>
     import {getContext} from 'svelte';
+	import dic from '../../../js/dictionairy.js';
 
     let className = '';
     export { className as class };
     export let value = '⚑';
-	export let title = 'Form status';
 
-    const state = getContext( 'state'); // store from form
+	let title = dic.title.saved;
+
+    const state = getContext( 'form'); // store from form
 
 	let changed = false;
 	let invalid = true;
@@ -14,6 +16,7 @@
     function onChange( dummy ) {
 		changed = $state.changed;
 		invalid = ! ( $state.valid === undefined || $state.valid );
+		title = invalid ? dic.title.error : changed ? dic.title.changed : dic.title.saved;
     }
 
     $: onChange( $state ); // update on change of state

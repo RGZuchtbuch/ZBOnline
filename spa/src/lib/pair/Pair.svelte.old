@@ -9,11 +9,7 @@
     import {user} from "../../js/store.js";
     import api from '../../js/api.js';
 
-    import Page from '../common/Page.svelte';
-//    import LayerPair from './layer/Pair.svelte';
-//    import PigeonPair from './pigeon/Pair.svelte';
-
-
+    import Page from "../common/Page.svelte";
     import Form from '../common/form/Form.svelte';
     import FormStatus from '../common/form/Status.svelte';
     import PairHead from "./Head.svelte";
@@ -44,8 +40,8 @@
         return {
             id: 0,
             breederId:breederId, districtId:districtId, year: new Date().getFullYear(), group: 'I',
-            sectionId: null, breedId: null, colorId: null,
-            name: null, paired: null, notes: 'Info...',
+            sectionId: 12, breedId: 1024, colorId: 8543,
+            name: 'Neu', paired: '2023-01-01', notes: 'Info...',
             parents: [],
             lay: { start:null, end:null, eggs:null, weight:null },
             broods: [],
@@ -74,18 +70,16 @@
     }
 
 
-    function updatePair( url ) {
-        if( id > 0 && breederId > 0 && districtId > 0 ) { // existing, note id could be '0' from param for new
+    function updatePair( districtId, breederId, id ) {
+        if( id > 0 && breederId > 0 ) { // existing, note id could be '0' from param
             api.pair.get( id ).then( response => {
                 pair = response.pair;
-                formType = pair.sectionId === 5 ? PIGEONS : LAYERS;
                 api.breeder.get( pair.breederId ).then( response => {
                     pair.breeder = response.breeder;
                 });
             });
         } else { // new
             pair = newPair();
-            formType = null;
             api.breeder.get( pair.breederId ).then( response => {
                 pair.breeder = response.breeder;
             });
@@ -93,7 +87,7 @@
         }
     }
 
-    function setFormType( type ) {
+    function selectForm( type ) {
         return ( event ) => {
             formType = type;
             console.log( 'Form ', formType );
@@ -112,7 +106,11 @@
         console.log( 'After', id);
     })
 
-    $: updatePair( $router.url );
+//    $: validate( invalids );
+    $: updatePair( districtId, breederId, id );
+
+
+    console.log( 'Boe', id);
 
 </script>
 
@@ -130,60 +128,59 @@
 
         </div>
 
-        <div slot='body' class='' transition:slide>
-            {#if formType === null }
+        <div slot='body' class='pl-4' transition:slide>
+            {#if id === 0 && formType == null }
                 <div class='flex flex-row justify-evenly' transition:slide>
-                    <button type='button' on:click={ setFormType( LAYERS ) } >
-                        <figure class='cursor-pointer' title={dic.title.layers}>
-                            <img class='w-16' src='/assets/layer.png'  alt={dic.alt.layers}/>
-                            <figcaption class='text-center'>Leger</figcaption>
-                        </figure>
-                    </button>
-                    oder
-                    <button type='button' on:click={ setFormType( PIGEONS ) } >
-                        <figure class='cursor-pointer' title={dic.title.pigeons}>
-                            <img class='w-16' src='/assets/pigeon.png' alt={dic.alt.pigeons}/>
-                            <figcaption class='text-center'>Tauben</figcaption>
-                        </figure>
-                    </button>
+                    <figure class='cursor-pointer'>
+                        <img class='w-16' src='/assets/layer.png' on:click={selectForm(LAYERS)} />
+                        <figcaption class='text-center'>Leger</figcaption>
+                    </figure>
+                    <figure class='cursor-pointer'>
+                        <img class='w-16' src='/assets/pigeon.png' on:click={selectForm(PIGEONS)} />
+                        <figcaption class='text-center'>Tauben</figcaption>
+                    </figure>
                 </div>
-            {:else if formType === LAYERS} <!-- Pigeons form -->
-                <Form {disabled} class='gap-y-1' on:submit={onSubmit}>
-                    <div class='flex justify-end'>
-                        <FormStatus />
-                    </div>
-                    <div class='flex flex-col gap-y-1' >
-                        <PairHead {formType} bind:pair={pair}/>
-                        {#if pair.sectionId && pair.breedId && pair.colorId }
-                            <div  transition:slide>
-                                <PairParents bind:pair={pair} />
-                                <PairLay bind:pair={pair} />
-                                <PairBroods bind:pair={pair} />
-                                <PairShow bind:pair={pair} />
-                            </div>
-                        {/if}
-                        <PairNotes bind:notes={pair.notes} {disabled} />
-                    </div>
-                </Form>
             {:else if formType === PIGEONS} <!-- Pigeons form -->
+
                 <Form {disabled} on:submit={onSubmit}>
-                    <div class='flex justify-end'>
+                    <div class='flex'>
+                        <div>Züchter Meldung ändern</div>
                         <FormStatus />
                     </div>
-                    <div class='flex flex-col gap-y-1' >
-                        <PairHead {formType} bind:pair={pair}/>
-                        {#if pair.sectionId && pair.breedId  }
-                            <div  transition:slide>
-                                <PairParents bind:pair={pair} />
-                                <PairBroods bind:pair={pair} />
-                                <PairShow bind:pair={pair} />
-                            </div>
-                        {/if}
-                        <PairNotes bind:notes={pair.notes} {disabled} />
-                    </div>
+
+                    <PairHead bind:pair={pair}/>
+
+                    {#if pair.sectionId && pair.breedId && ( pair.colorId || pair.sectionId === 5 ) }
+                        <div  transition:slide>
+                            <PairParents bind:pair={pair} />
+                            <PairBroods bind:pair={pair} />
+                            <PairShow bind:pair={pair} />
+                        </div>
+                    {/if}
+                    <PairNotes bind:notes={pair.notes} {disabled} />
                 </Form>
-            {:else}
-                ??
+
+            {:else} <!-- Layers form -->
+                <Form {disabled} on:submit={onSubmit}>
+                    <div class='flex'>
+                        <div>Züchter Meldung ändern</div>
+                        <FormStatus />
+                    </div>
+                    <PairHead bind:pair={pair}/>
+
+                    {#if pair.sectionId && pair.breedId && ( pair.colorId || pair.sectionId === 5 ) }
+                        <div  transition:slide>
+
+                            <PairParents bind:pair={pair} />
+                            {#if pair.sectionId !== 5} <!-- Layers -->
+                                <PairLay bind:pair={pair} />
+                            {/if}
+                            <PairBroods bind:pair={pair} />
+                            <PairShow bind:pair={pair} />
+                        </div>
+                    {/if}
+                    <PairNotes bind:notes={pair.notes} {disabled} />
+                </Form>
             {/if}
         </div>
     </Page>

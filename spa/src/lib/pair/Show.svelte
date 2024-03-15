@@ -4,6 +4,7 @@
     import validator from '../../js/validator.js';
 
     import InputNumber from '../common/form/input/NumberInput.svelte';
+    import FormStatus from '../common/form/Status.svelte';
 
     export let pair;
 
@@ -52,6 +53,9 @@
         <div class='w-6'></div>
     </div>
 
+    <div class='flex justify-end'>
+        <FormStatus />
+    </div>
     <div class='grow flex flex-row p-2 gap-x-1'>
         {#if pair.show}
             <InputNumber class='w-16 pr-2' label={'U/O'} bind:value={pair.show['89']} validator={validate.count} />

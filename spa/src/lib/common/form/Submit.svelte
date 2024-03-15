@@ -18,7 +18,7 @@
     let error = false;
     let disabled = false;
 
-    const state = getContext( 'state'); // store from form
+    const state = getContext( 'form'); // store from form
 
     function onChange( dummy ) {
         console.log( 'Change', $state );

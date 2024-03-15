@@ -12,7 +12,7 @@
 	export let label = null;
 	export let value = null;
 	export let error = dic.error.error; // message on invalid
-	export let validator = null;
+	export let validator = null; // validation by Textinput, forwarded
 
 	export let disabled = false;
 

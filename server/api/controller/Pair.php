@@ -53,12 +53,13 @@ class Pair
 //				if ($id && Pair::postParents( $id, $pair[ 'parents' ], $requester ) && Pair::postLay( $id, $pair['lay'], $requester ) && Pair::postBroods( $id, $pair['broods'], $requester ) && Pair::postShow($id, $pair['show'], $requester ) && Pair::postResult( $id, $pair, $requester ))  {
 //                $success = $id && Pair::postParents( $id, $pair[ 'parents' ], $requester );
 //                if( $success ) {
-                $pair['lay']['dames'] = $pair['dames']; // redundant but handy
+//                $pair['lay']['dames'] = $pair['dames']; // redundant but handy
+//				$lay = $pair['lay'] ?? null;
                 if( $id &&
-                    Pair::postParents( $id, $pair[ 'parents' ], $requester ) &&
+                    Pair::postParents( $id, $pair[ 'parents' ] ?? null, $requester ) &&
                     Pair::postLay( $id, $pair['lay'], $requester ) &&
-                    Pair::postBroods( $id, $pair['broods'], $requester ) &&
-                    Pair::postShow($id, $pair['show'], $requester ) &&
+                    Pair::postBroods( $id, $pair['broods'] ?? null, $requester ) &&
+                    Pair::postShow($id, $pair['show'] ?? null, $requester ) &&
                     Pair::postResult( $id, $pair, $requester )
                 ) {
 					Query::commit();
@@ -119,43 +120,52 @@ class Pair
 
 	public static function postParents( int $pairId, array $parents, Requester $requester ) : bool
 	{
-		$success = model\Pair::delParents( $pairId ); // remove existing parent links to replace by new once
-		foreach ($parents as & $parent) {
-            if( $parent['ring'] ) {
-                // note pairId is this parents parents and parentPair is the pair this parent is parent. to be consistent with pair_child
-                $success = $success && model\Pair::newParent($pairId, $parent['sex'], $parent['ring'], $parent['score'], $parent['parentsPairId'], $requester->getId());
-            }
+		if( $parents ) {
+			$success = model\Pair::delParents($pairId); // remove existing parent links to replace by new once
+			foreach ($parents as & $parent) {
+				if ($parent['ring']) {
+					// note pairId is this parents parents and parentPair is the pair this parent is parent. to be consistent with pair_child
+					$success = $success && model\Pair::newParent($pairId, $parent['sex'], $parent['ring'], $parent['score'], $parent['parentsPairId'], $requester->getId());
+				}
+			}
+			return $success;
 		}
-		return $success;
+		return true; // no parents is ok
 	}
 
-	public static function postLay( int $pairId, array $lay, Requester $requester ) : bool {
-        if( $lay['start'] && $lay['end'] && $lay['eggs'] ) {
+	public static function postLay( int $pairId, ? array $lay, Requester $requester ) : bool {
+        if( $lay && $lay['start'] && $lay['end'] && $lay['eggs'] ) {
             return model\Pair::delLay($pairId) && model\Pair::newLay($pairId, $lay['start'], $lay['end'], $lay['eggs'], $lay['dames'], $lay['weight'], $requester->getId());
         }
-        return true;
+        return true; // no lay is ok
 	}
 
 	public static function postBroods( int $pairId, array $broods, Requester $requester ) : bool {
-		$success = model\Pair::delBroods( $pairId ) && model\Pair::delChicks( $pairId ); // remove broods and chicks
-		foreach ($broods as & $brood) {
-            if( $brood['eggs'] && $brood['hatched'] ) {
-                $broodId = model\Pair::newBrood($pairId, $brood['start'], $brood['eggs'], $brood['fertile'], $brood['hatched'], $requester->getId());
-                $success = $success && $broodId;
-                if ($broodId) {
-                    foreach ($brood['chicks'] as $chick) {
-                        if ($chick['ring']) {
-                            $success = $success && model\Pair::newChick($pairId, $broodId, $brood['ringed'], $chick['ring'], $requester->getId());
-                        }
-                    }
-                }
-            }
+		if( $broods ) {
+			$success = model\Pair::delBroods($pairId) && model\Pair::delChicks($pairId); // remove broods and chicks
+			foreach ($broods as & $brood) {
+				if ($brood['eggs'] && $brood['hatched']) {
+					$broodId = model\Pair::newBrood($pairId, $brood['start'], $brood['eggs'], $brood['fertile'], $brood['hatched'], $requester->getId());
+					$success = $success && $broodId;
+					if ($broodId) {
+						foreach ($brood['chicks'] as $chick) {
+							if ($chick['ring']) {
+								$success = $success && model\Pair::newChick($pairId, $broodId, $brood['ringed'], $chick['ring'], $requester->getId());
+							}
+						}
+					}
+				}
+			}
+			return $success; // all is well
 		}
-		return $success; // all is well
+		return true; // no broods is ok
 	}
 
 	public static function postShow( int $pairId, array $show, Requester $requester ) : bool {
-		return model\Pair::delShow( $pairId ) && model\Pair::newShow( $pairId, $show['89'], $show['90'], $show['91'], $show['92'], $show['93'], $show['94'], $show['95'], $show['96'], $show['97'], $requester->getId() );
+		if( $show ) {
+			return model\Pair::delShow($pairId) && model\Pair::newShow($pairId, $show['89'], $show['90'], $show['91'], $show['92'], $show['93'], $show['94'], $show['95'], $show['96'], $show['97'], $requester->getId());
+		}
+		return true; // no show is ok
 	}
 
 	public static function postResult( int $pairId, array $pair, Requester $requester ) : bool {
@@ -202,7 +212,9 @@ class Pair
 				$pairId, $pair['districtId'], $pair['year'],
 				$pair['group'], $pair['breedId'], $pair['colorId'],
 				1, 1,
-				$pair['dames'], $pair['lay']['production'], $pair['lay']['weight'],
+				$pair['dames'],
+				$pair['lay']['production'],
+				$pair['lay']['weight'],
 				$broodEggs, $broodFertile, $broodHatched,
 				$showCount, $showScore,
                 $requester->getId()

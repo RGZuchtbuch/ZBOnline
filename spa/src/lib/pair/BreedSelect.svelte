@@ -1,14 +1,17 @@
 <script>
     import {onMount} from 'svelte';
-    import api from "../../../../js/api.js";
-    import validator from '../../../../js/validator.js';
-    import Select from './Select.svelte';
+    import api from "../../js/api.js";
+    import validator from '../../js/validator.js';
+    import Select from '../common/form/input/Select.svelte';
 
+    export let formType;
     export let value = { sectionId:null, breedId:null, colorId:null }; // take from pair or other
     let classname = '';
     export { classname as class }
 
-    let sections = [ { id:3, name:'Groß und Wassergeflügel' }, { id:11, name:'Große Hühner' }, { id:12, name:'Zwerghühner und Wachteln' }, { id:5, name:'Tauben' }, { id:6, name:'Ziergeflügel' } ];
+    let sections = formType === PIGEONS ?
+        [ { id:5, name:'Tauben' } ] :
+        [ { id:3, name:'Groß und Wassergeflügel' }, { id:11, name:'Große Hühner' }, { id:12, name:'Zwerghühner und Wachteln' }, { id:6, name:'Ziergeflügel' } ];
     let breeds = [];
     let colors = [];
 
@@ -23,17 +26,6 @@
         colorId:        (v) => validator(v).number().if( v > 0 ).orNullIf( sectionId === 5 ).isValid(),
     }
 
-
-/* hardcoded for specific selection.
-    function getSections() {
-        if( ! sections ) {
-            api.section.children.get(2).then(data => {
-                sections = data.sections
-            });
-        }
-    }
-
- */
     function getBreeds( v ) {
         if( ! sectionId || value.sectionId !== sectionId ) {
             sectionId = value.sectionId;
