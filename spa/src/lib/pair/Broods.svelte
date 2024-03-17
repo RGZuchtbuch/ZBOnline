@@ -9,7 +9,12 @@
 //    let layer;
 
     function addBrood( pairId ) {
-        const brood = { pairId:pairId, start:null, eggs:null, fertile:null, hatched:null, ringed:null, chicks:[ newChick( pairId, 0 ), newChick( pairId, 0 ) ] };
+        let brood = null;
+        if( pair.sectionId === PIGEONS ) {
+            brood = { pairId:pairId, start:null, eggs:2, fertile:null, hatched:null, ringed:null, chicks:[ newChick( pairId, 0 ), newChick( pairId, 0 ) ] };
+        } else {
+            brood = { pairId:pairId, start:null, eggs:null, fertile:null, hatched:null, ringed:null };
+        }
         pair.broods = [ ...pair.broods, brood ];
     }
 
