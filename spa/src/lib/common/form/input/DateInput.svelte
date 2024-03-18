@@ -1,6 +1,6 @@
 <script>
 	import {getContext, onMount} from 'svelte';
-	import {toDate} from '../../../../js/util.js';
+	import {toDate, toDateISO, toDateString} from '../../../../js/util.js';
     import dic from '../../../../js/dictionairy.js';
 	import TextInput from './TextInput.svelte';
 
@@ -20,13 +20,14 @@
 	const state = getContext( 'form'); // store
 	let date = toDate( value );
 
-	let localeValue = date ? date.getDate()+'.'+(date.getMonth()+1)+'.'+date.getFullYear() : null; // D
+//    let localeValue = date ? date.getDate()+'.'+(date.getMonth()+1)+'.'+date.getFullYear() : null; // D
+    let localeValue = toDateString( date ); // D
 
 	let component = null;
 
 	function onInput( event ) {
 		const date = toDate( localeValue );
-    	value = date ? date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate() : localeValue; // valid date or faulty input
+    	value = date ? toDateISO( date ) : localeValue; // valid date or faulty as was
 	}
 
 	function onBlur( event ) { // format valid date

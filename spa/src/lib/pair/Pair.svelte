@@ -10,9 +10,6 @@
     import api from '../../js/api.js';
 
     import Page from '../common/Page.svelte';
-//    import LayerPair from './layer/Pair.svelte';
-//    import PigeonPair from './pigeon/Pair.svelte';
-
 
     import Form from '../common/form/Form.svelte';
     import FormStatus from '../common/form/Status.svelte';

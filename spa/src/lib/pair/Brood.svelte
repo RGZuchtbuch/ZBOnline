@@ -33,15 +33,16 @@
     }
 
     function getHatching( brood ) {
-        if( pair.sectionId !== 5 ) { // layer
+        if( pair.sectionId === PIGEONS ) { // layer
             return pct( brood.hatched, 2, 0 ); // defaults to 2 eggs
         } else { // pigeon
+            console.log( 'H', brood.hatched, brood.eggs );
             return pct( brood.hatched, brood.eggs, 0 );
         }
     }
 
     onMount( () => {
-        if( pair.sectionId === PIGEONS ) pair.eggs = 2
+    //    if( pair.sectionId === PIGEONS ) pair.eggs = 2
     })
 
 </script>
@@ -53,13 +54,15 @@
             <InputDate class='w-24' label={nolabel ? '' : 'Gelegt am'} bind:value={brood.start} validator={validate.date} />
             <InputNumber class='w-16' label={nolabel ? '' : 'Küken'} bind:value={brood.hatched} error='0 - 2'  validator={validate.chicks}/>
             <InputDate class='w-24' label={nolabel ? '' : 'Beringt am'} bind:value={brood.ringed} validator={validate.ringed} />
-            {#if brood.chicks}
+            {#if brood.chicks && brood.chicks.length>=1 }
                 <InputRing class='32' label={nolabel ? '' : 'Ring Küken #1'} bind:value={brood.chicks[0].ring} validator={validate.ring1} />
+            {/if}
+            {#if brood.chicks && brood.chicks.length>=2 }
                 <InputRing class='32' label={nolabel ? '' : 'Ring Küken #2'} bind:value={brood.chicks[1].ring} validator={validate.ring2} />
             {/if}
         </div>
         <div class='flex flex-row gap-x-1'>
-            <InputText class='w-16' label={nolabel ? '' : 'Schlupf'} value={getHatching( brood )} disabled readonly />
+            <InputText class='w-16' label={nolabel ? '' : 'Schlupf'} value={getHatching( brood )} disabled />
         </div>
     {:else} <!-- Layers -->
         <div class='grow flex flex-row gap-x-1'>
@@ -72,7 +75,7 @@
         </div>
         <div class='flex flex-row gap-x-1'>
             <InputText class='w-16' label={nolabel ? '' : 'Befruchtung'} value={ getFertility( brood.eggs, brood.fertile )} disabled />
-            <InputText class='w-16' label={nolabel ? '' : 'Schlupf'} value={getHatching( brood )} disabled />
+            <InputText class='w-16' label={nolabel ? '' : 'Schlupf'} value={ getHatching( brood )} disabled />
         </div>
 
     {/if}

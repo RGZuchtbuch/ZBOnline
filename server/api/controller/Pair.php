@@ -142,17 +142,20 @@ class Pair
 
 	public static function postBroods( int $pairId, array $broods, Requester $requester ) : bool {
 		if( $broods ) {
-			$success = model\Pair::delBroods($pairId) && model\Pair::delChicks($pairId); // remove broods and chicks
+			$success = model\Pair::delBroods($pairId) && model\Pair::delChicks($pairId); // remove old broods and chicks
 			foreach ($broods as & $brood) {
 				if ($brood['eggs'] && $brood['hatched']) {
 					$broodId = model\Pair::newBrood($pairId, $brood['start'], $brood['eggs'], $brood['fertile'], $brood['hatched'], $requester->getId());
 					$success = $success && $broodId;
 					if ($broodId) {
-						foreach ($brood['chicks'] as $chick) {
-							if ($chick['ring']) {
-								$success = $success && model\Pair::newChick($pairId, $broodId, $brood['ringed'], $chick['ring'], $requester->getId());
-							}
-						}
+						$chicks = $brood['chicks'] ?? null;
+						if( $chicks ) { // null for layers empty or filled for pigeons
+                            foreach ($brood['chicks'] as $chick) {
+                                if ($chick['ring']) {
+                                    $success = $success && model\Pair::newChick($pairId, $broodId, $brood['ringed'], $chick['ring'], $requester->getId());
+                                }
+                            }
+                        }
 					}
 				}
 			}
@@ -163,7 +166,9 @@ class Pair
 
 	public static function postShow( int $pairId, array $show, Requester $requester ) : bool {
 		if( $show ) {
-			return model\Pair::delShow($pairId) && model\Pair::newShow($pairId, $show['89'], $show['90'], $show['91'], $show['92'], $show['93'], $show['94'], $show['95'], $show['96'], $show['97'], $requester->getId());
+			return
+				model\Pair::delShow($pairId) &&
+				model\Pair::newShow($pairId, $show['89'], $show['90'], $show['91'], $show['92'], $show['93'], $show['94'], $show['95'], $show['96'], $show['97'], $requester->getId());
 		}
 		return true; // no show is ok
 	}

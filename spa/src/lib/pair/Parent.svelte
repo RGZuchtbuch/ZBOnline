@@ -65,17 +65,16 @@
         </Select>
         <InputRing class='w-32' label={nolabel ? '' : 'Ring [D J Bs Nr]'} bind:value={parent.ring} validator={validate.ring}/>
         <InputNumber class='w-16' label={nolabel ? '' : '∅ Note'} bind:value={parent.score} step={1} validator={validate.points}/>
-
-        <div class='w-8 self-center text-center'> ← </div>
-
+        <div class='w-4'></div>
         <Select class='w-32' label={nolabel ? '' : 'Aus Stamm / Paar'} bind:value={parent.parentsPairId}>
             <option value={null}> ? </option>
             {#if ancestorPairs}
                 {#each ancestorPairs as ancestorPair }
-                    <option value={ancestorPair.id} selected={ancestorPair.id === parent.parentsPairId} > {ancestorPair.year+':'+ancestorPair.name} {ancestorPair.id}</option>
+                    <option value={ancestorPair.id} selected={ancestorPair.id === parent.parentsPairId} > {ancestorPair.year+':'+ancestorPair.name} </option>
                 {/each}
             {/if}
         </Select>
+        <div class='w-8 '> → </div>
     </div>
 
     {#if ancestorPair }
@@ -89,8 +88,8 @@
             </div>
         {:else}
             <div class='flex flex-row gap-x-1'>
-                <InputText class='w-16' label={nolabel ? '' : '# Eier /J'} value={ancestorPair.layEggs} disabled/>
-                <InputText class='w-16' label={nolabel ? '' : '∅ Gewicht'} value={ancestorPair.layWeight} disabled/>
+                <InputText class='w-16' label={nolabel ? '' : '# Eier /J'} value={dec(ancestorPair.layEggs)} disabled/>
+                <InputText class='w-16' label={nolabel ? '' : '∅ Gewicht'} value={dec(ancestorPair.layWeight,1)} disabled/>
                 <InputText class='w-16' label={nolabel ? '' : '% Befruchtet'} value={pct( ancestorPair.broodFertile, ancestorPair.broodEggs)} disabled/>
                 <InputText class='w-16' label={nolabel ? '' : '% Geschlüpft'} value={pct( ancestorPair.broodHatched, ancestorPair.broodEggs)} disabled/>
                 <InputText class='w-16' label={nolabel ? '' : '∅ Note'} value={ancestorPair.showScore} disabled/>

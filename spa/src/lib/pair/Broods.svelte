@@ -8,23 +8,43 @@
 
 //    let layer;
 
-    function addBrood( pairId ) {
-        let brood = null;
-        if( pair.sectionId === PIGEONS ) {
-            brood = { pairId:pairId, start:null, eggs:2, fertile:null, hatched:null, ringed:null, chicks:[ newChick( pairId, 0 ), newChick( pairId, 0 ) ] };
-        } else {
-            brood = { pairId:pairId, start:null, eggs:null, fertile:null, hatched:null, ringed:null };
-        }
-        pair.broods = [ ...pair.broods, brood ];
+    function addBrood() { // from form
+        pair.broods = [ ...pair.broods, newBrood() ]; // push and trigger
     }
 
-    function newChick( pairId, broodId ) {
-        return {pairId:pairId, broodId:broodId, ring:null};
+    function newBrood() {
+        let brood = null;
+        if( pair.sectionId === PIGEONS ) {
+            brood = { pairId:pair.id, start:null, eggs:2, fertile:null, hatched:null, ringed:null, chicks:[ newChick(), newChick() ] };
+        } else {
+            brood = { pairId:pair.id, start:null, eggs:null, fertile:null, hatched:null, ringed:null };
+        }
+        return brood;
+//        pair.broods = [ ...pair.broods, brood ];
+    }
+
+    function newChick() {
+        return {pairId:pair.id, broodId:null, ring:null};
     }
 
     function update( pair ) {
-        while( pair.broods.length < 2 ) { // want at least 2
-            addBrood( pair.id )
+        //while( pair.broods.length < 2 ) { // want at least 2
+       //     addBrood( pair.id )
+        //}
+
+        const broods = pair.broods;
+        for( let broodIndex=0; broodIndex<2; broodIndex++ ) { // add for at least 2 broods
+            if( ! broods[ broodIndex ] ) {
+                broods.push( newBrood() );
+            }
+            if( pair.sectionId === PIGEONS ) { // add chicks if not room for 2
+                const chicks = broods[ broodIndex ].chicks;
+                for( let chickIndex=0; chickIndex<2; chickIndex++ ) { // add fields for max 2 chicks
+                    if( ! chicks[ chickIndex ] ) {
+                        chicks.push( newChick() );
+                    }
+                }
+            }
         }
     }
 

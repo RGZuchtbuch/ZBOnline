@@ -186,17 +186,17 @@ class Pair extends Query
 
 	// no set as all renewed at report save
 
-	public static function getChicks( $pairId ) {
+	public static function getChicks( $broodId ) {
 		$args = get_defined_vars();
 		$stmt = Query::prepare( '
             SELECT id, pairId, broodId, ringed, ring
             FROM pair_chick
-            WHERE pairId=:pairId
+            WHERE broodId=:broodId
         ' );
 		return Query::selectArray( $stmt, $args );
 	}
 
-	public static function delChicks( int $pairId ) {
+	public static function delChicks( int $pairId ) { // note PAIRID
 		$args = get_defined_vars();
 		$stmt = Query::prepare( '
             DELETE 

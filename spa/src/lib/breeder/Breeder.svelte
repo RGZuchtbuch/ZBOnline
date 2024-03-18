@@ -3,8 +3,8 @@
     import api from '../../js/api.js';
     import {txt} from '../../js/util.js';
     import Pair from '../pair/Pair.svelte';
-    import LayerPair from '../pair/layer/Pair.svelte';
-    import PigeonPair from '../pair/pigeon/Pair.svelte';
+//    import LayerPair from '../pair/layer/Pair.svelte';
+//    import PigeonPair from '../pair/pigeon/Pair.svelte';
     import BreederPairs from './Pairs.svelte';
     import BreederDetails from "./BreederDetails.svelte";
 
@@ -54,13 +54,14 @@
             <Route path='/' let:meta>
                 <Pair id={Number(meta.params.pairId)} districtId={Number(meta.params.districtId)} breederId={Number(meta.params.breederId)}/>
             </Route>
+<!--
             <Route path='/leger' let:meta>
                 <LayerPair id={Number(meta.params.pairId)} districtId={Number(meta.params.districtId)} breederId={Number(meta.params.breederId)}/>
             </Route>
             <Route path='/tauben' let:meta>
                 <PigeonPair id={Number(meta.params.pairId)} districtId={Number(meta.params.districtId)} breederId={Number(meta.params.breederId)}/>
             </Route>
-
+-->
         </Route>
     </Route>
 

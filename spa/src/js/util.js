@@ -93,6 +93,13 @@ export function toDate( input, yearsAhead = 10 ) {
     }
     return null;
 }
+export function toDateISO( date ) {
+    return date ? date.getFullYear().toString().padStart(4, '0') + '-'+(date.getMonth()+1).toString().padStart( 2, '0' )+'.'+date.getDate().toString().padStart( 2, '0' ) : null; // to formatted ISO
+}
+export function toDateString( date ) {
+    return date ? date.getDate().toString().padStart( 2, '0' )+'.'+(date.getMonth()+1).toString().padStart( 2, '0' )+'.'+date.getFullYear().toString().padStart(4, '0') : null; // to formatted locale
+}
+
 export function toNumber( value ) {
     return value !== undefined && value !== null && ! isNaN(value) ? Number( value ) : null;
 }
@@ -121,6 +128,11 @@ export function toRing( value ) { // returns object for ring
     }
     return null;
 }
+
+export function toRingString( ring ) { // ring object to string
+    return ring.country+' '+ (ring.year%100) +' '+ring.code+' '+ring.number;
+}
+
 export function toString( value ) {
     return value !== undefined && value !== null ? String( value ) : null;
 }
