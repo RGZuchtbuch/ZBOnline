@@ -60,6 +60,15 @@ export function isEmail( value ) {
     }
     return false; // match failed
 }
+export function isPassword( value ) {
+    // min 8 chars, having a-z, A-Z, 0-9 and one that is not a-z,A-Z, 0-9 : should match backends check !
+    if( value ) {
+        return value.match( '(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})' ) !== null;
+    }
+    return false;
+//    let regex = /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})/;
+//    return regex.test( value );
+}
 export function isNumber( value ) {
     return value !== undefined && value !== null && ! isNaN(value);
 }

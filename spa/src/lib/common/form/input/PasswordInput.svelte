@@ -10,47 +10,42 @@
     export let title = null;
     export let label = null;
     export let value = null;
+    export let placeholder = null;
     export let error = dic.error.error; // message on invalid
     export let validator = null;
-
     export let disabled = false;
     let valid = true;
-    let dirty = false; // unvalidated, for changed element vs all others for validation
+//    let dirty = false; // unvalidated, for changed element vs all others for validation
 
     const state = getContext( 'form'); // store
-
-//    $state.validators.push( validate );
 
     function validate() { // called from form with this context
         if( validator ) valid = validator( value ); // only if dirty or was invalid, only the active, dirty input can become invalid by design!
         return valid;
     }
-
     function onInput( event ) {
-        //dirty = true; // needs validation
+        if( value === '' ) value = null;
     }
+
     onMount( () => { // catch input and register validator
         element.addEventListener( 'input', onInput );
-
-        if( state && validator ) $state.validators.push( validate ); // add this.validate with it's context
+        if( validator ) $state.validators.push( validate ); // add this.validate with it's context
     });
     onDestroy( () => { // remove validator
-        console.log( 'form state', state );
-        if( state ) {
-            let index = $state.validators.indexOf(validate);
-            if (index >= 0) $state.validators.splice(index, 1); // remove this validator;
-        }
+        let index = $state.validators.indexOf( validate );
+        if( index >= 0 ) $state.validators.splice( index, 1 ); // remove this validator;
     });
 
 </script>
 
 <div class='{className}'>
     {#if label}
-        <label class='name' for='number'>{label}</label>
+        <label class='name' for='number'> {label} </label>
     {/if}
-    <select class='input bg-red-300' {name} class:valid bind:this={element} bind:value={value} on:input on:change on:focus on:blur >
-        <slot />
-    </select>
+    <input class='input' {name} class:valid bind:this={element} type='password' bind:value={value}
+           {placeholder} {title} {disabled}
+           on:input on:change on:focus on:blur
+    />
     <label class='error' class:valid for='number'>{error}</label>
 </div>
 
@@ -58,6 +53,9 @@
     div {
         display:flex;
         flex-direction: column;
+    }
+    left {
+        text-align: left;
     }
     .error.valid {
         visibility: hidden;

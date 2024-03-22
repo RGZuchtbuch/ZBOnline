@@ -83,6 +83,7 @@
             breed = breed; // trigger
         }
     }
+    console.log( 'Breed', breed );
 
 </script>
 
@@ -142,10 +143,12 @@
                         <div class='grow'></div>
                         <CheckBoxInput class='w-12' label='Löschen' bind:value={toRemove} disabled={ breed.name != null || breed.colors.length > 0}/>
                     </div>
-                    <div class='flex'>
-                        <NumberInput class='w-32' bind:value={breed.layEggs} label='Eier/Jahr' error='pflichtfeld' validator={validate.eggs} />
-                        <NumberInput class='w-32' bind:value={breed.layWeight} label='Ei gewicht' error='pflichtfeld' validator={validate.eggWeight} />
-                    </div>
+                    {#if breed.sectionId !== PIGEONS }
+                        <div class='flex'>
+                            <NumberInput class='w-32' bind:value={breed.layEggs} label='Eier/Jahr' error='pflichtfeld' validator={validate.eggs} />
+                            <NumberInput class='w-32' bind:value={breed.layWeight} label='Ei gewicht' error='pflichtfeld' validator={validate.eggWeight} />
+                        </div>
+                    {/if}
                     <div class='flex'>
                         <NumberInput class='w-32' bind:value={breed.sireWeight} label='Gewicht Hahn' error='pflichtfeld' validator={validate.weight} />
                         .

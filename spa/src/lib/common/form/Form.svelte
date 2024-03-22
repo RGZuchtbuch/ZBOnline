@@ -5,7 +5,7 @@
     let className = '';
     export { className as class };
 
-    export let autosave = false;
+    export let autoSave = false;
 
     export let valid = true; // if valid, only save when changed and valid
     export let changed = false; // if form data changed
@@ -29,7 +29,7 @@
 //    localStorage.setItem('help', 'init' );
 
     function beforeUnload( event ) { // needs keepalive in post !
-        if( $state.changed ) { // show dialog
+        if( autoSave && $state.changed ) { // show dialog
 //            event.preventDefault(); // triggers dialog;
 //            event.returnValue = true;
             trySubmit();
@@ -37,9 +37,9 @@
         }
     }
     function trySubmit() { // called by submit or autosave timeout
-//        console.log( 'TrySubmit' );
+        console.log( 'TrySubmit' );
         if( $state.changed && $state.valid ) {
-//            console.log( 'Fire submit' );
+            console.log( 'Fire submit' );
             $state.changed = changed = false; // after post success
             dispatch( 'submit' ); // let outside do the actual submit
             return true; // submitted
@@ -60,21 +60,22 @@
     function onDisabled( dummy ) {
         $state.disabled = disabled;
     }
+
     function onInput( event ) { // called after children got input and init validate and autosave
         if( ! $state.changed ) {
             $state.changed = changed = true;
             localStorage.setItem('help', 'changed' );
         }
         $state.valid = valid = undefined; // to be validated...
-        clearTimeout( validateTimeout );
+        clearTimeout( validateTimeout ); // reset timers to fire after timeout on last change
         clearTimeout( saveTimeout );
         validateTimeout = setTimeout( validate, 500 ); // validate n ms after last input
-        saveTimeout = setTimeout( trySubmit, 2000 ); // try save n ms after last input
-
+        if( autoSave ) saveTimeout = setTimeout( trySubmit, 2000 ); // try save n ms after last input
     }
 
     function onSubmit( event ) { // enter or submit button
         event.preventDefault();
+        console.log( 'Form onSubmit' );
         if( $state.changed ) {
             validate();
             trySubmit();

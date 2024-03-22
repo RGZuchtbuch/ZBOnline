@@ -1,11 +1,9 @@
 <script>
     import { meta, router, Route } from 'tinro';
-    import api from '../../js/api.js';
-    import {user} from '../../js/store.js';
 
-    import Comment from '../common/Comment.svelte';
     import District from '../district/District.svelte';
     import Districts from './Districts.svelte';
+    import Grading from '../moderator/Grading.svelte';
 
     const route = meta();
 
@@ -26,4 +24,8 @@
     <Route path='/:districtId/*' let:meta>
         <District districtId={meta.params.districtId} />
     </Route>
+</Route>
+
+<Route path='/grading'>
+    <Grading />
 </Route>

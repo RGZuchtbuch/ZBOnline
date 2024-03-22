@@ -2,7 +2,7 @@
     //  import logo from './assets/svelte.png'
     import {Route} from 'tinro';
 
-    import { user } from './js/store.js'
+    import { standard, user } from './js/store.js'
 
     import Article from './lib/article/Article.svelte';
     import NavigationBar from './lib/navigation/NavigationBar.svelte';
@@ -16,6 +16,11 @@
     import Reset from './lib/login/Reset.svelte';
     import Logout from './lib/login/Logout.svelte';
     import Message from './lib/common/Message.svelte';
+    import api from './js/api.js';
+
+    api.standard.get().then( response => { // load standard here async into store
+        standard.set( response.standard );
+    } );
 
 </script>
 

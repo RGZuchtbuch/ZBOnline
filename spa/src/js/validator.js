@@ -1,4 +1,4 @@
-import { isEmail, toString, toNumber, toDate, toRing } from './util.js';
+import { isEmail, isPassword, toString, toNumber, toDate, toRing } from './util.js';
 
 // age : Validator.number().min(0).max(100);
 // console.log( age.value ); // t/f
@@ -45,8 +45,14 @@ export default function validator(value ) {
             }
             return worker;
         },
-
-
+        email : () => {
+            valid &&= isEmail( value );
+            return worker;
+        },
+        password : () => {
+            valid &&= isPassword( value );
+            return worker;
+        },
         true : () => {
             valid &&= value;
             return worker;
@@ -91,10 +97,7 @@ export default function validator(value ) {
             return worker;
         },
 
-        email : () => {
-            valid &&= isEmail( value );
-            return worker;
-        },
+
 
         if : ( condition ) => {
             valid &&= condition;

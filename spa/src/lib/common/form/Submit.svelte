@@ -10,21 +10,25 @@
     export let invalidValue = 'Invalid';
     export let errorValue = 'System error !'; // not expected
 
+    export let enforce = false;
+
     let formDisabled = false; // when form disabled, do not show
 	let value = submitValue;
 //    let submittable = true; // ready when changed and valid
-    let noChange = false;
+    let noChange = true;
     let invalid = false;
     let error = false;
     let disabled = false;
 
     const state = getContext( 'form'); // store from form
 
+    if( enforce ) $state.changed = true;
+
     function onChange( dummy ) {
         console.log( 'Change', $state );
         formDisabled = $state.disabled;
 //        submittable = $state.changed && $state.valid && ! $state.error;
-        noChange = ! $state.changed;
+		noChange = ! $state.changed;
         invalid  = ! $state.valid;
         error    = $state.error;
         value = noChange ? noChangeValue : invalid ? invalidValue : error ? errorValue : submitValue;
@@ -33,6 +37,7 @@
 
     $: onChange( $state ); // update on change of state
 </script>
+
 
 <input class='submit {className}' class:formDisabled class:noChange class:invalid class:error type='submit' {value} {disabled} />
 
@@ -43,9 +48,11 @@
 
     input.submit {
         color: black;
-        background-color: orange;
-        font-size: 0.6em;
+        background-color: #fc5226;
+        font-size: 1em;
+	    font-weight: bold;
         text-align: center;
+	    color: white;
         border: solid 1px grey;
         border-radius: 0.25em;
         padding: 0.5em;
