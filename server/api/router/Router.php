@@ -61,6 +61,8 @@ class Router {
 		$app->get(	'/district/{id}/results', 'App\controller\District::results' ); // having year, section and group in query. For obmann edit
 		$app->get(	'/district/{id}/breed/{breed}/results', 'App\controller\District::breedResults' ); // having year, section and group in query. For obmann edit
 
+		$app->post('/message',                'App\controller\Message::post' ); // send message to obmann
+
 		$app->get(	'/pair/{id}', 'App\controller\Pair::get' ); // for selecting pair for parent ring in report
         $app->post(	'/pair', 'App\controller\Pair::post' );
         $app->put(	'/pair/{id}', 'App\controller\Pair::post' ); // same as post, correct
@@ -73,7 +75,8 @@ class Router {
 		$app->get('/section/{id}/children',   'App\controller\Section::children' );
 		$app->get('/section/{id}/descendants','App\controller\Section::descendants' );
 
-		$app->post('/message',                'App\controller\Message::post' ); // send message to obmann
+		$app->get('/standard', 'App\controller\Standard::get' );
+
 
 
 
@@ -100,11 +103,10 @@ class Router {
 
 
 
-        $app->get('/standard', 'App\controller\standard\Get' );
 
-        $app->get('/user/reset/{email}', 'App\controller\user\Reset' );
-        $app->post('/user/token', 'App\controller\user\GetToken' );
-        $app->post('/user/password', 'App\controller\user\Password' );
+        $app->get('/user/reset/{email}', 'App\controller\User::resetMail' ); // sends an email with reset link
+        $app->post('/user/token', 'App\controller\User::login' ); // post, as we do not want credentials in query !
+        $app->post('/user/password', 'App\controller\User::reset' );
 
         $app->get('/test', 'App\controller\Test' ); // test, query has year, district, section, breed, color and group
     }

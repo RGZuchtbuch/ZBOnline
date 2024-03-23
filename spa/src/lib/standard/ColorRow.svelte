@@ -74,14 +74,14 @@
                     <div class='w-4'></div>
                 {/if}
             </div>
-            <small class='w-10 text-gray-400 text-right cursor-auto' title={dic.title.colorId}>[{color.id}]</small>
+            <small class='w-6 text-gray-400 text-3xs text-right cursor-auto' title={color.id}>[{color.id}]</small>
 
         </div>
         {#if edit}
-            <div class='pl-4' transition:slide>
+            <div class='pl-4 border-2 border-red-400 rounded' transition:slide>
                 <Form class='flex flex-col' on:submit={onSubmit}>
                     <div class='flex'>
-                        <div>Farbe ändern. leerlassen ist löschen</div>
+                        <div>Farbe ändern. leerlassen & löschen ist löschen</div>
                         <FormStatus />
                     </div>
                     <div class='flex'>

@@ -11,6 +11,7 @@
     import StandardMenu from "./StandardMenu.svelte";
     import InfoMenu from "./ArticleMenu.svelte";
 
+    const route = meta();
     // w-64 border rounded flex flex-col
 </script>
 
@@ -23,8 +24,15 @@
 
         <Route path='/zuchtbuch/*'> <InfoMenu /> </Route>
         <Route path='/standard/*'> <StandardMenu /> </Route>
-        <Route path='/leistungen/*'> <h4>Zuchtleistungen ←</h4> </Route>
-
+        <Route path='/leistungen/*'>
+            <ul>
+                <li> <a href={ '/leistungen/' } title='Zuchtleistungen'>→ Zuchtleistungen</a> </li>
+            </ul>
+            <div class='h-2'></div>
+            <ul>
+                <li> <a href={ '/leistungen/nachweis' } title='Bewertungsrechner'>→ Bewertungsrechner</a> </li>
+            </ul>
+        </Route>
         <Route path='/obmann/*'>
             {#if $user && $user.moderator.length > 0 }
                 <ModeratorMenu />

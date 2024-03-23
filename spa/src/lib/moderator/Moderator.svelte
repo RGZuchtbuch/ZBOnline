@@ -3,7 +3,8 @@
 
     import District from '../district/District.svelte';
     import Districts from './Districts.svelte';
-    import Grading from '../moderator/Grading.svelte';
+    import Grading from '../result/Grading.svelte';
+
 
     const route = meta();
 
@@ -15,17 +16,17 @@
 </script>
 
 <Route path='/' redirect={ route.match+'/verband'} />
+<Route path='/nachweis'> <Grading /> </Route>
 
 <Route path='/verband/*'>
 
     <Route path='/'> <Districts on:select={onSelectDistrict}/> </Route>
 
-
     <Route path='/:districtId/*' let:meta>
         <District districtId={meta.params.districtId} />
     </Route>
+
 </Route>
 
-<Route path='/grading'>
-    <Grading />
-</Route>
+
+

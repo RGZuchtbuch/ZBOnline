@@ -12,7 +12,7 @@ use Slim\Exception\HttpNotFoundException;
 use Slim\Exception\HttpNotImplementedException;
 use Slim\Exception\HttpUnauthorizedException;
 
-class Breeder
+class Breeder // is user
 {
 
 	public static function get( Request $request, Response $response, array $args ) : Response {

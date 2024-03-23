@@ -40,7 +40,7 @@ export default {
 			return null;
 		},
 		pigeons: ( group, broods, chicks ) => {
-			if (broods >= 2 && chicks >= 0 && chicks <= broods * 2 ) {
+			if ( group >= 1 && group <= 4 && broods >= 2 && chicks >= 0 && chicks <= broods * 2 ) {
 				if (broods <= 6) {
 					return broodPigeon[ group ][ broods ][ chicks ];
 				} else { // fit max

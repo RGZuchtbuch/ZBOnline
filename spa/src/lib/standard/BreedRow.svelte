@@ -4,7 +4,7 @@
     import {meta} from "tinro";
     import api from '../../js/api.js';
     import dic from '../../js/dictionairy.js';
-    import { user } from '../../js/store.js';
+    import { broodGroups, user } from '../../js/store.js';
     import { dec } from '../../js/util.js';
     import validator from '../../js/validator.js';
 
@@ -13,10 +13,12 @@
     import CheckBoxInput from '../common/form/input/CheckBoxInput.svelte';
     import NumberInput from '../common/form/input/NumberInput.svelte';
     import TextInput from '../common/form/input/TextInput.svelte';
+    import Select from '../common/form/input/Select.svelte';
 
     import ColorRow from './ColorRow.svelte';
     import Toggler from '../common/OpenClose.svelte';
 
+    export let section;
     export let breed;
 
     export let open = false;
@@ -53,7 +55,6 @@
     }
 
     function onSubmit() { // triggered by form's autosave
-        //edit = false;
         if( breed.name ) {
             if( breed.id > 0 ) {
                 api.breed.put( breed.id, breed );
@@ -83,7 +84,7 @@
             breed = breed; // trigger
         }
     }
-    console.log( 'Breed', breed );
+    console.log( 'Section', section );
 
 </script>
 
@@ -95,27 +96,33 @@
             <div class='font-semibold' title={dic.title.breed}>
                 {breed.name}
             </div>
-            <div class='text-xs'>({breed.colors.length})</div>
+            <div class='text-xs' title={dic.title.colors} >({breed.colors.length})</div>
 
             <div class='grow flex gap-x-2 justify-end text-sm italic'>
-                <div class='flex border-x border-gray-400'>
-                    <div class='w-8 text-right'>{#if breed.layEggs} {dec(breed.layEggs)} {/if}</div>
-                    <small class='w-6 self-center text-center'>{#if breed.layEggs} e/j {/if}</small>
+                {#if section.layers}
+                    <div class='flex'>
+                        <div class='w-8 text-right'>{#if breed.layEggs} {dec(breed.layEggs)} {/if}</div>
+                        <small class='w-6 self-center text-center'>{#if breed.layEggs} e/j {/if}</small>
 
-                    <div class='w-8 text-right'>{#if breed.layWeight} {dec(breed.layWeight)} {/if}</div>
-                    <small class='w-4 self-center text-center'>{#if breed.layWeight} g {/if}</small>
-                </div>
+                        <div class='w-8 text-right'>{#if breed.layWeight} {dec(breed.layWeight)} {/if}</div>
+                        <small class='w-6 self-center text-center'>{#if breed.layWeight} g {/if}</small>
+                    </div>
+                {:else}
+                    <div class='flex '>
+                        <div class='w-28 text-center'>{dec(breed.broodGroup)}</div>
+                    </div>
+                {/if}
                 <div class='flex border-0'>
                     <div class='w-12 text-right'> {#if breed.sireWeight} {dec(breed.sireWeight)}{/if} </div>
                     <small class='w-2 self-center text-center'>{#if breed.sireWeight} . {/if}</small>
                     <div class='w-12 text-left'> {#if breed.dameWeight} {dec(breed.dameWeight)} {/if} </div>
-                    <small class='w-4 text-center self-center '> {#if breed.sireWeight || breed.dameWeight } g {/if} </small>
+                    <small class='w-2 text-center self-center '>{#if breed.sireWeight || breed.dameWeight }g{/if}</small>
                 </div>
-                <div class='flex border-x border-gray-400'>
+                <div class='flex'>
                     <div class='w-6 text-right'>{#if breed.sireRing}{dec(breed.sireRing)} {/if}</div>
                     <small class='w-2 self-center text-center'>{#if breed.sireRing} . {/if}</small>
                     <div class='w-6 text-left'>{#if breed.dameRing} {dec(breed.dameRing)} {/if}</div>
-                    <small class='w-8 self-center text-center'>{#if breed.sireRing || breed.dameRing} mm {/if}</small>
+                    <small class='w-6 self-center text-center'>{#if breed.sireRing || breed.dameRing} mm {/if}</small>
                 </div>
             </div>
 
@@ -128,14 +135,14 @@
                 </div>
             {/if}
 
-            <small class='w-10 text-gray-400 text-right cursor-auto'>[{breed.id}]</small>
+            <small class='w-6 text-gray-400 text-3xs text-right cursor-auto' title={breed.id}>[{breed.id}]</small>
         </div>
 
         {#if edit}
-            <div class='pl-4' transition:slide>
+            <div class='pl-6 border-2 border-red-400 rounded' transition:slide>
                 <Form class='flex flex-col' on:submit={onSubmit}>
                     <div class='flex'>
-                        <div>Rasse ändern. name leerlassen heist löschen</div>
+                        <div>Rasse ändern. leer & löschen nur wenn ohne Farbenschläge</div>
                         <FormStatus />
                     </div>
                     <div class='flex'>
@@ -143,10 +150,18 @@
                         <div class='grow'></div>
                         <CheckBoxInput class='w-12' label='Löschen' bind:value={toRemove} disabled={ breed.name != null || breed.colors.length > 0}/>
                     </div>
-                    {#if breed.sectionId !== PIGEONS }
+                    {#if section.layers }
                         <div class='flex'>
                             <NumberInput class='w-32' bind:value={breed.layEggs} label='Eier/Jahr' error='pflichtfeld' validator={validate.eggs} />
                             <NumberInput class='w-32' bind:value={breed.layWeight} label='Ei gewicht' error='pflichtfeld' validator={validate.eggWeight} />
+                        </div>
+                    {:else}
+                        <div class='flex'>
+                            <Select bind:value={breed.broodGroup} label={dic.label.broodgroup}>
+                                {#each $broodGroups as group }
+                                    <option value={group.id}>{group.name}</option>
+                                {/each}
+                            </Select>
                         </div>
                     {/if}
                     <div class='flex'>
@@ -155,9 +170,9 @@
                         <NumberInput class='w-32' bind:value={breed.dameWeight} label='Gewicht Henne' error='pflichtfeld' validator={validate.weight} />
                     </div>
                     <div class='flex'>
-                        <NumberInput class='w-32' bind:value={breed.sireRing} label='Eier/Jahr' error='pflichtfeld' validator={validate.ring} />
+                        <NumberInput class='w-32' bind:value={breed.sireRing} label='Ring Hahn' error='1..99' validator={validate.ring} />
                         .
-                        <NumberInput class='w-32' bind:value={breed.dameRing} label='Ei gewicht' error='pflichtfeld' validator={validate.ring} />
+                        <NumberInput class='w-32' bind:value={breed.dameRing} label='Ring Henne' error='1..99' validator={validate.ring} />
                     </div>
                 </Form>
             </div>

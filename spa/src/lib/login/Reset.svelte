@@ -20,8 +20,7 @@
     let route = meta();
 
     const validate = {
-        //email:     (v) => validator(v).email().isValid(), // 1-10 → 30-09
-        password:  (v) => validator(v).password().isValid(), // pigeons
+        password:  (v) => validator(v).password().isValid(),
     }
 
     function onSubmit() {
@@ -40,15 +39,15 @@
 </script>
 
 <Modal class=''>
-    <Form class='w-96 flex flex-col gap-4 self-center border rounded p-4' on:submit={onSubmit}>
+    <Form class='w-96 flex flex-col gap-4 self-center border rounded pt-16' on:submit={onSubmit}>
         <div class='flex bg-header'>
             <h2 class='grow '>Paswort ändern</h2>
             <div class='cursor-pointer mr-2' on:click={cancel}>&#8855;</div>
         </div>
-        <EmailInput class='' label='eMail' bind:value={email}/>
-        <div class='italic text-xs'>Das Passwort braucht minimal 8 Zeichen, kleine und große Buchstaben [a-z][A-Z], eine Nummer [0-9] und ein Sonderzeichen [!@#$%^&*(),.:;]</div>
+        <EmailInput class='' label='eMail' value={email} disabled/>
+        <div class='italic text-xs'>Das Passwort braucht minimal 8 Zeichen, mit kleine und große Buchstaben [a-z][A-Z], eine Nummer [0-9] und ein Sonderzeichen [!@#$%^&*(),.:;]</div>
         <PasswordInput class='' label='Password' bind:value={password} validator={validate.password}/>
-        <Submit submitValue='Passwort zu einfach !'/>
+        <Submit submitValue='Passwort ändern' invalidValue='Passwort zu einfach'/>
         {#if ! success} <div class='error'>Nicht erfolgreich</div> {/if}
     </Form>
 

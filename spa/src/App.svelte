@@ -17,9 +17,11 @@
     import Logout from './lib/login/Logout.svelte';
     import Message from './lib/common/Message.svelte';
     import api from './js/api.js';
+    import Grading from './lib/result/Grading.svelte';
 
     api.standard.get().then( response => { // load standard here async into store
         standard.set( response.standard );
+        console.log( 'Standard loaded', response.standard );
     } );
 
 </script>
@@ -51,7 +53,12 @@
                     <Route path='/:articleId' let:meta> <Article articleId={meta.params.articleId} /> </Route>
                 </Route>
                 <Route path='/standard/*' > <Standard /> </Route>
-                <Route path='/leistungen/*' > <Results /> </Route>
+                <Route path='/leistungen/*' >
+                    <Route path='/'> <Results />  </Route>
+                    <Route path='/nachweis'> <Grading />  </Route>
+
+                </Route>
+
                 <Route path='/obmann/*' > <Moderator /> </Route>
 
                 <Route path='/admin/*' > <Admin /> </Route>
@@ -60,22 +67,10 @@
                 <Route path='/reset'> <Reset /> </Route>
                 <Route path='/abmelden'> <Logout /> </Route>
 
+
                 <Route path='/kontakt/:districtId' let:meta> <Message districtId={meta.params.districtId} /> </Route>
             </div>
 
-            {#if false}
-                <div class='w-48 border rounded flex flex-col no-print'>
-                    <h2>Info</h2>
-                    <div>
-                        {#if $user}
-                            {#if $user.admin} <div>Administrator</div>{/if}
-                            {#if $user.moderator.length>0} <div>Obmann</div>{/if}
-                            <div>{$user.fullname}</div>
-                            <div>Bis { new Date( $user.exp * 1000 ).toLocaleString( 'de') }</div>
-                        {/if}
-                    </div>
-                </div>
-            {/if}
         </div>
 
     </div>

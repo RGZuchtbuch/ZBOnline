@@ -1,24 +1,15 @@
 <script>
     import { meta } from 'tinro';
-    import api from '../../js/api.js';
+    import { standard } from '../../js/store.js';
 
     import List from "../common/List.svelte";
-
     import SectionRow from "./SectionRow.svelte";
 
     let section = null;
 
     const route = meta();
 
-    function loadStandard() {
-        api.standard.get().then( response => {
-            section = response.standard;
-            section.open = true;
-        } );
-
-    }
-
-    loadStandard();
+    $: section = $standard;
 </script>
 
 

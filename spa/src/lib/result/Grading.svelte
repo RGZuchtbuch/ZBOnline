@@ -22,14 +22,21 @@
 
     function updateBreeds( event ) {
         if( section && section.id > 0 ) {
+			breeds = [];
             const foundSection = findSection( section.id, $standard );
             if( foundSection ) {
-                breeds = [];
                 collectBreeds(foundSection, breeds);
                 breeds.sort( (a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0 )
             }
         }
     }
+
+	function updateValues( event ) {
+		hasLayEggs = null;
+		hasBroods = null;
+		hasBroodEggs = null;
+		hasBroodChicks = null;
+	}
 
     function findSection( id, section ) {
         if( section.id === id ) return section;
@@ -68,7 +75,7 @@
 				{/each}
 			</Select>
 
-			<Select class='w-104' label={'Rasse *'} bind:value={breed} error='Pflichtfeld'>
+			<Select class='w-104' label={'Rasse *'} bind:value={breed} error='Pflichtfeld' on:change={updateValues}>
 				<option value={null}></option>
 				{#if breeds}
 					{#each breeds as breed }

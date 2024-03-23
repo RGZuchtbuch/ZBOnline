@@ -56,18 +56,19 @@ export function isDate( value ) {
 }
 export function isEmail( value ) {
     if( value ) {
-        return value.match( '[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$' ) !== null; // a.a@a.aa
+        const regex = /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
+        return regex.test( value );
+//        return value.match( '[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$' ) !== null; // a.a@a.aa
     }
     return false; // match failed
 }
 export function isPassword( value ) {
     // min 8 chars, having a-z, A-Z, 0-9 and one that is not a-z,A-Z, 0-9 : should match backends check !
     if( value ) {
-        return value.match( '(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})' ) !== null;
+        const regex = /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})/;
+        return regex.test( value );
     }
     return false;
-//    let regex = /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})/;
-//    return regex.test( value );
 }
 export function isNumber( value ) {
     return value !== undefined && value !== null && ! isNaN(value);

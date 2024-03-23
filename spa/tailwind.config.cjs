@@ -26,6 +26,7 @@ const config = {
       },
       fontSize: {
         '2xs': '0.5rem',
+        '3xs': '0.4rem',
       },
     },
   },

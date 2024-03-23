@@ -26,8 +26,8 @@
     let route = meta();
 
     const validate = {
-        email:     (v) => validator(v).email().isValid(), // 1-10 → 30-09
-        password:  (v) => validator(v).password().isValid(), // pigeons
+        email:     (v) => validator(v).email().isValid(),
+        password:  (v) => validator(v).password().isValid(),
     }
 
     function onSubmit() {
@@ -76,7 +76,7 @@
 
 <Modal class=''>
 
-    <Form class='w-96 flex flex-col self-center rounded' on:submit={onSubmit}>
+    <Form class='w-96 flex flex-col self-center rounded pt-16' autoSave={false} on:submit={onSubmit}>
         <div class='flex bg-header rounded-t p-4'>
             {#if forgot}
                 <h2 class='grow text-white'>Passwort Reset</h2>
@@ -85,7 +85,7 @@
             {/if}
             <div class='w-8 justify-center m-2 circled bg-alert cursor-pointer' on:click={cancel}>X</div>
         </div>
-        <div class='flex flex-col gap-4 rounded-b bg-gray-200 gap-4 p-4'>
+        <div class='flex flex-col gap-4 rounded-b bg-gray-200  p-4'>
             <TextInput label='eMail *' bind:value={email} validator={validate.email}/>
 
             {#if ! forgot}

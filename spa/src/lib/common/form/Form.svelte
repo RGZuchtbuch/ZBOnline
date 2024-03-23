@@ -5,7 +5,7 @@
     let className = '';
     export { className as class };
 
-    export let autoSave = false;
+    export let autoSave = true;
 
     export let valid = true; // if valid, only save when changed and valid
     export let changed = false; // if form data changed
@@ -105,13 +105,13 @@
 
 <style>
     form {
-        padding : 0.25em;
-        margin: 0.25em;
+        padding : 0;
+        margin: 0;
     }
 
     fieldset {
         border: 0;
-        margin: 0.25em;
+        margin: 0;
     }
 
     form :global(label.name) { /* for inputs label */

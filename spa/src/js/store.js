@@ -7,10 +7,10 @@ export const sexes = writable( ['1.0', '0.1' ] );
 
 // state
 export const user = writable( null ); // keeping loggedin user
-//export const district = writable( null ); // current districtexport
-//export const breeder = writable( null ); // current breeder
 
-export const standard = writable( {standard:[] } );
+export const standard = writable( null ); // should lod section geflügel as root
 
-//export const resultType = { 2: 'Zuchten' }
+export const broodGroups = writable( [ {id:1, name:'I' }, {id:2, name:'II' }, {id:3, name:'III' }, {id:4, name:'IV' } ] );
+
+
 
