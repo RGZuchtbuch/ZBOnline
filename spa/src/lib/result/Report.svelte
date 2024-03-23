@@ -6,7 +6,7 @@
 
     export let report;
 
-    function addTo( sum, result ) {
+    function addTo( sum, result ) { // count and add all up to totals of section etc
         result.broods = result.broodEggs ? result.broodEggs / 2 : null; // for pigeons
         result.broodResult = result.pairs && result.broodHatched ? result.broodHatched / result.pairs : null;
 
@@ -26,25 +26,28 @@
             sum.layWeight += result.breeders * result.layWeight;
         }
 
-        if (result.broodLayerEggs) {
-            sum.brooders += result.breeders;
+        if (result.broodLayerBreeders && result.broodLayerEggs ) {
+            sum.brooders += result.broodLayerBreeders;
             sum.broodEggs += result.broodLayerEggs;
             sum.broodFertile += result.breeders * result.broodLayerFertile;
             sum.broodHatched += result.breeders * result.broodLayerHatched;
         }
-        if( result.pairs && result.broodPigeonChicks ) {
-            sum.brooders += result.breeders;
-            sum.broodChicks += result.broodPigeonChicks;
+        if( result.broodPigeonBreeders && result.pairs && result.broodPigeonHatched ) {
+            sum.brooders += result.broodPigeonBreeders;
+            sum.broodChicks += result.broodPigeonHatched;
             sum.broodResult += result.breeders * result.broodPigeonProduction;
         }
+
         if( result.showCount && result.showScore ) {
             sum.showers += result.breeders;
             sum.showCount += result.showCount;
             sum.showScore += result.breeders * result.showScore;
         }
+
+        if( result.broodPigeonBreeders > 0 ) console.log( 'BPB', sum );
     }
 
-    function avgTotal( sum ) {
+    function avgTotal( sum ) { // get avg from total
         const total = {};
             total.breeders = sum.breeders; // reporting layers
             total.pairs = sum.pairs; // reported pigeon pairs ( could be used for layers as well )
@@ -132,66 +135,20 @@
 
     $: calcTotals( report );
 
+    $: console.log( 'Report', report );
+
 </script>
 
 
 <div class='print'>
     {#if report }
-        {#each report.sections as section}
-            <table class='w-full p-2'>
-                <thead>
-                    <!-- totals -->
-                    <tr><th class='sticky top-0 border-y border-gray-600 p-2 bg-header text-center text-white text-xl' colspan=14>Sparte Geflügel</th></tr>
-                    <tr>
-                        <th>
-                            <div class='flex flex-row bg-gray-300 px-2 gap-x-1 font-bold'>
-                                <div class='grow text-left'>Alle Sparten, Gruppen, Rassen & Farben</div>
-                                <div class='flex flex-row justify-evenly gap-x-6'>
-                                    <div class='w-14 text-center'>Zuchten</div>
-                                    <div class='w-28'></div>
-                                    <div class='w-40'></div>
-                                    <div class='w-28 text-center'>Schauleistung</div>
-                                </div>
-                            </div>
-                            <div class='flex flex-row bg-gray-300 px-2 gap-x-1 text-xs'>
-                                <div class='grow text-left'></div>
-                                <div class='flex flex-row justify-evenly gap-x-6'>
-                                    <div class='flex w-14 justify-evenly'>
-                                        <div class='th'></div>
-                                    </div>
-                                    <div class='w-28'></div>
-                                    <div class='w-40'></div>
-                                    <div class='flex w-28 justify-evenly'>
-                                        <div class='th'>Tiere</div>
-                                        <div class='th'>Punkte</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </th>
-                    </tr>
-                    <tr>
-                        <th>
-                            <div class='flex flex-row bg-header text-white px-2 gap-x-1 justify-evenly font-bold text-sm italic border-y border-gray-600'>
-                                <div class='grow'>Gesamt</div>
-                                <div class='flex justify-evenly text-sm gap-x-6'>
-                                    <div class='flex w-14 justify-evenly'>
-                                        <div class='td' title='Zahl der Zuchten / Züchter'>{dec( report.total.breeders )}</div>
-                                    </div>
-                                    <div class='w-28'></div>
+        <table class='w-full p-2'>
 
-                                    <div class='w-40'></div>
+            {#each report.sections as section}
 
-                                    <div class='flex w-28 justify-evenly'>
-                                        <div class='td' title='Zahl der ausgestellten Tieren'>{dec( report.total.showCount )}</div>
-                                        <div class='td' title='Durchschnitt Bewertungsnote'>{dec( report.total.showScore, 1 )}</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </th>
-                    </tr>
-                    <tr><th>-</th></tr>
 
                     <!-- section header -->
+                <tbody>
                     <tr><th class='sticky top-0 border-y border-gray-600 p-2 bg-header text-center text-white text-xl' colspan=14>Sparte {section.name}</th></tr>
                     <tr>
                         <th>
@@ -232,7 +189,7 @@
                             </div>
                         </th>
                     </tr>
-                </thead>
+                </tbody>
 
                 <tbody>
                     {#each section.subsections as subsection}
@@ -284,7 +241,7 @@
                                         <div class='grow text-left text-base font-semibold'>
                                             {breed.name}
                                         </div>
-                                        {#if section.id === 5 && breed.result}
+                                        {#if ! section.layers && breed.result}
                                             <!-- breed result for pigeon -->
                                             <div class='flex justify-evenly text-sm gap-x-6'>
                                                 <div class='flex w-14 justify-evenly'>
@@ -292,8 +249,8 @@
                                                 </div>
                                                 <div class='w-28'> </div>
                                                 <div class='flex w-40 justify-evenly'>
-                                                    <div class='td'>{dec( breed.result.pairs )}</div>
-                                                    <div class='td' title='Geschlüpfte Küken'>{dec( breed.result.broodPigeonChicks ) }</div>
+                                                    <div class='td' title='Zahl der Brutpaare'>{dec( breed.result.pairs )}</div>
+                                                    <div class='td' title='Zahl der geschlüpften Küken'>{dec( breed.result.broodPigeonHatched ) }</div>
                                                     <div class='td' title='Zahl der Küken pro Paar'>{dec( breed.result.broodPigeonProduction, 1 )}</div>
                                                 </div>
                                                 <div class='flex w-28 justify-evenly'>
@@ -377,7 +334,7 @@
                                             {/if}
                                         </div>
                                         <div class='flex w-40 justify-evenly'>
-                                            {#if section.id === 5 }
+                                            {#if ! section.layers }
                                                 <div class='td' title='Paare'>{dec( subsection.total.pairs )}</div>
                                                 <div class='td' title='Geschlüpfte Küken'>{dec( subsection.total.broodChicks ) }</div>
                                                 <div class='td' title='Zahl der Küken pro Paar'>{dec( subsection.total.broodResult, 1 )}</div>
@@ -442,10 +399,62 @@
 
                 </tbody>
 
-                <tfoot></tfoot>
-            </table>
-            <div class='print-break text-center'> - </div>
-        {/each}
+
+                <div class='print-break text-center'> - </div>
+            {/each}
+            <tfoot>
+                <!-- totals -->
+                <tr><th class='sticky top-0 border-y border-gray-600 p-2 bg-header text-center text-white text-xl' colspan=14>Sparte Geflügel</th></tr>
+                <tr>
+                    <th>
+                        <div class='flex flex-row bg-gray-300 px-2 gap-x-1 font-bold'>
+                            <div class='grow text-left'>Alle Sparten, Gruppen, Rassen & Farben</div>
+                            <div class='flex flex-row justify-evenly gap-x-6'>
+                                <div class='w-14 text-center'>Zuchten</div>
+                                <div class='w-28'></div>
+                                <div class='w-40'></div>
+                                <div class='w-28 text-center'>Schauleistung</div>
+                            </div>
+                        </div>
+                        <div class='flex flex-row bg-gray-300 px-2 gap-x-1 text-xs'>
+                            <div class='grow text-left'></div>
+                            <div class='flex flex-row justify-evenly gap-x-6'>
+                                <div class='flex w-14 justify-evenly'>
+                                    <div class='th'></div>
+                                </div>
+                                <div class='w-28'></div>
+                                <div class='w-40'></div>
+                                <div class='flex w-28 justify-evenly'>
+                                    <div class='th'>Tiere</div>
+                                    <div class='th'>Punkte</div>
+                                </div>
+                            </div>
+                        </div>
+                    </th>
+                </tr>
+                <tr>
+                    <th>
+                        <div class='flex flex-row bg-header text-white px-2 gap-x-1 justify-evenly font-bold text-sm italic border-y border-gray-600'>
+                            <div class='grow'>Gesamt</div>
+                            <div class='flex justify-evenly text-sm gap-x-6'>
+                                <div class='flex w-14 justify-evenly'>
+                                    <div class='td' title='Zahl der Zuchten / Züchter'>{dec( report.total.breeders )}</div>
+                                </div>
+                                <div class='w-28'></div>
+
+                                <div class='w-40'></div>
+
+                                <div class='flex w-28 justify-evenly'>
+                                    <div class='td' title='Zahl der ausgestellten Tieren'>{dec( report.total.showCount )}</div>
+                                    <div class='td' title='Durchschnitt Bewertungsnote'>{dec( report.total.showScore, 1 )}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </th>
+                </tr>
+                <tr><th>-</th></tr>
+            </tfoot>
+        </table>
         {#if report.sections.length === 0 }
             <h2 class='p-2 bg-header text-center text-xl'>Leider keine Daten für dieses Jahr</h2>
         {/if}

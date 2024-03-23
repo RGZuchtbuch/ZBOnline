@@ -198,7 +198,9 @@ class Pair
 		if( $showCount > 0 ) {
 			$showTotalScore = 89 * $show['89'] + 90 * $show['90'] + 91 * $show['91'] + 92 * $show['92'] + 93 * $show['93'] + 94 * $show['94'] + 95 * $show['95'] + 96 * $show['96'] + 97 * $show['97'];
 			$showScore = $showTotalScore / $showCount;
-		}
+		} else { // being 0, so none counted
+            $showCount = null;
+        }
 
 		// save pigeon or layer
 		if( $pair['sectionId'] === 5 ) { // pigeon, no lay, no color

@@ -32,15 +32,7 @@ class YearDistricts extends Controller
         $colorId   = $this->query[ 'color' ] ?? null;
         $group     = $this->query[ 'group' ] ?? null;
         $districts = model\Result::getResultsYearDistricts( $year, $sectionId, $breedId, $colorId, $group );
-/*
-        if( $colorId ) {
-            $districts = query\Result::districtsForColor( $year, $colorId );
-        } else if( $breedId ) {
-            $districts = query\Result::districtsForBreed( $year, $breedId );
-        } else if( $sectionId ) {
-            $districts = query\Result::districtsForSection( $year, $sectionId );
-        }
-*/
+
         return ['districts' => $districts ];
     }
 
