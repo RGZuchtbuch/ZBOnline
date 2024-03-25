@@ -53,12 +53,12 @@
             <InputText class='w-8' label={nolabel ? '' : '#'} value={index+1} disabled/>
             <InputDate class='w-24' label={nolabel ? '' : 'Gelegt am'} bind:value={brood.start} validator={validate.date} />
             <InputNumber class='w-16' label={nolabel ? '' : 'Küken'} bind:value={brood.hatched} error='0 - 2'  validator={validate.chicks}/>
-            <InputDate class='w-24' label={nolabel ? '' : 'Beringt am'} bind:value={brood.ringed} validator={validate.ringed} />
+            <InputDate class='w-24 ml-4' label={nolabel ? '' : 'Beringt am'} bind:value={brood.ringed} validator={validate.ringed} />
             {#if brood.chicks && brood.chicks.length>=1 }
-                <InputRing class='32' label={nolabel ? '' : 'Ring Küken #1'} bind:value={brood.chicks[0].ring} validator={validate.ring1} />
+                <InputRing class='w-32' label={nolabel ? '' : 'Ring Küken #1'} bind:value={brood.chicks[0].ring} validator={validate.ring1} />
             {/if}
             {#if brood.chicks && brood.chicks.length>=2 }
-                <InputRing class='32' label={nolabel ? '' : 'Ring Küken #2'} bind:value={brood.chicks[1].ring} validator={validate.ring2} />
+                <InputRing class='w-32' label={nolabel ? '' : 'Ring Küken #2'} bind:value={brood.chicks[1].ring} validator={validate.ring2} />
             {/if}
         </div>
         <div class='flex flex-row gap-x-1'>
@@ -71,7 +71,7 @@
             <InputNumber class='w-16' label={nolabel ? '' : 'Eingelegt*'} bind:value={brood.eggs} validator={validate.eggs} />
             <InputNumber class='w-16' label={nolabel ? '' : 'Befruchtet'} bind:value={brood.fertile} error='Fehler' validator={validate.fertile} />
             <InputNumber class='w-16' label={nolabel ? '' : 'Geschlüpft*'} bind:value={brood.hatched} error='Fehler' validator={validate.hatched} />
-            <InputDate class='w-24 pl-2' label={nolabel ? '' : 'Beringt am'} bind:value={brood.ringed} validator={validate.ringed} />
+            <InputDate class='w-24 ml-4' label={nolabel ? '' : 'Beringt am'} bind:value={brood.ringed} validator={validate.ringed} />
         </div>
         <div class='flex flex-row gap-x-1'>
             <InputText class='w-16' label={nolabel ? '' : 'Befruchtung'} value={ getFertility( brood.eggs, brood.fertile )} disabled />

@@ -20,19 +20,23 @@
 	const state = getContext( 'form'); // store
 	let date = toDate( value );
 
-//    let localeValue = date ? date.getDate()+'.'+(date.getMonth()+1)+'.'+date.getFullYear() : null; // D
-    let localeValue = toDateString( date ); // D
+    let localValue = toDateString( date ); // German
+    let tempValue = value; // for detecting external change
 
-	let component = null;
+    function update( v ) {
+        if( value !== tempValue ) { // changed extern
+            localValue = tempValue = value;
+        }
+    }
 
 	function onInput( event ) {
-		const date = toDate( localeValue );
-    	value = date ? toDateISO( date ) : localeValue; // valid date or faulty as was
+		const date = toDate( localValue );
+    	value = tempValue = date ? toDateISO( date ) : localValue; // valid date or faulty as was
 	}
 
 	function onBlur( event ) { // format valid date
 		const date = toDate( value );
-		localeValue = date ? date.getDate().toString().padStart( 2, '0' )+'.'+(date.getMonth()+1).toString().padStart( 2, '0' )+'.'+date.getFullYear().toString().padStart(4, '0') : null; // to formatted locale
+        localValue = date ? date.getDate().toString().padStart( 2, '0' )+'.'+(date.getMonth()+1).toString().padStart( 2, '0' )+'.'+date.getFullYear().toString().padStart(4, '0') : null; // to formatted locale
 	}
 
 	onMount( () => {
@@ -40,11 +44,13 @@
 		element.addEventListener( 'blur', onBlur );
 	})
 
+    $: update( value ); // from extern or intern....
+
 </script>
 
 
-<TextInput class={className} bind:value={localeValue} bind:this={component}
-   bind:element={element} {name} {label} {placeholder} {title} {error} {validator} {disabled}
+<TextInput class={className} bind:value={localValue} bind:element={element}
+   {name} {label} {placeholder} {title} {error} {validator} {disabled}
    on:input on:change on:focus on:blur
 />
 

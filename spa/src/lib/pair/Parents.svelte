@@ -1,4 +1,5 @@
 <script>
+    import { router } from 'tinro';
     import validator from '../../js/validator.js';
 
     import InputDate from '../common/form/input/DateInput.svelte';
@@ -39,13 +40,14 @@
         }
     }
 
-    function update( pair ) {
+    function update( url, pair ) {
+        console.log( 'Update parents' );
         while( pair.parents.length < 2 ) { // want at least 2
             addParent( pair.id )
         }
     }
 
-    $: update( pair );
+    $: update( $router.url, pair );
 
     $: setSiresAndDames( pair );
 

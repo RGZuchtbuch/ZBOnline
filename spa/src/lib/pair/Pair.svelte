@@ -48,6 +48,7 @@
             broods: [],
             show: { 89:null, 90:null, 91:null, 92:null, 93:null, 94:null, 95:null, 96:null, 97:null },
             breeder: { firstname:null, infix:null, lastname:null },
+            delete: false,
         };
     }
 
@@ -58,23 +59,31 @@
     function onSubmit() {
         //disabled = true;
         // TODO check on delete like by having a checkbox for delete
-        if( pair.id > 0 ) { // existing
-            api.pair.put( pair.id, pair ).then( response => {
-                changed = false;
-            });
-        } else { // new
-            api.pair.post( pair ).then(response => {
-                pair.id = response.id;
-                changed = false;
-            });
+        if( pair.name ) {
+            if (pair.id > 0) { // existing
+                api.pair.put(pair.id, pair).then(response => {
+                    changed = false;
+                });
+            } else { // new
+                api.pair.post(pair).then(response => {
+                    pair.id = response.id;
+                    changed = false;
+                });
+            }
+        } else if( pair.delete ) {
+            api.pair.delete( pair.id );
+            console.log('Delete' );
+            router.goto(route.from);
         }
     }
 
 
     function updatePair( url ) {
+        console.log( 'Update Pair' );
         if( id > 0 && breederId > 0 && districtId > 0 ) { // existing, note id could be '0' from param for new
             api.pair.get( id ).then( response => {
                 pair = response.pair;
+                pair.delete = false;
                 formType = pair.sectionId === 5 ? PIGEONS : LAYERS;
                 api.breeder.get( pair.breederId ).then( response => {
                     pair.breeder = response.breeder;
@@ -96,18 +105,6 @@
             console.log( 'Form ', formType );
         }
     }
-
-
-    onMount( () => {
-        console.log( 'Maount', id);
-    })
-
-    beforeUpdate( () => {
-        console.log( 'Before', id);
-    })
-    afterUpdate( () => {
-        console.log( 'After', id);
-    })
 
     $: updatePair( $router.url );
 

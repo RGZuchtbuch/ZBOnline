@@ -11,6 +11,7 @@
 
     import BreedSelect from './BreedSelect.svelte';
     import FormStatus from '../common/form/Status.svelte';
+    import CheckBoxInput from '../common/form/input/CheckBoxInput.svelte';
 
 //    export let id;
     export let formType;
@@ -24,7 +25,7 @@
 
     const validate = {
         year:       (v) => validator(v).number().range(MINYEAR, MAXYEAR).isValid(),
-        name:       (v) => validator(v).string().length(1,16).isValid(),
+        name:       (v) => validator(v).string().length(1,16).orNullIf( pair.delete ).isValid(),
     }
 
     onMount( () => {
@@ -43,8 +44,14 @@
         }
     }
 
+    function onNameChange( event ) {
+        console.log( 'OnPC' )
+        pair.delete = pair.name ? false : pair.delete;
+    }
+
 //    $: setFocus( disabled ) // on switch to ! disabled
-//    $: validate( pair );
+
+
 
 </script>
 
@@ -59,13 +66,14 @@
     <div class='flex flex-row px-2 gap-x-1'>
         <InputText class='w-64' label='Züchter' value={txt(pair.breeder.firstname)+' '+txt(pair.breeder.infix)+' '+txt(pair.breeder.lastname)} disabled/>
         <InputNumber class='w-20' bind:element={focusElement} label='Jahr *' name='year' bind:value={pair.year} validator={validate.year}/>
-        <InputText class='w-20' label='Name *' bind:value={pair.name} error='* 1..16 bs' validator={validate.name} />
+        <InputText class='w-20' label='Name *' bind:value={pair.name} error='* 1..16 bs' validator={validate.name} on:input={onNameChange}/>
         <Select class='w-20' label='ZB Gruppe *' bind:value={pair.group} >
             {#each ['I', 'II', 'III' ] as group}
                 <option value={group} selected={group === pair.group}>{group}</option>
             {/each}
         </Select>
         <div class='grow'></div>
+        <CheckBoxInput class='w-12' label='Löschen' bind:value={ pair.delete } disabled={ pair.name != null }/>
         <FormStatus />
     </div>
     <BreedSelect class='flex flex-row p-2 gap-x-1' {formType} bind:value={pair} />

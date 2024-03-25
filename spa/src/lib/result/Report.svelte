@@ -316,8 +316,8 @@
                                 {/if}
                             {/each} <!-- color -->
                         {/each} <!-- subsection -->
-
-                        <tr> <!-- total subsection -->
+                        <!-- total subsection -->
+                        <tr>
                             <td>
                                 <div class='flex flex-row border-y border-gray-600 bg-gray-300 my-1 px-2 gap-x-1 justify-evenly text-sm italic'>
                                     <div class='grow'>Gesamt {subsection.name}</div>
@@ -398,62 +398,64 @@
 
 
                 </tbody>
+                {#if section.id === report.sections[ report.sections.length-1 ].id } <!-- last section -->
+                    <tbody>
+                        <!-- totals -->
+                        <tr><th>-</th></tr>
 
+                        <tr><th class='sticky top-0 border-y border-gray-600 p-2 bg-header text-center text-white text-xl' colspan=14>Gesammt Geflügel</th></tr>
+                        <tr>
+                            <th>
+                                <div class='flex flex-row bg-gray-300 px-2 gap-x-1 font-bold'>
+                                    <div class='grow text-left'>Alle Sparten, Gruppen, Rassen & Farben</div>
+                                    <div class='flex flex-row justify-evenly gap-x-6'>
+                                        <div class='w-14 text-center'>Zuchten</div>
+                                        <div class='w-28'></div>
+                                        <div class='w-40'></div>
+                                        <div class='w-28 text-center'>Schauleistung</div>
+                                    </div>
+                                </div>
+                                <div class='flex flex-row bg-gray-300 px-2 gap-x-1 text-xs'>
+                                    <div class='grow text-left'></div>
+                                    <div class='flex flex-row justify-evenly gap-x-6'>
+                                        <div class='flex w-14 justify-evenly'>
+                                            <div class='th'></div>
+                                        </div>
+                                        <div class='w-28'></div>
+                                        <div class='w-40'></div>
+                                        <div class='flex w-28 justify-evenly'>
+                                            <div class='th'>Tiere</div>
+                                            <div class='th'>Punkte</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>
+                                <div class='flex flex-row bg-header text-white px-2 gap-x-1 justify-evenly font-bold text-sm italic border-y border-gray-600'>
+                                    <div class='grow'>Gesamt</div>
+                                    <div class='flex justify-evenly text-sm gap-x-6'>
+                                        <div class='flex w-14 justify-evenly'>
+                                            <div class='td' title='Zahl der Zuchten / Züchter'>{dec( report.total.breeders )}</div>
+                                        </div>
+                                        <div class='w-28'></div>
+
+                                        <div class='w-40'></div>
+
+                                        <div class='flex w-28 justify-evenly'>
+                                            <div class='td' title='Zahl der ausgestellten Tieren'>{dec( report.total.showCount )}</div>
+                                            <div class='td' title='Durchschnitt Bewertungsnote'>{dec( report.total.showScore, 1 )}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </th>
+                        </tr>
+                    </tbody>
+                {/if}
 
                 <div class='print-break text-center'> - </div>
             {/each}
-            <tfoot>
-                <!-- totals -->
-                <tr><th class='sticky top-0 border-y border-gray-600 p-2 bg-header text-center text-white text-xl' colspan=14>Sparte Geflügel</th></tr>
-                <tr>
-                    <th>
-                        <div class='flex flex-row bg-gray-300 px-2 gap-x-1 font-bold'>
-                            <div class='grow text-left'>Alle Sparten, Gruppen, Rassen & Farben</div>
-                            <div class='flex flex-row justify-evenly gap-x-6'>
-                                <div class='w-14 text-center'>Zuchten</div>
-                                <div class='w-28'></div>
-                                <div class='w-40'></div>
-                                <div class='w-28 text-center'>Schauleistung</div>
-                            </div>
-                        </div>
-                        <div class='flex flex-row bg-gray-300 px-2 gap-x-1 text-xs'>
-                            <div class='grow text-left'></div>
-                            <div class='flex flex-row justify-evenly gap-x-6'>
-                                <div class='flex w-14 justify-evenly'>
-                                    <div class='th'></div>
-                                </div>
-                                <div class='w-28'></div>
-                                <div class='w-40'></div>
-                                <div class='flex w-28 justify-evenly'>
-                                    <div class='th'>Tiere</div>
-                                    <div class='th'>Punkte</div>
-                                </div>
-                            </div>
-                        </div>
-                    </th>
-                </tr>
-                <tr>
-                    <th>
-                        <div class='flex flex-row bg-header text-white px-2 gap-x-1 justify-evenly font-bold text-sm italic border-y border-gray-600'>
-                            <div class='grow'>Gesamt</div>
-                            <div class='flex justify-evenly text-sm gap-x-6'>
-                                <div class='flex w-14 justify-evenly'>
-                                    <div class='td' title='Zahl der Zuchten / Züchter'>{dec( report.total.breeders )}</div>
-                                </div>
-                                <div class='w-28'></div>
-
-                                <div class='w-40'></div>
-
-                                <div class='flex w-28 justify-evenly'>
-                                    <div class='td' title='Zahl der ausgestellten Tieren'>{dec( report.total.showCount )}</div>
-                                    <div class='td' title='Durchschnitt Bewertungsnote'>{dec( report.total.showScore, 1 )}</div>
-                                </div>
-                            </div>
-                        </div>
-                    </th>
-                </tr>
-                <tr><th>-</th></tr>
-            </tfoot>
         </table>
         {#if report.sections.length === 0 }
             <h2 class='p-2 bg-header text-center text-xl'>Leider keine Daten für dieses Jahr</h2>

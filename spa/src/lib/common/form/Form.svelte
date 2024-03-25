@@ -69,8 +69,8 @@
         $state.valid = valid = undefined; // to be validated...
         clearTimeout( validateTimeout ); // reset timers to fire after timeout on last change
         clearTimeout( saveTimeout );
-        validateTimeout = setTimeout( validate, 500 ); // validate n ms after last input
-        if( autoSave ) saveTimeout = setTimeout( trySubmit, 2000 ); // try save n ms after last input
+        validateTimeout = setTimeout( validate, 750 ); // validate n ms after last input
+        if( autoSave ) saveTimeout = setTimeout( trySubmit, 1500 ); // try save n ms after last input
     }
 
     function onSubmit( event ) { // enter or submit button
@@ -116,7 +116,7 @@
 
     form :global(label.name) { /* for inputs label */
         font-size: 0.6em;
-        color: grey;
+        color: black;
         text-align: left;
         padding-left: 0.5em;
     }

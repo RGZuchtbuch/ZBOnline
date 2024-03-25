@@ -142,7 +142,7 @@
             <div class='pl-6 border-2 border-red-400 rounded' transition:slide>
                 <Form class='flex flex-col' on:submit={onSubmit}>
                     <div class='flex'>
-                        <div>Rasse ändern. leer & löschen nur wenn ohne Farbenschläge</div>
+                        <div>Rasse ändern. leer & löschen nur wenn ohne Farbenschläge und in keine Meldung</div>
                         <FormStatus />
                     </div>
                     <div class='flex'>

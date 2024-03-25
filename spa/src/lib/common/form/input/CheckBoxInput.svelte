@@ -35,13 +35,15 @@
 		if( index >= 0 ) $state.validators.splice( index, 1 ); // remove this validator;
 	});
 
+	$: console.log( 'VBI', value );
+
 </script>
 
 <div class='{className}'>
 	{#if label}
 		<label class='name' for='number'> {label} </label>
 	{/if}
-	<input class='input' {name} class:valid bind:this={element} type='checkbox' bind:value={value}
+	<input class='input' {name} class:valid bind:this={element} type='checkbox' bind:checked={value}
 		   {placeholder} {title} {disabled}
 		   on:input on:change on:focus on:blur
 	/>

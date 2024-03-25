@@ -31,11 +31,9 @@
     }
     onMount( () => { // catch input and register validator
         element.addEventListener( 'input', onInput );
-
         if( state && validator ) $state.validators.push( validate ); // add this.validate with it's context
     });
     onDestroy( () => { // remove validator
-        console.log( 'form state', state );
         if( state ) {
             let index = $state.validators.indexOf(validate);
             if (index >= 0) $state.validators.splice(index, 1); // remove this validator;

@@ -1,4 +1,5 @@
 <script>
+    import { router } from 'tinro';
     import api from '../../js/api.js';
     import {dec, pct, toRing} from '../../js/util.js';
     import validator from '../../js/validator.js';
@@ -49,8 +50,16 @@
         return null; // not found
     }
 
-    $: getAncestorPairs( parent.ring );
-    $: ancestorPair = getAncestor( ancestorPairs, parent.parentsPairId ); // after loaded ancestors or changed ancestorId
+    function update( url, parent ) {
+        console.log( 'Parent update', parent );
+        getAncestorPairs( parent.ring );
+        ancestorPair = getAncestor( ancestorPairs, parent.parentsPairId ); // after loaded ancestors or changed ancestorId
+    }
+
+//    $: getAncestorPairs( parent.ring );
+//    $: ancestorPair = getAncestor( ancestorPairs, parent.parentsPairId ); // after loaded ancestors or changed ancestorId
+
+    $: update( $router.url, parent );
 
 </script>
 

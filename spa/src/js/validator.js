@@ -100,7 +100,7 @@ export default function validator(value ) {
 
 
         if : ( condition ) => {
-            valid &&= condition;
+            valid = condition ? valid : false;
             return worker;
         },
         orNull : () => { // last check

@@ -1,4 +1,5 @@
 <script>
+
     import {getContext, onMount} from 'svelte';
     import dic from '../../../../js/dictionairy.js';
 	import {toRing, toRingString} from '../../../../js/util.js';
@@ -18,24 +19,36 @@
 
 	export let disabled = false;
 
-    let localeValue = value; // D
+    let localValue = value; // D
+    let tempValue = value; // for detecting extern change
 
-    function onInput( event ) {
-        const ring  = toRing( localeValue );
-        value = ring ? toRingString( ring ) : localeValue; // valid date or faulty as was
+    function update( v ) {
+        if( value !== tempValue ) { // changed extern
+            tempValue = localValue = value;
+        }
+    }
+
+    function onInput( event ) { // from intern
+        console.log( 'RI', localValue, event.target.value );
+        const ring  = toRing( localValue );
+        value = tempValue = ring ? toRingString( ring ) : localValue; // valid date or faulty as was
     }
 
 	function onBlur( event ) {
-        localeValue = value; // value already updated by onInput
+        localValue = value; // value already updated by onInput
 	}
 
     onMount( () => {
         element.addEventListener( 'input', onInput );
         element.addEventListener( 'blur', onBlur );
     })
+
+    $: update( value );
 </script>
 
 
-<TextInput class={className} {name} bind:value={localeValue} {label} {title} {error} {validator} {disabled}
-           bind:element={element} on:input on:change on:focus on:blur />
+<TextInput class={className} {name} {label} {title} {error} {validator} {disabled}
+           bind:value={localValue}
+           bind:element={element}
+           on:input on:change on:focus on:blur />
 

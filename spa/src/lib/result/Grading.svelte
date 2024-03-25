@@ -38,7 +38,7 @@
 		hasBroodChicks = null;
 	}
 
-    function findSection( id, section ) {
+    function findSection( id, section ) { // find section to id
         if( section.id === id ) return section;
         for( let child of section.children ) {
             const foundSection = findSection( id, child );
@@ -47,7 +47,7 @@
         return null;
     }
 
-    function collectBreeds( section, breeds ) {
+    function collectBreeds( section, breeds ) { // collect breeds for sections and it's subsections
        // console.log( section.breeds );
         breeds.push( ...section.breeds );
         for( let childSection of section.children ) {

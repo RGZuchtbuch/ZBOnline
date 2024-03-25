@@ -1,100 +1,118 @@
 <script>
     import {onMount} from 'svelte';
+    import {router} from 'tinro'
+    import { standard } from '../../js/store.js';
     import api from "../../js/api.js";
     import validator from '../../js/validator.js';
     import Select from '../common/form/input/Select.svelte';
 
     export let formType;
     export let value = { sectionId:null, breedId:null, colorId:null }; // take from pair or other
+
     let classname = '';
     export { classname as class }
 
     let sections = formType === PIGEONS ?
         [ { id:5, name:'Tauben' } ] :
-        [ { id:3, name:'Groß und Wassergeflügel' }, { id:11, name:'Große Hühner' }, { id:12, name:'Zwerghühner und Wachteln' }, { id:6, name:'Ziergeflügel' } ];
+        [ { id:3, name:'Groß & Wassergeflügel' }, { id:11, name:'Große Hühner' }, { id:12, name:'Zwerghühner & Wachteln' }, { id:6, name:'Ziergeflügel' } ];
+
     let breeds = [];
     let colors = [];
 
-
-    let sectionId = null; // to avoid reloading
-    let breedId = null; // to avoid reloading
-    let colorId = null; // to avoid reloading
+    let section = null;
+    let breed = null;
+    let color = null;
 
     const validate = {
-        sectionId:      (v) => validator(v).number().if( v > 0 ).isValid(),
-        breedId:        (v) => validator(v).number().if( v > 0 ).isValid(),
-        colorId:        (v) => validator(v).number().if( v > 0 ).orNullIf( sectionId === 5 ).isValid(),
+        section:      (v) => validator(v).if( v ).isValid(),
+        breed:        (v) => validator(v).if( v ).isValid(),
+        color:        (v) => validator(v).if( v ).orNullIf( value.sectionId === PIGEONS ).isValid(),
     }
 
-    function getBreeds( v ) {
-        if( ! sectionId || value.sectionId !== sectionId ) {
-            sectionId = value.sectionId;
-            if( value.sectionId > 0 ) { // any selected
-                api.section.breeds.get(value.sectionId).then(data => {
-                    breeds = data.breeds;
-                });
+    function update( u, s ) {
+        console.log( 'Updated', value.sectionId, value.breedId, value.colorId );
+        if( value && $standard ) {
+            section = getSection( value.sectionId, $standard );
+            console.log( 'Updated', section );
+            breeds = getBreeds( section );
+            console.log( 'Updated', breeds );
+            breed = breeds.find( breed => breed.id === value.breedId );
+            console.log( 'Updated', breed );
+            colors = breed.colors;
+            console.log( 'Updated', colors );
+            color = colors.find( color => color.id === value.colorId );
+            console.log( 'Updated', color );
+
+        } else {
+            console.log( 'Update null' );
+        }
+    }
+
+    function getSection( id, section ) { // recursive
+        if( section ) {
+            if( section.id === id ) return section;
+            for (const child of section.children) {
+                const childSection = getSection(id, child);
+                if (childSection) return childSection;
             }
         }
+        return null;
     }
-    function getColors( v ) {
-        if( ! breedId || value.breedId !== breedId ) {
-            breedId = value.breedId;
-            if (value.breedId > 0) { // any selected
-                api.breed.colors.get(value.breedId).then(data => {
-                    colors = data.colors
-                });
+
+    function getBreeds( section, breeds ) { // recursive
+        if( breeds === undefined ) breeds = []; // init
+        if( section ) {
+            console.log( 'Sec', section )
+            breeds.push( ...section.breeds );
+            for( const childSection of section.children ) {
+                getBreeds( childSection, breeds );
             }
         }
+        return breeds;
     }
 
-    function updateSection() {
-        if (value.sectionId) {
-            getBreeds();
-            colors = [];
-        } else {
-            breeds = [];
-            colors = [];
+    function getBreed( id, breeds ) {
+        if( breeds ) {
+            for (const breed of breeds) { // check this sections breeds
+                if (breed.id === id) return breed;
+            }
         }
-        value.breedId = null;
-        value.colorId = null;
-        validate();
+        return null;
     }
-
-    function updateBreed() {
-        if ( value.breedId ) {
-            api.breed.colors.get( value.breedId ).then(data => {
-                colors = data.colors
-            });
-        } else {
-            colors = [];
+    function getColor( id, breed ) {
+        if( breed ) {
+            for (const color of breed.colors) { // check this sections breeds
+                if (color.id === id) return color;
+            }
         }
-        value.colorId = null;
-        validate();
+        return null;
     }
 
-    function updateColor() {
-    }
 
-    function update( value ) {
-        // getSections(); // only once
-        getBreeds( value.sectionId ); // after getSection
-        getColors( value.breedId ); // after getBreeds !
+    function onSectionChange( event ) {
+        section = getSection( value.sectionId, $standard ); // from standard as sections is incomplete
+        breeds = getBreeds( section );
+        colors = [];
+        value.breedId = value.coloId = null;
+    }
+    function onBreedChange( event ) {
+        const breed = breeds.find( breed => breed.id === value.breedId );
+        colors = breed.colors;
+        value.coloId = null;
     }
 
     onMount(() => {
     })
 
-    $: update( value ); // from extern
+    $: update( $router.url, $standard )
 
-    // need to take care of up[date from the url vs change in the form. Therefore the extern and intern step
-    // solution with color not nice, but works.
 </script>
 
 
 
 <fieldset class='flex flex-row px-2 gap-x-1'>
-    {#if sections}
-        <Select class='w-60' label='Sparte *' bind:value={value.sectionId} error='Pflichtfeld' on:change={updateSection} validator={validate.sectionId}>
+    {#if $standard && sections && value }
+        <Select class='w-60' label='Sparte *' bind:value={value.sectionId} error='Pflichtfeld' validator={validate.section} on:change={onSectionChange}>
             <option value={null}></option>
             {#each sections as section }
                 <option value={section.id} selected={section.id === value.sectionId}>{section.name}</option>
@@ -103,15 +121,15 @@
 
         {#if breeds}
 
-            <Select class='w-104' label={'Rasse *'} bind:value={value.breedId} error='Pflichtfeld' on:change={updateBreed} validator={validate.breedId}>
+            <Select class='w-104' label={'Rasse *'} bind:value={value.breedId} error='Pflichtfeld' validator={validate.breed} on:change={onBreedChange}>
                 <option value={null}></option>
                 {#each breeds as breed }
-                    <option value={breed.id} selected={breed.id === value.breedId}>{breed.name}</option>
+                    <option value={breed.id} selected={breed.id === value.breedId} >{breed.name}</option>
                 {/each}
             </Select>
 
             {#if colors}
-                <Select class='w-56' label='Farbenschlag' bind:value={value.colorId} error='Pflichtfeld' validator={validate.colorId}>
+                <Select class='w-56' label='Farbenschlag' bind:value={value.colorId} error='Pflichtfeld' validator={validate.color}>
                     <option value={null}></option>
                     {#each colors as color }
                         <option value={color.id} selected={color.id === value.colorId}>{color.name}</option>
