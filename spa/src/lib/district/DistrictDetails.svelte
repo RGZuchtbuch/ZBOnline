@@ -3,12 +3,17 @@
     import {meta} from "tinro";
     import api from '../../js/api.js';
     import {user} from '../../js/store.js';
+    import validator from '../../js/validator.js';
     import {txt} from '../../js/util.js';
-    import Number from '../common/input/Number.svelte';
-    import Select from '../common/input/Select.svelte';
-    import Text from '../common/input/Text.svelte';
+
     import Page from "../common/Page.svelte";
+
+    import Form from '../common/form/Form.svelte';
+    import NumberInput from '../common/form/input/NumberInput.svelte';
+    import Select from '../common/form/input/Select.svelte';
+    import TextInput from '../common/form/input/TextInput.svelte';
     import Districts from '../districts/DistrictsList.svelte';
+    import FormStatus from '../common/form/Status.svelte';
 
     export let districtId;
 
@@ -21,6 +26,15 @@
     const route    = meta();
     const dispatch = createEventDispatcher();
 
+    const validate = {
+        name:      (v) => validator(v).string().length( 3, 48 ).isValid(),
+        fullName:  (v) => validator(v).string().length( 3, 96 ).isValid(),
+        shortName: (v) => validator(v).string().length( 3, 16 ).isValid(),
+        lattitude: (v) => validator(v).number().range( MINLATITUDE, MAXLATITUDE ).isValid(),
+        longitude: (v) => validator(v).number().range( MINLONGITUDE, MAXLONGITUDE ).isValid(),
+        // mod ?
+    }
+
     function onToggleEdit() {
         disabled = ! disabled;
     }
@@ -30,16 +44,13 @@
     }
 
     function onSubmit() {
-        disabled = true;
         if( district.id > 0 ) {
             api.district.put( district.id, district ).then(response => {
-                changed = false;
             });
 
         } else {
             api.district.post(district).then(response => {
                 district.id = response.id;
-                changed = false;
             });
         }
     }
@@ -72,36 +83,32 @@
             {/if}
         </div>
 
-        <form slot='body' class='flex flex-col' on:input={onChange}>
-            <fieldset {disabled}>
+        <Form slot='body' on:submit={onSubmit} {disabled}>
+            <div class='flex'>
+                <div>District ändern</div>
+                <FormStatus />
+            </div>
+            <TextInput class='w-80' bind:value={district.name} label='Name' validator={validate.name}/>
+            <TextInput class='w-160' bind:value={district.fullname} label='Name voll' validator={validate.fullName}/>
+            <TextInput class='w-24' bind:value={district.short} label='Name abk.' validator={validate.shortName}/>
 
-                <div class='flex gap-2'>
-                    <Text class='w-64' bind:value={district.name} label='Name' required/>
-                </div>
-                <Text class='w-128' bind:value={district.fullname} label='Name voll' required/>
-                <Text class='w-24' bind:value={district.short} label='Name abk.' required/>
+            <div class='flex gap-x-2'>
+                <NumberInput class='w-32' bind:value={district.latitude} label='Breitegrad N' validator={validate.lattitude} />
+                <NumberInput class='w-32' bind:value={district.longitude}  label='Längegrad O' validator={validate.longitude} />
+            </div>
 
-                <div class='flex gap-x-2'>
-                    <Number class='w-32' bind:value={district.latitude} label='Breitegrad N' min={MINLATITUDE} max={MAXLATITUDE} required />
-                    <Number class='w-32' bind:value={district.longitude}  label='Längegrad O' min={MINLONGITUDE} max={MAXLONGITUDE} required />
-                </div>
-
-                <Select class='w-128' bind:value={district.moderatorId} label='Zuchtbuch Obmann' >
-                    {#if members}
-                        <option value={null}></option>
-                        {#each members as member}
-                            <option value={member.id} selected={district.moderatorId == member.id ? 'selected' : '' }>
-                                {txt(member.lastname)}, {txt(member.firstname)} {txt(member.infix)}
-                            </option>
-                        {/each}
-                    {/if}
-                </Select>
-
-                {#if ! disabled && changed}
-                    <div class='bg-alert text-center font-bold text-white cursor-pointer' on:click={onSubmit}>Speichern</div>
+            <Select class='w-128' bind:value={district.moderatorId} label='Zuchtbuch Obmann' >
+                {#if members}
+                    <option value={null}></option>
+                    {#each members as member}
+                        <option value={member.id} selected={district.moderatorId == member.id ? 'selected' : '' }>
+                            {txt(member.lastname)}, {txt(member.firstname)} {txt(member.infix)}
+                        </option>
+                    {/each}
                 {/if}
-            </fieldset>
-        </form>
+            </Select>
+        </Form>
+
     </Page>
 {/if}
 

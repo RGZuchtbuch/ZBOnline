@@ -36,7 +36,6 @@
         if( pair.sectionId === PIGEONS ) { // layer
             return pct( brood.hatched, 2, 0 ); // defaults to 2 eggs
         } else { // pigeon
-            console.log( 'H', brood.hatched, brood.eggs );
             return pct( brood.hatched, brood.eggs, 0 );
         }
     }

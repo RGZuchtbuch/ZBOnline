@@ -139,6 +139,7 @@ input.invalid, textarea.invalid, select.invalid {
 
     div {
     }
+
     .no-print {
         display: none;
     }

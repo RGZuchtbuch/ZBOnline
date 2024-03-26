@@ -30,19 +30,16 @@
     }
 
     function update( u, s ) {
-        console.log( 'Updated', value.sectionId, value.breedId, value.colorId );
         if( value && $standard ) {
             section = getSection( value.sectionId, $standard );
-            console.log( 'Updated', section );
-            breeds = getBreeds( section );
-            console.log( 'Updated', breeds );
-            breed = breeds.find( breed => breed.id === value.breedId );
-            console.log( 'Updated', breed );
-            colors = breed.colors;
-            console.log( 'Updated', colors );
-            color = colors.find( color => color.id === value.colorId );
-            console.log( 'Updated', color );
-
+            if( section ) {
+                breeds = getBreeds(section);
+                breed = breeds.find(breed => breed.id === value.breedId);
+                if( breed ) {
+                    colors = breed.colors;
+                    color = colors.find(color => color.id === value.colorId);
+                }
+            }
         } else {
             console.log( 'Update null' );
         }
@@ -62,7 +59,6 @@
     function getBreeds( section, breeds ) { // recursive
         if( breeds === undefined ) breeds = []; // init
         if( section ) {
-            console.log( 'Sec', section )
             breeds.push( ...section.breeds );
             for( const childSection of section.children ) {
                 getBreeds( childSection, breeds );
@@ -71,30 +67,13 @@
         return breeds;
     }
 
-    function getBreed( id, breeds ) {
-        if( breeds ) {
-            for (const breed of breeds) { // check this sections breeds
-                if (breed.id === id) return breed;
-            }
-        }
-        return null;
-    }
-    function getColor( id, breed ) {
-        if( breed ) {
-            for (const color of breed.colors) { // check this sections breeds
-                if (color.id === id) return color;
-            }
-        }
-        return null;
-    }
-
-
     function onSectionChange( event ) {
         section = getSection( value.sectionId, $standard ); // from standard as sections is incomplete
         breeds = getBreeds( section );
         colors = [];
         value.breedId = value.coloId = null;
     }
+
     function onBreedChange( event ) {
         const breed = breeds.find( breed => breed.id === value.breedId );
         colors = breed.colors;

@@ -24,10 +24,10 @@
             breeder = {
                 id:null, firstname:null, infix: null, lastname:null, active:true,
                 districtId: districtId,
-                district:{ id:districtId, name:null },
+                district:{ id:districtId, name:null }, // why this ?
                 clubId:null,
-                club:{ id:null, name:null },
-                start: Date.now(), end: null,
+                club:null,
+                start: null, end: null,
                 email: null,
                 info: null
             };;

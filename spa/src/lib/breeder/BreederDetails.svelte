@@ -35,16 +35,13 @@
         name:       (v) => validator(v).string().length(1,32).isValid(),
         infix:      (v) => validator(v).string().length(1,16).orNull().isValid(),
         email:      (v) => validator(v).email().orNull().isValid(),
-        start:      (v) => validator(v).date().orNull().isValid(),
+        start:      (v) => validator(v).date().isValid(),
         end:        (v) => validator(breeder.end).date().after( breeder.start ).orNull().isValid(),
     }
 
     function onToggleEdit() {
         disabled = ! disabled;
         needFocus = true;
-        if( ! disabled ) {
-            //loadClubs( breeder.district.id ); // TODO  !!!!!!!!!!!!!!
-        }
     }
 
     function onChange(event) {
@@ -70,32 +67,6 @@
         }
     }
 
-/*
-    function loadClubs( id ) {
-        clubs = null; // to trigger the select again
-        api.district.descendants.get( breeder.districtId ).then( response => {
-            clubs = filterClubs( response.district );
-            console.log( 'Clubs', clubs );
-        })
-    }
-*/
-
-    function filterClubs( district, resultClubs ) {
-        if( ! resultClubs ) { // init
-            resultClubs = [];
-        }
-        if( district.level === 'OV' ) {
-            resultClubs.push( district )
-        }
-        for( const child of district.children ) {
-            filterClubs( child, resultClubs );
-        }
-        return resultClubs;
-    }
-
-    function findClub( clubId ) {
-
-    }
 
     onMount( () => {
         //focusElement.focus();
@@ -112,7 +83,7 @@
         }
     })
 
-
+    console.log( 'Breeder', breeder );
 </script>
 
 <Page>

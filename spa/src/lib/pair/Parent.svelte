@@ -27,18 +27,19 @@
         points:     (v) => validator(v).number().range( 89.0, 97.0 ).orNull().isValid(),
     }
 
-    function getAncestorPairs( ring ) {
+    function getAncestorPairs( ring, parentsPairId ) {
         let newRingObject = toRing( ring ); // decode input
         if( newRingObject && ( ! ringObject || ringObject.year !== newRingObject.year ) ) { // first time or valid ring and changed
             ringObject = newRingObject;
             api.breeder.year.pairs.get(pair.breederId, ringObject.year).then(response => {
                 ancestorPairs = response.pairs;
-                console.log( ancestorPairs );
+                ancestorPair = getAncestor( ancestorPairs, parentsPairId ); // after loaded ancestors or changed ancestorId
             })
         }
     }
 
     function getAncestor( ancestorPairs, parentsPairId ) {
+        console.log( 'AP', ancestorPairs, parentsPairId );
         if( parentsPairId && ancestorPairs ) {
             for (const pair of ancestorPairs) {
                 if (pair.id === parentsPairId) {
@@ -52,8 +53,7 @@
 
     function update( url, parent ) {
         console.log( 'Parent update', parent );
-        getAncestorPairs( parent.ring );
-        ancestorPair = getAncestor( ancestorPairs, parent.parentsPairId ); // after loaded ancestors or changed ancestorId
+        getAncestorPairs( parent.ring, parent.parentsPairId );
     }
 
 //    $: getAncestorPairs( parent.ring );

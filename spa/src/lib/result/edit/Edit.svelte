@@ -24,7 +24,7 @@
         console.log( 'Query changed', now.getMonth() );
         sectionId = route.query.section ? Number( route.query.section ) : 3; // get from route or 3
         // year is query year or lastyear during spring or current year
-        year      = route.query.year   ? Number( route.query.year )    : now.getMonth() < 4 ? now.getFullYear()-1 : now.getFullYear();
+        year      = route.query.year   ? Number( route.query.year )    : now.getMonth() < 3 ? now.getFullYear()-1 : now.getFullYear(); // mind month 0..11
         group     = route.query.group  && ['I', 'II', 'III'].includes( route.query.group ) ? route.query.group : 'I';
         saveCount = 0;
         loadDistrict();
@@ -63,7 +63,7 @@
 </div>
 
 
-<Selector bind:year bind:sectionId bind:group/> {year}
+<Selector bind:year bind:sectionId bind:group/>
 
 <Header {saveCount} />
 
