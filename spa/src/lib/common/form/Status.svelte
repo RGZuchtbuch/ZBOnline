@@ -28,16 +28,17 @@
 <style>
 	.status {
 		color: #0A0;
-        display: flex;
-        align-items: center;
-		padding: 0 1em;
-		cursor: help;
+        vertical-align: text-top;
+		padding: 0 0.25em;
+		cursor: default;
     }
     .changed {
         color: orange;
+	    cursor: wait;
     }
     .invalid {
         color: red;
+	    cursor: no-drop;
     }
 
 

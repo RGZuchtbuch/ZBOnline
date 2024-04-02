@@ -15,13 +15,19 @@ class Standard
 {
 
 	public static function get( Request $request, Response $response, array $args ) : Response { // get whole standard
-
+		$json = model\Cache::get( 'Standard', $request->getUri()->getPath(), $request->getUri()->getQuery() );
+		if( $json ) { // in cache
+            $response->getBody()->write( $json );
+			return $response;
+		}
 		$sections = model\Section::getDescendants(2); // all poultry
 		$breeds = model\Breed::get();
 		$colors = model\Color::get();
 		$standard = Standard::toStandardTree($sections, $breeds, $colors);
-		$response->getBody()->write( json_encode( [ 'standard' => $standard ], JSON_UNESCAPED_SLASHES ) );
-		return $response;
+		$json = json_encode( [ 'standard' => $standard ], JSON_UNESCAPED_SLASHES );
+		$response->getBody()->write( $json );
+		model\Cache::set( 'Standard', $request->getUri()->getPath(), $request->getUri()->getQuery(), $json );
+        return $response;
 	}
 
 	/** other getters **/

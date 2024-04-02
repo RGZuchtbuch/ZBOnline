@@ -37,9 +37,7 @@
         }
     }
     function trySubmit() { // called by submit or autosave timeout
-        console.log( 'TrySubmit' );
         if( $state.changed && $state.valid ) {
-            console.log( 'Fire submit' );
             $state.changed = changed = false; // after post success
             dispatch( 'submit' ); // let outside do the actual submit
             return true; // submitted
@@ -134,12 +132,11 @@
         height: 6em;
     }
     form :global(.input) {
-        padding: 0em 0.25em;
         margin: 0.0em;
         color: black;
         border: solid 1px red;
         border-radius: 0.25em;
-        padding: 0.0em 0.35em;
+        padding: 0;
     }
     form :global(.input:disabled) {
         color: black;

@@ -43,8 +43,6 @@
             sum.showCount += result.showCount;
             sum.showScore += result.breeders * result.showScore;
         }
-
-        if( result.broodPigeonBreeders > 0 ) console.log( 'BPB', sum );
     }
 
     function avgTotal( sum ) { // get avg from total
@@ -134,8 +132,6 @@
     });
 
     $: calcTotals( report );
-
-    $: console.log( 'Report', report );
 
 </script>
 

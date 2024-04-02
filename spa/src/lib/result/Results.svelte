@@ -227,7 +227,6 @@
 
             <div class='flex flex-row m-2 border border-gray-400 gap-x-8 justify-evenly'>
                 <SectionsPie {districtId} {year} {typeId}/>
-
             </div>
 
             <div class='flex flex-col m-2 border border-gray-400'>

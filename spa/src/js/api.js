@@ -122,13 +122,16 @@ export default {
 
     map: {
         color: {
-            get: ( year, colorId ) => get( 'api/results/districts?year='+year+'&color='+colorId ),
+//            get: ( year, colorId ) => get( 'api/results/districts?year='+year+'&color='+colorId ),
+            get: ( year, colorId ) => get( 'api/results/districts/year/'+year+'?color='+colorId ),
         },
         breed: {
-            get: ( year, breedId ) => get( 'api/results/districts?year='+year+'&breed='+breedId ),
+//            get: ( year, breedId ) => get( 'api/results/districts?year='+year+'&breed='+breedId ),
+            get: ( year, breedId ) => get( 'api/results/districts/year/'+year+'?breed='+breedId ),
         },
         section: {
-            get: ( year, sectionId ) => get( 'api/results/districts?year='+year+'&section='+sectionId ),
+//            get: ( year, sectionId ) => get( 'api/results/districts?year='+year+'&section='+sectionId ),
+            get: ( year, sectionId ) => get( 'api/results/districts/year/'+year+'?section='+sectionId ),
         },
     },
 
@@ -179,8 +182,9 @@ export default {
     result: {
         get: ( id ) => get( 'api/result/'+id ),
         post: ( result ) => post( 'api/result', result ), // does insert or replace based on id ( null )
+        put: ( id, result ) => put( 'api/result/'+id, result ), // does update
         delete: ( id ) => del( 'api/result/'+id ),
-        districtYear: ( districtId, year, sectionId, breedId, colorId, group ) => {
+        districtYear: ( districtId, year, sectionId, breedId, colorId, group ) => { // for chart
             let params = {};
 
             if( sectionId ) params.section = sectionId;
@@ -215,15 +219,18 @@ export default {
     trend: {
         color: {
             get: ( districtId, colorId ) =>
-                get( 'api/results/years?district='+districtId+'&color='+colorId ),
+                get( 'api/results/years/district/'+districtId+'?color='+colorId ),
+//            get( 'api/results/years?district='+districtId+'&color='+colorId ),
         },
         breed: {
             get: ( districtId, breedId ) =>
-                get( 'api/results/years?district='+districtId+'&breed='+breedId ),
+                get( 'api/results/years/district/'+districtId+'?breed='+breedId ),
+//            get( 'api/results/years?district='+districtId+'&breed='+breedId ),
         },
         section: {
             get: ( districtId, sectionId ) =>
-                get( 'api/results/years?district='+districtId+'&section='+sectionId ),
+                get( 'api/results/years/district/'+districtId+'?section='+sectionId ),
+//            get( 'api/results/years?district='+districtId+'&section='+sectionId ),
         },
     },
 
@@ -289,7 +296,16 @@ let token = getToken();
 const cache = {
     urls:{}, // url -> promise, due
     get( url ) {
-        return this.urls[ url ];
+        const cached = this.urls[ url ]; // get cached if exists
+        let now = Date.now();
+        if( cached ) {
+            if (cached.due > now) { // cached and still fresh
+                return cached.promise;
+            } else {
+                delete this.urls[url]; // expired
+            }
+        }
+        return null;
     },
     put( url, promise, timeout ) {
         const now = Date.now();
@@ -298,7 +314,8 @@ const cache = {
     clear() {
         this.urls = {};
     },
-    update() {
+    update() { // periodical cleanup
+        console.log( 'Cache cleanup' );
         let now = new Date().getTime(); // in ms
         const toDelete = []; // collecte old, avoiding deleting while iterating
         for( const url in this.urls ) { // check per url->promise and collect before delete
@@ -347,19 +364,16 @@ function getHeaders() {
 }
 
 
-/**** FETYCH OPERATIONS ****/
+/**** FETCH OPERATIONS ****/
 
 async function get( url, timeout = CACHETIMEOUT ) {
-//    let cached = cache.get( url );
-//    let now = Date.now(); //new Date().getTime(); // in ms
-//    if( cached && cached.due > now ) { // cached and still fresh
-//        return cached.promise;
-//    } else {
+    let promise = cache.get( url );
+    if( ! promise ) {
         let options = {
             method: 'GET',
             headers: getHeaders()
         }
-        let promise = fetch(APIROOT+url, options).then( response => {
+        promise = fetch(APIROOT+url, options).then( response => {
             if (response.ok) {
                 return response.json();
             }
@@ -367,8 +381,8 @@ async function get( url, timeout = CACHETIMEOUT ) {
             return null;
         });
         cache.put( url, promise, timeout );
-        return promise;
-//    }
+    }
+    return promise;
 }
 
 async function post( url, data ) {

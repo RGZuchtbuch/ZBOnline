@@ -6,6 +6,7 @@
     import dic from '../../js/dictionairy.js';
     import validator from '../../js/validator.js';
     import api from "../../js/api.js";
+    import { txt } from '../../js/util.js';
 
     import Form from '../common/form/Form.svelte';
     import TextInput from '../common/form/input/TextInput.svelte';
@@ -34,8 +35,8 @@
 
     function onSubmit() {
         console.log( 'Submit ', color );
-        //edit = false;
         if( color.name ) {
+            toRemove = false;
             if( color.id > 0 ) { // not null and not null
                 api.color.put( color.id, color ).then(response => {
                     // nothing to do, really
@@ -45,27 +46,29 @@
                     color.id = response.id; // in case of new id
                 })
             }
-        } else { // should remove, hmm take care
-            console.log( 'CR', toRemove, color);
-            if( color.id && color.name == null && toRemove ) {
-                edit = false;
-                api.color.delete(color.id).then( response => {
+        } else if( toRemove && color.id > 0 && color.name == null ) {
+            api.color.delete(color.id).then( response => {
+                if( response.success ) {
+                    color.id = null;
+                    edit = false;
                     dispatch( 'removed', color );
-                } )
-            }
+                } else {
+                    toRemove = false;
+                }
+            } )
         }
-        console.log( 'Submit color' );
     }
+
 
 </script>
 
 <div class='flex flex-col pl-8' transition:slide>
     {#if color}
         <div class='flex flex-row border-b border-gray-300 gap-x-1 my-1'>
-            <div class='w-4'></div>
+            <div class='w-0'></div>
 
             <div class='grow cursor-auto' title={dic.title.color}>
-                {color.name}
+                ⤷ {txt(color.name)}
             </div>
 
             <div class='flex text-xs text-red-600'>
@@ -77,18 +80,15 @@
             <small class='w-6 text-gray-400 text-3xs text-right cursor-auto' title={color.id}>[{color.id}]</small>
 
         </div>
+
         {#if edit}
-            <div class='pl-4 border-2 border-red-400 rounded' transition:slide>
+            <div class='pl-2 border-2 border-red-400 rounded' transition:slide>
                 <Form class='flex flex-col' on:submit={onSubmit}>
                     <div class='flex'>
-                        <div>Farbe ändern. leerlassen & löschen ist löschen</div>
-                        <FormStatus />
-                    </div>
-                    <div class='flex'>
                         <TextInput class='w-128' label='Farbe' bind:value={color.name} error='pflichtfeld' validator={validate.name} />
-                        <div class='grow' />
-
-                        <CheckBoxInput class='w-12' label='Löschen' bind:value={toRemove} disabled={ color.name != null }/>
+                        <div class='grow'/>
+                        <CheckBoxInput class='w-10' label='Löschen' bind:value={toRemove} title={dic.title.delete.color} disabled={ color.name != null }/>
+                        <FormStatus class='w-6'/>
                     </div>
                 </Form>
             </div>

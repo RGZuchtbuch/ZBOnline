@@ -140,7 +140,7 @@
 </script>
 {#if fractions }
     <div class='flex flex-col p-4' >
-        <h5> Zuchten / Sparte</h5>
+        <h5> Zuchten / Sparte {typeId}</h5>
         <canvas id='fractions' bind:this={canvasFraction} width='256px' height='128px'></canvas>
     </div>
 {/if}

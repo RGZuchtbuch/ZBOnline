@@ -52,10 +52,11 @@
         display:flex;
         flex-direction: column;
     }
-    right {
+    input.right {
         text-align: right;
+        padding: 0;
     }
-    .error.valid {
+    label.error.valid {
         visibility: hidden;
     }
 </style>

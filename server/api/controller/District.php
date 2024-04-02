@@ -125,6 +125,7 @@ class District
 		throw new HttpBadRequestException( $request, 'Bad id' );
 	}
 
+    // for results edit list for section showing unopened breeds
 	public static function results( Request $request, Response $response, array $args ) : Response {
 		$id = ToolBox::toInt( $args[ 'id' ] );
 		$query = $request->getQueryParams();
@@ -142,6 +143,7 @@ class District
 		throw new HttpBadRequestException( $request, 'Bad arguments values' );
 	}
 
+    // for results edit list when opening breed
 	public static function breedResults( Request $request, Response $response, array $args ) : Response {
 		$id = ToolBox::toInt( $args[ 'id' ] );
 		$breedId = ToolBox::toInt($args[ 'breed' ] ?? null );
@@ -164,6 +166,11 @@ class District
 
 	// returns section/subsection/breed/color tree results for generating table
 	public static function report( Request $request, Response $response, array $args ) : Response {
+        $json = model\Cache::get( 'Result', $request->getUri()->getPath(), $request->getUri()->getQuery() );
+        if( $json ) { // in cache
+            $response->getBody()->write( $json );
+            return $response;
+        }
 		$id = $args[ 'id' ];
 		$year = $args[ 'year' ];
 		if( is_numeric( $id ) && is_numeric( $year ) ) {
@@ -171,7 +178,9 @@ class District
 
 			$report = ToolBox::toReportTree( $results );
 			if( $report ) {
-				$response->getBody()->write(json_encode( [ 'report' => & $report ], JSON_UNESCAPED_SLASHES));
+                $json = json_encode( [ 'report' => & $report ], JSON_UNESCAPED_SLASHES);
+				$response->getBody()->write( $json );
+                model\Cache::set( 'Result', $request->getUri()->getPath(), $request->getUri()->getQuery(), $json );
 				return $response;
 			}
 			throw new HttpInternalServerErrorException($request, 'No root district... wierd, please inform admin');

@@ -54,10 +54,11 @@
         display:flex;
         flex-direction: column;
     }
-    left {
+    textarea.left {
         text-align: left;
+        padding: 0 0.5em;
     }
-    .error.valid {
+    label.error.valid {
         visibility: hidden;
     }
 </style>

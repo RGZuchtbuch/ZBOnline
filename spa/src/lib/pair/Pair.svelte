@@ -70,10 +70,16 @@
                     changed = false;
                 });
             }
-        } else if( pair.delete ) {
-            api.pair.delete( pair.id );
+        } else if( pair.delete ) { // and not pair.name
             console.log('Delete' );
-            router.goto(route.from);
+            if( pair.id > 0 ) {
+                api.pair.delete(pair.id).then(response => {
+                    if (response.success) {
+                        pair.id = null;
+                        router.goto(route.from); // away from deleted pair
+                    }
+                });
+            }
         }
     }
 

@@ -55,6 +55,7 @@
     }
 
     function onSubmit() { // triggered by form's autosave
+        console.log( 'Submit breed' );
         if( breed.name ) {
             if( breed.id > 0 ) {
                 api.breed.put( breed.id, breed );
@@ -64,14 +65,14 @@
                 });
             }
         } else { // should remove, hmm take care
-            if( breed.id && breed.name == null && toRemove && breed.colors.length === 0) { // stored breed and no colors
+            if( toRemove && breed.id > 0 && breed.name == null && breed.colors.length === 0) { // stored breed and no colors
                 edit = false;
                 api.breed.delete( breed.id ).then( response => {
+                    breed.id = null;
                     dispatch( 'removed', breed );
                 } )
             }
         }
-        console.log( 'Submit breed' );
     }
 
     function onColorRemoved( event ) {
@@ -140,40 +141,27 @@
 
         {#if edit}
             <div class='pl-6 border-2 border-red-400 rounded' transition:slide>
-                <Form class='flex flex-col' on:submit={onSubmit}>
-                    <div class='flex'>
-                        <div>Rasse ändern. leer & löschen nur wenn ohne Farbenschläge und in keine Meldung</div>
-                        <FormStatus />
-                    </div>
-                    <div class='flex'>
-                        <TextInput class='w-128' label='Farbe' bind:value={breed.name} error='pflichtfeld' validator={validate.name} />
-                        <div class='grow'></div>
-                        <CheckBoxInput class='w-12' label='Löschen' bind:value={toRemove} disabled={ breed.name != null || breed.colors.length > 0}/>
-                    </div>
+                <Form class='flex flex-row gap-1' on:submit={onSubmit}>
+                        <TextInput class='grow' label='Farbe' bind:value={breed.name} error='pflichtfeld' validator={validate.name} />
+
                     {#if section.layers }
-                        <div class='flex'>
-                            <NumberInput class='w-32' bind:value={breed.layEggs} label='Eier/Jahr' error='pflichtfeld' validator={validate.eggs} />
-                            <NumberInput class='w-32' bind:value={breed.layWeight} label='Ei gewicht' error='pflichtfeld' validator={validate.eggWeight} />
-                        </div>
+                        <NumberInput class='w-12' bind:value={breed.layEggs} label='Eier' error='pflichtfeld' validator={validate.eggs} />
+                        <NumberInput class='w-12' bind:value={breed.layWeight} label='Gew.' error='pflichtfeld' validator={validate.eggWeight} />
                     {:else}
-                        <div class='flex'>
-                            <Select bind:value={breed.broodGroup} label={dic.label.broodgroup}>
-                                {#each $broodGroups as group }
-                                    <option value={group.id}>{group.name}</option>
-                                {/each}
-                            </Select>
-                        </div>
+                        <Select class='w-10' bind:value={breed.broodGroup} label={dic.label.broodgroup}>
+                            {#each $broodGroups as group }
+                                <option value={group.id}>{group.name}</option>
+                            {/each}
+                        </Select>
                     {/if}
-                    <div class='flex'>
-                        <NumberInput class='w-32' bind:value={breed.sireWeight} label='Gewicht Hahn' error='pflichtfeld' validator={validate.weight} />
-                        .
-                        <NumberInput class='w-32' bind:value={breed.dameWeight} label='Gewicht Henne' error='pflichtfeld' validator={validate.weight} />
-                    </div>
-                    <div class='flex'>
-                        <NumberInput class='w-32' bind:value={breed.sireRing} label='Ring Hahn' error='1..99' validator={validate.ring} />
-                        .
-                        <NumberInput class='w-32' bind:value={breed.dameRing} label='Ring Henne' error='1..99' validator={validate.ring} />
-                    </div>
+                    <NumberInput class='w-14' bind:value={breed.sireWeight} label='Gew 1.0' error='pflichtfeld' validator={validate.weight} />
+                    <NumberInput class='w-14' bind:value={breed.dameWeight} label='Gew 0.1' error='pflichtfeld' validator={validate.weight} />
+
+                    <NumberInput class='w-10' bind:value={breed.sireRing} label='Ring 1.0' error='1..99' validator={validate.ring} />
+                    <NumberInput class='w-10' bind:value={breed.dameRing} label='Ring 0.1' error='1..99' validator={validate.ring} />
+
+                    <CheckBoxInput class='w-10' label='Löschen' bind:value={toRemove} title={dic.title.delete.breed} disabled={ breed.name != null || breed.colors.length > 0}/>
+                    <FormStatus class='w-6' />
                 </Form>
             </div>
         {/if}

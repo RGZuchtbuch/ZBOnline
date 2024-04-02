@@ -34,8 +34,8 @@ const WORKINPROGRESS = false; // use in case of work in progress and disable the
 // switches from dev to production
 const APIROOT = location.hostname === 'localhost' || location.hostname === '127.0.0.1' ? 'http://localhost:80/' : 'https://rgzuchtbuch.de/';
 
-const CACHETIMEOUT = 60000; // 60 secs in dev mode
-const CACHECHECKINTERVAL = 60000; // once a minute
+const CACHETIMEOUT = 60_000; // 60 secs in dev mode
+const CACHECHECKINTERVAL = 300_000; // once a minute
 
 const MINDATE = '1850-01-01';
 const MAXDATE = (new Date().getFullYear()+1) + '-11-31';

@@ -42,7 +42,7 @@
     {#if label}
         <label class='name' for='number'> {label} </label>
     {/if}
-    <input class='input' {name} class:valid bind:this={element} type='text' bind:value={value}
+    <input class='input left' {name} class:valid bind:this={element} type='text' bind:value={value}
            {placeholder} {title} {disabled}
            on:input on:change on:focus on:blur
     />
@@ -54,10 +54,11 @@
         display:flex;
         flex-direction: column;
     }
-    left {
+    input.left {
         text-align: left;
+        padding: 0 0.5em;
     }
-    .error.valid {
+    label.error.valid {
         visibility: hidden;
     }
 </style>

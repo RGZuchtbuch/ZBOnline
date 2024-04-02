@@ -1,4 +1,6 @@
 <script>
+    import { slide } from 'svelte/transition';
+
     import api          from '../../../js/api.js';
     import Result  from './Result.svelte';
 
@@ -8,8 +10,6 @@
     export let year = null;
     export let group = null;
     export let title = null;
-
-    export let saveCount = 0;
 
     export let open = false;
 
@@ -33,8 +33,7 @@
 
     }
 
-    function recount() {
-        console.log( 'Count ');
+    function recount( b) {
         if( results.length > 0 ) {
             let counter = 0;
             for (let result of results) {
@@ -47,14 +46,14 @@
         }
     }
 
-    $: recount( breed, saveCount );
+    $: recount( breed );
     $: hasResults = breed.results;
 </script>
 
 
 
 <div class='flex flex-row px-2 gap-x-1'>
-    <div class='w-64 cursor-pointer whitespace-nowrap' class:hasResults on:click={onOpen} {title}>
+    <div class='w-80 cursor-pointer whitespace-nowrap' class:hasResults on:click={onOpen} {title}>
         {breed.name} {#if breed.results } <span class='text-xs'>({breed.results})</span> {/if}
     </div>
 
@@ -67,10 +66,9 @@
                 <div class='w-2 text-center'>  </div>
                 <div class='w-14'></div> <div class='w-14'></div> <div class='w-14'></div>
                 <div class='w-2 text-center'>  </div>
-                <div class='w-14'></div> <div class='w-14'></div> <div class='w-14'>Küken</div>
+                <div class='w-14'></div> <div class='w-14'>Küken</div> <div class='w-14'></div>
                 <div class='w-2 text-center'>  </div>
                 <div class='w-14'>Tiere</div> <div class='w-14 whitespace-nowrap'>Note</div>
-                <div class='w-14'></div>
             </div>
         {:else}
             <div class='flex flex-row gap-x-1 text-xs text-center'>
@@ -83,13 +81,14 @@
                 <div class='w-14'>Tiere</div> <div class='w-14 whitespace-nowrap'>Note</div>
             </div>
         {/if}
+        <div class='w-4'></div>
     {/if}
 </div>
 
 
 {#if open }
     {#each results as result}
-        <Result {sectionId} {result} bind:saveCount/>
+        <Result {sectionId} {result}/>
     {/each}
 {/if}
 

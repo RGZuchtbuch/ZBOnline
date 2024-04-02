@@ -40,6 +40,10 @@ export default {
 		color		: 'Farbenschlag',
 		colorId		: 'Farben Id',
 		colors		: 'Zahl der Farbenschläge',
+		delete: {
+			breed   : 'Rasse nur löschen wenn in keinem Paar, Leistungs und ohne Farben und Name soll leer sein. ',
+			color   : 'Farbe nur löschen wenn in keinem Paar oder Leistung',
+		},
 		deleted		: 'Gelöscht',
 		error		: 'Fehler',
 		info		: 'ZB Info',

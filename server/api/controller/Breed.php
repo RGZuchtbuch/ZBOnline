@@ -43,7 +43,7 @@ class Breed
 					$id = model\Breed::new($body['name'], $body['sectionId'], $body['broodGroup'], $body['layEggs'], $body['layWeight'], $body['sireRing'], $body['dameRing'], $body['sireWeight'], $body['dameWeight'], null, $requester->getId()); // $data['info']
 					if ($id) {
 						model\Cache::del('standard');
-						model\Cache::del('results');
+						model\Cache::del('result');
 
 						$response->getBody()->write(json_encode(['id' => $id], JSON_UNESCAPED_SLASHES));
 						return $response;
@@ -66,7 +66,7 @@ class Breed
 				$success = model\Breed::set( $id, $body['name'], $body['sectionId'], $body['broodGroup'], $body['layEggs'], $body['layWeight'], $body['sireRing'], $body['dameRing'], $body['sireWeight'], $body['dameWeight'], null, $requester->getId() ); //$data['info']
 				if( $success ) {
 					model\Cache::del('standard');
-					model\Cache::del('results');
+					model\Cache::del('result');
 					$response->getBody()->write(json_encode(['id' => $id], JSON_UNESCAPED_SLASHES));
 					return $response;
 				}
@@ -90,8 +90,13 @@ class Breed
                 if ($breed) {
                     if( ! model\Breed::getColors( $id ) && ! model\Pair::allWithBreed( $id ) && ! model\Result::getAllWithBreed( $id ) ) { // no more color, pair of result using it
                         $success = model\Breed::delete( $id );
-                        $response->getBody()->write(json_encode(['success' => $success, 'id'=>$id ], JSON_UNESCAPED_SLASHES));
-                        return $response;
+                        if( $success ) {
+                            model\Cache::del('standard');
+                            model\Cache::del('result');
+                            $response->getBody()->write(json_encode(['success' => $success, 'id' => $id], JSON_UNESCAPED_SLASHES));
+                            return $response;
+                        }
+                        throw new HttpInternalServerErrorException( $request, 'db error, should not happen');
                     }
                     throw new HttpBadRequestException($request, 'Breed in use for Color, Pair or Result');
                 }

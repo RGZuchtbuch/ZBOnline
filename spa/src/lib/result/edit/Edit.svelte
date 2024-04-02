@@ -1,4 +1,5 @@
 <script>
+    import { slide } from 'svelte/transition';
     import {router} from 'tinro';
     import api      from '../../../js/api.js';
 
@@ -16,24 +17,20 @@
     let district = null;
     let breeds = [];
 
-    let saveCount = 0;
     let help = false; // triggered in selector
 
     function onQuery( route ) {
         const now = new Date();
-        console.log( 'Query changed', now.getMonth() );
-        sectionId = route.query.section ? Number( route.query.section ) : 3; // get from route or 3
+        sectionId = route.query.section ? Number(route.query.section) : 3; // get from route or 3
         // year is query year or lastyear during spring or current year
-        year      = route.query.year   ? Number( route.query.year )    : now.getMonth() < 3 ? now.getFullYear()-1 : now.getFullYear(); // mind month 0..11
-        group     = route.query.group  && ['I', 'II', 'III'].includes( route.query.group ) ? route.query.group : 'I';
-        saveCount = 0;
+        year = route.query.year ? Number(route.query.year) : now.getMonth() < 3 ? now.getFullYear() - 1 : now.getFullYear(); // mind month 0..11
+        group = route.query.group && ['I', 'II', 'III'].includes(route.query.group) ? route.query.group : 'I';
         loadDistrict();
         loadBreeds();
     }
 
     function onHelp( event ) {
         help = ! help;
-        console.log( 'Help', help );
     }
 
     function loadDistrict() {
@@ -52,7 +49,6 @@
         }
     }
 
-
     $: onQuery( $router );
 
 </script>
@@ -65,11 +61,11 @@
 
 <Selector bind:year bind:sectionId bind:group/>
 
-<Header {saveCount} />
+<Header {sectionId}/>
 
 <div class='w-256 bg-gray-200 overflow-y-scroll border border-t-gray-400 rounded-b scrollbar'>
     {#each breeds as breed }
-        <Breed {districtId} {sectionId} {breed} {year} {group} bind:saveCount title='Wähle zum Eingeben' />
+        <Breed {districtId} {sectionId} {breed} {year} {group} title='Wähle zum Eingeben' />
     {/each}
 </div>
 {#if help}
