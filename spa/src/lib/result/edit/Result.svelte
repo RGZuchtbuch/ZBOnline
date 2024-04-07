@@ -60,20 +60,24 @@
     <div class='w-80' class:hasResult title={'Leistung ['+result.id+']'}>{result.name}</div>
 
     <NumberInput class='w-14' bind:value={result.breeders} error='1..99999' title='Zahl der Zuchten/Züchter, leer lassen zum Löschen' validator={validate.breeders} />
-    <NumberInput class='w-14' bind:value={result.pairs}  error={ (result.breeders ? result.breeders : '1')+'..99999'} title='Zahl der Stämme/Paare' validator={validate.pairs} />
+    {#if sectionId === PIGEONS}
+        <NumberInput class='w-14' bind:value={result.pairs}  error={ (result.breeders ? result.breeders : '1')+'..99999'} title='Zahl der Stämme/Paare' validator={validate.pairs} />
+    {:else}
+        <div class='w-14' />
+    {/if}
 
     <div class='w-2'></div>
-
+    <!-- lay -->
     {#if sectionId === PIGEONS}
-        <div class='w-14'></div> <div class='w-14'></div> <div class='w-14'></div>
+        <div class='w-14' /> <div class='w-14' /> <!-- div class='w-14' / -->
     {:else}
-        <NumberInput class='w-14' bind:value={result.layDames} error='0..99999' title='Gesamtzahl der legende Hennen' validator={validate.layDames}/>
+        <!-- NumberInput class='w-14' bind:value={result.layDames} error='0..99999' title='Gesamtzahl der legende Hennen' validator={validate.layDames}/ -->
         <NumberInput class='w-14' bind:value={result.layEggs} error='0..366' title='Durchschnittslegeleistung' validator={validate.layEggs}/>
         <NumberInput class='w-14' bind:value={result.layWeight} error='1..999' title='Durchschnittsgewicht der gelegten Eier' validator={validate.layWeight}/>
     {/if}
 
     <div class='w-2'></div>
-
+    <!-- brood -->
     {#if sectionId === PIGEONS}
         <div class='w-14'></div>
         <NumberInput class='w-14' bind:value={result.broodHatched} error='0..999999' title='Geschlüpfte Küken, Braucht Paare' validator={validate.broodHatched}/>
