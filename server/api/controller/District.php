@@ -111,7 +111,7 @@ class District
 	public static function descendants( Request $request, Response $response, array $args ) : Response {
 		$id = $args[ 'id' ];
 		if( is_numeric( $id ) ) {
-			$districts = model\district::getDescendants($id); // get all districts including root
+			$districts = model\District::getDescendants($id); // get all districts including root
 			if( $districts ) {
 				$rootDistrict = ToolBox::toTree($districts);
 				if ($rootDistrict) {
