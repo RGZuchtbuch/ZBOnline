@@ -63,13 +63,13 @@
     {#if sectionId === PIGEONS}
         <NumberInput class='w-14' bind:value={result.pairs}  error={ (result.breeders ? result.breeders : '1')+'..99999'} title='Zahl der Stämme/Paare' validator={validate.pairs} />
     {:else}
-        <div class='w-14' />
+        <div class='w-14'></div>
     {/if}
 
     <div class='w-2'></div>
     <!-- lay -->
     {#if sectionId === PIGEONS}
-        <div class='w-14' /> <div class='w-14' /> <!-- div class='w-14' / -->
+        <div class='w-14'></div> <div class='w-14'></div> <!-- div class='w-14' / -->
     {:else}
         <!-- NumberInput class='w-14' bind:value={result.layDames} error='0..99999' title='Gesamtzahl der legende Hennen' validator={validate.layDames}/ -->
         <NumberInput class='w-14' bind:value={result.layEggs} error='0..366' title='Durchschnittslegeleistung' validator={validate.layEggs}/>
@@ -92,7 +92,7 @@
 
     <NumberInput class='w-14' bind:value={result.showCount} error='1..99999' title='Zahl der ausgestellten Tiere' validator={validate.showCount}/>
     <NumberInput class='w-14' bind:value={result.showScore} step={0.1} error='89..97' title='Durchschnittsbewertung u/o=89, 90..97 Punkte, braucht Zahl der ausgestellen Tiere' validator={validate.showScore}/>
-    <FormStatus class='w-4'/>
+    <FormStatus class='w-4' />
 </Form>
 
 

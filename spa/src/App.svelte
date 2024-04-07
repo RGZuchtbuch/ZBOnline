@@ -26,7 +26,7 @@
 
 </script>
 
-
+<div />
 <Route path='/*' >
     <div class='w-full h-full flex flex-col'>
         <a href='/'>

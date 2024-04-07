@@ -63,21 +63,21 @@
         {#if sectionId === PIGEONS }
             <div class='flex flex-row gap-x-1 text-xs text-center'>
                 <div class='w-14'>Zuchten</div> <div class='w-14'>Paare</div>
-                <div class='w-2' />
+                <div class='w-2'></div>
                 <div class='w-14'></div> <div class='w-14'></div> <!-- div class='w-14'></div -->
-                <div class='w-2' />
+                <div class='w-2'></div>
                 <div class='w-14'></div> <div class='w-14'>Küken</div> <div class='w-14'></div>
-                <div class='w-2' />
+                <div class='w-2'></div>
                 <div class='w-14'>Tiere</div> <div class='w-14 whitespace-nowrap'>Note</div>
             </div>
         {:else}
             <div class='flex flex-row gap-x-1 text-xs text-center'>
-                <div class='w-14'>Zuchten</div> <div class='w-14' />
-                <div class='w-2' />
+                <div class='w-14'>Zuchten</div> <div class='w-14'></div>
+                <div class='w-2'></div>
                 <!-- div class='w-14'>Hennen</div --> <div class='w-14'>Eier/J</div> <div class='w-14 whitespace-nowrap'>Gewicht</div>
-                <div class='w-2' />
+                <div class='w-2'></div>
                 <div class='w-14'>Eingelegt</div> <div class='w-14'>Befruchtet</div> <div class='w-14'>Geschlüpft</div>
-                <div class='w-2' />
+                <div class='w-2'></div>
                 <div class='w-14'>Tiere</div> <div class='w-14 whitespace-nowrap'>Note</div>
             </div>
         {/if}

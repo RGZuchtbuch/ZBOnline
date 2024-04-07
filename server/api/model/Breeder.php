@@ -92,7 +92,7 @@ class Breeder extends Query
             LEFT JOIN color ON color.id = pair.colorId
             LEFT JOIN result ON result.pairId = pair.id
             WHERE pair.breederId=:breederId
-            ORDER BY pair.year, pair.name
+            ORDER BY pair.year DESC, pair.name
         ');
         return Query::selectArray($stmt, $args);
     }

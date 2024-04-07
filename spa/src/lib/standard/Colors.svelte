@@ -4,13 +4,6 @@
     import api from "../../js/api.js";
     import {user} from "../../js/store.js";
 
-    import NumberInput from '../common/input/Number.svelte';
-    import Page from "../common/Page.svelte";
-    import TextInput from '../common/input/Text.svelte';
-    import TextArea from "../common/input/TextArea.svelte";
-    import Color from "./Color.svelte";
-    import {txt} from "../../js/util.js";
-
     export let breed;
 
     let route = meta();
