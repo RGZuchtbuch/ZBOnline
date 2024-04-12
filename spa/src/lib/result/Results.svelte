@@ -141,7 +141,7 @@
 
 
 
-<div>
+<!--div -->>
     <div class='w-256 flex no-print'>
         <h2 class='grow text-center text-2xl print'>Zuchtleistungen</h2>
         <div class='w-8 justify-center m-2 circled bg-alert text-white cursor-pointer no-print' on:click={onHelp} title='Anleitung'>?</div>
@@ -250,6 +250,6 @@
     {#if help}
         <Help on:help={onHelp} />
     {/if}
-</div>
+<!--/div-->
 
 
