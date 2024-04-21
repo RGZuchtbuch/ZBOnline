@@ -88,7 +88,7 @@
 			{#if section && breed}
 				{#if section.id === PIGEONS }
 					<fieldset class='border border-gray-400 rounded p-2'>
-						<div>Bewertung der Brutleistung</div>
+						<div>Bewertung der Brutleistung laut AAB</div>
 						<div class='flex gap-x-2'>
 							<TextInput class='w-8' value={breed.broodGroup} label='Grp' title='Brutgruppen zur berechnung der Leistungsnote' disabled/>
 							<NumberInput class='w-20' bind:value={hasBroods} label='Bruten' title='Zahl der bruten/Nester'/>
@@ -100,21 +100,21 @@
 				{:else}
 					<div class='flex flex-col gap-y-2'>
 						<fieldset class='border border-gray-400 rounded p-2'>
-							<div>Bewertung der Legeleistung</div>
+							<div>Bewertung der Legeleistung laut AAB</div>
 							<div class='flex gap-x-2'>
-								<TextInput class='w-20' value={breed.layEggs} label='Soll legen' title='Legeleistung laut Standard' disabled/>
+								<NumberInput class='w-20' value={breed.layEggs} label='Soll legen' title='Legeleistung laut Standard' disabled/>
 								<NumberInput class='w-20' bind:value={hasLayEggs} label='Hat gelegt' title='Legeleistung in Eier / Jahr'/>
 								 =>
-								<TextInput class='w-20' value={grading.lay( hasLayEggs, breed.layEggs )} label='Bewertung' title='Legeleistung' disabled/>
+								<NumberInput class='w-32 text-right' value={grading.lay( hasLayEggs, breed.layEggs )} label='Bewertung in punkte' title='Legeleistung in punkte laut H5 AAB' disabled/>
 							</div>
 						</fieldset>
 						<fieldset class='border border-gray-400 rounded p-2'>
-							<div>Bewertung der Brutleistung</div>
+							<div>Bewertung der Brutleistung laut AAB</div>
 							<div class='flex gap-x-2'>
 								<NumberInput class='w-20' bind:value={hasBroodEggs} label='Eingelegt' title='Eingelegte Eier'/>
 								<NumberInput class='w-20' bind:value={hasBroodChicks} label='Küken' title='Zahl der aufgezogene Küken'/>
 								=>
-								<TextInput class='w-20' value={grading.brood.layers( hasBroodEggs, hasBroodChicks )} label='Bewertung' title='Brutleistung' disabled/>
+								<NumberInput class='w-32' value={grading.brood.layers( hasBroodEggs, hasBroodChicks )} label='Bewertung in punkte' title='Brutleistung in punkte laut H5 AAB' disabled/>
 							</div>
 						</fieldset>
 					</div>

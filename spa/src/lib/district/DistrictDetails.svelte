@@ -29,7 +29,7 @@
     const validate = {
         name:      (v) => validator(v).string().length( 3, 48 ).isValid(),
         fullName:  (v) => validator(v).string().length( 3, 96 ).isValid(),
-        shortName: (v) => validator(v).string().length( 3, 16 ).isValid(),
+        shortName: (v) => validator(v).string().length( 1, 16 ).isValid(),
         lattitude: (v) => validator(v).number().range( MINLATITUDE, MAXLATITUDE ).isValid(),
         longitude: (v) => validator(v).number().range( MINLONGITUDE, MAXLONGITUDE ).isValid(),
         // mod ?

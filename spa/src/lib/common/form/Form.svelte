@@ -36,15 +36,7 @@
             console.log('Form submit on leave');
         }
     }
-    function trySubmit() { // called by submit or autosave timeout
-        if( $state.changed && $state.valid ) {
-            $state.changed = changed = false; // after post success
-            dispatch( 'submit' ); // let outside do the actual submit
-            return true; // submitted
-        } else {
-            return false; // no submit
-        }
-    }
+
 
     function validate() { // all registered validators, triggered by timeout
         let tempValid = true;
@@ -79,6 +71,17 @@
             trySubmit();
         }
     }
+
+    function trySubmit() { // called by submit or autosave timeout
+        if( $state.changed && $state.valid ) {
+            $state.changed = changed = false; // after post success
+            dispatch( 'submit' ); // let outside do the actual submit
+            return true; // submitted
+        } else {
+            return false; // no submit
+        }
+    }
+
     onMount( () => {
         validate(); // check on init errors
         formElement.addEventListener('input', onInput); // each keystroke in form

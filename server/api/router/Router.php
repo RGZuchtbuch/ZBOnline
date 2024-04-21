@@ -13,7 +13,7 @@ class Router {
     }
 */
     public static function register( App $app ) {
-        $app->get(   '/', 'App\controller\Index');
+        $app->get(   '/', 'App\controller\Index::get');
 
 		$app->get(   '/article', 		'App\controller\Article::get'); // index
 		$app->get(   '/article/{id}', 	'App\controller\Article::get');

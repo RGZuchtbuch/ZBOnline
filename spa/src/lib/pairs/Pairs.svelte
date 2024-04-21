@@ -54,7 +54,7 @@
     </div>
 
     <div slot='body'>
-        {#each pairs as pair}
+        {#each pairs as pair (pair.id) }
             <a class='flex flex-row gap-1' href={route.match+'/'+pair.id}>
                 <div class='w-28 flex flex-row p-2 gap-1'>
                     <div class='w-10'>{pair.year}</div>

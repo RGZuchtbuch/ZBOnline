@@ -126,10 +126,10 @@
 
     {#if open }
         <div class='flex flex-col' transition:slide>
-            {#each section.children as childSection }
+            {#each section.children as childSection (childSection.id) }
                 <svelte:self section={childSection} on:open={onOpenChild} open={childSection === openedChild}/>
             {/each}
-            {#each section.breeds as breed }
+            {#each section.breeds as breed (breed.id) }
                 <BreedRow {section} {breed} on:open={onOpenBreed} open={ breed === openedBreed} on:removed={onBreedRemoved}/>
             {/each}
         </div>

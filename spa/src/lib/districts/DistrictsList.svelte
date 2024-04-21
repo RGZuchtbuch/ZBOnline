@@ -32,7 +32,7 @@
         <div slot='title'>{district.name} - Verbände / Vereine</div>
         <div slot='header' >--</div>
         <div slot='body'>
-            {#each district.children as child }
+            {#each district.children as child (child.id) }
                 <div class='flex flex-row border-b border-gray-300 my-2'>
                     <div class='w-6'>→</div>
                     <a class='cursor-pointer' href={route.match+'/'+child.id} title='Zum Verein'>{child.name}</a>

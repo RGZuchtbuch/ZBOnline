@@ -31,10 +31,12 @@ class Mail
 			$mail->addReplyTo(MAIL_SENDER, MAIL_SENDER_NAME );
 
 			//Content
+            $mail->CharSet = "UTF-8"; // to allow for umlauts etc
+//            $mail->Encoding = 'base64'; // to avoid 8 bit default encoding
 			$mail->isHTML(true);                                  //Set email format to HTML
 			$mail->Subject = 'RG Zuchtbuch, reset Passwort beantragt';
 			$mail->Body    = "
-                Für den RGZuchtbuch.de ist auf diese Emailadresse um ein neues Paswort gebeten.<br>
+                Für das RGZuchtbuch.de ist auf diese Emailadresse um ein neues Paswort gebeten. Waren Sie das, dan gehts hier weiter. Sonst ignorieren Sie dieser Mail.<br>
                 <br>
                 Benütze diesen Link: <a href='".$url."'>Neues Paswort</a> um ein neues Passwort einzugeben.<br>
                 <br>

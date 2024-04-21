@@ -79,7 +79,7 @@
 </script>
 
 <div class='flex flex-col' >
-    <h5>Brutleistung Leger %</h5>
+    <h5>Brutleistung Geflügel</h5>
     <canvas bind:this={canvas} width='192px' height='256px'></canvas>
     <div></div>
 </div>

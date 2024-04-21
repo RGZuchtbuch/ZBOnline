@@ -31,7 +31,7 @@
     <BreedersHeader slot='header' bind:showInactives />
     <div slot='body'>
         {#if breeders}
-            {#each breeders as breeder }
+            {#each breeders as breeder (breeder.id) }
                 <BreedersRow {breeder} {showInactives} />
             {/each}
         {/if}

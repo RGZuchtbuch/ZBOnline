@@ -43,9 +43,9 @@ export default {
 			if ( group >= 1 && group <= 4 && broods >= 2 && chicks >= 0 && chicks <= broods * 2 ) {
 				if (broods <= 6) {
 					return broodPigeon[ group ][ broods ][ chicks ];
-				} else { // fit max
-					const fraction = 6 / broods;
-					return broodLayers[ 6 ][ Math.floor( chicks * fraction ) ];
+				} else { // fit for 6 broods
+					const relChicks = Math.round( 6 * chicks / broods );
+					return broodPigeon[ group ][ 6 ][ relChicks ];
 				}
 			}
 		}

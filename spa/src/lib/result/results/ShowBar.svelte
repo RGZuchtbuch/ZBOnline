@@ -80,7 +80,7 @@
 </script>
 
 <div class='flex flex-col' >
-    <h5>Schauleistung</h5>
+    <h5>Schauleistung in pkt</h5>
     <canvas bind:this={canvas} width='128px' height='256px'></canvas>
     <div> </div>
 </div>

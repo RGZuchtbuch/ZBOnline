@@ -4,6 +4,7 @@
 
     import {meta, router} from 'tinro';
 
+    export let district = null;
     export let report;
 
     function addTo( sum, result ) { // count and add all up to totals of section etc
@@ -107,7 +108,7 @@
 
     function onSection( id ) {
         return () => {
-            router.location.query.set( 'section',id );
+            router.location.query.set( 'section', id );
         }
     }
 
@@ -141,11 +142,16 @@
         <table class='w-full p-2'>
 
             {#each report.sections as section}
-
-
-                    <!-- section header -->
+                <!-- section header -->
                 <tbody>
-                    <tr><th class='sticky top-0 border-y border-gray-600 p-2 bg-header text-center text-white text-xl' colspan=14>Sparte {section.name}</th></tr>
+                    <tr><th class='sticky top-0 border-y border-gray-600' colspan=14>
+                        <div class='h-2 bg-white'></div>
+                        <div class='flex flex-row p-2 bg-header'>
+                            <div class='w-56'></div>
+                            <div class='grow text-center text-white text-xl'>Sparte {section.name}</div>
+                            <small class='w-56 pr-2 text-white text-right self-end'>{#if district} {district.name} {/if}</small>
+                        </div>
+                    </th></tr>
                     <tr>
                         <th>
                             <div class='flex flex-row bg-gray-300 px-2 gap-x-1 font-bold'>

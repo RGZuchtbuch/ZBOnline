@@ -39,7 +39,7 @@
 </script>
 
 <Modal class=''>
-    <Form class='w-96 flex flex-col gap-4 self-center border rounded pt-16' on:submit={onSubmit}>
+    <Form class='w-96 flex flex-col gap-4 self-center border rounded pt-16' autoSave={false} on:submit={onSubmit}>
         <div class='flex bg-header'>
             <h2 class='grow '>Paswort ändern</h2>
             <div class='cursor-pointer mr-2' on:click={cancel}>&#8855;</div>

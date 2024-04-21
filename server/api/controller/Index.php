@@ -14,13 +14,18 @@ use Slim\Exception\HttpNotFoundException;
 class Index
 {
 
-    public function __invoke( Request $request, Response $response, array $args ) : Response {
+    public static function get( Request $request, Response $response, array $args ) : Response {
 		$api = [];
 		$api[] = [ 'url'=>'/standard', '?'=>'provides complete bdrg standard tree of sections, subsections, breeds and colors' ];
 		$api[] = [ 'url'=>'/district', '?'=>'provides complete bdrg districts tree' ];
 
-		$response->getBody()->write(json_encode(['api' => $api], JSON_UNESCAPED_SLASHES));
+//        $response->getBody()->write(json_encode(['api' => $api], JSON_UNESCAPED_SLASHES));
+        global $apiIndex; // to get access to the global
+        $response->getBody()->write( "Todo, index of API, try ./standard" );
         return $response;
     }
+
+
+
 
 }
