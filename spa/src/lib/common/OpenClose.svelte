@@ -1,6 +1,7 @@
 <script>
 
 	import {createEventDispatcher} from 'svelte';
+	import dic from '../../js/dictionairy.js';
 
 	export let open = false;
 	export let enabled = false; // enable if there are children
@@ -19,7 +20,7 @@
 // ▲▼▶▽○ ◦   https://www.compart.com/en/unicode/block/U+25A0
 </script>
 
-<button type='button' class={'w-6 text-left cursor-pointer '+className} on:click={onClick} >
+<button type='button' class={'w-6 text-left cursor-pointer '+className} title={dic.title.openclose} on:click={onClick} >
 	{#if enabled}
 		{#if open}▽{:else}▷{/if}
 	{:else}

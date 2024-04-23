@@ -22,7 +22,23 @@
         } );
     }
 
-    function filter( sourceDistrict ) {
+    function filter( sourceDistrict, moderated = false ) {
+        moderated ||= sourceDistrict.moderatorId === $user.id; // moderated an ancestor or this
+        const parentDistrict = { id:sourceDistrict.id, name:sourceDistrict.name, moderated:moderated, children:[] };
+
+        for( let child of sourceDistrict.children ) {
+            const childDistrict = filter( child, moderated );
+            if( moderated || childDistrict.moderated || childDistrict.children.length > 0 ) {
+                parentDistrict.children.push( childDistrict );
+            }
+        }
+        return parentDistrict;
+    }
+
+    /* TODO remove
+
+    function filterOld( sourceDistrict ) {
+        console.log( "Filter", sourceDistrict );
         let moderated = $user && sourceDistrict && sourceDistrict.moderatorId === $user.id
         let parentDistrict = { id:sourceDistrict.id, name:sourceDistrict.name, moderated:moderated, children:[] };
 
@@ -34,7 +50,7 @@
         }
         return parentDistrict;
     }
-
+*/
     $: loadDistricts( $user ); // if user changes by logout/login or exp
 </script>
 

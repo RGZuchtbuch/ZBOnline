@@ -48,6 +48,7 @@ export default {
 		error		: 'Fehler',
 		info		: 'ZB Info',
 		layers	 	: 'Formular für Leger ( Gänse, Hühner usw. )',
+		openclose	: 'Entfalten/Falten',
 		pigeons	 	: 'Formular für Tauben',
 		result		: 'Leistung',
 		results		: 'Leistungen',

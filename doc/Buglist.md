@@ -5,6 +5,7 @@
 * Obmann kan BDRG auswählen als verband, sollte nur wenn auch bdrg obmann ( nur Günter )
 * Setting beter integreren: nu niet herkend in PHPStorm
 * API index todo
+* Log in backend opnieuw toevoegen. Let op login pwd
 
 2024-04-21 Düsse
   * Wunsche, eingabe pro stamm anstatt pro lv ( will nicht zusammen rechnen ).
@@ -14,7 +15,7 @@
   * Auch zb homepage der LV's usw.
   * Zuchtbuchobmann Kappler ?
   * AOC klasse : farbe mit check aoc, separat in tabelle
-  * Rechte josef/gunter fuer unterliegende verbände
+
 
 
 

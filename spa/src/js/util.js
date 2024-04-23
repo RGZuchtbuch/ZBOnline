@@ -28,6 +28,7 @@ export function gpsToPx( width, height, west, east, south, north, lon, lat ) {
     let y = (yMax - mercY( lat ) )*yFactor;
     return { x:x, y:y };
 }
+
 // calc color for value in range ( map )
 export function calcColor( min, max, value, alpha = 1, blue = 0 ) {
     const relValue = (value-min)/(max-min);
