@@ -8,7 +8,7 @@
 	let className = '';
 	export { className as class };
 	export let name = null;
-	export let title = 'Ring D19 AB 678';
+	export let title = '31.12.2023';
 	export let label = null;
 	export let value = null;
 	export let placeholder = null;

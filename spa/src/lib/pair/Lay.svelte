@@ -10,8 +10,9 @@
 
     const validate = {
         start:      (v) => validator(v).date().between( (pair.year-1)+'-10-01', (pair.year)+'-09-30' ).orNull().isValid(), // 1-10 → 30-09
-        end:        (v) => validator(v).date().between( pair.lay.start, (pair.year)+'-09-30' ).orNullIf( ! pair.lay.start ).isValid(), // 1-10 → 30-09
-        eggs:       (v) => validator(v).number().range( 0, 366 ).orNull().isValid(),
+        end:        (v) => validator(v).date().between( pair.lay.start, (pair.year)+'-12-31' ).orNullIf( ! pair.lay.start ).isValid(), // 1-10 → 30-09
+        dames:      (v) => validator(v).number().range( 1, 32 ).orNull().isValid(),
+        eggs:       (v) => validator(v).number().range( 0, pair.lay.days * pair.dames ).orNull().isValid(),
         weight:     (v) => validator(v).number().range( 1.0, 9999.0 ).orNull().isValid(),
     }
 
@@ -36,8 +37,8 @@
 
     function setProduction() {
         pair.lay.production = null;
-        if ( pair.lay.days && pair.lay.eggs && pair.dames) {
-            pair.lay.production = getProduction( pair.lay.days, pair.lay.eggs, pair.dames ); //eggs * 274 / days / dames;
+        if ( pair.lay.days && pair.lay.eggs && pair.lay.dames) {
+            pair.lay.production = getProduction( pair.lay.days, pair.lay.eggs, pair.lay.dames ); //eggs * 274 / days / dames;
         }
     }
 
@@ -65,12 +66,14 @@
             <div class='grow flex flex-row gap-x-1'>
                 <InputDate class='w-24' label={'Gesammelt ab'} bind:value={pair.lay.start} error='Falsches Datum' validator={validate.start} />
                 <InputDate class='w-24' label={'Gesammelt bis'} bind:value={pair.lay.end} error='Falsches Datum' validator={validate.end} />
-                <InputNumber class='w-16' label={'# Eierzahl'} bind:value={pair.lay.eggs} error={'0 .. '+pair.lay.days * pair.dames} validator={validate.eggs} />
+                <div class='w-2'></div>
+                <InputNumber class='w-16' label='# Hennen' bind:value={pair.lay.dames} validator={validate.dames}/>
+                <InputNumber class='w-16' label={'# Eierzahl'} bind:value={pair.lay.eggs} error={'0 .. '+pair.lay.days * pair.lay.dames} validator={validate.eggs} />
+                <div class='w-4'></div>
                 <InputNumber class='w-16' label={'∅ Gewicht'} bind:value={pair.lay.weight} step={0.1} validator={validate.weight} />
             </div>
             <div class='flex flex-row gap-x-1'>
                 <InputNumber class='w-16' label='Tagen' value={pair.lay.days} disabled/>
-                <InputNumber class='w-16' label='# Hennen' value={pair.dames} disabled />
                 <InputNumber class='w-16' label='Eier / Jahr' value={dec(pair.lay.production, 1)} disabled />
             </div>
         </div>

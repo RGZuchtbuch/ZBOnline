@@ -25,18 +25,21 @@
     }
 
     function setSiresAndDames( pair ) {
-        pair.sires = 0;
-        pair.dames = 0;
+        let sires = 0;
+        let dames = 0;
         if( pair.parents ) {
             for (const parent of pair.parents) {
                 if (parent.ring) {
                     if (parent.sex === '1.0') { //sire
-                        pair.sires++;
+                        sires++;
                     } else {
-                        pair.dames++;
+                        dames++;
                     }
                 }
             }
+            pair.sires = sires;
+            pair.dames = dames;
+            pair = pair;
         }
     }
 

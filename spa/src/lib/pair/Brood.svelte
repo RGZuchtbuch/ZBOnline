@@ -51,6 +51,7 @@
         <div class='grow flex flex-row gap-x-1'>
             <InputText class='w-8' label={nolabel ? '' : '#'} value={index+1} disabled/>
             <InputDate class='w-24' label={nolabel ? '' : 'Gelegt am'} bind:value={brood.start} validator={validate.date} />
+            <div class='w-2'></div>
             <InputNumber class='w-16' label={nolabel ? '' : 'Küken'} bind:value={brood.hatched} error='0 - 2'  validator={validate.chicks}/>
             <InputDate class='w-24 ml-4' label={nolabel ? '' : 'Beringt am'} bind:value={brood.ringed} validator={validate.ringed} />
             {#if brood.chicks && brood.chicks.length>=1 }
@@ -67,6 +68,7 @@
         <div class='grow flex flex-row gap-x-1'>
             <InputText class='w-8' label={nolabel ? '' : '#'} value={index+1} disabled />
             <InputDate class='w-24' label={nolabel ? '' : 'Am'} bind:value={brood.start} validator={validate.date} />
+            <div class='w-2'></div>
             <InputNumber class='w-16' label={nolabel ? '' : 'Eingelegt*'} bind:value={brood.eggs} validator={validate.eggs} />
             <InputNumber class='w-16' label={nolabel ? '' : 'Befruchtet'} bind:value={brood.fertile} error='Fehler' validator={validate.fertile} />
             <InputNumber class='w-16' label={nolabel ? '' : 'Geschlüpft*'} bind:value={brood.hatched} error='Fehler' validator={validate.hatched} />

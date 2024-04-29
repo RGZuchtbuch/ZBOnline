@@ -39,7 +39,6 @@
     }
 
     function getAncestor( ancestorPairs, parentsPairId ) {
-        console.log( 'AP', ancestorPairs, parentsPairId );
         if( parentsPairId && ancestorPairs ) {
             for (const pair of ancestorPairs) {
                 if (pair.id === parentsPairId) {

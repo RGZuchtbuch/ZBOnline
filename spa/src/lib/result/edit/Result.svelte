@@ -21,6 +21,7 @@
         layEggs      : (v) => validator(v).number().range( 0, 366 ).orNull().isValid(),
         layWeight    : (v) => validator(v).number().range( 1, 999 ).orNull().isValid(),
 
+        broodChicks  : (v) => validator(v).number().if( result.pairs > 0).range( 0, result.pairs * 50 ).orNull().isValid(),
         broodEggs    : (v) => validator(v).number().range( 1, 99999 ).orNull().isValid(),
         broodFertile : (v) => validator(v).number().range( 0, result.broodEggs ).orNull().isValid(),
         broodHatched : (v) => validator(v).number().range( 0, result.broodFertile == null ? result.broodEggs : result.broodFertile ).orNull().isValid(),
@@ -80,7 +81,7 @@
     <!-- brood -->
     {#if sectionId === PIGEONS}
         <div class='w-14'></div>
-        <NumberInput class='w-14' bind:value={result.broodHatched} error='0..999999' title='Geschlüpfte Küken, Braucht Paare' validator={validate.broodHatched}/>
+        <NumberInput class='w-14' bind:value={result.broodHatched} error='0..99999' title='Geschlüpfte Küken, Braucht Paare' validator={validate.broodChicks}/>
         <div class='w-14'></div>
     {:else}
         <NumberInput class='w-14' bind:value={result.broodEggs}    error='0..99999' title='Eigelegte Eier' validator={validate.broodEggs}/>
