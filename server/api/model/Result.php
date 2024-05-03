@@ -10,7 +10,7 @@ class Result extends Query
     public static function get( $id ) {
         $args = get_defined_vars();
         $stmt = Query::prepare( '
-            SELECT id, pairId, districtId, `year`, `group`, breedId, colorId, breeders, pairs, layDames, layEggs, broodEggs, broodFertile, broodHatched, showCount, showScore
+            SELECT id, pairId, districtId, `year`, `group`, sectionId, breedId, colorId, aocColor, breeders, pairs, layDames, layEggs, broodEggs, broodFertile, broodHatched, showCount, showScore
             FROM result
             WHERE id=:id
         ' );
@@ -19,7 +19,7 @@ class Result extends Query
 
     public static function new(
         ? int $pairId, int $districtId, int $year, string $group,
-        int $breedId, ? int $colorId,
+        int $sectionId, int $breedId, ? int $colorId, ? string $aocColor,
         int $breeders, ? int $pairs,
         ? int $layDames, ? float $layEggs, ? float $layWeight,
         ? int $broodEggs, ? int $broodFertile, ? int $broodHatched,
@@ -28,8 +28,8 @@ class Result extends Query
     ) : ? int {
         $args = get_defined_vars();
         $stmt = Query::prepare( '
-            INSERT INTO result ( pairId, districtId, `year`, `group`, breedId, colorId, breeders, pairs, layDames, layEggs, layWeight, broodEggs, broodFertile, broodHatched, showCount, showScore, modifierId ) 
-            VALUES ( :pairId, :districtId, :year, :group, :breedId, :colorId, :breeders, :pairs, :layDames, :layEggs, :layWeight, :broodEggs, :broodFertile, :broodHatched, :showCount, :showScore, :modifierId )
+            INSERT INTO result ( pairId, districtId, `year`, `group`, sectionId, breedId, colorId, aocColor, breeders, pairs, layDames, layEggs, layWeight, broodEggs, broodFertile, broodHatched, showCount, showScore, modifierId ) 
+            VALUES ( :pairId, :districtId, :year, :group, :sectionId, :breedId, :colorId, :aocColor, :breeders, :pairs, :layDames, :layEggs, :layWeight, :broodEggs, :broodFertile, :broodHatched, :showCount, :showScore, :modifierId )
         ' );
         return Query::insert( $stmt, $args );
     }
@@ -37,7 +37,7 @@ class Result extends Query
 
     public static function set(
         int $id, ? int $pairId, int $districtId, int $year, string $group,
-        int $breedId, ? int $colorId,
+		int $sectionId, int $breedId, ? int $colorId, ? string $aocColor,
         int $breeders, ? int $pairs,
         ? int $layDames, ? float $layEggs, ? float $layWeight,
         ? int $broodEggs, ? int $broodFertile, ? int $broodHatched,
@@ -47,7 +47,7 @@ class Result extends Query
         $args = get_defined_vars();
         $stmt = Query::prepare( '
             UPDATE  result
-            SET pairId=:pairId, districtId=:districtId, `year`=:year, `group`=:group, breedId=:breedId, colorId=:colorId, breeders=:breeders, pairs=:pairs, layDames=:layDames, layEggs=:layEggs, layWeight=:layWeight, broodEggs=:broodEggs, broodFertile=:broodFertile, broodHatched=:broodHatched, showCount=:showCount, showScore=:showScore, modifierId=:modifierId
+            SET pairId=:pairId, districtId=:districtId, `year`=:year, `group`=:group, sectionId=:sectionId, breedId=:breedId, colorId=:colorId, aocColor=:aocColor, breeders=:breeders, pairs=:pairs, layDames=:layDames, layEggs=:layEggs, layWeight=:layWeight, broodEggs=:broodEggs, broodFertile=:broodFertile, broodHatched=:broodHatched, showCount=:showCount, showScore=:showScore, modifierId=:modifierId
             WHERE id=:id
         ' );
         return Query::update( $stmt, $args );
@@ -121,7 +121,7 @@ class Result extends Query
                 # to group the breeders results for multiple pairs as one breeder, not per pair
                 SELECT 
                     result.id, result.districtId, result.year, result.breeders,
-                    breed.sectionId as sectionId, result.breedId, result.colorId, result.group, 
+                    breed.sectionId as sectionId, result.breedId, result.colorId, result.group,                     
                     breed.layEggs AS layShould, breed.layWeight AS layWeightShould,
                     SUM( pairs ) AS pairs, SUM( layDames ) AS layDames, AVG( result.layEggs ) AS layEggs, AVG( result.layWeight ) AS layWeight, 
                     SUM( broodEggs ) AS broodEggs, SUM( broodFertile ) AS broodFertile, SUM( broodHatched ) AS broodHatched,
@@ -215,7 +215,11 @@ class Result extends Query
                         result.id, result.districtId, result.year, result.breeders,
                         section.id AS sectionId, section.name AS sectionName, section.order AS sectionOrder, 
                         subsection.id AS subsectionId, subsection.name AS subsectionName, subsection.order AS subsectionOrder,
-                        result.breedId, breed.name AS breedName, result.colorId, color.name AS colorName, result.group, 
+                        
+                    result.breedId, breed.name AS breedName, 
+                    result.colorId, IF( color.name IS NULL AND NOT section.id = 5, aocColor, color.name ) AS colorName, aocColor,
+                    result.group,                         
+                        
                         breed.layEggs AS layShould, breed.layWeight AS layWeightShould,
                         SUM( pairs ) AS pairs, SUM( layDames ) AS layDames, AVG( result.layEggs ) AS layEggs, AVG( result.layWeight ) AS layWeight, 
                         SUM( broodEggs ) AS broodEggs, SUM( broodFertile ) AS broodFertile, SUM( broodHatched ) AS broodHatched,
@@ -307,7 +311,11 @@ class Result extends Query
                         result.id, result.districtId, result.year, result.breeders,
                         section.id AS sectionId, section.name AS sectionName, section.order AS sectionOrder, 
                         subsection.id AS subsectionId, subsection.name AS subsectionName, subsection.order AS subsectionOrder,
-                        result.breedId, breed.name AS breedName, result.colorId, color.name AS colorName, result.group, 
+                        
+                    result.breedId, breed.name AS breedName, 
+                    result.colorId, IF( color.name IS NULL AND NOT section.id = 5, aocColor, color.name ) AS colorName, aocColor,
+                    result.group,                         
+                        
                         breed.layEggs AS layShould, breed.layWeight AS layWeightShould,
                         SUM( pairs ) AS pairs, SUM( layDames ) AS layDames, AVG( result.layEggs ) AS layEggs, AVG( result.layWeight ) AS layWeight, 
                         SUM( broodEggs ) AS broodEggs, SUM( broodFertile ) AS broodFertile, SUM( broodHatched ) AS broodHatched,
@@ -346,7 +354,7 @@ class Result extends Query
                 :districtId AS districtId, :year AS `year`, 
                 sectionId, sectionName, sectionOrder, 
                 subsectionId, subsectionName, subsectionOrder,
-                id AS resultId, breedId, breedName, colorId, colorName,
+                id AS resultId, breedId, breedName, colorId, colorName, aocColor, 'test' as test,
 
                 # breeders for district and breeder results
                 CAST( SUM( breeders ) AS UNSIGNED ) AS breeders, 
@@ -389,7 +397,9 @@ class Result extends Query
                     result.id, result.districtId, result.year, result.breeders,
                     section.id AS sectionId, section.name AS sectionName, section.order AS sectionOrder, 
                     subsection.id AS subsectionId, subsection.name AS subsectionName, subsection.order AS subsectionOrder,
-                    result.breedId, breed.name AS breedName, result.colorId, color.name AS colorName, result.group, 
+                    result.breedId, breed.name AS breedName, 
+                    result.colorId, IF( color.name IS NULL AND NOT section.id = 5, aocColor, color.name ) AS colorName, aocColor,
+                    result.group,                    
                     breed.layEggs AS layShould, breed.layWeight AS layWeightShould,
                     SUM( pairs ) AS pairs, SUM( layDames ) AS layDames, AVG( result.layEggs ) AS layEggs, AVG( result.layWeight ) AS layWeight, 
                     SUM( broodEggs ) AS broodEggs, SUM( broodFertile ) AS broodFertile, SUM( broodHatched ) AS broodHatched,
@@ -409,11 +419,11 @@ class Result extends Query
                             LEFT JOIN district AS child ON child.id = parent.id OR child.parentId = parent.id
                         WHERE parent.id=:districtId OR parent.parentId = :districtId                
                     )
-                GROUP BY result.year, result.districtId, result.breedId, result.colorId, result.group, pair.breederId                                
+                GROUP BY result.year, result.districtId, result.breedId, result.colorId, result.aocColor, result.group, pair.breederId                                
             ) AS results            
             
             GROUP BY subsectionOrder, breedName, colorName
-            ORDER BY subsectionOrder, breedName, colorName
+            ORDER BY subsectionOrder, breedName, aocColor, colorName
         ");
 
 		return Query::selectArray( $stmt, $args );

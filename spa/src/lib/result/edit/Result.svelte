@@ -8,10 +8,12 @@
     import FormStatus from '../../common/form/Status.svelte';
     import NumberInputOld from '../../common/input/Number.svelte';
 
-    export let sectionId = null;
-    export let result = null;
+    export let sectionId;
+    export let result;
 
     let hasResult = false;
+
+    result.sectionId = sectionId;
 
     const validate = {
         breeders     : (v) => validator(v).number().range( 1, 99999 ).orNull().isValid(),
@@ -33,6 +35,7 @@
 
 
     function onSubmit( event ) {
+        console.log('Result submit', result );
         if( result.breeders ) { // valid entry
             if( result.id > 0 ) { // existing
                 api.result.put( result.id, result ).then((response) => {
@@ -54,11 +57,12 @@
 
     $: hasResult = result.breeders > 0;
 
+
 </script>
 
 <Form class='flex flex-row px-2 gap-x-1 text-sm' on:submit={onSubmit}>
     <div class='w-4 pl-2'>&#10551; </div>
-    <div class='w-80' class:hasResult title={'Leistung ['+result.id+']'}>{result.name}</div>
+    <div class='w-80' class:hasResult title={'Leistung ['+result.id+']'}>{result.colorName}</div>
 
     <NumberInput class='w-14' bind:value={result.breeders} error='1..99999' title='Zahl der Zuchten/Züchter, leer lassen zum Löschen' validator={validate.breeders} />
     {#if sectionId === PIGEONS}

@@ -26,7 +26,7 @@ class Cache extends Query
             VALUES ( :controller, :url, :query, :json )
         ');
 
-        return Query::insert($stmt, $args ); // returns success
+        return true; // Query::insert($stmt, $args ); // returns success
     }
 
     public static function del( string $controller ): bool

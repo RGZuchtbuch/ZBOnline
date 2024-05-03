@@ -4,7 +4,8 @@
 
     import {meta, router} from 'tinro';
 
-    export let district = null;
+    export let district;
+    export let year;
     export let report;
 
     function addTo( sum, result ) { // count and add all up to totals of section etc
@@ -104,6 +105,7 @@
             }
             results.total = avgTotal( resultsSum );
         }
+        console.log( 'Results', results );
     }
 
     function onSection( id ) {
@@ -133,23 +135,24 @@
     });
 
     $: calcTotals( report );
+    $: console.log( 'Report', report );
 
 </script>
 
 
 <div class='print'>
     {#if report }
-        <table class='w-full p-2'>
 
             {#each report.sections as section}
+                <table class='w-full p-2'>
                 <!-- section header -->
                 <tbody>
                     <tr><th class='sticky top-0 border-y border-gray-600' colspan=14>
                         <div class='h-2 bg-white'></div>
                         <div class='flex flex-row p-2 bg-header'>
-                            <div class='w-56'></div>
+                            <small class='w-56 pr-2 text-white text-left self-end'>{#if district} {district.name} {/if}</small>
                             <div class='grow text-center text-white text-xl'>Sparte {section.name}</div>
-                            <small class='w-56 pr-2 text-white text-right self-end'>{#if district} {district.name} {/if}</small>
+                            <small class='w-56 pr-2 text-white text-right self-end'>{#if district} {year} {/if}</small>
                         </div>
                     </th></tr>
                     <tr>
@@ -297,7 +300,7 @@
                                             <td>
                                                 <div class='flex flex-row px-2 gap-x-1 print-no-break'>
                                                     <div class='grow pl-4'>
-                                                        &#10551; {color.name}
+                                                        &#10551; {color.name || color.result.aocColor}
                                                     </div>
                                                     <div class='flex justify-evenly text-sm gap-x-6'>
                                                         <div class='flex w-14 justify-evenly'>
@@ -324,6 +327,14 @@
                                 {/each} <!-- color -->
                             </tbody>
                         {/each} <!-- breed -->
+                        {#if subsection.aoc}
+                            {#each subsection.aoc as breed}
+                                <tbody>
+                                    <tr><td>AOC {breed.name}</td></tr>
+                                </tbody>
+                            {/each}
+                        {/if}
+
 
                         <!-- total subsection -->
                         <tbody>
@@ -466,8 +477,8 @@
                 {/if}
 
                 <div class='print-break text-center'> - </div>
+                </table>
             {/each}
-        </table>
         {#if report.sections.length === 0 }
             <h2 class='p-2 bg-header text-center text-xl'>Leider keine Daten für dieses Jahr</h2>
         {/if}

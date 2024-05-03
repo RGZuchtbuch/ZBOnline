@@ -133,12 +133,13 @@ class District
 		$sectionId = ToolBox::toInt( $query[ 'section' ] ?? null );
 		$group = $query[ 'group' ] ?? null;
 		if( $id && $year && $sectionId && $group ) { // all not null and > 0 as all id's should
-			$results = model\District::getSectionResults( $id, $sectionId, $year, $group );
-			if( $results != null ) {
-				$response->getBody()->write(json_encode( [ 'results' => & $results ], JSON_UNESCAPED_SLASHES));
-				return $response;
+			if( $sectionId === 9999 ) { // aoc klasse
+				$results = model\District::getAocResults( $id, $year, $group );
+			} else {
+				$results = model\District::getSectionResults( $id, $sectionId, $year, $group );
 			}
-			throw new HttpInternalServerErrorException($request, 'Hmm no results, should at least be empty array, warn admin');
+			$response->getBody()->write(json_encode( [ 'results' => & $results ], JSON_UNESCAPED_SLASHES));
+			return $response;
 		}
 		throw new HttpBadRequestException( $request, 'Bad arguments values' );
 	}
@@ -155,11 +156,8 @@ class District
 			$results = $sectionId == 5 ? // == as sectionId is text
 				model\District::getBreedResult($id, $breedId, $year, $group) :
 				model\District::getColorResults($id, $breedId, $year, $group);
-			if( $results != null ) {
-				$response->getBody()->write(json_encode( [ 'results' => & $results ], JSON_UNESCAPED_SLASHES));
-				return $response;
-			}
-			throw new HttpInternalServerErrorException($request, 'Hmm no results, should at least be empty array, warn admin');
+			$response->getBody()->write(json_encode( [ 'results' => & $results ], JSON_UNESCAPED_SLASHES));
+			return $response;
 		}
 		throw new HttpBadRequestException( $request, 'Bad arguments values' );
 	}
@@ -175,10 +173,9 @@ class District
 		$year = $args[ 'year' ];
 		if( is_numeric( $id ) && is_numeric( $year ) ) {
 			$results = model\Result::getResultsDistrictYear( $id, $year );
-
 			$report = ToolBox::toReportTree( $results );
 			if( $report ) {
-                $json = json_encode( [ 'report' => & $report ], JSON_UNESCAPED_SLASHES);
+                $json = json_encode( [ 'report' => & $report, 'results' => & $results ], JSON_UNESCAPED_SLASHES);
 				$response->getBody()->write( $json );
                 model\Cache::set( 'Result', $request->getUri()->getPath(), $request->getUri()->getQuery(), $json );
 				return $response;

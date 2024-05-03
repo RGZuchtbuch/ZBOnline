@@ -22,6 +22,7 @@
             })
             api.district.report.get( districtId, year ).then( response => {
                 report = response.report;
+                console.log( 'District.report', report );
             })
         }
     }

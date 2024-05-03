@@ -5,8 +5,10 @@
 
     import Selector from './Selector.svelte';
     import Header   from './Header.svelte';
+    import Aoc      from './Aoc.svelte';
     import Breed    from './Breed.svelte';
     import Help     from './Help.svelte';
+    import AocInput from './AocInput.svelte';
 
     export let districtId = null;
 
@@ -19,7 +21,7 @@
 
     let help = false; // triggered in selector
 
-    function onQuery( route ) {
+    function onQuery( route ) { // when route or query changes
         const now = new Date();
         sectionId = route.query.section ? Number(route.query.section) : 3; // get from route or 3
         // year is query year or lastyear during spring or current year
@@ -64,9 +66,19 @@
 <Header {sectionId}/>
 
 <div class='w-256 bg-gray-200 overflow-y-scroll border border-t-gray-400 rounded-b scrollbar'>
-    {#each breeds as breed }
-        <Breed {districtId} {sectionId} {breed} {year} {group} title='Wähle zum Eingeben' />
-    {/each}
+    {#if sectionId === 9999 }
+
+        <AocInput {districtId} {year} bind:results={breeds}/>
+        <div class='h-4 bg-white'></div>
+
+        {#each breeds as result }
+            <Aoc {districtId} {sectionId} {result} {year} {group} />
+        {/each}
+    {:else}
+        {#each breeds as breed }
+            <Breed {districtId} {sectionId} {breed} {year} {group} title='Wähle zum Eingeben' />
+        {/each}
+    {/if}
 </div>
 {#if help}
     <Help on:help={onHelp} />

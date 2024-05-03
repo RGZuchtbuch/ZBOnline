@@ -63,9 +63,9 @@ class ToolBox
 			}
 			$result = $row;
 			$result['id'] = $row['resultId'];
-			if( $row['colorId'] === null ) {
+			if( $row['colorId'] === null && $row['aocColor'] === null ) { // pigeon result for breed
 				$breed[ 'result' ] = $result;
-			} else {
+			} else { // layer or aoc
 				$breed['colors'][] = [
 					'id' => $row['colorId'], 'name' => $row['colorName'], 'result'=> $result
 				];

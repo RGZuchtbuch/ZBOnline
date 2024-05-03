@@ -40,10 +40,7 @@ class Section
         throw new HttpNotImplementedException( null, "oops" );
     }
 
-
-
-
-
+	// other getters
 
     public static function getBreeds(int $sectionId ) : array {
         $args = get_defined_vars();

@@ -20,6 +20,7 @@
             })
             api.district.report.get( districtId, year ).then( response => {
                 report = response.report;
+
             })
         }
     }
@@ -37,7 +38,7 @@
 {#if district && year }
     <h2 class='text-center'>Verband {#if district} {district.name} {/if} → Leistungsdaten {year}</h2>
     {#if report}
-        <Report {district} {report} />
+        <Report {district} {year} {report}/>
     {/if}
 {/if}
 </div>

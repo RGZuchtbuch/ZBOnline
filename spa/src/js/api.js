@@ -95,6 +95,7 @@ export default {
                 }
             },
 
+
             breed: { // to edit breed's breed ( pigeon ) or colors ( layers ) results
                 get: ( districtId, sectionId, breedId, year, group ) => {
                     return get( 'api/district/'+districtId+'/breed/'+breedId+'/results?section='+sectionId+'&year='+year+'&group='+group );
@@ -198,6 +199,9 @@ export default {
 
     section: {
         get: ( id ) => get( 'api/section/'+id ),
+        aoc : {
+            get: ( id ) => get( 'api/section/aoc' )
+        },
         children: {
             get: ( parentId ) => get( 'api/section/'+parentId+'/children')
         },

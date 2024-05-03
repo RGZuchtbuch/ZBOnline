@@ -103,6 +103,10 @@ export default function validator(value ) {
             valid = condition ? valid : false;
             return worker;
         },
+        notNull : () => {
+          valid = value != null;
+          return worker;
+        },
         orNull : () => { // last check
             valid = value === null ? true : valid; // true is null, otherwise unchanged
             return worker;

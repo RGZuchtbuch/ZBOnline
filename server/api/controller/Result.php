@@ -39,7 +39,7 @@ class Result
 			if ($requester && ($requester->isAdmin() || $requester->isModerating($result['districtId']))) { //granted
 				$id = model\Result::new(
 					$result['pairId'], $result['districtId'], $result['year'], $result['group'],
-					$result['breedId'], $result['colorId'],
+					$result['sectionId'], $result['breedId'], $result['colorId'], $result['aocColor'],
 					$result['breeders'], $result['pairs'],
 					$result['layDames'], $result['layEggs'], $result['layWeight'],
 					$result['broodEggs'], $result['broodFertile'], $result['broodHatched'],
@@ -68,7 +68,7 @@ class Result
 					$success = model\Result::set( // change
 						$result['id'],
 						$result['pairId'], $result['districtId'], $result['year'], $result['group'],
-						$result['breedId'], $result['colorId'],
+						$result['sectionId'], $result['breedId'], $result['colorId'], $result['aocColor'],
 						$result['breeders'], $result['pairs'],
 						$result['layDames'], $result['layEggs'], $result['layWeight'],
 						$result['broodEggs'], $result['broodFertile'], $result['broodHatched'],
