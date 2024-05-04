@@ -175,7 +175,7 @@ class District
 			$results = model\Result::getResultsDistrictYear( $id, $year );
 			$report = ToolBox::toReportTree( $results );
 			if( $report ) {
-                $json = json_encode( [ 'report' => & $report, 'results' => & $results ], JSON_UNESCAPED_SLASHES);
+                $json = json_encode( [ 'report' => & $report ], JSON_UNESCAPED_SLASHES);
 				$response->getBody()->write( $json );
                 model\Cache::set( 'Result', $request->getUri()->getPath(), $request->getUri()->getQuery(), $json );
 				return $response;

@@ -63,7 +63,7 @@
             {label: 'Küken %',      data: years.map( year => 100 * year.broodLayerHatched ), borderWidth: 1, categoryPercentage: (0.75), tooltip: (context) => dec( context.raw, 1 )+'% von '+dec( data[ context.dataIndex ].broodLayerEggs )+' eingelegte Eier' }
         ],
         21 : ( years ) => [
-            {label: 'Küken pro Paar', data: years.map( year => year.broodPigeonProduction ), borderWidth: 1, categoryPercentage: (0.75), tooltip:(context) => dec(context.raw, 1) + ' mit '+dec( data[ context.dataIndex ].broodPigeonChicks )+' Küken aus '+dec( data[ context.dataIndex ].broodPigeonChicks / data[ context.dataIndex ].broodPigeonProduction )+' Paare in  '+data[ context.dataIndex ].broodPigeonBreeders+' Zuchten' }
+            {label: 'Küken pro Paar', data: years.map( year => year.broodPigeonResult ), borderWidth: 1, categoryPercentage: (0.75), tooltip:(context) => dec(context.raw, 1) + ' mit '+dec( data[ context.dataIndex ].broodPigeonHatched )+' Küken aus '+dec( data[ context.dataIndex ].broodPigeonHatched / data[ context.dataIndex ].broodPigeonResult )+' Paare in  '+data[ context.dataIndex ].broodPigeonBreeders+' Zuchten' }
         ],
         30 : ( years ) => [
             {label: '⌀ Bewertung', data: years.map( year => year.showScore ), borderWidth: 1, categoryPercentage: (0.75), tooltip:(context) => dec(context.raw, 1) + ' auf '+dec( data[ context.dataIndex ].showCount )+' Tieren' }

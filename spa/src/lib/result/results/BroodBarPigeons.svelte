@@ -35,7 +35,7 @@
         let labels = [ 'Küken / Paar' ];
         let datasets = [
             {
-                data: [ result.broodPigeonProduction ],
+                data: [ result.broodPigeonResult ],
                 backgroundColor: [ '#CEC8' ],
                 borderColor: [ '#283' ],
                 borderWidth: 1,

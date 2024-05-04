@@ -7,14 +7,9 @@
 
     export let districtId = null;
     export let year = null;
-//    export let sectionId = null;
-    //export let breedId = null;
-//    export let colorId = null;
     export let typeId = null;
 
     let canvasFraction = null; // ref to canvas element
-    let canvasB = null;
-    let canvasC = null;
     let chart = null;
 
     let fractions = {
@@ -97,10 +92,9 @@
         if( districtId ) {
             api.district.results.get( districtId, year ).then( response => {
                 const report = response.report;
+
                 countBreeders( report );
-                //console.log( "Pie results", results );
                 let data = report.sections.map( section => section.count ); // get array of counts
-                //let data = [1,2,3];
                 let datasets = [ { data:data } ];
                 let labels = report.sections.map( section => section.name ); // get array of names
 
@@ -135,13 +129,13 @@
     Chart.register( ArcElement, DoughnutController, Legend, Tooltip );
     $: handle( districtId, year, typeId );
 
-
+    console.log( 'Type', typeId );
 
 </script>
 {#if fractions }
     <div class='flex flex-col p-4' >
-        <h5> Zuchten / Sparte {typeId}</h5>
-        <canvas id='fractions' bind:this={canvasFraction} width='256px' height='128px'></canvas>
+        <h5> Zuchten / Sparte </h5>
+        <canvas id='fractions' bind:this={canvasFraction} width='400px' height='128px'></canvas>
     </div>
 {/if}
 

@@ -17,33 +17,33 @@
         sum.layDames += result.layDames;
 
         if (result.layEggs) {
-            sum.layers += result.breeders;
-            sum.layShould += result.breeders * result.layShould; // needs div by total breeders
-            sum.layEggs += result.breeders * result.layEggs; // needs div by total breeders
+            sum.layBreeders += result.layBreeders;
+            sum.layShould   += result.layBreeders * result.layShould; // needs div by total breeders
+            sum.layEggs     += result.layBreeders * result.layEggs; // needs div by total breeders
         }
 
         if (result.layWeight) {
-            sum.layWeighters += result.breeders;
-            sum.layWeightShould += result.breeders * result.layWeightShould;
-            sum.layWeight += result.breeders * result.layWeight;
+            sum.layWeightBreeders += result.layWeightBreeders;
+            sum.layWeightShould   += result.layWeightBreeders * result.layWeightShould;
+            sum.layWeight         += result.layWeightBreeders * result.layWeight;
         }
 
-        if (result.broodLayerBreeders && result.broodLayerEggs ) {
-            sum.brooders += result.broodLayerBreeders;
-            sum.broodEggs += result.broodLayerEggs;
-            sum.broodFertile += result.breeders * result.broodLayerFertile;
-            sum.broodHatched += result.breeders * result.broodLayerHatched;
+        if( result.broodLayerBreeders && result.broodLayerEggs ) {
+            sum.broodBreeders     += result.broodLayerBreeders;
+            sum.broodLayerEggs    += result.broodLayerEggs;
+            sum.broodLayerFertile += result.broodLayerBreeders * result.broodLayerFertile;
+            sum.broodLayerHatched += result.broodLayerBreeders * result.broodLayerHatched;
         }
         if( result.broodPigeonBreeders && result.pairs && result.broodPigeonHatched ) {
-            sum.brooders += result.broodPigeonBreeders;
-            sum.broodChicks += result.broodPigeonHatched;
-            sum.broodResult += result.breeders * result.broodPigeonProduction;
+            sum.broodBreeders += result.broodPigeonBreeders;
+            sum.broodPigeonHatched   += result.broodPigeonHatched;
+            sum.broodPigeonResult   += result.broodPigeonBreeders * result.broodPigeonResult;
         }
 
         if( result.showCount && result.showScore ) {
-            sum.showers += result.breeders;
+            sum.showBreeders += result.showBreeders;
             sum.showCount += result.showCount;
-            sum.showScore += result.breeders * result.showScore;
+            sum.showScore += result.showBreeders * result.showScore;
         }
     }
 
@@ -51,44 +51,48 @@
         const total = {};
             total.breeders = sum.breeders; // reporting layers
             total.pairs = sum.pairs; // reported pigeon pairs ( could be used for layers as well )
-            total.layDames = sum.layDames; // layers henns doing llaying etc, optionsl.
 
-            total.layers = sum.layers; // breeders reporting lay results
-            total.layShould = sum.layers ? sum.layShould / sum.layers : null;
-            total.layEggs = sum.layers ? sum.layEggs / sum.layers : null; // to avg
-            total.layWeighters = sum.layWeighters;
-            total.layWeightShould = sum.layWeighters ? sum.layWeightShould / sum.layWeighters : null;
-            total.layWeight = sum.layWeighters ? sum.layWeight / sum.layWeighters : null;
+            total.layDames = sum.layDames; // layers henns doing llaying etc, optionsl.
+            total.layBreeders = sum.layBreeders; // breeders reporting lay results
+            total.layShould = sum.layBreeders ? sum.layShould / sum.layBreeders : null;
+            total.layEggs = sum.layBreeders ? sum.layEggs / sum.layBreeders : null; // to avg
+            total.layWeightBreeders = sum.layWeightBreeders;
+            total.layWeightShould = sum.layWeightBreeders ? sum.layWeightShould / sum.layWeightBreeders : null;
+            total.layWeight = sum.layWeightBreeders ? sum.layWeight / sum.layWeightBreeders : null;
 
             //subTotal.broodEggs = subTotal.broodEggs;
-            total.brooders = sum.brooders; // breeders reporting brood results ( P & L )
-            total.broodEggs = sum.broodEggs;
-            total.broodFertile = sum.brooders ? sum.broodFertile / sum.brooders : null; // layer
-            total.broodHatched = sum.brooders ? sum.broodHatched / sum.brooders : null; // layer
-            total.broodChicks = sum.broodChicks; // pigeon
-            total.broodResult = sum.brooders ? sum.broodResult / sum.brooders : null; // pigeon
+            total.broodBreeders = sum.broodBreeders; // breeders reporting brood results ( P & L )
+            total.broodLayerEggs = sum.broodLayerEggs;
+            total.broodLayerFertile = sum.broodBreeders ? sum.broodLayerFertile / sum.broodBreeders : null; // layer
+            total.broodLayerHatched = sum.broodBreeders ? sum.broodLayerHatched / sum.broodBreeders : null; // layer
+            total.broodPigeonHatched = sum.broodPigeonHatched; // pigeon
+            total.broodPigeonResult = sum.broodBreeders ? sum.broodPigeonResult / sum.broodBreeders : null; // pigeon
 
             // showCount
-            total.showers = sum.showers; // breeders reporting showscores
+            total.showBreeders = sum.showBreeders; // breeders reporting showscores
             total.showCount = sum.showCount;
-            total.showScore = sum.showers ? sum.showScore / sum.showers : null;
+            total.showScore = sum.showBreeders ? sum.showScore / sum.showBreeders : null;
         return total;
+    }
+
+    function createTotal() {
+        return { breeders:0, pairs:0, layDames:0, layShould:0, layBreeders:0, layEggs:0, layWeightBreeders:0, layWeightShould:0, layWeight:0, broodBreeders:0, broodLayerEggs:0, broodLayerFertile:0, broodLayerHatched:0, broodPigeonHatched:0, broodPigeonResult:0, showBreeders:0, showCount:0, showScore:0 };
     }
 
     function calcTotals( results ) {
         if( results ) {
-            const resultsSum = { breeders:0, pairs:0, layDames:0, layers:0, layShould:0, layEggs:0, layWeighters:0, layWeightShould:0, layWeight:0, brooders:0, broodEggs:0, broodFertile:0, broodHatched:0, broodChicks:0, broodResult:0, showers:0, showCount:0, showScore:0 };
+            const resultsSum = createTotal();
             for( const section of results.sections ) {
-                const sectionSum = { breeders:0, pairs:0, layDames:0, layers:0, layShould:0, layEggs:0, layWeighters:0, layWeightShould:0, layWeight:0, brooders:0, broodEggs:0, broodFertile:0, broodHatched:0, broodChicks:0, broodResult:0, showers:0, showCount:0, showScore:0 };
+                const sectionSum = createTotal();
                 for( const subsection of section.subsections ) {
-                    const subsectionSum = { breeders:0, pairs:0, layDames:0, layShould:0, layers:0, layEggs:0, layWeighters:0, layWeightShould:0, layWeight:0, brooders:0, broodEggs:0, broodFertile:0, broodHatched:0, broodChicks:0, broodResult:0, showers:0, showCount:0, showScore:0 };
+                    const subsectionSum = createTotal();
                     for( const breed of subsection.breeds ) {
                         if( breed.result ) { // pigeons by breed
                             addTo( resultsSum, breed.result);
                             addTo( sectionSum, breed.result);
                             addTo( subsectionSum, breed.result);
                         }
-                        const breedSum = { breeders:0, pairs:0, layDames:0, layShould:0, layers:0, layEggs:0, layWeighters:0, layWeightShould:0, layWeight:0, brooders:0, broodEggs:0, broodFertile:0, broodHatched:0, broodChicks:0, broodResult:0, showers:0, showCount:0, showScore:0 };
+                        const breedSum = createTotal();
                         for( const color of breed.colors ) { // layers by color
                             if( color.result ) {
                                 addTo( resultsSum, color.result);
@@ -105,7 +109,6 @@
             }
             results.total = avgTotal( resultsSum );
         }
-        console.log( 'Results', results );
     }
 
     function onSection( id ) {
@@ -135,7 +138,7 @@
     });
 
     $: calcTotals( report );
-    $: console.log( 'Report', report );
+   // $: console.log( 'Report', report );
 
 </script>
 
@@ -242,15 +245,13 @@
                         <!-- Breeds -->
                         {#each subsection.breeds as breed}
                             <tbody class='print-no-break'>
-
-
                                 <tr>
                                     <th>
                                         <div class='flex flex-row px-2 py-1 gap-x-1 bg-gray-100'>
                                             <div class='grow text-left text-base font-semibold'>
                                                 {breed.name}
                                             </div>
-                                            {#if ! section.layers && breed.result}
+                                            {#if section.id === 5 && breed.result}
                                                 <!-- breed result for pigeon -->
                                                 <div class='flex justify-evenly text-sm gap-x-6'>
                                                     <div class='flex w-14 justify-evenly'>
@@ -260,7 +261,7 @@
                                                     <div class='flex w-40 justify-evenly'>
                                                         <div class='td' title='Zahl der Brutpaare'>{dec( breed.result.pairs )}</div>
                                                         <div class='td' title='Zahl der geschlüpften Küken'>{dec( breed.result.broodPigeonHatched ) }</div>
-                                                        <div class='td' title='Zahl der Küken pro Paar'>{dec( breed.result.broodPigeonProduction, 1 )}</div>
+                                                        <div class='td' title='Zahl der Küken pro Paar'>{dec( breed.result.broodPigeonResult, 1 )}</div>
                                                     </div>
                                                     <div class='flex w-28 justify-evenly'>
                                                         <div class='td' title='Zahl der ausgestellten Tieren'>{dec( breed.result.showCount > 0 ? breed.result.showCount : null )}</div>
@@ -274,13 +275,13 @@
                                                         <div class='td' title='Zahl der Zuchten / Züchter'>{dec( breed.total.breeders )}</div>
                                                     </div>
                                                     <div class='flex w-28 justify-evenly'>
-                                                        <div class='td' title='Durchschnitt Legeleistung im Jahr'>{pct(breed.total.layEggs, 1, 1)}</div>
-                                                        <div class='td' title='Durchschnitt Eiergewicht'>{pct( breed.total.layWeight, 1, 1 )}</div>
+                                                        <div class='td' title='Durchschnitt Legeleistung im Jahr'>{pct(breed.total.layEggs, 1 )}</div>
+                                                        <div class='td' title='Durchschnitt Eiergewicht'>{pct( breed.total.layWeight, 1 )}</div>
                                                     </div>
                                                     <div class='flex w-40 justify-evenly'>
-                                                            <div class='td' title='Eingelegte Eier'>{dec( breed.total.broodEggs )}</div>
-                                                            <div class='td' title='Anteil befruchteten Eier'>{pct( breed.total.broodFertile, 1 )}</div>
-                                                            <div class='td' title='Anteil geschlüpfte Küken'>{pct( breed.total.broodHatched, 1 )}</div>
+                                                            <div class='td' title='Eingelegte Eier'>{dec( breed.total.broodLayerEggs )}</div>
+                                                            <div class='td' title='Anteil befruchteten Eier'>{pct( breed.total.broodLayerFertile, 1 )}</div>
+                                                            <div class='td' title='Anteil geschlüpfte Küken'>{pct( breed.total.broodLayerHatched, 1 )}</div>
                                                     </div>
                                                     <div class='flex w-28 justify-evenly'>
                                                         <div class='td' title='Zahl der ausgestellten Tieren'>{dec( breed.total.showCount > 0 ? breed.total.showCount : null )}</div>
@@ -308,7 +309,7 @@
                                                         </div>
                                                         <div class='flex w-28 justify-evenly'>
                                                             <div class='td' title='Durchschnitt Legeleistung im Jahr'>{pct( color.result.layEggs, 1 )}</div>
-                                                            <div class='td'>{pct( color.result.layWeight, 1, 1 )}</div>
+                                                            <div class='td'>{pct( color.result.layWeight, 1 )}</div>
                                                         </div>
                                                         <div class='flex w-40 justify-evenly'>
                                                             <div class='td' title='Eingelegte Eier'>{dec( color.result.broodLayerEggs )}</div>
@@ -327,14 +328,6 @@
                                 {/each} <!-- color -->
                             </tbody>
                         {/each} <!-- breed -->
-                        {#if subsection.aoc}
-                            {#each subsection.aoc as breed}
-                                <tbody>
-                                    <tr><td>AOC {breed.name}</td></tr>
-                                </tbody>
-                            {/each}
-                        {/if}
-
 
                         <!-- total subsection -->
                         <tbody>
@@ -350,19 +343,19 @@
                                                 {#if section.id === 5 }
                                                     <div class='td'>-</div> <div class='td'>-</div>
                                                 {:else}
-                                                    <div class='td' title='Durchschnitt Legeleistung im Jahr'>{pct(subsection.total.layEggs, 1, 1)}</div>
-                                                    <div class='td' title='Durchschnitt Eiergewicht'>{pct( subsection.total.layWeight, 1, 1 )}</div>
+                                                    <div class='td' title='Durchschnitt Legeleistung im Jahr'>{pct(subsection.total.layEggs, 1 )}</div>
+                                                    <div class='td' title='Durchschnitt Eiergewicht'>{pct( subsection.total.layWeight, 1)}</div>
                                                 {/if}
                                             </div>
                                             <div class='flex w-40 justify-evenly'>
-                                                {#if ! section.layers }
+                                                {#if section.id === 5 }
                                                     <div class='td' title='Paare'>{dec( subsection.total.pairs )}</div>
-                                                    <div class='td' title='Geschlüpfte Küken'>{dec( subsection.total.broodChicks ) }</div>
-                                                    <div class='td' title='Zahl der Küken pro Paar'>{dec( subsection.total.broodResult, 1 )}</div>
+                                                    <div class='td' title='Geschlüpfte Küken'>{dec( subsection.total.broodPigeonHatched ) }</div>
+                                                    <div class='td' title='Zahl der Küken pro Paar'>{dec( subsection.total.broodPigeonResult, 1 )}</div>
                                                 {:else}
-                                                    <div class='td' title='Eingelegte Eier'>{dec( subsection.total.broodEggs )}</div>
-                                                    <div class='td' title='Anteil befruchteten Eier'>{pct( subsection.total.broodFertile, 1 )}</div>
-                                                    <div class='td' title='Anteil geschlüpfte Küken'>{pct( subsection.total.broodHatched, 1 )}</div>
+                                                    <div class='td' title='Eingelegte Eier'>{dec( subsection.total.broodLayerEggs )}</div>
+                                                    <div class='td' title='Anteil befruchteten Eier'>{pct( subsection.total.broodLayerFertile, 1 )}</div>
+                                                    <div class='td' title='Anteil geschlüpfte Küken'>{pct( subsection.total.broodLayerHatched, 1 )}</div>
                                                 {/if}
                                             </div>
                                             <div class='flex w-28 justify-evenly'>
@@ -391,20 +384,20 @@
                                         {#if section.id === 5 }
                                             <div class='td'>-</div> <div class='td'>-</div>
                                         {:else}
-                                            <div class='td' title='Durchschnitt Legeleistung im Jahr'>{pct( section.total.layEggs, 1, 1)}</div>
-                                            <div class='td' title='Durchschnitt Eiergewicht'>{pct( section.total.layWeight, 1, 1 )}</div>
+                                            <div class='td' title='Durchschnitt Legeleistung im Jahr'>{pct( section.total.layEggs, 1)}</div>
+                                            <div class='td' title='Durchschnitt Eiergewicht'>{pct( section.total.layWeight, 1)}</div>
                                         {/if}
                                     </div>
 
                                     <div class='flex w-40 justify-evenly'>
                                         {#if section.id === 5 }
                                             <div class='td' title='Paare'>{dec( section.total.pairs )}</div>
-                                            <div class='td' title='Geschlüpfte Küken'>{dec( section.total.broodChicks ) }</div>
-                                            <div class='td' title='Zahl der Küken pro Paar'>{dec( section.total.broodResult, 1 )}</div>
+                                            <div class='td' title='Geschlüpfte Küken'>{dec( section.total.broodPigeonHatched ) }</div>
+                                            <div class='td' title='Zahl der Küken pro Paar'>{dec( section.total.broodPigeonResult, 1 )}</div>
                                         {:else}
-                                            <div class='td' title='Eingelegte Eier'>{dec( section.total.broodEggs )}</div>
-                                            <div class='td' title='Anteil befruchteten Eier'>{pct( section.total.broodFertile, 1 )}</div>
-                                            <div class='td' title='Anteil geschlüpfte Küken'>{pct( section.total.broodHatched, 1 )}</div>
+                                            <div class='td' title='Eingelegte Eier'>{dec( section.total.broodLayerEggs )}</div>
+                                            <div class='td' title='Anteil befruchteten Eier'>{pct( section.total.broodLayerFertile, 1 )}</div>
+                                            <div class='td' title='Anteil geschlüpfte Küken'>{pct( section.total.broodLayerHatched, 1 )}</div>
                                         {/if}
                                     </div>
 
@@ -420,6 +413,8 @@
 
 
                 </tbody>
+
+
                 {#if section.id === report.sections[ report.sections.length-1 ].id } <!-- last section -->
                     <tbody>
                         <!-- totals -->

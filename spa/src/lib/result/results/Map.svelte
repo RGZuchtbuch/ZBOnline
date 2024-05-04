@@ -57,11 +57,11 @@
         21: {
             id: 21,
             label: 'Brutleistung Tauben',
-            map: (result) => [ result.broodPigeonProduction === null ? null : result.broodPigeonProduction ], // for map and chart
+            map: (result) => [ result.broodPigeonResult === null ? null : result.broodPigeonResult ], // for map and chart
             title: (result) => result.broodPigeonBreeders ?
-                ` Bei ${dec(result.nonLayerPairs)} Paare schlüpften ${dec(result.chicks)} Küken also ${dec(result.broodPigeonProduction,1)} Küken / Paar`
+                ` Aus ${dec(result.broodPigeonHatched/result.broodPigeonResult)} Paare schlüpften ${dec(result.broodPigeonHatched)} Küken also ${dec(result.broodPigeonResult,1)} Küken / Paar`
                 : ` keine Angaben`,
-            getMax: districts => Math.max( ...districts.map( district => district.broodPigeonProduction ) ),
+            getMax: districts => Math.max( ...districts.map( district => district.broodPigeonResult ) ),
             getMin: districts => 0,
         },
 
@@ -99,6 +99,7 @@
             promise.then(response => {
                 districts = response.districts;
                 calcMaxValues(districts);
+                console.log( 'Map Districts', districts );
             });
         }
     }
@@ -111,7 +112,7 @@
             max.breeders = Math.max( ...districts.map( district => district.breeders ) ); // max of array of all breeders
             max.pairs = Math.max( ...districts.map( district => district.pairs ) );
             max.lay = 365;
-            max.brood = Math.max( ...districts.map( district => district.broodEggs ) );
+            max.brood = Math.max( ...districts.map( district => district.broodLayerEggs ) );
             max.show = 97;
         }
     }
@@ -158,7 +159,8 @@
                 max:type.max ? type.max : max,
                 colors:[ '#74abf0C0', '#cdf094C0', '#F9CA9BC0', '#F9ACBCC0' ], // for each circle
             };
-            //console.log( 'Map', map );
+            console.log( 'Type', type, (0-89/(97-89)) );
+            console.log( 'Map', map );
         }
     }
 
@@ -192,7 +194,7 @@
                         <circle cx={map.coords[index].x} cy={map.coords[index].y} r={1+MAXBUBBLE} stroke='none' fill='#ccf0'></circle>
                         {#each map.datasets as dataset, d }
                             <circle cx={map.coords[index].x} cy={map.coords[index].y}
-                                    r={MAXBUBBLE*(dataset.data[index] - map.min)/(map.max - map.min)}
+                                    r={Math.max( MAXBUBBLE*(dataset.data[index] - map.min)/(map.max - map.min), 0 ) }
                                     stroke='#7777' fill={map.colors[d]} >
                             </circle>
                         {/each}
