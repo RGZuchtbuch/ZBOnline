@@ -10,6 +10,7 @@ class User extends Query
         return null;
     }
 */
+
     public static function get( int $id ) : ? array {
         // TODO does breeder not handle this, needs check
         $args = get_defined_vars();

@@ -24,7 +24,7 @@ class Standard
 		$breeds = model\Breed::get();
 		$colors = model\Color::get();
 		$standard = Standard::toStandardTree($sections, $breeds, $colors);
-		$json = json_encode( [ 'standard' => $standard ], JSON_UNESCAPED_SLASHES );
+		$json = json_encode( [ 'standard' => $standard, 'timestamp' => date( 'Y-m-d H:i:s' ) ], JSON_UNESCAPED_SLASHES );
 		$response->getBody()->write( $json );
 		model\Cache::set( 'Standard', $request->getUri()->getPath(), $request->getUri()->getQuery(), $json );
         return $response;

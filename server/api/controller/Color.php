@@ -42,7 +42,7 @@ class Color
 			if( $body ) {
 				$breed = model\Breed::get( $body[ 'breedId' ] );
 				if( $breed ) {
-					$id = model\Color::new($body['name'], $body['breedId'], $body['aoc'], null, $requester->getId() );
+					$id = model\Color::new($body['name'], $body['breedId'], null, $requester->getId() );
 					if ($id) {
 						$response->getBody()->write(json_encode(['id' => $id], JSON_UNESCAPED_SLASHES));
 						return $response;
@@ -63,7 +63,7 @@ class Color
 			if( $id && is_numeric( $id ) ) {
 				$body = $request->getParsedBody();
 				if ($body) {
-					$updated = model\Color::set($id, $body['name'], $body['aoc'], null, $requester->getId());
+					$updated = model\Color::set($id, $body['name'], null, $requester->getId());
 					if ($updated) {
 						$response->getBody()->write(json_encode(['id' => $id, 'updated'=>$updated], JSON_UNESCAPED_SLASHES));
 						return $response;

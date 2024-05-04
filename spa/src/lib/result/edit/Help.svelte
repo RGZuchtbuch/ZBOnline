@@ -14,8 +14,9 @@
 
 
 <Help title='Eingabe Leistungen Anleitung' on:help>
-    Das eingeben der Leistungdaten ist eine Aufgabe für der Obman. Dies kann auf Landesverband- oder Kreisverbandsebene, aber auch auf BDRG ebene.
-    Wichtig ist es zu wissen das für den LV Bericht die LV und die KV Datendaten zusammen gefügt werden. Für den Bericht Mann muss also zuvor wissen wer welche Daten eingibt um doppelte Daten zu vermeiden.<br>
+    Das eingeben der Leistungdaten ist eine Aufgabe für der Obmann.<br>
+    Dies kann auf BDRG, Landerverband oder Kreisverband ( im LV Weser-Ems ) ebene.<br>
+    Alle Leistungsmeldungen auf jeder Ebene und die darunter liegende, werden zusammen gerechnet. Leistungsdaten sollen also nur einmahl auf eine ebene eingegeben werden.
     <hr>
     In dieser Seite gibt mann die Leistungsdaten für den jeweiligen Verband ein in einige Schritte:<br>
     <ol>
@@ -23,6 +24,7 @@
         <li>Wähle für welche Sparte mann Daten eingeben möchte </li>
         <li>Wähle für welche Zuchtbuchgruppe mann Daten eingeben will ( nur für Leger, Tauben kennen keine Gruppen</li>
     </ol>
+    Für die AOC-Klasse kann mann die AOC Klasse als Sparte Wählen und dar die Sparte mit Rasse wählen und den Farbenschlag als Tekst eingeben. Dieser neuer Farbenschlag wird and die unterstehende Liste hinzugefügt wo mann die Leistungsdaten dann eingeben kann.<br>
     <br>
     Mann sieht die Rasse der gewählten Sparte.<br>
     Wähle die Rasse für den mann die Leistungen eingeben will, durch klicken der Name.<br>
@@ -34,16 +36,16 @@
         <li>Zucht:
             <ul>
                 <li>Zuchten: Zahle der Zuchten oder Züchter.</li>
-                <li>Stämme / Paare: Zahle der Stämme oder Paare (Tauben).</li>
-
+                <li>Paare: Zahle der Tauben Paare.</li>
             </ul>
         </li>
         <br>
         <li>Legeleistung (Nicht bei Tauben ):
             <ul>
-                <li>Hennen: Zahl der legenden Hennen.</li>
-                <li>Eier / Jahr: Durchschnitt Legeleistung im Jahr (Eier / Tage / Hennen * 274)</li>
-                <li>Gewicht: Durchschnitt Eiergewicht der gelegten Eier</li>
+                <li>Eier / Jahr: Durchschnitt Legeleistung im Jahr<br>Oft werden nur einige Monate am Anfang des Jahres die Eier gesammelt und gezählt. Darum wird dieser Formel genützt: <br>
+                    Legeleistung = 274 * Eier / Tage / Hennen
+                </li>
+                <li>Gewicht: Durchschnitt Eiergewicht der gesammelten Eier, Ausreißer (zb. obere 5% und untere 5%) kann mann evt. weglassen</li>
             </ul>
         </li>
         <br>
@@ -53,7 +55,7 @@
                     <ul>
                         <li>Eingelegt: Zahl der eingelegten Eier.</li>
                         <li>Befruchtet: Zahl der befruchteten Eier, kann nicht mehr sein als Eingelegt!</li>
-                        <li>Geschlüpft: Zahl der geschlüpften Küken, kann nicht mehr sein als Befruchtet!</li>
+                        <li>Geschlüpft: Zahl der geschlüpften Küken, kann nicht mehr sein als Befruchtet oder Eingelegt!</li>
                     </ul>
                 </li>
                 <li>Tauben:
@@ -75,15 +77,10 @@
     <br>
     Jetzt kann mann von Links nach Rechts die Daten eingeben und mit 'tab' oder Maus zum nächsten Felt springen.<br>
     <br>
-    Während mann einem Feld bearbeitet wird die eingabe kontroliert und es erscheint eine rotfarbige Warmung unter dem Feld wenn es ein Fehler gibt.<br>
+    Während mann einem Feld bearbeitet wird die eingabe validiert und es erscheint eine rotfarbige Warnung unter dem Feld wenn es ein Fehler gibt.<br>
     <br>
-    Nach Änderungen sieht mann ganz recht die Schaltfläche erscheinen. Dieser hat drei verschiedene Farben und bedeutungen bei auswahl:
+    Die Daten werden automatisch gespeichert wenn valide, die Flagge hiter der zeile zeigt dies an: Rot Felhler, Orange geändert, Grün Gespeichert
     <br>
-    <ul>
-        <li>Rot mit "-" : Felhler in den Daten, kann nicht speichern</li>
-        <li>Gelb mit "X": Das Feld 'Zuchten' is leer, dies löscht dieser Zeile</li>
-        <li>Grün mit "&#10003;": Daten Ok, speichern</li>
-    </ul>
     <br>
     Mit 'tab' kan mann zu der Schaltfläche springen und mit der Leertaste oder Enter auswählen. Mit der Maus gehts natürlich auch.<br>
     Nachdem mann gespeichert oder gelöscht hat, verschwindet die Schaltfläche wieder (grau), da er keine Änderungen meht gibt.<br>
