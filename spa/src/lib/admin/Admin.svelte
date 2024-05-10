@@ -3,7 +3,7 @@
 
     import District from '../district/District.svelte';
     import Districts from './Districts.svelte';
-    import Articles from '../article/Articles.svelte';
+    import Articles from './Articles.svelte';
     import Standard from '../standard/Standard.svelte';
     import Log from './log/Log.svelte';
 

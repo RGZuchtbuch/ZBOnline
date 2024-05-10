@@ -1,7 +1,7 @@
 <script>
     import { createEventDispatcher } from 'svelte';
     import {router} from "tinro";
-    import Select from '../../common/input/Select.svelte';
+    import Select from '../../common/form/input/Select.svelte';
 
     export let year;
     export let sectionId;

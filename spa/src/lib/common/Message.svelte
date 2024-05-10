@@ -1,13 +1,14 @@
 <script>
     import {meta, router} from 'tinro';
     import api from '../../js/api.js';
-    import {txt} from '../../js/util.js';
-    import { user } from '../../js/store.js'
-    import EmailInput from './input/Email.svelte';
+    import validator from '../../js/validator.js';
+
     import Modal from './Modal.svelte';
-    import Submit from './input/Submit.svelte';
-    import TextInput from './input/Text.svelte';
-    import TextArea from './input/TextArea.svelte';
+    import EmailInput from './form/input/EmailInput.svelte';
+    import TextInput from './form/input/TextInput.svelte';
+    import TextArea from './form/input/TextArea.svelte';
+    import Submit from './form/Submit.svelte';
+    import Form from './form/Form.svelte';
 
     export let districtId = null;
     let district = null;
@@ -18,30 +19,25 @@
     let message = ''
     let confirm = false;
     let success = true;
-    let invalids = { from:false, name:false, subject:false, message:false };
     let invalid = true;
-    let sending = false;
 
     let route = meta();
 
-    function onInput() { // verify invalid
-        invalid = district === null;
-        for( let key in invalids ) {
-            invalid = invalid || invalids[ key ];
-        }
+    const validate = {
+        email:      (v) => validator(v).email().isValid(),
+        name:       (v) => validator(v).string().length( 2, 255 ).isValid(),
+        subject:    (v) => validator(v).string().length( 2, 255 ).isValid(),
+        message:    (v) => validator(v).string().length( 2, 65535 ).isValid(),
     }
 
     function onSubmit() {
-        if( ! invalid ) {
-            sending = true;
-            api.message.post( districtId, from, name, subject, message, confirm ).then(response => { // note confirm is antibot
-                success = response.success;
-                if (success) {
-                    router.goto(route.from);
-                    sending = false;
-                }
-            });
-        }
+        api.message.post( districtId, from, name, subject, message, confirm ).then(response => { // note confirm is antibot
+            success = response.success;
+            console.log( 'Response', response );
+            if (success) {
+                router.goto(route.from);
+            }
+        });
     }
 
     function loadDistrict( districtId ) {
@@ -59,24 +55,25 @@
 </script>
 
 <Modal class=''>
-    <form class='w-160 flex flex-col self-center rounded' on:input={onInput} on:submit|preventDefault={onSubmit}>
+    <Form class='w-160 flex flex-col self-center rounded' autoSave={false} on:submit={onSubmit}>
         <div class='flex bg-header rounded-t p-4'>
             <h2 class='grow text-white'>Nachricht am Obmann vom {#if district}{district.name}{/if}</h2>
             <div class='w-8 justify-center m-2 circled bg-alert cursor-pointer' on:click={cancel}>X</div>
         </div>
         <div class='flex flex-col gap-4 rounded-b bg-gray-200 gap-4 p-4'>
             <div>Am Obmann</div>
-            <EmailInput class='' label='eMail *' bind:value={from} bind:invalid={invalids.from} required />
-            <TextInput label='Ihr Name *' error='Unvollständiger Name' bind:value={name} bind:invalid={invalids.name} required />
-            <TextInput label='Betrifft *' error='Unvollständig' bind:value={subject} bind:invalid={invalids.subject} required />
-            <TextArea label='Nachricht *' error='Braucht eine Nachricht' bind:value={message} bind:invalid={invalids.message} required/>
+            <EmailInput class='' label='eMail *' bind:value={from} validator={validate.email}/>
+            <TextInput label='Ihr Name *' error='Unvollständiger Name' bind:value={name} validator={validate.name}  />
+            <TextInput label='Betrifft *' error='Unvollständig' bind:value={subject} validator={validate.subject}  />
+            <TextArea label='Nachricht *' error='Braucht eine Nachricht' bind:value={message} validator={validate.message} />
             <input type='checkbox' name='confirm' bind:checked={confirm} >
 
-            {#if ! invalid && ! sending }
-                <Submit value='Verschicken am Obmann &#10170;' disabled={invalid} />
-            {/if}
+            <Submit noChangeValue='?'
+                submitValue='Verschicken am Obmann &#10170;'
+                invalidValue='X'
+            />
         </div>
-    </form>
+    </Form>
 </Modal>
 
 <style>

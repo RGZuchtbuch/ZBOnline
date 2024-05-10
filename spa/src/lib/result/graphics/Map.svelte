@@ -99,7 +99,6 @@
             promise.then(response => {
                 districts = response.districts;
                 calcMaxValues(districts);
-                console.log( 'Map Districts', districts );
             });
         }
     }
@@ -159,8 +158,6 @@
                 max:type.max ? type.max : max,
                 colors:[ '#74abf0C0', '#cdf094C0', '#F9CA9BC0', '#F9ACBCC0' ], // for each circle
             };
-            console.log( 'Type', type, (0-89/(97-89)) );
-            console.log( 'Map', map );
         }
     }
 

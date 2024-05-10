@@ -2,7 +2,7 @@
     import { slide } from 'svelte/transition';
 
     import api          from '../../../js/api.js';
-    import Result  from './Result.svelte';
+    import ResultRow  from './ResultRow.svelte';
 
     export let districtId = null;
     export let sectionId = null;
@@ -88,7 +88,7 @@
 
 {#if open }
     {#each results as result}
-        <Result {sectionId} {result}/>
+        <ResultRow {sectionId} {result}/>
     {/each}
 {/if}
 

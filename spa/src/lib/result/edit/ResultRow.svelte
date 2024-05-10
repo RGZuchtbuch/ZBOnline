@@ -6,12 +6,14 @@
     import Form from '../../common/form/Form.svelte';
     import NumberInput from '../../common/form/input/NumberInput.svelte';
     import FormStatus from '../../common/form/Status.svelte';
-    import NumberInputOld from '../../common/input/Number.svelte';
+
+    import AddResultRow from './AddResultRow.svelte'
 
     export let sectionId;
     export let result;
 
     let hasResult = false;
+    let extended = false;
 
     result.sectionId = sectionId;
 
@@ -33,6 +35,9 @@
 
     }
 
+    function onToggleExtend( event ) {
+        extended = ! extended;
+    }
 
     function onSubmit( event ) {
         console.log('Result submit', result );
@@ -62,7 +67,11 @@
 
 <Form class='flex flex-row px-2 gap-x-1 text-sm' on:submit={onSubmit}>
     <div class='w-4 pl-2'>&#10551; </div>
-    <div class='w-80' class:hasResult title={'Leistung ['+result.id+']'}>{result.colorName}</div>
+    <div class='w-80 flex flex-row justify-between'>
+        <div class='' class:hasResult title={'Leistung ['+result.id+']'}>{result.colorName} </div>
+        <button class='mb-6 w-6' type='button' on:click={onToggleExtend}>[+]</button>
+    </div>
+
 
     <NumberInput class='w-14' bind:value={result.breeders} error='1..99999' title='Zahl der Zuchten/Züchter, leer lassen zum Löschen' validator={validate.breeders} />
     {#if sectionId === PIGEONS}
@@ -99,6 +108,9 @@
     <NumberInput class='w-14' bind:value={result.showScore} step={0.1} error='89..97' title='Durchschnittsbewertung u/o=89, 90..97 Punkte, braucht Zahl der ausgestellen Tiere' validator={validate.showScore}/>
     <FormStatus class='w-4' />
 </Form>
+{#if extended}
+    <AddResultRow {sectionId} bind:result={result} />
+{/if}
 
 
 <style>
@@ -107,5 +119,9 @@
     }
     input[type='button'] {
         @apply bg-alert text-white m-0 p-0;
+    }
+
+    button {
+        vertical-align: text-top;
     }
 </style>

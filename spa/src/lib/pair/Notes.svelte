@@ -1,6 +1,6 @@
 <script>
 
-    import TextArea from '../common/form/input/TextAreaInput.svelte';
+    import TextArea from '../common/form/input/TextArea.svelte';
     import Brood from "./Brood.svelte";
     import FormStatus from '../common/form/Status.svelte';
     export let notes;

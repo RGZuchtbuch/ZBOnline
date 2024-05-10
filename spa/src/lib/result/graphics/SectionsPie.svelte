@@ -129,8 +129,6 @@
     Chart.register( ArcElement, DoughnutController, Legend, Tooltip );
     $: handle( districtId, year, typeId );
 
-    console.log( 'Type', typeId );
-
 </script>
 {#if fractions }
     <div class='flex flex-col p-4' >

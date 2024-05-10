@@ -4,7 +4,7 @@
 
     import InputDate from '../common/form/input/DateInput.svelte';
     import InputNumber from '../common/form/input/NumberInput.svelte';
-    import InputText from '../common/input/Text.svelte';
+
 
     export let pair;
 

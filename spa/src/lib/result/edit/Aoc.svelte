@@ -2,7 +2,7 @@
     import { slide } from 'svelte/transition';
 
     import api          from '../../../js/api.js';
-    import Result  from './Result.svelte';
+    import Result  from './ResultRow.svelte';
 
     export let districtId = null;
     export let sectionId = null;

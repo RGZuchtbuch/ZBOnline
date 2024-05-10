@@ -7,8 +7,6 @@
     import DistrictResults from './DistrictReport.svelte';
     import ResultEdit from '../result/edit/Edit.svelte';
     import DistrictDetails from './DistrictDetails.svelte';
-    import Club from '../club/Club.svelte';
-    import ClubsList from '../club/ClubsList.svelte';
 
     export let districtId = null;
     let district = null;
@@ -46,10 +44,4 @@
     <Route path='/daten' let:meta>
         <DistrictDetails {districtId} />
     </Route>
-
-    <Route path='/verein/*' let:meta>
-        <Route path='/' let:meta> <ClubsList {districtId} /> </Route>
-        <Route path='/:clubId/*' let:meta > <Club districtId={ +meta.params.districtId } clubId={ +meta.params.clubId } /> </Route>
-    </Route>
-
 {/if}

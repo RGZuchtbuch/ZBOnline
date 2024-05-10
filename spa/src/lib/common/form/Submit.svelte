@@ -55,7 +55,7 @@
 	    color: white;
         border: solid 1px grey;
         border-radius: 0.25em;
-        padding: 0.5em;
+        padding: 0 0.5em;
     }
 
     input.submit.noChange {

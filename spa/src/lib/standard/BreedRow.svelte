@@ -85,7 +85,6 @@
             breed = breed; // trigger
         }
     }
-    console.log( 'Section', section );
 
 </script>
 

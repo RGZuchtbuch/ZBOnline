@@ -2,18 +2,19 @@
     import {Route, router, meta} from 'tinro';
     import { slide } from 'svelte/transition';
     import api from '../../js/api.js';
-    import Select from '../common/input/Select.svelte';
-    import SectionsPie from './results/SectionsPie.svelte';
+
+    import Select from '../common/form/input/Select.svelte';
+    import SectionsPie from './graphics/SectionsPie.svelte';
     import DistrictReport from './DistrictReport.svelte';
     import Help from './Help.svelte';
 
-    import LayBar from './results/LayBar.svelte';
-    import BroodBarLayers from './results/BroodBarLayers.svelte';
-    import BroodBarPigeons from './results/BroodBarPigeons.svelte';
-    import ShowBar from './results/ShowBar.svelte';
+    import LayBar from './graphics/LayBar.svelte';
+    import BroodBarLayers from './graphics/BroodBarLayers.svelte';
+    import BroodBarPigeons from './graphics/BroodBarPigeons.svelte';
+    import ShowBar from './graphics/ShowBar.svelte';
 
-    import TimeLine from './results/Trend.svelte';
-    import DistrictsMap from './results/Map.svelte';
+    import TimeLine from './graphics/Trend.svelte';
+    import DistrictsMap from './graphics/Map.svelte';
 
     const route = meta();
     const types = [ {id:2, name:'Zuchten'}, {id:10, name:'Legeleistung'}, {id:20, name:'Brutleistung Leger'}, {id:21, name:'Brutleistung Tauben'}, {id:30, name:'Schauleistung'}];
@@ -155,7 +156,7 @@
             {/each}
         </Select>
 
-        <Select class='w-64' bind:value={districtId} label={'Landesverband'}>
+        <Select class='w-64' label={'Landesverband'} bind:value={districtId}>
             {#if rootDistrict }
                 <option value={rootDistrict.id} selected={rootDistrict.id === districtId}>{rootDistrict.name}</option>
                 {#each rootDistrict.children as district}
@@ -164,7 +165,7 @@
             {/if}
         </Select>
 
-        <Select class='w-20' bind:value={year} label='Jahr'>
+        <Select class='w-20' label='Jahr' bind:value={year}>
             {#each years as option}
                 <option value={option}>{option}</option>
             {/each}

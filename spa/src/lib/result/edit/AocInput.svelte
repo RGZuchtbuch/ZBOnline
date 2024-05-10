@@ -4,7 +4,6 @@
 	import Form from '../../common/form/Form.svelte';
 	import Select from '../../common/form/input/Select.svelte';
 	import TextInput from '../../common/form/input/TextInput.svelte';
-	import Button from '../../common/input/Button.svelte';
 	import Submit from '../../common/form/Submit.svelte';
 
 	export let results;

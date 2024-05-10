@@ -42,7 +42,7 @@
     {#if label}
         <label class='name' for='number'> {label} </label>
     {/if}
-    <textarea class='input left h-16' {name} class:valid bind:this={element} bind:value={value}
+    <textarea class='input left' style='height:100%' {name} class:valid bind:this={element} bind:value={value}
            {placeholder} {title} {disabled}
            on:input on:change on:focus on:blur
     />

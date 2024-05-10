@@ -35,8 +35,6 @@
 		if( index >= 0 ) $state.validators.splice( index, 1 ); // remove this validator;
 	});
 
-	$: console.log( 'VBI', value );
-
 </script>
 
 <div class='{className}'>

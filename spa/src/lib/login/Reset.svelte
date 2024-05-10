@@ -1,8 +1,7 @@
 <script>
     import {meta, router} from 'tinro';
     import api from "../../js/api.js";
-    import { user } from '../../js/store.js'
-    import Button from '../common/input/Button.svelte';
+
     import Modal from '../common/Modal.svelte';
     import Form from '../common/form/Form.svelte';
     import EmailInput from '../common/form/input/EmailInput.svelte';
@@ -14,8 +13,6 @@
     let token = $router.query.token;
     let password = null;
     let success = true;
-    let invalids = { email:false, password:false };
-    let invalid = true;
 
     let route = meta();
 

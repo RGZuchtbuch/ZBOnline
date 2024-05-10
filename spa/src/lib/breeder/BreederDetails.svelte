@@ -16,7 +16,7 @@
     import EmailInput from '../common/form/input/EmailInput.svelte';
     import NumberInput from '../common/form/input/NumberInput.svelte';
     import SelectInput from '../common/form/input/Select.svelte';
-    import TextAreaInput from '../common/form/input/TextAreaInput.svelte';
+    import TextAreaInput from '../common/form/input/TextArea.svelte';
     import TextInput from '../common/form/input/TextInput.svelte';
     import ToggleInput from '../common/form/input/ToggleInput.svelte';
 

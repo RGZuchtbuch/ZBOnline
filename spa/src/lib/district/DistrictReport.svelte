@@ -4,7 +4,7 @@
     import api from '../../js/api.js';
     import { user } from '../../js/store.js'
     import Report from '../result/Report.svelte';
-    import Range from '../common/input/Range.svelte';
+    import Range from '../common/Range.svelte';
     import ScrollDiv from '../common/ScrollDiv.svelte';
 
     export let districtId = null;

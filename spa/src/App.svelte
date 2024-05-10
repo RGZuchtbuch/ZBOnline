@@ -33,7 +33,7 @@
             <img class='absolute w-20 mt-4 ml-24 no-print' src='../assets/bdrg_logo_r.png' alt='BDRG Logo'>
         </a>
         <div class='text-center no-print'>
-            Das Rassegeflügel Zuchtbuch. Schönheit und Leistung durch Wissen.
+            Das Rassegeflügel Zuchtbuch, Leistung und Schönheit durch Wissen.
         </div>
 
         <NavigationBar />
