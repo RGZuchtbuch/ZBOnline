@@ -81,18 +81,9 @@ class Router {
 
 
 /*********************/
-///		$app->get(	'/district/{id}/results',    'App\controller\result\District' ); // for showing
-//		$app->get('/section/{id}/children', 'App\controller\section\Children' );
-//		$app->get('/section/{id}/breeds', 'App\controller\section\Breeds' );
-//		$app->get('/section/{id}/descendants', 'App\controller\section\Descendants' );
+
 
         $app->get('/log/next', 'App\controller\log\Next' );
-
-//        $app->post('/message', 'App\controller\message\Post' ); // send message to obmann
-
-        //options: ( breederId, year ) => get( 'api/report/options/breeder/'+breederId+'/year'+year ),
-//        $app->get(	'/pair/{id}', 'App\controller\pair\Get' ); // for selecting pair for parent ring in report
-//        $app->post(	'/pair', 'App\controller\pair\Post' );
 
 		$app->get(	 '/result/{id}', 'App\controller\Result::get' ); // for selecting pair for parent ring in report
 		$app->get(	 '/result/district/{districtId}/year/{year}', 'App\controller\Result::resultFor' ); //
@@ -102,15 +93,6 @@ class Router {
 		$app->post(	 '/result', 'App\controller\Result::post' );
 		$app->put(	 '/result/{id}', 'App\controller\Result::put' ); // same as post, correct
 		$app->delete('/result/{id}', 'App\controller\Result::delete' );
-
-//        $app->post('/result', 'App\controller\result\Post' ); // save one result
-//        $app->get('/result/district/{districtId}/year/{year}', 'App\controller\result\Result'); // one result for district and year, section, breed, color, group in query
-
-//        $app->get('/results/years', 'App\controller\result\DistrictYears' ); // NEW, for trend, query with section/Breed/color,  year
-//        $app->get('/results/districts', 'App\controller\result\YearDistricts' ); // for map, , query with section/Breed/color,  year
-
-
-
 
         $app->get('/user/reset/{email}', 'App\controller\User::resetMail' ); // sends an email with reset link
         $app->post('/user/token', 'App\controller\User::login' ); // post, as we do not want credentials in query !

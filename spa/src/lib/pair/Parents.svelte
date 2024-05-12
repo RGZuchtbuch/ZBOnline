@@ -44,7 +44,6 @@
     }
 
     function update( url, pair ) {
-        console.log( 'Update parents' );
         while( pair.parents.length < 2 ) { // want at least 2
             addParent( pair.id )
         }

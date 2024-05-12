@@ -9,7 +9,7 @@
     import BreederDetails from "./BreederDetails.svelte";
 
     export let breederId
-    export let districtId;;
+    export let districtId;
 
     let breeder = null;
     let route = meta();
@@ -30,7 +30,7 @@
                 start: null, end: null,
                 email: null,
                 info: null
-            };;
+            };
             //router.goto( route.match+'/daten' );
         }
     }
@@ -50,7 +50,7 @@
             <BreederPairs breederId={meta.params.breederId} />
         </Route>
 
-        <Route path='/:pairId/*' let meta>
+        <Route path='/:pairId/*' let:meta>
             <Route path='/' let:meta>
                 <Pair id={Number(meta.params.pairId)} districtId={Number(meta.params.districtId)} breederId={Number(meta.params.breederId)}/>
             </Route>

@@ -42,7 +42,6 @@
         if( parentsPairId && ancestorPairs ) {
             for (const pair of ancestorPairs) {
                 if (pair.id === parentsPairId) {
-                    console.log("AnPair", pair );
                     return pair;
                 }
             }
@@ -51,7 +50,6 @@
     }
 
     function update( url, parent ) {
-        console.log( 'Parent update', parent );
         getAncestorPairs( parent.ring, parent.parentsPairId );
     }
 
