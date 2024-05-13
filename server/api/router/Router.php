@@ -90,14 +90,6 @@ class Router {
 		$app->put(	 '/result/{id}', 'App\controller\Result::put' ); // same as post, correct
 		$app->delete('/result/{id}', 'App\controller\Result::delete' );
 
-//        $app->post('/result', 'App\controller\result\Post' ); // save one result
-//        $app->get('/result/district/{districtId}/year/{year}', 'App\controller\result\Result'); // one result for district and year, section, breed, color, group in query
-
-//        $app->get('/results/years', 'App\controller\result\DistrictYears' ); // NEW, for trend, query with section/Breed/color,  year
-//        $app->get('/results/districts', 'App\controller\result\YearDistricts' ); // for map, , query with section/Breed/color,  year
-
-
-
 
         $app->get('/user/reset/{email}', 'App\controller\User::resetMail' ); // sends an email with reset link
         $app->post('/user/token', 'App\controller\User::login' ); // post, as we do not want credentials in query !

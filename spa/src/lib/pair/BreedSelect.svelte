@@ -29,7 +29,7 @@
         color:        (v) => validator(v).if( v ).orNullIf( value.sectionId === PIGEONS ).isValid(),
     }
 
-    function update( u, s ) {
+    function update( r, s ) {
         if( value && $standard ) {
             section = getSection( value.sectionId, $standard );
             if( section ) {
@@ -70,6 +70,7 @@
     function onSectionChange( event ) {
         section = getSection( value.sectionId, $standard ); // from standard as sections is incomplete
         breeds = getBreeds( section );
+        breeds.sort( (a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0 )
         colors = [];
         value.breedId = value.coloId = null;
     }
@@ -83,7 +84,7 @@
     onMount(() => {
     })
 
-    $: update( $router.url, $standard )
+    $: update( $router, $standard )
 
 </script>
 

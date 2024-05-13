@@ -75,6 +75,7 @@
             if( pair.id > 0 ) {
                 api.pair.delete(pair.id).then(response => {
                     if (response.success) {
+                        id = null;
                         pair.id = null;
                         router.goto(route.from); // away from deleted pair
                     }
@@ -84,7 +85,7 @@
     }
 
 
-    function updatePair( url ) {
+    function updatePair( router ) {
         console.log( 'Update Pair' );
         if( id > 0 && breederId > 0 && districtId > 0 ) { // existing, note id could be '0' from param for new
             api.pair.get( id ).then( response => {
@@ -112,7 +113,7 @@
         }
     }
 
-    $: updatePair( $router.url );
+    $: updatePair( $router );
 
 </script>
 

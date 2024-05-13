@@ -26,7 +26,7 @@
             const foundSection = findSection( section.id, $standard );
             if( foundSection ) {
                 collectBreeds(foundSection, breeds);
-                breeds.sort( (a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0 )
+                breeds.sort( (a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0 );
             }
         }
     }

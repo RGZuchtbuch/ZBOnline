@@ -50,11 +50,6 @@ class Pair
 			if ( $requester && ($requester->isAdmin() || $requester->isModerating($pair['districtId']) || $requester->hasId($pair['breederId']) ) ) {
 				Query::begin();
                 $id = Pair::postPair( $id, $pair, $requester );
-//				if ($id && Pair::postParents( $id, $pair[ 'parents' ], $requester ) && Pair::postLay( $id, $pair['lay'], $requester ) && Pair::postBroods( $id, $pair['broods'], $requester ) && Pair::postShow($id, $pair['show'], $requester ) && Pair::postResult( $id, $pair, $requester ))  {
-//                $success = $id && Pair::postParents( $id, $pair[ 'parents' ], $requester );
-//                if( $success ) {
-//                $pair['lay']['dames'] = $pair['dames']; // redundant but handy
-//				$lay = $pair['lay'] ?? null;
                 if( $id &&
                     Pair::postParents( $id, $pair[ 'parents' ] ?? null, $requester ) &&
                     Pair::postLay( $id, $pair['lay'], $requester ) &&
@@ -88,7 +83,7 @@ class Pair
 				$requester = new Requester($request);
 				if ($requester && ($requester->isAdmin() || $requester->isModerating($pair['districtId']) || $requester->hasId($pair['breederId']))) {
 					Query::begin();
-					if( model\Pair::delParents( $id ) && model\Pair::delLay( $id ) && model\Pair::delBroods( $id ) && model\Pair::delShow( $id ) && model\Pair::del( $id ) ) {
+					if( model\Pair::del( $id ) && model\Pair::delParents( $id ) && model\Pair::delLay( $id ) && model\Pair::delBroods( $id ) && model\Pair::delShow( $id ) && model\Result::delForPair( $id ) ) {
 						Query::commit();
 						model\Cache::del('result' ); // clear cache as results changed
 						$response->getBody()->write(json_encode(['success' => true ], JSON_UNESCAPED_SLASHES));
