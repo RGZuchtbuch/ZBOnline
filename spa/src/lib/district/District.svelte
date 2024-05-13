@@ -4,7 +4,7 @@
 
     import Breeder from '../breeder/Breeder.svelte';
     import Breeders from '../breeders/Breeders.svelte';
-    import DistrictResults from './DistrictReport.svelte';
+    import DistrictReport from './DistrictReport.svelte';
     import ResultEdit from '../result/edit/Edit.svelte';
     import DistrictDetails from './DistrictDetails.svelte';
 
@@ -37,7 +37,7 @@
     </Route>
 
     <Route path='/leistung/*' let:meta>
-        <Route path='/' let:meta> <DistrictResults districtId={ +meta.params.districtId } /> </Route>
+        <Route path='/' let:meta> <DistrictReport districtId={ +meta.params.districtId } /> </Route>
         <Route path='/edit' let:meta> <ResultEdit districtId={ +meta.params.districtId }  /></Route>
     </Route>
 

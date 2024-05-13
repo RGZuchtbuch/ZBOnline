@@ -52,6 +52,7 @@ export default {
 		pigeons	 	: 'Formular für Tauben',
 		result		: 'Leistung',
 		results		: 'Leistungen',
+		resultscount : 'Zahl der Züchter Meldungen und eingegebene Leistungen',
 		saved		: 'Gespeichert',
 		section		: 'Sparte',
 		standard	: 'Standard',

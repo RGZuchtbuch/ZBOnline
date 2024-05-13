@@ -63,6 +63,7 @@ class Pair
                     Pair::postResult( $id, $pair, $requester )
                 ) {
 					Query::commit();
+					model\Cache::del('result' ); // clear cache as results changed
 					$response->getBody()->write( json_encode([ 'id' => $id ], JSON_UNESCAPED_SLASHES) );
 					return $response;
 				} else {
@@ -89,6 +90,7 @@ class Pair
 					Query::begin();
 					if( model\Pair::delParents( $id ) && model\Pair::delLay( $id ) && model\Pair::delBroods( $id ) && model\Pair::delShow( $id ) && model\Pair::del( $id ) ) {
 						Query::commit();
+						model\Cache::del('result' ); // clear cache as results changed
 						$response->getBody()->write(json_encode(['success' => true ], JSON_UNESCAPED_SLASHES));
 						return $response;
 					} else {
@@ -218,7 +220,7 @@ class Pair
 				$pairId, $pair['districtId'], $pair['year'], $pair['group'],
 				null, $pair['breedId'], $pair['colorId'], null,
 				1, 1,
-				$pair['dames'],	$pair['lay']['production'],	$pair['lay']['weight'],
+				$pair['lay']['dames'],	$pair['lay']['production'],	$pair['lay']['weight'],
 				$broodEggs, $broodFertile, $broodHatched,
 				$showCount, $showScore,
                 $requester->getId()

@@ -1,7 +1,8 @@
 <script>
     import { slide } from 'svelte/transition';
 
-    import api          from '../../../js/api.js';
+    import api        from '../../../js/api.js';
+    import dic        from '../../../js/dictionairy.js';
     import ResultRow  from './ResultRow.svelte';
 
     export let districtId = null;
@@ -55,7 +56,7 @@
 
 <div class='flex flex-row px-2 gap-x-1'>
     <div class='w-80 cursor-pointer whitespace-nowrap' class:hasResults on:click={onOpen} {title}>
-        {breed.name} {#if breed.results } <span class='text-xs'>({breed.results})</span> {/if}
+        {breed.name} {#if breed.results } <span class='text-xs' title={dic.title.resultscount}>({breed.results})</span> {/if}
     </div>
 
     <div class='w-4'></div>

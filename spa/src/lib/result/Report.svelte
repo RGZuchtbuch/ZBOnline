@@ -28,13 +28,15 @@
             sum.layWeight         += result.layWeightBreeders * result.layWeight;
         }
 
-        if( result.broodLayerBreeders && result.broodLayerEggs ) {
+//        if( result.broodLayerBreeders && result.broodLayerEggs ) {
+        if( result.broodLayerEggs ) {
             sum.broodBreeders     += result.broodLayerBreeders;
             sum.broodLayerEggs    += result.broodLayerEggs;
             sum.broodLayerFertile += result.broodLayerBreeders * result.broodLayerFertile;
             sum.broodLayerHatched += result.broodLayerBreeders * result.broodLayerHatched;
         }
-        if( result.broodPigeonBreeders && result.pairs && result.broodPigeonHatched ) {
+//        if( result.broodPigeonBreeders && result.pairs && result.broodPigeonHatched ) {
+        if( result.pairs && result.broodPigeonHatched ) {
             sum.broodBreeders += result.broodPigeonBreeders;
             sum.broodPigeonHatched   += result.broodPigeonHatched;
             sum.broodPigeonResult   += result.broodPigeonBreeders * result.broodPigeonResult;
@@ -76,7 +78,7 @@
     }
 
     function createTotal() {
-        return { breeders:0, pairs:0, layDames:0, layShould:0, layBreeders:0, layEggs:0, layWeightBreeders:0, layWeightShould:0, layWeight:0, broodBreeders:0, broodLayerEggs:0, broodLayerFertile:0, broodLayerHatched:0, broodPigeonHatched:0, broodPigeonResult:0, showBreeders:0, showCount:0, showScore:0 };
+        return { breeders:0, pairs:0, layDames:0, layShould:0, layBreeders:0, layEggs:0, layWeightBreeders:0, layWeightShould:0, layWeight:0, broodBreeders:0, broodLayerEggs:null, broodLayerFertile:0, broodLayerHatched:0, broodPigeonHatched:0, broodPigeonResult:0, showBreeders:0, showCount:null, showScore:0 };
     }
 
     function calcTotals( results ) {
@@ -110,7 +112,7 @@
             results.total = avgTotal( resultsSum );
         }
     }
-
+/*
     function onSection( id ) {
         return () => {
             router.location.query.set( 'section', id );
@@ -131,11 +133,8 @@
             router.location.query.set( 'color', colorId );
         }
     }
-
+*/
     const route = meta();
-
-    onMount( () => {
-    });
 
     $: calcTotals( report );
    // $: console.log( 'Report', report );
@@ -284,7 +283,7 @@
                                                             <div class='td' title='Anteil geschlüpfte Küken'>{pct( breed.total.broodLayerHatched, 1 )}</div>
                                                     </div>
                                                     <div class='flex w-28 justify-evenly'>
-                                                        <div class='td' title='Zahl der ausgestellten Tieren'>{dec( breed.total.showCount > 0 ? breed.total.showCount : null )}</div>
+                                                        <div class='td' title='Zahl der ausgestellten Tieren'>{dec( breed.total.showCount ) }</div>
                                                         <div class='td' title='Durchschnitt Bewertungsnote'>{dec( breed.total.showScore, 1 )}</div>
                                                     </div>
                                                 </div>
