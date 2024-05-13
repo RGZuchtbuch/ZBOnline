@@ -205,23 +205,20 @@ class Pair
 		// save pigeon or layer
 		if( $pair['sectionId'] === 5 ) { // pigeon, no lay, no color
             $success = $success && model\Result::new(
-				$pairId, $pair['districtId'], $pair['year'],
-				$pair['group'], $pair['breedId'], null,
+				$pairId, $pair['districtId'], $pair['year'], $pair['group'],
+				null, $pair['breedId'], null, null,
 				1, 1,
 				null, null, null,
 				$broodEggs, null, $broodHatched,
 				$showCount, $showScore,
                 $requester->getId()
 			);
-
 		} else { // layers
             $success = $success && model\Result::new(
-				$pairId, $pair['districtId'], $pair['year'],
-				$pair['group'], $pair['breedId'], $pair['colorId'],
+				$pairId, $pair['districtId'], $pair['year'], $pair['group'],
+				null, $pair['breedId'], $pair['colorId'], null,
 				1, 1,
-				$pair['dames'],
-				$pair['lay']['production'],
-				$pair['lay']['weight'],
+				$pair['dames'],	$pair['lay']['production'],	$pair['lay']['weight'],
 				$broodEggs, $broodFertile, $broodHatched,
 				$showCount, $showScore,
                 $requester->getId()

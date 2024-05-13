@@ -15,6 +15,7 @@
     //let results = [];
     //let hasResults = 0;
 
+    /*
     function onOpen() {
         if( open ) {
             open = false;
@@ -28,9 +29,10 @@
             }
             open = true;
         }
-        console.log( 'Open', open );
 
     }
+
+     */
 /*
     function recount( b) {
         if( results.length > 0 ) {
@@ -49,7 +51,7 @@
 
     //$: recount( breed );
     //$: hasResults = breed.results;
-    console.log( 'Breed/Result', result )
+//    console.log( 'Breed/Result', result )
 </script>
 
 

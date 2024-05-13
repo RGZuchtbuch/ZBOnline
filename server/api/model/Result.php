@@ -19,7 +19,7 @@ class Result extends Query
 
     public static function new(
         ? int $pairId, int $districtId, int $year, string $group,
-        int $sectionId, int $breedId, ? int $colorId, ? string $aocColor,
+        ? int $sectionId, int $breedId, ? int $colorId, ? string $aocColor,
         int $breeders, ? int $pairs,
         ? int $layDames, ? float $layEggs, ? float $layWeight,
         ? int $broodEggs, ? int $broodFertile, ? int $broodHatched,
@@ -37,7 +37,7 @@ class Result extends Query
 
     public static function set(
         int $id, ? int $pairId, int $districtId, int $year, string $group,
-		int $sectionId, int $breedId, ? int $colorId, ? string $aocColor,
+		? int $sectionId, int $breedId, ? int $colorId, ? string $aocColor,
         int $breeders, ? int $pairs,
         ? int $layDames, ? float $layEggs, ? float $layWeight,
         ? int $broodEggs, ? int $broodFertile, ? int $broodHatched,
@@ -98,9 +98,6 @@ class Result extends Query
                 CAST( SUM( IF( layWeight > 0, breeders * layWeight / layWeightShould, 0 ) ) / SUM( IF( layWeight > 0, breeders, 0 ) ) AS DOUBLE ) AS layWeight,  
                 # brood all
                 CAST( SUM( IF( broodEggs > 0, breeders, 0 ) ) AS UNSIGNED ) AS broodBreeders,
-                # CAST( SUM( broodEggs ) AS UNSIGNED ) AS broodEggs,  
-                # CAST( SUM( IF( broodFertile IS NOT NULL, breeders * broodFertile / broodEggs, 0 ) ) / SUM( IF( broodFertile IS NOT NULL, breeders, 0 ) ) AS DOUBLE ) AS broodFertile,
-                # CAST( SUM( IF( broodHatched IS NOT NULL, breeders * broodHatched / broodEggs, 0 ) ) / SUM( IF( broodHatched IS NOT NULL, breeders, 0 ) ) AS DOUBLE ) AS broodHatched,
                 # brood layers
                 CAST( SUM( IF( layers = 1, breeders, 0 ) ) AS UNSIGNED ) AS broodLayerBreeders,               
                 CAST( SUM( IF( layers = 1, broodEggs, 0 ) ) AS UNSIGNED ) AS broodLayerEggs,  
@@ -108,9 +105,6 @@ class Result extends Query
                 CAST( SUM( IF( layers = 1 AND broodHatched IS NOT NULL, breeders * broodHatched / broodEggs, 0 ) ) / SUM( IF( layers = 1 AND broodHatched IS NOT NULL, breeders, 0 ) ) AS DOUBLE ) AS broodLayerHatched,
                 # brood pigeons
                 CAST( SUM( IF( layers = 0 AND broodHatched IS NOT NULL, breeders, 0 ) ) AS UNSIGNED ) AS broodPigeonBreeders,                     
-                    # CAST( SUM( IF( layers = 0, broodEggs, 0 ) ) AS UNSIGNED ) AS broodPigeonPairEggs, # only when breeder input, do not use, improvement on broodPigeonEggs
-                    # CAST( SUM( IF( layers = 0 AND broodEggs > 0, broodHatched, 0 ) ) AS UNSIGNED ) AS broodPigeonPairHatched, # only when breeder input, do not use
-                # CAST( SUM( IF( layers = 0, broodEggs, 0 ) ) AS UNSIGNED ) AS broodPigeonEggs, # only when breeder input, do not use
                 CAST( SUM( IF( layers = 0, broodHatched, 0 ) ) AS UNSIGNED ) AS broodPigeonHatched,  
                 CAST( SUM( IF( layers = 0 AND pairs > 0 AND broodHatched IS NOT NULL, breeders * broodHatched / pairs, 0 ) ) / SUM( IF( layers = 0 AND pairs > 0 AND broodHatched IS NOT NULL, breeders, 0 ) ) AS DOUBLE ) AS broodPigeonResult,               
                 # show  
@@ -182,9 +176,6 @@ class Result extends Query
                 CAST( SUM( IF( layWeight > 0, breeders * layWeight / layWeightShould, 0 ) ) / SUM( IF( layWeight > 0, breeders, 0 ) ) AS DOUBLE ) AS layWeight,  
                 # brood all
                 CAST( SUM( IF( broodEggs > 0, breeders, 0 ) ) AS UNSIGNED ) AS broodBreeders,
-                # CAST( SUM( broodEggs ) AS UNSIGNED ) AS broodEggs,  
-                # CAST( SUM( IF( broodFertile IS NOT NULL, breeders * broodFertile / broodEggs, 0 ) ) / SUM( IF( broodFertile IS NOT NULL, breeders, 0 ) ) AS DOUBLE ) AS broodFertile,
-                # CAST( SUM( IF( broodHatched IS NOT NULL, breeders * broodHatched / broodEggs, 0 ) ) / SUM( IF( broodHatched IS NOT NULL, breeders, 0 ) ) AS DOUBLE ) AS broodHatched,
                 # brood layers
                 CAST( SUM( IF( layers = 1 AND broodEggs > 0, breeders, 0 ) ) AS UNSIGNED ) AS broodLayerBreeders,
                 CAST( SUM( IF( layers = 1, broodEggs, 0 ) ) AS UNSIGNED ) AS broodLayerEggs,  
@@ -192,9 +183,6 @@ class Result extends Query
                 CAST( SUM( IF( layers = 1 AND broodHatched IS NOT NULL, breeders * broodHatched / broodEggs, 0 ) ) / SUM( IF( layers = 1 AND broodHatched IS NOT NULL, breeders, 0 ) ) AS DOUBLE ) AS broodLayerHatched,
                 # brood pigeons
                 CAST( SUM( IF( layers = 0 AND broodHatched IS NOT NULL, breeders, 0 ) ) AS UNSIGNED ) AS broodPigeonBreeders,
-                    # CAST( SUM( IF( layers = 0, broodEggs, 0 ) ) AS UNSIGNED ) AS broodPigeonPairEggs, # only when breeder input, do not use, improvement on broodPigeonEggs
-                    # CAST( SUM( IF( layers = 0 AND broodEggs > 0, broodHatched, 0 ) ) AS UNSIGNED ) AS broodPigeonPairHatched, # only when breeder input, do not use
-                # CAST( SUM( IF( layers = 0, broodEggs, 0 ) ) AS UNSIGNED ) AS broodPigeonEggs,
                 CAST( SUM( IF( layers = 0, broodHatched, 0 ) ) AS UNSIGNED ) AS broodPigeonHatched,  
                 CAST( SUM( IF( layers = 0 AND pairs > 0 AND broodHatched IS NOT NULL, breeders * broodHatched / pairs, 0 ) ) / SUM( IF( layers = 0 AND pairs > 0 AND broodHatched IS NOT NULL, breeders, 0 ) ) AS DOUBLE ) AS broodPigeonResult,               
                 # show  
@@ -285,9 +273,6 @@ class Result extends Query
                 CAST( SUM( IF( layWeight > 0, breeders * layWeight / layWeightShould, 0 ) ) / SUM( IF( layWeight > 0, breeders, 0 ) ) AS DOUBLE ) AS layWeight,  
                 # brood all
                 CAST( SUM( IF( broodEggs > 0, breeders, 0 ) ) AS UNSIGNED ) AS broodBreeders,
-                # CAST( SUM( broodEggs ) AS UNSIGNED ) AS broodEggs,  
-                # CAST( SUM( IF( broodFertile IS NOT NULL, breeders * broodFertile / broodEggs, 0 ) ) / SUM( IF( broodFertile IS NOT NULL, breeders, 0 ) ) AS DOUBLE ) AS broodFertile,
-                # CAST( SUM( IF( broodHatched IS NOT NULL, breeders * broodHatched / broodEggs, 0 ) ) / SUM( IF( broodHatched IS NOT NULL, breeders, 0 ) ) AS DOUBLE ) AS broodHatched,
                 # brood layers
                 CAST( SUM( IF( layers = 1 AND broodEggs > 0, breeders, 0 ) ) AS UNSIGNED ) AS broodLayerBreeders,
                 CAST( SUM( IF( layers = 1, broodEggs, 0 ) ) AS UNSIGNED ) AS broodLayerEggs,  
@@ -295,9 +280,6 @@ class Result extends Query
                 CAST( SUM( IF( layers = 1 AND broodHatched IS NOT NULL, breeders * broodHatched / broodEggs, 0 ) ) / SUM( IF( layers = 1 AND broodHatched IS NOT NULL, breeders, 0 ) ) AS DOUBLE ) AS broodLayerHatched,
                 # brood pigeons
                 CAST( SUM( IF( layers = 0 AND broodHatched IS NOT NULL, breeders, 0 ) ) AS UNSIGNED ) AS broodPigeonBreeders,
-                    # CAST( SUM( IF( layers = 0, broodEggs, 0 ) ) AS UNSIGNED ) AS broodPigeonPairEggs, # only when breeder input, do not use, improvement on broodPigeonEggs
-                    # CAST( SUM( IF( layers = 0 AND broodEggs > 0, broodHatched, 0 ) ) AS UNSIGNED ) AS broodPigeonPairHatched, # only when breeder input, do not use
-                # CAST( SUM( IF( layers = 0, broodEggs, 0 ) ) AS UNSIGNED ) AS broodPigeonEggs,  
                 CAST( SUM( IF( layers = 0, broodHatched, 0 ) ) AS UNSIGNED ) AS broodPigeonHatched,  
                 CAST( SUM( IF( layers = 0 AND pairs > 0 AND broodHatched IS NOT NULL, breeders * broodHatched / pairs, 0 ) ) / SUM( IF( layers = 0 AND pairs > 0 AND broodHatched IS NOT NULL, breeders, 0 ) ) AS DOUBLE ) AS broodPigeonResult,               
                 # show  
@@ -373,9 +355,6 @@ class Result extends Query
                 CAST( SUM( IF( layWeight > 0, breeders * layWeight / layWeightShould, 0 ) ) / SUM( IF( layWeight > 0, breeders, 0 ) ) AS DOUBLE ) AS layWeight,  
                 # brood all
                 CAST( SUM( IF( broodEggs > 0, breeders, 0 ) ) AS UNSIGNED ) AS broodBreeders,
-                # CAST( SUM( broodEggs ) AS UNSIGNED ) AS broodEggs,  
-                # CAST( SUM( IF( broodFertile IS NOT NULL, breeders * broodFertile / broodEggs, 0 ) ) / SUM( IF( broodFertile IS NOT NULL, breeders, 0 ) ) AS DOUBLE ) AS broodFertile,
-                # CAST( SUM( IF( broodHatched IS NOT NULL, breeders * broodHatched / broodEggs, 0 ) ) / SUM( IF( broodHatched IS NOT NULL, breeders, 0 ) ) AS DOUBLE ) AS broodHatched,
                 # brood layers               
                 CAST( SUM( IF( layers = 1 AND broodEggs > 0, breeders, 0 ) ) AS UNSIGNED ) AS broodLayerBreeders,
                 CAST( SUM( IF( layers = 1, broodEggs, 0 ) ) AS UNSIGNED ) AS broodLayerEggs,  
@@ -383,9 +362,6 @@ class Result extends Query
                 CAST( SUM( IF( layers = 1 AND broodHatched IS NOT NULL, breeders * broodHatched / broodEggs, 0 ) ) / SUM( IF( layers = 1 AND broodHatched IS NOT NULL, breeders, 0 ) ) AS DOUBLE ) AS broodLayerHatched,
                 # brood pigeons
                 CAST( SUM( IF( layers = 0 AND broodHatched IS NOT NULL, breeders, 0 ) ) AS UNSIGNED ) AS broodPigeonBreeders,            
-                    # CAST( SUM( IF( layers = 0, broodEggs, 0 ) ) AS UNSIGNED ) AS broodPigeonPairEggs, # only when breeder input, do not use, improvement on broodPigeonEggs
-                    # CAST( SUM( IF( layers = 0 AND broodEggs > 0, broodHatched, 0 ) ) AS UNSIGNED ) AS broodPigeonPairHatched, # only when breeder input, do not use
-                # CAST( SUM( IF( layers = 0, broodEggs, 0 ) ) AS UNSIGNED ) AS broodPigeonEggs,  
                 CAST( SUM( IF( layers = 0, broodHatched, 0 ) ) AS UNSIGNED ) AS broodPigeonHatched,  
                 CAST( SUM( IF( layers = 0 AND pairs > 0 AND broodHatched IS NOT NULL, breeders * broodHatched / pairs, 0 ) ) / SUM( IF( layers = 0 AND pairs > 0 AND broodHatched IS NOT NULL, breeders, 0 ) ) AS DOUBLE ) AS broodPigeonResult,               
                 # show  
