@@ -3,6 +3,7 @@
     import { slide } from 'svelte/transition';
     import api from '../../js/api.js';
 
+    import Form from '../common/form/Form.svelte';
     import Select from '../common/form/input/Select.svelte';
     import SectionsPie from './graphics/SectionsPie.svelte';
     import DistrictReport from './DistrictReport.svelte';
@@ -142,12 +143,13 @@
 
 
 
-<div class='w-256 flex no-print'>
+<div class='w-256 mt-8 flex bg-header rounded-t text-white no-print'>
     <h2 class='grow text-center text-2xl print'>Zuchtleistungen</h2>
     <div class='w-8 justify-center m-2 circled bg-alert text-white cursor-pointer no-print' on:click={onHelp} title='Anleitung'>?</div>
 </div>
 
-<div class='w-256 flex flex-col border rounded-t border-gray-400 bg-header gab-2 no-print'>
+<div class='w-256 flex flex-col border border-gray-400 bg-gray-100 gab-2 no-print'>
+    <Form>
     <div class='flex flex-row px-4 gap-x-2'>
         <div class='w-12 font-semibold text-white self-center' >Was :</div>
         <Select class='w-64' label='Was sehen' value={typeId} on:change={onType}>
@@ -180,7 +182,7 @@
             {/each}
         </Select>
 
-        <Select class='w-64' label={'Rasse'} value={breedId} on:change={onBreed}>
+        <Select class='w-64 text-white' label={'Rasse'} value={breedId} on:change={onBreed}>
             <option value={null} title='Alle Rassen in der gewählten Sparte'> * </option>
             {#each breeds as breed}
                 <option value={breed.id} selected={breed.id === breedId}> {breed.name} </option>
@@ -194,6 +196,7 @@
             {/each}
         </Select>
     </div>
+    </Form>
 </div>
 
 <div class='w-256 bg-white overflow-y-scroll border rounded-b border-gray-400 scrollbar print-no-border print-no-scrollbar'>
