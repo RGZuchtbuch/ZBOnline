@@ -126,7 +126,7 @@ class District
         $stmt = Query::prepare("
             SELECT 
                    result.id, result.pairId, :districtId AS districtId, :year AS `year`, :group AS `group`,             
-                   breed.id AS breedId, null AS colorId, 'Gesamte Farbenschläge' AS colorName, 'Gesamte Farbenschläge' AS name,  
+                   result.sectionId, breed.id AS breedId, null AS colorId, 'Gesamte Farbenschläge' AS colorName, 'Gesamte Farbenschläge' AS name, result.aocColor,  
                    result.breeders, result.pairs,
                    result.layDames, result.layEggs, result.layWeight,
                    result.broodEggs, result.broodFertile, result.broodHatched,
@@ -148,7 +148,7 @@ class District
         $args = get_defined_vars();
         $stmt = Query::prepare("
             SELECT result.id, result.pairId, :districtId AS districtId, :year AS `year`, :group AS `group`,
-                   breed.id AS breedId, color.id AS colorId, color.name AS colorName, color.name, result.aocColor,
+                   result.sectionId, breed.id AS breedId, color.id AS colorId, color.name AS colorName, color.name, result.aocColor,
                    result.breeders, result.pairs,
                    result.layDames, result.layEggs, result.layWeight,
                    result.broodEggs, result.broodFertile, result.broodHatched,

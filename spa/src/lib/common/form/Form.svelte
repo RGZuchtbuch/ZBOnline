@@ -111,8 +111,11 @@
     }
 
     fieldset {
+        /*
         border: 0;
         margin: 0;
+
+         */
     }
 
     form :global(label.name) { /* for inputs label */
@@ -121,14 +124,7 @@
         text-align: left;
         padding-left: 0.5em;
     }
-
-/*
-    input, select, option {
-        @apply h-6 py-0 px-1;
-    }
-
- */
-    form :global( input select ) {
+    form :global( input textarea select ) {
         height: 1.5em;
     }
     form :global( textarea ) {
@@ -153,6 +149,7 @@
         color: red;
         font-size: 0.6em;
         text-align: left;
+        line-height: 0.8rem;
         padding: 0.0em 0.5em;
     }
 

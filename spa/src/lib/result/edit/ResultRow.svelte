@@ -59,6 +59,29 @@
             }
         }
     }
+    function onAdd( event ) {
+        extended = false; // hide
+        const addResult = event.detail;
+        console.log( 'toAdd', addResult );
+        result.pairs        = add( addResult.pairs, result.pairs );
+        result.layEggs      = avg( addResult.breeders, addResult.layEggs, result.breeders, result.layEggs );
+        result.layWeight    = avg( addResult.breeders, addResult.layWeight, result.breeders, result.layWeight );
+        result.broodEggs    = add( addResult.broodEggs, result.broodEggs );
+        result.broodFertile = add( addResult.broodFertile, result.broodFertile );
+        result.broodHatched = add( addResult.broodHatched, result.broodHatched );
+        result.showCount    = add( addResult.showCount, result.showCount );
+        result.showScore    = avg( addResult.breeders, addResult.showScore, result.breeders, result.showScore );
+        // breeders must be last as old value is needed for avg
+        result.breeders     = add( addResult.breeders, result.breeders );
+        onSubmit( null );
+    }
+
+    function add( value, toValue ) {
+        return value ? toValue + value : toValue;
+    }
+    function avg( addCount, addValue, toCount, toValue ) {
+        return addValue ? ( toCount * toValue + addCount * addValue ) / ( toCount + addCount ) : toValue; // avg
+    }
 
     $: hasResult = result.breeders > 0;
 
@@ -69,7 +92,7 @@
     <div class='w-4 pl-2'>&#10551; </div>
     <div class='w-80 flex flex-row justify-between'>
         <div class='' class:hasResult title={'Leistung ['+result.id+']'}>{result.colorName} </div>
-        <button class='mb-6 w-6' type='button' on:click={onToggleExtend}>[+]</button>
+        <button class='self-start w-6' type='button' on:click={onToggleExtend}>[+]</button>
     </div>
 
 
@@ -108,8 +131,9 @@
     <NumberInput class='w-14' bind:value={result.showScore} step={0.1} error='89..97' title='Durchschnittsbewertung u/o=89, 90..97 Punkte, braucht Zahl der ausgestellen Tiere' validator={validate.showScore}/>
     <FormStatus class='w-4' />
 </Form>
+
 {#if extended}
-    <AddResultRow {sectionId} bind:result={result} />
+    <AddResultRow {sectionId} bind:result={result} on:add={onAdd}/>
 {/if}
 
 

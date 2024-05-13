@@ -1,4 +1,5 @@
 <script>
+    import { createEventDispatcher } from 'svelte';
     import { slide } from 'svelte/transition';
     import api         from '../../../js/api.js';
     import validator   from '../../../js/validator.js';
@@ -12,6 +13,8 @@
     export let result;
 
     let hasResult = false;
+
+    const dispatch = createEventDispatcher();
 
     let addedResult = newResult();
 
@@ -52,38 +55,27 @@
         console.log('Result add A', addedResult, result );
         // these before changing breeders
 
-        result.pairs        = add( addedResult.pairs, result.pairs );
-        result.layEggs      = addedResult.layEggs ? ( result.breeders * result.layEggs + addedResult.breeders * addedResult.layEggs ) / ( result.breeders + addedResult.breeders ) : result.layEggs; // avg
-        result.layWeight    = addedResult.layWeight ? ( result.breeders * result.layWeight + addedResult.breeders * addedResult.layWeight ) / ( result.breeders + addedResult.breeders ) : result.layWeight; // avg
 
-        result.broodEggs    = add( addedResult.broodEggs, result.broodEggs );
-        result.broodFertile = add( addedResult.broodFertile, result.broodFertile );
-        result.broodHatched = add( addedResult.broodHatched, result.broodHatched );
-        result.showCount    = add( addedResult.showCount, result.showCount );
-        result.showScore    = addedResult.showScore ? ( result.breeders * result.showScore + addedResult.breeders * addedResult.showScore ) / ( result.breeders + addedResult.breeders ) : result.showScore; // avg
-        // should be last as breeders are needed for avg
-        result.breeders     = add( addedResult.breeders, result.breeders );
+        dispatch( 'add', addedResult );
 
         console.log('Result add B', addedResult, result );
         addedResult = newResult();
     }
 
-    function add( value, toValue ) {
-        return value ? toValue + value : toValue;
-    }
+
 
     $: hasResult = addedResult.breeders > 0;
 
 
 </script>
 
-<Form class='flex flex-row px-2 gap-x-1 text-sm' on:submit={onSubmit} autoSave={false}>
-    <div class='w-4 pl-2'></div>
-    <div class='w-80 flex flex-row justify-end'>
-        <div class='' class:hasResult title={'Leistung hinzufügen'}>Hinzufügen</div>
+<div transition:slide>
+<Form class='flex flex-row ml-48 m-4 border rounded border-gray-800 bg-gray-300 pt-2 px-2 gap-x-1 text-sm' on:submit={onSubmit} autoSave={false}>
+    <div class='w-0'></div>
+    <div class='w-36 flex flex-row justify-end'>
+        <div class='' title={'Leistung hinzufügen'}>Hinzufügen</div>
         <div class='w-6' ></div>
     </div>
-
 
     <NumberInput class='w-14' bind:value={addedResult.breeders} error='1..99999' title='Zahl der Zuchten/Züchter, leer lassen zum Löschen' validator={validate.breeders} />
     {#if sectionId === PIGEONS}
@@ -120,7 +112,7 @@
     <NumberInput class='w-14' bind:value={addedResult.showScore} step={0.1} error='89..97' title='Durchschnittsbewertung u/o=89, 90..97 Punkte, braucht Zahl der ausgestellen Tiere' validator={validate.showScore}/>
     <Submit class='mb-4' noChangeValue='[?]' submitValue='[+]' invalidValue='[x]' errorValue='[x]'/>
 </Form>
-
+</div>
 
 
 <style>

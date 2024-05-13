@@ -23,6 +23,7 @@
             if( results.length === 0 ) { // only if not already fetched
                 api.district.results.breed.get( districtId, sectionId, breed.id, year, group ).then( response => {
                     results = response.results;
+                    console.log( 'Results', results );
                 })
             } else {
                 results = results;

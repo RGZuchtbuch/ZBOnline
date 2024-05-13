@@ -77,22 +77,9 @@ class Router {
 
 		$app->get('/standard', 'App\controller\Standard::get' );
 
-
-
-
 /*********************/
-///		$app->get(	'/district/{id}/results',    'App\controller\result\District' ); // for showing
-//		$app->get('/section/{id}/children', 'App\controller\section\Children' );
-//		$app->get('/section/{id}/breeds', 'App\controller\section\Breeds' );
-//		$app->get('/section/{id}/descendants', 'App\controller\section\Descendants' );
 
         $app->get('/log/next', 'App\controller\log\Next' );
-
-//        $app->post('/message', 'App\controller\message\Post' ); // send message to obmann
-
-        //options: ( breederId, year ) => get( 'api/report/options/breeder/'+breederId+'/year'+year ),
-//        $app->get(	'/pair/{id}', 'App\controller\pair\Get' ); // for selecting pair for parent ring in report
-//        $app->post(	'/pair', 'App\controller\pair\Post' );
 
 		$app->get(	 '/result/{id}', 'App\controller\Result::get' ); // for selecting pair for parent ring in report
 		$app->get(	 '/result/district/{districtId}/year/{year}', 'App\controller\Result::resultFor' ); //
