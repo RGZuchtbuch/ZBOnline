@@ -42,6 +42,7 @@
     <div class='w-48'></div>
     <div class='grow gap-x-4 pl-8'>
         <a class:active={ $route.url.startsWith('/zuchtbuch') } href='/zuchtbuch'>Das Zuchtbuch</a>
+        <a class:active={ $route.url.startsWith('/verband') } href='/verband'>Verbände</a>
         {#if STANDARDENABLED}<a class:active={ $route.url.startsWith('/standard') } href='/standard'>Standard</a>{/if}
         {#if RESULTSENABLED}<a class:active={ $route.url.startsWith('/leistungen') } href='/leistungen'>Leistungen</a>{/if}
         {#if BREEDERENABLED && $user } <a class:active={ $route.url.startsWith('/zuechter') } href='/zuechter'>Mein Zuchtbuch</a> {/if}

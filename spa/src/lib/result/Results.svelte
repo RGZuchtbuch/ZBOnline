@@ -143,7 +143,7 @@
 
 
 
-<div class='w-256 mt-8 flex bg-header rounded-t text-white no-print'>
+<div class='w-256 mt-6 flex bg-header rounded-t text-white no-print'>
     <h2 class='grow text-center text-2xl print'>Zuchtleistungen</h2>
     <div class='w-8 justify-center m-2 circled bg-alert text-white cursor-pointer no-print' on:click={onHelp} title='Anleitung'>?</div>
 </div>
@@ -151,7 +151,7 @@
 <div class='w-256 flex flex-col border border-gray-400 bg-gray-100 gab-2 no-print'>
     <Form>
     <div class='flex flex-row px-4 gap-x-2'>
-        <div class='w-12 font-semibold text-white self-center' >Was :</div>
+        <div class='w-12 font-semibold self-center' >Was :</div>
         <Select class='w-64' label='Was sehen' value={typeId} on:change={onType}>
             {#each types as item }
                 <option value={ item.id }> { item.name }</option>
@@ -175,7 +175,7 @@
     </div>
 
     <div class='flex flex-row px-4 gap-x-2'>
-        <div class='w-12 font-semibold text-white self-center' >Filter :</div>
+        <div class='w-12 font-semibold self-center' >Filter :</div>
         <Select class='w-64' label='Sparte' value={sectionId} on:change={onSection}>
             {#each sections as section}
                 <option value={section.id} selected={section.id === sectionId}> {section.name} </option>
