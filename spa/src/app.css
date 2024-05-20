@@ -140,6 +140,11 @@ input.invalid, textarea.invalid, select.invalid {
     div {
     }
 
+    input, textarea, select {
+        color: inherit;
+        text-decoration: none;
+    }
+
     .no-print {
         display: none;
     }
