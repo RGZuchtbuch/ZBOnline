@@ -44,8 +44,19 @@ export default {
 				if (broods <= 6) {
 					return broodPigeon[ group ][ broods ][ chicks ];
 				} else { // fit for 6 broods
-					const relChicks = Math.round( 6 * chicks / broods );
-					return broodPigeon[ group ][ 6 ][ relChicks ];
+					//const relChicks = Math.round( 6 * chicks / broods );
+					const relChicks = 6 * chicks / broods;
+					const low = Math.floor(relChicks);
+					const high = Math.ceil(relChicks);
+					const lowGrade = broodPigeon[group][6][low];
+					if (low === high) {
+						return lowGrade;
+					} else {
+						const highGrade = broodPigeon[group][6][high];
+//						console.log(low, relChicks, high, lowGrade, highGrade);
+						return lowGrade + (relChicks - low) / (high - low) * (highGrade - lowGrade);
+					}
+					//return broodPigeon[ group ][ 6 ][ relChicks ];
 				}
 			}
 		}
