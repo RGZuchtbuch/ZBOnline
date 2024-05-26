@@ -59,6 +59,7 @@ export default {
 					//return broodPigeon[ group ][ 6 ][ relChicks ];
 				}
 			}
+			return null;
 		}
 	}
 }
