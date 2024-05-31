@@ -1,0 +1,19 @@
+meta {
+  name: post cat
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:3000/api/cats
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  { "name":"nAAdjAAl4", "age":19}
+}
