@@ -57,7 +57,10 @@ class Router {
         $app->get(	'/district/{id}/breeders',   	'App\controller\District::breeders' );
         $app->get(	'/district/{id}/children',   	'App\controller\District::children' );
         $app->get(	'/district/{id}/descendants',	'App\controller\District::descendants' );
+
+		// should be report/district/{id}/year/{year}
 		$app->get(	'/district/{id}/year/{year}/report', 'App\controller\District::report' ); // for showing table
+
 		$app->get(	'/district/{id}/results', 'App\controller\District::results' ); // having year, section and group in query. For obmann edit
 		$app->get(	'/district/{id}/breed/{breed}/results', 'App\controller\District::breedResults' ); // having year, section and group in query. For obmann edit
 
@@ -79,7 +82,8 @@ class Router {
 
 /*********************/
 
-        $app->get('/log/next', 'App\controller\log\Next' );
+		$app->get('/log/next', 'App\controller\Log::next' );
+		$app->get('/log/clear', 'App\controller\Log::clear' );
 
 		$app->get(	 '/result/{id}', 'App\controller\Result::get' ); // for selecting pair for parent ring in report
 		$app->get(	 '/result/district/{districtId}/year/{year}', 'App\controller\Result::resultFor' ); //
