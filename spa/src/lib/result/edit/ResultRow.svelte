@@ -80,7 +80,7 @@
         return value ? toValue + value : toValue;
     }
     function avg( addCount, addValue, toCount, toValue ) {
-        return addValue ? ( toCount * toValue + addCount * addValue ) / ( toCount + addCount ) : toValue; // avg
+        return addValue ? (( toCount * toValue + addCount * addValue ) / ( toCount + addCount )).toFixed(1) : toValue; // avg
     }
 
     $: hasResult = result.breeders > 0;
