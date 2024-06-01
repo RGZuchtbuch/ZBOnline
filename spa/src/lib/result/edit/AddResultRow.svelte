@@ -1,13 +1,11 @@
 <script>
     import { createEventDispatcher } from 'svelte';
     import { slide } from 'svelte/transition';
-    import api         from '../../../js/api.js';
     import validator   from '../../../js/validator.js';
 
     import Form from '../../common/form/Form.svelte';
     import DateInput from '../../common/form/input/DateInput.svelte';
     import NumberInput from '../../common/form/input/NumberInput.svelte';
-    import FormStatus from '../../common/form/Status.svelte';
     import Submit from '../../common/form/Submit.svelte';
 
     export let sectionId; // for pigeons or other
@@ -121,18 +119,6 @@
             <NumberInput class='w-14' bind:value={addedResult.showCount} error='1..99999' title='Zahl der ausgestellten Tiere' validator={validate.showCount}/>
             <NumberInput class='w-14' bind:value={addedResult.showScore} step={0.1} error='89..97' title='Durchschnittsbewertung u/o=89, 90..97 Punkte, braucht Zahl der ausgestellen Tiere' validator={validate.showScore}/>
             <Submit class='mb-4' noChangeValue='[?]' submitValue='[+]' invalidValue='[x]' errorValue='[x]'/>
-        </div>
-        <div class='flex flex-row gap-x-1 border border-red-500'>
-            <div class='w-0'></div>
-            <div class='w-36 flex flex-row justify-end'>
-                <div class='' title={'Leistung hinzufügen'}>Eier Sammeln</div>
-                <div class='w-6' ></div>
-            </div>
-            <DateInput class='w-16' label='Ab' bind:value={ addedResult.layPeriod.start } title='Gesammeld ab' />
-            <DateInput class='w-16' label='Bis' bind:value={ addedResult.layPeriod.end } title='Gesammeld bis'/>
-            <NumberInput class='w-14' label='Hennen' bind:value={addedResult.layPeriod.dames } error='1..99' title='Legende Hennen' validator={validate.layEggs()}/>
-            <NumberInput class='w-14' label='Eier' bind:value={addedResult.layPeriod.eggs} error='1..99999' title='Gesammelte Eier' validator={validate.layEggs()}/>
-            <button class='' type='button' value='Einfügen' on:click={onSetLayEggs}>
         </div>
     </Form>
 

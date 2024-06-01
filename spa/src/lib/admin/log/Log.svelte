@@ -50,9 +50,9 @@
 {#if $user && $user.admin}
     <h2 class='w-256 border border-gray-400 rounded-t p-2 bg-header text-white text-center text-xl print'>System Log</h2>
     <div class='w-256 flex border-gray-600 bg-header gap-x-4 text-xl text-white font-semibold justify-center'>
-        <div on:click={onBegin} title='To begin, the most recent entry'>&larrb;</div>
-        <div on:click={onPrev} title='Previous entries'>&larr;</div>
-        <div on:click={onNext} title='Previous entries'>&rarr;</div>
+        <div class='cursor-pointer' on:click={onBegin} title='To begin, the most recent entry'>&larrb;</div>
+        <div class='cursor-pointer' on:click={onPrev} title='Previous entries'>&larr;</div>
+        <div class='cursor-pointer' on:click={onNext} title='Previous entries'>&rarr;</div>
     </div>
     <div class='w-256 flex bg-header text-white font-semibold p-2'>
         <div class='w-12'>#</div>
