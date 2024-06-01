@@ -1,7 +1,8 @@
 <script>
     import { createEventDispatcher } from 'svelte';
     import { slide } from 'svelte/transition';
-    import validator   from '../../../js/validator.js';
+    import {dec, getDays, getProduction } from '../../../js/util.js';
+    import validator from '../../../js/validator.js';
 
     import Form from '../../common/form/Form.svelte';
     import DateInput from '../../common/form/input/DateInput.svelte';
@@ -11,7 +12,7 @@
     export let sectionId; // for pigeons or other
     export let result;
 
-    let hasResult = false;
+    let showLayPeriod = false;
 
     const dispatch = createEventDispatcher();
 
@@ -38,11 +39,9 @@
 
     function newResult() {
         return {
-            breeders: null,
+            breeders: 1,
             pairs: null,
-            layPeriod: {
-                start:null, end:null, dames:null, eggs:null
-            },
+            layPeriod: newLayPeriod(),
             layEggs: null,
             layWeight: null,
             broodEggs: null,
@@ -52,25 +51,42 @@
             showScore: null
         }
     }
+    function newLayPeriod() {
+        return { first:null, last:null, days:null, dames:null, eggs:null, production:null };
+    }
 
     function onSubmit( event ) {
         console.log('Result add A', addedResult, result );
         // these before changing breeders
-
-
         dispatch( 'add', addedResult );
-
         console.log('Result add B', addedResult, result );
         addedResult = newResult();
     }
 
-    function onSetLayEggs( event ) {
-
+    function onToggleLayPeriod( event ) {
+        console.log('onToggleLayPeriod');
+        showLayPeriod = ! showLayPeriod;
     }
 
+    function calcPeriodDays( first, last ) {
+        console.log( 'Calc days' );
+        addedResult.layPeriod.days = getDays( first, last )
+    }
 
+    function calcProduction( event ) {
+        console.log( 'calcProduction' );
+        addedResult.layPeriod.production = Math.round( getProduction( addedResult.layPeriod.days, addedResult.layPeriod.eggs, addedResult.layPeriod.dames ) );
+    }
 
-    $: hasResult = addedResult.breeders > 0;
+    function onInsertProduction( event ) {
+        console.log( 'onInsert' );
+        showLayPeriod = false;
+        addedResult.layEggs = addedResult.layPeriod.production;
+        addedResult.LayPeriod = newLayPeriod();
+    }
+
+    $: calcPeriodDays( addedResult.layPeriod.first, addedResult.layPeriod.last );
+    $: calcProduction( addedResult.layPeriod.days, addedResult.layPeriod.eggs, addedResult.layPeriod.dames )
 
 
 </script>
@@ -87,11 +103,15 @@
             <NumberInput class='w-14' bind:value={addedResult.breeders} error='1..99999' title='Zahl der Zuchten/Züchter, leer lassen zum Löschen' validator={validate.breeders} />
             {#if sectionId === PIGEONS}
                 <NumberInput class='w-14' bind:value={addedResult.pairs}  error={ (addedResult.breeders ? addedResult.breeders : '1')+'..99999'} title='Zahl der Stämme/Paare' validator={validate.pairs} />
+                <div class='w-2'></div>
             {:else}
-                <div class='w-14'></div>
+                <div class='w-2'></div>
+                <div class='w-14 flex flex-row justify-end'>
+                    <button class='w-6 mb-4' type='button' title='Legeleistung berechnen' on:click={onToggleLayPeriod}>&#43;</button>
+                </div>
+
             {/if}
 
-            <div class='w-2'></div>
             <!-- lay -->
             {#if sectionId === PIGEONS}
                 <div class='w-14'></div> <div class='w-14'></div> <!-- div class='w-14' / -->
@@ -118,22 +138,33 @@
 
             <NumberInput class='w-14' bind:value={addedResult.showCount} error='1..99999' title='Zahl der ausgestellten Tiere' validator={validate.showCount}/>
             <NumberInput class='w-14' bind:value={addedResult.showScore} step={0.1} error='89..97' title='Durchschnittsbewertung u/o=89, 90..97 Punkte, braucht Zahl der ausgestellen Tiere' validator={validate.showScore}/>
-            <Submit class='mb-4' noChangeValue='[?]' submitValue='[+]' invalidValue='[x]' errorValue='[x]'/>
+            <Submit class='mb-4' noChangeValue='&#63;' submitValue='&#43;' invalidValue='&#10539;' errorValue='[x]'/>
         </div>
+        {#if showLayPeriod}
+            <div class='flex flex-rol gap-x-1'>
+                <div class='w-0'></div>
+                <div class='w-36 flex flex-row justify-end'>
+                    <div class='mt-5' title={'Legeleistungsrechner'}>Berechnen Eier/J</div>
+                    <div class='w-6' ></div>
+                </div>
+
+                <DateInput class='w-24' label='Ab' bind:value={addedResult.layPeriod.first}></DateInput>
+                <DateInput class='w-24' label='Bis' bind:value={addedResult.layPeriod.last}></DateInput>
+                <div class='w-12 my-5 px-1 border border-gray-400 text-right'>{dec(addedResult.layPeriod.days)}</div>
+                <div class='mt-5'>Tage</div>
+
+                <NumberInput class='w-14' label='Hennen' bind:value={addedResult.layPeriod.dames} error='1..99' title='Zahl der Hennen' validator={validate.layEggs} />
+                <NumberInput class='w-14' label='Eier' bind:value={addedResult.layPeriod.eggs} error='1..366' title='Gesammelte Eier' validator={validate.layEggs} />
+                <div class='mt-5'> → </div>
+                <div class='w-10 my-5 px-1 border border-gray-400 text-right'>{dec(addedResult.layPeriod.production)}</div>
+                <div class='my-5'>Eier / Jahr</div>
+                <button class='my-5 bg-button px-1 text-white' type='button' on:click={onInsertProduction}>Einfügen</button>
+            </div>
+        {/if}
     </Form>
 
 </div>
 
 
 <style>
-    .hasResult {
-        @apply font-bold;
-    }
-    input[type='button'] {
-        @apply bg-alert text-white m-0 p-0;
-    }
-
-    button {
-        vertical-align: text-top;
-    }
 </style>

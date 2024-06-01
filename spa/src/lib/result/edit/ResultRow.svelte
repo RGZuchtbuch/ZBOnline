@@ -92,7 +92,7 @@
     <div class='w-4 pl-2'>&#10551; </div>
     <div class='w-80 flex flex-row justify-between'>
         <div class='' class:hasResult title={'Leistung ['+result.id+']'}>{result.colorName} </div>
-        <button class='self-start w-6' type='button' on:click={onToggleExtend}>[+]</button>
+        <button class='self-start w-6' type='button' title='Hinzufügen' on:click={onToggleExtend}>&#43;</button>
     </div>
 
 

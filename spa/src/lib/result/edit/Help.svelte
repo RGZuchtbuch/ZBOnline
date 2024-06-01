@@ -77,9 +77,14 @@
     <br>
     Jetzt kann mann von Links nach Rechts die Daten eingeben und mit 'tab' oder Maus zum nächsten Felt springen.<br>
     <br>
+    Um das zusammenrechnen zu vereinfachen is das "<strong>Hinzufügen</strong>" dar mittels den [+] Knopf.<br>
+    Da kan man pro Züchter die Daten eingeben und wenn Komplet, zum gesamten zählen.<br>
+    Aber aufgepasst, bei Fehleingaben kan mann dies nicht rückgängig machen.<br>
+    Zusätzlich kann mann auch die Legeleistung berechnen über den zweiten [+] Knopf im "Hinzufügen". Hier kann man die sammelzeit eingeben, die zahl der Hennen und gesammelten Eier und an das "Hinzufügen" einfügen.
+    <br>
     Während mann einem Feld bearbeitet wird die eingabe validiert und es erscheint eine rotfarbige Warnung unter dem Feld wenn es ein Fehler gibt.<br>
     <br>
-    Die Daten werden automatisch gespeichert wenn valide, die Flagge hiter der zeile zeigt dies an: Rot Felhler, Orange geändert, Grün Gespeichert
+    Die Daten werden automatisch gespeichert, etwa eine sekunde nach der letzte Änderung, wenn valide, die Flagge hinter der zeile zeigt dies an: Rot Fehler, Orange geändert, Grün Gespeichert
     <br>
     <br>
     Mit 'tab' kan mann zu der Schaltfläche springen und mit der Leertaste oder Enter auswählen. Mit der Maus gehts natürlich auch.<br>

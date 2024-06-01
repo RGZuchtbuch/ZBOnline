@@ -164,6 +164,18 @@ export function formatDate(local, dateString ) { // local ignored for now, defau
     return null;
 }
 
+export function getDays( first, last ) {
+    if( first && last ) {
+        const firstDate = new Date( first );
+        const lastDate = new Date( last );
+
+        if ( firstDate && lastDate) {
+            const dif = 1 + Math.floor((lastDate - firstDate) / 86400000); // first and last including
+            return dif >= 0 ? dif : null;
+        }
+    }
+    return null;
+}
 // eggs count to egg production, experimental
 export function getProduction( days, eggs, dames ) {
     let fit;
