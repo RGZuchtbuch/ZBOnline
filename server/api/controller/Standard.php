@@ -4,6 +4,7 @@ namespace App\controller;
 
 use App\model;
 use App\model\Requester;
+use App\util\Logger;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpBadRequestException;
@@ -15,6 +16,9 @@ class Standard
 {
 
 	public static function get( Request $request, Response $response, array $args ) : Response { // get whole standard
+
+		Logger::add( null, $request );
+
 		$json = model\Cache::get( 'Standard', $request->getUri()->getPath(), $request->getUri()->getQuery() );
 		if( $json ) { // in cache
             $response->getBody()->write( $json );

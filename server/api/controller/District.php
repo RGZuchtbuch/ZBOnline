@@ -4,6 +4,7 @@ namespace App\controller;
 
 use App\model;
 use App\model\Requester;
+use App\util\Logger;
 use App\util\ToolBox;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -164,7 +165,9 @@ class District
 
 	// returns section/subsection/breed/color tree results for generating table
 	public static function report( Request $request, Response $response, array $args ) : Response {
-        $json = model\Cache::get( 'Result', $request->getUri()->getPath(), $request->getUri()->getQuery() );
+		Logger::add( null, $request );
+
+		$json = model\Cache::get( 'Result', $request->getUri()->getPath(), $request->getUri()->getQuery() );
         if( $json ) { // in cache
             $response->getBody()->write( $json );
             return $response;

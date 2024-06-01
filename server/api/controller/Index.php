@@ -21,7 +21,10 @@ class Index
 
 //        $response->getBody()->write(json_encode(['api' => $api], JSON_UNESCAPED_SLASHES));
         global $apiIndex; // to get access to the global
-        $response->getBody()->write( "Todo, index of API, try ./standard" );
+        $response->getBody()->write( json_encode([
+			'title'=> 'Index for RGZuchbuch.de api',
+			'standard' => 'https://rgzuchtbuch.de/api/standard'
+		] ) );
         return $response;
     }
 
