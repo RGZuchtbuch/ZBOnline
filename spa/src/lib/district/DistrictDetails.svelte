@@ -100,7 +100,7 @@
                 {#if members}
                     <option value={null}></option>
                     {#each members as member}
-                        <option value={member.id} selected={district.moderatorId == member.id ? 'selected' : '' }>
+                        <option value={member.id} selected={district.moderatorId === member.id ? 'selected' : '' }>
                             {txt(member.lastname)}, {txt(member.firstname)} {txt(member.infix)}
                         </option>
                     {/each}

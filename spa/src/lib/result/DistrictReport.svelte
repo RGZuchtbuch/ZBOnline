@@ -1,8 +1,8 @@
 <script>
     import { onMount } from 'svelte';
-    import {active, meta, router, Route} from 'tinro';
+    import {meta} from 'tinro';
     import api from '../../js/api.js';
-    import { user } from '../../js/store.js'
+
     import Report from './Report.svelte';
 
     export let districtId = null;

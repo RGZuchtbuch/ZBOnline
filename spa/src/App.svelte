@@ -2,7 +2,7 @@
     //  import logo from './assets/svelte.png'
     import {Route} from 'tinro';
 
-    import { standard, user } from './js/store.js'
+    import { standard } from './js/store.js'
 
     import NavigationBar from './lib/navigation/NavigationBar.svelte';
     import Menu from './lib/menu/Menu.svelte';

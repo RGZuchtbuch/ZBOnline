@@ -174,7 +174,7 @@
 
         {#if open}
             <div class='flex flex-col' transition:slide>
-                {#each breed.colors as color (color.id) }
+                {#each breed.colors as color, i }
                     <ColorRow bind:breed={breed} {color} on:removed={onColorRemoved}/>
                 {/each}
             </div>

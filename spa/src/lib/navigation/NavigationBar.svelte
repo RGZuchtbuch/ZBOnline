@@ -1,7 +1,6 @@
 <script>
-    import {Route, meta, router} from 'tinro';
+    import {meta, router} from 'tinro';
     import {user} from '../../js/store.js';
-    import {get as storeGet} from "svelte/store";
 
     let remainingMessage = '?';
     let blink = true;

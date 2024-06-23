@@ -6,11 +6,6 @@
 
     import { user } from '../../js/store.js';
     import BreedRow from './BreedRow.svelte';
-    import NumberInput from '../common/form/input/NumberInput.svelte';
-    import FormStatus from '../common/form/Status.svelte';
-    import TextInput from '../common/form/input/TextInput.svelte';
-    import Form from '../common/form/Form.svelte';
-    import {dec} from '../../js/util.js';
     import Toggle from '../common/OpenClose.svelte';
 
     export let section = null;
@@ -128,10 +123,10 @@
 
     {#if open }
         <div class='flex flex-col' transition:slide>
-            {#each section.children as childSection (childSection.id) }
+            {#each section.children as childSection, i }
                 <svelte:self section={childSection} on:open={onOpenChild} open={childSection === openedChild}/>
             {/each}
-            {#each section.breeds as breed (breed.id) }
+            {#each section.breeds as breed, i }
                 <BreedRow {section} {breed} on:open={onOpenBreed} open={ breed === openedBreed} on:removed={onBreedRemoved}/>
             {/each}
         </div>

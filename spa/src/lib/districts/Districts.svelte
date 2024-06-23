@@ -1,7 +1,6 @@
 <script>
 	import { meta } from 'tinro';
 	import api from '../../js/api.js';
-	import { user } from '../../js/store.js'
 	import { txt } from '../../js/util.js';
 
 	import List from "../common/List.svelte";

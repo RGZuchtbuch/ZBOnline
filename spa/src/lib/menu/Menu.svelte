@@ -1,8 +1,6 @@
 <script>
-    import {Route, meta, router} from 'tinro';
+    import {Route, meta} from 'tinro';
     import {user} from '../../js/store.js';
-    import api from '../../js/api.js';
-    import {txt} from '../../js/util.js';
     import AdminMenu from "./AdminMenu.svelte";
     import BreederMenu from "./BreederMenu.svelte";
     import ClubMenu from "./ClubMenu.svelte";
