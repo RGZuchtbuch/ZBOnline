@@ -1,14 +1,14 @@
 <script>
     import { Route } from 'tinro';
 
-    import Breeds from "./Sections.svelte";
+    import Sections from "./Sections.svelte";
 
 
 
 </script>
 
 <Route path='/'>
-    <Breeds />
+    <Sections />
 </Route>
 
 <style>

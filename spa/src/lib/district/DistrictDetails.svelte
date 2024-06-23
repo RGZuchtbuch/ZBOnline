@@ -12,7 +12,6 @@
     import NumberInput from '../common/form/input/NumberInput.svelte';
     import Select from '../common/form/input/Select.svelte';
     import TextInput from '../common/form/input/TextInput.svelte';
-    import Districts from '../districts/DistrictsList.svelte';
     import FormStatus from '../common/form/Status.svelte';
 
     export let districtId;

@@ -2,9 +2,9 @@
 </script>
 
 
-<h3 class='title'> <slot name='title'> <span>Title ?</span> </slot> </h3>
-<div class='header'> <slot name='header'> <span>Header ?</span> </slot> </div>
-<div class='flex flex-col body scrollbar'> <slot name='body'> <span>Body ?</span> </slot></div>
+<h3 class='title'> <slot name='title'></slot> </h3>
+<div class='header'> <slot name='header'></slot> </div>
+<div class='flex flex-col body scrollbar'> <slot name='body'></slot></div>
 
 <style>
     article {

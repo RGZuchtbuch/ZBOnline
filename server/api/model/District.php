@@ -109,7 +109,7 @@ class District
     public static function getDescendants(int $districtId ) : array {
         $args = get_defined_vars();
         $stmt = Query::prepare( "
-            SELECT DISTINCT child.parentId, child.id, child.short, child.name, child.fullname, child.level, child.moderatorId 
+            SELECT DISTINCT child.parentId, child.id, child.short, child.name, child.fullname, child.level, child.moderatorId, child.url 
             FROM district AS parent
             LEFT JOIN district AS child ON child.id = parent.id OR child.parentId = parent.id
             WHERE parent.id=:districtId OR parent.parentId=:districtId

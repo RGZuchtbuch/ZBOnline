@@ -18,7 +18,7 @@
             api.district.get( districtId ).then( response => {
                 district = response.district;
             })
-            api.district.report.get( districtId, year ).then( response => {
+            api.report.get( districtId, year ).then( response => {
                 report = response.report;
 
             })

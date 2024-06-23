@@ -73,7 +73,9 @@
 
             <div class='flex text-xs text-red-600'>
                 {#if $user && $user.admin }
-                    <button class='w-4' type='button' on:click={onEdit} title={dic.title.change}>(e)</button>
+                    <button class='w-4 border-0' type='button' on:click={onEdit} title={dic.title.change}>
+                        <img src="assets/edit.svg" alt="Farbe ändern">
+                    </button>
                     <div class='w-4'></div>
                 {/if}
             </div>

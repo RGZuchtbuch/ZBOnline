@@ -113,10 +113,12 @@
 
 
         {#if $user && $user.admin }
-            <div class='flex w-8 text-xs text-red-600'>
+            <div class='flex text-xs text-red-600'>
                 <div class='w-4'></div>
                 {#if open && section.children.length === 0}
-                    <button class='w-4' type='button' on:click={onAddBreed} title='Rasse hinzufügen'> [✚] </button>
+                    <button class='w-4 border-0' type='button' on:click={onAddBreed} title='Rasse hinzufügen'>
+                        <img src="assets/add.svg" alt="Rasse hinzufügen">
+                    </button>
                 {/if}
             </div>
         {/if}

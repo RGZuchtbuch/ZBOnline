@@ -20,7 +20,7 @@
 // ▲▼▶▽○ ◦   https://www.compart.com/en/unicode/block/U+25A0
 </script>
 
-<button type='button' class={'w-6 text-left cursor-pointer '+className} title={dic.title.openclose} on:click={onClick} >
+<button type='button' class={'w-6 border-0 text-left cursor-pointer '+className} title={dic.title.openclose} on:click={onClick} >
 	{#if enabled}
 		{#if open}▽{:else}▷{/if}
 	{:else}

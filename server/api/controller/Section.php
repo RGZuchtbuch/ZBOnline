@@ -41,6 +41,8 @@ class Section
 			if( $body ) {
 				$id = model\Article::new( $body['title'], $body['html'], $requester->getId() );
 				if( $id ) {
+					model\Cache::del('standard');
+					model\Cache::del('result');
 					$response->getBody()->write(json_encode(['id' => $id], JSON_UNESCAPED_SLASHES));
 					return $response;
 				}
@@ -59,6 +61,8 @@ class Section
 			if( is_numeric( $id ) && $body ) {
 				$updated = model\Article::set( $id, $body['title'], $body['html'], $requester->getId() );
 				if( $updated ) {
+					model\Cache::del('standard');
+					model\Cache::del('result');
 					$response->getBody()->write(json_encode(['id' => $id], JSON_UNESCAPED_SLASHES));
 					return $response;
 				}
@@ -76,6 +80,8 @@ class Section
 			if( $id && is_numeric( $id ) ) {
 				$deleted = model\Article::del( $id );
 				if( $deleted ) {
+					model\Cache::del('standard');
+					model\Cache::del('result');
 					$response->getBody()->write(json_encode([ 'id'=>$id, 'deleted'=>true ], JSON_UNESCAPED_SLASHES));
 					return $response;
 				}

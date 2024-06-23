@@ -23,6 +23,7 @@
     <div class='body scrollbar'>
 
         <Route path='/zuchtbuch/*'> <InfoMenu /> </Route>
+        <Route path='/verband/*'> Verbände </Route>
         <Route path='/standard/*'> <StandardMenu /> </Route>
         <Route path='/leistungen/*'>
             <ul>

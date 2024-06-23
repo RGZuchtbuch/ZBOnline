@@ -60,6 +60,7 @@ class Router {
 
 		// should be report/district/{id}/year/{year}
 		$app->get(	'/district/{id}/year/{year}/report', 'App\controller\District::report' ); // for showing table
+		$app->get(	'/report/district/{id}/year/{year}', 'App\controller\District::report' ); // for showing table
 
 		$app->get(	'/district/{id}/results', 'App\controller\District::results' ); // having year, section and group in query. For obmann edit
 		$app->get(	'/district/{id}/breed/{breed}/results', 'App\controller\District::breedResults' ); // having year, section and group in query. For obmann edit

@@ -127,10 +127,16 @@
             </div>
 
             {#if $user && $user.admin }
-                <div class='flex w-8 text-xs text-red-600'>
-                    <button class='w-4' type='button' on:click={onEdit} title='Rassedaten ändern'> (e) </button>
+                <div class='flex text-xs text-red-600'>
+                    <button class='w-4 border-0' type='button' on:click={onEdit} title='Rasse ändern'>
+                        <img src="assets/edit.svg" alt="Rassename ändern">
+                    </button>
                     {#if open || breed.colors.length === 0 }
-                        <button class='w-4' type='button' on:click={onAddColor} title='Farbe hinzufügen'> (✚) </button>
+                        <button class='w-4 border-0' type='button' on:click={onAddColor} title='Farbe hinzufügen'>
+                            <img src="assets/add.svg" alt="Farbe hinzufügen">
+                        </button>
+                    {:else}
+                        <div class='w-4'></div>
                     {/if}
                 </div>
             {/if}
@@ -175,3 +181,7 @@
         {/if}
     {/if}
 </div>
+
+<style>
+
+</style>

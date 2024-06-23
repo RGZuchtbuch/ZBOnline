@@ -82,12 +82,12 @@ export default {
             get: ( districtId ) => get( 'api/district/'+districtId+'/descendants'),
         },
 
-        report: {
-            get: (id, year) => get( 'api/district/'+id+'/year/'+year+'/report' ),
-        },
+        //report: {
+            //get: (id, year) => get( 'api/district/'+id+'/year/'+year+'/report' ),
+        //},
 
         results: { // showing results for district, all sections etc
-            get: (districtId, year) => get( 'api/district/'+districtId+'/year/'+year+'/report' ),
+            //get: (districtId, year) => get( 'api/district/'+districtId+'/year/'+year+'/report' ),
 
             section: {// for edit list sections breed ( with extra like nr of results )
                 get: ( districtId, sectionId, year, group ) => {
@@ -178,6 +178,10 @@ export default {
         post: (pair) => post( 'api/pair',pair ),
         put: (id, pair) => put( 'api/pair/'+id, pair ),
         delete: ( id ) => del( 'api/pair/'+id ),
+    },
+
+    report: {
+        get: (districtId, year) => get( 'api/report/district/'+districtId+'/year/'+year ),
     },
 
     result: {

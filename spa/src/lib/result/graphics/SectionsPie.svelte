@@ -90,7 +90,8 @@
     function handle( districtId, year, typeId ) {
         type = types[ typeId ];
         if( districtId ) {
-            api.district.results.get( districtId, year ).then( response => {
+//            api.district.results.get( districtId, year ).then( response => {
+            api.report.get( districtId, year ).then( response => {
                 const report = response.report;
 
                 countBreeders( report );

@@ -114,6 +114,9 @@ class District
 		if( is_numeric( $id ) ) {
 			$districts = model\District::getDescendants($id); // get all districts including root
 			if( $districts ) {
+				foreach( $districts as & $district ) {
+					$district['moderator'] = $district[ 'moderatorId' ] ? model\User::get($district['moderatorId']) : null;
+				}
 				$rootDistrict = ToolBox::toTree($districts);
 				if ($rootDistrict) {
 					$response->getBody()->write(json_encode(['district' => & $rootDistrict], JSON_UNESCAPED_SLASHES));
