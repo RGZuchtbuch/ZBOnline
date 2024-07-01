@@ -59,7 +59,6 @@ export function isEmail( value ) {
     if( value ) {
         const regex = /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
         return regex.test( value );
-//        return value.match( '[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$' ) !== null; // a.a@a.aa
     }
     return false; // match failed
 }
@@ -70,6 +69,13 @@ export function isPassword( value ) {
         return regex.test( value );
     }
     return false;
+}
+export function isURL( value ) {
+    if( value ) {
+        const regex = /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
+        return regex.test( value );
+    }
+    return false; // match failed
 }
 export function isNumber( value ) {
     return value !== undefined && value !== null && ! isNaN(value);
@@ -219,56 +225,4 @@ export function txt( text ) {
     return text ? text : '';
 }
 
-/* moved to validator.js */
-//TODO remove
-export function validator( value ) {
-    let valid = true;
-    const worker = {
-        string: () => {
-            valid &= typeof value === 'string';
-            return worker;
-        },
-        number: () => {
-            valid &= isNumber( value );
-            return worker;
-        },
-        range: ( min, max ) => {
-            valid &= value >= min && value <= max;
-            return worker;
-        },
-        date:  () => {
-            valid &= ! isNaN( Date.parse( value ) );
-            return worker;
-        },
-        ring: () => {
-            valid &= isRing( value );
-            return worker;
-        },
-        empty: () => {
-            valid &= value === null || value.length === 0;
-            return worker;
-        },
-        nullable: () => { // should be last !
-            valid = value === null ? true : valid;
-            return worker;
-        },
-        isNull( other ) {
-            valid &= other === null;
-            return worker;
-        },
-        notNull( other ) {
-            valid &= other !== null;
-            return worker;
-        },
-
-        isValid: () => {
-            return valid;
-        },
-        isInvalid: () => {
-            return ! valid;
-        }
-    }
-    return worker;
-
-}
 

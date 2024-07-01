@@ -11,6 +11,7 @@
     export let label = null;
     export let value = null;
     export let placeholder = null;
+    export let maxlength = null;
     export let error = dic.error.error; // message on invalid
     export let validator = null;
     export let disabled = false;
@@ -43,7 +44,7 @@
         <label class='name' for='number'> {label} </label>
     {/if}
     <input class='input left' {name} class:valid bind:this={element} type='text' bind:value={value}
-           {placeholder} {title} {disabled}
+           {placeholder} {title} {disabled} {maxlength}
            on:input on:change on:focus on:blur
     />
     <label class='error' class:valid for='number'>{error}</label>

@@ -29,6 +29,7 @@
         name:      (v) => validator(v).string().length( 3, 48 ).isValid(),
         fullName:  (v) => validator(v).string().length( 3, 96 ).isValid(),
         shortName: (v) => validator(v).string().length( 1, 16 ).isValid(),
+        url:       (v) => validator(v).url().isValid(),
         lattitude: (v) => validator(v).number().range( MINLATITUDE, MAXLATITUDE ).isValid(),
         longitude: (v) => validator(v).number().range( MINLONGITUDE, MAXLONGITUDE ).isValid(),
         // mod ?
@@ -90,6 +91,7 @@
             <TextInput class='w-80' bind:value={district.name} label='Name' validator={validate.name}/>
             <TextInput class='w-160' bind:value={district.fullname} label='Name voll' validator={validate.fullName}/>
             <TextInput class='w-24' bind:value={district.short} label='Name abk.' validator={validate.shortName}/>
+            <TextInput class='w-160' bind:value={district.url} label='Webseite https://...' maxlength=128 validator={validate.url}/>
 
             <div class='flex gap-x-2'>
                 <NumberInput class='w-32' bind:value={district.latitude} label='Breitegrad N' validator={validate.lattitude} />

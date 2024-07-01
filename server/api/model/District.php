@@ -19,7 +19,7 @@ class District
 			return Query::select($stmt, $args);
 		} else {
 			$stmt = Query::prepare( '
-				SELECT id, parentId, name, fullname, short, level, latitude, longitude, moderatorId  
+				SELECT id, parentId, name, fullname, url, short, level, latitude, longitude, moderatorId  
 				FROM district
 				ORDER BY name
 			' );
@@ -29,13 +29,14 @@ class District
 
 	public static function new(
 		int $parentId, string $name, string $fullname, string $short, // parentId cannot change
+		? string $url,
 		? float $latitude, ? float $longitude,
 		string $level, ? int $moderatorId, int $modifierId
 	) : ? int {
 		$args = get_defined_vars();
 		$stmt = Query::prepare( '
-            INSERT INTO district ( parentId, name, fullname, short, latitude, longitude, level, moderatorId, modifierId )
-            VALUES ( :parentId, :name, :fullname, :short, :latitude, :longitude, :level, :moderatorId, :modifierId )
+            INSERT INTO district ( parentId, name, fullname, url, short, latitude, longitude, level, moderatorId, modifierId )
+            VALUES ( :parentId, :name, :fullname, :url, :short, :latitude, :longitude, :level, :moderatorId, :modifierId )
         ' );
 		return Query::insert( $stmt, $args );
 	}
@@ -43,13 +44,14 @@ class District
     public static function set(
         int $id,
         string $name, ? string $fullname, ? string $short,
+		? string $url,
         ? float $latitude, ? float $longitude,
         string $level, ? int $moderatorId, int $modifierId
     ) : bool {
         $args = get_defined_vars();
         $stmt = Query::prepare('
             UPDATE district
-            SET name=:name, fullname=:fullname, short=:short, latitude=:latitude, longitude=:longitude, level=:level, moderatorId=:moderatorId, modifierId=:modifierId
+            SET name=:name, fullname=:fullname, short=:short, url=:url, latitude=:latitude, longitude=:longitude, level=:level, moderatorId=:moderatorId, modifierId=:modifierId
             WHERE id=:id  
         ');
         return Query::update($stmt, $args);

@@ -1,4 +1,4 @@
-import { isEmail, isPassword, toString, toNumber, toDate, toRing } from './util.js';
+import { isEmail, isPassword, isURL, toString, toNumber, toDate, toRing } from './util.js';
 
 // age : Validator.number().min(0).max(100);
 // console.log( age.value ); // t/f
@@ -51,6 +51,10 @@ export default function validator(value ) {
         },
         password : () => {
             valid &&= isPassword( value );
+            return worker;
+        },
+        url : () => {
+            valid &&= isURL( value );
             return worker;
         },
         true : () => {

@@ -8,6 +8,9 @@ const config = {
         'button': '#fc5226',
         'header': '#1dbab4',
       },
+      fontFamily: {
+          rgz: ['Roboto', 'sans-serif'], // google font
+      },
       spacing: {
         '104': '26rem',
         '112': '28rem',
@@ -21,6 +24,7 @@ const config = {
         '256': '64rem',
         '272': '68rem',
         '288': '72rem',
+        '320': '80rem', // 64+256
         '384': '96rem',
         '512': '128rem'
       },

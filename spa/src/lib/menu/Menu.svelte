@@ -14,7 +14,7 @@
 </script>
 
 
-<div class='w-64 mt-12 flex flex-col border rounded no-print'>
+<div class='w-60 mt-12 flex flex-col border rounded no-print'>
 
 
     <div class='header'> Menü für {$user ? $user.firstname : 'Besucher' } </div>

@@ -25,6 +25,7 @@ optional
 * &#10551; tree
 * &#8679; Close
 * &#8681; Open
+* &#8803; Hamburger open and &#10006; for close
 
 
 ## Special Chars to copy paste

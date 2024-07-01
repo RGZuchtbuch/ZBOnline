@@ -21,6 +21,12 @@
     import api from './js/api.js';
     import Grading from './lib/result/Grading.svelte';
 
+    let showMenu = false;
+
+    function toggleMenu() {
+        showMenu = ! showMenu;
+    }
+
     api.standard.get().then( response => { // load standard here async into store
         standard.set( response.standard );
         console.log( 'Standard loaded', response.standard );
@@ -31,16 +37,35 @@
 <div />
 <Route path='/*' >
     <div class='w-full h-full flex flex-col'>
-        <a href='/'>
-            <img class='absolute w-20 mt-4 ml-24 no-print' src='../assets/bdrg_logo_r.png' alt='BDRG Logo'>
-        </a>
-        <div class='text-center no-print'>
-            Das Rassegeflügel Zuchtbuch, Leistung und Schönheit durch Wissen.
+
+        <!-- mobile screen -->
+        <div class='md:hidden flex flex-col'>
+            <a class='absolute top-1 left-1' href='/'>
+                <img class='w-12' src='../assets/bdrg_logo_r.png' alt='BDRG Logo'>
+            </a>
+            <div class='text-center no-print'>
+                Das Rassegeflügel Zuchtbuch
+            </div>
+            <button type='button' class='absolute top-1 right-1 border-0 md:hidden' on:click={toggleMenu}>
+                {#if showMenu}&#10006;{:else}&#8803;{/if}
+            </button>
+            {#if showMenu}
+                <NavigationBar />
+            {/if}
         </div>
 
-        <NavigationBar />
+        <!-- wide screen -->
+        <div class='hidden md:block flex flex-col'>
+            <a href='/'>
+                <img class='absolute w-20 mt-4 ml-24 no-print' src='../assets/bdrg_logo_r.png' alt='BDRG Logo'>
+            </a>
+            <div class='text-center no-print'>
+                Das Rassegeflügel Zuchtbuch, Leistung und Schönheit durch Wissen.
+            </div>
+            <NavigationBar />
+        </div>
 
-        <div class='grow p-2 flex flex-row gap-2 relative min-h-0'>
+        <div class='grow p-2 flex flex-col md:flex-row gap-2 relative min-h-0'>
 
             <div class=''>
                 <Menu />

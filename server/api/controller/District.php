@@ -40,7 +40,7 @@ class District
 		if( $requester->isAdmin() ) {
 			$body = $request->getParsedBody();
 			if( $body ) {
-				$id = model\District::new( $body['parentId'], $body['name'], $body['fullname'], $body['short'], $body['latitude'], $body['longitude'], $body['level'], $body['moderatorId'], $requester->getId() );
+				$id = model\District::new( $body['parentId'], $body['name'], $body['fullname'], $body['short'], $body['url'], $body['latitude'], $body['longitude'], $body['level'], $body['moderatorId'], $requester->getId() );
 				if( $id ) {
 					$response->getBody()->write(json_encode(['id' => $id], JSON_UNESCAPED_SLASHES));
 					return $response;
@@ -58,7 +58,7 @@ class District
 			$id = $args[ 'id' ] ?? null;
 			$body = $request->getParsedBody();
 			if( is_numeric( $id ) && $body ) {
-				$updated = model\District::set($body['id'], $body['name'], $body['fullname'], $body['short'], $body['latitude'], $body['longitude'], $body['level'], $body['moderatorId'], $requester->getId() );
+				$updated = model\District::set($body['id'], $body['name'], $body['fullname'], $body['short'], $body['url'], $body['latitude'], $body['longitude'], $body['level'], $body['moderatorId'], $requester->getId() );
 				if( $updated ) {
 					$response->getBody()->write(json_encode(['id' => $id], JSON_UNESCAPED_SLASHES));
 					return $response;
