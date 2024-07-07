@@ -5,8 +5,8 @@
     import {calcColor, dec, gpsToPx, pct} from '../../../js/util.js';
     import BdrgSVG from './BdrgSVG.svelte';
 
-    export let typeId;
-    export let year;
+    export let typeId = null;
+    export let year = null;
     export let sectionId;
     export let breedId;
     export let colorId;
@@ -133,7 +133,8 @@
             // fill label;s and datasets depending on rows
             districts.forEach(district => {
                 labels.push(district.name);
-                coords.push( gpsToPx( 380, 512, 5.7, 15.0, 47.5, 55.0, district.longitude, district.latitude ) );
+//                coords.push( gpsToPx( 380, 512, 5.7, 15.0, 47.5, 55.0, district.longitude, district.latitude ) );
+                coords.push( gpsToPx( 360, 485, 5.7, 15.0, 47.5, 55.0, district.longitude, district.latitude ) );
                 titles.push( type.title( district ) );
                 let values = type.map( district );
 
@@ -177,13 +178,13 @@
 </script>
 
 
-<div class='flex flex-col'>
-    <h3 class='text-center'>In den Landesverbänden, {year} </h3>
+<div class='flex flex-col border border-gray-600 rounded'>
+    <h3 class='bg-header text-white text-center'>{#if type && year } {type.label} in {year} {/if}</h3>
 
     <div class='relative'>
         <BdrgSVG {colors}/>
 
-        <svg class='absolute top-0 bottom-0 border border-gray-600' width=380 height=512>
+        <svg class='absolute top-0 bottom-0' width='360px' height='485px'>
 
             {#if map}
                 <g in:fade={{duration:1000}} >

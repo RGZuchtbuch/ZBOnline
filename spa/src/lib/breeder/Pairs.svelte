@@ -6,7 +6,6 @@
     import {meta} from 'tinro';
 
     import Pairs from '../pairs/Pairs.svelte';
-    import List from "../common/List.svelte";
 
     export let breederId;
     let breeder;

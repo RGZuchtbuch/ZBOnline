@@ -65,7 +65,7 @@
 
 </script>
 
-<div class='flex flex-col pl-4' transition:slide>
+<div class='flex flex-col pl-2 md:pl-4' transition:slide>
     <div class='flex flex-row gap-x-1 my-2 border-b border-gray-300'>
 
         <Toggle bind:open={open} enabled={section.children.length > 0 || section.breeds.length > 0 } class='text-orange-600'/>
@@ -73,13 +73,13 @@
             {section.name}
         </div>
         {#if section.children.length > 0 }
-            <div class='text-xs' title={dic.title.children}>({ section.children.length })</div>
+            <div class='hidden md:block text-xs' title={dic.title.children}>({ section.children.length })</div>
         {/if}
         {#if section.breeds.length > 0 }
-            <div class='text-xs' title={dic.title.breeds}>({ section.breeds.length })</div>
+            <div class='hidden md:block text-xs' title={dic.title.breeds}>({ section.breeds.length })</div>
         {/if}
 
-        <div class='grow flex gap-x-2 justify-end text-sm font-bold italic'>
+        <div class='hidden md:flex grow gap-x-2 justify-end text-sm font-bold italic'>
             {#if open && section.breeds.length > 0}
                 {#if section.layers }
                     <div class='flex'>

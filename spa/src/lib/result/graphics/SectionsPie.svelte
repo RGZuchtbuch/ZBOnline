@@ -4,12 +4,15 @@
 //    import {BarController, BarElement, CategoryScale, Chart, Colors, LinearScale, Tooltip} from "chart.js";
     import { Chart, ArcElement, DoughnutController, Legend, Tooltip} from 'chart.js';
     import {dec, pct} from "../../../js/util.js";
+    import {onMount} from 'svelte';
 
     export let districtId = null;
     export let year = null;
     export let typeId = null;
 
-    let canvasFraction = null; // ref to canvas element
+    let district = null;
+
+    let pieCanvas = null; // ref to canvas element
     let chart = null;
 
     let fractions = {
@@ -91,8 +94,15 @@
         type = types[ typeId ];
         if( districtId ) {
 //            api.district.results.get( districtId, year ).then( response => {
+            district = null;
+            api.district.get( districtId )
+                .then( response => {
+                    district = response.district;
+                });
+
             api.report.get( districtId, year ).then( response => {
                 const report = response.report;
+                console.log('Pie report', report);
 
                 countBreeders( report );
                 let data = report.sections.map( section => section.count ); // get array of counts
@@ -120,22 +130,25 @@
                             }
                         }
                     }
-                    const context = canvasFraction.getContext( '2d' );
+                    const context = pieCanvas.getContext( '2d' );
                     chart = new Chart( context, config );
                 }
             });
         }
     }
 
+    onMount( () => {
+
+    })
+
     Chart.register( ArcElement, DoughnutController, Legend, Tooltip );
     $: handle( districtId, year, typeId );
 
 </script>
-{#if fractions }
-    <div class='flex flex-col p-4' >
-        <h5> Zuchten / Sparte </h5>
-        <canvas id='fractions' bind:this={canvasFraction} width='400px' height='128px'></canvas>
-    </div>
-{/if}
+
+<div class='flex flex-col' >
+    <h5 class='border border-gray-400 rounded bg-header text-center text-white'> Zuchten / Sparte {#if district && year}im {district.name} in {year} {/if}</h5>
+    <canvas id='fractions' bind:this={pieCanvas} width='360px' height='128px'></canvas>
+</div>
 
 <style></style>

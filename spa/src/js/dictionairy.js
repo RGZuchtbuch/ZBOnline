@@ -56,6 +56,7 @@ export default {
 		saved		: 'Gespeichert',
 		section		: 'Sparte',
 		standard	: 'Standard',
+		url         : 'Internetseite',
 		user		: 'Benutzer',
 	},
 

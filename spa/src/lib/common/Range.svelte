@@ -33,6 +33,6 @@
 
 <style>
     input {
-        @apply h-2 bg-green-200 rounded appearance-none cursor-pointer dark:bg-gray-700 accent-red-600;
+        @apply h-2 bg-header rounded appearance-none cursor-pointer dark:bg-gray-700 accent-red-600;
     }
 </style>

@@ -26,7 +26,7 @@ class User
 				if( $id ) {
 					$user = model\User::get($id);
 					if( $user ) {
-						$user['fullname'] = $user['firstname'] . ' ' . ($user['infix'] ? $user['infix'] . ' ' : '') . $user['lastname'];
+						$user['name'] = $user['firstname'] . ' ' . ($user['infix'] ? $user['infix'] . ' ' : '') . $user['lastname'];
 						$user['moderator'] = array_column(model\Moderator::districts($id), 'id'); // what districts to moderate
 						$token = model\Token::encode( $user );
 						if ($token) {

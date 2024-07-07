@@ -1,32 +1,16 @@
 <script>
     import { meta, router, Route } from 'tinro';
+    import { onMount, setContext } from 'svelte';
+    import { user } from '../../js/store.js';
 
     import District from '../district/District.svelte';
     import Districts from './Districts.svelte';
-    import Grading from '../result/Grading.svelte';
-
+    import Grading from '../grading/Calculator.svelte';
 
     const route = meta();
-
-    function onSelectDistrict( event ) {
-        const url = route.match+'/verband/'+event.detail;
-        router.goto( url );
-    }
+    console.log( 'Moderator route', route);
 
 </script>
 
-<Route path='/' redirect={ route.match+'/verband'} />
-<Route path='/nachweis'> <Grading /> </Route>
 
-<Route path='/verband/*'>
-
-    <Route path='/'> <Districts on:select={onSelectDistrict}/> </Route>
-
-    <Route path='/:districtId/*' let:meta>
-        <District districtId={meta.params.districtId} />
-    </Route>
-
-</Route>
-
-
-
+<slot>Hier sollte man nur enden wenn mann angemeldet und Obmann ist</slot>

@@ -2,7 +2,7 @@
     import { meta } from 'tinro';
     import { standard } from '../../js/store.js';
 
-    import List from "../common/List.svelte";
+    import Page from "../common/Page.svelte";
     import SectionRow from "./SectionRow.svelte";
 
     let section = null;
@@ -13,15 +13,15 @@
 </script>
 
 
-<List>
-    <div slot='title'> BDRG Rassegeflügelstandard </div>
-    <div slot='header' class='text-center'> Sparten / Gruppen / Rassen / Farbenschläge </div>
+<Page>
+    <div slot='title'> Sparten / Gruppen / Rassen / Farbenschläge</div>
+    <div slot='header'> BDRG Rassegeflügelstandard </div>
     <div slot='body'>
         {#if section}
             <SectionRow {section} open={true}/>
         {/if}
     </div>
-</List>
+</Page>
 
 <style>
 

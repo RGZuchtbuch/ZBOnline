@@ -15,27 +15,29 @@
     }
 
 </script>
+<main class='border border-red-500 p-2'>
+    <div>Admin></div>
+    <Route path='/' redirect={ route.match+'/verband'} />
 
-<Route path='/' redirect={ route.match+'/verband'} />
+    <Route path='/standard/*'> <Standard /> </Route>
 
-<Route path='/standard/*'> <Standard /> </Route>
+    <Route path='/verband/*'>
 
-<Route path='/verband/*'>
+        <Route path='/'>
+            <Districts on:select={onSelectDistrict}/>
+        </Route>
 
-    <Route path='/'>
-        <Districts on:select={onSelectDistrict}/>
+        <Route path='/:districtId/*' let:meta>
+            <District districtId={meta.params.districtId} />
+        </Route>
     </Route>
 
-    <Route path='/:districtId/*' let:meta>
-        <District districtId={meta.params.districtId} />
+    <Route path='/seite' >
+        <Articles />
     </Route>
-</Route>
 
-<Route path='/seite' >
-    <Articles />
-</Route>
+    <Route path='/log' >
+        <Log />
+    </Route>
 
-<Route path='/log' >
-    <Log />
-</Route>
-
+</main>

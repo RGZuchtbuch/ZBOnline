@@ -20,8 +20,8 @@
 {#if article}
     <Page>
         <div slot='title'> {article.title} </div>
-        <div slot='header'> - </div>
-        <div slot='body'> {@html article.html} </div>
+        <div slot='header'></div>
+        <div class='p-8' slot='body'> {@html article.html} </div>
     </Page>
 {:else}
     Seite wird geladen.....

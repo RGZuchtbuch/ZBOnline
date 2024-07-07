@@ -2,7 +2,7 @@
 	import { slide } from 'svelte/transition';
     import { meta } from 'tinro';
 	import grading from '../../js/aab.js';
-	import {dec} from '../../js/util.js';
+	import {dat, dec} from '../../js/util.js';
 	import { standard } from '../../js/store.js'
 	import validator from '../../js/validator.js';
 
@@ -76,6 +76,7 @@
                 collectBreeds(foundSection, breeds);
                 breeds.sort( (a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0 );
             }
+			pair.breed = null;
 			clearResults();
         }
     }
@@ -166,18 +167,19 @@
 		}
 	}
 
-	function grade( value, dec = 1 ) {
+	function grade( value, dec = 0 ) {
 		console.log( 'Grade', value );
-		return value === 0 ? '0' : value === '?' ? '?' : value.toFixed( dec )+' p.';
+		return value === 0 ? '0' : value === '?' ? '?' : value.toFixed( dec );
 	}
 
     createData();
 
 </script>
 
-<main class='w-256 p-4 bg-gray-100 text-xl transition:slide'>
+<main class='w-full p-4 bg-gray-100 text-xl transition:slide'>
 	<Form autoSave={false}>
 		<header>
+			<span class='absolute top-2 right-2 text-xs'> { dat( new Date )}</span>
 			<h2 class='text-center'>BDRG Zuchtbuch</h2>
 
 			<h1 class='flex flex-row gap-x-4 justify-center'>
@@ -237,7 +239,10 @@
 						Stamm
 					</div>
 					<div class='grow'>
-						Elterntiere : Brutgruppe {pair.breed.broodGroup}
+						Elterntiere
+					</div>
+					<div class='pr-4'>
+						{#if pair && pair.section && pair.section.id === PIGEONS && pair.breed } Brutgruppe {pair.breed.broodGroup} {/if}
 					</div>
 				</div>
 
@@ -249,26 +254,26 @@
 									<span class='w-8 mt-6 mx-2'>{animal.sex}</span>
 									<RingInput class='w-36' label='Bundesring {animal.sex}'/>
 								</div>
-								<output class='text-2xl text-center font-bold'>{ grade( animal.grade, 1 ) }</output>
+								<output class='text-2xl text-center font-bold'>{ grade( animal.grade ) }</output>
 							</div>
 
 							<div class='grow lex flex-col gap-y-1'>
 								{#each animal.parents as parent}
-									{#if pair.section.id === PIGEONS}
-										<div class='flex flex-row border border-gray-400 rounded p-2'>
+									{#if pair.section.id === PIGEONS} <!-- Pigeons -->
+										<div class='flex flex-row border border-gray-400 rounded p-2 justify-evenly'>
 											<span class='w-8 my-6 mx-1'>{parent.sex}</span>
 											<RingInput class='w-36' label='Bundesring {parent.sex}'/>
-											<fieldset class='grow flex flex-row gap-x-2' on:input={ () => gradeBrood( parent.brood ) }>
-												<span class='w-36 mt-6 text-center'> → Brutleistung</span>
+											<fieldset class='grow flex flex-row gap-x-2 justify-evenly' on:input={ () => gradeBrood( parent.brood ) }>
+												<span class='w-36 mt-6 text-left'>→ Bruten</span>
 												<NumberInput class='w-24' label='Bruten' bind:value={parent.brood.count} validator={validate.pigeon.brood.count} />
 												<span class='w-8 mt-6'>mit</span>
 												<NumberInput class='w-32' label='Beringte Jungtauben' bind:value={parent.brood.hatched} validator={validate.pigeon.brood.hatched( parent.brood )}  />
-												<span class='w-4 mt-6'>=</span>
-												<output class='grow mt-6 mx-1 text-xl font-bold text-center'>{ grade( parent.brood.grade )}</output>
+												<span class='w-4 mt-6'>→</span>
+												<output class='w-8 mt-6 mx-1 text-xl font-bold text-center'>{ grade( parent.brood.grade )}</output>
 											</fieldset>
 										</div>
-									{:else}
-										<div class='flex flex-row border border-gray-400 rounded p-2'> <!-- parent -->
+									{:else} <!-- Layers -->
+										<div class='flex flex-row border border-gray-400 rounded p-2 justify-evenly'> <!-- parent -->
 											<div class='flex flex-col'>
 												<div class='flex flex-row'>
 													<span class='w-8 my-6 mx-1'>{parent.sex}</span>
@@ -279,25 +284,25 @@
 												{/if}
 											</div>
 
-											<div class='flex flex-col'>
+											<div class='grow flex flex-col'>
 												{#if parent.sex === '0.1'}
-													<fieldset class='flex flex-row' on:input={ () => gradeLay( parent.lay ) }>
-														<span class='w-36 mt-6 mx-1 text-center'> → Legeleistung</span>
-														<NumberInput class='w-32' label='Legeleistung' bind:value={ parent.lay.eggs } validator={validate.layer.lay.eggs}/>
-														<span class='w-8 mt-6 mx-1 text-center'>und</span>
-														<NumberInput class='w-32' label='SOLL Legeleistuing' value={pair.breed ? pair.breed.layEggs : '?'} disabled />
-														<span class='w-4 mt-6 mx-1 text-center'>=</span>
-														<output class='grow mt-6 mx-1 text-xl font-bold text-center'>{ grade( parent.lay.grade) }</output>
+													<fieldset class='grow flex flex-row justify-evenly' on:input={ () => gradeLay( parent.lay ) }>
+														<div class='w-32 mt-6 mx-1 text-left'>→ Legen</div>
+														<NumberInput class='w-32' label='Legen e/j' bind:value={ parent.lay.eggs } validator={validate.layer.lay.eggs}/>
+														<div class='w-8 mt-6 mx-1 text-center'>von</div>
+														<NumberInput class='w-32' label='SOLL Legen' value={pair.breed ? pair.breed.layEggs : '?'} disabled />
+														<div class='w-4 mt-6 mx-1 text-center'>→</div>
+														<output class='w-8 mt-6 mx-1 text-xl font-bold text-center'>{ grade( parent.lay.grade) }</output>
 													</fieldset>
 												{/if}
 
-												<fieldset class='flex flex-row ' on:input={ () => gradeBrood( parent.brood ) }>
-													<span class='w-36 mt-6 mx-1'>→ Brutleistung</span>
-													<NumberInput class='w-32' label='Eingelegte Eier' bind:value={parent.brood.eggs} validator={ validate.layer.brood.eggs } />
-													<span class='w-8 mt-6 mx-1'>mit</span>
-													<NumberInput class='w-32' label='Geschüpfte Küken' bind:value={parent.brood.hatched} validator={ validate.layer.brood.hatched(parent.brood) } />
-													<span class='w-4 mt-6 mx-1'>=</span>
-													<output class='grow mt-6 mx-1 text-xl font-bold'>{ grade( parent.brood.grade )}</output>
+												<fieldset class='grow flex flex-row justify-evenly' on:input={ () => gradeBrood( parent.brood ) }>
+													<span class='w-32 mt-6 mx-1 text-left'>→ Brut</span>
+													<NumberInput class='w-32' label='Eingelegt' bind:value={parent.brood.eggs} validator={ validate.layer.brood.eggs } />
+													<span class='w-8 mt-6 mx-1 text-center'>mit</span>
+													<NumberInput class='w-32' label='Geschüpft' bind:value={parent.brood.hatched} validator={ validate.layer.brood.hatched(parent.brood) } />
+													<span class='w-4 mt-6 mx-1 text-center'>→</span>
+													<output class='w-8 mt-6 mx-1 text-xl font-bold text-center'>{ grade( parent.brood.grade )}</output>
 												</fieldset>
 											</div>
 										</div>
@@ -321,6 +326,8 @@
 					</div>
 				</footer>
 			</div>
+		{:else}
+			<div class='text-center italic'>Der Leistungsdatenteil erscheint sobalt die Rasse eingegeben ist</div>
 		{/if}
 
 

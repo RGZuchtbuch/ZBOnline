@@ -9,7 +9,8 @@ const config = {
         'header': '#1dbab4',
       },
       fontFamily: {
-          rgz: ['Roboto', 'sans-serif'], // google font
+          rgz: [ 'Nunito Sans', 'sans-serif' ],
+        ///*    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; */
       },
       spacing: {
         '104': '26rem',

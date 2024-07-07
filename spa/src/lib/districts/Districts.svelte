@@ -2,17 +2,18 @@
 	import { meta } from 'tinro';
 	import api from '../../js/api.js';
 	import { txt } from '../../js/util.js';
+	import dic from '../../js/dictionairy.js';
 
-	import List from "../common/List.svelte";
+	import Page from "../common/Page.svelte";
 	import Tree from '../common/Tree.svelte';
 
-	let district = null;
+	let districts = null;
 	const route = meta();
 
 
 	function loadDistricts() {
 		api.district.descendants.get( 1 ).then( response => {
-			district = response.district;
+			districts = response.district;
 		} );
 	}
 
@@ -22,33 +23,33 @@
 </script>
 
 
-<List>
-	<div slot='header' >Verbände und Unterverbände im BDRG Zuchtbuch </div>
+<Page>
+	<div slot='title' >Verbände im BDRG Zuchtbuch </div>
 	<div slot='body'>
-		{#if district}
-			<Tree node={district} open={true} let:node={district}>
-				<div class='flex flex-row grow'>
+		{#if districts}
+			<Tree node={districts} open={true} let:node={districts}>
+				<div class='flex flex-col sm:flex-row grow'>
 					<div class='grow'>
-						<span class=''>{district.name}</span>
-						<small class='w-8 text-center' title='Zahl der Unterverbände'> [{district.children.length}]</small>
+						<span class='' title={districts.id}>{districts.name}</span>
 					</div>
-					<div class='w-64 flex'>
-						{#if district.moderator}
-							<img class='px-2 fill-green-600' src='assets/obmann.svg' alt='link'>
-							{txt(district.moderator.firstname)} {txt(district.moderator.infix)} {txt(district.moderator.lastname)}
+					<div class='flex flex-row gap-x-2 justify-between'>
+						{#if districts.moderator}
+							<img class='w-4 fill-green-600' src='assets/obmann.svg' alt='link'>
+							<div class='w-48'>
+								{txt(districts.moderator.firstname)} {txt(districts.moderator.infix)} {txt(districts.moderator.lastname)}
+							</div>
+						{/if}
+						{#if districts.url}
+							<a class='w-4 cursor-pointer' href={districts.url} target='_blank' title={dic.title.url}> <img src='assets/link.svg' alt='link'> </a>
+						{:else}
+							<div class='w-4'></div>
 						{/if}
 					</div>
-					{#if district.url}
-						<a class='w-4 cursor-pointer' href={district.url} target='_blank'> <img src='assets/link.svg' alt='link'> </a>
-					{:else}
-						<div class='w-4'></div>
-					{/if}
-					<small class='w-6 text-gray-400 text-3xs text-right cursor-auto' title='item id'>[{district.id}]</small>
 				</div>
 			</Tree>
 		{/if}
 	</div>
-</List>
+</Page>
 
 <style>
 </style>

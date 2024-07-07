@@ -5,6 +5,7 @@
     import { BarController, BarElement, CategoryScale, Chart, Colors, LinearScale, Tooltip } from 'chart.js';
 
     export let typeId = null;
+    export let type = null; // to replace typeid ?
     export let districtId = null;
     export let sectionId = null;
     export let breedId = null;
@@ -151,9 +152,9 @@
 
 <div class='flex flex-col'>
 
-    <h3 class='text-center'>Im {#if district}{district.name}{/if}</h3>
+    <h3 class='bg-header text-center text-white'>{#if type && district } {type.name } im {district.name}{/if}</h3>
 
-    <div class='border border-gray-600'>
-        <canvas id='canvas' bind:this={canvas} width='380px' height='512px'></canvas>
+    <div class='border border-gray-600 rounded'>
+        <canvas id='canvas' bind:this={canvas} width='360px' height='485px'></canvas>
     </div>
 </div>

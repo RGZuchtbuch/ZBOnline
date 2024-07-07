@@ -16,6 +16,9 @@
   * Zuchtbuchobmann Kappler ?
   * AOC klasse : farbe mit check aoc, separat in tabelle
 
+2024-07-05
+    Breeder Details, edit button color error
+
 
 
 

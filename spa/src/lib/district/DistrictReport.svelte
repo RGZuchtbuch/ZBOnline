@@ -6,6 +6,7 @@
     import Report from '../result/Report.svelte';
     import Range from '../common/Range.svelte';
     import ScrollDiv from '../common/ScrollDiv.svelte';
+    import Page from '../common/Page.svelte';
 
     export let districtId = null;
 //    export let moderator = null;
@@ -38,11 +39,14 @@
 </script>
 
 {#if district && report}
-    <h2 class='w-256 text-center'>Verband {#if district} {district.name} {/if} → Leistungen {year}</h2>
-    <Range class='w-228 px-8' label='Jahr' bind:value={year} min={STARTYEAR} max={new Date().getFullYear()} step={1} title='Schieben um das Jahr zu wählen'/>
-    <ScrollDiv>
-        <Report {report} {district} {year}/>
-    </ScrollDiv>
+    <Page>
+
+        <div slot='title'>Verband {#if district} {district.name} {/if} → Leistungen {year}</div>
+        <div slot='body'>
+            <Range class='w-full px-16' label='Jahr' bind:value={year} min={STARTYEAR} max={new Date().getFullYear()} step={1} title='Schieben um das Jahr zu wählen'/>
+            <Report {report} {district} {year}/>
+        </div>
+    </Page>
 {/if}
 
 

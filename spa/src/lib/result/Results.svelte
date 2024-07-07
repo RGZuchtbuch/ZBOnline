@@ -14,15 +14,16 @@
     import BroodBarPigeons from './graphics/BroodBarPigeons.svelte';
     import ShowBar from './graphics/ShowBar.svelte';
 
-    import TimeLine from './graphics/Trend.svelte';
+    import TimeLine from './graphics/TimeLine.svelte';
     import DistrictsMap from './graphics/Map.svelte';
+    import Page from '../common/Page.svelte';
 
     const route = meta();
     const types = [ {id:2, name:'Zuchten'}, {id:10, name:'Legeleistung'}, {id:20, name:'Brutleistung Leger'}, {id:21, name:'Brutleistung Tauben'}, {id:30, name:'Schauleistung'}];
 
     //set by query
     let typeId = 2;
-    let type = types.find( item => item.id = typeId );
+    let type = types.find( item => item.id === typeId );
     let year = null;
     let rootDistrict = null;
     let districtId = null;
@@ -51,7 +52,7 @@
         breedId = Number( route.query.breed ) || null;
         colorId = Number( route.query.color ) || null;
 
-        type = types.find( item => item.id = typeId );
+        type = types.find( item => item.id === typeId );
 
 
         loadBreeds();
@@ -141,118 +142,120 @@
 </script>
 
 
+<Page>
 
+    <div slot='header' class='flex bg-header rounded-t text-white no-print'>
+        <h2 class='grow text-center text-2xl print'>Zuchtleistungen</h2>
+        <div class='w-8 justify-center m-2 circled bg-alert text-white cursor-pointer no-print' on:click={onHelp} title='Anleitung'>?</div>
+    </div>
 
-<div class='w-256 mt-6 flex bg-header rounded-t text-white no-print'>
-    <h2 class='grow text-center text-2xl print'>Zuchtleistungen</h2>
-    <div class='w-8 justify-center m-2 circled bg-alert text-white cursor-pointer no-print' on:click={onHelp} title='Anleitung'>?</div>
-</div>
+    <div slot='body'>
+        <div class='flex flex-col border border-gray-400 bg-gray-100 gab-2 no-print'>
+            <Form>
+            <div class='flex flex-col md:flex-row px-4 gap-x-2'>
+                <div class='hidden md:block w-16 font-semibold self-center' >Was :</div>
+                <Select class='w-64' label='Was sehen' value={typeId} on:change={onType}>
+                    {#each types as item }
+                        <option value={ item.id }> { item.name }</option>
+                    {/each}
+                </Select>
 
-<div class='w-256 flex flex-col border border-gray-400 bg-gray-100 gab-2 no-print'>
-    <Form>
-    <div class='flex flex-row px-4 gap-x-2'>
-        <div class='w-12 font-semibold self-center' >Was :</div>
-        <Select class='w-64' label='Was sehen' value={typeId} on:change={onType}>
-            {#each types as item }
-                <option value={ item.id }> { item.name }</option>
-            {/each}
-        </Select>
+                <Select class='w-64' label={'Landesverband'} bind:value={districtId}>
+                    {#if rootDistrict }
+                        <option value={rootDistrict.id} selected={rootDistrict.id === districtId}>{rootDistrict.name}</option>
+                        {#each rootDistrict.children as district}
+                            <option value={district.id}  selected={district.id === districtId}>{district.name}</option>
+                        {/each}
+                    {/if}
+                </Select>
 
-        <Select class='w-64' label={'Landesverband'} bind:value={districtId}>
-            {#if rootDistrict }
-                <option value={rootDistrict.id} selected={rootDistrict.id === districtId}>{rootDistrict.name}</option>
-                {#each rootDistrict.children as district}
-                    <option value={district.id}  selected={district.id === districtId}>{district.name}</option>
-                {/each}
+                <Select class='w-20' label='Jahr' bind:value={year}>
+                    {#each years as option}
+                        <option value={option}>{option}</option>
+                    {/each}
+                </Select>
+            </div>
+
+            <div class='flex flex-col md:flex-row px-4 gap-x-2'>
+                <div class='hidden md:block w-16 font-semibold self-center' >Filter :</div>
+                <Select class='w-64' label='Sparte' value={sectionId} on:change={onSection}>
+                    {#each sections as section}
+                        <option value={section.id} selected={section.id === sectionId}> {section.name} </option>
+                    {/each}
+                </Select>
+
+                <Select class='w-64 text-white' label={'Rasse'} value={breedId} on:change={onBreed}>
+                    <option value={null} title='Alle Rassen in der gewählten Sparte'> * </option>
+                    {#each breeds as breed}
+                        <option value={breed.id} selected={breed.id === breedId}> {breed.name} </option>
+                    {/each}
+                </Select>
+
+                <Select class='w-64' label={'Farbe'} value={colorId} on:change={onColor}>
+                    <option value={null} title='Alle farben der gewählten Rasse'> * </option>
+                    {#each colors as color}
+                        <option value={color.id} selected={color.id === colorId}>{color.name}</option>
+                    {/each}
+                </Select>
+            </div>
+            </Form>
+        </div>
+
+        <div class='bg-white border rounded-b border-gray-400 scrollbar print-no-border'>
+
+            {#if districts && districtId && year && sectionId}
+                <div class='flex'>
+                    <h2 class='grow text-center' >Leistungen im {districts[ districtId ].name} in {year}</h2>
+
+                    <div class='flex flex-col p-2 no-print'>
+                        <a class='p-1 bg-alert rounded text-xl text-black text-center' href={'/kontakt/'+districtId} title='eMail am Obmann'>&#9993;</a>
+                    </div>
+                </div>
+
+                <div class='flex flex-col my-2 border border-gray-400'>
+                    <h2 class='bg-header text-center text-white'>Leistungen</h2>
+                    <div class='flex flex-col md:flex-row justify-evenly'>
+                        <div class='flex m-auto'>
+                            <LayBar {districtId} {year} {sectionId} {breedId} {colorId}></LayBar>
+                        </div>
+                        <div class='flex flex-row justify-evenly'>
+                            <BroodBarLayers {districtId} {year} {sectionId} {breedId} {colorId}></BroodBarLayers>
+                            <BroodBarPigeons {districtId} {year} {sectionId} {breedId} {colorId}></BroodBarPigeons>
+                        </div>
+                        <div class='flex m-auto'>
+                            <ShowBar {districtId} {year} {sectionId} {breedId} {colorId}></ShowBar>
+                        </div>
+                    </div>
+                </div>
+                {#if true}
+
+                <div class='flex flex-row my-2 border border-gray-400 justify-evenly'>
+                    <SectionsPie {districtId} {year} {typeId}/>
+                </div>
+
+                <div class='print-break'></div>
+
+                <div class='flex flex-col md:flex-row my-2 border border-gray-400 justify-evenly'>
+
+                            <TimeLine bind:year={year} {districtId} {sectionId} {breedId} {colorId} {typeId} {type}/>
+                            <DistrictsMap bind:districtId={districtId} {year} {sectionId} {breedId} {colorId} {typeId}/>
+                </div>
+                {/if}
+                {#if true}
+
+                <div class='print-break'></div>
+                {/if}
+                <div class='hidden md:block border rounded print'>
+                    <DistrictReport districtId={districtId} year={year} />
+                </div>
             {/if}
-        </Select>
-
-        <Select class='w-20' label='Jahr' bind:value={year}>
-            {#each years as option}
-                <option value={option}>{option}</option>
-            {/each}
-        </Select>
-    </div>
-
-    <div class='flex flex-row px-4 gap-x-2'>
-        <div class='w-12 font-semibold self-center' >Filter :</div>
-        <Select class='w-64' label='Sparte' value={sectionId} on:change={onSection}>
-            {#each sections as section}
-                <option value={section.id} selected={section.id === sectionId}> {section.name} </option>
-            {/each}
-        </Select>
-
-        <Select class='w-64 text-white' label={'Rasse'} value={breedId} on:change={onBreed}>
-            <option value={null} title='Alle Rassen in der gewählten Sparte'> * </option>
-            {#each breeds as breed}
-                <option value={breed.id} selected={breed.id === breedId}> {breed.name} </option>
-            {/each}
-        </Select>
-
-        <Select class='w-64' label={'Farbe'} value={colorId} on:change={onColor}>
-            <option value={null} title='Alle farben der gewählten Rasse'> * </option>
-            {#each colors as color}
-                <option value={color.id} selected={color.id === colorId}>{color.name}</option>
-            {/each}
-        </Select>
-    </div>
-    </Form>
-</div>
-
-<div class='w-256 bg-white overflow-y-scroll border rounded-b border-gray-400 scrollbar print-no-border print-no-scrollbar'>
-
-    {#if districts && districtId && year && sectionId}
-        <div class='flex'>
-            <h2 class='grow text-center' >Das Zuchtbuch : {districts[ districtId ].name} in {year}</h2>
-
-            <div class='flex flex-col p-2 no-print'>
-                <div class='text-sm'>eMail am Obmann</div>
-                <a class='p-1 bg-alert rounded text-xl text-black text-center' href={'/kontakt/'+districtId}>&#9993;</a>
-            </div>
         </div>
 
-        <div class='flex flex-col my-2 border border-gray-400'>
-            <h2 class='text-center'>Leistungen</h2>
-            <div class='flex flex-row justify-around'>
-                <div>
-                    <LayBar {districtId} {year} {sectionId} {breedId} {colorId}></LayBar>
-                </div>
-                <div class='flex flex-row gap-x-4'>
-                    <BroodBarLayers {districtId} {year} {sectionId} {breedId} {colorId}></BroodBarLayers>
-                    <BroodBarPigeons {districtId} {year} {sectionId} {breedId} {colorId}></BroodBarPigeons>
-                </div>
-                <div>
-                    <ShowBar {districtId} {year} {sectionId} {breedId} {colorId}></ShowBar>
-                </div>
-            </div>
-        </div>
-        {#if true}
-
-        <div class='flex flex-row my-2 border border-gray-400 gap-x-8 justify-evenly'>
-            <SectionsPie {districtId} {year} {typeId}/>
-        </div>
-
-        <div class='flex flex-col my-2 border border-gray-400'>
-            <h2 class='text-center'>{type.name}</h2>
-            <div class='flex flex-row flex-wrap justify-evenly'>
-                    <TimeLine bind:year={year} {districtId} {sectionId} {breedId} {colorId} {typeId} />
-                    <DistrictsMap bind:districtId={districtId} {year} {sectionId} {breedId} {colorId} {typeId} />
-            </div>
-        </div>
+        {#if help}
+            <Help on:help={onHelp} />
         {/if}
-        {#if true}
-
-        <div class='print-break'></div>
-        {/if}
-        <div class='border rounded print'>
-            <DistrictReport districtId={districtId} year={year} />
-        </div>
-    {/if}
-</div>
-
-{#if help}
-    <Help on:help={onHelp} />
-{/if}
+    </div>
+</Page>
 
 <style>
 </style>

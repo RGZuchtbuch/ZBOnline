@@ -2,7 +2,7 @@
     import { onMount } from 'svelte';
     import {meta} from 'tinro';
     import { dec, pct, txt } from '../../js/util.js';
-    import List from "../common/List.svelte";
+    import Page from "../common/Page.svelte";
 
     export let title = 'Meldungen';
     export let pairs = [];
@@ -15,7 +15,7 @@
 </script>
 
 
-<List>
+<Page>
     <h2 slot='title' class='text-center'>{title}</h2>
 
     <div slot='header'>
@@ -81,7 +81,7 @@
         {/each}
     </div>
 
-</List>
+</Page>
 
 
 
