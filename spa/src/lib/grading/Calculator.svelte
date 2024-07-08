@@ -9,6 +9,7 @@
 	import Form from '../common/form/Form.svelte';
 	import Select from '../common/form/input/Select.svelte';
     import NumberInput from '../common/form/input/NumberInput.svelte';
+	import Page from '../common/Page.svelte';
 
 
 	const route = meta();
@@ -120,77 +121,82 @@
 
 </script>
 
-<main class='w-full p-4 bg-gray-100 text-xl transition:slide'>
-	<Form autoSave={false}>
-		<header>
-		</header>
+<Page>
+	<div slot='title'> Bewertungsrechner </div>
+	<div slot='body' class='px-4'>
+		<Form autoSave={false}>
 
-		<main>
-			<fieldset class='flex flex-col'>
-				<div class='flex flex-row gap-x-4'>
-					<span class='w-40 mt-6'> Sparte </span>
-					<Select class='w-96' label='Sparte *' bind:value={section} error='Pflichtfeld' on:change={sectionChanged}>
-						<option value={null}>?</option>
-						{#each sections as section }
-							<option value={section}>{section.name}</option>
-						{/each}
-					</Select>
-				</div>
-				<div class='flex flex-row gap-x-4'>
-					<span class='w-40 mt-6'> Rasse </span>
-					<Select class='w-96' label={'Rasse *'} bind:value={breed} error='Pflichtfeld' on:change={breedChanged}>
-						<option value={null}>?</option>
-						{#if breeds}
-							{#each breeds as breed }
-								<option value={breed}>{breed.name}</option>
+
+			<section>
+				<fieldset class='flex flex-col'>
+					<h2>Wähle Sparte und Rasse</h2>
+					<div class='flex flex-row gap-x-4'>
+						<span class='hidden md:block w-16 mt-6'> Sparte </span>
+						<Select class='w-80' label='Sparte *' bind:value={section} error='Pflichtfeld' on:change={sectionChanged}>
+							<option value={null}>?</option>
+							{#each sections as section }
+								<option value={section}>{section.name}</option>
 							{/each}
-						{/if}
-					</Select>
-					<div class='mt-6'>
-						{#if section && section.id === PIGEONS && breed } in Brutgruppe {breed.broodGroup } {/if}
-						{#if section && section.id !== PIGEONS && breed } soll legen {breed.layEggs } {/if}
+						</Select>
 					</div>
+					<div class='flex flex-row gap-x-4'>
+						<span class='hidden md:block w-16 mt-6'> Rasse </span>
+						<Select class='w-80' label={'Rasse *'} bind:value={breed} error='Pflichtfeld' on:change={breedChanged}>
+							<option value={null}>?</option>
+							{#if breeds}
+								{#each breeds as breed }
+									<option value={breed}>{breed.name}</option>
+								{/each}
+							{/if}
+						</Select>
+					</div>
+				</fieldset>
+			</section>
+			<hr>
+
+
+			{#if section && breed}
+				<div class='flex flex-col'>
+					{#if section.id === PIGEONS}
+						<div class='text-center'>Brutgruppe {breed.broodGroup }</div>
+						<fieldset class='flex flex-row gap-x-4 justify-evenly'>
+							<span class='hidden md:block w-40 mt-6 text-left'>Brutleistung </span>
+							<NumberInput class='w-24' label='Bruten' bind:value={brood.count} validator={validate.pigeon.brood.count} />
+							<span class='w-2 mt-6 text-center'>:</span>
+							<NumberInput class='w-24' label='Ber. Jungtauben' bind:value={brood.hatched} validator={validate.pigeon.brood.hatched( brood )}  />
+							<span class='w-2 mt-6 text-center'>→</span>
+							<output class='w-8 mt-6 text-xl font-bold text-center'>{ grade( brood.grade )}</output>
+						</fieldset>
+					{:else}
+						<fieldset class='flex flex-col md:flex-row gap-x-4'>
+							<div class='w-40 mt-6 text-left'>Legeleistung</div>
+							<div class='flex flex-row'>
+								<NumberInput class='w-32' label='Legen e/j' bind:value={ lay.eggs } validator={validate.layer.lay.eggs}/>
+								<div class='w-8 mt-6 text-center'>von</div>
+								<NumberInput class='w-32' label='SOLL Legen' value={breed ? breed.layEggs : '?'} disabled />
+								<div class='w-4 mt-6 text-center'>→</div>
+								<output class='w-8 mt-6 text-xl font-bold text-center'>{ grade( lay.grade ) }</output>
+							</div>
+						</fieldset>
+
+						<fieldset class='flex flex-col md:flex-row gap-x-4'>
+							<span class='w-40 mt-6 text-left'>Brutleistung</span>
+							<div class='flex flex-row'>
+								<NumberInput class='w-32' label='Eingelegt' bind:value={brood.eggs} validator={ validate.layer.brood.eggs } />
+								<span class='w-8 mt-6 text-center'>mit</span>
+								<NumberInput class='w-32' label='Geschüpft' bind:value={brood.hatched} validator={ validate.layer.brood.hatched(brood) } />
+								<span class='w-4 mt-6 text-center'>→</span>
+								<output class='w-8 mt-6 text-xl font-bold text-center'>{ grade( brood.grade )}</output>
+							</div>
+						</fieldset>
+					{/if}
 				</div>
-			</fieldset>
-		</main>
-		<hr>
-		{#if section && breed}
-			<div class='flex flex-col'>
-				{#if section.id === PIGEONS}
-					<fieldset class='flex flex-row gap-x-4 '>
-						<span class='w-40 mt-6 text-left'>Brutleistung </span>
-						<NumberInput class='w-24' label='Bruten' bind:value={brood.count} validator={validate.pigeon.brood.count} />
-						<span class='w-8 mt-6'>mit</span>
-						<NumberInput class='w-32' label='Beringte Jungtauben' bind:value={brood.hatched} validator={validate.pigeon.brood.hatched( brood )}  />
-						<span class='w-4 mt-6'>→</span>
-						<output class='w-8 mt-6 text-xl font-bold text-center'>{ grade( brood.grade )}</output>
-					</fieldset>
-				{:else}
-					<fieldset class='flex flex-row gap-x-4'>
-						<div class='w-40 mt-6 text-left'>Legeleistung</div>
-						<NumberInput class='w-32' label='Legen e/j' bind:value={ lay.eggs } validator={validate.layer.lay.eggs}/>
-						<div class='w-8 mt-6 text-center'>von</div>
-						<NumberInput class='w-32' label='SOLL Legen' value={breed ? breed.layEggs : '?'} disabled />
-						<div class='w-4 mt-6 text-center'>→</div>
-						<output class='w-8 mt-6 text-xl font-bold text-center'>{ grade( lay.grade ) }</output>
-					</fieldset>
-
-					<fieldset class='flex flex-row gap-x-4'>
-						<span class='w-40 mt-6 text-left'>Brutleistung</span>
-						<NumberInput class='w-32' label='Eingelegt' bind:value={brood.eggs} validator={ validate.layer.brood.eggs } />
-						<span class='w-8 mt-6 text-center'>mit</span>
-						<NumberInput class='w-32' label='Geschüpft' bind:value={brood.hatched} validator={ validate.layer.brood.hatched(brood) } />
-						<span class='w-4 mt-6 text-center'>→</span>
-						<output class='w-8 mt-6 text-xl font-bold text-center'>{ grade( brood.grade )}</output>
-					</fieldset>
-				{/if}
-			</div>
-		{:else}
-			<div class='text-center italic'>Der Leistungsdatenteil erscheint sobalt die Rasse eingegeben ist</div>
-		{/if}
-	</Form>
-
-</main>
+			{:else}
+				<div class='m-16 text-center italic'>Der Leistungsdatenteil erscheint sobalt die Rasse ausgewählt worden ist</div>
+			{/if}
+		</Form>
+	</div>>
+</Page>
 
 <style>
 
