@@ -94,11 +94,11 @@
             </div>
         {:else}
             <div class='flex flex-row gap-x-1'>
-                <InputText class='w-16' label={nolabel ? '' : '# Eier /J'} value={dec(ancestorPair.layEggs)} disabled/>
-                <InputText class='w-16' label={nolabel ? '' : '∅ Gewicht'} value={dec(ancestorPair.layWeight,1)} disabled/>
-                <InputText class='w-16' label={nolabel ? '' : '% Befruchtet'} value={pct( ancestorPair.broodFertile, ancestorPair.broodEggs)} disabled/>
-                <InputText class='w-16' label={nolabel ? '' : '% Geschlüpft'} value={pct( ancestorPair.broodHatched, ancestorPair.broodEggs)} disabled/>
-                <InputText class='w-16' label={nolabel ? '' : '∅ Note'} value={ancestorPair.showScore} disabled/>
+                <InputNumber class='w-16' label={nolabel ? '' : '# Eier /J'} value={dec(ancestorPair.layEggs)} disabled/>
+                <InputNumber class='w-16' label={nolabel ? '' : '∅ Gewicht'} value={dec(ancestorPair.layWeight,1)} disabled/>
+                <InputText class='w-16' label={nolabel ? '' : 'Befruchtet'} value={pct( ancestorPair.broodFertile, ancestorPair.broodEggs)} disabled/>
+                <InputText class='w-16' label={nolabel ? '' : 'Geschlüpft'} value={pct( ancestorPair.broodHatched, ancestorPair.broodEggs)} disabled/>
+                <InputNumber class='w-16' label={nolabel ? '' : '∅ Note'} value={dec(ancestorPair.showScore,1)} disabled/>
             </div>
         {/if}
     {/if}

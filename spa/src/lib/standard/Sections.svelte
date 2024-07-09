@@ -14,8 +14,8 @@
 
 
 <Page>
-    <div slot='title'> Sparten / Gruppen / Rassen / Farbenschläge</div>
-    <div slot='header'> BDRG Rassegeflügelstandard </div>
+    <div slot='title'> BDRG Rassegeflügelstandard</div>
+    <div slot='header'> Sparten / Gruppen / Rassen / Farbenschläge </div>
     <div slot='body'>
         {#if section}
             <SectionRow {section} open={true}/>

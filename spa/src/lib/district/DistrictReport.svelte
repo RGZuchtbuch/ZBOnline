@@ -3,7 +3,7 @@
     import { meta } from 'tinro';
     import api from '../../js/api.js';
 
-    import Report from '../result/Report.svelte';
+    import Report from './Report.svelte';
     import Range from '../common/Range.svelte';
     import ScrollDiv from '../common/ScrollDiv.svelte';
     import Page from '../common/Page.svelte';
@@ -40,8 +40,11 @@
 
 {#if district && report}
     <Page>
-
-        <div slot='title'>Verband {#if district} {district.name} {/if} → Leistungen {year}</div>
+        <div slot='title' class='flex flex-row justify-between'>
+            <div></div>
+            <div>Verband {#if district} {district.name} {/if} → Leistungen {year}</div>
+            <a href={`/obmann/verband/${districtId}/leistung/${year}/edit`} title='Eingeben'>&#9998;</a>
+        </div>
         <div slot='body'>
             <Range class='w-full px-16' label='Jahr' bind:value={year} min={STARTYEAR} max={new Date().getFullYear()} step={1} title='Schieben um das Jahr zu wählen'/>
             <Report {report} {district} {year}/>

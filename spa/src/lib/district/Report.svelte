@@ -123,7 +123,6 @@
 
 <div class='print'>
     {#if report }
-
             {#each report.sections as section}
                 <table class='w-full p-2'>
                     <!-- section header -->

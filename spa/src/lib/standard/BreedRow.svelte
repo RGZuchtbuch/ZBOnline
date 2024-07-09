@@ -88,17 +88,18 @@
 
 </script>
 
-<div class='flex flex-col pl-6' transition:slide>
+<div class='flex flex-col pl-4' transition:slide>
     {#if breed}
-        <div class='flex flex-row gap-x-1 border-b border-gray-300 my-1'>
-            <Toggler bind:open={open} enabled={breed.colors.length > 0} class='text-orange-600'/>
+        <div class='flex flex-col md:flex-row gap-x-1 border-b border-gray-300 my-1'>
 
-            <div class='font-semibold' title={dic.title.breed}>
-                {breed.name}
+
+            <div class='flex flex-row font-semibold' title={dic.title.breed}>
+                <Toggler bind:open={open} enabled={breed.colors.length > 0} class='text-orange-600'/>
+                <div>{breed.name}</div>
+                <div class='text-xs' title={dic.title.colors} >({breed.colors.length})</div>
             </div>
-            <div class='text-xs' title={dic.title.colors} >({breed.colors.length})</div>
 
-            <div class='grow flex gap-x-2 justify-end text-sm italic'>
+            <div class='grow flex flex-row gap-x-2 justify-end text-sm italic'>
                 {#if section.layers}
                     <div class='flex'>
                         <div class='w-8 text-right'>{#if breed.layEggs} {dec(breed.layEggs)} {/if}</div>
@@ -127,7 +128,7 @@
             </div>
 
             {#if $user && $user.admin }
-                <div class='flex text-xs text-red-600'>
+                <div class='hidden md:flex text-xs text-red-600'>
                     <button class='w-4 border-0' type='button' on:click={onEdit} title='Rasse ändern'>
                         <img src="assets/edit.svg" alt="Rassename ändern">
                     </button>

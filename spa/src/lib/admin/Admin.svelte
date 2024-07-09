@@ -1,43 +1,16 @@
 <script>
-    import {Route, meta, router} from 'tinro';
+    import { meta, router, Route } from 'tinro';
+    import { breeder, district, user } from '../../js/store.js';
 
     import District from '../district/District.svelte';
     import Districts from './Districts.svelte';
-    import Articles from './Articles.svelte';
-    import Standard from '../standard/Standard.svelte';
-    import Log from './log/Log.svelte';
+    import Grading from '../grading/Calculator.svelte';
 
     const route = meta();
-
-    function onSelectDistrict( event ) {
-        const url = route.match+'/verband/'+event.detail;
-        router.goto( url );
-    }
+    console.log( 'Moderator route', route);
 
 </script>
-<main class='border border-red-500 p-2'>
-    <div>Admin></div>
-    <Route path='/' redirect={ route.match+'/verband'} />
 
-    <Route path='/standard/*'> <Standard /> </Route>
 
-    <Route path='/verband/*'>
+<slot>Hier sollte man nur enden wenn mann angemeldet und Admin ist</slot>
 
-        <Route path='/'>
-            <Districts on:select={onSelectDistrict}/>
-        </Route>
-
-        <Route path='/:districtId/*' let:meta>
-            <District districtId={meta.params.districtId} />
-        </Route>
-    </Route>
-
-    <Route path='/seite' >
-        <Articles />
-    </Route>
-
-    <Route path='/log' >
-        <Log />
-    </Route>
-
-</main>

@@ -41,14 +41,16 @@
         }
         return years;
     }
+
+    console.log( 'Selector', year );
 </script>
 
 
 
 <div class='w-256 flex flex-row rounded-t bg-header gap-x-4 justify-center'>
-    <Select label="Jahr" bind:value={year} on:change={onYear} title='Leistungsjahr'>
-        {#each years as year}
-            <option value={year}>{year}</option>
+    <Select label="Jahr" value={year} on:change={onYear} title='Leistungsjahr'>
+        {#each years as y}
+            <option value={y} selected={ y === year }>{y}</option>
         {/each}
     </Select>
 

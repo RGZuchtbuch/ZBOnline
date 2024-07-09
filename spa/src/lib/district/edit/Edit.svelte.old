@@ -1,4 +1,5 @@
 <script>
+
     import { slide } from 'svelte/transition';
     import {router} from 'tinro';
     import api      from '../../../js/api.js';
@@ -57,7 +58,7 @@
 
 <div class='w-256 flex rounded-t'>
     <h2 class='grow text-center'>Eingabe Leistungen {district ? district.name : '...'}</h2>
-    <div class='w-8 justify-center m-2 circled bg-alert cursor-pointer text-white' on:click={onHelp} title='Anleitung'>?</div>
+    <button type='button' class='w-8 justify-center m-2 circled bg-alert cursor-pointer text-white' on:click={onHelp} title='Anleitung'>?</button>
 </div>
 
 

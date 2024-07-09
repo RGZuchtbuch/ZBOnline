@@ -6,7 +6,7 @@
     import Form from '../common/form/Form.svelte';
     import Select from '../common/form/input/Select.svelte';
     import SectionsPie from './graphics/SectionsPie.svelte';
-    import DistrictReport from './DistrictReport.svelte';
+    import DistrictReport from '../district/DistrictReport.svelte';
     import Help from './Help.svelte';
 
     import LayBar from './graphics/LayBar.svelte';

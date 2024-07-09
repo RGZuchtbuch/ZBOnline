@@ -45,7 +45,7 @@
             <Tree node={districts} open={true} let:node={districts}>
                 <div class='flex flex-row'>
                     {#if districts.moderated}
-                        <a class='cursor-pointer' class:moderated={districts.moderated} href={'/obmann/verband/'+districts.id+'/zuechter'} title='Zum Verband'>{districts.name} </a>
+                        <a class='cursor-pointer' class:moderated={districts.moderated} href={'/obmann/verband/'+districts.id+'/leistung'} title='Zum Verband'>{districts.name} </a>
                     {:else}
                         <span class='cursor-not-allowed'>{districts.name}</span>
                     {/if}

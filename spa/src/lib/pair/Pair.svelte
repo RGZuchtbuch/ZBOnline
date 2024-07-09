@@ -119,14 +119,17 @@
 
 {#if pair}
     <Page>
-        <div slot='title'> Zuchtbuch Meldung</div>
+        <div slot='title' class='flex flex-row justify-between'>
+            <div class='w-4'></div>
+            <div>Zuchtbuch Meldung</div>
+            {#if $user && ( $user.admin || $user.moderator.includes( pair.districtId ) ) }
+                <div class='w-6 border rounded text-center text-red-600 cursor-pointer' class:disabled on:click={onToggleEdit} title='Daten ändern'>&#9998;</div>
+            {/if}
+        </div>
 
         <div slot='header' class='flex flex-col'>
             <div class='flex'>
-                <div class='grow' class:invalid>Stamm / Paar Meldung</div>
-                {#if $user && ( $user.admin || $user.moderator.includes( pair.districtId ) ) }
-                    <div class='w-6 border rounded text-center text-red-600 cursor-pointer' class:disabled on:click={onToggleEdit} title='Daten ändern'>&#9998;</div>
-                {/if}
+                <div class='grow text-center' class:invalid>Stamm / Paar Meldung</div>
             </div>
 
         </div>
