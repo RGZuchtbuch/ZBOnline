@@ -47,6 +47,9 @@ export function calcColor( min, max, value, alpha = 1, blue = 0 ) {
 }
 
 
+/***** Generators ****/
+
+
 
 /******* for forms and more *******/
 

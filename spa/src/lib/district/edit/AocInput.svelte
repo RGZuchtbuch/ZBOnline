@@ -24,7 +24,7 @@
 
 
 	const validate = {
-		id:     (v) => validator(v).notNull().isValid(),
+		id:     (v) => validator(v).notNull().isValid(), // object
 		name:   (v) => validator(v).string().length( 2, 64 ).isValid(),
 	}
 

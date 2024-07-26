@@ -1,16 +1,36 @@
 <script>
     import { meta, router, Route } from 'tinro';
     import { onMount, setContext } from 'svelte';
-    import { user } from '../../js/store.js';
+    import { moderator, user } from '../../js/store.js';
 
-    import District from '../district/District.svelte';
-    import Districts from './Districts.svelte';
-    import Grading from '../grading/Calculator.svelte';
+	// setting context from store into context. enables district and breeder handling without role
+	setContext( 'district', moderator.district );
+	setContext( 'breeder', moderator.breeder );
+
+	let authenticated = false;
+	let authorized = false;
 
     const route = meta();
     console.log( 'Moderator route', route);
 
+	function onRoute( route ) {
+		authenticated = $user != null;
+		if( authenticated ) {
+			console.log( 'User', $user );
+			authorized = $user.moderator.length > 0;
+		} else {
+			authorized = false;
+			router.goto( '/anmelden' );
+		}
+
+	}
+
+	$: onRoute( route );
+
 </script>
 
-
-<slot>Hier sollte man nur enden wenn mann angemeldet und Obmann ist</slot>
+{#if authorized }
+	<slot>Hier sollte man nur enden wenn mann angemeldet und Obmann ist</slot>
+{:else}
+	Not authorized !!!!
+{/if}

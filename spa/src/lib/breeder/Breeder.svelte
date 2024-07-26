@@ -1,9 +1,12 @@
 <script>
+    import {getContext} from 'svelte';
     import {Route, meta} from 'tinro';
     import api from '../../js/api.js';
-    import {breeder, district, user} from '../../js/store.js';
 
     export let id = null;
+
+    const district = getContext( 'district' );
+    const breeder  = getContext( 'breeder' );
 
     let route = meta();
 

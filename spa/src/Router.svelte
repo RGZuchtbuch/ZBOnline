@@ -3,10 +3,8 @@
 	import {meta, Route} from 'tinro';
 	import api from './js/api.js';
 	import {toNumber} from './js/util.js';
-	import { breeder, district, standard, user } from './js/store.js'
+	import { standard, user } from './js/store.js'
 
-	import NavigationBar from './lib/navigation/NavigationBar.svelte';
-	//    import Menu from './lib/menu/Menu.svelte';
 	import Admin from './lib/admin/Admin.svelte';
 	import AdminDistricts from './lib/admin/Districts.svelte';
 	import Article from './lib/article/Article.svelte';
@@ -67,17 +65,20 @@
 		<Route path='/nachweis'> <GradingForm />  </Route>
 		<Route path='/rechner'> <GradingCalculator />  </Route>
 	</Route>
-	<div>bbbb</div>
+
 	<Route path='/obmann/*' >
-		<Moderator> <!-- uses users from store and relays to login is needed -->
+
+		<Moderator> <!-- uses user from store and relays to login if needed -->
 			<Route path='/verband/*'>
 				<Route path='/'> <ModeratorDistricts/> </Route>
 				<Route path='/:districtId/*' let:meta>
+
 					<District id={toNumber(meta.params.districtId)} >
 						<Route path='/' let:meta> <DistrictDetails districtId={toNumber(meta.params.districtId)} /> </Route>
 						<Route path='/zuechter/*' let:meta>
 							<Route path='/' let:meta> <DistrictBreeders /> </Route>
 							<Route path='/:breederId/*' let:meta >
+
 								<Breeder id={toNumber(meta.params.breederId)} >
 									<Route path='/' let:meta> <BreederDetails /> </Route>
 									<Route path='/meldung/*' let:meta>
@@ -107,7 +108,7 @@
 		</Moderator>
 
 	</Route>
-	<div>cccc</div>
+
 	<Route path='/admin/*' >
 		<Admin>
 			<Route path='/' >

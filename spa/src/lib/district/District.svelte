@@ -1,11 +1,14 @@
 <script>
     import {Route, meta} from 'tinro';
+    import { getContext } from 'svelte';
     import api from '../../js/api.js';
-    import { district } from '../../js/store.js';
+    //import { district } from '../../js/store.js';
 
     export let id = null;
 
     let route = meta();
+
+    const district = getContext( 'district' );
 
 
     function loadDistrict( id ) {
@@ -17,6 +20,7 @@
             })
             .catch( e => {
                 alert('Houston we have got a problem loading district');
+                district.set( null );
             } );
     }
 

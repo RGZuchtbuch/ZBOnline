@@ -6,7 +6,7 @@
     import Form from '../common/form/Form.svelte';
     import Select from '../common/form/input/Select.svelte';
     import SectionsPie from './graphics/SectionsPie.svelte';
-    import DistrictReport from '../district/DistrictReport.svelte';
+    import DistrictReport from './DistrictReport.svelte';
     import Help from './Help.svelte';
 
     import LayBar from './graphics/LayBar.svelte';
@@ -241,10 +241,9 @@
                             <DistrictsMap bind:districtId={districtId} {year} {sectionId} {breedId} {colorId} {typeId}/>
                 </div>
                 {/if}
-                {#if true}
 
                 <div class='print-break'></div>
-                {/if}
+
                 <div class='hidden md:block border rounded print'>
                     <DistrictReport districtId={districtId} year={year} />
                 </div>

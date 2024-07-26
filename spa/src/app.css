@@ -8,7 +8,7 @@
 }
 
 html, body {
-    @apply h-full max-w-256 w-full md:w-256 flex flex-col m-auto bg-gray-100 font-rgz text-base;
+    @apply h-full max-w-256 w-full flex flex-col m-auto bg-gray-100 font-rgz text-base;
 }
 
 a, button {

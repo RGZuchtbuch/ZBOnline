@@ -5,15 +5,20 @@
 	import screens from '../../js/screens.js';
 	import Item from './Item.svelte';
 	import api from '../../js/api.js';
-	import {breeder, district, user} from '../../js/store.js';
-
-	let focus = null;
-
-	let articles = [];
+	import { admin, moderator, user } from '../../js/store.js';
 
 	let route = meta();
 
+	let focus = null;
+	let articles = [];
+
 	let showMenu = false;
+
+	// writables
+	const adminDistrict = admin.district;
+	const adminBreeder = admin.breeder;
+	const moderatorDistrict = moderator.district;
+	const moderatorBreeder = moderator.breeder;
 
 	function toggleMenu() {
 		showMenu = ! showMenu;
@@ -39,10 +44,13 @@
 	}
 
 	onMount( () => {
+
 		loadArticles();
 	})
 
 	$: hideOnChange( route );
+
+	console.log( 'Admin', $adminDistrict, $adminBreeder );
 </script>
 
 <header class='relative flex flex-row justify-center'>
@@ -53,6 +61,11 @@
 	<div class='text-center font-bold italic no-print'>
 		Das Rassegeflügel Zuchtbuch {#if $user} für {$user.name} {/if}
 	</div>
+
+	<div class='sm:hidden'>smallest</div>
+	<div class='hidden sm:block md:hidden'>small</div>
+	<div class='hidden md:block'>medium</div>
+
 	<button type='button' class='absolute top-0 right-1 w-6 border-0 md:hidden text-xl no-print' on:click={toggleMenu}>
 		{#if showMenu}&#10006;{:else}&#8803;{/if}
 	</button>
@@ -81,15 +94,15 @@
 		{#if $user && $user.moderator.length > 0 }
 			<Item name='Obmann' bind:focus={focus}>
 				<a href='/obmann/verband'>&#9755; Verbände</a>
-				{#if $district}
-					<div>Verband {$district.short}</div>
-					<a href={'/obmann/verband/'+$district.id+'/leistung'}>&#9755; Leistungen</a>
-					<a href={'/obmann/verband/'+$district.id+'/zuechter'}>&#9755; Züchter</a>
-					<a href={'/obmann/verband/'+$district.id}>&#9755; Verbandsdaten</a>
-					{#if $breeder}
-						<div>Züchter {$breeder.lastname}</div>
-						<a href={'/obmann/verband/'+$district.id+'/zuechter/'+$breeder.id}>&#9755; Mitglied</a>
-						<a href={'/obmann/verband/'+$district.id+'/zuechter/'+$breeder.id+'/meldung'}>&#9755; Meldungen</a>
+				{#if $moderatorDistrict}
+					<div>Verband {$moderatorDistrict.short}</div>
+					<a href={'/obmann/verband/'+$moderatorDistrict.id+'/leistung'}>&#9755; Leistungen</a>
+					<a href={'/obmann/verband/'+$moderatorDistrict.id+'/zuechter'}>&#9755; Züchter</a>
+					<a href={'/obmann/verband/'+$moderatorDistrict.id}>&#9755; Verbandsdaten</a>
+					{#if $moderatorBreeder}
+						<div>Züchter {$moderatorBreeder.lastname}</div>
+						<a href={'/obmann/verband/'+$moderatorDistrict.id+'/zuechter/'+$moderatorBreeder.id}>&#9755; Mitglied</a>
+						<a href={'/obmann/verband/'+$moderatorDistrict.id+'/zuechter/'+$moderatorBreeder.id+'/meldung'}>&#9755; Meldungen</a>
 					{/if}
 				{/if}
 			</Item>
@@ -98,19 +111,20 @@
 		{#if $user && $user.admin }
 			<Item name='Admin' bind:focus={focus}>
 				<a href='/admin/verband'>&#9755; Verbände</a>
-				{#if $district}
-					<div>Verband {$district.short}</div>
-					<a href={'/admin/verband/'+$district.id+'/leistung'}>&#9755; Leistungen</a>
-					<a href={'/admin/verband/'+$district.id+'/zuechter'}>&#9755; Züchter</a>
-					<a href={'/admin/verband/'+$district.id}>&#9755; Verbandsdaten</a>
-					{#if $breeder}
-						<div>Züchter {$breeder.lastname}</div>
-						<a href={'/admin/verband/'+$district.id+'/zuechter/'+$breeder.id}>&#9755; Mitglied</a>
-						<a href={'/admin/verband/'+$district.id+'/zuechter/'+$breeder.id+'/meldung'}>&#9755; Meldungen</a>
+				{#if $adminDistrict }
+					<div>Verband {$adminDistrict.short}</div>
+					<a href={'/admin/verband/'+$adminDistrict.id+'/leistung'}>&#9755; Leistungen</a>
+					<a href={'/admin/verband/'+$adminDistrict.id+'/zuechter'}>&#9755; Züchter</a>
+					<a href={'/admin/verband/'+$adminDistrict.id }>&#9755; Verbandsdaten</a>
+					{#if $adminBreeder}
+						<div>Züchter {$adminBreeder.lastname}</div>
+						<a href={'/admin/verband/'+$adminDistrict.id+'/zuechter/'+$adminBreeder.id}>&#9755; Mitglied</a>
+						<a href={'/admin/verband/'+$adminDistrict.id+'/zuechter/'+$adminBreeder.id+'/meldung'}>&#9755; Meldungen</a>
 					{/if}
 				{/if}
 			</Item>
 		{/if}
+
 	</div>
 
 	<div class='hidden w-16 md:flex justify-center text-white'>

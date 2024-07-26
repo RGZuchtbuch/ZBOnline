@@ -3,7 +3,7 @@
     import {meta} from 'tinro';
     import api from '../../js/api.js';
 
-    import Report from './Report.svelte';
+    import Report from '../district/Report.svelte';
 
     export let districtId = null;
     export let year = null;

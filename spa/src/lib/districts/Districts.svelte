@@ -1,4 +1,5 @@
 <script>
+
 	import { meta } from 'tinro';
 	import api from '../../js/api.js';
 	import { txt } from '../../js/util.js';
@@ -6,6 +7,8 @@
 
 	import Page from "../common/Page.svelte";
 	import Tree from '../common/Tree.svelte';
+
+
 
 	let districts = null;
 	const route = meta();
@@ -28,9 +31,9 @@
 	<div slot='body'>
 		{#if districts}
 			<Tree node={districts} open={true} let:node={districts}>
-				<div class='flex flex-col sm:flex-row grow'>
-					<div class='grow'>
-						<span class='' title={districts.id}>{districts.name}</span>
+				<div class='flex flex-col md:flex-row grow'>
+					<div class='grow' title={districts.id}>
+						{districts.name}
 					</div>
 					<div class='flex flex-row gap-x-2 justify-between'>
 						{#if districts.moderator}
@@ -40,7 +43,9 @@
 							</div>
 						{/if}
 						{#if districts.url}
-							<a class='w-4 cursor-pointer' href={districts.url} target='_blank' title={dic.title.url}> <img src='assets/link.svg' alt='link'> </a>
+							<a class='w-4 cursor-pointer' href={districts.url} target='_blank' title={dic.title.url}>
+								<img src='assets/link.svg' alt='link'>
+							</a>
 						{:else}
 							<div class='w-4'></div>
 						{/if}

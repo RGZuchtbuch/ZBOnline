@@ -2,7 +2,7 @@
     //  import logo from './assets/svelte.png'
     import {meta, Route} from 'tinro';
 
-    import { breeder, district, standard, user } from './js/store.js'
+    import { standard, user } from './js/store.js'
 
 
     import Router from './Router.svelte';

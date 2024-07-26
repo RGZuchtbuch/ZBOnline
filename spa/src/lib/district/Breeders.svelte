@@ -1,12 +1,15 @@
 <script>
+    import {getContext} from 'svelte';
     import { meta } from 'tinro';
     import api from '../../js/api.js';
-    import { breeder, district, user } from '../../js/store.js'
+    import { user } from '../../js/store.js';
 
-    import Breeders from '../breeders/Breeders.svelte';
     import Page from '../common/Page.svelte';
-    import BreedersRow from '../breeders/BreedersRow.svelte';
     import {dat, txt} from '../../js/util.js';
+
+    const district = getContext( 'district' );
+    const breeder  = getContext( 'breeder' );
+
 
 
     let breeders = null;
@@ -39,6 +42,15 @@
         return true;
     }
 
+    function addBreeder() {
+        breeders = [         {
+            id: null, zbnr:null,
+            firstname: null, infix: null, lastname: null,
+            districtId: district.id, districtName: null, clubName: null,
+            start: null, end: null
+        }, ...breeders ];
+    }
+
     $: loadBreeders( $district ); // each time district changes in url, could be null !
     console.log( 'DistrictBreeders', $district);
 </script>
@@ -55,7 +67,7 @@
         <div class='grow'></div>
         {#if $user && $user.moderator}
             <div class='cursor-pointer' title='Neues Mitglied'>
-                <a href={route.match+'/0/daten'}>[+]</a>
+                <button type='button' on:click={addBreeder}> + </button>
             </div>
         {/if}
     </div>

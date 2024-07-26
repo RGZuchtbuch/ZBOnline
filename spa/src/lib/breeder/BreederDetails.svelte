@@ -1,10 +1,9 @@
 <script>
-    import { afterUpdate, onMount } from 'svelte';
+    import { afterUpdate, getContext, onMount } from 'svelte';
     import { slide } from 'svelte/transition';
 
     import api from "../../js/api.js";
     import dic from '../../js/dictionairy.js';
-    import {breeder, district, user} from "../../js/store.js";
     import {txt} from '../../js/util.js';
     import validator from '../../js/validator.js';
 
@@ -22,6 +21,8 @@
 
 
 //    export let breeder;
+    const district = getContext( 'district' );
+    const breeder  = getContext( 'breeder' );
 
     let disabled = true; // enabled if new breeder
     let needFocus = true;

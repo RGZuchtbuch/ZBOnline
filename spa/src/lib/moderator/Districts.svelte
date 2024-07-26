@@ -1,10 +1,14 @@
 <script>
+    import {getContext} from 'svelte';
     import { meta } from 'tinro';
     import api from '../../js/api.js';
-    import { breeder, district, user } from '../../js/store.js'
+    import { user } from '../../js/store.js'
 
     import Page from "../common/Page.svelte";
     import Tree from "../common/Tree.svelte";
+
+    const district = getContext( 'district' );
+    const breeder  = getContext( 'breeder' );
 
     let districts = null; // a hierarchy of districts
 

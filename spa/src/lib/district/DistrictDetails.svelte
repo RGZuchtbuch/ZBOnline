@@ -29,7 +29,7 @@
         name:      (v) => validator(v).string().length( 3, 48 ).isValid(),
         fullName:  (v) => validator(v).string().length( 3, 96 ).isValid(),
         shortName: (v) => validator(v).string().length( 1, 16 ).isValid(),
-        url:       (v) => validator(v).url().isValid(),
+        url:       (v) => validator(v).url().orNull().isValid(),
         lattitude: (v) => validator(v).number().range( MINLATITUDE, MAXLATITUDE ).isValid(),
         longitude: (v) => validator(v).number().range( MINLONGITUDE, MAXLONGITUDE ).isValid(),
         // mod ?
@@ -74,7 +74,7 @@
 
 {#if district}
     <Page>
-        <div slot='title'> Verband {district.name} </div>
+        <div slot='title'> Verband {district.name} {district.moderatorId}</div>
 
         <div slot='header' class='flex flex-row'>
             <div class='grow'>Verbandsdaten</div>
@@ -100,7 +100,7 @@
 
             <Select class='w-128' bind:value={district.moderatorId} label='Zuchtbuch Obmann' >
                 {#if members}
-                    <option value={null}></option>
+                    <option value={null}>Keiner</option>
                     {#each members as member}
                         <option value={member.id} selected={district.moderatorId === member.id ? 'selected' : '' }>
                             {txt(member.lastname)}, {txt(member.firstname)} {txt(member.infix)}

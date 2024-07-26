@@ -14,7 +14,7 @@
 
     function onSubmit() {
         api.user.logout();
-        router.goto( '/' );
+        router.goto( '/zuchtbuch/1' );
     }
 
     function cancel() {
