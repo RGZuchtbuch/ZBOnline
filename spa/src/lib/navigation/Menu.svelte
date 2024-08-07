@@ -9,7 +9,7 @@
 
 	let route = meta();
 
-	let focus = null;
+	let focus = null; // what menu shown ?
 	let articles = [];
 
 	let showMenu = false;
@@ -44,7 +44,6 @@
 	}
 
 	onMount( () => {
-
 		loadArticles();
 	})
 
@@ -59,12 +58,8 @@
 	</a>
 
 	<div class='text-center font-bold italic no-print'>
-		Das Rassegeflügel Zuchtbuch {#if $user} für {$user.name} {/if}
+		Rassegeflügel Zuchtbuch {#if $user} für {$user.firstname} {/if}
 	</div>
-
-	<div class='sm:hidden'>smallest</div>
-	<div class='hidden sm:block md:hidden'>small</div>
-	<div class='hidden md:block'>medium</div>
 
 	<button type='button' class='absolute top-0 right-1 w-6 border-0 md:hidden text-xl no-print' on:click={toggleMenu}>
 		{#if showMenu}&#10006;{:else}&#8803;{/if}
@@ -74,25 +69,25 @@
 <nav class:showMenu class='hidden md:flex flex-col md:flex-row bg-header rounded justify-between gap-x-1 mb-1 md:mb-8 px-2 print:hidden' on:click={onSelected} transition:slide>
 	<div class='hidden md:block w-16'></div>
 	<div class='flex flex-col md:flex-row'>
-		<Item name='Info' bind:focus={focus}>
+		<Item name='Info v' url='/zuchtbuch' bind:focus={focus}>
 			{#each articles as article}
 				<a href={'/zuchtbuch/'+article.id}>&#9755; {article.title}</a>
 			{/each}
 		</Item>
-		<Item name='Verbände' bind:focus={focus}>
-			<a href={'/verband'}>&#9755; Verbände im Zuchtbuch</a>
+		<Item name='Verbände' url='/verband' bind:focus={focus} href={'/verband'}>
+			<!--a href={'/verband'}>&#9755; Verbände im Zuchtbuch</a -->
 		</Item>
-		<Item name='Rassestandard' bind:focus={focus}>
-			<a href={'/standard'}>&#9755; BDRG Rassestandard</a>
+		<Item name='Rassestandard' url='/standard' bind:focus={focus} href={'/standard'}>
+			<!-- a href={'/standard'}>&#9755; BDRG Rassestandard</a -->
 		</Item>
-		<Item name='Leistungen' bind:focus={focus}>
+		<Item name='Leistungen v' url='/leistungen' bind:focus={focus}>
 			<a href={ '/leistungen' }>&#9755; Leistungen</a>
 			<a class='hidden md:block' href={ '/leistungen/nachweis' }>&#9755; Abstammungsnachweis Formular</a>
 			<a href={ '/leistungen/rechner' }>&#9755; Zuchtbuch Bewertungsrechner</a>
 		</Item>
 
 		{#if $user && $user.moderator.length > 0 }
-			<Item name='Obmann' bind:focus={focus}>
+			<Item name='Obmann v' url='/obmann' bind:focus={focus}>
 				<a href='/obmann/verband'>&#9755; Verbände</a>
 				{#if $moderatorDistrict}
 					<div>Verband {$moderatorDistrict.short}</div>
@@ -109,7 +104,7 @@
 		{/if}
 
 		{#if $user && $user.admin }
-			<Item name='Admin' bind:focus={focus}>
+			<Item name='Admin v' url='/admin' bind:focus={focus}>
 				<a href='/admin/verband'>&#9755; Verbände</a>
 				{#if $adminDistrict }
 					<div>Verband {$adminDistrict.short}</div>

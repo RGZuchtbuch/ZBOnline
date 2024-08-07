@@ -25,13 +25,9 @@
         openedBreed = breed; // make sure the new breed is open to alow for adding colors
         open = true;
     }
-    function onEdit() {
-        edit = ! edit;
-    }
-
     function onToggle() {
-        //section.open = ! section.open;
-        dispatch( 'open', section );
+
+        open = ! open;
     }
 
     function onOpenBreed( event ) {
@@ -69,9 +65,11 @@
     <div class='flex flex-row gap-x-1 my-2 border-b border-gray-300'>
 
         <Toggle bind:open={open} enabled={section.children.length > 0 || section.breeds.length > 0 } class='text-orange-600'/>
-        <div class='font-bold text-left' title={dic.title.section}>
+
+        <button class='border-0 font-bold text-left' title={dic.title.section} on:click={onToggle}>
             {section.name}
-        </div>
+        </button>
+
         {#if section.children.length > 0 }
             <div class='hidden md:block text-xs' title={dic.title.children}>({ section.children.length })</div>
         {/if}

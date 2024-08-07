@@ -1,5 +1,6 @@
 <script>
-    import { createEventDispatcher } from 'svelte';
+    import {createEventDispatcher, getContext} from 'svelte';
+    import { slide } from 'svelte/transition';
     import {meta} from "tinro";
     import api from '../../js/api.js';
     import {user} from '../../js/store.js';
@@ -14,9 +15,6 @@
     import TextInput from '../common/form/input/TextInput.svelte';
     import FormStatus from '../common/form/Status.svelte';
 
-    export let districtId;
-
-    let district;
     let disabled = true;
     let changed = false;
     let members = null; // for selecting obmann
@@ -24,6 +22,8 @@
 
     const route    = meta();
     const dispatch = createEventDispatcher();
+
+    const district = getContext( 'district' );
 
     const validate = {
         name:      (v) => validator(v).string().length( 3, 48 ).isValid(),
@@ -44,20 +44,18 @@
     }
 
     function onSubmit() {
-        if( district.id > 0 ) {
-            api.district.put( district.id, district ).then(response => {
-            });
-
+        if( $district.id > 0 ) {
+            api.district.put( $district.id, $district );
         } else {
-            api.district.post(district).then(response => {
-                district.id = response.id;
+            api.district.post( $district ).then( response => {
+                $district.id = response.id;
             });
         }
     }
 
     function loadDistrict( id ) {
         api.district.get( id ).then( response => {
-           district = response.district;
+            $district.set( response.district );
         });
     }
 
@@ -67,49 +65,49 @@
         })
     }
 
-    $: loadDistrict( districtId );
-    $: loadMembers( districtId );
+//    $: loadDistrict( districtId );
+    $: loadMembers( $district.id );
 </script>
 
 
 {#if district}
     <Page>
-        <div slot='title'> Verband {district.name} {district.moderatorId}</div>
+        <div slot='title'> Verband {$district.name} {$district.moderatorId}</div>
 
         <div slot='header' class='flex flex-row'>
-            <div class='grow'>Verbandsdaten</div>
+            <div class='grow text-center font-bold'>Verbandsdaten</div>
             {#if $user.admin}
                 <div class='w-6 h-6 border-2 border-alert rounded bg-white align-middle text-center text-red-600 cursor-pointer' class:disabled on:click={onToggleEdit} title={ disabled ? 'Daten ändern' : 'Daten nicht ändern' }>&#9998;</div>
             {/if}
         </div>
+        <div slot='body' class='p-2' transition:slide>
+            <Form on:submit={onSubmit} {disabled}>
+                <div class='flex'>
+                    <div>District ändern</div>
+                    <FormStatus />
+                </div>
+                <TextInput class='w-80' bind:value={$district.name} label='Name' validator={validate.name}/>
+                <TextInput class='w-160' bind:value={$district.fullname} label='Name voll' validator={validate.fullName}/>
+                <TextInput class='w-24' bind:value={$district.short} label='Name abk.' validator={validate.shortName}/>
+                <TextInput class='w-160' bind:value={$district.url} label='Webseite https://...' maxlength=128 validator={validate.url}/>
 
-        <Form slot='body' on:submit={onSubmit} {disabled}>
-            <div class='flex'>
-                <div>District ändern</div>
-                <FormStatus />
-            </div>
-            <TextInput class='w-80' bind:value={district.name} label='Name' validator={validate.name}/>
-            <TextInput class='w-160' bind:value={district.fullname} label='Name voll' validator={validate.fullName}/>
-            <TextInput class='w-24' bind:value={district.short} label='Name abk.' validator={validate.shortName}/>
-            <TextInput class='w-160' bind:value={district.url} label='Webseite https://...' maxlength=128 validator={validate.url}/>
+                <div class='flex gap-x-2'>
+                    <NumberInput class='w-32' bind:value={$district.latitude} label='Breitegrad N' validator={validate.lattitude} />
+                    <NumberInput class='w-32' bind:value={$district.longitude}  label='Längegrad O' validator={validate.longitude} />
+                </div>
 
-            <div class='flex gap-x-2'>
-                <NumberInput class='w-32' bind:value={district.latitude} label='Breitegrad N' validator={validate.lattitude} />
-                <NumberInput class='w-32' bind:value={district.longitude}  label='Längegrad O' validator={validate.longitude} />
-            </div>
-
-            <Select class='w-128' bind:value={district.moderatorId} label='Zuchtbuch Obmann' >
-                {#if members}
-                    <option value={null}>Keiner</option>
-                    {#each members as member}
-                        <option value={member.id} selected={district.moderatorId === member.id ? 'selected' : '' }>
-                            {txt(member.lastname)}, {txt(member.firstname)} {txt(member.infix)}
-                        </option>
-                    {/each}
-                {/if}
-            </Select>
-        </Form>
-
+                <Select class='w-128' bind:value={$district.moderatorId} label='Zuchtbuch Obmann' >
+                    {#if members}
+                        <option value={null}>Keiner</option>
+                        {#each members as member}
+                            <option value={member.id} selected={$district.moderatorId === member.id ? 'selected' : '' }>
+                                {txt(member.lastname)}, {txt(member.firstname)} {txt(member.infix)}
+                            </option>
+                        {/each}
+                    {/if}
+                </Select>
+            </Form>
+        </div>
     </Page>
 {/if}
 

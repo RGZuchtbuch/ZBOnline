@@ -1,11 +1,16 @@
 <script>
     import { onMount } from 'svelte';
-    import {meta} from 'tinro';
+    import {meta, router} from 'tinro';
     import { dec, pct, txt } from '../../js/util.js';
     import Page from "../common/Page.svelte";
 
     export let title = 'Meldungen';
     export let pairs = [];
+
+    function addPair( event ) {
+        console.log( 'Add pair', event );
+        router.goto( './0' ); //http://localhost:8100/#/obmann/verband/6/zuechter/1/meldung/36 )
+    }
 
     const route = meta();
 
@@ -16,18 +21,21 @@
 
 
 <Page>
-    <h2 slot='title' class='text-center'>{title}</h2>
-
+    <h2 slot='title' class='text-center'> {title} </h2>
     <div slot='header'>
-        <div class='flex flex-row bg-header gap-1 text-white text-center'>
+        <div class='flex flex-row gap-1 text-center'>
             <div class='w-28'>Meldung</div>
             <div class='w-112'>Rasse & Farbe</div>
             <div class='w-32'>Legen</div>
             <div class='w-48'>Bruten</div>
             <div class='w-16'>Schau</div>
+            <div class='grow'></div>
+            <a class='border border-gray-400 p-1' href={$router.path+'/0'}> + </a>
+            <!--button type='button' on:click={addPair}> + </button-->
+
         </div>
 
-        <div class='flex flex-row bg-header gap-1 text-xs text-white text-center'>
+        <div class='flex flex-row gap-1 text-xs text-center'>
             <div class='w-28 flex flex-row px-2 gap-1 border-l'>
                 <div class='w-10'>Jahr</div>
                 <div class='w-12'>Code</div>

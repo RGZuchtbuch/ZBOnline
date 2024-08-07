@@ -17,6 +17,7 @@
         api.district.get( id )
             .then( response => {
                 district.set( response.district );
+                console.log( 'got District', response.district );
             })
             .catch( e => {
                 alert('Houston we have got a problem loading district');
@@ -29,7 +30,7 @@
     $: loadDistrict( id );
 </script>
 
-{#if district}
+{#if $district}
     <slot>Hier sollte man nur enden wenn mann angemeldet und Obmann ist</slot>
 {/if}
 

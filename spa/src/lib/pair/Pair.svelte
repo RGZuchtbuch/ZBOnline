@@ -3,7 +3,7 @@
     import {beforeUpdate, afterUpdate, onMount} from 'svelte';
     import { slide } from 'svelte/transition';
     import dic from '../../js/dictionairy.js';
-    import {active, meta, router, Route} from 'tinro';
+    import {active, meta, router } from 'tinro';
     import validator from '../../js/validator.js';
 
     import {user} from "../../js/store.js";
@@ -85,7 +85,7 @@
     }
 
 
-    function updatePair( router ) {
+    function updatePair( id ) {
         console.log( 'Update Pair' );
         if( id > 0 && breederId > 0 && districtId > 0 ) { // existing, note id could be '0' from param for new
             api.pair.get( id ).then( response => {
@@ -96,7 +96,7 @@
                     pair.breeder = response.breeder;
                 });
             });
-        } else { // new
+        } else { // new as id == 0
             pair = newPair();
             formType = null;
             api.breeder.get( pair.breederId ).then( response => {
@@ -113,14 +113,17 @@
         }
     }
 
-    $: updatePair( $router );
+//    $: updatePair( $router );
+    $: updatePair( id );
 
 </script>
 
 {#if pair}
     <Page>
         <div slot='title' class='flex flex-row justify-between'>
-            <div class='w-4'></div>
+
+            <a class='border-0 w-4' title='Zu den Meldungen' href={$router.from}>←</a>
+
             <div>Zuchtbuch Meldung</div>
             {#if $user && ( $user.admin || $user.moderator.includes( pair.districtId ) ) }
                 <div class='w-6 border rounded text-center text-red-600 cursor-pointer' class:disabled on:click={onToggleEdit} title='Daten ändern'>&#9998;</div>

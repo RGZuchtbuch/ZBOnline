@@ -74,7 +74,7 @@
 				<Route path='/:districtId/*' let:meta>
 
 					<District id={toNumber(meta.params.districtId)} >
-						<Route path='/' let:meta> <DistrictDetails districtId={toNumber(meta.params.districtId)} /> </Route>
+						<Route path='/' let:meta> <DistrictDetails /> </Route>
 						<Route path='/zuechter/*' let:meta>
 							<Route path='/' let:meta> <DistrictBreeders /> </Route>
 							<Route path='/:breederId/*' let:meta >

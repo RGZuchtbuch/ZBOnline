@@ -1,6 +1,6 @@
 <script>
     import {getContext} from 'svelte';
-    import { meta } from 'tinro';
+    import {meta, router} from 'tinro';
     import api from '../../js/api.js';
     import { user } from '../../js/store.js';
 
@@ -69,6 +69,7 @@
             <div class='cursor-pointer' title='Neues Mitglied'>
                 <button type='button' on:click={addBreeder}> + </button>
             </div>
+            <a class='border border-gray-400 p-1' href={$router.path+'/0'}> + </a>
         {/if}
     </div>
     <div slot='body' class=''>

@@ -11,7 +11,6 @@
 	let authorized = false;
 
     const route = meta();
-    console.log( 'Moderator route', route);
 
 	function onRoute( route ) {
 		authenticated = $user != null;

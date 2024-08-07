@@ -1,19 +1,20 @@
 <script>
     import {getContext} from 'svelte';
-    import {Route, meta} from 'tinro';
+    import { meta, router } from 'tinro';
     import api from '../../js/api.js';
 
     export let id = null;
 
-    const district = getContext( 'district' );
-    const breeder  = getContext( 'breeder' );
+    const district = getContext( 'district' ); // store
+    const breeder  = getContext( 'breeder' ); // store
 
-    let route = meta();
+    //let route = meta();
 
 
-    function loadBreeder( id ) {
-        console.log( 'Breeder load', id );
+    function updateBreeder(  ) {
+        console.log( 'Update Breeder', id, $breeder, $district );
         breeder.set( null );
+
         if( id ) { // valid id, else new
             api.breeder.get( id )
                 .then( response => {
@@ -25,12 +26,11 @@
                     alert( 'Oops loading breeder' );
                 });
 
-        }
-/*        else { // new
+        } else if( $district ) { // new
             breeder.set( {
                 id:null, firstname:null, infix: null, lastname:null, active:true,
-                districtId: forDistrict.id,
-                district: forDistrict, // needed ?
+                districtId: $district.id,
+                district: $district, // needed ?
                 club:null,
                 start: null, end: null,
                 email: null,
@@ -38,10 +38,11 @@
             } );
             //router.goto( route.match+'/daten' );
         }
-*/
     }
 
-    $: loadBreeder( id );
+    $: updateBreeder( $district, id );
+
+    console.log( 'Breeder', id );
 </script>
 
 {#if $breeder}

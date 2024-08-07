@@ -2,7 +2,8 @@
     import { afterUpdate, getContext, onMount } from 'svelte';
     import { slide } from 'svelte/transition';
 
-    import api from "../../js/api.js";
+    import { user } from '../../js/store.js';
+    import api from '../../js/api.js';
     import dic from '../../js/dictionairy.js';
     import {txt} from '../../js/util.js';
     import validator from '../../js/validator.js';
@@ -23,6 +24,8 @@
 //    export let breeder;
     const district = getContext( 'district' );
     const breeder  = getContext( 'breeder' );
+
+    console.log('A', $breeder );
 
     let disabled = true; // enabled if new breeder
     let needFocus = true;
@@ -75,19 +78,19 @@
         }
     })
 
-    console.log( 'Breeder', $breeder );
+    console.log( 'BreederDetails', $breeder );
 </script>
 
 {#if $breeder }
     <Page>
         <div slot='title'> Zuchtbuchmitglied {$breeder.firstname} {txt($breeder.infix)} {$breeder.lastname}</div>
         <div slot='header' class='flex flex-row'>
-            <div class='grow'>Mitgliedsdaten</div>
+            <div class='grow text-center font-bold'>Mitgliedsdaten</div>
             {#if $user && ( $user.admin || $user.moderator.includes( $breeder.districtId ) ) }
-                <div class='w-6 border rounded text-center text-red-600 cursor-pointer' class:disabled on:click={onToggleEdit} title='Daten ändern'>&#9998;</div>
+                <div class='w-6 border border-alert rounded bg-white align-middle text-center text-red-600 cursor-pointer' class:disabled on:click={onToggleEdit} title='Daten ändern'>&#9998;</div>
             {/if}
         </div>
-        <div slot='body' class='pl-4' transition:slide>
+        <div slot='body' class='p-2' transition:slide>
             <Form {disabled} on:submit={onSubmit}>
                 <div class='flex'>
                     <div>Züchter Anschrift ändern</div>
@@ -118,6 +121,6 @@
 
 <style>
     .disabled {
-        @apply text-white;
+        @apply text-green-600;
     }
 </style>

@@ -50,8 +50,8 @@
         edit = ! edit;
         open = true;
     }
-    function onOpen() {
-        dispatch( 'open', breed );
+    function onToggle() {
+        open = ! open;
     }
 
     function onSubmit() { // triggered by form's autosave
@@ -95,7 +95,7 @@
 
             <div class='flex flex-row font-semibold' title={dic.title.breed}>
                 <Toggler bind:open={open} enabled={breed.colors.length > 0} class='text-orange-600'/>
-                <div>{breed.name}</div>
+                <button class='border-0' on:click={onToggle}>{breed.name}</button>
                 <div class='text-xs' title={dic.title.colors} >({breed.colors.length})</div>
             </div>
 
