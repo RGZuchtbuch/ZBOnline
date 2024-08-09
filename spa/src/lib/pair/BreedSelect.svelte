@@ -6,15 +6,16 @@
     import validator from '../../js/validator.js';
     import Select from '../common/form/input/Select.svelte';
 
-    export let formType;
+//    export let formType;
     export let value = { sectionId:null, breedId:null, colorId:null }; // take from pair or other
 
     let classname = '';
     export { classname as class }
 
-    let sections = formType === PIGEONS ?
-        [ { id:5, name:'Tauben' } ] :
-        [ { id:3, name:'Groß & Wassergeflügel' }, { id:11, name:'Große Hühner' }, { id:12, name:'Zwerghühner & Wachteln' }, { id:6, name:'Ziergeflügel' } ];
+//    let sections = formType === PIGEONS ?
+//        [ { id:5, name:'Tauben' } ] :
+//        [ { id:3, name:'Groß & Wassergeflügel' }, { id:11, name:'Große Hühner' }, { id:12, name:'Zwerghühner & Wachteln' }, { id:6, name:'Ziergeflügel' } ];
+    let sections = [ { id:3, name:'Groß & Wassergeflügel' }, { id:11, name:'Große Hühner' }, { id:12, name:'Zwerghühner & Wachteln' }, { id:5, name:'Tauben' }, { id:6, name:'Ziergeflügel' } ];
 
     let breeds = [];
     let colors = [];
@@ -68,17 +69,25 @@
     }
 
     function onSectionChange( event ) {
-        section = getSection( value.sectionId, $standard ); // from standard as sections is incomplete
-        breeds = getBreeds( section );
-        breeds.sort( (a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0 )
+        breeds = [];
         colors = [];
-        value.breedId = value.coloId = null;
+        value.breedId = value.colorId = null;
+        if( value.sectionId ) {
+            section = getSection(value.sectionId, $standard); // from standard as sections is incomplete
+            breeds = getBreeds(section);
+            breeds.sort((a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0)
+            value.breedId = value.coloId = null;
+        }
     }
 
     function onBreedChange( event ) {
-        const breed = breeds.find( breed => breed.id === value.breedId );
-        colors = breed.colors;
-        value.coloId = null;
+        colors = [];
+        value.colorId = null;
+        if( value.breedId ) {
+            const breed = breeds.find(breed => breed.id === value.breedId);
+            colors = breed.colors;
+            value.coloId = null;
+        }
     }
 
     onMount(() => {

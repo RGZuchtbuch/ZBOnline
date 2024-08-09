@@ -66,7 +66,7 @@
 
     <div class='flex flex-col p-2 gap-1'>
         <div class='flex'>
-            <InputDate class='w-24' label={'Angepaart am'} bind:value={pair.paired} validator={validate.date} />
+            <InputDate class='w-28' label={'Angepaart am'} bind:value={pair.paired} validator={validate.date} />
             <div class='grow'></div>
             <FormStatus />
         </div>

@@ -15,7 +15,9 @@
     export let pair;
     export let nolabel = false; // for list of
 
-    let ringObject = null; // to only load parentsPairs if year changed
+    //let ringChanged = false;; // to only load parentsPairs if year changed
+    let prevYear = null;
+    let prevAncestorId = null;
     let ancestorPairs = null; // optional parent pairs
     let ancestorPair = null;
 //    let parentsPairResults = { eggs:null, weight:null, fertility:null, hatching:null, score:null }; // and their results
@@ -27,36 +29,43 @@
         points:     (v) => validator(v).number().range( 89.0, 97.0 ).orNull().isValid(),
     }
 
-    function getAncestorPairs( ring, parentsPairId ) {
-        let newRingObject = toRing( ring ); // decode input
-        if( newRingObject && ( ! ringObject || ringObject.year !== newRingObject.year ) ) { // first time or valid ring and changed
-            ringObject = newRingObject;
-            api.breeder.year.pairs.get(pair.breederId, ringObject.year).then(response => {
-                ancestorPairs = response.pairs;
-                ancestorPair = getAncestor( ancestorPairs, parentsPairId ); // after loaded ancestors or changed ancestorId
-            })
+    function updateAncestorPairs( ) {
+        let newRingObject = toRing(parent.ring); // decode input
+        if (newRingObject) {
+
+            if ( newRingObject.year !== prevYear) {
+                console.log('Year changed');
+                ancestorPairs = null;
+                api.breeder.year.pairs.get(pair.breederId, newRingObject.year).then(response => {
+                    ancestorPairs = response.pairs;
+                })
+                prevYear = newRingObject.year;
+            }
+        } else {
+            console.log('Reset')
+            ancestorPairs = null;
+            ancestorPair = null;
+            prevYear = null;
+            parent.parentsPairId = null;
         }
     }
 
-    function getAncestor( ancestorPairs, parentsPairId ) {
-        if( parentsPairId && ancestorPairs ) {
+    function updateAncestorPair( ) {
+        if( parent.parentsPairId && parent.parentsPairId !== prevAncestorId && ancestorPairs ) {
+            console.log( 'Get APair')
+            ancestorPair = null;
             for (const pair of ancestorPairs) {
-                if (pair.id === parentsPairId) {
-                    return pair;
+                if ( pair.id === parent.parentsPairId ) {
+                    ancestorPair = pair;
+                    console.log( 'Found ', pair.id );
                 }
             }
+            prevAncestorId = parent.parentsPairId;
         }
-        return null; // not found
     }
 
-    function update( url, parent ) {
-        getAncestorPairs( parent.ring, parent.parentsPairId );
-    }
-
-//    $: getAncestorPairs( parent.ring );
-//    $: ancestorPair = getAncestor( ancestorPairs, parent.parentsPairId ); // after loaded ancestors or changed ancestorId
-
-    $: update( $router.url, parent );
+    $: updateAncestorPairs( $router, parent );
+    $: updateAncestorPair( parent, ancestorPairs );
 
 </script>
 
@@ -72,18 +81,22 @@
         <InputRing class='w-32' label={nolabel ? '' : 'Ring [D J Bs Nr]'} bind:value={parent.ring} validator={validate.ring}/>
         <InputNumber class='w-16' label={nolabel ? '' : '∅ Note'} bind:value={parent.score} step={1} validator={validate.points}/>
         <div class='w-4'></div>
-        <Select class='w-32' label={nolabel ? '' : 'Aus Stamm / Paar'} bind:value={parent.parentsPairId}>
-            <option value={null}> ? </option>
-            {#if ancestorPairs}
-                {#each ancestorPairs as ancestorPair }
-                    <option value={ancestorPair.id} selected={ancestorPair.id === parent.parentsPairId} > {ancestorPair.year+':'+ancestorPair.name} </option>
-                {/each}
-            {/if}
-        </Select>
-        <div class='w-8 '> → </div>
+
+        {#if ancestorPairs && ancestorPairs.length > 0}
+            <Select class='w-32' label={nolabel ? '' : 'Aus Stamm / Paar'} bind:value={parent.parentsPairId}>
+                <option value={null}> ? </option>
+                {#if ancestorPairs}
+                    {#each ancestorPairs as ancestorPair }
+                        <option value={ancestorPair.id} selected={ancestorPair.id === parent.parentsPairId} > {ancestorPair.year+':'+ancestorPair.name} </option>
+                    {/each}
+                {/if}
+            </Select>
+        {:else}
+            <div class='w-32'></div>
+        {/if}
     </div>
 
-    {#if ancestorPair }
+    {#if parent.parentsPairId && ancestorPair }
         {#if pair.sectionId === 5 }
             <div class='flex flex-row gap-x-1'>
                 <div class='w-16'></div>

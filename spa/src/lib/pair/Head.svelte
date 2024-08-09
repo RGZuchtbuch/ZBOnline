@@ -13,10 +13,7 @@
     import FormStatus from '../common/form/Status.svelte';
     import CheckBoxInput from '../common/form/input/CheckBoxInput.svelte';
 
-//    export let id;
-    export let formType;
     export let pair;
-//    export let disabled = true;
 
     let needFocus = true;
     let focusElement = null;
@@ -76,7 +73,7 @@
         <CheckBoxInput class='w-12' label='Löschen' bind:value={ pair.delete } disabled={ pair.name != null }/>
         <FormStatus />
     </div>
-    <BreedSelect class='flex flex-row p-2 gap-x-1' {formType} bind:value={pair} />
+    <BreedSelect class='flex flex-row p-2 gap-x-1' bind:value={pair} />
 </div>
 
 <style>

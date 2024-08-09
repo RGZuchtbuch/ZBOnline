@@ -99,7 +99,7 @@
 
 
 <form bind:this={formElement} class:valid>
-    <fieldset class='{className}' {disabled}>
+    <fieldset class='{className}' {disabled}> <!-- to allow disabled for all -->
         <slot />
     </fieldset>
 </form>

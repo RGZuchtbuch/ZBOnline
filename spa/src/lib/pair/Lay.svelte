@@ -64,8 +64,8 @@
     {#if pair.lay }
         <div class='flex flex-row p-2 gap-x-1'>
             <div class='grow flex flex-row gap-x-1'>
-                <InputDate class='w-24' label={'Gesammelt ab'} bind:value={pair.lay.start} error='Falsches Datum' validator={validate.start} />
-                <InputDate class='w-24' label={'Gesammelt bis'} bind:value={pair.lay.end} error='Falsches Datum' validator={validate.end} />
+                <InputDate class='w-28' label={'Gesammelt ab'} bind:value={pair.lay.start} error='Falsches Datum' validator={validate.start} />
+                <InputDate class='w-28' label={'Gesammelt bis'} bind:value={pair.lay.end} error='Falsches Datum' validator={validate.end} />
                 <div class='w-2'></div>
                 <InputNumber class='w-16' label='# Hennen' bind:value={pair.lay.dames} validator={validate.dames}/>
                 <InputNumber class='w-16' label={'# Eierzahl'} bind:value={pair.lay.eggs} error={'0 .. '+pair.lay.days * pair.lay.dames} validator={validate.eggs} />

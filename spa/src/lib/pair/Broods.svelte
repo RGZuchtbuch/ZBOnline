@@ -17,7 +17,7 @@
         if( pair.sectionId === PIGEONS ) {
             brood = { pairId:pair.id, start:null, eggs:2, fertile:null, hatched:null, ringed:null, chicks:[ newChick(), newChick() ] };
         } else {
-            brood = { pairId:pair.id, start:null, eggs:null, fertile:null, hatched:null, ringed:null };
+            brood = { pairId:pair.id, start:null, eggs:null, fertile:null, hatched:null, ringed:null, chicks:[] };
         }
         return brood;
 //        pair.broods = [ ...pair.broods, brood ];
@@ -38,6 +38,7 @@
                 broods.push( newBrood() );
             }
             if( pair.sectionId === PIGEONS ) { // add chicks if not room for 2
+                console.log( 'PBroods', broods );
                 const chicks = broods[ broodIndex ].chicks;
                 for( let chickIndex=0; chickIndex<2; chickIndex++ ) { // add fields for max 2 chicks
                     if( ! chicks[ chickIndex ] ) {
