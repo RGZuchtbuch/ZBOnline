@@ -19,6 +19,8 @@
     import TextAreaInput from '../common/form/input/TextArea.svelte';
     import TextInput from '../common/form/input/TextInput.svelte';
     import ToggleInput from '../common/form/input/ToggleInput.svelte';
+    import CheckBoxInput from '../common/form/input/CheckBoxInput.svelte';
+    import {router} from 'tinro';
 
 
 //    export let breeder;
@@ -32,6 +34,8 @@
     let clubs = null;
     let changed = false; // form changed
     let invalid = false;
+
+    let toRemove = false;
 
     let focusElement; // to set focus to for starters
 
@@ -50,15 +54,23 @@
 
     function onSubmit(event) {
         console.log('Submit');
-        if( $breeder.id > 0 ) {
-            api.breeder.put( $breeder.id, $breeder ).then(response => { // chenge breeder
-                changed = false;
-            });
-        } else {
-            api.breeder.post( $breeder ).then(response => { // new breeder
-                $breeder.id = response.id;
-                changed = false;
-            });
+        if( $breeder.firstname && $breeder.lastname && $breeder.start ) {
+            if ($breeder.id > 0) {
+                api.breeder.put($breeder.id, $breeder).then(response => { // chenge breeder
+                    changed = false;
+                });
+            } else {
+                api.breeder.post($breeder).then(response => { // new breeder
+                    $breeder.id = response.id;
+                    changed = false;
+                });
+            }
+        } else if( toRemove && $breeder.id > 0 ) {
+            disabled = true;
+            api.breeder.delete( $breeder.id ).then( response => {
+                breeder.id = null;;
+                $router.goto( $router.from );
+            })
         }
     }
 
@@ -92,14 +104,18 @@
         </div>
         <div slot='body' class='p-2' transition:slide>
             <Form {disabled} on:submit={onSubmit}>
-                <div class='flex'>
-                    <div>Züchter Anschrift ändern</div>
-                    <FormStatus />
-                </div>
+                {#if ! disabled}
+                    <div class='flex'>
+                        <div class='grow text-center'>Züchteranschrift ändern</div>
+                        <FormStatus />
+                    </div>
+                {/if}
                 <div class='flex flex-row gap-x-2'>
                     <TextInput class='w-48' bind:value={$breeder.firstname} label={dic.label.firstname} error={dic.error.required} validator={validate.name}/>
                     <TextInput class='w-24' bind:value={$breeder.infix} label={dic.label.infix}/>
                     <TextInput class='w-64' bind:value={$breeder.lastname} label={dic.label.lastname} error={dic.error.required} validator={validate.name}/>
+                    <div class='grow'></div>
+                    <!--CheckBoxInput class='w-10' label='Löschen' bind:value={toRemove} title={dic.title.delete.breeder} disabled={ $breeder.firstname != null || $breeder.lastname != null }/-->
                 </div>
 
                 <TextInput class='w-128' bind:value={$breeder.club} label={dic.label.club} />

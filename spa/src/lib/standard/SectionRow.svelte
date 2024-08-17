@@ -115,8 +115,9 @@
                 {/if}
             </div>
         {/if}
-
-        <small class='w-6 text-gray-400 text-3xs text-right cursor-auto' title={section.id}>[{section.id}]</small>
+        {#if $user && $user.admin}
+            <small class='w-6 text-gray-400 text-3xs text-right cursor-auto' title={section.id}>[{section.id}]</small>
+        {/if}
     </div>
 
     {#if open }

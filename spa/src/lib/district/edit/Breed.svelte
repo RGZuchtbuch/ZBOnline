@@ -56,7 +56,11 @@
 
 <div class='flex flex-row px-2 gap-x-1'>
     <div class='w-80 cursor-pointer whitespace-nowrap' class:hasResults on:click={onOpen} {title}>
-        {breed.name} {#if breed.results } <span class='text-xs' title={dic.title.resultscount}>({breed.results})</span> {/if}
+        {breed.name}
+        {#if breed.results }
+            <span class='text-xs'>
+                (<span title={dic.title.resultscount}>{breed.results}</span>{#if breed.pairs }<span class='text-xs' title={dic.title.pairscount}>/{breed.pairs}</span>{/if})
+            </span> {/if}
     </div>
 
     <div class='w-4'></div>

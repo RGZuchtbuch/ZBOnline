@@ -57,7 +57,7 @@
 
 <Page>
     <div slot='title'> Zuchtbuchmitglieder in Verband </div>
-    <div slot='header' class='flex flex-row gap-x-4 px-2'>
+    <div slot='header' class='flex flex-row gap-x-4 px-2 py-1'>
         <div class='w-12'>ZbNr</div>
         <div class='w-56'>Name</div>
         <div class='w-36'>Ortsverein</div>
@@ -66,10 +66,7 @@
         <div class='w-16'>Inaktief</div> <div class='w-6 h-6 text-center'> <input class='cursor-pointer' type='checkbox' bind:checked={showInactives}> </div>
         <div class='grow'></div>
         {#if $user && $user.moderator}
-            <div class='cursor-pointer' title='Neues Mitglied'>
-                <button type='button' on:click={addBreeder}> + </button>
-            </div>
-            <a class='border border-gray-400 p-1' href={$router.path+'/0'}> + </a>
+            <a class='bg-amber-500 border border-gray-400 rounded px-1' href={$router.path+'/0'} title='Züchter hinzufügen'> + </a>
         {/if}
     </div>
     <div slot='body' class=''>

@@ -1,13 +1,14 @@
 <script>
     import {onMount} from 'svelte';
     import {router} from 'tinro'
+    import dic from '../../js/dictionairy.js';
     import { standard } from '../../js/store.js';
     import api from "../../js/api.js";
     import validator from '../../js/validator.js';
     import Select from '../common/form/input/Select.svelte';
 
 //    export let formType;
-    export let value = { sectionId:null, breedId:null, colorId:null }; // take from pair or other
+    export let pair; // = { sectionId:null, breedId:null, colorId:null }; // take from pair or other
 
     let classname = '';
     export { classname as class }
@@ -27,18 +28,18 @@
     const validate = {
         section:      (v) => validator(v).if( v ).isValid(),
         breed:        (v) => validator(v).if( v ).isValid(),
-        color:        (v) => validator(v).if( v ).orNullIf( value.sectionId === PIGEONS ).isValid(),
+        color:        (v) => validator(v).if( v ).orNullIf( pair.sectionId === PIGEONS ).isValid(),
     }
 
     function update( r, s ) {
-        if( value && $standard ) {
-            section = getSection( value.sectionId, $standard );
+        if( pair && $standard ) {
+            section = getSection( pair.sectionId, $standard );
             if( section ) {
                 breeds = getBreeds(section);
-                breed = breeds.find(breed => breed.id === value.breedId);
+                breed = breeds.find(breed => breed.id === pair.breedId);
                 if( breed ) {
                     colors = breed.colors;
-                    color = colors.find(color => color.id === value.colorId);
+                    color = colors.find(color => color.id === pair.colorId);
                 }
             }
         } else {
@@ -71,22 +72,22 @@
     function onSectionChange( event ) {
         breeds = [];
         colors = [];
-        value.breedId = value.colorId = null;
-        if( value.sectionId ) {
-            section = getSection(value.sectionId, $standard); // from standard as sections is incomplete
+        pair.breedId = pair.colorId = null;
+        if( pair.sectionId ) {
+            section = getSection(pair.sectionId, $standard); // from standard as sections is incomplete
             breeds = getBreeds(section);
             breeds.sort((a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0)
-            value.breedId = value.coloId = null;
+            pair.breedId = pair.coloId = null;
         }
     }
 
     function onBreedChange( event ) {
         colors = [];
-        value.colorId = null;
-        if( value.breedId ) {
-            const breed = breeds.find(breed => breed.id === value.breedId);
+        pair.colorId = null;
+        if( pair.breedId ) {
+            const breed = breeds.find(breed => breed.id === pair.breedId);
             colors = breed.colors;
-            value.coloId = null;
+            pair.coloId = null;
         }
     }
 
@@ -100,28 +101,29 @@
 
 
 <fieldset class='flex flex-row px-2 gap-x-1'>
-    {#if $standard && sections && value }
-        <Select class='w-60' label='Sparte *' bind:value={value.sectionId} error='Pflichtfeld' validator={validate.section} on:change={onSectionChange}>
+    {#if $standard && sections && pair }
+        <div title={dic.title.immutable}>{ pair.id }</div>
+        <Select class='w-60' label='Sparte *' bind:value={pair.sectionId} title={dic.title.immutable} error='Pflichtfeld' validator={validate.section} on:change={onSectionChange} disabled={pair.id}>
             <option value={null}></option>
             {#each sections as section }
-                <option value={section.id} selected={section.id === value.sectionId}>{section.name}</option>
+                <option value={section.id} selected={section.id === pair.sectionId}>{section.name}</option>
             {/each}
         </Select>
 
         {#if breeds}
 
-            <Select class='w-104' label={'Rasse *'} bind:value={value.breedId} error='Pflichtfeld' validator={validate.breed} on:change={onBreedChange}>
+            <Select class='w-104' label={'Rasse *'} bind:value={pair.breedId} error='Pflichtfeld' validator={validate.breed} on:change={onBreedChange}>
                 <option value={null}></option>
                 {#each breeds as breed }
-                    <option value={breed.id} selected={breed.id === value.breedId} >{breed.name}</option>
+                    <option value={breed.id} selected={breed.id === pair.breedId} >{breed.name}</option>
                 {/each}
             </Select>
 
             {#if colors}
-                <Select class='w-56' label='Farbenschlag' bind:value={value.colorId} error='Pflichtfeld' validator={validate.color}>
+                <Select class='w-56' label='Farbenschlag' bind:value={pair.colorId} error='Pflichtfeld' validator={validate.color}>
                     <option value={null}></option>
                     {#each colors as color }
-                        <option value={color.id} selected={color.id === value.colorId}>{color.name}</option>
+                        <option value={color.id} selected={color.id === pair.colorId}>{color.name}</option>
                     {/each}
                 </Select>
             {/if}

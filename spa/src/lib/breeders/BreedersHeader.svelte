@@ -11,7 +11,7 @@
 
 <div class='flex flex-row gap-x-4'>
     <div class='w-4'>#</div>
-    <div class='w-56'>Name</div>
+    <div class='w-56'>Namen</div>
     <div class='w-36'>Ortsverein</div>
     <div class='w-64'>ZB Verband</div>
     <div class='w-24'>Seit</div>

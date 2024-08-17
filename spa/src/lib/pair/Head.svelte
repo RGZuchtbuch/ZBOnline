@@ -3,6 +3,7 @@
     import {afterUpdate, getContext, onDestroy, onMount} from 'svelte';
     import {active, meta, router, Route} from 'tinro';
     import {txt} from '../../js/util.js';
+    import dic from '../../js/dictionairy.js';
     import validator from '../../js/validator.js';
 
     import InputNumber from '../common/form/input/NumberInput.svelte';
@@ -63,7 +64,7 @@
     <div class='flex flex-row px-2 gap-x-1'>
         <InputText class='w-64' label='Züchter' value={txt(pair.breeder.firstname)+' '+txt(pair.breeder.infix)+' '+txt(pair.breeder.lastname)} disabled/>
         <InputNumber class='w-20' bind:element={focusElement} label='Jahr *' name='year' bind:value={pair.year} validator={validate.year}/>
-        <InputText class='w-20' label='Name *' bind:value={pair.name} error='* 1..16 bs' validator={validate.name} on:input={onNameChange}/>
+        <InputText class='w-20' label='Name *' bind:value={pair.name} title={dic.title.requiredunique} error='* 1..16 bs' validator={validate.name} on:input={onNameChange}/>
         <Select class='w-20' label='ZB Gruppe *' bind:value={pair.group} >
             {#each ['I', 'II', 'III' ] as group}
                 <option value={group} selected={group === pair.group}>{group}</option>
@@ -73,7 +74,7 @@
         <CheckBoxInput class='w-12' label='Löschen' bind:value={ pair.delete } disabled={ pair.name != null }/>
         <FormStatus />
     </div>
-    <BreedSelect class='flex flex-row p-2 gap-x-1' bind:value={pair} />
+    <BreedSelect class='flex flex-row p-2 gap-x-1' bind:pair={pair} />
 </div>
 
 <style>

@@ -25,9 +25,7 @@
     if( enforce ) $state.changed = true;
 
     function onChange( dummy ) {
-        console.log( 'Change', $state );
         formDisabled = $state.disabled;
-//        submittable = $state.changed && $state.valid && ! $state.error;
 		noChange = ! $state.changed;
         invalid  = ! $state.valid;
         error    = $state.error;

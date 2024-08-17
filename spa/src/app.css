@@ -128,7 +128,7 @@ input.invalid, textarea.invalid, select.invalid {
         display: none;
     }
     .print-break {
-        page-break-after:always;
+        break-after:page;
     }
     div {
     }

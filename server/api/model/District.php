@@ -204,6 +204,7 @@ class District
         $stmt = Query::prepare("
             SELECT 
           		breed.id, breed.name, 
+
           		COUNT( result.id ) AS results, :districtId AS districtId, :year AS `year`, :group AS `group`, 
                 SUM( breeders ) AS breeders, SUM( pairs ) AS pairs,
                 SUM( result.layDames ) AS layDames, AVG( result.layEggs ) AS layEggs, AVG( result.layWeight ) AS layWeight,

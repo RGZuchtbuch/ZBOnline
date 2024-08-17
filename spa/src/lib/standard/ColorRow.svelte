@@ -79,8 +79,10 @@
                     <div class='w-4'></div>
                 {/if}
             </div>
-            <small class='w-6 text-gray-400 text-3xs text-right cursor-auto' title={color.id}>[{color.id}]</small>
 
+            {#if $user && $user.admin}
+                <small class='w-6 text-gray-400 text-3xs text-right cursor-auto' title={color.id}>[{color.id}]</small>
+            {/if}
         </div>
 
         {#if edit}

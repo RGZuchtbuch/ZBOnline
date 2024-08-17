@@ -16,7 +16,7 @@
 <Page>
     <div slot='title'> BDRG Rassegeflügelstandard</div>
     <div slot='header'> Sparten / Gruppen / Rassen / Farbenschläge </div>
-    <div slot='body'>
+    <div slot='body' class='p-2'>
         {#if section}
             <SectionRow {section} open={true}/>
         {/if}

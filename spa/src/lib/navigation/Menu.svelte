@@ -68,8 +68,8 @@
 
 <nav class:showMenu class='hidden md:flex flex-col md:flex-row bg-header rounded justify-between gap-x-1 mb-1 md:mb-8 px-2 print:hidden' on:click={onSelected} transition:slide>
 	<div class='hidden md:block w-16'></div>
-	<div class='flex flex-col md:flex-row'>
-		<Item name='Info v' url='/zuchtbuch' bind:focus={focus}>
+	<div class='flex flex-col md:flex-row md:gap-x-2'>
+		<Item name='Info *' url='/zuchtbuch' bind:focus={focus}>
 			{#each articles as article}
 				<a href={'/zuchtbuch/'+article.id}>&#9755; {article.title}</a>
 			{/each}
@@ -80,19 +80,19 @@
 		<Item name='Rassestandard' url='/standard' bind:focus={focus} href={'/standard'}>
 			<!-- a href={'/standard'}>&#9755; BDRG Rassestandard</a -->
 		</Item>
-		<Item name='Leistungen v' url='/leistungen' bind:focus={focus}>
+		<Item name='Leistungen *' url='/leistungen' bind:focus={focus}>
 			<a href={ '/leistungen' }>&#9755; Leistungen</a>
 			<a class='hidden md:block' href={ '/leistungen/nachweis' }>&#9755; Abstammungsnachweis Formular</a>
 			<a href={ '/leistungen/rechner' }>&#9755; Zuchtbuch Bewertungsrechner</a>
 		</Item>
 
 		{#if $user && $user.moderator.length > 0 }
-			<Item name='Obmann v' url='/obmann' bind:focus={focus}>
+			<Item name='Obmann *' url='/obmann' bind:focus={focus}>
 				<a href='/obmann/verband'>&#9755; Verbände</a>
 				{#if $moderatorDistrict}
 					<div>Verband {$moderatorDistrict.short}</div>
 					<a href={'/obmann/verband/'+$moderatorDistrict.id+'/leistung'}>&#9755; Leistungen</a>
-					<a href={'/obmann/verband/'+$moderatorDistrict.id+'/zuechter'}>&#9755; Züchter</a>
+					<!--a href={'/obmann/verband/'+$moderatorDistrict.id+'/zuechter'}>&#9755; Züchter</a-->
 					<a href={'/obmann/verband/'+$moderatorDistrict.id}>&#9755; Verbandsdaten</a>
 					{#if $moderatorBreeder}
 						<div>Züchter {$moderatorBreeder.lastname}</div>
@@ -104,7 +104,7 @@
 		{/if}
 
 		{#if $user && $user.admin }
-			<Item name='Admin v' url='/admin' bind:focus={focus}>
+			<Item name='Admin *' url='/admin' bind:focus={focus}>
 				<a href='/admin/verband'>&#9755; Verbände</a>
 				{#if $adminDistrict }
 					<div>Verband {$adminDistrict.short}</div>
@@ -122,7 +122,7 @@
 
 	</div>
 
-	<div class='hidden w-16 md:flex justify-center text-white'>
+	<div class='hidden md:flex w-16 pr-2 justify-center text-white'>
 		{#if $user}
 			<a href='/abmelden'>Abmelden</a>
 		{:else}

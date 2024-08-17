@@ -56,7 +56,7 @@
     }
 
     function onSubmit( event ) {
-        console.log('Result add A', addedResult, result );
+        console.log('Result add A', addedResult.breeders, result.breeders );
         // these before changing breeders
         dispatch( 'add', addedResult );
         console.log('Result add B', addedResult, result );

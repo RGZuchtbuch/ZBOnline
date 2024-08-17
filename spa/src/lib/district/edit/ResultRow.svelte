@@ -60,6 +60,7 @@
         }
     }
     function onAdd( event ) {
+        console.log( 'P', result.breeders, result );
         extended = false; // hide
         const addResult = event.detail;
         console.log( 'toAdd', addResult );
@@ -80,7 +81,13 @@
         return value ? toValue + value : toValue;
     }
     function avg( addCount, addValue, toCount, toValue ) {
-        return addValue ? (( toCount * toValue + addCount * addValue ) / ( toCount + addCount )).toFixed(1) : toValue; // avg
+        if( toValue === null  ) {
+            return addValue;
+        } else {
+            return addValue ? (( toCount * toValue + addCount * addValue ) / ( toCount + addCount )).toFixed(1) : toValue; // avg
+        }
+
+//        return addValue ? (( toCount * toValue + addCount * addValue ) / ( toCount + addCount )).toFixed(1) : toValue; // avg
     }
 
     $: hasResult = result.breeders > 0;
@@ -92,7 +99,7 @@
     <div class='w-4 pl-2'>&#10551; </div>
     <div class='w-80 flex flex-row justify-between'>
         <div class='' class:hasResult title={'Leistung ['+result.id+']'}>{result.colorName} </div>
-        <button class='self-start w-6' type='button' title='Hinzufügen' on:click={onToggleExtend}>&#43;</button>
+        <!--button class='self-start w-6' type='button' title='Hinzufügen' on:click={onToggleExtend}>&#43;</button -->
     </div>
 
 

@@ -43,7 +43,7 @@
 							</div>
 						{/if}
 						{#if districts.url}
-							<a class='w-4 cursor-pointer' href={districts.url} target='_blank' title={dic.title.url}>
+							<a class='w-8 cursor-pointer' href={districts.url} target='_blank' title={dic.title.url}>
 								<img src='assets/link.svg' alt='link'>
 							</a>
 						{:else}

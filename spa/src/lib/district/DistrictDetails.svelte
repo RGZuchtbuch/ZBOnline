@@ -82,10 +82,12 @@
         </div>
         <div slot='body' class='p-2' transition:slide>
             <Form on:submit={onSubmit} {disabled}>
-                <div class='flex'>
-                    <div>District ändern</div>
-                    <FormStatus />
-                </div>
+                {#if ! disabled}
+                    <div class='flex'>
+                        <div class='grow text-center'>Verbandsdaten ändern</div>
+                        <FormStatus />
+                    </div>
+                {/if}
                 <TextInput class='w-80' bind:value={$district.name} label='Name' validator={validate.name}/>
                 <TextInput class='w-160' bind:value={$district.fullname} label='Name voll' validator={validate.fullName}/>
                 <TextInput class='w-24' bind:value={$district.short} label='Name abk.' validator={validate.shortName}/>
