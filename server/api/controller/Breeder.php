@@ -7,6 +7,7 @@ use App\model\Requester;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpBadRequestException;
+use Slim\Exception\HttpForbiddenException;
 use Slim\Exception\HttpInternalServerErrorException;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Exception\HttpNotImplementedException;
@@ -52,7 +53,7 @@ class Breeder // is user
 			$district = model\District::get( $body[ 'districtId' ] );
 			if( $requester && $district ) {
 				if ($requester->isAdmin() || $requester->isModerating( $district['id'] )) { //admin or the moderator
-					$id = model\Breeder::new($body['firstname'], $body['infix'], $body['lastname'], $body['email'], $body['districtId'], $body['club'], $body['start'], $body['end'], $body['info'], $requester->getId());
+					$id = model\Breeder::new( $body['member'], $body['firstname'], $body['infix'], $body['lastname'], $body['email'], $body['districtId'], $body['club'], $body['start'], $body['end'], $body['info'], $requester->getId());
 					if ($id) {
 						$response->getBody()->write(json_encode(['id' => $id], JSON_UNESCAPED_SLASHES));
 						return $response;
@@ -73,7 +74,7 @@ class Breeder // is user
 		if( is_numeric( $id ) && $body ) {
 			$districtId = $body['districtId'] ?? null;
 			if( $requester->isAdmin() || $requester->isModerating( $districtId ) ) { //admin of the moderator
-				$success = model\Breeder::set($id, $body['firstname'], $body['infix'], $body['lastname'], $body['email'], $body['club'], $body['start'], $body['end'], $body['info'], $requester->getId());
+				$success = model\Breeder::set($id, $body['member'], $body['firstname'], $body['infix'], $body['lastname'], $body['email'], $body['club'], $body['start'], $body['end'], $body['info'], $requester->getId());
 				if ($success) {
 					$response->getBody()->write(json_encode(['id' => $id], JSON_UNESCAPED_SLASHES));
 					return $response;
@@ -86,7 +87,28 @@ class Breeder // is user
 	}
 
 	public static function delete( Request $request, Response $response, array $args ) : Response {
-		throw new HttpNotImplementedException( $request );
+		// delete if no results/pairs or is moderator or admin
+		$id = $args[ 'id' ] ?? null;
+		if( is_numeric( $id ) ) {
+			$requester = new Requester( $request );
+			$breeder = model\Breeder::get($id);
+			if( $breeder ) {
+				$districtId = $breeder[ 'districtId' ] ?? null;
+				if( ( $requester->isAdmin() || $requester->isModerating( $districtId ) ) && ! $requester->hasId( $id ) ) { //admin or moderator and not self
+					$pairs = model\Breeder::getPairs( $id ); // check if has pairs
+					if( count( $pairs ) === 0 ) {
+						model\Breeder::del( $id );
+						$response->getBody()->write(json_encode([ 'id'=>$id ], JSON_UNESCAPED_SLASHES));
+						return $response;
+					}
+					throw new HttpForbiddenException( $request, 'Cannot delete breeder that has results '.count( $pairs ) );
+				}
+				throw new HttpUnauthorizedException( $request, 'Cannot do this' );
+			}
+			throw new HttpNotFoundException($request, 'Breeder not found');
+
+		}
+		throw new HttpBadRequestException( $request, 'Bad id provided' );
 	}
 
 	/** other getters **/

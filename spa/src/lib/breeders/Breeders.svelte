@@ -1,7 +1,7 @@
 <script>
     import { meta } from 'tinro';
     import api from '../../js/api.js';
-    import { breeder, district, user } from '../../js/store.js'
+    import { district } from '../../js/store.js'
 
     import Page from "../common/Page.svelte";
     import BreedersHeader from "../breeders/BreedersHeader.svelte";

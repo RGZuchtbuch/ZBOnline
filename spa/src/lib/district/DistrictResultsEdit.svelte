@@ -56,10 +56,11 @@
 	console.log( 'Edit', districtId, year );
 </script>
 
+<div class='w-256 flex flex-row justify-between border rounded-t border-gray-400 px-4 py-2 bg-header text-xl font-bold text-white text-center italic'>
+	<button type='button' class='w-8 justify-center circled bg-alert cursor-pointer text-white' on:click={onHelp} title='Anleitung'>?</button>
 
-<div class='w-256 flex rounded-t'>
-	<h2 class='grow text-center'>Eingabe Leistungen {district ? district.name : '...'}</h2>
-	<button type='button' class='w-8 justify-center m-2 circled bg-alert cursor-pointer text-white' on:click={onHelp} title='Anleitung'>?</button>
+	<div>Verband {#if district} {district.name} {/if} → Leistungen {year} EINGABE</div>
+	<a class='w-8 border border-black rounded bg-button text-white text-center' href={`/obmann/verband/${districtId}/leistung/${year}`} title='Zurück zur Leistungen'>&#9998;</a>
 </div>
 
 
@@ -67,7 +68,7 @@
 
 <Header {sectionId}/>
 
-<div class='w-256 bg-gray-200 overflow-y-scroll border border-t-gray-400 rounded-b scrollbar'>
+<div class='w-256 bg-gray-200 overflow-y-scroll border border-gray-400 rounded-b scrollbar'>
 	{#if sectionId === 9999 }
 
 		<AocInput {districtId} {year} bind:results={breeds}/>

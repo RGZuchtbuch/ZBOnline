@@ -12,7 +12,6 @@
 
 
     function updateBreeder(  ) {
-        console.log( 'Update Breeder', id, $breeder, $district );
         breeder.set( null );
 
         if( id ) { // valid id, else new
@@ -20,7 +19,6 @@
                 .then( response => {
                     //breeder.set( response.breeder );
                     breeder.set( response.breeder );
-                    console.log( 'Load breeder', $breeder);
                 })
                 .catch( e => {
                     alert( 'Oops loading breeder' );
@@ -42,7 +40,8 @@
 
     $: updateBreeder( $district, id );
 
-    console.log( 'Breeder', id );
+    console.log( 'Breeder', id, breeder );
+
 </script>
 
 {#if $breeder}

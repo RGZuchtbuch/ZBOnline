@@ -72,7 +72,7 @@
 
 {#if district}
     <Page>
-        <div slot='title'> Verband {$district.name} {$district.moderatorId}</div>
+        <div slot='title'> Verband {$district.name}</div>
 
         <div slot='header' class='flex flex-row'>
             <div class='grow text-center font-bold'>Verbandsdaten</div>

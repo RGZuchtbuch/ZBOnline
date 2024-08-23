@@ -35,7 +35,7 @@ export default {
         get: ( id ) => get( 'api/breeder/'+id ),
         post: (breeder ) => post( 'api/breeder', breeder ),
         put: (id, breeder ) => put( 'api/breeder/'+id, breeder ),
-        //delete: ( id )       => del( 'api/breed/'+id ),
+        delete: ( id )       => del( 'api/breeder/'+id ),
 
         pairs: {
             get: (breederId) => get( 'api/breeder/'+breederId+'/pair' ),
@@ -436,11 +436,13 @@ async function del( url ) {
     }
     return fetch( APIROOT + url, options)
         .then( response => {
+            console.log('R', response);
             if( response.ok ) {
                 return response.json();
             }
+            console.log('Del Error');
             throw response;
-        });
+        })
 }
 
 

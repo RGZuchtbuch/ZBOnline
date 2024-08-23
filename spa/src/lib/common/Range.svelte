@@ -12,11 +12,6 @@
     let classname = '';
     export { classname as class }
 
-    const on = {
-        blur: () => { console.log( 'Range', label, ' blur') },
-        focus: () => { console.log( 'Range', label, ' focus') },
-    }
-
 </script>
 
 <div class='input {classname} flex flex-col gap-0 pb-1' title={title}>
@@ -26,8 +21,7 @@
     <input class='data mb-1' type='range' id='input'
         bind:value={value} bind:this={element}
         {min} {max} {step}
-        on:blur={on.blur}
-        on:focus={on.focus}
+        on:change on:focus on:blur
     >
 </div>
 

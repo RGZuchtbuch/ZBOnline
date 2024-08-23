@@ -1,7 +1,4 @@
 <script>
-    //  import logo from './assets/svelte.png'
-    import {meta, Route} from 'tinro';
-
     import { standard, user } from './js/store.js'
 
 
@@ -11,7 +8,6 @@
 
     api.standard.get().then( response => { // load standard here async into store
         standard.set( response.standard );
-        console.log( 'Standard loaded', response.standard );
     } );
 
 </script>
@@ -19,8 +15,6 @@
 <main class='h-full flex flex-col'>
     <Router />
 </main>
-
-
 
 
 <style>

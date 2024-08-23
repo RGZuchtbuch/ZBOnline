@@ -3,6 +3,7 @@
 	import {getProduction} from '../../js/util.js';
 	import { meta, router } from 'tinro';
 	import { slide } from 'svelte/transition';
+	import Link from './Link.svelte';
 
 	export let name = '?';
 	export let focus = null;
@@ -19,7 +20,7 @@
 
 	function onChange( router ) {
 		selected = router.path.startsWith( url );
-		console.log( 'onChange', router.path, url, selected );
+		//console.log( 'onChange', router.path, url, selected );
 	}
 
 	$: onChange( $router );

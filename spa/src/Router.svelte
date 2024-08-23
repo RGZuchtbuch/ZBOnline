@@ -1,6 +1,6 @@
 <script>
 	//  import logo from './assets/svelte.png'
-	import {meta, Route} from 'tinro';
+	import {meta, Route, router} from 'tinro';
 	import api from './js/api.js';
 	import {toNumber} from './js/util.js';
 	import { standard, user } from './js/store.js'
@@ -27,7 +27,7 @@
 	import Results from './lib/result/Results.svelte';
 	import Standard from './lib/standard/Standard.svelte';
 
-	import Menu from './lib/navigation/Menu.svelte';
+	import Menu from './lib/menu/Menu.svelte';
 
 	import Login from './lib/login/Login.svelte';
 	import Reset from './lib/login/Reset.svelte';
@@ -37,12 +37,7 @@
 	import DistrictResultsEdit from './lib/district/DistrictResultsEdit.svelte';
 	import Log from './lib/admin/log/Log.svelte';
 	import Articles from './lib/admin/Articles.svelte';
-
-	api.standard.get().then( response => { // load standard here async into store
-		standard.set( response.standard );
-		console.log( 'Standard loaded', response.standard );
-	} );
-
+	import Trend from './lib/breeder/Trend.svelte';
 </script>
 
 <!-- the router here is responsible for converting params to numbers using isNumber if appropriate -->
@@ -74,13 +69,13 @@
 				<Route path='/:districtId/*' let:meta>
 
 					<District id={toNumber(meta.params.districtId)} >
-						<Route path='/' let:meta> <DistrictDetails /> </Route>
+						<Route path='/details' let:meta> <DistrictDetails /> </Route>
 						<Route path='/zuechter/*' let:meta>
 							<Route path='/' let:meta> <DistrictBreeders /> </Route>
 							<Route path='/:breederId/*' let:meta >
 
 								<Breeder id={toNumber(meta.params.breederId)} >
-									<Route path='/' let:meta> <BreederDetails /> </Route>
+									<Route path='/details' let:meta> <BreederDetails /> </Route>
 									<Route path='/meldung/*' let:meta>
 										<Route path='/' let:meta> <BreederPairs breederId={toNumber(meta.params.breederId)} /> </Route>
 										<Route path='/:pairId/*' let:meta>
@@ -89,6 +84,7 @@
 											</Route>
 										</Route>
 									</Route>
+									<Route path='/entwicklung' let:meta> <Trend /> </Route>
 								</Breeder>
 							</Route>
 						</Route>
@@ -126,12 +122,13 @@
 				<Route path='/:districtId/*' let:meta>
 					<District id={toNumber(meta.params.districtId)} >
 						<Route path='/' let:meta> <DistrictDetails districtId={toNumber(meta.params.districtId)} /> </Route>
+						<Route path='/details' let:meta> <DistrictDetails districtId={toNumber(meta.params.districtId)} /> </Route>
 
 						<Route path='/zuechter/*' let:meta>
 							<Route path='/' let:meta> <DistrictBreeders /> </Route>
 							<Route path='/:breederId/*' let:meta >
 								<Breeder id={toNumber(meta.params.breederId)} >
-									<Route path='/' let:meta> <BreederDetails /> </Route>
+									<Route path='/details' let:meta> <BreederDetails /> </Route>
 									<Route path='/meldung/*' let:meta>
 										<Route path='/' let:meta> <BreederPairs breederId={toNumber(meta.params.breederId)} /> </Route>
 										<Route path='/:pairId/*' let:meta>
@@ -168,7 +165,6 @@
 	<Route path='/anmelden'> <Login /> </Route>
 	<Route path='/reset'> <Reset /> </Route>
 	<Route path='/abmelden'> <Logout /> </Route>
-
 
 	<Route path='/kontakt/:districtId' let:meta> <Message districtId={meta.params.districtId} /> </Route>
 </Route>

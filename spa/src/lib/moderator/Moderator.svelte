@@ -15,7 +15,6 @@
 	function onRoute( route ) {
 		authenticated = $user != null;
 		if( authenticated ) {
-			console.log( 'User', $user );
 			authorized = $user.moderator.length > 0;
 		} else {
 			authorized = false;

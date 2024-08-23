@@ -19,7 +19,7 @@
     <div class='grow'></div>
     {#if $user && $user.moderator}
         <div class='cursor-pointer' title='Neues Mitglied'>
-            <a href={route.match+'/0/daten'}>[+]</a>
+            <a href={route.match+'/0/details'}>[+]</a>
         </div>
     {/if}
 </div>

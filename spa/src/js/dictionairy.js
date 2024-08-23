@@ -24,6 +24,7 @@ export default {
 		firstname	: 'Vorname',
 		infix		: 'Zusatz',
 		lastname	: 'Nachname',
+		member		: 'Mitgliedsnummer',
 		result		: 'Leistung',
 		results		: 'Leistungen',
 		since		: 'Seit',

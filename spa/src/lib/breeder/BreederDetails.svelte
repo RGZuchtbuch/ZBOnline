@@ -27,8 +27,6 @@
     const district = getContext( 'district' );
     const breeder  = getContext( 'breeder' );
 
-    console.log('A', $breeder );
-
     let disabled = true; // enabled if new breeder
     let needFocus = true;
     let clubs = null;
@@ -40,10 +38,11 @@
     let focusElement; // to set focus to for starters
 
     const validate = { // for validating Form fields
-        name:       (v) => validator(v).string().length(1,32).isValid(),
+        member:     (v) => validator(v).string().length(1,16).orNull().isValid(),
+        name:       (v) => validator(v).string().length(1,32).orNullIf( toRemove ).isValid(),
         infix:      (v) => validator(v).string().length(1,16).orNull().isValid(),
         email:      (v) => validator(v).email().orNull().isValid(),
-        start:      (v) => validator(v).date().isValid(),
+        start:      (v) => validator(v).date().after( '1990-01-01' ).orNull().isValid(),
         end:        (v) => validator(v).date().after( $breeder.start ).orNull().isValid(),
     }
 
@@ -53,13 +52,15 @@
     }
 
     function onSubmit(event) {
-        console.log('Submit');
-        if( $breeder.firstname && $breeder.lastname && $breeder.start ) {
+        console.log('Submit', $breeder);
+        if( $breeder.firstname && $breeder.lastname ) {
             if ($breeder.id > 0) {
+                console.log( 'put' )
                 api.breeder.put($breeder.id, $breeder).then(response => { // chenge breeder
                     changed = false;
                 });
             } else {
+                console.log( 'post' )
                 api.breeder.post($breeder).then(response => { // new breeder
                     $breeder.id = response.id;
                     changed = false;
@@ -69,8 +70,12 @@
             disabled = true;
             api.breeder.delete( $breeder.id ).then( response => {
                 breeder.id = null;;
-                $router.goto( $router.from );
-            })
+                router.goto( `/obmann/verband/${$district.id}/zuechter` );
+
+            }).catch( error => {
+                console.log( 'Error', error );
+               alert( 'Kann Züchter nicht löschen, hat leistungen');
+            });
         }
     }
 
@@ -90,7 +95,6 @@
         }
     })
 
-    console.log( 'BreederDetails', $breeder );
 </script>
 
 {#if $breeder }
@@ -111,11 +115,15 @@
                     </div>
                 {/if}
                 <div class='flex flex-row gap-x-2'>
-                    <TextInput class='w-48' bind:value={$breeder.firstname} label={dic.label.firstname} error={dic.error.required} validator={validate.name}/>
-                    <TextInput class='w-24' bind:value={$breeder.infix} label={dic.label.infix}/>
-                    <TextInput class='w-64' bind:value={$breeder.lastname} label={dic.label.lastname} error={dic.error.required} validator={validate.name}/>
+                    <TextInput class='w-32' bind:value={$breeder.member} label={dic.label.member} error={dic.error.required} validator={validate.member}/>
                     <div class='grow'></div>
-                    <!--CheckBoxInput class='w-10' label='Löschen' bind:value={toRemove} title={dic.title.delete.breeder} disabled={ $breeder.firstname != null || $breeder.lastname != null }/-->
+                    <CheckBoxInput class='w-10' label='Löschen' bind:value={toRemove} title={dic.title.delete.breeder} disabled={ $breeder.firstname != null || $breeder.lastname != null }/>
+                </div>
+                <div class='flex flex-row gap-x-2'>
+                    <TextInput class='w-48' bind:value={$breeder.firstname} label={dic.label.firstname+'*'} error={dic.error.required} validator={validate.name}/>
+                    <TextInput class='w-24' bind:value={$breeder.infix} label={dic.label.infix}/>
+                    <TextInput class='w-64' bind:value={$breeder.lastname} label={dic.label.lastname+'*'} error={dic.error.required} validator={validate.name}/>
+                    <div class='grow'></div>
                 </div>
 
                 <TextInput class='w-128' bind:value={$breeder.club} label={dic.label.club} />

@@ -13,19 +13,15 @@
 
     function loadDistrict( id ) {
         district.set( null );
-        console.log( 'District load', id );
         api.district.get( id )
             .then( response => {
                 district.set( response.district );
-                console.log( 'got District', response.district );
             })
             .catch( e => {
                 alert('Houston we have got a problem loading district');
                 district.set( null );
             } );
     }
-
-    console.log( 'District route', route );
 
     $: loadDistrict( id );
 </script>

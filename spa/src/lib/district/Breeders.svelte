@@ -18,9 +18,7 @@
     const route = meta();
 
     function loadBreeders( forDistrict ) {
-        console.log( 'DistrictBreeders load', forDistrict );
         if( forDistrict ) {
-            console.log( 'DistrictBreeders load', forDistrict );
             api.district.breeders.get( forDistrict.id )
                 .then( response => {
                     breeders = response.breeders;
@@ -33,7 +31,6 @@
     }
 
     function activeMember( breeder ) {
-        console.log( 'Breeder', breeder );
         if( breeder.end ) { // if end and end before now
             let now = new Date();
             let end = new Date( breeder.end );
@@ -44,7 +41,7 @@
 
     function addBreeder() {
         breeders = [         {
-            id: null, zbnr:null,
+            id: null, member:null,
             firstname: null, infix: null, lastname: null,
             districtId: district.id, districtName: null, clubName: null,
             start: null, end: null
@@ -52,7 +49,6 @@
     }
 
     $: loadBreeders( $district ); // each time district changes in url, could be null !
-    console.log( 'DistrictBreeders', $district);
 </script>
 
 <Page>
@@ -66,7 +62,7 @@
         <div class='w-16'>Inaktief</div> <div class='w-6 h-6 text-center'> <input class='cursor-pointer' type='checkbox' bind:checked={showInactives}> </div>
         <div class='grow'></div>
         {#if $user && $user.moderator}
-            <a class='bg-amber-500 border border-gray-400 rounded px-1' href={$router.path+'/0'} title='Züchter hinzufügen'> + </a>
+            <a class='bg-amber-500 border border-gray-400 rounded px-1' href={$router.path+'/0/details'} title='Züchter hinzufügen'> + </a>
         {/if}
     </div>
     <div slot='body' class=''>

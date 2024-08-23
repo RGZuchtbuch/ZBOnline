@@ -1,11 +1,12 @@
 <script>
-	import {meta} from 'tinro';
+	import {meta, router} from 'tinro';
 	import {onMount, setContext} from 'svelte';
 	import {slide} from 'svelte/transition';
 	import screens from '../../js/screens.js';
 	import Item from './Item.svelte';
 	import api from '../../js/api.js';
 	import { admin, moderator, user } from '../../js/store.js';
+	import Link from './Link.svelte';
 
 	let route = meta();
 
@@ -25,7 +26,6 @@
 	}
 
 	function hideOnChange() {
-		console.log( 'Change', route.url );
 		showMenu = false;
 	}
 
@@ -71,7 +71,7 @@
 	<div class='flex flex-col md:flex-row md:gap-x-2'>
 		<Item name='Info *' url='/zuchtbuch' bind:focus={focus}>
 			{#each articles as article}
-				<a href={'/zuchtbuch/'+article.id}>&#9755; {article.title}</a>
+				<Link href={'/zuchtbuch/'+article.id}>&#9755; {article.title}</Link>
 			{/each}
 		</Item>
 		<Item name='Verbände' url='/verband' bind:focus={focus} href={'/verband'}>
@@ -81,23 +81,25 @@
 			<!-- a href={'/standard'}>&#9755; BDRG Rassestandard</a -->
 		</Item>
 		<Item name='Leistungen *' url='/leistungen' bind:focus={focus}>
-			<a href={ '/leistungen' }>&#9755; Leistungen</a>
-			<a class='hidden md:block' href={ '/leistungen/nachweis' }>&#9755; Abstammungsnachweis Formular</a>
-			<a href={ '/leistungen/rechner' }>&#9755; Zuchtbuch Bewertungsrechner</a>
+			<Link href={ '/leistungen' }>&#9755; Leistungen</Link>
+			<Link href={ '/leistungen/rechner' }>&#9755; Zuchtbuch Bewertungsrechner</Link>
 		</Item>
 
 		{#if $user && $user.moderator.length > 0 }
 			<Item name='Obmann *' url='/obmann' bind:focus={focus}>
-				<a href='/obmann/verband'>&#9755; Verbände</a>
+				<Link href='/obmann/verband'>&#9755; Verbände</Link>
+				<Link href={ '/leistungen/nachweis' }>&#9755; Abstammungsnachweis Formular</Link>
+
 				{#if $moderatorDistrict}
 					<div>Verband {$moderatorDistrict.short}</div>
-					<a href={'/obmann/verband/'+$moderatorDistrict.id+'/leistung'}>&#9755; Leistungen</a>
-					<!--a href={'/obmann/verband/'+$moderatorDistrict.id+'/zuechter'}>&#9755; Züchter</a-->
-					<a href={'/obmann/verband/'+$moderatorDistrict.id}>&#9755; Verbandsdaten</a>
+					<Link href={'/obmann/verband/'+$moderatorDistrict.id+'/leistung'}>&#9755; Leistungen</Link>
+					<Link href={'/obmann/verband/'+$moderatorDistrict.id+'/zuechter'}>&#9755; Züchter</Link>
+					<Link href={'/obmann/verband/'+$moderatorDistrict.id+'/details'}>&#9755; Verbandsdaten</Link>
 					{#if $moderatorBreeder}
 						<div>Züchter {$moderatorBreeder.lastname}</div>
-						<a href={'/obmann/verband/'+$moderatorDistrict.id+'/zuechter/'+$moderatorBreeder.id}>&#9755; Mitglied</a>
-						<a href={'/obmann/verband/'+$moderatorDistrict.id+'/zuechter/'+$moderatorBreeder.id+'/meldung'}>&#9755; Meldungen</a>
+						<Link href={'/obmann/verband/'+$moderatorDistrict.id+'/zuechter/'+$moderatorBreeder.id+'/details'}>&#9755; Mitgliedsdaten</Link>
+						<Link href={'/obmann/verband/'+$moderatorDistrict.id+'/zuechter/'+$moderatorBreeder.id+'/meldung'}>&#9755; Meldungen</Link>
+						<!--Link href={'/obmann/verband/'+$moderatorDistrict.id+'/zuechter/'+$moderatorBreeder.id+'/entwicklung'}>&#9755; Entwicklung</Link-->
 					{/if}
 				{/if}
 			</Item>
@@ -105,16 +107,16 @@
 
 		{#if $user && $user.admin }
 			<Item name='Admin *' url='/admin' bind:focus={focus}>
-				<a href='/admin/verband'>&#9755; Verbände</a>
+				<Link href='/admin/verband'>&#9755; Verbände</Link>
 				{#if $adminDistrict }
 					<div>Verband {$adminDistrict.short}</div>
-					<a href={'/admin/verband/'+$adminDistrict.id+'/leistung'}>&#9755; Leistungen</a>
-					<a href={'/admin/verband/'+$adminDistrict.id+'/zuechter'}>&#9755; Züchter</a>
-					<a href={'/admin/verband/'+$adminDistrict.id }>&#9755; Verbandsdaten</a>
+					<Link href={'/admin/verband/'+$adminDistrict.id+'/leistung'}>&#9755; Leistungen</Link>
+					<Link href={'/admin/verband/'+$adminDistrict.id+'/zuechter'}>&#9755; Züchter</Link>
+					<Link href={'/admin/verband/'+$adminDistrict.id+'/details' }>&#9755; Verbandsdaten</Link>
 					{#if $adminBreeder}
 						<div>Züchter {$adminBreeder.lastname}</div>
-						<a href={'/admin/verband/'+$adminDistrict.id+'/zuechter/'+$adminBreeder.id}>&#9755; Mitglied</a>
-						<a href={'/admin/verband/'+$adminDistrict.id+'/zuechter/'+$adminBreeder.id+'/meldung'}>&#9755; Meldungen</a>
+						<Link href={'/admin/verband/'+$adminDistrict.id+'/zuechter/'+$adminBreeder.id+'/details' }>&#9755; Mitglied</Link>
+						<Link href={'/admin/verband/'+$adminDistrict.id+'/zuechter/'+$adminBreeder.id+'/meldung'}>&#9755; Meldungen</Link>
 					{/if}
 				{/if}
 			</Item>
@@ -136,5 +138,9 @@
 <style>
 	.showMenu {
 		@apply flex print:hidden;
+	}
+
+	.chosen {
+		@apply font-bold;
 	}
 </style>
