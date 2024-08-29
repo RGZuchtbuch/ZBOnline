@@ -42,7 +42,6 @@
                 prevYear = newRingObject.year;
             }
         } else {
-            console.log('Reset')
             ancestorPairs = null;
             ancestorPair = null;
             prevYear = null;
@@ -52,12 +51,10 @@
 
     function updateAncestorPair( ) {
         if( parent.parentsPairId && parent.parentsPairId !== prevAncestorId && ancestorPairs ) {
-            console.log( 'Get APair')
             ancestorPair = null;
             for (const pair of ancestorPairs) {
                 if ( pair.id === parent.parentsPairId ) {
                     ancestorPair = pair;
-                    console.log( 'Found ', pair.id );
                 }
             }
             prevAncestorId = parent.parentsPairId;

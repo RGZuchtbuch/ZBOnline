@@ -1,11 +1,11 @@
 <script>
-    import {getContext} from 'svelte';
+    import {getContext, setContext} from 'svelte';
     import {meta, router} from 'tinro';
     import api from '../../js/api.js';
     import { user } from '../../js/store.js';
 
     import Page from '../common/Page.svelte';
-    import {dat, txt} from '../../js/util.js';
+    import {dat, isNumber, txt} from '../../js/util.js';
 
     const district = getContext( 'district' );
     const breeder  = getContext( 'breeder' );
@@ -17,9 +17,9 @@
 
     const route = meta();
 
-    function loadBreeders( forDistrict ) {
-        if( forDistrict ) {
-            api.district.breeders.get( forDistrict.id )
+    function loadBreeders( districtId ) {
+        if( districtId > 0 ) {
+            api.district.breeders.get( districtId )
                 .then( response => {
                     breeders = response.breeders;
                     breeder.set( null );
@@ -48,13 +48,18 @@
         }, ...breeders ];
     }
 
-    $: loadBreeders( $district ); // each time district changes in url, could be null !
+    function update( districtId ) {
+        loadBreeders( districtId );
+        breeder.set( null );
+    }
+
+    $: loadBreeders( $district.id ); // each time district changes in url, could be null !
 </script>
 
 <Page>
     <div slot='title'> Zuchtbuchmitglieder in Verband </div>
     <div slot='header' class='flex flex-row gap-x-4 px-2 py-1'>
-        <div class='w-12'>ZbNr</div>
+        <div class='w-12'>Nr</div>
         <div class='w-56'>Name</div>
         <div class='w-36'>Ortsverein</div>
         <div class='w-64'>ZB Verband</div>
@@ -70,7 +75,7 @@
             {#each breeders as breeder (breeder.id) }
                 {#if showInactives || activeMember( breeder ) }
                     <div class='flex flex-row border-b border-gray-400 gap-x-4 px-2 my-2'>
-                        <div class='w-12 text-2xs'>[{breeder.id}]</div>
+                        <div class='w-12'>{txt(breeder.member)}</div>
 
                         <a class='w-56' href={route.match+'/'+breeder.id+'/meldung'}>
                             { txt( breeder.lastname )+', '+txt( breeder.firstname )+' '+txt( breeder.infix ) }

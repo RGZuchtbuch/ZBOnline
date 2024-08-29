@@ -49,7 +49,6 @@
 
 	$: hideOnChange( route );
 
-	console.log( 'Admin', $adminDistrict, $adminBreeder );
 </script>
 
 <header class='relative flex flex-row justify-center'>
@@ -91,14 +90,15 @@
 				<Link href={ '/leistungen/nachweis' }>&#9755; Abstammungsnachweis Formular</Link>
 
 				{#if $moderatorDistrict}
-					<div>Verband {$moderatorDistrict.short}</div>
+					<div class='bg-gray-300 text-center'>Verband {$moderatorDistrict.short}</div>
 					<Link href={'/obmann/verband/'+$moderatorDistrict.id+'/leistung'}>&#9755; Leistungen</Link>
 					<Link href={'/obmann/verband/'+$moderatorDistrict.id+'/zuechter'}>&#9755; Züchter</Link>
-					<Link href={'/obmann/verband/'+$moderatorDistrict.id+'/details'}>&#9755; Verbandsdaten</Link>
+					<Link href={'/obmann/verband/'+$moderatorDistrict.id+'/meldung'}>&#9755; Meldungen</Link>
+					<!--Link href={'/obmann/verband/'+$moderatorDistrict.id+'/details'}>&#9755; Verbandsdaten</Link-->
 					{#if $moderatorBreeder}
-						<div>Züchter {$moderatorBreeder.lastname}</div>
-						<Link href={'/obmann/verband/'+$moderatorDistrict.id+'/zuechter/'+$moderatorBreeder.id+'/details'}>&#9755; Mitgliedsdaten</Link>
+						<div class='bg-gray-300 text-center'>Züchter {$moderatorBreeder.lastname}</div>
 						<Link href={'/obmann/verband/'+$moderatorDistrict.id+'/zuechter/'+$moderatorBreeder.id+'/meldung'}>&#9755; Meldungen</Link>
+						<Link href={'/obmann/verband/'+$moderatorDistrict.id+'/zuechter/'+$moderatorBreeder.id+'/details'}>&#9755; Züchterdaten</Link>
 						<!--Link href={'/obmann/verband/'+$moderatorDistrict.id+'/zuechter/'+$moderatorBreeder.id+'/entwicklung'}>&#9755; Entwicklung</Link-->
 					{/if}
 				{/if}
@@ -109,14 +109,15 @@
 			<Item name='Admin *' url='/admin' bind:focus={focus}>
 				<Link href='/admin/verband'>&#9755; Verbände</Link>
 				{#if $adminDistrict }
-					<div>Verband {$adminDistrict.short}</div>
+					<div class='bg-gray-300 text-center'>Verband {$adminDistrict.short}</div>
 					<Link href={'/admin/verband/'+$adminDistrict.id+'/leistung'}>&#9755; Leistungen</Link>
 					<Link href={'/admin/verband/'+$adminDistrict.id+'/zuechter'}>&#9755; Züchter</Link>
+					<Link href={'/admin/verband/'+$adminDistrict.id+'/meldung'}>&#9755; Meldungen</Link>
 					<Link href={'/admin/verband/'+$adminDistrict.id+'/details' }>&#9755; Verbandsdaten</Link>
 					{#if $adminBreeder}
-						<div>Züchter {$adminBreeder.lastname}</div>
-						<Link href={'/admin/verband/'+$adminDistrict.id+'/zuechter/'+$adminBreeder.id+'/details' }>&#9755; Mitglied</Link>
+						<div class='bg-gray-300 text-center'>Züchter {$adminBreeder.lastname}</div>
 						<Link href={'/admin/verband/'+$adminDistrict.id+'/zuechter/'+$adminBreeder.id+'/meldung'}>&#9755; Meldungen</Link>
+						<Link href={'/admin/verband/'+$adminDistrict.id+'/zuechter/'+$adminBreeder.id+'/details' }>&#9755; Züchterdaten</Link>
 					{/if}
 				{/if}
 			</Item>

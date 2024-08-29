@@ -38,7 +38,6 @@
                 broods.push( newBrood() );
             }
             if( pair.sectionId === PIGEONS ) { // add chicks if not room for 2
-                console.log( 'PBroods', broods );
                 const chicks = broods[ broodIndex ].chicks;
                 for( let chickIndex=0; chickIndex<2; chickIndex++ ) { // add fields for max 2 chicks
                     if( ! chicks[ chickIndex ] ) {

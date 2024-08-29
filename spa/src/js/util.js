@@ -224,8 +224,15 @@ export function pct(a, b, decimals= 0 ) {
     }
     return '';
 }
-export function txt( text ) {
-    return text ? text : '';
+export function txt( text, positions = 0 ) {
+    if( text ) {
+        if( positions ) {
+            return text.substring( 0, positions );
+        } else {
+            return text;
+        }
+    }
+    return '';
 }
 
 

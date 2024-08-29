@@ -1,6 +1,6 @@
 <script>
 
-    import {beforeUpdate, afterUpdate, onMount} from 'svelte';
+    import {beforeUpdate, afterUpdate, onMount, getContext, setContext} from 'svelte';
     import { slide } from 'svelte/transition';
     import dic from '../../js/dictionairy.js';
     import {active, meta, router } from 'tinro';
@@ -8,6 +8,7 @@
 
     import {user} from "../../js/store.js";
     import api from '../../js/api.js';
+    import { toNumber } from '../../js/util.js';
 
     import Page from '../common/Page.svelte';
 
@@ -21,11 +22,14 @@
     import PairNotes from './Notes.svelte';
 
     export let id = 0; // pairId
-    export let districtId = null;
-    export let breederId = null;
+    //export let districtId = null;
+    //export let breederId = null;
+
+    let district = getContext( 'district' );
+    let breeder = getContext( 'breeder' );
 
     let pair = null;
-    let breeder = null;
+//    let breeder = null;
     let changed = false;
     let invalid = false;
     let layer = true;
@@ -35,19 +39,22 @@
     const route = meta();
 
     function newPair()  {
-        console.log( 'From route', districtId, breederId );
-        return {
-            id: 0,
-            breederId:breederId, districtId:districtId, year: new Date().getFullYear(), group: 'I',
-            sectionId: null, breedId: null, colorId: null,
-            name: null, paired: null, notes: 'Info...',
-            parents: [],
-            lay: { start:null, end:null, eggs:null, weight:null },
-            broods: [],
-            show: { 89:null, 90:null, 91:null, 92:null, 93:null, 94:null, 95:null, 96:null, 97:null },
-            breeder: { firstname:null, infix:null, lastname:null },
-            delete: false,
-        };
+        console.log( 'From route', $district.id, $breeder.id );
+        if( $district && $breeder ) {
+            return {
+                id: 0,
+                breederId: $breeder.id, districtId: $district.id, year: new Date().getFullYear(), group: 'I',
+                sectionId: null, breedId: null, colorId: null,
+                name: null, paired: null, notes: 'Info...',
+                parents: [],
+                lay: {start: null, end: null, eggs: null, weight: null},
+                broods: [],
+                show: {89: null, 90: null, 91: null, 92: null, 93: null, 94: null, 95: null, 96: null, 97: null},
+                breeder: {firstname: null, infix: null, lastname: null},
+                delete: false,
+            };
+        }
+        return null; // should not happen
     }
 
     function onToggleEdit() {
@@ -84,19 +91,21 @@
 
 
     function updatePair( id ) {
-        console.log( 'Update Pair' );
-        if( id > 0 && breederId > 0 && districtId > 0 ) { // existing, note id could be '0' from param for new
+        id = toNumber( id ); // null if not
+        if( id && id > 0 ) { // existing, note id could be '0' from param for new
             api.pair.get( id ).then( response => {
                 pair = response.pair;
                 pair.delete = false;
                 api.breeder.get( pair.breederId ).then( response => {
                     pair.breeder = response.breeder;
+                    breeder.set( pair.breeder );
                 });
             });
-        } else { // new as id == 0
+        } else { // new as id == 0 or null
             pair = newPair();
             api.breeder.get( pair.breederId ).then( response => {
                 pair.breeder = response.breeder;
+                breeder.set( pair.breeder );
             });
             disabled = false; // ready to edit
         }

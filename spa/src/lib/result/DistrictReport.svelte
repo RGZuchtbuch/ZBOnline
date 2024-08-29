@@ -38,7 +38,7 @@
 {#if district && year }
     <h2 class='text-center'>Verband {#if district} {district.name} {/if} → Leistungsdaten {year}</h2>
     {#if report}
-        <Report {district} {year} {report}/>
+        <Report {year} {report}/>
     {/if}
 {/if}
 </div>

@@ -1,12 +1,14 @@
 <script>
-    import { onMount } from 'svelte';
+    import {getContext, onMount, setContext} from 'svelte';
     import { dec, pct } from '../../js/util.js';
 
     import {meta, router} from 'tinro';
 
-    export let district;
     export let year;
     export let report;
+
+    let district = getContext( 'district' );
+    let breeder = getContext( 'breeder' );
 
     function addTo( sum, result ) { // count and add all up to totals of section etc
         result.broods = result.broodEggs ? result.broodEggs / 2 : null; // for pigeons
@@ -112,11 +114,14 @@
             results.total = avgTotal( resultsSum );
         }
     }
+    function update( report ) {
+        calcTotals( report );
+        if( breeder ) breeder.set( null );
+    }
 
     const route = meta();
 
-    $: calcTotals( report );
-   // $: console.log( 'Report', report );
+    $: update( report );
 
 </script>
 

@@ -102,7 +102,6 @@
 
             api.report.get( districtId, year ).then( response => {
                 const report = response.report;
-                console.log('Pie report', report);
 
                 countBreeders( report );
                 let data = report.sections.map( section => section.count ); // get array of counts

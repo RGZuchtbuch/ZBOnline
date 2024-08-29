@@ -1,13 +1,13 @@
 <script>
 	import {setContext} from 'svelte';
     import { meta, router, Route } from 'tinro';
-	import {admin as state, user} from '../../js/store.js';
+	import {admin, user} from '../../js/store.js';
 
 	let authenticated = false;
 	let authorized = false;
 	// setting context from store into context. enables district and breeder handling without role
-	setContext( 'district', state.district );
-	setContext( 'breeder', state.breeder );
+	setContext( 'district', admin.district );
+	setContext( 'breeder', admin.breeder );
 
     const route = meta();
 

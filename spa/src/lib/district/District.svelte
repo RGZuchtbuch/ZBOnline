@@ -9,10 +9,12 @@
     let route = meta();
 
     const district = getContext( 'district' );
+    const breeder = getContext( 'breeder' );
 
 
     function loadDistrict( id ) {
         district.set( null );
+        breeder.set( null );
         api.district.get( id )
             .then( response => {
                 district.set( response.district );

@@ -11,24 +11,23 @@
     //let route = meta();
 
 
-    function updateBreeder(  ) {
+    function update( districtId, breederId ) {
         breeder.set( null );
 
-        if( id ) { // valid id, else new
-            api.breeder.get( id )
+        if( breederId ) { // valid id, else new
+            api.breeder.get( breederId )
                 .then( response => {
-                    //breeder.set( response.breeder );
                     breeder.set( response.breeder );
                 })
                 .catch( e => {
                     alert( 'Oops loading breeder' );
                 });
 
-        } else if( $district ) { // new
+        } else if( districtId ) { // new
             breeder.set( {
                 id:null, firstname:null, infix: null, lastname:null, active:true,
-                districtId: $district.id,
-                district: $district, // needed ?
+                districtId: districtId,
+//                district: $district, // needed ?
                 club:null,
                 start: null, end: null,
                 email: null,
@@ -38,9 +37,7 @@
         }
     }
 
-    $: updateBreeder( $district, id );
-
-    console.log( 'Breeder', id, breeder );
+    $: update( $district.id, id );
 
 </script>
 

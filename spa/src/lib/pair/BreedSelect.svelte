@@ -31,8 +31,8 @@
         color:        (v) => validator(v).if( v ).orNullIf( pair.sectionId === PIGEONS ).isValid(),
     }
 
-    function update( r, s ) {
-        if( pair && $standard ) {
+    function update( pair ) {
+        if( pair ) {
             section = getSection( pair.sectionId, $standard );
             if( section ) {
                 breeds = getBreeds(section);
@@ -94,7 +94,7 @@
     onMount(() => {
     })
 
-    $: update( $router, $standard )
+    $: update( pair )
 
 </script>
 
@@ -102,7 +102,7 @@
 
 <fieldset class='flex flex-row px-2 gap-x-1'>
     {#if $standard && sections && pair }
-        <div title={dic.title.immutable}>{ pair.id }</div>
+
         <Select class='w-60' label='Sparte *' bind:value={pair.sectionId} title={dic.title.immutable} error='Pflichtfeld' validator={validate.section} on:change={onSectionChange} disabled={pair.id}>
             <option value={null}></option>
             {#each sections as section }

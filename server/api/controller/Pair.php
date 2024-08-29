@@ -5,11 +5,13 @@ namespace App\controller;
 use App\model;
 use App\model\Query;
 use App\model\Requester;
+use HttpRequestException;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpBadRequestException;
 use Slim\Exception\HttpInternalServerErrorException;
 use Slim\Exception\HttpNotFoundException;
+use Slim\Exception\HttpNotImplementedException;
 use Slim\Exception\HttpUnauthorizedException;
 
 class Pair
@@ -225,5 +227,32 @@ class Pair
 		return $success;
 	}
 
+	public static function filter( Request $request, Response $response, array $args ) : Response {
+		$requester = new Requester( $request );
+		$query = $request->getQueryParams();
+		$breederId = $query[ 'breeder' ] ?? null;
+		$districtId = $query[ 'district' ] ?? null;
 
+		if( is_numeric( $districtId ) ) {
+			if( $requester->isAdmin() || $requester->isModerating( $districtId ) ) { //admin of the moderator or self
+				$pairs = model\District::getPairs( $districtId );
+				$response->getBody()->write(json_encode( [ 'pairs' => $pairs ], JSON_UNESCAPED_SLASHES));
+				return $response;
+			}
+			throw new HttpUnauthorizedException( $request, 'Cannot do this' );
+		} else if( is_numeric( $breederId ) ) {
+			$breeder = model\Breeder::get($breederId);
+			if( $breeder ) {
+				$districtId = $breeder['districtId'] && null;
+				if ($requester->isAdmin() || $requester->isModerating($districtId) || $requester->hasId($breederId)) { //admin of the moderator or self
+					$pairs = model\Breeder::getPairs($breederId);
+					$response->getBody()->write(json_encode(['pairs' => $pairs], JSON_UNESCAPED_SLASHES));
+					return $response;
+				}
+				throw new HttpUnauthorizedException($request, 'Cannot do this');
+			}
+			throw new HttpNotFoundException( $request, 'Breeder unknown' );
+		}
+		throw new HttpBadRequestException( $request, 'Invalid query');
+	}
 }

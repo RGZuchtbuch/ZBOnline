@@ -37,8 +37,12 @@ export default {
         put: (id, breeder ) => put( 'api/breeder/'+id, breeder ),
         delete: ( id )       => del( 'api/breeder/'+id ),
 
+//        pairs: {
+//            get: (breederId) => get( 'api/breeder/'+breederId+'/pair' ),
+//        },
+
         pairs: {
-            get: (breederId) => get( 'api/breeder/'+breederId+'/pair' ),
+            get: ( breederId ) => get( `api/pair?breeder=${breederId}` ),
         },
         year : {
             pairs: {
@@ -82,9 +86,14 @@ export default {
             get: ( districtId ) => get( 'api/district/'+districtId+'/descendants'),
         },
 
+        pairs: {
+            get: ( districtId ) => get( `api/pair?district=${districtId}` ),
+        },
+
         //report: {
             //get: (id, year) => get( 'api/district/'+id+'/year/'+year+'/report' ),
         //},
+
 
         results: { // showing results for district, all sections etc
             //get: (districtId, year) => get( 'api/district/'+districtId+'/year/'+year+'/report' ),

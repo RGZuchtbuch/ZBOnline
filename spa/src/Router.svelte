@@ -17,6 +17,7 @@
 	import District from './lib/district/District.svelte';
 	import DistrictBreeders from './lib/district/Breeders.svelte';
 	import DistrictDetails from './lib/district/DistrictDetails.svelte';
+	import DistrictPairs from './lib/district/Pairs.svelte';
 	import DistrictReport from './lib/district/DistrictReport.svelte';
 
 	import GradingCalculator from './lib/grading/Calculator.svelte';
@@ -37,7 +38,7 @@
 	import DistrictResultsEdit from './lib/district/DistrictResultsEdit.svelte';
 	import Log from './lib/admin/log/Log.svelte';
 	import Articles from './lib/admin/Articles.svelte';
-	import Trend from './lib/breeder/Trend.svelte';
+	import Trend from './lib/breeder/TimeLine.svelte';
 </script>
 
 <!-- the router here is responsible for converting params to numbers using isNumber if appropriate -->
@@ -69,15 +70,15 @@
 				<Route path='/:districtId/*' let:meta>
 
 					<District id={toNumber(meta.params.districtId)} >
-						<Route path='/details' let:meta> <DistrictDetails /> </Route>
+						<!--Route path='/details' let:meta> <DistrictDetails /> </Route-->
 						<Route path='/zuechter/*' let:meta>
 							<Route path='/' let:meta> <DistrictBreeders /> </Route>
 							<Route path='/:breederId/*' let:meta >
 
-								<Breeder id={toNumber(meta.params.breederId)} >
+								<Breeder id={toNumber(meta.params.breederId)} > <!-- sets breeder in moderator context -->
 									<Route path='/details' let:meta> <BreederDetails /> </Route>
 									<Route path='/meldung/*' let:meta>
-										<Route path='/' let:meta> <BreederPairs breederId={toNumber(meta.params.breederId)} /> </Route>
+										<Route path='/' let:meta> <BreederPairs /> </Route>
 										<Route path='/:pairId/*' let:meta>
 											<Route path='/' let:meta>
 												<Pair id={toNumber(meta.params.pairId)} districtId={toNumber(meta.params.districtId)} breederId={toNumber(meta.params.breederId)}/>
@@ -94,6 +95,17 @@
 							<Route path='/:year' let:meta> <DistrictReport districtId={toNumber(meta.params.districtId)} year={toNumber(meta.params.year)} /> </Route>
 							<Route path='/:year/edit' let:meta> <DistrictResultsEdit districtId={toNumber(meta.params.districtId)} year={toNumber(meta.params.year)} /> </Route>
 							<!--Route path='/edit' let:meta> <ResultEdit districtId={ +meta.params.districtId }  /></Route-->
+						</Route>
+
+						<Route path='/meldung/*' let:meta>
+							<Route path='/' let:meta>
+								<DistrictPairs />
+							</Route>
+							<Route path='/:pairId/*' let:meta>
+								<Route path='/' let:meta>
+									<Pair id={toNumber(meta.params.pairId)} />
+								</Route>
+							</Route>
 						</Route>
 
 					</District>
@@ -120,14 +132,14 @@
 					<AdminDistricts />
 				</Route>
 				<Route path='/:districtId/*' let:meta>
-					<District id={toNumber(meta.params.districtId)} >
+					<District id={toNumber(meta.params.districtId)} >  <!-- sets district in context -->
 						<Route path='/' let:meta> <DistrictDetails districtId={toNumber(meta.params.districtId)} /> </Route>
 						<Route path='/details' let:meta> <DistrictDetails districtId={toNumber(meta.params.districtId)} /> </Route>
 
 						<Route path='/zuechter/*' let:meta>
 							<Route path='/' let:meta> <DistrictBreeders /> </Route>
 							<Route path='/:breederId/*' let:meta >
-								<Breeder id={toNumber(meta.params.breederId)} >
+								<Breeder id={toNumber(meta.params.breederId)} > <!-- sets breeder in context -->
 									<Route path='/details' let:meta> <BreederDetails /> </Route>
 									<Route path='/meldung/*' let:meta>
 										<Route path='/' let:meta> <BreederPairs breederId={toNumber(meta.params.breederId)} /> </Route>
@@ -146,6 +158,17 @@
 							<Route path='/:year' let:meta> <DistrictReport districtId={toNumber(meta.params.districtId)} year={toNumber(meta.params.year)} /> </Route>
 							<Route path='/:year/edit' let:meta> <DistrictResultsEdit districtId={toNumber(meta.params.districtId)} year={toNumber(meta.params.year)} /> </Route>
 							<!--Route path='/edit' let:meta> <ResultEdit districtId={ +meta.params.districtId }  /></Route-->
+						</Route>
+
+						<Route path='/meldung/*' let:meta>
+							<Route path='/' let:meta>
+								<DistrictPairs />
+							</Route>
+							<Route path='/:pairId/*' let:meta>
+								<Route path='/' let:meta>
+									<Pair id={toNumber(meta.params.pairId)} />
+								</Route>
+							</Route>
 						</Route>
 					</District>
 				</Route>

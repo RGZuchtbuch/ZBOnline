@@ -79,7 +79,7 @@ class District
         $args = get_defined_vars();
         $stmt = Query::prepare( "
             SELECT 
-                breeder.id, breeder.firstname, breeder.infix, breeder.lastname, 
+                breeder.id, breeder.member, breeder.firstname, breeder.infix, breeder.lastname, 
                 district.id AS districtId, district.name AS districtName,
                 club.id AS clubId, club.name AS clubName, start, end
 			FROM user AS breeder
@@ -296,4 +296,22 @@ class District
         }
         return 0;
     }
+
+	public static function getPairs( int $districtId ) : array { // TODO move to pair!
+		$args = get_defined_vars();
+		$stmt = Query::prepare('
+            SELECT pair.id, pair.year, pair.group, pair.districtId,
+                user.firstname, user.infix, user.lastname, user.member,    
+                pair.sectionId, pair.breedId, pair.colorId, pair.name, breed.name AS breedName, color.name AS colorName,
+                result.layEggs, result.layWeight, result.broodEggs, result.broodFertile, result.broodHatched, result.showScore
+            FROM pair
+            LEFT JOIN breed ON breed.id = pair.breedId
+            LEFT JOIN color ON color.id = pair.colorId
+            LEFT JOIN result ON result.pairId = pair.id
+            LEFT JOIN user ON user.id = pair.breederId
+            WHERE pair.districtId=:districtId
+            ORDER BY pair.year DESC, pair.name
+        ');
+		return Query::selectArray($stmt, $args);
+	}
 }

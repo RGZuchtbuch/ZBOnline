@@ -113,7 +113,7 @@ class Breeder // is user
 
 	/** other getters **/
 
-
+/*
 	public static function pairs( Request $request, Response $response, array $args ) : Response {
 		$id = $args[ 'id' ] ?? null;
 		if( is_numeric( $id ) ) {
@@ -132,7 +132,7 @@ class Breeder // is user
 		}
 		throw new HttpBadRequestException( $request, 'Bad id provided' );
 	}
-
+*/
 	public static function yearPairs( Request $request, Response $response, array $args ) : Response {
 		$id = $args[ 'id' ] ?? null;
 		$year = $args[ 'year' ] ?? null;

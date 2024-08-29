@@ -79,13 +79,15 @@ class Breeder extends Query
     public static function getPairs( int $breederId ) : array { // TODO move to pair!
         $args = get_defined_vars();
         $stmt = Query::prepare('
-            SELECT pair.id, pair.year, pair.group, pair.sectionId, 
-                pair.breedId, pair.colorId, pair.name, breed.name AS breedName, color.name AS colorName,
+            SELECT pair.id, pair.year, pair.group, pair.districtId,
+                user.firstname, user.infix, user.lastname, user.member, 
+                pair.sectionId, pair.breedId, pair.colorId, pair.name, breed.name AS breedName, color.name AS colorName,
                 result.layEggs, result.layWeight, result.broodEggs, result.broodFertile, result.broodHatched, result.showScore
             FROM pair
             LEFT JOIN breed ON breed.id = pair.breedId
             LEFT JOIN color ON color.id = pair.colorId
             LEFT JOIN result ON result.pairId = pair.id
+            LEFT JOIN user ON user.id = pair.breederId
             WHERE pair.breederId=:breederId
             ORDER BY pair.year DESC, pair.name
         ');

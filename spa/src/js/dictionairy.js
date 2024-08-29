@@ -43,6 +43,7 @@ export default {
 		colors		: 'Zahl der Farbenschläge',
 		delete: {
 			breed   : 'Rasse nur löschen wenn in keinem Paar, Leistungs und ohne Farben und Name soll leer sein. ',
+			breeder : 'Entfernen nur wen die Namen leer sind und keine Meldungen bekannt.',
 			color   : 'Farbe nur löschen wenn in keinem Paar oder Leistung',
 		},
 		deleted		: 'Gelöscht',

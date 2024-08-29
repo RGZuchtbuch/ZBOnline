@@ -72,6 +72,8 @@ class Router {
         $app->put(	 '/pair/{id}', 'App\controller\Pair::post' ); // same as post, correct
 		$app->delete('/pair/{id}', 'App\controller\Pair::delete' );
 
+		$app->get(	 '/pair', 'App\controller\Pair::filter' ); // for selecting pair for parent ring in report
+
 
 		$app->get('/section',                 'App\controller\Section::get' );
 		$app->get('/section/{id}',            'App\controller\Section::get' );

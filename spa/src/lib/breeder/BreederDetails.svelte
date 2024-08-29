@@ -99,7 +99,7 @@
 
 {#if $breeder }
     <Page>
-        <div slot='title'> Zuchtbuchmitglied {$breeder.firstname} {txt($breeder.infix)} {$breeder.lastname}</div>
+        <div slot='title'> Zuchtbuchmitglied {$breeder.firstname && $breeder.lastname ? txt($breeder.firstname) + ' ' + txt($breeder.infix)+' '+$breeder.lastname : 'Neu'}</div>
         <div slot='header' class='flex flex-row'>
             <div class='grow text-center font-bold'>Mitgliedsdaten</div>
             {#if $user && ( $user.admin || $user.moderator.includes( $breeder.districtId ) ) }

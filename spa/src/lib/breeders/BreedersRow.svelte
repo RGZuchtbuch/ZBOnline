@@ -19,7 +19,7 @@
 
 {#if showInactives || activeMember() }
     <div class='flex flex-row gap-x-4 border-b border-gray-300 my-2'>
-        <div class='w-4 text-xs'>[{breeder.id}]</div>
+        <div class='w-4 text-xs'>{breeder.member}</div>
 
         <a class='w-56' href={route.match+'/'+breeder.id+'/meldung'}>
             { txt( breeder.lastname )+', '+txt( breeder.firstname )+' '+txt( breeder.infix ) }
