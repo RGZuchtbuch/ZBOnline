@@ -22,7 +22,7 @@
     const state = getContext( 'state'); // form state
 
     const validate = {
-        year:       (v) => validator(v).number().range(MINYEAR, MAXYEAR).isValid(),
+        year:       (v) => validator(v).number().range(MINYEAR, MAXYEAR).orNullIf( pair.delete ).isValid(),
         name:       (v) => validator(v).string().length(1,16).orNullIf( pair.delete ).isValid(),
     }
 
@@ -71,7 +71,7 @@
             {/each}
         </Select>
         <div class='grow'></div>
-        <CheckBoxInput class='w-12' label='Löschen' bind:value={ pair.delete } disabled={ pair.name != null }/>
+        <CheckBoxInput class='w-12' label='Löschen' bind:value={ pair.delete } disabled={ pair.name != null } title={'Nur wenn Feld Name leer ist'}/>
         <FormStatus />
     </div>
     <BreedSelect class='flex flex-row p-2 gap-x-1' bind:pair={pair} />

@@ -35,21 +35,19 @@
 
     }
 
-    function recount( b) {
-        if( results.length > 0 ) {
-            let counter = 0;
-            for (let result of results) {
-                if (result.breeders && result.breeders > 0) {
-                    counter++;
-                }
+    function onResultChange( event ) { // from ResultRows
+        // recount breeders when results change
+        let breeders = breed.reports + breed.aoc; // to get total breeders
+        for (let result of results) {
+            if (result.breeders && result.breeders > 0) {
+                breeders += result.breeders;
             }
-            breed.results = counter;
-            breed = breed;
         }
+        breed.breeders = breeders;
     }
 
-    $: recount( breed );
-    $: hasResults = breed.results;
+    $: hasResults = breed.results; // indicator for delete on save (NEEDED? )
+
 </script>
 
 
@@ -59,7 +57,11 @@
         {breed.name}
         {#if breed.results }
             <span class='text-xs'>
-                (<span title={dic.title.resultscount}>{breed.results}</span>{#if breed.pairs }<span class='text-xs' title={dic.title.pairscount}>/{breed.pairs}</span>{/if})
+                (
+                <span title={'Zuchten hier'}>{breed.breeders-breed.reports-breed.aoc}</span> +
+                <span title={'Meldungen Züchter'}>{breed.reports}</span> +
+                <span title={'Zuchten AOC Klasse'}>{breed.aoc}</span>
+                )
             </span> {/if}
     </div>
 
@@ -94,7 +96,7 @@
 
 {#if open }
     {#each results as result}
-        <ResultRow {sectionId} {result}/>
+        <ResultRow {sectionId} {result} on:change={onResultChange}/>
     {/each}
 {/if}
 

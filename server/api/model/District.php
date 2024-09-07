@@ -197,7 +197,7 @@ class District
         return Query::selectArray( $stmt, $args );
     }
 	 */
-
+//                 CAST( SUM( IF( layEggs > 0, breeders, 0 ) ) AS UNSIGNED ) AS layBreeders,
     public static function getSectionResults(int $districtId, int $sectionId, int $year, string $group ) : array {
         $args = get_defined_vars();
 
@@ -205,11 +205,15 @@ class District
             SELECT 
           		breed.id, breed.name, 
 
-          		COUNT( result.id ) AS results, :districtId AS districtId, :year AS `year`, :group AS `group`, 
-                SUM( breeders ) AS breeders, SUM( pairs ) AS pairs,
-                SUM( result.layDames ) AS layDames, AVG( result.layEggs ) AS layEggs, AVG( result.layWeight ) AS layWeight,
-                SUM( result.broodEggs) AS broodEggs, SUM( broodFertile ) AS broodFertile, SUM( broodHatched ) AS broodHatched,
-                SUM( result.showCount ) AS showCount, AVG( showScore ) AS showScore
+				COUNT( result.pairId ) AS reports, 
+				COUNT( result.aocColor ) AS aoc,
+          		COUNT( result.id ) AS results, 
+          		
+          		CAST( :districtId AS UNSIGNED ) AS districtId, CAST( :year AS UNSIGNED ) AS `year`, :group AS `group`, 
+                CAST( SUM( breeders ) AS UNSIGNED ) AS breeders, CAST( SUM( pairs ) AS UNSIGNED ) AS pairs,
+                CAST( SUM( result.layDames ) AS UNSIGNED ) AS layDames, AVG( result.layEggs ) AS layEggs, AVG( result.layWeight ) AS layWeight,
+                CAST( SUM( result.broodEggs) AS UNSIGNED ) AS broodEggs, CAST( SUM( broodFertile ) AS UNSIGNED ) AS broodFertile, CAST( SUM( broodHatched ) AS UNSIGNED ) AS broodHatched,
+                CAST( SUM( result.showCount ) AS UNSIGNED ) AS showCount, AVG( showScore ) AS showScore
             FROM breed
             LEFT JOIN result 
                 ON result.breedId = breed.id

@@ -60,7 +60,7 @@
 	<button type='button' class='w-8 justify-center circled bg-alert cursor-pointer text-white' on:click={onHelp} title='Anleitung'>?</button>
 
 	<div>Verband {#if district} {district.name} {/if} → Leistungen {year} EINGABE</div>
-	<a class='w-8 border border-black rounded bg-button text-white text-center' href={`/obmann/verband/${districtId}/leistung/${year}`} title='Zurück zur Leistungen'>&#9998;</a>
+	<a class='w-8 border-white border border-black rounded bg-button text-white text-center' href={`/obmann/verband/${districtId}/leistung/${year}`} title='Zurück zur Leistungen'>&#9998;</a>
 </div>
 
 

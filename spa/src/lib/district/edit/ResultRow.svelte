@@ -1,5 +1,6 @@
 <script>
-    import { slide } from 'svelte/transition';
+
+    import {createEventDispatcher} from 'svelte';
     import api         from '../../../js/api.js';
     import validator   from '../../../js/validator.js';
 
@@ -14,6 +15,8 @@
 
     let hasResult = false;
     let extended = false;
+
+    const dispatch = createEventDispatcher();
 
     result.sectionId = sectionId;
 
@@ -40,11 +43,10 @@
     }
 
     function onSubmit( event ) {
-        console.log('Result submit', result );
         if( result.breeders ) { // valid entry
             if( result.id > 0 ) { // existing
                 api.result.put( result.id, result ).then((response) => {
-                    result.id = response.id; // new id when inserted
+                    //result.id = response.id; // new id when inserted
                 });
             } else {
                 api.result.post(result).then((response) => {
@@ -59,6 +61,13 @@
             }
         }
     }
+
+    function onChange( result ) {
+        console.log( 'Result', result );
+        dispatch( 'change', result );
+    }
+
+/*
     function onAdd( event ) {
         console.log( 'P', result.breeders, result );
         extended = false; // hide
@@ -89,10 +98,10 @@
 
 //        return addValue ? (( toCount * toValue + addCount * addValue ) / ( toCount + addCount )).toFixed(1) : toValue; // avg
     }
-
+*/
     $: hasResult = result.breeders > 0;
 
-
+    $: onChange( result );
 </script>
 
 <Form class='flex flex-row px-2 gap-x-1 text-sm' on:submit={onSubmit}>
@@ -140,7 +149,7 @@
 </Form>
 
 {#if extended}
-    <AddResultRow {sectionId} bind:result={result} on:add={onAdd}/>
+    <!--AddResultRow {sectionId} bind:result={result} on:add={onAdd}/-->
 {/if}
 
 

@@ -43,7 +43,7 @@
         <div slot='title' class='flex flex-row justify-between'>
             <div></div>
             <div>Verband {$district.name} → Leistungen {year}</div>
-            <a class='w-8 border border-black rounded bg-button text-white text-center' href={`/obmann/verband/${ $district.id }/leistung/${year}/edit`} title='Eingeben'>&#9998;</a>
+            <a class='w-8 border-white border rounded bg-button text-white text-center' href={`/obmann/verband/${ $district.id }/leistung/${year}/edit`} title='Eingeben'>&#9998;</a>
         </div>
 
         <div slot='body'>

@@ -60,7 +60,7 @@ class Result
 	public static function put( Request $request, Response $response, array $args ) : Response
 	{
 		$id = $args[ 'id' ] ?? null;
-		if( $id && $id > 0 ) {
+		if( is_numeric( $id ) && $id > 0 ) {
 			$result = $request->getParsedBody();
 			if ($result) {
 				$requester = new Requester($request);
@@ -76,7 +76,7 @@ class Result
 					);
 					if( $success ) {
 						model\Cache::del('result' ); // clear cache as results changed
-						$response->getBody()->write(json_encode(['id' => $id], JSON_UNESCAPED_SLASHES));
+						$response->getBody()->write(json_encode(['id' => (int)$id ], JSON_UNESCAPED_SLASHES));
 						return $response;
 					}
 					throw new HttpInternalServerErrorException($request, 'Error updating result');

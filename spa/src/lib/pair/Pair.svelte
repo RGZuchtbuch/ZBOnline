@@ -123,7 +123,7 @@
 
             <div>Zuchtbuch Meldung</div>
             {#if $user && ( $user.admin || $user.moderator.includes( pair.districtId ) ) }
-                <div class='w-6 border rounded text-center text-red-600 cursor-pointer' class:disabled on:click={onToggleEdit} title='Daten ändern'>&#9998;</div>
+                <div class='w-8 p-0 border-white text-white border rounded bg-amber-500 text-center text-red-600 cursor-pointer' class:disabled on:click={onToggleEdit} title='Daten ändern'>&#9998;</div>
             {/if}
         </div>
 

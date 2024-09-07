@@ -3,6 +3,7 @@
     import {meta, router} from 'tinro';
     import { dec, pct, txt } from '../../js/util.js';
     import Page from "../common/Page.svelte";
+    import {user} from '../../js/store.js';
 
     export let title = 'Meldungen';
     export let pairs = [];
@@ -21,7 +22,14 @@
 
 
 <Page>
-    <h2 slot='title' class='text-center'> {title} </h2>
+    <div slot='title' class='flex flex-row justify-between'>
+        <div class='w5'></div>
+        <div class='text-center'> {title} </div>
+        {#if $user && $user.moderator}
+            <a class='w-8 bg-button border-white border border-gray-400 rounded px-1 text-white' href={$router.path+'/0'} title='Meldung hinzufügen'> + </a>
+        {/if}
+
+    </div>
     <div slot='header'>
         <div class='flex flex-row gap-1 text-center'>
             <div class='w-28'>Meldung</div>
@@ -30,7 +38,9 @@
             <div class='w-48'>Bruten</div>
             <div class='w-16'>Schau</div>
             <div class='grow'></div>
-            <a class='border border-gray-400 p-1' href={$router.path+'/0'}> + </a>
+
+
+            <!--a class='border border-gray-400 p-1' href={$router.path+'/0'}> + </a-->
             <!--button type='button' on:click={addPair}> + </button-->
 
         </div>

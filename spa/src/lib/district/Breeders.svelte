@@ -57,7 +57,13 @@
 </script>
 
 <Page>
-    <div slot='title'> Zuchtbuchmitglieder in Verband </div>
+    <div slot='title' class='flex flex-row justify-between'>
+        <div class='w-4'></div>
+        <div> Zuchtbuchmitglieder in Verband </div>
+        {#if $user && $user.moderator}
+            <a class='w-8 bg-button border border-white rounded font-bold text-white px-1' href={$router.path+'/0/details'} title='Züchter hinzufügen'> + </a>
+        {/if}
+    </div>
     <div slot='header' class='flex flex-row gap-x-4 px-2 py-1'>
         <div class='w-12'>Nr</div>
         <div class='w-56'>Name</div>
@@ -66,9 +72,7 @@
         <div class='w-24'>Seit</div>
         <div class='w-16'>Inaktief</div> <div class='w-6 h-6 text-center'> <input class='cursor-pointer' type='checkbox' bind:checked={showInactives}> </div>
         <div class='grow'></div>
-        {#if $user && $user.moderator}
-            <a class='bg-amber-500 border border-gray-400 rounded px-1' href={$router.path+'/0/details'} title='Züchter hinzufügen'> + </a>
-        {/if}
+
     </div>
     <div slot='body' class=''>
         {#if breeders}
