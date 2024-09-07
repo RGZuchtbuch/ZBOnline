@@ -85,7 +85,7 @@
                             { txt( breeder.lastname )+', '+txt( breeder.firstname )+' '+txt( breeder.infix ) }
                         </a>
 
-                        <div class='w-36 whitespace-nowrap'>{txt( breeder.clubName )}</div>
+                        <div class='w-36 whitespace-nowrap'>{txt( breeder.club )}</div>
                         <div class='w-64 whitespace-nowrap'>{txt( breeder.districtName )}</div>
                         <div class='w-24'> {dat(breeder.start)} </div>
                         <div class='w-24'> {dat(breeder.end)} </div>

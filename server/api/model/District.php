@@ -81,10 +81,9 @@ class District
             SELECT 
                 breeder.id, breeder.member, breeder.firstname, breeder.infix, breeder.lastname, 
                 district.id AS districtId, district.name AS districtName,
-                club.id AS clubId, club.name AS clubName, start, end
+                breeder.club, start, end
 			FROM user AS breeder
                 LEFT JOIN district ON district.id=breeder.districtId 
-                LEFT JOIN district AS club ON club.id=breeder.clubId 
             WHERE breeder.districtId IN (
                 SELECT DISTINCT child.id FROM district AS parent
                     LEFT JOIN district AS child ON child.id = parent.id OR child.parentId = parent.id
