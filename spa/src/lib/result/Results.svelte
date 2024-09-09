@@ -31,6 +31,8 @@
     let breedId = null;
     let colorId = null;
 
+    let district = null; // selected district based on districtId
+
     let max = {}
 
     const years = [];
@@ -105,6 +107,11 @@
     }
     function onDistrict( id ) {
         router.location.query.set( 'district', id );
+        district = null;
+        api.district.get( districtId )
+            .then( response => {
+                district = response.district;
+            });
     }
     function onSection( event ) {
         router.location.query.set( 'section', event.target.value );
@@ -141,21 +148,21 @@
 
 </script>
 
-<div>
-    <div class='flex bg-header rounded-t text-white no-print'>
-        <h2 class='grow text-center text-2xl print'>Zuchtleistungen</h2>
-        <div class='w-8 justify-center m-2 circled bg-alert text-white cursor-pointer no-print' on:click={onHelp} title='Anleitung'>?</div>
+
+    <div class='flex bg-header rounded-t text-white'>
+        <h2 class='grow text-center text-2xl' >BDRG Zuchtbuch {year}</h2>
+        <!--div class='w-8 justify-center m-2 circled bg-alert text-white cursor-pointer no-print' on:click={onHelp} title='Anleitung'>?</div-->
     </div>
 
-    <div class='flex flex-col border border-gray-400 bg-gray-100 gab-2 no-print'>
+
+
+    <div class='h-full bg-white border rounded-b border-gray-400 scroll scrollbar print-no-border'>
+
+
+        <div class='flex flex-col border border-gray-400 bg-gray-200 gab-2 no-print'>
 
             <div class='flex flex-col md:flex-row px-4 gap-x-2'>
                 <div class='hidden md:block w-16 font-semibold self-center' >Was :</div>
-                <Select class='w-64' label='Was sehen' value={typeId} on:change={onType}>
-                    {#each types as item }
-                        <option value={ item.id }> { item.name }</option>
-                    {/each}
-                </Select>
 
                 <Select class='w-64' label={'Landesverband'} bind:value={districtId}>
                     {#if rootDistrict }
@@ -181,7 +188,7 @@
                     {/each}
                 </Select>
 
-                <Select class='w-64 text-white' label={'Rasse'} value={breedId} on:change={onBreed}>
+                <Select class='w-64' label={'Rasse'} value={breedId} on:change={onBreed}>
                     <option value={null} title='Alle Rassen in der gewählten Sparte'> * </option>
                     {#each breeds as breed}
                         <option value={breed.id} selected={breed.id === breedId}> {breed.name} </option>
@@ -196,25 +203,15 @@
                 </Select>
             </div>
 
-    </div>
-
-    <div class='bg-white border rounded-b border-gray-400 scrollbar print-no-border'>
+        </div>
 
         {#if districts && districtId && year && sectionId}
-            <div class='flex'>
-                <h2 class='grow text-center' >Leistungen im {districts[ districtId ].name} in {year}</h2>
-
-                <div class='flex flex-col p-2 no-print'>
-                    <a class='p-1 bg-alert rounded text-xl text-black text-center' href={'/kontakt/'+districtId} title='eMail am Obmann'>&#9993;</a>
-                </div>
-            </div>
-
-            <div class='flex flex-row my-2 border border-gray-400 justify-evenly'>
+            <div class='flex flex-row my-2 border rounded border-gray-400 justify-evenly'>
                 <SectionsPie {districtId} {year} {typeId}/>
             </div>
 
-            <div class='flex flex-col my-2 border border-gray-400'>
-                <h2 class='bg-header text-center text-white'>Leistungen</h2>
+            <div class='flex flex-col my-2 border rounded border-gray-400'>
+                <h2 class='bg-header text-center text-white'>Leistungen {#if district && year} im {district.name} in {year} {/if}</h2>
                 <div class='flex flex-col sm:flex-row justify-evenly'>
                     <div class='flex m-auto'>
                         <LayBar {districtId} {year} {sectionId} {breedId} {colorId}></LayBar>
@@ -231,10 +228,21 @@
 
             <div class='print-break'></div>
 
-            <div class='flex flex-col sm:flex-row my-2 border border-gray-400 justify-evenly'>
+            <div class='bg-white border rounded border-gray-400'>
+                <h2 class='bg-header text-center text-white'>Leistungen über die Zeit und Länder</h2>
+                <div class='flex flex-row bg-gray-200 px-4 gap-x-2 no-print'>
+                    <div class='hidden md:block w-16 font-semibold self-center' >Was :</div>
+                    <Select class='w-64' label='Was sehen' value={typeId} on:change={onType}>
+                        {#each types as item }
+                            <option value={ item.id }> { item.name }</option>
+                        {/each}
+                    </Select>
+                </div>
 
-                <TimeLine bind:year={year} {districtId} {sectionId} {breedId} {colorId} {typeId} {type}/>
-                <DistrictsMap bind:districtId={districtId} {year} {sectionId} {breedId} {colorId} {typeId}/>
+                <div class='flex flex-col sm:flex-row my-2 justify-evenly'>
+                    <TimeLine bind:year={year} {districtId} {sectionId} {breedId} {colorId} {typeId} {type}/>
+                    <DistrictsMap bind:districtId={districtId} {year} {sectionId} {breedId} {colorId} {typeId}/>
+                </div>
             </div>
 
             <div class='print-break'></div>
@@ -245,7 +253,7 @@
         {/if}
     </div>
 
-</div>
+
 
 <style>
 
@@ -259,7 +267,3 @@
         @apply w-full flex flex-col border rounded-b border-gray-400 bg-gray-50 p-0 text-black; /* scrollbar part in div class for priority */
     }
 </style>
-
-
-
-

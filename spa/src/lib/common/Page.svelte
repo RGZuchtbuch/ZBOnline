@@ -2,7 +2,7 @@
 	import { slide } from 'svelte/transition';
 </script>
 
-<div class='h-full w-full flex flex-col min-h-0'>
+<div class='w-full flex flex-col min-h-0'>
 	<h3 class='title'> <slot name='title'></slot> </h3>
 	<div class='header'> <slot name='header'></slot> </div>
 	<div class='body overflow-y-scroll scrollbar print-no-scrollbar'> <slot name='body'></slot></div> <!--  in:slide -->

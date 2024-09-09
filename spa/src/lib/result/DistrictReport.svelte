@@ -36,7 +36,7 @@
 
 <div class='flex flex-col my-2 border border-gray-400'>
 {#if district && year }
-    <h2 class='text-center'>Verband {#if district} {district.name} {/if} → Leistungsdaten {year}</h2>
+    <h2 class='bg-header rounded-t text-white text-center'>{#if district} {district.name} {/if} Leistungsdaten {year}</h2>
     {#if report}
         <Report {year} {report}/>
     {/if}

@@ -8,7 +8,7 @@
 }
 
 html, body {
-    @apply h-full max-w-256 w-full flex flex-col m-auto bg-gray-100 font-rgz text-base;
+    @apply h-full max-w-256 w-full flex flex-col m-auto bg-white font-rgz text-base;
 }
 
 a, button {
@@ -112,6 +112,12 @@ input.invalid, textarea.invalid, select.invalid {
 
 .scrollbar::-webkit-scrollbar-thumb {
     background: #777;
+}
+
+@media screen {
+    .scroll {
+        overflow-y: scroll;
+    }
 }
 
 @media print {
