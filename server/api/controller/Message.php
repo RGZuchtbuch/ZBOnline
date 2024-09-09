@@ -64,6 +64,7 @@ class Message
 			$mail->addReplyTo( $from, $name );
 
 			//Content
+			$mail->CharSet = "UTF-8";
 			$mail->isHTML(true);                                  //Set email format to HTML
 			$mail->Subject = 'RGZ: '.$subject;
 			$mail->Body    = str_replace( "\n", "<br>", $message );
@@ -73,5 +74,4 @@ class Message
 			throw new HttpInternalServerErrorException( $request, "mail error: ".$e->getMessage() );
 		}
 	}
-
 }

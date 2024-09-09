@@ -174,8 +174,8 @@
 								<NumberInput class='w-32' label='Legen e/j' bind:value={ lay.eggs } validator={validate.layer.lay.eggs}/>
 								<div class='w-8 mt-6 text-center'>von</div>
 								<NumberInput class='w-32' label='SOLL Legen' value={breed ? breed.layEggs : '?'} disabled />
-								<div class='w-4 mt-6 text-center'>→</div>
-								<output class='w-8 mt-6 text-xl font-bold text-center'>{ grade( lay.grade ) }</output>
+								<div class='w-8 mt-6 text-center'>→</div>
+								<output class='w-8 mt-6 text-xl font-bold text-center whitespace-nowrap'>{ grade( lay.grade ) } Punkte</output>
 							</div>
 						</fieldset>
 
@@ -185,8 +185,8 @@
 								<NumberInput class='w-32' label='Eingelegt' bind:value={brood.eggs} validator={ validate.layer.brood.eggs } />
 								<span class='w-8 mt-6 text-center'>mit</span>
 								<NumberInput class='w-32' label='Geschüpft' bind:value={brood.hatched} validator={ validate.layer.brood.hatched(brood) } />
-								<span class='w-4 mt-6 text-center'>→</span>
-								<output class='w-8 mt-6 text-xl font-bold text-center'>{ grade( brood.grade )}</output>
+								<span class='w-8 mt-6 text-center'> → </span>
+								<output class='w-8 mt-6 text-xl font-bold text-center whitespace-nowrap'>{ grade( brood.grade )} Punkte</output>
 							</div>
 						</fieldset>
 					{/if}

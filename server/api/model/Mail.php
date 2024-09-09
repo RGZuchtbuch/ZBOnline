@@ -9,6 +9,7 @@ use PHPMailer\PHPMailer\SMTP;
 use Slim\Exception\HttpInternalServerErrorException;
 use Slim\Psr7\Request;
 
+//TODO should be moved into controller/Message
 class Mail
 {
 	public static function sendResetMail( Request $request, string $email, string $url ) : bool {

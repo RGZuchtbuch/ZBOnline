@@ -41,13 +41,21 @@
 							<div class='w-48'>
 								{txt(districts.moderator.firstname)} {txt(districts.moderator.infix)} {txt(districts.moderator.lastname)}
 							</div>
+
+							{#if districts.moderator.email}
+								<a class='w-8 cursor-pointer' href={'/kontakt/'+districts.id} title='eMail am Obmann'>&#9993;</a>
+							{:else}
+								<div class='w-8'></div>
+							{/if}
+
 						{/if}
+
 						{#if districts.url}
 							<a class='w-8 cursor-pointer' href={districts.url} target='_blank' title={dic.title.url}>
 								<img src='assets/link.svg' alt='link'>
 							</a>
 						{:else}
-							<div class='w-4'></div>
+							<div class='w-8'></div>
 						{/if}
 					</div>
 				</div>

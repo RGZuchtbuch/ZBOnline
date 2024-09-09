@@ -76,7 +76,7 @@
     </div>
     <div slot='body' class=''>
         {#if breeders}
-            {#each breeders as breeder (breeder.id) }
+            {#each breeders as breeder (breeder.id) } <!-- ide gives error here, but it's correct svelte-->
                 {#if showInactives || activeMember( breeder ) }
                     <div class='flex flex-row border-b border-gray-400 gap-x-4 px-2 my-2'>
                         <div class='w-12'>{txt(breeder.member)}</div>

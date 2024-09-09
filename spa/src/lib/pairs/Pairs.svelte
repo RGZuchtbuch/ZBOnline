@@ -72,7 +72,7 @@
     </div>
 
     <div slot='body'>
-        {#each pairs as pair (pair.id) }
+        {#each pairs as pair (pair.id) } <!-- ide gives error here, but it's correct svelte-->cvl
             <a class='flex flex-row justify-evenly py-1 text-sm' href={route.match+'/'+pair.id}>
                 <div class='w-28 flex flex-row justify-evenly'>
                     <div class='w-10'>{pair.year}</div>

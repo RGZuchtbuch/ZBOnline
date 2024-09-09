@@ -39,7 +39,7 @@
 		if( event.target.tagName === 'A' ) {
 			showMenu = screen.width >= screens.md; // only true on small screen
 			focus = null;
-			console.log( 'Selected', screen.width, screens.md, showMenu );
+//			console.log( 'Selected', screen.width, screens.md, showMenu );
 		}
 	}
 
@@ -120,6 +120,7 @@
 						<Link href={'/admin/verband/'+$adminDistrict.id+'/zuechter/'+$adminBreeder.id+'/details' }>&#9755; Züchterdaten</Link>
 					{/if}
 				{/if}
+				<Link href='/admin/seite'>&#9755; Seiten</Link>
 			</Item>
 		{/if}
 

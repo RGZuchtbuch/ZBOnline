@@ -248,7 +248,7 @@
             <div class='print-break'></div>
 
             <div class='hidden sm:block border rounded print'>
-                <DistrictReport districtId={districtId} year={year} />
+                <DistrictReport {districtId} {year} />
             </div>
         {/if}
     </div>
