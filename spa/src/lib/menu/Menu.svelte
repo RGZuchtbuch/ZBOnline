@@ -79,24 +79,28 @@
 		<Item name='Rassestandard' url='/standard' bind:focus={focus} href={'/standard'}>
 			<!-- a href={'/standard'}>&#9755; BDRG Rassestandard</a -->
 		</Item>
-		<Item name='Leistungen *' url='/leistungen' bind:focus={focus}>
-			<Link href={ '/leistungen' }>&#9755; Leistungen</Link>
+		<Item name='Leistungen' url='/leistungen' href={ '/leistungen' } bind:focus={focus}>
+			<!--Link href={ '/leistungen' }>&#9755; Leistungen</Link-->
+			<!--Link href={ '/leistungen/rechner' }>&#9755; Zuchtbuch Bewertungsrechner</Link-->
+		</Item>
+		<Item name='Toolbox *' url='/leistungen' bind:focus={focus}>
 			<Link href={ '/leistungen/rechner' }>&#9755; Zuchtbuch Bewertungsrechner</Link>
+			<Link href={ '/leistungen/nachweis' }>&#9755; Abstammungsnachweis Formular</Link>
 		</Item>
 
 		{#if $user && $user.moderator.length > 0 }
 			<Item name='Obmann *' url='/obmann' bind:focus={focus}>
 				<Link href='/obmann/verband'>&#9755; Verbände</Link>
-				<Link href={ '/leistungen/nachweis' }>&#9755; Abstammungsnachweis Formular</Link>
 
 				{#if $moderatorDistrict}
-					<div class='bg-gray-300 text-center'>Verband {$moderatorDistrict.short}</div>
+					<div class='rounded bg-gray-300 px-1 font-bold text-center'>Verband {$moderatorDistrict.short}</div>
 					<Link href={'/obmann/verband/'+$moderatorDistrict.id+'/leistung'}>&#9755; Leistungen</Link>
-					<Link href={'/obmann/verband/'+$moderatorDistrict.id+'/zuechter'}>&#9755; Züchter</Link>
+					<div class='h-1'/>
 					<Link href={'/obmann/verband/'+$moderatorDistrict.id+'/meldung'}>&#9755; Meldungen</Link>
+					<Link href={'/obmann/verband/'+$moderatorDistrict.id+'/zuechter'}>&#9755; Züchter</Link>
 					<!--Link href={'/obmann/verband/'+$moderatorDistrict.id+'/details'}>&#9755; Verbandsdaten</Link-->
 					{#if $moderatorBreeder}
-						<div class='bg-gray-300 text-center'>Züchter {$moderatorBreeder.lastname}</div>
+						<div class='rounded bg-gray-300 px-1 font-bold text-center'>Züchter {$moderatorBreeder.lastname}</div>
 						<Link href={'/obmann/verband/'+$moderatorDistrict.id+'/zuechter/'+$moderatorBreeder.id+'/meldung'}>&#9755; Meldungen</Link>
 						<Link href={'/obmann/verband/'+$moderatorDistrict.id+'/zuechter/'+$moderatorBreeder.id+'/details'}>&#9755; Züchterdaten</Link>
 						<!--Link href={'/obmann/verband/'+$moderatorDistrict.id+'/zuechter/'+$moderatorBreeder.id+'/entwicklung'}>&#9755; Entwicklung</Link-->

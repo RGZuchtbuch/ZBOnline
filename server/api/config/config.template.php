@@ -17,5 +17,5 @@ const TOKEN_EXPIRE = 1440; // expire time in minutes
 const TOKEN_SECRET = ''; // servers jwt secret
 const TOKEN_ALGORITHM = 'HS256'; // used for jwt
 
-const START_YEAR = 2000; // startig year of recording data, for graphs and selects
+const START_YEAR = 2000; // starting year of recording data, for graphs and selects
 

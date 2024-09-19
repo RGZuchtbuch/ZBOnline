@@ -1,257 +1,257 @@
 <script>
-    import {Route, router, meta} from 'tinro';
-    import { slide } from 'svelte/transition';
-    import api from '../../js/api.js';
+	import {Route, router, meta} from 'tinro';
+	import { slide } from 'svelte/transition';
+	import api from '../../js/api.js';
 
-    import Form from '../common/form/Form.svelte';
-    import Select from '../common/form/input/Select.svelte';
-    import SectionsPie from './graphics/SectionsPie.svelte';
-    import DistrictReport from './DistrictReport.svelte';
-    import Help from './Help.svelte';
+	import Form from '../common/form/Form.svelte';
+	import Select from '../common/form/input/Select.svelte';
+	import SectionsPie from './graphics/SectionsPie.svelte';
+	import DistrictReport from './DistrictReport.svelte';
+	import Help from './Help.svelte';
 
-    import LayBar from './graphics/LayBar.svelte';
-    import BroodBarLayers from './graphics/BroodBarLayers.svelte';
-    import BroodBarPigeons from './graphics/BroodBarPigeons.svelte';
-    import ShowBar from './graphics/ShowBar.svelte';
+	import LayBar from './graphics/LayBar.svelte';
+	import BroodBarLayers from './graphics/BroodBarLayers.svelte';
+	import BroodBarPigeons from './graphics/BroodBarPigeons.svelte';
+	import ShowBar from './graphics/ShowBar.svelte';
 
-    import TimeLine from './graphics/TimeLine.svelte';
-    import DistrictsMap from './graphics/Map.svelte';
-    import Page from '../common/Page.svelte';
+	import TimeLine from './graphics/TimeLine.svelte';
+	import DistrictsMap from './graphics/Map.svelte';
+	import Page from '../common/Page.svelte';
 
-    const route = meta();
-    const types = [ {id:2, name:'Zuchten'}, {id:10, name:'Legeleistung'}, {id:20, name:'Brutleistung Leger'}, {id:21, name:'Brutleistung Tauben'}, {id:30, name:'Schauleistung'}];
+	const route = meta();
+	const types = [ {id:2, name:'Zuchten'}, {id:10, name:'Legeleistung'}, {id:20, name:'Brutleistung Leger'}, {id:21, name:'Brutleistung Tauben'}, {id:30, name:'Schauleistung'}];
 
-    //set by query
-    let typeId = 2;
-    let type = types.find( item => item.id === typeId );
-    let year = null;
-    let rootDistrict = null;
-    let districtId = null;
-    let sectionId = null;
-    let breedId = null;
-    let colorId = null;
+	//set by query
+	let typeId = 2;
+	let type = types.find( item => item.id === typeId );
+	let year = null;
+	let rootDistrict = null;
+	let districtId = null;
+	let sectionId = null;
+	let breedId = null;
+	let colorId = null;
 
-    let district = null; // selected district based on districtId
+	let district = null; // selected district based on districtId
 
-    let max = {}
+	let max = {}
 
-    const years = [];
-    for( let year=new Date().getFullYear(); year >= STARTYEAR; year--) years.push( year );
+	const years = [];
+	for( let year=new Date().getFullYear(); year >= STARTYEAR; year--) years.push( year );
 
-    let sections = []
+	let sections = []
 
-    let breeds = [];
-    let colors = [];
+	let breeds = [];
+	let colors = [];
 
-    let districts = null; // map id->district
-    let help = false;
+	let districts = null; // map id->district
+	let help = false;
 
-    function onQuery( route ) {
-        typeId = Number( route.query.type ) || 2;
-        year = Number( route.query.year ) || new Date().getFullYear() -1; // last year;
-        districtId = Number( route.query.district ) || 1;
-        sectionId = Number( route.query.section ) || 2;
-        breedId = Number( route.query.breed ) || null;
-        colorId = Number( route.query.color ) || null;
+	function onQuery( route ) {
+		typeId = Number( route.query.type ) || 2;
+		year = Number( route.query.year ) || new Date().getFullYear() -1; // last year;
+		districtId = Number( route.query.district ) || 1;
+		sectionId = Number( route.query.section ) || 2;
+		breedId = Number( route.query.breed ) || null;
+		colorId = Number( route.query.color ) || null;
 
-        type = types.find( item => item.id === typeId );
+		type = types.find( item => item.id === typeId );
 
 
-        loadBreeds();
-        loadColors();
-    }
+		loadBreeds();
+		loadColors();
+	}
 
-    function loadDistricts() {
-        api.district.descendants.get( 1 ).then( response => { // bdrg (1) is fixed root
-            rootDistrict = response.district;
-            districts = {};
-            districts[ rootDistrict.id ] = rootDistrict;
-            for( const district of rootDistrict.children ) districts[ district.id ] = district;
-        })
-    }
+	function loadDistricts() {
+		api.district.descendants.get( 1 ).then( response => { // bdrg (1) is fixed root
+			rootDistrict = response.district;
+			districts = {};
+			districts[ rootDistrict.id ] = rootDistrict;
+			for( const district of rootDistrict.children ) districts[ district.id ] = district;
+		})
+	}
 
-    function loadSections() {
-        sections = [];
-        api.section.descendants.get( 2 ).then( response => {
-            sections = prepareSections( sections, response.section, '' );
-        });
-    }
+	function loadSections() {
+		sections = [];
+		api.section.descendants.get( 2 ).then( response => {
+			sections = prepareSections( sections, response.section, '' );
+		});
+	}
 
-    function prepareSections( sections, section, prepend ) { // recursive
-        sections.push( { id:section.id, name:prepend+section.name } );
+	function prepareSections( sections, section, prepend ) { // recursive
+		sections.push( { id:section.id, name:prepend+section.name } );
 //        if( prepend === '' ) prepend = '';
-        if( section && section.children ) {
-            for( const child of section.children ) {
+		if( section && section.children ) {
+			for( const child of section.children ) {
 //                prepareSections( sections, child, '\xA0\xA0\xA0'+prepend );
-                prepareSections( sections, child, '·  '+prepend ); // alt 255
-            }
-        }
-        return sections;
-    }
+				prepareSections( sections, child, '·  '+prepend ); // alt 255
+			}
+		}
+		return sections;
+	}
 
-    function loadBreeds() {
-        breeds = [];
-        if( sectionId ) api.section.breeds.get( sectionId ).then( response => { breeds = response.breeds } );
-    }
+	function loadBreeds() {
+		breeds = [];
+		if( sectionId ) api.section.breeds.get( sectionId ).then( response => { breeds = response.breeds } );
+	}
 
-    function loadColors() {
-        colors = [];
-        if( breedId ) api.breed.colors.get( breedId ).then( response => { colors = response.colors });
-    }
+	function loadColors() {
+		colors = [];
+		if( breedId ) api.breed.colors.get( breedId ).then( response => { colors = response.colors });
+	}
 
-    function onType( event ) {
-        router.location.query.set( 'type', event.target.value );
-    }
-    function onYear( year ) {
-        router.location.query.set( 'year', year );
-    }
-    function onDistrict( id ) {
-        router.location.query.set( 'district', id );
-        district = null;
-        api.district.get( districtId )
-            .then( response => {
-                district = response.district;
-            });
-    }
-    function onSection( event ) {
-        router.location.query.set( 'section', event.target.value );
-        router.location.query.delete( 'breed' );
-        router.location.query.delete( 'color' );
-    }
-    function onBreed( event ) {
-        colorId = null;
-        colors = [];
-        router.location.query.set( 'breed', event.target.value );
-        router.location.query.delete( 'color' );
-    }
-    function onColor( event ) {
-        router.location.query.set( 'color', event.target.value );
-    }
+	function onType( event ) {
+		router.location.query.set( 'type', event.target.value );
+	}
+	function onYear( year ) {
+		router.location.query.set( 'year', year );
+	}
+	function onDistrict( id ) {
+		router.location.query.set( 'district', id );
+		district = null;
+		api.district.get( districtId )
+			.then( response => {
+				district = response.district;
+			});
+	}
+	function onSection( event ) {
+		router.location.query.set( 'section', event.target.value );
+		router.location.query.delete( 'breed' );
+		router.location.query.delete( 'color' );
+	}
+	function onBreed( event ) {
+		colorId = null;
+		colors = [];
+		router.location.query.set( 'breed', event.target.value );
+		router.location.query.delete( 'color' );
+	}
+	function onColor( event ) {
+		router.location.query.set( 'color', event.target.value );
+	}
 
-    function onHelp() {
-        help = ! help;
-    }
+	function onHelp() {
+		help = ! help;
+	}
 
-    const on = {
-        click: ( district ) => {
-            return (event) => {
-                console.log('clicked')
-            }
-        }
-    }
+	const on = {
+		click: ( district ) => {
+			return (event) => {
+				console.log('clicked')
+			}
+		}
+	}
 
-    loadDistricts();
-    loadSections();
-    $: onQuery( $router );
-    $: onYear( year );
-    $: onDistrict( districtId );
+	loadDistricts();
+	loadSections();
+	$: onQuery( $router );
+	$: onYear( year );
+	$: onDistrict( districtId );
 
 </script>
 
 
-    <div class='flex bg-header rounded-t text-white'>
-        <h2 class='grow text-center text-2xl' >BDRG Zuchtbuch {year}</h2>
-        <!--div class='w-8 justify-center m-2 circled bg-alert text-white cursor-pointer no-print' on:click={onHelp} title='Anleitung'>?</div-->
-    </div>
+<div class='flex bg-header rounded-t text-white'>
+	<h2 class='grow text-center text-2xl' >BDRG Zuchtbuch {year}</h2>
+	<!--div class='w-8 justify-center m-2 circled bg-alert text-white cursor-pointer no-print' on:click={onHelp} title='Anleitung'>?</div-->
+</div>
 
 
 
-    <div class='h-full bg-white border rounded-b border-gray-400 scroll scrollbar print-no-border'>
+<div class='h-full bg-white border rounded-b border-gray-400 scroll scrollbar print-no-border'>
 
 
-        <div class='flex flex-col border border-gray-400 bg-gray-200 gab-2 no-print'>
+	<div class='flex flex-col border border-gray-400 bg-gray-200 gab-2 no-print'>
 
-            <div class='flex flex-col md:flex-row px-4 gap-x-2'>
-                <div class='hidden md:block w-16 font-semibold self-center' >Was :</div>
+		<div class='flex flex-col md:flex-row px-4 gap-x-2'>
+			<div class='hidden md:block w-16 font-semibold self-center' >Was :</div>
 
-                <Select class='w-64' label={'Landesverband'} bind:value={districtId}>
-                    {#if rootDistrict }
-                        <option value={rootDistrict.id} selected={rootDistrict.id === districtId}>{rootDistrict.name}</option>
-                        {#each rootDistrict.children as district}
-                            <option value={district.id}  selected={district.id === districtId}>{district.name}</option>
-                        {/each}
-                    {/if}
-                </Select>
+			<Select class='w-64' label={'Landesverband'} bind:value={districtId}>
+				{#if rootDistrict }
+					<option value={rootDistrict.id} selected={rootDistrict.id === districtId}>{rootDistrict.name}</option>
+					{#each rootDistrict.children as district}
+						<option value={district.id}  selected={district.id === districtId}>{district.name}</option>
+					{/each}
+				{/if}
+			</Select>
 
-                <Select class='w-20' label='Jahr' bind:value={year}>
-                    {#each years as option}
-                        <option value={option}>{option}</option>
-                    {/each}
-                </Select>
-            </div>
+			<Select class='w-20' label='Jahr' bind:value={year}>
+				{#each years as option}
+					<option value={option}>{option}</option>
+				{/each}
+			</Select>
+		</div>
 
-            <div class='flex flex-col md:flex-row px-4 gap-x-2'>
-                <div class='hidden md:block w-16 font-semibold self-center' >Filter :</div>
-                <Select class='w-64' label='Sparte' value={sectionId} on:change={onSection}>
-                    {#each sections as section}
-                        <option value={section.id} selected={section.id === sectionId}> {section.name} </option>
-                    {/each}
-                </Select>
+		<div class='flex flex-col md:flex-row px-4 gap-x-2'>
+			<div class='hidden md:block w-16 font-semibold self-center' >Filter :</div>
+			<Select class='w-64' label='Sparte' value={sectionId} on:change={onSection}>
+				{#each sections as section}
+					<option value={section.id} selected={section.id === sectionId}> {section.name} </option>
+				{/each}
+			</Select>
 
-                <Select class='w-64' label={'Rasse'} value={breedId} on:change={onBreed}>
-                    <option value={null} title='Alle Rassen in der gewählten Sparte'> * </option>
-                    {#each breeds as breed}
-                        <option value={breed.id} selected={breed.id === breedId}> {breed.name} </option>
-                    {/each}
-                </Select>
+			<Select class='w-64' label={'Rasse'} value={breedId} on:change={onBreed}>
+				<option value={null} title='Alle Rassen in der gewählten Sparte'> * </option>
+				{#each breeds as breed}
+					<option value={breed.id} selected={breed.id === breedId}> {breed.name} </option>
+				{/each}
+			</Select>
 
-                <Select class='w-64' label={'Farbe'} value={colorId} on:change={onColor}>
-                    <option value={null} title='Alle farben der gewählten Rasse'> * </option>
-                    {#each colors as color}
-                        <option value={color.id} selected={color.id === colorId}>{color.name}</option>
-                    {/each}
-                </Select>
-            </div>
+			<Select class='w-64' label={'Farbe'} value={colorId} on:change={onColor}>
+				<option value={null} title='Alle farben der gewählten Rasse'> * </option>
+				{#each colors as color}
+					<option value={color.id} selected={color.id === colorId}>{color.name}</option>
+				{/each}
+			</Select>
+		</div>
 
-        </div>
+	</div>
 
-        {#if districts && districtId && year && sectionId}
-            <div class='flex flex-row my-2 border rounded border-gray-400 justify-evenly'>
-                <SectionsPie {districtId} {year} {typeId}/>
-            </div>
+	{#if districts && districtId && year && sectionId}
+		<div class='flex flex-row my-2 border rounded border-gray-400 justify-evenly'>
+			<SectionsPie {districtId} {year} {typeId}/>
+		</div>
 
-            <div class='flex flex-col my-2 border rounded border-gray-400'>
-                <h2 class='bg-header text-center text-white'>Leistungen {#if district && year} im {district.name} in {year} {/if}</h2>
-                <div class='flex flex-col sm:flex-row justify-evenly'>
-                    <div class='flex m-auto'>
-                        <LayBar {districtId} {year} {sectionId} {breedId} {colorId}></LayBar>
-                    </div>
-                    <div class='flex flex-row justify-evenly'>
-                        <BroodBarLayers {districtId} {year} {sectionId} {breedId} {colorId}></BroodBarLayers>
-                        <BroodBarPigeons {districtId} {year} {sectionId} {breedId} {colorId}></BroodBarPigeons>
-                    </div>
-                    <div class='flex m-auto'>
-                        <ShowBar {districtId} {year} {sectionId} {breedId} {colorId}></ShowBar>
-                    </div>
-                </div>
-            </div>
+		<div class='flex flex-col my-2 border rounded border-gray-400'>
+			<h2 class='bg-header text-center text-white'>Leistungen {#if district && year} im {district.name} in {year} {/if}</h2>
+			<div class='flex flex-col sm:flex-row justify-evenly'>
+				<div class='flex m-auto'>
+					<LayBar {districtId} {year} {sectionId} {breedId} {colorId}></LayBar>
+				</div>
+				<div class='flex flex-row justify-evenly'>
+					<BroodBarLayers {districtId} {year} {sectionId} {breedId} {colorId}></BroodBarLayers>
+					<BroodBarPigeons {districtId} {year} {sectionId} {breedId} {colorId}></BroodBarPigeons>
+				</div>
+				<div class='flex m-auto'>
+					<ShowBar {districtId} {year} {sectionId} {breedId} {colorId}></ShowBar>
+				</div>
+			</div>
+		</div>
 
-            <div class='print-break'></div>
+		<div class='print-break'></div>
 
-            <div class='bg-white border rounded border-gray-400'>
-                <h2 class='bg-header text-center text-white'>Leistungen über die Zeit und Länder</h2>
-                <div class='flex flex-row bg-gray-200 px-4 gap-x-2 no-print'>
-                    <div class='hidden md:block w-16 font-semibold self-center' >Was :</div>
-                    <Select class='w-64' label='Was sehen' value={typeId} on:change={onType}>
-                        {#each types as item }
-                            <option value={ item.id }> { item.name }</option>
-                        {/each}
-                    </Select>
-                </div>
+		<div class='bg-white border rounded border-gray-400'>
+			<h2 class='bg-header text-center text-white'>Leistungen über die Zeit und Länder</h2>
+			<div class='flex flex-row bg-gray-200 px-4 gap-x-2 no-print'>
+				<div class='hidden md:block w-16 font-semibold self-center' >Was :</div>
+				<Select class='w-64' label='Was sehen' value={typeId} on:change={onType}>
+					{#each types as item }
+						<option value={ item.id }> { item.name }</option>
+					{/each}
+				</Select>
+			</div>
 
-                <div class='flex flex-col sm:flex-row my-2 justify-evenly'>
-                    <TimeLine bind:year={year} {districtId} {sectionId} {breedId} {colorId} {typeId} {type}/>
-                    <DistrictsMap bind:districtId={districtId} {year} {sectionId} {breedId} {colorId} {typeId}/>
-                </div>
-            </div>
+			<div class='flex flex-col sm:flex-row my-2 justify-evenly'>
+				<TimeLine bind:year={year} {districtId} {sectionId} {breedId} {colorId} {typeId} {type}/>
+				<DistrictsMap bind:districtId={districtId} {year} {sectionId} {breedId} {colorId} {typeId}/>
+			</div>
+		</div>
 
-            <div class='print-break'></div>
+		<div class='print-break'></div>
 
-            <div class='hidden sm:block border rounded print'>
-                <DistrictReport {districtId} {year} />
-            </div>
-        {/if}
-    </div>
+		<div class='hidden sm:block border rounded print'>
+			<DistrictReport {districtId} {year} />
+		</div>
+	{/if}
+</div>
 
 
 

@@ -20,10 +20,10 @@ class Token
 		return $this->payload;
 	}
 
-	public static function encode( array $data ) : string {
+	public static function encode( array $data, int $lifetime = TOKEN_EXPIRE ) : string {
 		$issuer = 'RG Zuchtbuch Online';
 		$issued = new DateTimeImmutable();
-		$expires = $issued->modify('+'.TOKEN_EXPIRE.' minutes'); // till so many minutes after now
+		$expires = $issued->modify('+'.$lifetime.' minutes'); // till so many minutes after now
 
 		$payload = [
 			'iss'   => $issuer,
@@ -35,6 +35,7 @@ class Token
 
 		return JWT::encode( $payload, TOKEN_SECRET, TOKEN_ALGORITHM );
 	}
+
 	public static function decode( string $token ) : array {
 		$payload = (array)JWT::decode($token, new Key(TOKEN_SECRET, TOKEN_ALGORITHM));
 		$payload['user'] = (array)$payload['user']; // convert back to 'normal' array
@@ -43,13 +44,13 @@ class Token
 	}
 
 	private static function getBearer(Request $request ) : ? string {
-	$authorization = $request->getHeaderLine( 'Authorization' );
-	if( $authorization && !empty( $authorization ) ) {
-		$header = trim($authorization);
-		if (preg_match('/Bearer\s(\S+)/', $header, $matches )) { // get token part of header
-			return $matches[1];
+		$authorization = $request->getHeaderLine( 'Authorization' );
+		if( $authorization && !empty( $authorization ) ) {
+			$header = trim($authorization);
+			if (preg_match('/Bearer\s(\S+)/', $header, $matches )) { // get token from header
+				return $matches[1];
+			}
 		}
+		return null;
 	}
-	return null;
-}
 }

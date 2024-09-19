@@ -70,12 +70,14 @@
 				<Route path='/:districtId/*' let:meta>
 
 					<District id={toNumber(meta.params.districtId)} >
+
 						<!--Route path='/details' let:meta> <DistrictDetails /> </Route-->
 						<Route path='/zuechter/*' let:meta>
 							<Route path='/' let:meta> <DistrictBreeders /> </Route>
 							<Route path='/:breederId/*' let:meta >
 
 								<Breeder id={toNumber(meta.params.breederId)} > <!-- sets breeder in moderator context -->
+
 									<Route path='/details' let:meta> <BreederDetails /> </Route>
 									<Route path='/meldung/*' let:meta>
 										<Route path='/' let:meta> <BreederPairs /> </Route>

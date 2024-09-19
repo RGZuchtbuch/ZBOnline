@@ -42,6 +42,32 @@ class User
 		throw new HttpBadRequestException( $request, 'Bad body' );
 	}
 
+	public static function newLogin( Request $request, Response $response, array $args ) : Response { // get token with query
+		$body = $request->getParsedBody();
+		if( $body ) {
+			$email = $body[ 'email' ] ?? null;
+			$password = $body[ 'password' ] ?? null;
+			if( $email && $password ) {
+				$id = model\User::authenticate( $email, $password );
+				if( $id ) {
+					$user = model\User::get($id);
+					if( $user ) {
+						$user['name'] = $user['firstname'] . ' ' . ($user['infix'] ? $user['infix'] . ' ' : '') . $user['lastname'];
+						$user['moderator'] = array_column(model\Moderator::districts($id), 'id'); // what districts to moderate
+						$token = model\Token::encode( $user );
+						if ($token) {
+							$response->getBody()->write(json_encode(['token' => $token ], JSON_UNESCAPED_SLASHES));
+							return $response;
+						}
+					}
+				}
+				throw new HttpNotFoundException($request, 'User not found');
+			}
+			throw new HttpBadRequestException( $request, 'Bad credentials' );
+		}
+		throw new HttpBadRequestException( $request, 'Bad body' );
+	}
+
 	public static function resetMail( Request $request, Response $response, array $args ) : Response { // get token
 		$email = $args['email'] ?? null;
 

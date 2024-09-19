@@ -1,12 +1,15 @@
 <script>
-    import { onMount } from 'svelte';
+    import {getContext, onMount} from 'svelte';
     import {meta, router} from 'tinro';
     import { dec, pct, txt } from '../../js/util.js';
     import Page from "../common/Page.svelte";
-    import {user} from '../../js/store.js';
+    import {moderator, user} from '../../js/store.js';
 
     export let title = 'Meldungen';
     export let pairs = [];
+
+    const district = getContext( 'district' );
+    const breeder = getContext( 'breeder' );
 
     function addPair( event ) {
         console.log( 'Add pair', event );
@@ -18,15 +21,19 @@
     onMount( () => {
     });
 
+    $:console.log( 'Breeder', $breeder );
+
 </script>
 
 
 <Page>
     <div slot='title' class='flex flex-row justify-between'>
-        <div class='w5'></div>
+        <div class='w-5'></div>
         <div class='text-center'> {title} </div>
-        {#if $user && $user.moderator}
+        {#if $user && $user.moderator && $breeder }
             <a class='w-8 bg-button border-white border border-gray-400 rounded px-1 text-white' href={$router.path+'/0'} title='Meldung hinzufügen'> + </a>
+        {:else }
+            <div class='w-5' />
         {/if}
 
     </div>
@@ -72,7 +79,7 @@
     </div>
 
     <div slot='body'>
-        {#each pairs as pair (pair.id) } <!-- ide gives error here, but it's correct svelte-->cvl
+        {#each pairs as pair (pair.id) } <!-- ide gives error here, but it's correct svelte-->
             <a class='flex flex-row justify-evenly py-1 text-sm' href={route.match+'/'+pair.id}>
                 <div class='w-28 flex flex-row justify-evenly'>
                     <div class='w-10'>{pair.year}</div>

@@ -59,7 +59,7 @@
 <Page>
     <div slot='title' class='flex flex-row justify-between'>
         <div class='w-4'></div>
-        <div> Zuchtbuchmitglieder in Verband </div>
+        <div> Zuchtbuchmitglieder in {$district.name} </div>
         {#if $user && $user.moderator}
             <a class='w-8 bg-button border border-white rounded font-bold text-white px-1' href={$router.path+'/0/details'} title='Züchter hinzufügen'> + </a>
         {/if}

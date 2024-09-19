@@ -99,8 +99,14 @@ class Router {
 
 
         $app->get('/user/reset/{email}', 'App\controller\User::resetMail' ); // sends an email with reset link
-        $app->post('/user/token', 'App\controller\User::login' ); // post, as we do not want credentials in query !
-        $app->post('/user/password', 'App\controller\User::reset' );
+		$app->post('/user/token', 'App\controller\User::login' ); // post, as we do not want credentials in query !
+		$app->post('/user/password', 'App\controller\User::reset' );
+
+		// TODO New approach
+		$app->post('/login', 'App\controller\Auth::newLogin' ); // post credentials, replies token!
+		$app->post('/forgot', 'App\controller\Auth::newForgot' ); // post forgot password email, sends email
+		$app->post('/reset', 'App\controller\Auth::newReset' ); // post resetToken and new password, returns loginToken
+
 
         $app->get('/test', 'App\controller\Test' ); // test, query has year, district, section, breed, color and group
     }
