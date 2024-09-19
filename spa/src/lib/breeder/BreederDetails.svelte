@@ -99,12 +99,17 @@
 
 {#if $breeder }
     <Page>
-        <div slot='title'> Zuchtbuchmitglied {$breeder.firstname && $breeder.lastname ? txt($breeder.firstname) + ' ' + txt($breeder.infix)+' '+$breeder.lastname : 'Neu'}</div>
+        <div slot='title' class='flex flex-row justify-between'>
+            <div class='w-8' />
+            <div>Zuchtbuchmitglied {$breeder.firstname && $breeder.lastname ? txt($breeder.firstname) + ' ' + txt($breeder.infix)+' '+$breeder.lastname : 'Neu'}</div>
+            {#if $user && ( $user.admin || $user.moderator.includes( $breeder.districtId ) ) }
+                <div class='w-8 bg-alert border border-white rounded align-middle text-center text-white cursor-pointer' on:click={onToggleEdit} title='Daten ändern'>&#9998;</div>
+            {:else}
+                <div class='w-8' />
+            {/if}
+        </div>
         <div slot='header' class='flex flex-row'>
             <div class='grow text-center font-bold'>Mitgliedsdaten</div>
-            {#if $user && ( $user.admin || $user.moderator.includes( $breeder.districtId ) ) }
-                <div class='w-6 border border-alert rounded bg-white align-middle text-center text-red-600 cursor-pointer' class:disabled on:click={onToggleEdit} title='Daten ändern'>&#9998;</div>
-            {/if}
         </div>
         <div slot='body' class='p-2' transition:slide>
             <Form {disabled} on:submit={onSubmit}>
