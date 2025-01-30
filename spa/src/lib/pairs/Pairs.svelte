@@ -87,7 +87,7 @@
                     <div class='w-4 text-center'>{pair.group}</div>
                 </div>
                 <div class='w-16 whitespace-nowrap'>
-                       {txt( pair.lastname )} {txt( pair.firstname, 1 )} {txt( pair.infix )}
+                    {txt( pair.firstname, 1 )}. {txt( pair.lastname, 6 )}{#if pair.infix}, {txt( pair.infix, 1 )} {/if}..
                 </div>
                 <div class='w-104 flex flex-row justify-evenly'>
                     <div class='w-56'>{pair.breedName}</div>

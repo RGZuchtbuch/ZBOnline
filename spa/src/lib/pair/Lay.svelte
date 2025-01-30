@@ -4,6 +4,7 @@
 
     import InputDate from '../common/form/input/DateInput.svelte';
     import InputNumber from '../common/form/input/NumberInput.svelte';
+    import FormStatus from '../common/form/Status.svelte';
 
 
     export let pair;
@@ -12,7 +13,7 @@
         start:      (v) => validator(v).date().between( (pair.year-1)+'-10-01', (pair.year)+'-09-30' ).orNull().isValid(), // 1-10 → 30-09
         end:        (v) => validator(v).date().between( pair.lay.start, (pair.year)+'-12-31' ).orNullIf( ! pair.lay.start ).isValid(), // 1-10 → 30-09
         dames:      (v) => validator(v).number().range( 1, 32 ).orNull().isValid(),
-        eggs:       (v) => validator(v).number().range( 0, pair.lay.days * pair.lay.dames ).orNull().isValid(),
+        eggs:       (v) => validator(v).number().range( 0, 2 * pair.lay.days * pair.lay.dames ).orNull().isValid(),
         weight:     (v) => validator(v).number().range( 1.0, 9999.0 ).orNull().isValid(),
     }
 
@@ -59,6 +60,10 @@
     <div class='flex flex-row bg-header px-2 py-1 text-center text-white'>
         <div class='grow'>Legeleistung</div>
         <div class='w-6'></div>
+    </div>
+
+    <div class='flex justify-end'>
+        <FormStatus />
     </div>
 
     {#if pair.lay }

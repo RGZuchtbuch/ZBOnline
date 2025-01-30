@@ -10,6 +10,7 @@
 	import Breed    from './edit/Breed.svelte';
 	import Help     from './edit/Help.svelte';
 	import AocInput from './edit/AocInput.svelte';
+	import {getContext} from 'svelte';
 
 	// params
 	export let districtId = null;
@@ -64,7 +65,8 @@
 </div>
 
 
-<Selector {year} {sectionId} {group}/>
+<!-- Selector {year} {sectionId} {group}/ -->
+<Selector {sectionId} {group}/>
 
 <Header {sectionId}/>
 

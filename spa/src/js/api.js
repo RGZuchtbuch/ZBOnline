@@ -372,7 +372,7 @@ function getToken() {
 function getHeaders() {
     let headers = {
         'Accept': 'application/json', // expected response
-        'Content-Type': 'application/json' // send body
+        'Content-Type': 'application/json', // send body
     }
     if( token ) {
         headers[ 'Authorization'] = 'Bearer '+token;

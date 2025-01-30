@@ -83,7 +83,7 @@
 										<Route path='/' let:meta> <BreederPairs /> </Route>
 										<Route path='/:pairId/*' let:meta>
 											<Route path='/' let:meta>
-												<Pair id={toNumber(meta.params.pairId)} districtId={toNumber(meta.params.districtId)} breederId={toNumber(meta.params.breederId)}/>
+												<Pair id={toNumber(meta.params.pairId)}/>
 											</Route>
 										</Route>
 									</Route>
@@ -93,8 +93,8 @@
 						</Route>
 
 						<Route path='/leistung/*' let:meta>
-							<Route path='/' let:meta> <DistrictReport districtId={toNumber(meta.params.districtId)} year={new Date().getFullYear()} /> </Route>
-							<Route path='/:year' let:meta> <DistrictReport districtId={toNumber(meta.params.districtId)} year={toNumber(meta.params.year)} /> </Route>
+							<Route path='/' let:meta> <DistrictReport year={new Date().getFullYear()-1} /> </Route>
+							<Route path='/:year' let:meta> <DistrictReport year={toNumber(meta.params.year)} /> </Route>
 							<Route path='/:year/edit' let:meta> <DistrictResultsEdit districtId={toNumber(meta.params.districtId)} year={toNumber(meta.params.year)} /> </Route>
 							<!--Route path='/edit' let:meta> <ResultEdit districtId={ +meta.params.districtId }  /></Route-->
 						</Route>
@@ -147,7 +147,7 @@
 										<Route path='/' let:meta> <BreederPairs breederId={toNumber(meta.params.breederId)} /> </Route>
 										<Route path='/:pairId/*' let:meta>
 											<Route path='/' let:meta>
-												<Pair id={toNumber(meta.params.pairId)} districtId={toNumber(meta.params.districtId)} breederId={toNumber(meta.params.breederId)}/>
+												<Pair id={toNumber(meta.params.pairId)}/>
 											</Route>
 										</Route>
 									</Route>
@@ -156,8 +156,8 @@
 						</Route>
 
 						<Route path='/leistung/*' let:meta>
-							<Route path='/' let:meta> <DistrictReport districtId={toNumber(meta.params.districtId)} year={new Date().getFullYear()} /> </Route>
-							<Route path='/:year' let:meta> <DistrictReport districtId={toNumber(meta.params.districtId)} year={toNumber(meta.params.year)} /> </Route>
+							<Route path='/' let:meta> <DistrictReport year={new Date().getFullYear()} /> </Route>
+							<Route path='/:year' let:meta> <DistrictReport year={toNumber(meta.params.year)} /> </Route>
 							<Route path='/:year/edit' let:meta> <DistrictResultsEdit districtId={toNumber(meta.params.districtId)} year={toNumber(meta.params.year)} /> </Route>
 							<!--Route path='/edit' let:meta> <ResultEdit districtId={ +meta.params.districtId }  /></Route-->
 						</Route>

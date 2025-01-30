@@ -243,7 +243,7 @@ class Pair
 		} else if( is_numeric( $breederId ) ) {
 			$breeder = model\Breeder::get($breederId);
 			if( $breeder ) {
-				$districtId = $breeder['districtId'] && null;
+				$districtId = $breeder['districtId'] ?? null;
 				if ($requester->isAdmin() || $requester->isModerating($districtId) || $requester->hasId($breederId)) { //admin of the moderator or self
 					$pairs = model\Breeder::getPairs($breederId);
 					$response->getBody()->write(json_encode(['pairs' => $pairs], JSON_UNESCAPED_SLASHES));

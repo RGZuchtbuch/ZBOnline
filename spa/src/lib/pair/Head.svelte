@@ -62,7 +62,7 @@
 
 
     <div class='flex flex-row px-2 gap-x-1'>
-        <InputText class='w-64' label='Züchter' value={txt(pair.breeder.firstname)+' '+txt(pair.breeder.infix)+' '+txt(pair.breeder.lastname)} disabled/>
+        <InputText class='w-64' label={'Züchter '+txt(pair.breeder.member)} value={txt(pair.breeder.firstname)+' '+txt(pair.breeder.infix)+' '+txt(pair.breeder.lastname)} disabled/>
         <InputNumber class='w-20' bind:element={focusElement} label='Jahr *' name='year' bind:value={pair.year} validator={validate.year}/>
         <InputText class='w-20' label='Name *' bind:value={pair.name} title={dic.title.requiredunique} error='* 1..16 bs' validator={validate.name} on:input={onNameChange}/>
         <Select class='w-20' label='ZB Gruppe *' bind:value={pair.group} >

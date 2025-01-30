@@ -41,9 +41,14 @@
     function newPair()  {
         console.log( 'From route', $district.id, $breeder.id );
         if( $district && $breeder ) {
+            const date = new Date();
+            let year = date.getFullYear();
+            if ( date.getMonth() ===  0 ) { // in januari then last year still
+                year = year - 1; //last year
+            }
             return {
                 id: 0,
-                breederId: $breeder.id, districtId: $district.id, year: new Date().getFullYear(), group: 'I',
+                breederId: $breeder.id, districtId: $district.id, year: year, group: 'I',
                 sectionId: null, breedId: null, colorId: null,
                 name: null, paired: null, notes: 'Info...',
                 parents: [],
@@ -142,7 +147,11 @@
                 <div class='flex flex-col gap-y-1' >
                     <PairHead bind:pair={pair}/>
 
-                    {#if pair.sectionId && pair.breedId && (pair.sectionId === PIGEONS || pair.colorId )}
+                    {#if ! pair.name || ! pair.sectionId || ! pair.breedId || ( pair.sectionId !== PIGEONS && ! pair.colorId )}
+                        <div class='text-center italic' transition:slide>Die Eingabefeldern für Legen, Brut und Schauleistungen erscheinen wenn oberes vollständig ist !</div>
+                    {/if}
+
+                    {#if pair.name && pair.sectionId && pair.breedId && (pair.sectionId === PIGEONS || pair.colorId )}
                         {#if pair.sectionId === PIGEONS}
                             <div  transition:slide>
                                 <PairParents bind:pair={pair} />

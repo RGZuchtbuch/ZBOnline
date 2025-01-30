@@ -123,4 +123,20 @@ class Breed
 		throw new HttpBadRequestException( $request, 'Bad id' );
 	}
 
+
+
+	/* new approach rgzuchtbuch 3.0 */
+
+	public static function filter( Request $request, Response $response, array $args ) : Response {
+		$query = $request->getQueryParams();
+		$sectionId = $query['section'] ?? null;
+
+		if( is_numeric( $sectionId ) ) {
+			$breeds = model\Breed::forSection( $sectionId );
+			$response->getBody()->write(json_encode(['breeds' => $breeds], JSON_UNESCAPED_SLASHES));
+			return $response;
+		}
+		throw new HttpBadRequestException( $request, 'Bad id' );
+	}
+
 }

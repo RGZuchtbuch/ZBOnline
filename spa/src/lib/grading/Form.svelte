@@ -188,9 +188,10 @@
 
 			<fieldset class='flex flex-row gap-x-2'>
 				<span class='w-40 mt-6'> Ausstellung am </span>
-				<DateInput label='Datum'/>
+				<DateInput class='w-32' label='Datum'/>
 				<span class='w-8 mt-6 text-center'> in </span>
 				<TextInput class='grow' label='Schau'/>
+				<TextInput class='w-24' label='Käfig-Nr.' />
 			</fieldset>
 		</header>
 

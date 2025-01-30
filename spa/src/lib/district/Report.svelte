@@ -8,6 +8,7 @@
     export let report;
 
     let district = getContext( 'district' );
+    console.log('Got district', district );
     let breeder = getContext( 'breeder' );
 
     function addTo( sum, result ) { // count and add all up to totals of section etc
@@ -135,7 +136,7 @@
                         <tr><th class='sticky top-0 border-y border-gray-600' colspan=14>
                             <div class='h-2 bg-white'></div>
                             <div class='flex flex-row p-2 bg-header'>
-                                <small class='w-48 pr-2 text-white text-left self-end'>{#if district} {district.name} {/if}</small>
+                                <small class='w-48 pr-2 text-white text-left self-end'>{#if $district} {$district.short} {/if}</small>
                                 <div class='grow text-center text-white text-xl'>Sparte {section.name}</div>
                                 <small class='w-48 pr-2 text-white text-right self-end'>{#if district} {year} {/if}</small>
                             </div>

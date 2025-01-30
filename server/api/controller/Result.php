@@ -196,4 +196,38 @@ class Result
 		}
 		throw  new HttpBadRequestException($request, 'Bad arguments');
 	}
+
+
+	// new approach 2
+	public static function filter( Request $request, Response $response, array $args ) : Response {
+		$query = $request->getQueryParams();
+		$districtId = $query['district'] ?? null;
+		$year = $query['year'] ?? null;
+		$colorId = $query['color'] ?? null;
+
+		if( is_numeric( $districtId ) && is_numeric( $year ) && is_numeric( $colorId ) ) {
+			$results = model\Result::forColor( $districtId, $year, $colorId );
+
+			$formatted = [];
+			foreach( $results as &$result ) {
+				$formatted[] = self::formatResult( $result );
+			}
+			$response->getBody()->write(json_encode(['results' => $formatted], JSON_UNESCAPED_SLASHES));
+			return $response;
+		}
+		throw new HttpBadRequestException( $request, 'Bad query' );
+	}
+
+	public static function formatResult( array &$input ) : array	{
+		return [
+			'id'=>$input['id'], 'pairId'=>$input['pairId'],
+			'districtId'=>$input['districtId'], 'year'=>$input['year'], 'group'=>$input['group'],
+			'sectionId'=>$input['sectionId'],'breedId'=>$input['breedId'], 'colorId'=>$input['colorId'],
+			'aocColor'=>$input['aocColor'],
+			'breeders'=>$input['breeders'], 'pairs'=>$input['pairs'],
+			'lay'=> [ 'eggs'=>$input['layEggs'], 'weight'=>$input['layWeight'] ],
+			'brood'=>[ 'eggs'=>$input['broodEggs'], 'fertile'=>$input['broodFertile'], 'hatched'=>$input['broodHatched'] ],
+			'show'=>[ 'count'=>$input['showCount'], 'score'=>$input['showScore'] ],
+		];
+	}
 }

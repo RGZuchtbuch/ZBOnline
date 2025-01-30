@@ -428,5 +428,14 @@ class Result extends Query
         return Query::selectArray( $stmt, $args );
     }
 
+	// new version 2 getters
 
+	/* returns the district result for year and color */
+	public static function forColor( int $districtId, int $year, int $colorId ) : array {
+		$args = get_defined_vars();
+		$stmt = Query::prepare('
+			SELECT * FROM result WHERE districtId=:districtId AND `year`=:year AND colorId=:colorId ORDER BY pairId
+        ');
+		return Query::selectArray($stmt, $args);
+	}
 }

@@ -7,10 +7,11 @@ use Slim\Factory\AppFactory;
 use App\router;
 
 // allow cross-origin from all, could use Slim for this ?
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Headers:  Accept, Authorization, Content-Type, Origin, X-Requested-With');
-header('Access-Control-Allow-Methods:  GET, POST, PUT, DELETE');
-header("Content-Type: application/json");
+header('Access-Control-Allow-Origin: *' );
+header('Access-Control-Allow-Methods:  GET, POST, PUT, DELETE, PATCH, OPTIONS' );
+header('Access-Control-Allow-Headers:  Accept, Authorization, Content-Type, Origin, X-Requested-With' );
+header('Access-Control-Allow-Credentials: true' );
+header('Content-Type: application/json' );
 
 require_once './config/config.php';
 require_once './vendor/autoload.php'; // require __DIR__.'/vendor/autoload.php';
@@ -31,13 +32,15 @@ if( $_SERVER[ 'REMOTE_ADDR' ] === '::1' ) { // localhost
 
 /* TODO does not work as replace for lines 7-10
 $app->add(function ($req, $res, $next) {
-    $response = $next($req, $res);
-    return $response
-            ->withHeader('Access-Control-Allow-Origin', '*')
-            ->withHeader('Access-Control-Allow-Headers', 'Accept, Authorization, Content-Type, Origin, X-Requested-With')
-            ->withHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS'); // 'GET, POST, PUT, DELETE, PATCH, OPTIONS'
+	$response = $next($req, $res);
+	return $response
+		->withHeader('Access-Control-Allow-Origin', '*')
+		->withHeader('Access-Control-Allow-Headers', 'Accept, Authorization, Content-Type, Origin, X-Requested-With')
+		->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS')
+		->withHeader('Content-Type', 'application/json' );
 });
 */
+
 $app->setBasePath("/api"); // as the api lives here... else not found.
 
 App\router\Router::register( $app );

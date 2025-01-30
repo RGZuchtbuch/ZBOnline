@@ -16,7 +16,7 @@
 //    let sections = formType === PIGEONS ?
 //        [ { id:5, name:'Tauben' } ] :
 //        [ { id:3, name:'Groß & Wassergeflügel' }, { id:11, name:'Große Hühner' }, { id:12, name:'Zwerghühner & Wachteln' }, { id:6, name:'Ziergeflügel' } ];
-    let sections = [ { id:3, name:'Groß & Wassergeflügel' }, { id:11, name:'Große Hühner' }, { id:12, name:'Zwerghühner & Wachteln' }, { id:5, name:'Tauben' }, { id:6, name:'Ziergeflügel' } ];
+    let sections = [ { id:3, name:'Groß & Wassergeflügel' }, { id:11, name:'Große Hühner' }, { id:12, name:'Zwerghühner' }, { id:13, name:'Legewachteln' }, { id:5, name:'Tauben' }, { id:6, name:'Ziergeflügel' } ];
 
     let breeds = [];
     let colors = [];
@@ -35,7 +35,7 @@
         if( pair ) {
             section = getSection( pair.sectionId, $standard );
             if( section ) {
-                breeds = getBreeds(section);
+                breeds = getSortedBreeds(section);
                 breed = breeds.find(breed => breed.id === pair.breedId);
                 if( breed ) {
                     colors = breed.colors;
@@ -58,7 +58,13 @@
         return null;
     }
 
-    function getBreeds( section, breeds ) { // recursive
+    function getSortedBreeds( section ) {
+        const breeds = getBreeds( section, [] );
+        breeds.sort((a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0)
+        return breeds;
+    }
+
+    function getBreeds( section, breeds ) { // recursive, helper for getSorted above
         if( breeds === undefined ) breeds = []; // init
         if( section ) {
             breeds.push( ...section.breeds );
@@ -75,8 +81,9 @@
         pair.breedId = pair.colorId = null;
         if( pair.sectionId ) {
             section = getSection(pair.sectionId, $standard); // from standard as sections is incomplete
-            breeds = getBreeds(section);
-            breeds.sort((a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0)
+            breeds = getSortedBreeds(section);
+//            breeds = getBreeds(section);
+//            breeds.sort((a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0)
             pair.breedId = pair.coloId = null;
         }
     }

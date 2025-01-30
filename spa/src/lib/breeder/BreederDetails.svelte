@@ -42,7 +42,7 @@
         name:       (v) => validator(v).string().length(1,32).orNullIf( toRemove ).isValid(),
         infix:      (v) => validator(v).string().length(1,16).orNull().isValid(),
         email:      (v) => validator(v).email().orNull().isValid(),
-        start:      (v) => validator(v).date().after( '1990-01-01' ).orNull().isValid(),
+        start:      (v) => validator(v).date().after( '1960-01-01' ).orNull().isValid(),
         end:        (v) => validator(v).date().after( $breeder.start ).orNull().isValid(),
     }
 
@@ -108,8 +108,12 @@
                 <div class='w-8' />
             {/if}
         </div>
-        <div slot='header' class='flex flex-row'>
+        <div slot='header' class='flex flex-col'>
             <div class='grow text-center font-bold'>Mitgliedsdaten</div>
+            <div class='border-b border-header text-center italic'>
+                Mitgliedsdaten. Wenn bis Datum in der vergangenheit, dann ist dieser Mitglied Inaktiv.<br>
+                Ein Mitglied löschen geht nur wenn es keine Meldungen gibt. Löschen durch namen leermachen und Löschen ankreuzen.
+            </div>
         </div>
         <div slot='body' class='p-2' transition:slide>
             <Form {disabled} on:submit={onSubmit}>

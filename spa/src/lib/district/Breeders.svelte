@@ -59,20 +59,24 @@
 <Page>
     <div slot='title' class='flex flex-row justify-between'>
         <div class='w-4'></div>
-        <div> Zuchtbuchmitglieder in {$district.name} </div>
+        <div>Zuchtbuchmitglieder im {$district.name} </div>
         {#if $user && $user.moderator}
             <a class='w-8 bg-button border border-white rounded font-bold text-white px-1' href={$router.path+'/0/details'} title='Züchter hinzufügen'> + </a>
         {/if}
     </div>
-    <div slot='header' class='flex flex-row gap-x-4 px-2 py-1'>
-        <div class='w-12'>Nr</div>
-        <div class='w-56'>Name</div>
-        <div class='w-36'>Ortsverein</div>
-        <div class='w-64'>ZB Verband</div>
-        <div class='w-24'>Seit</div>
-        <div class='w-16'>Inaktief</div> <div class='w-6 h-6 text-center'> <input class='cursor-pointer' type='checkbox' bind:checked={showInactives}> </div>
-        <div class='grow'></div>
-
+    <div slot='header' class='flex flex-col'>
+        <div class='border-b border-header text-center italic'>
+            Liste der Züchter im Verband. Wenn Inaktiv angekreuzt ist werden auch die ausgestiegene Mitglieder gezeigt.
+        </div>
+        <div class='flex flex-row gap-x-4 px-2 py-1'>
+            <div class='w-12'>Nr</div>
+            <div class='w-56'>Name</div>
+            <div class='w-36'>Ortsverein</div>
+            <div class='w-64'>ZB Verband</div>
+            <div class='w-24'>Seit</div>
+            <div class='w-16'>Inaktiv</div> <div class='w-6 h-6 text-center'> <input class='cursor-pointer' type='checkbox' bind:checked={showInactives}> </div>
+            <div class='grow'></div>
+        </div>
     </div>
     <div slot='body' class=''>
         {#if breeders}

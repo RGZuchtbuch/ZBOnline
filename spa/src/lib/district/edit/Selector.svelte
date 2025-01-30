@@ -3,7 +3,7 @@
     import {router} from "tinro";
     import Select from '../../common/form/input/Select.svelte';
 
-    export let year;
+//    export let year;
     export let sectionId;
     export let group;
 
@@ -42,17 +42,16 @@
         return years;
     }
 
-    console.log( 'Selector', year );
 </script>
 
 
 
 <div class='w-256 flex flex-row border border-gray-400 bg-gray-200 gap-x-4 justify-center'>
-    <Select label="Jahr" value={year} on:change={onYear} title='Leistungsjahr'>
+    <!--Select label="Jahr" value={year} on:change={onYear} title='Leistungsjahr'>
         {#each years as y}
             <option value={y} selected={ y === year }>{y}</option>
         {/each}
-    </Select>
+    </Select -->
 
     <Select label="Sparte" bind:value={sectionId} on:change={onSection} title='Sparte zum Eingeben'>
         {#each sections as section}

@@ -108,7 +108,18 @@ class Color
 //		throw new HttpNotImplementedException( $request, 'not implemented yet, should only be possible if not used.');
 	}
 
-// ****************************************
+// **************************************** new
 
+	public static function filter( Request $request, Response $response, array $args ) : Response {
+		$query = $request->getQueryParams();
+		$breedId = $query['breed'] ?? null;
+
+		if( is_numeric( $breedId ) ) {
+			$colors = model\Color::forBreed( $breedId );
+			$response->getBody()->write(json_encode(['colors' => $colors], JSON_UNESCAPED_SLASHES));
+			return $response;
+		}
+		throw new HttpBadRequestException( $request, 'Bad id' );
+	}
 
 }

@@ -102,13 +102,17 @@ class Router {
 		$app->post('/user/token', 'App\controller\User::login' ); // post, as we do not want credentials in query !
 		$app->post('/user/password', 'App\controller\User::reset' );
 
-		// TODO New approach
-		$app->post('/login', 'App\controller\Auth::newLogin' ); // post credentials, replies token!
-		$app->post('/forgot', 'App\controller\Auth::newForgot' ); // post forgot password email, sends email
-		$app->post('/reset', 'App\controller\Auth::newReset' ); // post resetToken and new password, returns loginToken
+		// TODO New approach 2
+		$app->post('/2/login', 'App\controller\Auth::newLogin' ); // post credentials, replies token!
+		$app->post('/2/forgot', 'App\controller\Auth::newForgot' ); // post forgot password email, sends email
+		$app->post('/2/reset', 'App\controller\Auth::newReset' ); // post resetToken and new password, returns loginToken
+
+		$app->get('/2/breed', 'App\controller\Breed::filter' );
+		$app->get('/2/color', 'App\controller\Color::filter' );
+		$app->get('/2/result', 'App\controller\Result::filter' );
 
 
-        $app->get('/test', 'App\controller\Test' ); // test, query has year, district, section, breed, color and group
+		$app->get('/test', 'App\controller\Test' ); // test, query has year, district, section, breed, color and group
     }
 };
 

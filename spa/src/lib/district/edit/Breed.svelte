@@ -59,7 +59,7 @@
             <span class='text-xs'>
                 (
                 <span title={'Zuchten hier'}>{breed.breeders-breed.reports-breed.aoc}</span> +
-                <span title={'Meldungen Züchter'}>{breed.reports}</span> +
+                <span title={'Paar/Stamm Meldungen Züchter'}>{breed.reports}</span> +
                 <span title={'Zuchten AOC Klasse'}>{breed.aoc}</span>
                 )
             </span> {/if}
