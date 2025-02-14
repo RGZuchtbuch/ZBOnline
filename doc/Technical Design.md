@@ -101,7 +101,7 @@ On top of this a three layered structure is chosen. The router forwards the requ
         }
     }
     
-    Client -r-> Router : api
+    Client -r-> Router : apiSvelte
     Router -r-> Controller : request
     Controller -r-> Query : query
 ```

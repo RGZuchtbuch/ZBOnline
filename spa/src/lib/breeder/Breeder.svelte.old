@@ -1,6 +1,6 @@
 <script>
     import {Route, router, meta} from 'tinro';
-    import api from '../../js/api.js';
+    import apiSvelte from '../../js/apiSvelte.js';
     import {txt} from '../../js/util.js';
     import { breeder } from '../../js/store.js';
     import Pair from '../pair/Pair.svelte';
@@ -17,7 +17,7 @@
 
     function loadBreeder( id ) {
         if( id && id>0 ) { // valid id, else new
-            api.breeder.get(id).then(response => {
+            apiSvelte.breeder.get(id).then(response => {
                 //breeder.set( response.breeder );
                 breeder.set( response.breeder );
                 console.log( 'Load breeder', $breeder);

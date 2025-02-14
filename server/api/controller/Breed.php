@@ -109,7 +109,7 @@ class Breed
 
 	/** other getters **/
 
-
+	// should be through color filter
 	public static function colors( Request $request, Response $response, array $args ) : Response {
 		$id = $args[ 'id' ] ?? null;
 		if( is_numeric( $id ) ) {
@@ -130,9 +130,10 @@ class Breed
 	public static function filter( Request $request, Response $response, array $args ) : Response {
 		$query = $request->getQueryParams();
 		$sectionId = $query['section'] ?? null;
-
+		// others ?
 		if( is_numeric( $sectionId ) ) {
-			$breeds = model\Breed::forSection( $sectionId );
+			//$breeds = model\Breed::forSection( $sectionId );
+			$breeds = model\Breed::section( $sectionId );
 			$response->getBody()->write(json_encode(['breeds' => $breeds], JSON_UNESCAPED_SLASHES));
 			return $response;
 		}

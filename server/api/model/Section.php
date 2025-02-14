@@ -59,7 +59,7 @@ class Section
         return Query::selectArray( $stmt, $args );
     }
 
-    public static function getChildren( int $id ) : array {
+    public static function children(int $id ) : array {
         $args = get_defined_vars();
         $stmt = Query::prepare('
             SELECT id, name, parentId, layers, `order`
@@ -69,15 +69,25 @@ class Section
         return Query::selectArray($stmt, $args);
     }
 
-    public static function getDescendants( int $sectionId ) : array { // including root
+    public static function descendants(int $rootId ) : array { // including root
         $args = get_defined_vars();
+		$stmt = Query::prepare( "
+			WITH RECURSIVE parent( id, `name`, `order`, parentId) AS (
+				SELECT id, `name`, `order`, parentId FROM section WHERE id=:rootId
+				UNION ALL
+				SELECT child.id, child.name, child.order, child.parentId FROM section AS child, parent WHERE child.parentId = parent.id 
+			)
+			SELECT * FROM parent ORDER BY `order`;		
+        ");
+
+/*
         $stmt = Query::prepare( "
             SELECT DISTINCT child.id, child.parentId, child.name, child.layers, child.order FROM section AS parent
                 LEFT JOIN section AS child ON child.id = parent.id OR child.parentId = parent.id
             WHERE parent.id=:sectionId OR parent.parentId=:sectionId
             ORDER BY child.order
         ");
-
+*/
         return Query::selectArray( $stmt, $args );
     }
 }

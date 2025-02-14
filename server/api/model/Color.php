@@ -56,7 +56,7 @@ class Color
 
 // new approach
 
-	public static function forBreed(int $breedId ) : array {
+	public static function breed(int $breedId ) : array {
 		$args = get_defined_vars();
 		$stmt = Query::prepare('
             SELECT id, name, breedId
@@ -66,5 +66,4 @@ class Color
         ');
 		return Query::selectArray($stmt, $args);
 	}
-
 }

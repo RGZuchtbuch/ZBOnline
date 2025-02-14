@@ -107,7 +107,7 @@ class Section
 	public static function children( Request $request, Response $response, array $args ) : Response {
 		$id = $args[ 'id' ] ?? null;
 		if( is_numeric( $id ) ) {
-			$children = model\Section::getChildren( $id );
+			$children = model\Section::children( $id );
 			$response->getBody()->write(json_encode(['sections' => $children], JSON_UNESCAPED_SLASHES));
 			return $response;
 		}
@@ -117,7 +117,7 @@ class Section
 	public static function descendants( Request $request, Response $response, array $args ) : Response {
 		$id = $args[ 'id' ] ?? null;
 		if( is_numeric( $id ) ) {
-			$descendants = model\Section::getDescendants( $id );
+			$descendants = model\Section::descendants( $id );
 			$root = ToolBox::toTree( $descendants );
 			$response->getBody()->write(json_encode(['section' => $root], JSON_UNESCAPED_SLASHES));
 			return $response;

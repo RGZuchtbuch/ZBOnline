@@ -19,18 +19,18 @@ class Standard
 
 		Logger::add( null, $request );
 
-		$json = model\Cache::get( 'Standard', $request->getUri()->getPath(), $request->getUri()->getQuery() );
+		$json = model\Cache::get( 'standard', $request->getUri()->getPath(), $request->getUri()->getQuery() );
 		if( $json ) { // in cache
             $response->getBody()->write( $json );
 			return $response;
 		}
-		$sections = model\Section::getDescendants(2); // all poultry
+		$sections = model\Section::descendants(2); // all poultry
 		$breeds = model\Breed::get();
 		$colors = model\Color::get();
 		$standard = Standard::toStandardTree($sections, $breeds, $colors);
 		$json = json_encode( [ 'standard' => $standard, 'timestamp' => date( 'Y-m-d H:i:s' ) ], JSON_UNESCAPED_SLASHES );
 		$response->getBody()->write( $json );
-		model\Cache::set( 'Standard', $request->getUri()->getPath(), $request->getUri()->getQuery(), $json );
+		model\Cache::set( 'standard', $request->getUri()->getPath(), $request->getUri()->getQuery(), $json );
         return $response;
 	}
 
@@ -38,34 +38,37 @@ class Standard
 
 	/** helpers **/
 
-	private static function toStandardTree( & $sectionsRows, & $breedsRows, & $colorsRows ) : array {
+	private static function toStandardTree(& $sectionsArray, & $breedsArray, & $colorsArray ) : array {
 		$sections = [];
 		$breeds = [];
+		$colors = [];
 
-		foreach($sectionsRows as & $section ) { // all by id
+		// prepare each section
+		foreach( $sectionsArray as & $section ) { // all by id
 			$section[ 'children' ] = [];
 			$section[ 'breeds' ] = [];
 			$sections[ $section['id'] ] = & $section;
 		}
-
-		foreach($sectionsRows as & $section ) { // add children to parents
+		// add to parents children
+		foreach( $sectionsArray as & $section ) { // add children to parents
 			$parentId = $section[ 'parentId' ];
 			if( $parentId ) {
 				$sections[ $parentId ]['children'][] = & $section;
 			}
 		}
-
-		foreach($breedsRows as & $breed ) { // add breeds to sections
+		// add breeds to their section
+		foreach($breedsArray as & $breed ) { // add breeds to sections
 			$breed[ 'colors' ] = [];
 			$breeds[ $breed[ 'id' ] ] = & $breed;
 			$sections[ $breed[ 'sectionId' ] ][ 'breeds' ][] = & $breed;
 		}
-
-		foreach($colorsRows as & $color ) { // add colors to breeds
+		// arr colors to their breeds
+		foreach($colorsArray as & $color ) { // add colors to breeds
+			$colors[ $color[ 'id'] ] = & $color;
 			$breeds[ $color[ 'breedId' ] ][ 'colors' ][] = & $color;
 		}
 
-		return $sections[2]; // geflügel
+		return [ 'root'=>$sections[2] ]; // geflügel
 	}
 
 }

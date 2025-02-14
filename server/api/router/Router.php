@@ -102,14 +102,32 @@ class Router {
 		$app->post('/user/token', 'App\controller\User::login' ); // post, as we do not want credentials in query !
 		$app->post('/user/password', 'App\controller\User::reset' );
 
+
 		// TODO New approach 2
-		$app->post('/2/login', 'App\controller\Auth::newLogin' ); // post credentials, replies token!
-		$app->post('/2/forgot', 'App\controller\Auth::newForgot' ); // post forgot password email, sends email
-		$app->post('/2/reset', 'App\controller\Auth::newReset' ); // post resetToken and new password, returns loginToken
+
+		$app->get( '/2/article', 		'App\controller\Article::filter'); // filter
+		$app->get( '/2/article/{id:[0-9]+}', 	'App\controller\Article::get'); // only accept uint
+
+		$app->post('/2/user/login', 'App\controller\User::newLogin' ); // post credentials, replies token!
+		$app->post('/2/user/forgot', 'App\controller\User::newForgot' ); // post forgot password email, sends email
+		$app->post('/2/user/reset', 'App\controller\User::newReset' ); // post resetToken and new password, returns loginToken
 
 		$app->get('/2/breed', 'App\controller\Breed::filter' );
+		$app->get('/2/breed/{id:[0-9]+}', 'App\controller\Breed::get' );
 		$app->get('/2/color', 'App\controller\Color::filter' );
+
+		$app->get('/2/breeder', 'App\controller\Breeder::filter' );
+		$app->get('/2/breeder/{id:[0-9]+}', 'App\controller\Breeder::get' );
+
+		$app->get('/2/district', 'App\controller\District::filter' );
+		$app->get('/2/district/{id:[0-9]+}', 'App\controller\District::get' );
+
+		$app->get('/2/pair', 'App\controller\Pair::filter' );
+		$app->get('/2/pair/{id:[0-9]+}', 'App\controller\Pair::get' );
+
 		$app->get('/2/result', 'App\controller\Result::filter' );
+		$app->get( '/2/standard', 'App\controller\Standard::get' );
+
 
 
 		$app->get('/test', 'App\controller\Test' ); // test, query has year, district, section, breed, color and group

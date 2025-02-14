@@ -13,6 +13,12 @@ use Slim\Exception\HttpUnauthorizedException;
 
 class Article
 {
+	//added the all option, took out of get
+	public static function all( Request $request, Response $response, array $args ) : Response {
+		$articles = model\Article::get();
+		$response->getBody()->write( json_encode( [ 'articles' => $articles ], JSON_UNESCAPED_SLASHES ) );
+		return $response;
+	}
 
 	public static function get( Request $request, Response $response, array $args ) : Response {
 		$id = $args[ 'id' ] ?? null;
@@ -85,6 +91,23 @@ class Article
 		throw new HttpUnauthorizedException( $request, 'not Admin');
 	}
 
-	/** other getters **/
-
+	/** v3 **/
+	public static function filter( Request $request, Response $response, array $args ) : Response {
+		$id = $args[ 'id' ] ?? null;
+		if( $id ) { // specific article
+			if( is_numeric( $id ) ) {
+				$article = model\Article::get( $id );
+				if ($article) {
+					$response->getBody()->write(json_encode(['article' => $article], JSON_UNESCAPED_SLASHES));
+					return $response;
+				}
+				throw new HttpNotFoundException($request, 'Article not found');
+			}
+			throw new HttpBadRequestException( $request, 'Bad id' );
+		} else { // list
+			$articles = model\Article::get();
+			$response->getBody()->write( json_encode( [ 'articles' => $articles ], JSON_UNESCAPED_SLASHES ) );
+			return $response;
+		}
+	}
 }

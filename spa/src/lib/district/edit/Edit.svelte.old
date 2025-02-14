@@ -2,7 +2,7 @@
 
     import { slide } from 'svelte/transition';
     import {router} from 'tinro';
-    import api      from '../../../js/api.js';
+    import apiSvelte      from '../../../js/apiSvelte.js';
 
     import Selector from './Selector.svelte';
     import Header   from './Header.svelte';
@@ -37,7 +37,7 @@
     }
 
     function loadDistrict() {
-        api.district.get( districtId ).then( response => {
+        apiSvelte.district.get( districtId ).then( response => {
             district = response.district
         });
     }
@@ -46,7 +46,7 @@
         breeds = []; // empty
         if( sectionId === 5 ) group = 'I'; // pigeons don't have group, so defaults to 'I' locally
         if( sectionId && year && group ) { // on change of any reload all
-            api.district.results.section.get( districtId, sectionId, year, group ).then( response => {
+            apiSvelte.district.results.section.get( districtId, sectionId, year, group ).then( response => {
                 breeds = response.results;
             });
         }

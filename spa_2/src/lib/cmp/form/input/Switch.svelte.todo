@@ -1,0 +1,95 @@
+<script>
+	import { getContext,  onDestroy, onMount } from 'svelte';
+	//import '../form.css';
+
+//	let { element } = $props();
+	let { class:classname='', disabled=false, element=$bindable(), error='!', label=null, name=null, options=[], placeholder=null, title=null, validator=null, value=$bindable() } = $props();
+
+
+//	let className = '';
+// 	export { className as class };
+// 	export let title = null;
+// 	export let label = null;
+// 	export let value;
+// 	export let options;
+// 	export let error = 'error'; // message on invalid
+// 	export let validator = null;
+// 	export let disabled = false;
+
+	let valid = true;
+	//    let dirty = false; // unvalidated, for changed element vs all others for validation
+
+	let min = $state( 0 );
+	let max = $state( 1 );
+	let index = $state( 0 );
+
+	const form = getContext( 'form'); // store
+
+	function validate() { // called from form with this context
+		if( validator ) valid = validator( value ); // only if dirty or was invalid, only the active, dirty input can become invalid by design!
+		return valid;
+	}
+
+	function onInput( event ) {
+		//if( value === '' ) value = null;
+		value = options[ index ];
+		console.log( 'Input', index, value );
+	}
+
+	//function update() { // when props change
+	$effect( ()=> { // update on change TODO
+		console.log( 'Update', index, options, value );
+		min = 0;
+		max = options.length-1;
+		index = options.indexOf( value );
+	} );
+
+
+	onMount( () => { // catch input and register validator
+		element.addEventListener( 'input', onInput );
+		if( validator ) $form.validators.push( validate ); // add this.validate with it's context
+	});
+
+	onDestroy( () => { // remove validator
+		let index = $form.validators.indexOf( validate );
+		if( index >= 0 ) $form.validators.splice( index, 1 ); // remove this validator;
+	});
+
+
+	//$: update( options );
+
+</script>
+
+<div class='wrapper switch {classname}'>
+	{#if label}
+		<label class='label' for='number'> {label} </label>
+	{/if}
+	<input type='range'
+	       class='input' class:valid
+	       bind:this={element} bind:value={index}
+	       {min} {max}
+	       {title} {disabled}
+	       on:input on:change on:focus on:blur
+	>
+	<label class='options w-full flex flex-row justify-between text-2xs' for='number'>
+		{#each options as option}
+			<div>{option}</div>
+		{/each}
+	</label>
+	<!--label class='error' class:valid for='number'>{error}</label-->
+</div>
+
+<style>
+    .input {
+	    @apply appearance-none bg-transparent accent-teal-600 px-0 [&::-webkit-slider-runnable-track]:rounded-full [&::-webkit-slider-runnable-track]:bg-slate-300;
+    }
+    .options {
+        line-height: 1.25em;
+        font-size: 0.6em;
+        padding-left: 0.5em;
+    }
+    label.error.valid {
+        visibility: hidden;
+    }
+
+</style>

@@ -65,7 +65,7 @@ class Breed
 
 
 
-
+	// should be moved to color filter
     public static function getColors(int $id ) : array {
         $args = get_defined_vars();
         $stmt = Query::prepare('
@@ -79,7 +79,7 @@ class Breed
 
 	/** api version 2 */
 
-	public static function forSection( $sectionId ) {
+	public static function forSection( int $sectionId ) {
 		$args = get_defined_vars();
 		$stmt = Query::prepare('
 			WITH RECURSIVE sections AS (
@@ -93,5 +93,21 @@ class Breed
 		');
 		return Query::selectArray($stmt, $args);
 	}
+
+	public static function section( int $sectionId ) : array { // field=>value
+		$args = get_defined_vars();
+		$stmt = Query::prepare('
+			WITH RECURSIVE sections AS (
+				SELECT * FROM section WHERE section.id=:sectionId	
+				UNION 	
+				SELECT child.* FROM section AS child, sections AS parent WHERE child.parentId = parent.id
+			)
+			SELECT :sectionId AS sectionId, sections.id AS subSectionId, breed.id, breed.name  
+			FROM sections JOIN breed ON breed.sectionId = sections.id
+			ORDER BY breed.name        
+		');
+		return Query::selectArray($stmt, $args );
+	}
+
 
 }

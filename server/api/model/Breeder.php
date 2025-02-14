@@ -108,4 +108,26 @@ class Breeder extends Query
         " );
 		return Query::selectArray( $stmt, $args );
 	}
+
+
+	// new svelte 5
+
+	public static function forDistrict( int $districtId ) {
+		$args = get_defined_vars();
+		$stmt = Query::prepare( " 
+			SELECT user.id, firstname, infix, lastname, districtId, district.name AS districtname, club FROM user
+			LEFT JOIN district ON district.id = user.districtId
+			WHERE districtId IN (
+				WITH RECURSIVE districts( id ) AS (
+					SELECT id FROM district WHERE district.id = :districtId
+				UNION ALL
+					SELECT child.id	FROM district AS child INNER JOIN districts AS parent ON child.parentId = parent.id
+				)
+				SELECT * FROM districts
+			)
+			ORDER BY lastname, firstname
+        " );
+		return Query::selectArray( $stmt, $args );
+	}
+
 }

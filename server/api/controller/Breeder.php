@@ -4,6 +4,7 @@ namespace App\controller;
 
 use App\model;
 use App\model\Requester;
+use App\util\ToolBox;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpBadRequestException;
@@ -20,14 +21,14 @@ class Breeder // is user
 		$id = $args[ 'id' ] ?? null;
 		if( $id ) { // breeder
 			if( is_numeric( $id ) ) {
-				$requester = new Requester( $request );
+				//$requester = new Requester( $request );
 				$breeder = model\Breeder::get($id);
 				if( $breeder ) {
 					$districtId = $breeder[ 'districtId' ] ?? null;
-					if( $requester->isAdmin() || $requester->isModerating( $districtId ) || $requester->hasId( $id ) ) { //admin of the moderator or self
+					//if( $requester->isAdmin() || $requester->isModerating( $districtId ) || $requester->hasId( $id ) ) { //admin of the moderator or self
 						$response->getBody()->write(json_encode(['breeder' => $breeder], JSON_UNESCAPED_SLASHES));
 						return $response;
-					}
+					//}
 					throw new HttpUnauthorizedException( $request, 'Cannot do this' );
 				}
 				throw new HttpNotFoundException($request, 'Not found');
@@ -151,5 +152,27 @@ class Breeder // is user
 			throw new HttpNotFoundException($request, 'Breeder not found');
 		}
 		throw new HttpBadRequestException( $request, 'Bad id provided' );
+	}
+
+	public static function filter( Request $request, Response $response, array $args ) : Response {
+		//$requester = new Requester( $request );
+		$query = $request->getQueryParams();
+		if( $query ) {
+			$districtId  = $query['districtId'] ?? null; // for children
+
+			if (is_numeric($districtId)) { // children as parentId
+				$breeders = model\Breeder::forDistrict( $districtId );
+				$response->getBody()->write(json_encode(['breeders' => $breeders], JSON_UNESCAPED_SLASHES));
+				return $response;
+			}
+			throw new HttpBadRequestException($request, 'Bad argument');
+		}
+		throw new HttpBadRequestException( $request, 'Bad query' );
+		// cache should be on class, url and querystring?
+		//$json = model\Cache::get( 'Result', $request->getUri()->getPath(), $request->getUri()->getQuery() );
+		//if( $json ) { // in cache
+		//	$response->getBody()->write( $json );
+		//	return $response;
+		//}
 	}
 }

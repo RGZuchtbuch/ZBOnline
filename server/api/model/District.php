@@ -9,22 +9,16 @@ use Slim\Exception\HttpNotImplementedException;
 class District
 {
 	public static function get( int $id = null ) : ? array {
+		$args = get_defined_vars();
 		if( $id ) {
-			$args = get_defined_vars();
 			$stmt = Query::prepare( '
 				SELECT district.* 
 				FROM district
 				WHERE id=:id
 			' );
 			return Query::select($stmt, $args);
-		} else {
-			$stmt = Query::prepare( '
-				SELECT id, parentId, name, fullname, url, short, level, latitude, longitude, moderatorId  
-				FROM district
-				ORDER BY name
-			' );
-			return Query::selectArray($stmt );
 		}
+		return null;
     }
 
 	public static function new(
@@ -75,7 +69,7 @@ class District
      * @param int $districtId
      * @return array of breeders in district incl descendants
      */
-    public static function getBreeders(int $districtId ) : array {
+    public static function getBreeders( int $districtId ) : array {
         $args = get_defined_vars();
         $stmt = Query::prepare( "
             SELECT 
@@ -94,8 +88,16 @@ class District
         return Query::selectArray( $stmt, $args );
     }
 
+	public static function all() : array {
+		$stmt = Query::prepare( '
+			SELECT id, parentId, name, fullname, url, short, level, latitude, longitude, moderatorId  
+			FROM district
+			ORDER BY name
+		' );
+		return Query::selectArray($stmt );
+	}
     // select children
-    public static function getChildren(int $parentId ) : array {
+    public static function children( int $parentId ) : array {
         $args = get_defined_vars();
         $stmt = Query::prepare('
             SELECT id, parentId, name, level
@@ -107,7 +109,7 @@ class District
     }
 
     // select root and 2 level descendants
-    public static function getDescendants(int $districtId ) : array {
+    public static function descendants( int $districtId ) : array {
         $args = get_defined_vars();
         $stmt = Query::prepare( "
             SELECT DISTINCT child.parentId, child.id, child.short, child.name, child.fullname, child.level, child.moderatorId, child.url 
@@ -118,6 +120,7 @@ class District
         ");
         return Query::selectArray( $stmt, $args );
     }
+
 
     /*
      * getting results for pigeons for results edit

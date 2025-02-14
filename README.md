@@ -11,7 +11,7 @@ Frontend:
  
 Backend
 * php 8: https://www.php.net/ using composer
-* slim 4 framework api router: https://www.slimframework.com/
+* slim 4 framework apiSvelte router: https://www.slimframework.com/
 * mysql database: https://www.mysql.com/
 
 This is a re-engineering project based on the prototype:  

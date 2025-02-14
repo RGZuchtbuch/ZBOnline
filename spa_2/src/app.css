@@ -1,0 +1,109 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    html, body {
+        @apply h-full w-full m-0 p-0 font-rgz box-border;
+    }
+
+    a, button, div, h1, h2, h3, h4, img, span {
+        @apply rounded;
+    }
+
+    a {
+        @apply border-0 hover:bg-teal-400 px-0.5;
+    }
+
+    h1 {
+        @apply py-2 font-bold text-xl;
+    }
+    h2 {
+        @apply py-2 font-bold text-lg;
+    }
+    h3 {
+        @apply py-1 font-bold text-lg;
+    }
+    h4 {
+        @apply py-1 font-bold text-base;
+    }
+
+    button {
+        @apply rounded bg-amber-500 px-2 text-white cursor-pointer;
+    }
+    button:disabled {
+        @apply bg-slate-200 text-gray-400;
+    }
+
+    hr {
+        @apply w-full h-0.5 bg-teal-100 mx-2;
+    }
+
+    img {
+    }
+
+    @media screen {
+        body {
+            @apply bg-white text-black;
+        }
+    }
+
+    @media print {
+        body {
+            @apply bg-white text-black;
+        }
+
+
+    }
+}
+
+@layer components {
+    .text-neutral {
+        @apply text-gray-400;
+    }
+    .text-header {
+        @apply text-slate-50 dark:text-slate-800;
+    }
+    .bg-header {
+        @apply bg-teal-500 dark:bg-teal-100;
+    }
+    .text-button {
+        @apply text-center text-white;
+    }
+
+
+    .breadcrumbs {
+        @apply hidden lg:block flex flex-col lg:flex-row gap-x-1;
+    }
+
+    .breadcrumbs a:after {
+        content: '∗';
+    }
+    .breadcrumbs a:last-child:after {
+        content: '';
+    }
+    .navbar {
+        @apply flex flex-col lg:flex-row gap-x-4;
+    }
+
+    .title {
+        @apply min-h-14;
+    }
+
+    .content {
+
+    }
+
+    .content.list {
+        @apply flex flex-col px-16 gap-y-2
+    }
+
+    .content.list a:before {
+        content: '➢ ';
+    }
+
+}
+
+@layer utilities {
+
+}

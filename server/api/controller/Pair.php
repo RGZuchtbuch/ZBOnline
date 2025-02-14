@@ -22,8 +22,8 @@ class Pair
 		if( is_numeric( $id ) ) {
 			$pair = model\Pair::get( $id );
 			if( $pair ) {
-				$requester = new Requester( $request );
-				if( $requester && ( $requester->isAdmin() || $requester->isModerating( $pair[ 'districtId' ] ) || $requester->hasId( $pair[ 'breederId' ] ) ) ) {
+				//$requester = new Requester( $request );
+				//if( $requester && ( $requester->isAdmin() || $requester->isModerating( $pair[ 'districtId' ] ) || $requester->hasId( $pair[ 'breederId' ] ) ) ) {
 					$pair['breeder'] = model\Breeder::getName($pair['breederId']);
 					$pair['parents']  = model\Pair::getParents($pair['id']);
 					$pair['lay']     = model\Pair::getLay($pair['id']);
@@ -34,7 +34,7 @@ class Pair
 					$pair['show'] = model\Pair::getShow( $pair['id'] );
 					$response->getBody()->write(json_encode([ 'pair' => $pair ], JSON_UNESCAPED_SLASHES));
 					return $response;
-				}
+				//}
 				throw new HttpUnauthorizedException( $request, 'No way' );
 			}
 			throw new HttpNotFoundException( $request, 'Pair not found' );
@@ -228,27 +228,27 @@ class Pair
 	}
 
 	public static function filter( Request $request, Response $response, array $args ) : Response {
-		$requester = new Requester( $request );
+		//$requester = new Requester( $request );
 		$query = $request->getQueryParams();
-		$breederId = $query[ 'breeder' ] ?? null;
-		$districtId = $query[ 'district' ] ?? null;
+		$breederId = $query[ 'breederId' ] ?? null;
+		$districtId = $query[ 'districtId' ] ?? null;
 
 		if( is_numeric( $districtId ) ) {
-			if( $requester->isAdmin() || $requester->isModerating( $districtId ) ) { //admin of the moderator or self
+			//if( $requester->isAdmin() || $requester->isModerating( $districtId ) ) { //admin of the moderator or self
 				$pairs = model\District::getPairs( $districtId );
 				$response->getBody()->write(json_encode( [ 'pairs' => $pairs ], JSON_UNESCAPED_SLASHES));
 				return $response;
-			}
+			//}
 			throw new HttpUnauthorizedException( $request, 'Cannot do this' );
 		} else if( is_numeric( $breederId ) ) {
 			$breeder = model\Breeder::get($breederId);
 			if( $breeder ) {
 				$districtId = $breeder['districtId'] ?? null;
-				if ($requester->isAdmin() || $requester->isModerating($districtId) || $requester->hasId($breederId)) { //admin of the moderator or self
+				//if ($requester->isAdmin() || $requester->isModerating($districtId) || $requester->hasId($breederId)) { //admin of the moderator or self
 					$pairs = model\Breeder::getPairs($breederId);
 					$response->getBody()->write(json_encode(['pairs' => $pairs], JSON_UNESCAPED_SLASHES));
 					return $response;
-				}
+				//}
 				throw new HttpUnauthorizedException($request, 'Cannot do this');
 			}
 			throw new HttpNotFoundException( $request, 'Breeder unknown' );

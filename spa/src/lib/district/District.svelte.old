@@ -1,6 +1,6 @@
 <script>
     import {Route, meta} from 'tinro';
-    import api from '../../js/api.js';
+    import apiSvelte from '../../js/apiSvelte.js';
     import { district } from '../../js/store.js';
 
     import Breeder from '../breeder/Breeder.svelte';
@@ -13,7 +13,7 @@
     //let district = null;
 
     function loadDistrict( id ) {
-        api.district.get( id ).then( response => {
+        apiSvelte.district.get( id ).then( response => {
             //district = response.district;
             district.set( response.district );
             console.log( 'District fetch to store', $district);

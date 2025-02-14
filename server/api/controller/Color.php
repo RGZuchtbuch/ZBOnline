@@ -113,9 +113,8 @@ class Color
 	public static function filter( Request $request, Response $response, array $args ) : Response {
 		$query = $request->getQueryParams();
 		$breedId = $query['breed'] ?? null;
-
 		if( is_numeric( $breedId ) ) {
-			$colors = model\Color::forBreed( $breedId );
+			$colors = model\Color::breed( $breedId );
 			$response->getBody()->write(json_encode(['colors' => $colors], JSON_UNESCAPED_SLASHES));
 			return $response;
 		}
