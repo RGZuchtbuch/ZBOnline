@@ -2,12 +2,13 @@
 	import { page } from '$app/state';
 	import { app } from '$lib/js/store.svelte.js';
 	import District from '$lib/cmp/moderator/District.svelte';
+	import Pairs from '$lib/cmp/moderator/district/Pairs.svelte';
 
     let { data } = $props();
 
 	const path = page.url.pathname;
 
-    app.title = `Stämme und Paare für ${data.district.name}`;
+    app.title = `Stämme und Paare für ${ data.district.name }`;
 	app.menu.trail = [
         { name:'Home',      href:'/' },
         { name:'Obmann',    href:'/moderator' },
@@ -20,7 +21,7 @@
 
 </script>
 
-Report
+<Pairs {...data} />
 
 
 

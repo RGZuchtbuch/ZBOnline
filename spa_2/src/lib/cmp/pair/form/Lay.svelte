@@ -7,6 +7,9 @@
 	let { pair } = $props();
 
 
+	console.log( 'Pair', pair );
+
+
 	let days = $state( null );
 	let result = $state( null );
 

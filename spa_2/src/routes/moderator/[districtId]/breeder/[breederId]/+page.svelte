@@ -3,27 +3,27 @@
 	import { app } from '$lib/js/store.svelte.js';
 	//import Breeder from '$lib/cmp/breeder/Breeder.svelte';
 
-
+	let { data } = $props();
 
 	const path = page.url.pathname;
 
 	$effect( () => {
-		if( app.breeder && app.district ) {
-			console.log( app.breeder, app.district );
-			app.title = `Zuchter ${app.breeder.firstname} ${app.breeder.infix} ${app.breeder.lastname} im ${app.district.name}`;
+		if( data.breeder && data.district ) {
+			console.log( data.breeder, data.district );
+			app.title = `Zuchter ${data.breeder.firstname} ${data.breeder.infix} ${data.breeder.lastname} im ${data.district.name}`;
 			app.menu.trail = [
 				{name: 'Home', href: '/'},
 				{name: 'Obmann', href: '/moderator'},
-				{name: app.district.short, href: '/moderator/' + app.district.id},
-				{name: 'Zuechter', href: '/moderator/' + app.district.id + '/breeder'},
+				{name: data.district.short, href: '/moderator/' + data.district.id},
+				{name: 'Zuechter', href: '/moderator/' + data.district.id + '/breeder'},
 				{
-					name: `${app.breeder.firstname.charAt(0)}.${app.breeder.lastname.charAt(0)}`,
-					href: '/moderator/' + app.district.id + '/breeder/' + app.breeder.id
+					name: `${data.breeder.firstname.charAt(0)}.${data.breeder.lastname.charAt(0)}`,
+					href: '/moderator/' + data.district.id + '/breeder/' + data.breeder.id
 				},
 			];
 			app.menu.options = [
-				{name: 'Stämme', href: '/moderator/' + app.district.id + '/breeder/' + app.breeder.id + '/pair'},
-				{name: 'Mitglied', href: '/moderator/' + app.district.id + '/breeder/' + app.breeder.id + '/profile'},
+				{name: 'Stämme', href: '/moderator/' + data.district.id + '/breeder/' + data.breeder.id + '/pair'},
+				{name: 'Mitglied', href: '/moderator/' + data.district.id + '/breeder/' + data.breeder.id + '/profile'},
 			];
 		}
 	} );
@@ -32,8 +32,8 @@
 
 </script>
 
-{#if app.breeder}
-	Breeder {app.breeder.firstname}
+{#if data.breeder}
+	Breeder {data.breeder.firstname}
 {/if}
 
 

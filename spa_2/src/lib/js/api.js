@@ -82,9 +82,16 @@ const api = { // api
 	},
 
 	result : {
-		forColor: async ( districtId, year, colorId ) => {
-			return await get( `/api/2/result?district=${districtId}&year=${year}&color=${colorId}`);
+		get: async ( arg=null ) => {
+			if( +arg ) { // test if number
+				return await get(`/api/2/result/${arg}`); // { id, title, level }
+			} else {
+				return await get( `/api/2/result`, arg ); // arg as query
+			}
 		},
+		// forColor: async ( districtId, year, colorId ) => {
+		// 	return await get( `/api/2/result?district=${districtId}&year=${year}&color=${colorId}`);
+		// },
 	},
 	standard : {
 		get: async ( arg=null ) => { // gets all

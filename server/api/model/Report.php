@@ -5,83 +5,18 @@ namespace App\model;
 use Error;
 use Exception;
 
-class Result extends Query
+class Report extends Query
 {
-    public static function get( $id ) {
-        $args = get_defined_vars();
-        $stmt = Query::prepare( '
-            SELECT id, pairId, districtId, `year`, `group`, sectionId, breedId, colorId, aocColor, breeders, pairs, layDames, layEggs, broodEggs, broodFertile, broodHatched, showCount, showScore
-            FROM result
-            WHERE id=:id
-        ' );
-        return Query::select( $stmt, $args );
-    }
 
-    public static function new(
-        ? int $pairId, int $districtId, int $year, string $group,
-        ? int $sectionId, int $breedId, ? int $colorId, ? string $aocColor,
-        int $breeders, ? int $pairs,
-        ? int $layDames, ? float $layEggs, ? float $layWeight,
-        ? int $broodEggs, ? int $broodFertile, ? int $broodHatched,
-        ? int $showCount, ? float $showScore,
-        int $modifierId
-    ) : ? int {
-        $args = get_defined_vars();
-        $stmt = Query::prepare( '
-            INSERT INTO result ( pairId, districtId, `year`, `group`, sectionId, breedId, colorId, aocColor, breeders, pairs, layDames, layEggs, layWeight, broodEggs, broodFertile, broodHatched, showCount, showScore, modifierId ) 
-            VALUES ( :pairId, :districtId, :year, :group, :sectionId, :breedId, :colorId, :aocColor, :breeders, :pairs, :layDames, :layEggs, :layWeight, :broodEggs, :broodFertile, :broodHatched, :showCount, :showScore, :modifierId )
-        ' );
-        return Query::insert( $stmt, $args );
-    }
-
-
-    public static function set(
-        int $id, ? int $pairId, int $districtId, int $year, string $group,
-		? int $sectionId, int $breedId, ? int $colorId, ? string $aocColor,
-        int $breeders, ? int $pairs,
-        ? int $layDames, ? float $layEggs, ? float $layWeight,
-        ? int $broodEggs, ? int $broodFertile, ? int $broodHatched,
-        ? int $showCount, ? float $showScore,
-        int $modifierId
-    ) : bool {
-        $args = get_defined_vars();
-        $stmt = Query::prepare( '
-            UPDATE  result
-            SET pairId=:pairId, districtId=:districtId, `year`=:year, `group`=:group, sectionId=:sectionId, breedId=:breedId, colorId=:colorId, aocColor=:aocColor, breeders=:breeders, pairs=:pairs, layDames=:layDames, layEggs=:layEggs, layWeight=:layWeight, broodEggs=:broodEggs, broodFertile=:broodFertile, broodHatched=:broodHatched, showCount=:showCount, showScore=:showScore, modifierId=:modifierId
-            WHERE id=:id
-        ' );
-        return Query::update( $stmt, $args );
-    }
-
-    public static function del( int $id ) {
-        $args = get_defined_vars();
-        $stmt = Query::prepare( '
-            DELETE 
-            FROM result
-            WHERE id=:id
-        ' );
-        return Query::delete( $stmt, $args );
-    }
-
-
-    public static function delForPair(int $pairId ) {
-        $args = get_defined_vars();
-        $stmt = Query::prepare( '
-            DELETE 
-            FROM result
-            WHERE pairId=:pairId
-        ' );
-        return Query::delete( $stmt, $args );
-    }
-
-    /**
-     * REPORTS, the bigguns
-     */
+	/**
+	 * REPORTS, the bigguns
+	 */
 
 	// for charts, one result for current district and year ( filtered for s,b,c )
-    public static function getResultDistrictYear(int $districtId, int $year, ? int $sectionId, ? int $breedId, ? int $colorId, ? int $group ) : ? array {
-        $args = get_defined_vars();
-        $stmt = Query::prepare('
+	// for 1 district and 1 year, filtered for section, brood, color or group
+	public static function getReportDistrictYear(int $districtId, int $year, ? int $sectionId, ? int $breedId, ? int $colorId, ? int $group ) : ? array {
+		$args = get_defined_vars();
+		$stmt = Query::prepare('
             SELECT count(*) AS results, 
                 :districtId AS districtId, :year AS `year`, :sectionId  AS sectionId, layers, :breedId AS breedId, :colorId AS colorId, :group AS `group`, 
                 
@@ -146,15 +81,15 @@ class Result extends Query
             ) AS results
             # GROUP BY result.districtId, result.year 
         ');
-        return Query::select($stmt, $args); // returns null, no results found, or single result
-    }
+		return Query::select($stmt, $args); // returns null, no results found, or single result
+	}
 
-	// for results district trend
-    public static function getResultsDistrictYears(int $districtId, ? int $sectionId, ? int $breedId, ? int $colorId, ? string $group ) : ? array {
+	// report for district , all years (trend)
+	public static function getResultsDistrictYears(int $districtId, ? int $sectionId, ? int $breedId, ? int $colorId, ? string $group ) : ? array {
 
-        $startYear = START_YEAR;
-        $args = get_defined_vars();
-        $stmt = Query::prepare('
+		$startYear = START_YEAR;
+		$args = get_defined_vars();
+		$stmt = Query::prepare('
             SELECT 
                 count(*) AS count, 
                 CAST( years.year  AS UNSIGNED ) AS `year`,
@@ -241,14 +176,14 @@ class Result extends Query
             GROUP BY years.year
             ORDER BY years.year
         ');
-        return Query::selectArray($stmt, $args); // returns null, no results found, or single result
-    }
+		return Query::selectArray($stmt, $args); // returns null, no results found, or single result
+	}
 
-	// for results year districts map
-    public static function getResultsYearDistricts(int $year, ? int $sectionId, ? int $breedId, ? int $colorId, ? string $group ) : ? array {
-        $startYear = START_YEAR;
-        $args = get_defined_vars();
-        $stmt = Query::prepare('
+	// report for all districts in a year (map)
+	public static function getResultsYearDistricts(int $year, ? int $sectionId, ? int $breedId, ? int $colorId, ? string $group ) : ? array {
+		$startYear = START_YEAR;
+		$args = get_defined_vars();
+		$stmt = Query::prepare('
             SELECT 
                 count(*) AS count, 
                 CAST( :year      AS UNSIGNED ) AS `year`,
@@ -326,8 +261,8 @@ class Result extends Query
             
             GROUP BY district.rootId # all LV
         ');
-        return Query::selectArray($stmt, $args); // returns null, no results found, or single result
-    }
+		return Query::selectArray($stmt, $args); // returns null, no results found, or single result
+	}
 
 	// for use in district year report
 	public static function getResultsDistrictYear(int $districtId, int $year ) : ? array {
@@ -407,63 +342,25 @@ class Result extends Query
 	}
 
 	// for checking before deleting breed that might have results or pairs yet
-    public static function getAllWithBreed(int $id ) : array {
-        $args = get_defined_vars();
-        $stmt = Query::prepare( '
+	public static function getAllWithBreed(int $id ) : array {
+		$args = get_defined_vars();
+		$stmt = Query::prepare( '
             SELECT id, breedId
             FROM result
             WHERE breedId=:id
         ' );
-        return Query::selectArray( $stmt, $args );
-    }
+		return Query::selectArray( $stmt, $args );
+	}
 
 	// for checking before deleting color that might have results or pairs
-    public static function getAllWithColor(int $id ) : array {
-        $args = get_defined_vars();
-        $stmt = Query::prepare( '
+	public static function getAllWithColor(int $id ) : array {
+		$args = get_defined_vars();
+		$stmt = Query::prepare( '
             SELECT id, colorId
             FROM result
             WHERE colorId=:id
         ' );
-        return Query::selectArray( $stmt, $args );
-    }
-
-	// new version 2 getters
-
-	/* returns the district result for year and color */
-	public static function forDistrict( int $districtId ) : array {
-		$args = get_defined_vars();
-		$stmt = Query::prepare('
-			SELECT
-				result.id, result.year, result.pairId, result.districtId, 
-					result.group, result.breeders, result.pairs, 
-					result.breedId, breed.name AS breedname, result.colorId, color.name AS colorname, result.aocColor,		
-					result.layDames, result.layEggs, result.layWeight,
-					result.broodEggs, result.broodFertile, result.broodHatched,
-					result.showCount, result.showScore,				
-				supersection.id AS supersectionId, supersection.name AS supersectionname,
-				rootsection.id AS rootsectionId, rootsection.name AS rootsectionname,
-				section.id AS sectionId, section.name AS sectionname,
-				pair.breederId, user.firstname, user.infix, user.lastname
-			FROM result
-				LEFT JOIN breed  ON breed.id = result.breedId
-				LEFT JOIN color  ON color.id = result.colorId
-				LEFT JOIN section ON section.id = breed.sectionId
-				LEFT JOIN section AS rootsection ON rootsection.id = section.rootId
-				LEFT JOIN section AS supersection ON supersection.id = section.parentId
-				LEFT JOIN pair   ON pair.id = result.pairId
-				LEFT JOIN user   ON user.id = pair.breederId		
-			WHERE result.districtId = :districtId
-			ORDER BY result.`year` DESC, section.order, breed.name, color.name 
-        ');
-		return Query::selectArray($stmt, $args);
+		return Query::selectArray( $stmt, $args );
 	}
-	/* returns the district result for year and color */
-	public static function forColor( int $districtId, int $year, int $colorId ) : array {
-		$args = get_defined_vars();
-		$stmt = Query::prepare('
-			SELECT * FROM result WHERE districtId=:districtId AND `year`=:year AND colorId=:colorId ORDER BY pairId
-        ');
-		return Query::selectArray($stmt, $args);
-	}
+
 }

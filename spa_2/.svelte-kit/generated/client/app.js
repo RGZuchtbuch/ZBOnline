@@ -37,37 +37,41 @@ export const nodes = [
 	() => import('./nodes/33'),
 	() => import('./nodes/34'),
 	() => import('./nodes/35'),
-	() => import('./nodes/36')
+	() => import('./nodes/36'),
+	() => import('./nodes/37'),
+	() => import('./nodes/38'),
+	() => import('./nodes/39'),
+	() => import('./nodes/40')
 ];
 
 export const server_loads = [];
 
 export const dictionary = {
-		"/": [12],
-		"/article": [13],
-		"/article/[articleId]": [14],
-		"/breeder/[breederId]": [15,[2]],
-		"/breeder/[breederId]/pair": [16,[2,3]],
-		"/district": [17],
-		"/moderator": [18,[4]],
-		"/moderator/[districtId]": [19,[4,5]],
-		"/moderator/[districtId]/breeder": [20,[4,5,6]],
-		"/moderator/[districtId]/breeder/[breederId]": [21,[4,5,6,7]],
-		"/moderator/[districtId]/breeder/[breederId]/pair": [22,[4,5,6,7]],
-		"/moderator/[districtId]/breeder/[breederId]/pair/[pairId]": [23,[4,5,6,7,8]],
-		"/moderator/[districtId]/breeder/[breederId]/profile": [24,[4,5,6,7]],
-		"/moderator/[districtId]/pair": [25,[4,5]],
-		"/moderator/[districtId]/pair/[pairId]": [26,[4,5,9]],
-		"/moderator/[districtId]/report": [27,[4,5]],
-		"/moderator/[districtId]/result": [28,[4,5]],
-		"/pair/[pairId]": [29,[10]],
-		"/result": [30],
-		"/result/map/year/[year]/type/[type]": [31],
-		"/result/table/district/[districtId]/year/[year]": [32],
-		"/result/trend/district/[districtId]/type/[type]": [33],
-		"/standard": [34],
-		"/test": [35,[11]],
-		"/user": [36]
+		"/": [16],
+		"/article": [17,[2]],
+		"/article/[articleId]": [18,[2]],
+		"/breeder/[breederId]": [19,[3]],
+		"/breeder/[breederId]/pair": [20,[3,4]],
+		"/district": [21],
+		"/moderator": [22,[5]],
+		"/moderator/[districtId]": [23,[5,6]],
+		"/moderator/[districtId]/breeder": [24,[5,6,7]],
+		"/moderator/[districtId]/breeder/[breederId]": [25,[5,6,7,8]],
+		"/moderator/[districtId]/breeder/[breederId]/pair": [26,[5,6,7,8,9]],
+		"/moderator/[districtId]/breeder/[breederId]/pair/[pairId]": [27,[5,6,7,8,9,10]],
+		"/moderator/[districtId]/breeder/[breederId]/profile": [28,[5,6,7,8]],
+		"/moderator/[districtId]/pair": [29,[5,6,11]],
+		"/moderator/[districtId]/pair/[pairId]": [30,[5,6,11,12]],
+		"/moderator/[districtId]/report": [31,[5,6]],
+		"/moderator/[districtId]/result": [32,[5,6,13]],
+		"/pair/[pairId]": [33,[14]],
+		"/result": [34],
+		"/result/map/year/[year]/type/[type]": [35],
+		"/result/table/district/[districtId]/year/[year]": [36],
+		"/result/trend/district/[districtId]/type/[type]": [37],
+		"/standard": [38],
+		"/test": [39,[15]],
+		"/user": [40]
 	};
 
 export const hooks = {

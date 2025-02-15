@@ -21,6 +21,7 @@
 	});
 
 
+//	{#each Object.entries(pair.show) as [ points, count ], i }
 
 </script>
 
@@ -28,7 +29,8 @@
 <fieldset class='flex flex-row gap-x-2 border p-2' in:fade>
 	<legend>Schauleistung</legend>
 	{#each Object.entries(pair.show) as [ points, count ], i }
-		<NumberInput class='w-16' label={labels[i]} bind:value={ pair.show[ points ]} validator={validate.score} />
+
+		<NumberInput class='w-12' label={labels[i]} bind:value={ pair.show[ points ]} validator={validate.score} />
 	{/each}
 
 	<div class='grow'></div>

@@ -125,7 +125,9 @@ class Router {
 		$app->get('/2/pair', 'App\controller\Pair::filter' );
 		$app->get('/2/pair/{id:[0-9]+}', 'App\controller\Pair::get' );
 
-		$app->get('/2/result', 'App\controller\Result::filter' );
+		$app->get('/2/result', 'App\controller\Result::filter' ); // on districtId
+		$app->get('/2/result/{id:[0-9]+}', 'App\controller\Result::get' );
+
 		$app->get( '/2/standard', 'App\controller\Standard::get' );
 
 

@@ -5,14 +5,14 @@
 	let { data } = $props();
 
 	$effect( () => {
-		if( app.breeder && app.district) {
-			app.title = `Stämme von Züchter ${app.breeder.firstname} ${app.breeder.infix} ${app.breeder.lastname}`;
+		if( data.breeder && data.district) {
+			app.title = `Stämme von Züchter ${data.breeder.firstname} ${data.breeder.infix} ${data.breeder.lastname}`;
 			app.menu.trail = [
 				{ name:'Home',              href:'/' },
 				{ name:'Obmann',            href:'/moderator' },
-				{ name:app.district.short,  href:'/moderator/'+app.district.id },
-				{ name:'Zuechter',          href:'/moderator/'+app.district.id+'/breeder' },
-				{ name:`${app.breeder.firstname.charAt(0)}.${app.breeder.lastname.charAt(0)}`, href:'/moderator/'+app.district.id+'/breeder/'+app.breeder.id },
+				{ name:app.district.short,  href:'/moderator/'+data.district.id },
+				{ name:'Zuechter',          href:'/moderator/'+data.district.id+'/breeder' },
+				{ name:`${data.breeder.firstname.charAt(0)}.${data.breeder.lastname.charAt(0)}`, href:'/moderator/'+data.district.id+'/breeder/'+data.breeder.id },
 				{ name:'Stamm',             href:page.url.pathname },
 			];
 			app.menu.options = []
@@ -24,13 +24,13 @@
 
 </script>
 
-{#if app.district && app.breeder && app.pairs}
+{#if data.district && data.breeder && data.pairs}
 	<h3 class='text-center italic'>
-		Stämme {app.pairs.length}
+		Stämme {data.pairs.length}
 	</h3>
 	<ul>
-		{#each app.pairs as pair}
-			<li><a href={`/moderator/${app.district.id}/breeder/${app.breeder.id}/pair/${pair.id}`}>{pair.name}</a></li>
+		{#each data.pairs as pair}
+			<li><a href={`/moderator/${data.district.id}/breeder/${data.breeder.id}/pair/${pair.id}`}>{pair.name}</a></li>
 		{/each}
 	</ul>
 {/if}

@@ -206,7 +206,7 @@ class District
 		if( $query ) {
 			$parentId    = $query['parentId'] ?? null; // for children
 			$rootId      = $query['rootId'] ?? null; // for descendants
-			$moderatorId = $query[ 'moderatorId' ] ?? null;
+			$moderatorId = $query['moderatorId'] ?? null;
 
 			if (is_numeric($parentId)) { // children as parentId
 				$children = model\District::children($parentId);

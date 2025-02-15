@@ -3,13 +3,12 @@
 	import { app } from '$lib/js/store.svelte.js'
 	import { Form, Select } from '$lib/cmp/form/Form.svelte';
 
-	let { pair } = $props();
-
+	let { pair, standard } = $props();
 
 	// initial getting objects from pair
-	let rootSection = $state( app.rootSections.find( ( section ) => section.id === pair.sectionId ) ?? null );
-	let breed   = $state( app.standard.breeds[ app.pair.breedId ] ?? null );
-	let color   = $state( app.standard.colors[ app.pair.colorId ] ?? null );
+	let rootSection = $state( standard.rootSections.find( ( section ) => section.id === pair.sectionId ) ?? null );
+	let breed   = $state( standard.breeds[ pair.breedId ] ?? null );
+	let color   = $state( standard.colors[ pair.colorId ] ?? null );
 
 	function onSectionChange( event ) {
 		//rootSection = data.rootSections[ data.pair.sectionId ]; // auto
@@ -41,8 +40,8 @@
 			<option value={null} selected={rootSection === null}>
 				Sparte ?
 			</option>
-			{#each app.rootSections as section }
-				<option value={ section } selected={app.pair.sectionId === section.id}>
+			{#each standard.rootSections as section }
+				<option value={ section } selected={pair.sectionId === section.id}>
 					{section.name} ({rootSection.id})
 				</option>
 			{/each}
@@ -54,7 +53,7 @@
 			</option>
 			{#if rootSection}
 				{#each rootSection.breeds as breed }
-					<option value={breed} selected={app.pair.breedId === breed.id}>
+					<option value={breed} selected={pair.breedId === breed.id}>
 						{breed.name} ({breed.id})
 					</option>
 				{/each}
@@ -67,7 +66,7 @@
 			</option>
 			{#if breed}
 				{#each breed.colors as color }
-					<option value={color} selected={app.pair.colorId === color.id}>
+					<option value={color} selected={pair.colorId === color.id}>
 						{color.name} ({color.id})
 					</option>
 				{/each}

@@ -1,3 +1,3 @@
-import * as universal from "../../../../src/routes/article/[articleId]/+page.js";
+import * as universal from "../../../../src/routes/pair/[pairId]/+layout.js";
 export { universal };
-export { default as component } from "../../../../src/routes/article/[articleId]/+page.svelte";
+export { default as component } from "../../../../node_modules/@sveltejs/kit/src/runtime/components/svelte-5/layout.svelte";

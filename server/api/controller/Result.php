@@ -201,13 +201,12 @@ class Result
 	// new approach 2
 	public static function filter( Request $request, Response $response, array $args ) : Response {
 		$query = $request->getQueryParams();
-		$districtId = $query['district'] ?? null;
-		$year = $query['year'] ?? null;
-		$colorId = $query['color'] ?? null;
+		$districtId = $query['districtId'] ?? null;
+		//$year = $query['year'] ?? null;
+		//$colorId = $query['color'] ?? null;
 
-		if( is_numeric( $districtId ) && is_numeric( $year ) && is_numeric( $colorId ) ) {
-			$results = model\Result::forColor( $districtId, $year, $colorId );
-
+		if( is_numeric( $districtId ) ) { // per district over years
+			$results = model\Result::forDistrict( $districtId );
 			$formatted = [];
 			foreach( $results as &$result ) {
 				$formatted[] = self::formatResult( $result );
@@ -220,14 +219,17 @@ class Result
 
 	public static function formatResult( array &$input ) : array	{
 		return [
-			'id'=>$input['id'], 'pairId'=>$input['pairId'],
-			'districtId'=>$input['districtId'], 'year'=>$input['year'], 'group'=>$input['group'],
-			'sectionId'=>$input['sectionId'],'breedId'=>$input['breedId'], 'colorId'=>$input['colorId'],
-			'aocColor'=>$input['aocColor'],
-			'breeders'=>$input['breeders'], 'pairs'=>$input['pairs'],
-			'lay'=> [ 'eggs'=>$input['layEggs'], 'weight'=>$input['layWeight'] ],
-			'brood'=>[ 'eggs'=>$input['broodEggs'], 'fertile'=>$input['broodFertile'], 'hatched'=>$input['broodHatched'] ],
-			'show'=>[ 'count'=>$input['showCount'], 'score'=>$input['showScore'] ],
+			'id'          => $input['id'], 'year'=>$input['year'], 'districtId'=>$input['districtId'],
+			'breeders'    => $input['breeders'], 'pairs'=>$input['pairs'], 'group'=>$input['group'],
+			'lay'         => [ 'eggs'=>$input['layEggs'], 'weight'=>$input['layWeight'] ],
+			'brood'       => [ 'eggs'=>$input['broodEggs'], 'fertile'=>$input['broodFertile'], 'hatched'=>$input['broodHatched'] ],
+			'show'        => [ 'count'=>$input['showCount'], 'score'=>$input['showScore'] ],
+			'supersection'=> [ 'id'=>$input['supersectionId'], 'name'=>$input['supersectionname'] ],
+			'rootsection' => [ 'id'=>$input['rootsectionId'], 'name'=>$input['rootsectionname'] ],
+			'section'     => [ 'id'=>$input['sectionId'], 'name'=>$input['sectionname'] ],
+			'breed'       => [ 'id'=>$input['breedId'], 'name'=>$input['breedname'] ],
+			'color'       => [ 'id'=>$input['colorId'], 'name'=>$input['colorname'] === NULL ? $input['aocColor'] : $input['colorname'] ],
+			'breeder'     => [ 'id'=>$input['breederId'], 'firstname'=>$input['firstname'], 'infix'=>$input['infix'], 'lastname'=>$input['lastname'] ]
 		];
 	}
 }

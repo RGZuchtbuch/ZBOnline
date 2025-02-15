@@ -9,19 +9,21 @@
 	import Broods from './form/Broods.svelte';
 	import Show from './form/Show.svelte';
 
+	let { standard, district, pair } = $props();
+
 	function onSubmit() {
 		console.log( 'Pair Submit', app.pair );
 	}
 </script>
 
-{#if app.standard && app.pair}
+{#if standard && pair}
 	<Form class='flex flex-col gap-y-2' autosubmit={true} onsubmit={onSubmit}>
-		<PairHead pair={app.pair} />
-		<Breed    pair={app.pair} />
-		<Parents  pair={app.pair} />
-		<Lay      pair={app.pair} />
-		<Broods   pair={app.pair} />
-		<Show     pair={app.pair} />
+		<PairHead {pair} />
+		<Breed    {pair} {standard}/>
+		<Parents  {pair} />
+		<Lay      {pair} />
+		<Broods   {pair} />
+		<Show     {pair} />
 	</Form>
 {/if}
 

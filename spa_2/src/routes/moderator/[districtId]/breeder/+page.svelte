@@ -4,6 +4,8 @@
 	import District from '$lib/cmp/moderator/District.svelte';
 	import Breeders from '$lib/cmp/moderator/Breeders.svelte';
 
+	let { data } = $props();
+
 	const path = page.url.pathname;
 
 	$effect( () => {
@@ -22,8 +24,8 @@
 
 </script>
 
-{#if app.breeders}
-	<Breeders breeders={app.breeders} />
+{#if data.breeders}
+	<Breeders breeders={data.breeders} />
 {/if}
 
 

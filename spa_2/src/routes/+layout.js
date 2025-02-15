@@ -19,11 +19,28 @@ export async function load ({ fetch, params }) {
 async function getStandard() {
 	const response = await api.standard.get();
 	if( response ) {
-		return structuredStandardTree(response.standard); // { root, sections, breed, colors }
+		const standard = structuredStandardTree(response.standard); // { root, sections, breed, colors }
+		standard.rootSections = getRootSections( standard )
+		return standard;
 	}
 	return null;
 }
 
+function getRootSections( standard ) {
+	const sections = [
+		{ id:3,  name:'Groß u. Wassergeflügel', breeds:[] },
+		{ id:11, name:'Hühner Groß', breeds:[] },
+		{ id:12, name:'Zwerghühner', breeds:[] },
+		{ id:13, name:'LegeWachteln', breeds:[] },
+		{ id:5,  name:'Tauben', breeds:[] },
+		{ id:6,  name:'Ziergeflügel', breeds:[] },
+	];
+	for( let section of sections ) { // each rootSection, add breed and child breeds
+		addBreeds(  standard.sections[ section.id ], section.breeds ); // add to rootsection breeds, recursive
+		section.breeds.sort((a, b) => a.name.localeCompare(b.name)); // sort by name
+	}
+	return sections;
+}
 
 async function getDistricts() {
 	const response = await api.district.get( { rootId:1 } );
@@ -32,6 +49,8 @@ async function getDistricts() {
 	}
 	return null;
 }
+
+
 
 // structuring
 
@@ -69,6 +88,15 @@ function addDistrict( district, districts ) { // recursive for sections
 	districts[ district.id ] = district;
 	for( const child of district.children ) {
 		addDistrict( child, districts );
+	}
+}
+
+function addBreeds( section, breeds ) {
+	for( const breed of section.breeds ) {
+		breeds.push( breed );
+	}
+	for( const child of section.children ) {
+		addBreeds( child, breeds );
 	}
 }
 

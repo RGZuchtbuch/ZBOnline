@@ -19,17 +19,17 @@ class AppState {
     breeder = $state( null );
     pair = $state( null );
 
-    rootSections = $state( rootSections );
+    //rootSections = $state( rootSections );
 }
 
-const rootSections = [
-    { id:3,  name:'Groß u. Wassergeflügel', breeds:[] },
-    { id:11, name:'Hühner Groß', breeds:[] },
-    { id:12, name:'Zwerghühner', breeds:[] },
-    { id:13, name:'LegeWachteln', breeds:[] },
-    { id:5,  name:'Tauben', breeds:[] },
-    { id:6,  name:'Ziergeflügel', breeds:[] },
-];
+// const rootSections = [
+//     { id:3,  name:'Groß u. Wassergeflügel', breeds:[] },
+//     { id:11, name:'Hühner Groß', breeds:[] },
+//     { id:12, name:'Zwerghühner', breeds:[] },
+//     { id:13, name:'LegeWachteln', breeds:[] },
+//     { id:5,  name:'Tauben', breeds:[] },
+//     { id:6,  name:'Ziergeflügel', breeds:[] },
+// ];
 
 export let app = new AppState();
 
