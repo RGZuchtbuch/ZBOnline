@@ -6,34 +6,31 @@
 	import Pair from '$lib/cmp/pair/Pair.svelte';
 	import {onMount} from 'svelte';
 
+	let { data } = $props();
 
-	onMount( async () => {
-		app.pair = null;
-		const response = await api.pair.get( page.params.pairId );
-		if( response ) {
-			app.pair = response.pair;
-		}
-	})
-	$effect( () => {
-		if( app.district && app.breeder && app.pair ) {
-			app.title = `Stamm ${app.pair.year}.${app.pair.name} von Züchter ${txt(app.breeder.firstname)} ${ txt(app.breeder.infix) } ${ txt(app.breeder.lastname) }`;
-			app.menu.trail = [
-				{ name:'Home',      href:'/' },
-				{ name:'Obmann',    href:'/moderator' },
-				{ name:'Verband',   href:`/moderator/${app.district.id}` },
-				{ name:'Züchter',   href:`/moderator/${app.district.id}/breeder/${app.breeder.id}` },
-				{ name:'Stämme',    href:`/moderator/${app.district.id}/breeder/${app.breeder.id}/pair` },
-				{ name:''+app.pair.year%100+'.'+app.pair.name,    href:`/moderator/${app.district.id}/breeder/${app.breeder.id}/pair/${app.pair.id}` },
-			];
-			app.menu.options = [
-			]
+	let standard = $state( data.standard ); // make reactive
+	let district = $state( data.district );
+	let breeder  = $state( data.breeder );
+	let pair     = $state( data.pair );
 
-		}
-	})
 
-	$inspect( 'AP', app.pair );
+
+	if( district && breeder && pair ) {
+		app.title = `Stamm ${pair.year}.${pair.name} von Züchter ${txt(breeder.firstname)} ${ txt(breeder.infix) } ${ txt(breeder.lastname) }`;
+		app.menu.trail = [
+			{ name:'Home',      href:'/' },
+			{ name:'Obmann',    href:'/moderator' },
+			{ name:'Verband',   href:`/moderator/${district.id}` },
+			{ name:'Züchter',   href:`/moderator/${district.id}/breeder/${breeder.id}` },
+			{ name:'Stämme',    href:`/moderator/${district.id}/breeder/${breeder.id}/pair` },
+			{ name:''+pair.year%100+'.'+pair.name, href:`/moderator/${district.id}/breeder/${breeder.id}/pair/${pair.id}` },
+		];
+		app.menu.options = [
+		]
+
+	}
+
 </script>
 
-{#if app.standard && app.pair }
-	<Pair pair={app.pair} standard={app.standard} />
-{/if}
+
+<Pair {pair} {standard} />

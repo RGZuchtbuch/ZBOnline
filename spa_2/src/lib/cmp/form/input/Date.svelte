@@ -16,9 +16,7 @@
 
 	function onInput( event ) { // translate to iso date (2024-12-31)
 		const date = toDate( localValue );
-        console.log( 'D', date );
     	value = tempValue = date ? toDateISO( date ) : localValue; // valid date or faulty as was
-        console.log( 'V', value );
 	}
 
 	function onBlur( event ) { // format valid date when done
@@ -34,7 +32,6 @@
     $effect( () => {
         if( value !== tempValue ) { // changed extern
             localValue = tempValue = value;
-            console.log( 'L', localValue );
         }
     });
 

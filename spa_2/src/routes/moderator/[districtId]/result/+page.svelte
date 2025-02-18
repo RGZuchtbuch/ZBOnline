@@ -2,7 +2,7 @@
 	import { page } from '$app/state';
 	import { app } from '$lib/js/store.svelte.js';
 	import District from '$lib/cmp/moderator/District.svelte';
-	import Results from '$lib/cmp/result/Results.svelte';
+	import Results from '$lib/cmp/moderator/district/Results.svelte';
 
     let { data } = $props();
 

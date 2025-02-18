@@ -2,37 +2,47 @@
 	import {fade, slide} from 'svelte/transition';
 	import { NumberInput, RingInput, Select, TextInput, validator } from '../../form/Form.svelte';
 	import Parent from './Parent.svelte';
+	import {dec} from '$lib/js/toolbox.js';
 
-	let { pair } = $props();
-	//localParents.push( { id:0, sex:'0.1', ring:null, score:null, parentsPairId:null } );
+	let { pair, standard } = $props();
 
-	// const validate = {
-	// 	ring: (v) => validator(v).ring().orNull().isValid(),
-	// }
-
-	// function updateScore() { // 1.4
-	// 	const sires = data.pair.parents.reduce( ( accu, parent ) => accu + ( parent.sex ==='1.0' ? 1 : 0 ), 0 );
-	// 	const dames = data.pair.parents.reduce( ( accu, parent ) => accu + ( parent.sex ==='0.1' ? 1 : 0 ), 0 );
-	// 	data.pair.parents.score = `${sires}.${dames}`;
-	// }
-
-	function addParent(event) {
-		console.log( 'E', event );
-		const parent = { id:0, pairId:pair.id, sex:'0.1', ring:null, score:null, parentsPairId:null };
-		pair.parents.push( parent );
-//		data.pair.parents = [ ...data.pair.parents, parent ];
+	if( ! pair.parents ) {
+		pair.parents = [];
+	}
+	for( let i=pair.parents.length; i<4; i++ ) {
+		pair.parents.push( newParent() );
 	}
 
+	function newParent() {
+		return { id:0, pairId:pair.id, sex:'0.1', ring:null, score:null, parentsPairId:null };
+	}
 
-	//$inspect( 'data Ps', data.pair.parents );
-	$inspect( 'Ps', pair.parents );
+	function addParent(event) {
+		const parent = newParent();
+		pair.parents.push( parent );
+	}
+
+	$effect( () => {
+		let count = 0;
+		let sum = null;
+		for( let parent of pair.parents ) {
+			count += parent.grade ? 1 : 0;
+			sum += parent.grade;
+		}
+		pair.parentsGrade = count > 0 ? sum / count : null;
+	})
+
 </script>
 
 
-<fieldset class='flex flex-col gap-x-2 border p-2' in:slide>
-	<legend>Abstammung</legend>
+<fieldset class='flex flex-col gap-x-2 border pt-2 px-2' in:slide>
+	<legend>Abstammung {pair.parentsGrade}</legend>
 	{#each pair.parents as parent, i (i) }
-		<Parent {parent} {i} />
+		<Parent {pair} {parent} {i} {standard} />
 	{/each}
-	<button class='w-6' type='button' onclick={addParent}>+</button>
+	<div class='border-t flex flex-row pt-1'>
+		<button class='w-6 h-6' type='button' onclick={addParent}>+</button>
+		<span class='grow'></span>
+		<NumberInput class='w-14 font-bold' label='G.Note' value={dec( pair.parentsGrade, 1 )} disabled/>
+	</div>
 </fieldset>

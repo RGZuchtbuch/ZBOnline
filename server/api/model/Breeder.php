@@ -94,20 +94,20 @@ class Breeder extends Query
         return Query::selectArray($stmt, $args);
     }
 
-	public static function getPairsInYear( int $breederId, int $year ) {
-		$args = get_defined_vars();
-		$stmt = Query::prepare( " 
-            SELECT pair.id, pair.breederId, pair.year, pair.name, 
-				layEggs, layWeight, 
-				broodEggs, broodFertile, broodHatched,
-				showCount, showScore
-            FROM pair
-            LEFT JOIN result ON result.pairId = pair.id
-            WHERE pair.breederId=:breederId AND pair.year=:year
-            ORDER BY pair.year, name
-        " );
-		return Query::selectArray( $stmt, $args );
-	}
+//	public static function getPairsInYear( int $breederId, int $year ) {
+//		$args = get_defined_vars();
+//		$stmt = Query::prepare( "
+//            SELECT pair.id, pair.breederId, pair.year, pair.name,
+//				layEggs, layWeight,
+//				broodEggs, broodFertile, broodHatched,
+//				showCount, showScore
+//            FROM pair
+//            LEFT JOIN result ON result.pairId = pair.id
+//            WHERE pair.breederId=:breederId AND pair.year=:year
+//            ORDER BY pair.year, name
+//        " );
+//		return Query::selectArray( $stmt, $args );
+//	}
 
 
 	// new svelte 5

@@ -202,19 +202,24 @@ class Result
 	public static function filter( Request $request, Response $response, array $args ) : Response {
 		$query = $request->getQueryParams();
 		$districtId = $query['districtId'] ?? null;
-		//$year = $query['year'] ?? null;
+		$year = $query['year'] ?? null;
 		//$colorId = $query['color'] ?? null;
 
-		if( is_numeric( $districtId ) ) { // per district over years
-			$results = model\Result::forDistrict( $districtId );
-			$formatted = [];
-			foreach( $results as &$result ) {
-				$formatted[] = self::formatResult( $result );
-			}
-			$response->getBody()->write(json_encode(['results' => $formatted], JSON_UNESCAPED_SLASHES));
+		if( is_numeric( $districtId ) && is_numeric( $year ) ) { // per district over years
+			$results = model\Result::forDistrictYear( $districtId, $year );
+			$tree = self::treeResults( $results );
+			$response->getBody()->write(json_encode( [ 'results' => $tree ], JSON_UNESCAPED_SLASHES ) );
 			return $response;
+//		} else if( is_numeric( $districtId ) ) { // per district over years
+//			$results = model\Result::forDistrict( $districtId );
+//			$formatted = [];
+//			foreach( $results as &$result ) {
+//				$formatted[] = self::formatResult( $result );
+//			}
+//			$response->getBody()->write(json_encode(['results' => $formatted], JSON_UNESCAPED_SLASHES));
+//			return $response;
 		}
-		throw new HttpBadRequestException( $request, 'Bad query' );
+		throw new HttpBadRequestException( $request, 'Bad filter' );
 	}
 
 	public static function formatResult( array &$input ) : array	{
@@ -231,5 +236,43 @@ class Result
 			'color'       => [ 'id'=>$input['colorId'], 'name'=>$input['colorname'] === NULL ? $input['aocColor'] : $input['colorname'] ],
 			'breeder'     => [ 'id'=>$input['breederId'], 'firstname'=>$input['firstname'], 'infix'=>$input['infix'], 'lastname'=>$input['lastname'] ]
 		];
+	}
+
+	public static function treeResults( array $results) : array {
+		$tree = [ 'sections'=>[] ];
+		$section = [ 'id'=>NULL ];
+		$breed = [ 'id'=>NULL ];
+		foreach( $results as & $raw ) {
+			//print( $raw['id'].PHP_EOL );
+//			unset( $result );
+			$result = [
+				'id'=>$raw['id'], 'group'=>$raw['group'], 'pairId'=>$raw['pairId'],
+				'breeders'=>$raw['breeders'], 'pairs'=>$raw['pairs'],
+				'lay'     =>[ 'dames'=>$raw['layDames'], 'eggs'=>$raw['layEggs'], 'weight'=>$raw['layWeight'] ],
+				'brood'   =>[ 'eggs'=>$raw['broodEggs'], 'fertile'=>$raw['broodFertile'], 'hatched'=>$raw['broodHatched'] ],
+				'show'    =>[ 'count'=>$raw['showCount'], 'score'=>$raw['showScore'] ],
+				'breeder' => $raw['breederId'] === NULL ? NULL : [ 'id'=>$raw['breederId'], 'firstName'=>$raw['firstname'], 'infix'=>$raw['infix'], 'lastName'=>$raw['lastname'] ],
+//				'sectionId' => $raw['sectionId'], 'rootSectionId'=>$raw['rootsectionId'], 'superSectionId'=>$raw['supersectionId']
+			];
+			if( $raw['rootsectionId'] !== $section['id'] ) {
+				unset( $section ); // unbind from tree
+				$section = [ 'id'=>$raw['rootsectionId'], 'name'=>$raw['rootsectionname'], 'breeds'=>[] ];
+				$tree['sections'][] = & $section;
+			}
+			if( $raw['breedId'] !== $breed['id'] ) {
+				//print( '    '.$raw['id'].PHP_EOL);
+				unset( $breed ); // unbind from tree
+				$breed = [ 'id'=>$raw['breedId'], 'name'=>$raw['breedname'], 'colors'=>[] ];
+				if( $raw['colorId'] === NULL && $raw['aocColor'] === NULL ) $breed['result'] = $result; // if no color, like pigeons
+				$section['breeds'][] = & $breed;
+			}
+			if( $raw['colorId'] !== NULL || $raw['aocColor'] !== NULL) {
+				unset( $color ); // unbind from tree
+				$color =  [	'id'=>$raw['colorId'], 'name'=>$raw['colorId'] === NULL ? $raw['aocColor'] : $raw['colorname'], 'result'=> $result ];
+				$breed['colors'][] = & $color;
+			}
+		}
+		unset( $section, $breed, $color );
+		return $tree;
 	}
 }

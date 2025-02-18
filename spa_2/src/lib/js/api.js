@@ -65,7 +65,6 @@ const api = { // api
 			if( +arg ) { // test if number
 				return await get(`/api/2/district/${arg}`); // { id, title, level }
 			} else {
-				console.log( 'district query', arg )
 				return await get( `/api/2/district`, arg ); // arg as query
 			}
 		},

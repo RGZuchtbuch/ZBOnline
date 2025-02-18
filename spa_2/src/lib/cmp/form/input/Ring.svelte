@@ -4,7 +4,7 @@
 	import {toRing, toRingString} from '../validator.js';
 	import TextInput from './Text.svelte';
 
-    let { class:classname='', disabled=false, element=$bindable(), error='!', label=null, name=null, placeholder=null, title=null, validator=null, value=$bindable() } = $props();
+    let { class:classname='', disabled=false, element=$bindable(), error='!!!', label=null, name=null, oninput=null, placeholder=null, title=null, validator=null, value=$bindable() } = $props();
 
     let localValue = $state( value ); // D
     let tempValue = value; // for detecting extern change from parent on page reload oid
@@ -16,7 +16,6 @@
 //    }
 
     function onInput( event ) { // from intern
-        console.log( 'RI', localValue, event.target.value );
         const ring  = toRing( localValue );
         value = tempValue = ring ? toRingString( ring ) : localValue; // valid date or faulty as was
     }
@@ -41,5 +40,6 @@
 <TextInput class='w-32 {classname}'
     bind:value={localValue} bind:element={element}
     {disabled} {error} {label} {placeholder} {title} {validator}
+    {oninput}
 />
 

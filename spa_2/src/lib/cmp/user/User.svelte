@@ -56,9 +56,8 @@
     }
 
     onMount( () => {
-
     })
-    $inspect( app.user );
+
 </script>
 
 {state}

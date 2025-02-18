@@ -6,6 +6,10 @@
 
     let { data } = $props();
 
+	// make reactive
+	let standard = $state( data.standard );
+	let pair     = $state( data.pair );
+
 	const path = page.url.pathname;
 
     app.title = `Stämme und Paare für ${data.district.name}`;
@@ -18,11 +22,9 @@
     ];
 	app.menu.options = [];
 
-    console.log( 'Results page', path );
-
 </script>
 
-<Pair {...data} />
+<Pair {standard} {pair} />
 
 
 

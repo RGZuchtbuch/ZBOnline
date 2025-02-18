@@ -1,24 +1,27 @@
 <script>
 	import {fade, slide} from 'svelte/transition';
-	import {calculateLay, daysBetween, dec, txt } from '$lib/js/toolbox.js';
+	import aab from '$lib/js/aab.js';
+	import {daysBetween, dec, txt } from '$lib/js/toolbox.js';
 	import Form, { DateInput, NumberInput, validator } from '../../form/Form.svelte';
 //	import Form from '$lib/form/form/Profile.svelte';
 
-	let { pair } = $props();
-
-
-	console.log( 'Pair', pair );
-
+	let { pair, standard } = $props();
 
 	let days = $state( null );
 	let result = $state( null );
+
+	if( pair.lay === null ) {
+		pair.lay = { start:null, end:null, dames:null, eggs:null, weight:null };
+	}
+
+
 
 	const validate = {
 		start:      v => validator(v).date().orNullIf( pair.lay.end === null ).isValid(),
 		end:        v => validator(v).date().after( pair.lay.start ).orNullIf( pair.lay.start === null ).isValid(),
 		dames:      v => validator(v).number().range( 1,   99 ).orNullIf( pair.lay.end === null ).isValid(),
-		total:      v => validator(v).number().range( 0, 9999 ).orNullIf( pair.lay.end === null ).isValid(),
-		eggs:       v => validator(v).number().range( 0, 399 ).orNull().isValid(),
+		eggs:       v => validator(v).number().range( 0, 9999 ).orNullIf( pair.lay.end === null ).isValid(),
+		weight:     v => validator(v).number().range( 0,  399 ).orNull().isValid(),
 	}
 
 	function onForward() { // copy result to oair
@@ -27,37 +30,31 @@
 	}
 
 	$effect( () => {
+		const breed = standard.breeds[ pair.breedId ];
 		days = daysBetween( pair.lay.start, pair.lay.end );
-		result = calculateLay( pair.lay.start, pair.lay.end, pair.lay.dames, pair.lay.eggs );
-		console.log('calc', result);
+		result = aab.layProduction( pair.lay.start, pair.lay.end, pair.lay.dames, pair.lay.eggs );
+
+		pair.layGrade = breed ? aab.lay( result, breed.layEggs ) : null;
 	})
-	function updateScore() {
-		pair.lay.score = pair.lay.eggs * 2; //TODO calculation from table
-	}
-
-	//$: console.log( 'V', start, end, dames, eggs)
-
-	//$: updateInput( start, end, dames, eggs );
-	//$: updateScore( pair.lay.eggs );
-
 
 </script>
 
 
 <fieldset class='flex flex-col gap-x-2 border p-2' in:fade>
-	<legend>Legeleistung</legend>
+	<legend>Legeleistung {pair.layGrade}</legend>
 	<div>Legeleistung im Jahr</div>
 	<div class='flex flex-row gap-x-2'>
 		<DateInput class='' label='Gesammelt ab' bind:value={pair.lay.start} validator={validate.start} />
 		<DateInput class='' label='bis' bind:value={pair.lay.end} validator={validate.end} />
+		<div class='w-4'></div>
 		<NumberInput class='w-16' label='Hennen' bind:value={pair.lay.dames} validator={validate.dames} />
-		<NumberInput class='w-16' label='Total Eggs' bind:value={pair.lay.eggs} validator={validate.total} />
-		<div class='w-8'></div>
-		<NumberInput class='w-16' label='Ø Gewicht' bind:value={ pair.lay.weight }/>
+		<NumberInput class='w-16' label='# Eier' bind:value={pair.lay.eggs} validator={validate.eggs} />
+		<div class='w-4'></div>
+		<NumberInput class='w-16' label='Ø Gewicht' bind:value={ pair.lay.weight } validator={validate.weight}/>
 		<div class='grow' />
 		<NumberInput class='w-16' label='Tagen' value={ days } disabled/>
 		<NumberInput class='w-16' label='Legeleistung' value={ result } disabled/>
-		<NumberInput class='w-20' label='Leistungsnote' value={dec( 93.2 )} disabled/>
+		<NumberInput class='w-14 font-bold' label='Note' value={dec( pair.layGrade, 1 )} disabled/>
 	</div>
 
 </fieldset>

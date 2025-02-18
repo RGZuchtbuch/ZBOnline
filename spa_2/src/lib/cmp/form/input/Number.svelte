@@ -1,7 +1,7 @@
 <script>
     import { getContext,  onDestroy, onMount } from 'svelte';
 
-    let { class:classname='', disabled=false, element=$bindable(), error='!', label=null, max=null, maxlength=null, min=null, name=null, placeholder=null, step=1, title=null, type='text', validator=null, value=$bindable() } = $props();
+    let { class:classname='', disabled=false, element=$bindable(), error='!!!', label=null, max=null, maxlength=null, min=null, name=null, oninput=null, placeholder=null, step=1, title=null, type='text', validator=null, value=$bindable() } = $props();
 
     let valid = $state( true );
 
@@ -30,6 +30,7 @@
            class='input number right' class:valid
            bind:this={element} bind:value={value}
            {disabled} {min} {max} {name} {step} {title}
+           {oninput}
     />
     <label class='error' class:valid for='number'>{error}</label>
 </div>
@@ -38,6 +39,12 @@
     div {
         display:flex;
         flex-direction: column;
+    }
+    input {
+        background-color: #FEE8;
+    }
+    input.valid {
+        background-color: transparent;
     }
     input.right {
         text-align: right;

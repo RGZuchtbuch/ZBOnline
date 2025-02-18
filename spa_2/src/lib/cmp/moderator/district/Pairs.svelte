@@ -7,7 +7,7 @@
 {#each pairs as pair}
 	<div>
 		<a href={`/moderator/${district.id}/pair/${pair.id}`}>
-			{pair.name} {pair.firstname} {pair.infix} {pair.lastname}
+			{pair.name} {pair.breedId} {pair.breedName} {pair.firstname} {pair.infix} {pair.lastname}
 		</a>
 	</div>
 {/each}

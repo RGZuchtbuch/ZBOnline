@@ -39,7 +39,12 @@
 </div>
 
 <style>
-
+    textarea {
+        background-color: #FEE8;
+    }
+    textarea.valid {
+        background-color: transparent;
+    }
     textarea.left {
         padding: 0.5em 0.5em;
     }

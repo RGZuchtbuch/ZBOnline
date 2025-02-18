@@ -3,8 +3,11 @@
 @tailwind utilities;
 
 @layer base {
+    * {
+        @apply border-0 border-teal-300 rounded;
+    }
     html, body {
-        @apply h-full w-full m-0 p-0 font-rgz box-border;
+        @apply h-full w-full m-0 p-0 font-rgz;
     }
 
     a, button, div, h1, h2, h3, h4, img, span {
@@ -13,6 +16,10 @@
 
     a {
         @apply border-0 hover:bg-teal-400 px-0.5;
+    }
+
+    fieldset {
+        @apply border border-teal-600 rounded;
     }
 
     h1 {
@@ -36,7 +43,7 @@
     }
 
     hr {
-        @apply w-full h-0.5 bg-teal-100 mx-2;
+        @apply w-full h-0.5 bg-teal-100 px-2;
     }
 
     img {

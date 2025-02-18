@@ -8,13 +8,7 @@
 	app.title = null;
 
 	let { article } = $props();
-	// api.article.get( page.params.articleId ).then( ( response ) => {
-	// 	article = response.article;
-	// 	app.title = article.title;
-	// 	app.menu.trail.push( {name: article.title.substring(0, 8)+'..', href:null} );
-	// } );
 
-	$inspect( 'Article', article );
 </script>
 
 {#if article}

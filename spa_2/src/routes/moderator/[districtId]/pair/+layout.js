@@ -4,6 +4,5 @@ import api from '$lib/js/api.js';
 
 export async function load( { params } ) {
 		const response = await api.pair.get( { districtId:params.districtId} );
-		console.log( 'Pairs', response.pairs );
 		return { pairs:response.pairs };
 };

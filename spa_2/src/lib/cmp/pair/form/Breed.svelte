@@ -15,20 +15,19 @@
 		pair.sectionId = rootSection ? rootSection.id : null;
 		breed = pair.breedId = null;
 		color = pair.colorId = null;
+		console.log( 'BS', rootSection.id )
 	}
 	function onBreedChange( event ) {
 		//breed = data.standard.breeds[ data.pair.breedId ]; // auto
+		pair.breed = breed;
 		pair.breedId = breed ? breed.id : null;
 		color = pair.colorId = null;
+		console.log( 'BB', breed.id);
 	}
 	function onColorChange( event ) {
 		pair.colorId = color ? color.id : null;
+		console.log( 'BC')
 	}
-
-	$inspect( 'rootSection', rootSection );
-	$inspect( 'breed', breed );
-	$inspect( 'color', color );
-
 
 </script>
 
@@ -42,7 +41,7 @@
 			</option>
 			{#each standard.rootSections as section }
 				<option value={ section } selected={pair.sectionId === section.id}>
-					{section.name} ({rootSection.id})
+					{section.name}
 				</option>
 			{/each}
 		</Select>

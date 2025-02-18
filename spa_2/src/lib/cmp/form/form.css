@@ -6,8 +6,6 @@ div.wrapper {
 }
 
 fieldset {
-    border: 1px solid gray;
-    border-radius: 3px;
 }
 fieldset > legend {
     padding: 0 1em;

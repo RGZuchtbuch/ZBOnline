@@ -24,14 +24,22 @@ class Pair
 			if( $pair ) {
 				//$requester = new Requester( $request );
 				//if( $requester && ( $requester->isAdmin() || $requester->isModerating( $pair[ 'districtId' ] ) || $requester->hasId( $pair[ 'breederId' ] ) ) ) {
-					$pair['breeder'] = model\Breeder::getName($pair['breederId']);
-					$pair['parents']  = model\Pair::getParents($pair['id']);
+				$pair['breed']   = model\Breed::get( $pair['breedId'] );
+				$pair['color']   = model\Color::get( $pair['colorId'] );
+
+				$pair['breeder'] = model\Breeder::getName($pair['breederId']);
+					$pair['parents'] = model\Pair::getParents($pair['id']);
+					foreach( $pair['parents'] as & $parent ) {
+						//$brood['chicks'] = model\Pair::getChicks( $brood['id'] );
+						$parent['parentsPair'] = $parent['parentsPairId'] !== null ? model\pair::getPairResult( $parent['parentsPairId'] ) : null;
+					}
 					$pair['lay']     = model\Pair::getLay($pair['id']);
 					$pair['broods']  = model\Pair::getBroods( $pair['id'] );
 					foreach( $pair['broods'] as & $brood ) {
 						$brood['chicks'] = model\Pair::getChicks( $brood['id'] );
 					}
-					$pair['show'] = model\Pair::getShow( $pair['id'] );
+					$pair['show'] = self::toShow( model\Pair::getShow( $pair['id'] ) );
+
 					$response->getBody()->write(json_encode([ 'pair' => $pair ], JSON_UNESCAPED_SLASHES));
 					return $response;
 				//}
@@ -229,18 +237,24 @@ class Pair
 
 	public static function filter( Request $request, Response $response, array $args ) : Response {
 		//$requester = new Requester( $request );
-		$query = $request->getQueryParams();
-		$breederId = $query[ 'breederId' ] ?? null;
+		$query      = $request->getQueryParams();
+		$breederId  = $query[ 'breederId' ] ?? null;
 		$districtId = $query[ 'districtId' ] ?? null;
+		$year       = $query[ 'year' ] ?? null;
 
-		if( is_numeric( $districtId ) ) {
+		if( is_numeric( $breederId) && is_numeric( $year ) ) { // for breeders and some year
+			//$pairs = model\Pair::getPairsInYear( $breederId, $year );
+			$pairs = self::toPairs( model\Pair::getPairsInYear( $breederId, $year ) );
+			$response->getBody()->write( json_encode( [ 'pairs'=>$pairs ], JSON_UNESCAPED_SLASHES));
+			return $response;
+		} else if( is_numeric( $districtId ) ) { // for district, TODO should be for a year
 			//if( $requester->isAdmin() || $requester->isModerating( $districtId ) ) { //admin of the moderator or self
 				$pairs = model\District::getPairs( $districtId );
 				$response->getBody()->write(json_encode( [ 'pairs' => $pairs ], JSON_UNESCAPED_SLASHES));
 				return $response;
 			//}
 			throw new HttpUnauthorizedException( $request, 'Cannot do this' );
-		} else if( is_numeric( $breederId ) ) {
+		} else if( is_numeric( $breederId ) ) { // for breeder, TODO should not be used
 			$breeder = model\Breeder::get($breederId);
 			if( $breeder ) {
 				$districtId = $breeder['districtId'] ?? null;
@@ -254,5 +268,40 @@ class Pair
 			throw new HttpNotFoundException( $request, 'Breeder unknown' );
 		}
 		throw new HttpBadRequestException( $request, 'Invalid query');
+	}
+
+
+	// helpers
+	public static function toPairs( array $rows ) : array {
+		$pairs = [];
+		foreach( $rows as $row ) {
+			$pair          = [ 'id'=>$row['id'], 'breederId'=>$row['breederId'], 'year'=>$row['year'], 'name'=>$row['name'] ];
+			$pair['lay']   = [ 'eggs'=>$row['layEggs'], 'weight'=>$row['layWeight'], 'eggsShould'=>$row['layEggsShould'], 'weightShould'=>$row['layWeightShould'] ];
+			$pair['brood'] = [ 'eggs'=>$row['broodEggs'], 'fertile'=>$row['broodFertile'], 'hatched'=>$row['broodHatched'], 'group'=>$row['broodGroup'] ];
+			$pair['show']  = [ 'count'=>$row['showCount'], 'score'=>$row['showScore'] ];
+			$pairs[] = $pair;
+		}
+		return $pairs;
+	}
+
+	public static function toShow( array $raw ) : array {
+		//$sum = $raw['89']*89+$raw['90']*90+$raw['91']*91+$raw['92']*92+$raw['93']*93+$raw['94']*94+$raw['95']*95+$raw['96']*96+$raw['97']*97;
+		//$total = $raw['89']+$raw['90']+$raw['91']+$raw['92']+$raw['93']+$raw['94']+$raw['95']+$raw['96']+$raw['97'];
+		//$avg = $total > 0 ? $sum / $total : null;
+		$score = [ 'id'=>$raw['id'], 'pairId'=>$raw['pairId'],
+			'scores'=>[
+				[ 'count'=>$raw['89'], 'weight'=>89 ],
+				[ 'count'=>$raw['90'], 'weight'=>90 ],
+				[ 'count'=>$raw['91'], 'weight'=>91 ],
+				[ 'count'=>$raw['92'], 'weight'=>92 ],
+				[ 'count'=>$raw['93'], 'weight'=>93 ],
+				[ 'count'=>$raw['94'], 'weight'=>94 ],
+				[ 'count'=>$raw['95'], 'weight'=>95 ],
+				[ 'count'=>$raw['96'], 'weight'=>96 ],
+				[ 'count'=>$raw['97'], 'weight'=>97 ],
+			],
+			//'avg'=>$avg,
+		];
+		return $score;
 	}
 }

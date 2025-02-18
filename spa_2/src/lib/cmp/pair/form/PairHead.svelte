@@ -21,9 +21,6 @@
 		name:       v => validator(v).string().notNull().isValid(),
 	}
 
-
-
-
 </script>
 
 
@@ -39,10 +36,10 @@
 			{/each}
 		</Select>
 		<div class='grow' ></div>
-		<NumberInput class='w-20' label='Abstammung' value={ 98 } disabled/>
-		<NumberInput class='w-20' label='Legeleistung' value={ dec( 93, 1 ) } disabled/>
-		<NumberInput class='w-20' label='Brutleistung' value={ dec( 94, 1 ) } disabled />
-		<NumberInput class='w-20' label='Schauleistung' value={ dec( 95, 1 ) } disabled />
+		<NumberInput class='w-20' label='Abstammung' value={ dec( pair.parentsGrade, 1 ) } disabled/>
+		<NumberInput class='w-20' label='Legeleistung' value={ dec( pair.layGrade, 1 ) } disabled/>
+		<NumberInput class='w-20' label='Brutleistung' value={ dec( pair.broodGrade, 1 ) } disabled />
+		<NumberInput class='w-20' label='Schauleistung' value={ dec( pair.showGrade, 1 ) } disabled />
 		<Status />
 	</div>
 

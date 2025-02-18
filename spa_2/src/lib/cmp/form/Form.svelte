@@ -59,11 +59,9 @@
             valid = validator() && valid; // call validator first otherwise call will be skipped when valid already false
         }
         form.state = valid ? states.valid : states.invalid;
-        console.log( 'validating', form.state );
     }
 
     async function submit() { // triggered by timeout or submit button
-        console.log('Submit if valid to exernal');
         if( form.state===states.valid ) {
             if( onsubmit ) {
                 const success = await onsubmit();
@@ -92,7 +90,6 @@
         }
     })
 
-    $inspect( 'form', form );
 </script>
 
 <form bind:this={element} class:valid onsubmit={ ()=>console.log('Click') }>

@@ -15,8 +15,6 @@
 	app.menu.options = [
 	];
 
-	$inspect( 'Data',  data );
-
 </script>
 
 <Article article={data.article} />

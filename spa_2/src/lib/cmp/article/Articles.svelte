@@ -1,16 +1,7 @@
 <script>
 	import { fade, fly, slide } from 'svelte/transition';
-	import { page } from '$app/state';
-	import api from '$lib/js/api.js';
-
-	//let articles = $state( [] );
 	let {articles} = $props()
 
-	// api.article.get().then( ( response ) => {
-	// 	console.log( 'As', response )
-	// 	articles = response.articles
-	// } );
-	$inspect( 'P', articles);
 </script>
 
 

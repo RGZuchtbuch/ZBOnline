@@ -238,4 +238,35 @@ class Pair extends Query
 		return Query::delete( $stmt, $args );
 	}
 
+	public static function getPairResult( int $pairId ) : array {
+		$args = get_defined_vars();
+		$stmt = Query::prepare( " 
+            SELECT pair.id, pair.breederId, pair.year, pair.name, 
+				layEggs, layWeight, 
+				broodEggs, broodFertile, broodHatched,
+				showCount, showScore
+            FROM pair
+            LEFT JOIN result ON result.pairId = pair.id
+            WHERE pair.id = :pairId
+        " );
+		return Query::select( $stmt, $args );
+	}
+
+	// for grandparents in pair
+	public static function getPairsInYear( int $breederId, int $year ) {
+		$args = get_defined_vars();
+		$stmt = Query::prepare( " 
+            SELECT pair.id, pair.breederId, pair.year, pair.name, 
+				result.layEggs, result.layWeight, breed.layEggs AS layEggsShould, breed.layWeight AS layWeightShould,
+				broodEggs, broodFertile, broodHatched, broodGroup,
+				showCount, showScore
+            FROM pair
+            LEFT JOIN result ON result.pairId = pair.id
+            LEFT JOIN breed ON result.breedId = breed.id
+            WHERE pair.breederId=:breederId AND pair.year=:year
+            ORDER BY pair.year, name
+        " );
+		return Query::selectArray( $stmt, $args );
+	}
+
 }

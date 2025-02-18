@@ -9,8 +9,6 @@
 	addDistrict( root, moderatables );
 	moderatables.reverse();
 
-	$inspect( 'M', moderatables );
-
 	function addDistrict( district, list ) {
 
 		for( const child of district.children ) {
