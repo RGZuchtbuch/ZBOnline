@@ -4,7 +4,7 @@
 	import {onMount} from 'svelte';
 	//	import Form from '$lib/form/form/Profile.svelte';
 
-	let { pair } = $props();
+	let { notes=$bindable() } = $props();
 
 	const validate = {
 		//score:       v => validator(v).number().range( 0, 999 ).orNull().isValid(),
@@ -14,5 +14,5 @@
 
 <fieldset class='flex flex-col border p-2' in:fade>
 	<legend>Notizen</legend>
-	<TextArea class='h-24' classbind:value={pair.notes} />
+	<TextArea class='h-24' bind:value={notes} />
 </fieldset>

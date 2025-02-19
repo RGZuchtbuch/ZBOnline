@@ -24,7 +24,7 @@
 
 </script>
 
-<Pair {standard} {pair} />
+<Pair bind:pair {standard} />
 
 
 

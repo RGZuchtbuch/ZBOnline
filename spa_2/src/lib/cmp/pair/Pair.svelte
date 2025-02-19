@@ -10,37 +10,31 @@
 	import Show from './form/Show.svelte';
 	import Notes from './form/Notes.svelte';
 
-	let { pair, standard } = $props();
+	let { pair=$bindable(), standard } = $props();
 
 	function onSubmit() {
-		let t = pair;
+		//let t = pair;
 		//console.log( 'Pair Submit', t );
 	}
 
 </script>
 
 {#if standard && pair}
-	<Form class='flex flex-col gap-y-2' autosubmit={true} onsubmit={onSubmit}>
-		<PairHead {pair} />
-		<Breed    {pair} {standard} />
-		<fieldset class='border-0' disabled={pair.sectionId === null}>
-			<div>{pair.sectionId === null }</div>
-			<Parents  {pair} {standard}/>
+	<Form class='flex flex-col gap-y-4' autosubmit={true} onsubmit={onSubmit}>
+		<PairHead bind:pair />
+		<Breed    bind:pair {standard} />
+		<fieldset class='flex flex-col border-0 gap-y-4' disabled={pair.sectionId === null}>
+			<Parents  bind:parents={pair.parents} bind:pair {standard}/>
 			{#if pair.sectionId !== 5}
-				<Lay      {pair} {standard} />
+				<Lay  bind:lay={pair.lay} bind:pair {standard} />
 			{/if}
-			<Broods   {pair} {standard} />
-			<Show     {pair} />
-			<Notes    {pair} />
+			<Broods   bind:pair {standard} />
+			<Show     bind:pair />
+			<Notes    bind:pair />
 		</fieldset>
 	</Form>
 {/if}
 
 <style>
-	.tab {
-        @apply p-2 border border-gray-600 rounded-t-xl rounded-b-none bg-slate-100 text-black;
-    }
-	.active {
-		@apply border-b-white bg-white;
-	}
+
 </style>

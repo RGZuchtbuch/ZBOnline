@@ -5,7 +5,7 @@
 	import Form, { DateInput, NumberInput, RingInput, Select, TextInput, validator } from '../../form/Form.svelte';
 	//	import Form from '$lib/form/form/Profile.svelte';
 
-	let { brood, pair, standard } = $props();
+	let { brood=$bindable(), pair, standard, i } = $props();
 	brood.eggs = 2; // default 2 eggs per brood for pigeons
 
 	const validate = {
@@ -24,7 +24,9 @@
 
 
 <div class='w-full flex flex-row gap-x-2' in:fade>
+	<TextInput class='w-8' label={i===0?'#':null} value={i+1} disabled />
 	<DateInput class='w-24' label='Gelegt am' bind:value={brood.start} validator={validate.start} />
-	<NumberInput class='w-14' label='Gelegt' bind:value={brood.eggs} disabled />
+	<NumberInput class='w-14' label='Eier' value={brood.eggs} disabled />
 	<NumberInput class='w-14' label='Geschlüpft' bind:value={brood.hatched} validator={validate.hatched} />
+	Pigeon
 </div>

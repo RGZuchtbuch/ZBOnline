@@ -307,7 +307,7 @@ class District
 		$args = get_defined_vars();
 		$stmt = Query::prepare('
             SELECT pair.id, pair.year, pair.group, pair.districtId,
-                user.firstname, user.infix, user.lastname, user.member,    
+                user.id AS breederId, user.firstname, user.infix, user.lastname, user.member,    
                 pair.sectionId, pair.breedId, pair.colorId, pair.name, breed.name AS breedName, color.name AS colorName,
                 result.layEggs, result.layWeight, result.broodEggs, result.broodFertile, result.broodHatched, result.showScore
             FROM pair

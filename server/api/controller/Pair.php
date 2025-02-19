@@ -242,7 +242,7 @@ class Pair
 		$districtId = $query[ 'districtId' ] ?? null;
 		$year       = $query[ 'year' ] ?? null;
 
-		if( is_numeric( $breederId) && is_numeric( $year ) ) { // for breeders and some year
+		if( is_numeric( $breederId ) && is_numeric( $year ) ) { // for breeders and some year
 			//$pairs = model\Pair::getPairsInYear( $breederId, $year );
 			$pairs = self::toPairs( model\Pair::getPairsInYear( $breederId, $year ) );
 			$response->getBody()->write( json_encode( [ 'pairs'=>$pairs ], JSON_UNESCAPED_SLASHES));
@@ -254,7 +254,7 @@ class Pair
 				return $response;
 			//}
 			throw new HttpUnauthorizedException( $request, 'Cannot do this' );
-		} else if( is_numeric( $breederId ) ) { // for breeder, TODO should not be used
+		} else if( is_numeric( $breederId ) ) { // for breeder, TODO should not be used, only for year ?
 			$breeder = model\Breeder::get($breederId);
 			if( $breeder ) {
 				$districtId = $breeder['districtId'] ?? null;
@@ -276,6 +276,7 @@ class Pair
 		$pairs = [];
 		foreach( $rows as $row ) {
 			$pair          = [ 'id'=>$row['id'], 'breederId'=>$row['breederId'], 'year'=>$row['year'], 'name'=>$row['name'] ];
+			$pair['breeder'] = [ 'id'=>$row['breederId'] ]; // TODO add name but dep on Pair::getPairs
 			$pair['lay']   = [ 'eggs'=>$row['layEggs'], 'weight'=>$row['layWeight'], 'eggsShould'=>$row['layEggsShould'], 'weightShould'=>$row['layWeightShould'] ];
 			$pair['brood'] = [ 'eggs'=>$row['broodEggs'], 'fertile'=>$row['broodFertile'], 'hatched'=>$row['broodHatched'], 'group'=>$row['broodGroup'] ];
 			$pair['show']  = [ 'count'=>$row['showCount'], 'score'=>$row['showScore'] ];

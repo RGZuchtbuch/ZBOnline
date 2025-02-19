@@ -262,7 +262,7 @@ class Pair extends Query
 				showCount, showScore
             FROM pair
             LEFT JOIN result ON result.pairId = pair.id
-            LEFT JOIN breed ON result.breedId = breed.id
+            LEFT JOIN breed  ON result.breedId = breed.id 
             WHERE pair.breederId=:breederId AND pair.year=:year
             ORDER BY pair.year, name
         " );

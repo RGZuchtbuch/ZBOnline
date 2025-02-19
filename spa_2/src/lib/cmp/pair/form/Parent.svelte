@@ -8,7 +8,7 @@
 	import { toRing } from '$lib/cmp/form/validator.js';
 
 
-	let { pair, parent = $bindable(), i, standard } = $props();
+	let { parent=$bindable(), pair, standard, i } = $props();
 
 	let fromPairs = $state( [] ); // the parent it's parent pair options
 	let fromPair = $state( null );
@@ -55,21 +55,21 @@
 
 </script>
 
-<div class='w-full flex flex-row gap-x-2'>
-	<TextInput class='w-8' label={i===0?'#':null} value={i+1} disabled />
+<div class='w-full flex flex-row gap-x-2 items-center'>
+	<TextInput class='w-8 px-0 border-0' label={i===0?' #':null} value={i+1} disabled />
 	<TextInput class='w-12' label={i===0?'♂.♀':null} value={parent.sex} disabled />
 	<RingInput label={i===0?'Ring':null} bind:value={parent.ring} oninput={onRingInput} validator={validate.ring}/>
 	<NumberInput class='w-16' label={i===0?'Bewertung':null} bind:value={parent.score} validator={validate.score}/>
-	<div class='grow'></div>
+	<div class='w-4'></div>
 	<Select class='w-32' label={i===0?'Aus Stamm':null} bind:value={parent.parentsPairId}>
 		{#each fromPairs as fromPair}
 			<option value={fromPair.id} >{(fromPair.year%100)+'.'+fromPair.name}</option>
 		{/each}
 	</Select>
-	<div class='w-8'></div>
+	<div class='grow'></div>
 	<NumberInput class='w-16' label={i===0?'Legeleistung':null} title='Von dem Elternstamm' value={ dec( fromLayGrade, 1 ) } disabled/>
 	<NumberInput class='w-16' label={i===0?'Brutleistung':null} title='Von dem Elternstamm' value={ dec( fromBroodGrade, 1 ) } disabled/>
-	<!--NumberInput class='w-16' label={i===0?'Schauleistung':null} value={ dec( fromShowGrade, 1 ) } disabled/-->
+	<div class='w-4'></div>
 	<NumberInput class='w-14 font-bold' label={i===0?'G.Note':null} value={ dec( fromTotalGrade, 1 ) } disabled
         title='Schauleistung des Tiers und Lege u. Brutleisting der Eltern'
 	/>

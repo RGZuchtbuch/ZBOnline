@@ -32,15 +32,16 @@ input, textarea, select {
     border: solid 1px darkgreen;
     border-radius: 0.25em;
     background: white;
+    cursor:pointer;
 }
 
 input, select {
     height: 2em;
     padding: 0 0.2em;
 }
-input:disabled {
+input:disabled, select:disabled, textarea:disabled {
     color: black;
-    border: none;
+    border: solid 1px lightgrey;
 }
 
 textarea {

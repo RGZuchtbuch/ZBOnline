@@ -5,7 +5,7 @@
 	import Form, { DateInput, NumberInput, RingInput, Select, TextInput, validator } from '../../form/Form.svelte';
 	//	import Form from '$lib/form/form/Profile.svelte';
 
-	let { brood, pair, standard, i } = $props();
+	let { brood=$bindable(), pair, standard, i } = $props();
 
 	const validate = {
 		start:      v => validator(v).date().orNull().isValid(),
@@ -22,9 +22,10 @@
 
 
 <div class='w-full flex flex-row gap-x-2 items-center' in:fade>
-	<span class='border'># {1+i}</span>
-	<DateInput class='w-24' label={i===0?'Eigelegt':null} bind:value={brood.start} validator={validate.start} />
-	<NumberInput class='w-24' label={i===0?'Eingelegt':null} bind:value={brood.eggs} validator={validate.eggs} />
-	<NumberInput class='w-24' label={i===0?'Befruchtet':null} bind:value={brood.fertile} validator={validate.fertile} />
-	<NumberInput class='w-24' label={i===0?'Geschlüpft':null} bind:value={brood.hatched} validator={validate.hatched} />
+	<TextInput class='w-8' label={i===0?' #':null} value={i+1} disabled />
+	<DateInput class='w-24' label={i===0?'Eigeleg am':null} bind:value={brood.start} validator={validate.start} />
+	<NumberInput class='w-14' label={i===0?'Eier':null} bind:value={brood.eggs} validator={validate.eggs} />
+	<NumberInput class='w-14' label={i===0?'Befruchtet':null} bind:value={brood.fertile} validator={validate.fertile} />
+	<NumberInput class='w-14' label={i===0?'Geschlüpft':null} bind:value={brood.hatched} validator={validate.hatched} />
+	Layer
 </div>

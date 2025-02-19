@@ -9,7 +9,7 @@
 //	import Select from '$lib/cmp/form/input/Select.svelte';
 //	import Status from '$lib/cmp/form/Status.svelte';
 
-	let { pair } = $props();
+	let { pair=$bindable() } = $props();
 
 	//let breeder = store.breeder;
 	//let pair    = store.pair;
@@ -27,7 +27,7 @@
 <fieldset class='flex flex-col p-2 gap-x-4 border border-base rounded' in:slide>
 	<legend>Stamm</legend>
 	<div class='flex flex-row gap-x-4 '>
-		<TextInput class='w-32' label='Züchter' value={txt( pair.breeder.firstname ) + ' ' + txt( pair.breeder.infix ) + ' ' + txt( pair.breeder.lastname ) } disabled  />
+		<TextInput class='w-56' label='Züchter' value={txt( pair.breeder.firstname ) + ' ' + txt( pair.breeder.infix ) + ' ' + txt( pair.breeder.lastname ) } disabled  />
 		<NumberInput class='w-16' label='Jahr*' bind:value={pair.year} error={'Fehler'} validator={validate.year} />
 		<TextInput class='w-24' label='Name*' bind:value={pair.name} error='Fehler' validator={validate.name} />
 		<Select label='Gruppe*' bind:value={pair.group}>

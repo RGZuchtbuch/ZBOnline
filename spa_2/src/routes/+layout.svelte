@@ -1,9 +1,7 @@
 <script>
     import { navigating, page } from '$app/state';
     import { fade, fly, slide } from 'svelte/transition';
-
 	import '../app.css';
-
     import { app } from '$lib/js/store.svelte.js'
     import { profile_icon } from '$lib/cmp/snippets.svelte';
 
