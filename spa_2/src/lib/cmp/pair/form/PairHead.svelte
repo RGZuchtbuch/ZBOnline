@@ -1,5 +1,5 @@
 <script>
-	import {app} from '$lib/js/store.svelte.js';
+	import {store} from '$lib/js/store.svelte.js';
 	import { fade, slide } from 'svelte/transition';
 	import { dec, txt } from '$lib/js/toolbox.js';
 	import { Form, NumberInput, TextInput, Select, Status, validator } from '$lib/cmp/form/Form.svelte';

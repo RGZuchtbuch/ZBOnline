@@ -1,12 +1,7 @@
 <script>
-	import { page } from '$app/state';
-	import { app } from '$lib/js/store.svelte.js';
-
-	import api from '$lib/js/api.js';
-	import { email_icon, link_icon } from '$lib/cmp/snippets.svelte';
+	import { slide } from 'svelte/transition';
 
 	let { color } = $props();
-
 </script>
 
 {#if color}

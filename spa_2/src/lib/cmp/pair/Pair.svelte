@@ -1,5 +1,6 @@
 <script>
-	import {app} from '$lib/js/store.svelte.js';
+	import { getContext } from 'svelte';
+	import {store} from '$lib/js/store.svelte.js';
 	import Form from '$lib/cmp/form/Form.svelte';
 
 	import PairHead from './form/PairHead.svelte';
@@ -10,11 +11,13 @@
 	import Show from './form/Show.svelte';
 	import Notes from './form/Notes.svelte';
 
-	let { pair=$bindable(), standard } = $props();
+	let { standard } = $props();
+
+	let pair = getContext( 'pair' );
 
 	function onSubmit() {
-		//let t = pair;
-		//console.log( 'Pair Submit', t );
+		console.log( 'Pair Submit', pair );
+
 	}
 
 </script>
@@ -26,11 +29,11 @@
 		<fieldset class='flex flex-col border-0 gap-y-4' disabled={pair.sectionId === null}>
 			<Parents  bind:parents={pair.parents} bind:pair {standard}/>
 			{#if pair.sectionId !== 5}
-				<Lay  bind:lay={pair.lay} bind:pair {standard} />
+				<Lay  bind:pair {standard} />
 			{/if}
 			<Broods   bind:pair {standard} />
 			<Show     bind:pair />
-			<Notes    bind:pair />
+			<Notes    bind:pair={pair} />
 		</fieldset>
 	</Form>
 {/if}

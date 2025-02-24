@@ -2,8 +2,6 @@
 	import { slide } from 'svelte/transition';
 	import Color from '$lib/cmp/standard/Color.svelte';
 
-
-
 	let { breed, unfold=false } = $props();
 
 	function toggle() {

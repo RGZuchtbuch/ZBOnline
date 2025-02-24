@@ -1,6 +1,4 @@
 <script>
-	import { app } from '$lib/js/store.svelte.js';
-
 	let { district } = $props();
 
 </script>

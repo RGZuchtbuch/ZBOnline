@@ -1,6 +1,6 @@
 <script>
 	import { page } from '$app/state';
-	import { app } from '$lib/js/store.svelte.js';
+	import { store } from '$lib/js/store.svelte.js';
 	import BreederProfile from '$lib/cmp/breeder/profile.svelte';
 
 	let { data } = $props();

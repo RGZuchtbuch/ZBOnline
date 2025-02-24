@@ -1,5 +1,5 @@
 <script>
-    import { app } from '$lib/js/store.svelte.js';
+    import { store } from '$lib/js/store.svelte.js';
     import User from '$lib/cmp/user/User.svelte';
 
     let { data } = $props();

@@ -4,5 +4,6 @@ import api from '$lib/js/api.js';
 
 export async function load( { params } ) {
 		const response = await api.pair.get( { breederId:params.breederId } );
+		console.log( 'R', response.pairs );
 		return { pairs:response.pairs };
 };

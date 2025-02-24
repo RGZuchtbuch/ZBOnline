@@ -1,17 +1,20 @@
 <script>
-	import { app } from '$lib/js/store.svelte.js';
+	import { getContext } from 'svelte';
+
 	import Articles from '$lib/cmp/article/Articles.svelte';
 
-	let { data } = $props();
+	let page     = getContext( 'page' );
+	let articles = getContext( 'articles' );
 
-	app.articles = data.articles;
+	page.title = 'Info zum BDRG Zuchtbuch';
+	page.menu = {
+		trail : [
+			{ name:'Start',  href:'/' },
+			{ name:'Info',   href:'/article' },
+		],
+		options : [],
+	};
 
-	app.title = 'Info zum BDRG Zuchtbuch';
-	app.menu.trail = [
-		{ name:'Start',  href:'/' },
-		{ name:'Info',   href:'/article' },
-	];
-	app.menu.options = [];
 </script>
 
-<Articles articles={data.articles} />
+<Articles articles={articles} />

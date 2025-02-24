@@ -1,25 +1,7 @@
 <script>
-	import { page } from '$app/state';
-	import { app } from '$lib/js/store.svelte.js';
-	import { email_icon, link_icon, fullname } from '$lib/cmp/snippets.svelte';
+	import { getContext } from 'svelte';
 
-	let { root } = $props();
-	let moderatables = $state( [] );
-
-	addDistrict( root, moderatables );
-	moderatables.reverse();
-
-	function addDistrict( district, list ) {
-
-		for( const child of district.children ) {
-			addDistrict( child, list );
-		}
-		if( app.user.moderates.includes( district.id ) ) {
-			list.push( district );
-			console.log( 'AD', district.name );
-		}
-	}
-
+	let { districts } = $props();
 
 </script>
 
@@ -45,7 +27,7 @@
 
 {#if root}
 	<ul class='mx-8'>
-		{@render row( moderatables )}
+		{@render row( districts )}
 	</ul>
 {/if}
 

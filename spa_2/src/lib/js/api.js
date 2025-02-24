@@ -1,7 +1,7 @@
 
 import { browser } from '$app/environment'; // to find window
 import { jwtDecode } from 'jwt-decode';
-import { app } from '$lib/js/store.svelte.js';
+import store from '$lib/js/store.svelte.js';
 //let token = window.sessionStorage.getItem('token' ); // for auth api calls, may expire
 //export let user = writable( extractUser( token ) ); //get stored user or empty
 //console.log( 'User', extractUser( token ) );
@@ -164,47 +164,45 @@ function findRoot( data, id ) {
 // fetch methods
 async function get( url, query=null ) {
 	url += query ? '?' + new URLSearchParams( query ).toString() : '';
-	const response = await fetch( `${API_BASE}${url}`, { method:'GET', headers:getHeaders() });
+	const response = await fetch( `${API_BASE}${url}`, { method:'GET', headers:headers });
 	return response.ok ? await response.json() : null;
 }
 
 async function post(url, body) {
-	const response = await fetch(`${API_BASE}${url}`, { method:'POST', headers:getHeaders(), body:JSON.stringify( body ) });
+	const response = await fetch(`${API_BASE}${url}`, { method:'POST', headers:headers, body:JSON.stringify( body ) });
 	return response.ok ? await response.json() : null;
 }
 
 async function put(url, body) {
-	const response = await fetch(`${API_BASE}${url}`, { method:'PUT', headers:getHeaders(), body:JSON.stringify( body ) });
+	const response = await fetch(`${API_BASE}${url}`, { method:'PUT', headers:headers, body:JSON.stringify( body ) });
 	return response.ok ? await response.json() : null;
 }
 
 async function del(url) { // delete is a reserved word
-	const response = await fetch(`${API_BASE}${url}`, { method:'DELETE', headers:getHeaders() } );
+	const response = await fetch(`${API_BASE}${url}`, { method:'DELETE', headers:headers } );
 	return response.ok ? await response.json() : null;
 }
 
 // Helpers
-function getHeaders() {
-	return {
-		'Accept': 'application/json', // response
-		'Content-Type': 'application/json', // body
-		'Authorization': `Bearer ${authenticationToken}`,
-	}
+const headers = {
+	'Accept': 'application/json', // response
+	'Content-Type': 'application/json', // body
+	'Authorization': `Bearer ${authenticationToken}`,
 }
 
 // session tools
 
 export default api;
 
-export function headers( method='GET' ) {
-	return {
-		method:method,
-		headers: {
-			'Accept': 'application/json', // response
-			'Content-Type': 'application/json', // body
-			'Authorization': `Bearer ${authenticationToken}`,
-		}
-	}
-}
+// export function headers( method='GET' ) {
+// 	return {
+// 		method:method,
+// 		headers: {
+// 			'Accept': 'application/json', // response
+// 			'Content-Type': 'application/json', // body
+// 			'Authorization': `Bearer ${authenticationToken}`,
+// 		}
+// 	}
+// }
 
 

@@ -1,6 +1,7 @@
 <script>
+	import { setContext } from 'svelte';
 	import { page } from '$app/state';
-	import { app } from '$lib/js/store.svelte.js';
+	import { store } from '$lib/js/store.svelte.js';
 	import api from '$lib/js/api.js';
 	import {txt } from '$lib/js/toolbox.js';
 	import Pair from '$lib/cmp/pair/Pair.svelte';
@@ -12,6 +13,8 @@
 	let district = $state( data.district );
 	let breeder  = $state( data.breeder );
 	let pair     = $state( data.pair );
+
+	setContext( 'pair', pair );
 
 
 

@@ -1,6 +1,6 @@
 <script>
 	import { slide } from 'svelte/transition';
-	import { app } from '$lib/js/store.svelte.js'
+	import { store } from '$lib/js/store.svelte.js'
 	import { Form, Select } from '$lib/cmp/form/Form.svelte';
 
 	let { pair=$bindable(), standard } = $props();

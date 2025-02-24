@@ -1,31 +1,23 @@
 <script>
-	import api from '$lib/js/api.js';
-import { app } from '$lib/js/store.svelte.js';
-	import {onMount} from 'svelte';
+	import { getContext, setContext } from 'svelte';
+	import store from '$lib/js/store.svelte.js';
 
-let { children } = $props();
+	let { children } = $props(); // get page
+	let federation = getContext( 'federation' );
 
-onMount( () => {
-	//const sections = $rootSections;
-//	getRootSectionsBreeds( app.rootSections, app.standard );
-} );
+	let districts = $state( getModeratorDistricts( store.data.user.moderates, federation ) );
+	setContext( 'districts', districts );
 
-// function getRootSectionsBreeds( sections, standard ) {
-// 	for( let section of sections ) {
-// 		const standardSection = standard.sections[ section.id ]; // standard section to get all breeds
-// 		getBreeds( standardSection, section.breeds ); // add to rootsection breeds, recursive
-// 		section.breeds.sort((a, b) => a.name.localeCompare(b.name)); // sort by name
-// 	}
-// }
-
-// function getBreeds( fromSection, breeds ) {
-// 	for( const breed of fromSection.breeds ) {
-// 		breeds.push( breed );
-// 	}
-// 	for( const child of fromSection.children ) {
-// 		getBreeds( child, breeds );
-// 	}
-// }
+	function getModeratorDistricts( ids, federation ) {
+		let districts = [];
+		if( ids && ids.length > 0 ) {
+			ids.forEach( id => {
+				districts.push( federation.districts[id] );
+			});
+		}
+		return districts;
+	}
 </script>
 
 {@render children()}
+

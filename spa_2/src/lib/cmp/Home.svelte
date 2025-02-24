@@ -1,0 +1,149 @@
+<script>
+	import { fade, fly, slide } from 'svelte/transition';
+	import store from '$lib/js/store.svelte.js'
+	import { info_icon } from '$lib/cmp/icons.svelte';
+</script>
+
+<div class='' in:slide>
+
+	{@render info_icon()}
+
+	<a href='/article'>Articles</a>
+	<div>aaaaaa aaaaaa aaa aa a a a a a a aaaaaaa aaaaaa aaaaaa aaa aa a a a a a a aaaaaaa aaaaaa aaaaaa aaa aa a a a a a a aaaaaaa aaaaaa aaaaaa aaa aa a a a a a a aaaaaaa aaaaaa aaaaaa aaa aa a a a a a a aaaaaaa aaaaaa aaaaaa aaa aa a a a a a a aaaaaaa aaaaaa aaaaaa aaa aa a a a a a a aaaaaaa aaaaaa aaaaaa aaa aa a a a a a a aaaaaaa </div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<br>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>aaaaaa aaaaaa aaa aa a a a a a a aaaaaaa aaaaaa aaaaaa aaa aa a a a a a a aaaaaaa aaaaaa aaaaaa aaa aa a a a a a a aaaaaaa aaaaaa aaaaaa aaa aa a a a a a a aaaaaaa aaaaaa aaaaaa aaa aa a a a a a a aaaaaaa aaaaaa aaaaaa aaa aa a a a a a a aaaaaaa aaaaaa aaaaaa aaa aa a a a a a a aaaaaaa aaaaaa aaaaaa aaa aa a a a a a a aaaaaaa </div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<br>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+	<div>a</div>
+</div>
+

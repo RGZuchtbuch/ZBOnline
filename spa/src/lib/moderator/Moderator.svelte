@@ -5,7 +5,7 @@
 
 	// setting context from store into context. enables district and breeder handling without role
 	setContext( 'district', moderator.district );
-	setContext( 'breeder', moderator.breeder );
+	//setContext( 'breeder', moderator.breeder );
 
 	let authenticated = false;
 	let authorized = false;

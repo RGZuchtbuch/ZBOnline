@@ -1,37 +1,48 @@
-import {writable} from 'svelte/store';
+//import {writable} from 'svelte/store';
 
-class AppState {
+class Store {
+    page = new PageStore();
+    data = new DataStore();
+}
+
+class PageStore {
     title = $state( null );
     menu = $state({
         trial:null,
         options:null
     } );
-
-    user = $state( { id:1, firstname:'Eelco', infix:null, lastname:'Jannink', moderates:[ 2, 6 ] });
-
-    articles = $state( null );
-    standard = $state( null );
-    districts = $state( null );
-    breeders = $state( null );
-    pairs = $state( null );
-
-    district = $state( null );
-    breeder = $state( null );
-    pair = $state( null );
-
-    //rootSections = $state( rootSections );
 }
 
-// const rootSections = [
-//     { id:3,  name:'Groß u. Wassergeflügel', breeds:[] },
-//     { id:11, name:'Hühner Groß', breeds:[] },
-//     { id:12, name:'Zwerghühner', breeds:[] },
-//     { id:13, name:'LegeWachteln', breeds:[] },
-//     { id:5,  name:'Tauben', breeds:[] },
-//     { id:6,  name:'Ziergeflügel', breeds:[] },
-// ];
+class DataStore {
+    // set on login, reset to null on logout, dummy data for now
+    user = $state( { id:1, firstname:'Eelco', infix:null, lastname:'Jannink', moderates:[ 2, 6 ] });
 
-export let app = new AppState();
+    // pre loaded
+    federation = $state( null ); // district tree and districts by id for lookup
+    standard = $state( null ); // standard tree and sections, breeds, colors by id for lookup
+
+    // use in route tree
+    article = $state( null );
+    articles = $state( null );
+
+    breeder = $state( null );
+    breeders = $state( null );
+
+    district = $state( null );
+    districts = $state( null );
+
+    pair = $state( null );
+    pairs = $state( null );
+
+    result = $state( null );
+    results = $state( null );
+}
 
 
 
+const store = new Store()
+
+
+export default store;
+export const page = store.page;
+export const data = store.data;

@@ -169,8 +169,10 @@
 	    stroke:none;
 	    fill:black;
 		text-anchor:middle;
+	    cursor:default;
     }
     text:hover {
 	    fill:red;
     }
+
 </style>

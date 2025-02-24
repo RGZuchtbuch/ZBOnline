@@ -1,16 +1,13 @@
 <script>
-	import { page } from '$app/state';
-	import api from '$lib/js/api.js';
-	import { app } from '$lib/js/store.svelte.js';
-	import {onMount} from 'svelte';
+	import { setContext} from 'svelte';
 
-	let { children } = $props();
+	let { children, data } = $props();
 
-	onMount( async () => {
-		const response = await api.district.get( page.params.districtId );
-		app.district = response.district;
-	} );
+	const district = $state( data.district );
 
+	setContext( 'district', district );
 </script>
+
+
 
 {@render children()}

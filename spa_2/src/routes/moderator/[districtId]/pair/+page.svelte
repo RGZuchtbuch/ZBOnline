@@ -1,6 +1,6 @@
 <script>
 	import { page } from '$app/state';
-	import { app } from '$lib/js/store.svelte.js';
+	import { store } from '$lib/js/store.svelte.js';
 	import District from '$lib/cmp/moderator/District.svelte';
 	import Pairs from '$lib/cmp/moderator/district/Pairs.svelte';
 

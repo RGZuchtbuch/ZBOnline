@@ -1,24 +1,26 @@
 <script>
-    import { page } from '$app/state';
-    import { app } from '$lib/js/store.svelte.js';
-    import DistrictTree from '$lib/cmp/moderator/DistrictTree.svelte';
+	import { getContext } from 'svelte';
+    import ModeratorDistricts from '$lib/cmp/moderator/Districts.svelte';
+	import {goto} from '$app/navigation';
 
-    const { data } = $props();
-	let moderatables = [];
-    const path = page.url.pathname;
+	let districts = getContext( 'districts' );
+	let page      = getContext( 'page' );
 
-    app.title = 'Obmann';
-    app.menu.trail = [
-        { name:'Start',    href:'/' },
-        { name:'Obmann',    href:path },
-    ];
-    app.menu.options = [];
+    page.title = 'Obmann';
+    page.menu = {
+		trail : [
+			{ name:'Start',    href:'/' },
+			{ name:'Obmann',   href:'/moderator' },
+		],
+	    options : [],
+	};
 
-    console.log( 'Moderator page', path );
-
+	if( districts.length === 1 ) {
+		goto( `/moderator/${districts[0].id}`); // if only one option go there
+	}
 </script>
 
-<DistrictTree root={data.districts.root}/>
+<ModeratorDistricts districts={districts}/>
 
 
 

@@ -1,6 +1,6 @@
 <script>
 	import { page } from '$app/state';
-	import { app } from '$lib/js/store.svelte.js';
+	import { store } from '$lib/js/store.svelte.js';
 	import District from '$lib/cmp/moderator/District.svelte';
 	import Pair from '$lib/cmp/pair/Pair.svelte';
 
@@ -11,6 +11,8 @@
 	let pair     = $state( data.pair );
 
 	const path = page.url.pathname;
+
+	console.log( 'D', data );
 
     app.title = `Stämme und Paare für ${data.district.name}`;
 	app.menu.trail = [

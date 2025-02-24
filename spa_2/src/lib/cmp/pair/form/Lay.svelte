@@ -5,13 +5,13 @@
 	import Form, { DateInput, NumberInput, TextInput, validator } from '../../form/Form.svelte';
 //	import Form from '$lib/form/form/Profile.svelte';
 
-	let { lay=$bindable(), pair=$bindable(), standard } = $props();
+	let { pair=$bindable(), standard } = $props();
 
 	let days = $state( null );
 	let result = $state( null );
 
-	if( lay === null ) { // only layers !
-		lay = { start:null, end:null, dames:null, eggs:null, weight:null };
+	if( pair.lay === null ) { // only layers !
+		pair.lay = { start:null, end:null, dames:null, eggs:null, weight:null };
 	}
 
 	const validate = {

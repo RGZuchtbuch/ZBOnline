@@ -2,7 +2,7 @@
     import { onMount } from 'svelte';
     import { goto } from '$app/navigation';
 
-    import { app } from '$lib/js/store.svelte.js';
+    import { store } from '$lib/js/store.svelte.js';
     import { txt } from '$lib/js/toolbox.js';
     import Form, { validator, CheckBox, DateInput, EmailInput, NumberInput, PasswordInput, RangeInput, RingInput, Status, TextInput } from '$lib/cmp/form/Form.svelte';
     import Submit from '$lib/cmp/form/Submit.svelte';

@@ -53,6 +53,9 @@
         body {
             @apply bg-white text-black;
         }
+        .screen-scroll-y { /* only scroll on screen, for content section */
+            @apply h-full min-h-0 overflow-y-scroll;
+        }
     }
 
     @media print {

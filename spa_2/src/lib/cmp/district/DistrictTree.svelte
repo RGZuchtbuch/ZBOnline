@@ -1,29 +1,18 @@
 <script>
-	import { page } from '$app/state';
-	import { app } from '$lib/js/store.svelte.js';
+	//import { store } from '$lib/js/store.svelte.js';
 
 	import api from '$lib/js/api.js';
-	import { email_icon, link_icon } from '$lib/cmp/snippets.svelte';
+	import { email_icon, link_icon } from '$lib/cmp/icons.svelte';
+	import { name } from '$lib/cmp/snippets.svelte';
 
 	let { root } = $props();
-	let district = $state( null ); // root, should be bdrg
-
-	// api.district.get( { rootId:1} ).then( ( response ) => {
-	// 	console.log( 'LVs', response.district )
-	// 	district = response.district;
-	// } );
-
 </script>
 
 <h3>
 	Verband und Zuchtbuchbmann
 </h3>
 
-{#snippet name( moderator )}
-	{#if moderator}
-		{moderator.firstname} {moderator.infix} {moderator.lastname}
-	{/if}
-{/snippet}
+
 
 {#snippet row( district, level )}
 	<tr>

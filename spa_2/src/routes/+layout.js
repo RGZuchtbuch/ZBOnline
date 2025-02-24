@@ -1,22 +1,21 @@
-export const ssr = false;
-
 import api from '$lib/js/api.js';
-import { app } from '$lib/js/store.svelte.js';
 
-export async function load ({ fetch, params }) {
-	const standard_promise = getStandard();
-	const districts_promise = getDistricts();
+export const ssr = false; // need this once for spa only in sveltekit
 
-	const responses = await Promise.all( [ districts_promise, standard_promise ] )
 
-	//app.districts = responses[0]; // sideeffect, moved to layout.svelte
-	//app.standard = responses[1];
-	return { districts:responses[0], standard:responses[1] };
-}
+export async function load( { params } ) {
+	const standard_promise = getStandardPromise();
+	const fed_promise = getFederationPromise();
 
-// get promise
+	const responses = await Promise.all([ fed_promise, standard_promise ])
 
-async function getStandard() {
+	return { federation:responses[0], standard:responses[1] }; // no return as all in stored state
+};
+
+// helpers
+
+
+async function getStandardPromise() {
 	const response = await api.standard.get();
 	if( response ) {
 		const standard = structuredStandardTree(response.standard); // { root, sections, breed, colors }
@@ -42,25 +41,7 @@ function getRootSections( standard ) {
 	return sections;
 }
 
-async function getDistricts() {
-	const response = await api.district.get( { rootId:1 } );
-	if( response ) {
-		return structuredDistrictTree( response.district ); // { root, districts by id }
-	}
-	return null;
-}
-
-
-
 // structuring
-
-function structuredDistrictTree( root ) {
-	const districts = {};
-	districts.root = root;
-	addDistrict( root, districts );
-	return districts;
-}
-
 function structuredStandardTree( standard ) {
 	standard.sections = {};
 	standard.breeds = {};
@@ -84,20 +65,33 @@ function addSection( section, standard ) { // recursive for sections
 	}
 }
 
+function addBreeds( section, breeds ) { // for rootSections
+	for( const breed of section.breeds ) { // add these
+		breeds.push( breed );
+	}
+	for( const child of section.children ) { // add children's
+		addBreeds( child, breeds );
+	}
+}
+
+
+
+async function getFederationPromise() {
+	const response = await api.district.get( { rootId:1 } );
+	if( response ) {
+		let federation = {
+			root : response.district,
+			districts: [],
+		};
+		addDistrict( response.district, federation.districts );
+		return federation;
+	}
+	return null;
+}
+
 function addDistrict( district, districts ) { // recursive for sections
 	districts[ district.id ] = district;
 	for( const child of district.children ) {
 		addDistrict( child, districts );
 	}
 }
-
-function addBreeds( section, breeds ) {
-	for( const breed of section.breeds ) {
-		breeds.push( breed );
-	}
-	for( const child of section.children ) {
-		addBreeds( child, breeds );
-	}
-}
-
-

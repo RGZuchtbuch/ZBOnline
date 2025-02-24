@@ -1,20 +1,20 @@
 <script>
-	import { page } from '$app/state';
-	import { fade, fly, slide } from 'svelte/transition';
-	import { app } from '$lib/js/store.svelte.js';
-	import api from '$lib/js/api.js';
+	import { getContext } from 'svelte';
 	import Article from '$lib/cmp/article/Article.svelte';
 
-	let {data } = $props();
+	let page = getContext( 'page' );
+	let article = getContext( 'article' );
 
-	app.title = null; // to set after loading
-	app.menu.trail = [
-		{name: 'Home', href: '/'},
-		{name: 'Info', href: '/article'}
-	];
-	app.menu.options = [
-	];
+	page.title = article.title; // to set after loading
+	page.menu = {
+		trail: [
+			{ name: 'Home', href: '/' },
+			{ name: 'Info', href: '/article' },
+			{ name: article.title, href: `/article/${article.id}` },
+		],
+		options: [],
+	};
 
 </script>
 
-<Article article={data.article} />
+<Article article={article} />

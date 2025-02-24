@@ -15,15 +15,15 @@
 	<div class='row'><button type='button' onclick={toggle}>o</button><div class='grow'>{section.name}</div><div>{unfold}</div></div>
 
 	{#if unfold}
-		<div class='pl-8' transition:slide={{duration:section.breeds.length*100}}>
-			{#each section.breeds as breed}
-				<Breed {breed} />
+		<div class='pl-8' transition:slide={{duration:section.children.length*20}}>
+			{#each section.children as child}
+				<Section section={child} />
 			{/each}
 		</div>
 
-		<div class='pl-8' transition:slide={{duration:section.children.length*100}}>
-			{#each section.children as child}
-				<Section section={child} />
+		<div class='pl-8' transition:slide={{duration:section.breeds.length*25}}>
+			{#each section.breeds as breed}
+				<Breed {breed} />
 			{/each}
 		</div>
 	{/if}
