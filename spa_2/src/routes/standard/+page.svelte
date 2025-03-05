@@ -2,11 +2,11 @@
 	import { getContext } from 'svelte';
 	import Standard from '$lib/cmp/standard/Standard.svelte';
 
-	let standard = getContext( 'standard' );
-	let page = getContext( 'page' )
+	let { data } = $props();
+	let state = getContext( 'state' )
 
-	page.title = 'Die anerkannten Rassen im BDRG';
-	page.menu = {
+	state.title = 'Die anerkannten Rassen im BDRG';
+	state.menu = {
 		trail : [
 			{ name:'Start',      href:'/' },
 			{ name:'Standard',   href:'/standard' },
@@ -16,5 +16,5 @@
 
 </script>
 
-<Standard standard={standard} />
+<Standard {...data} />
 

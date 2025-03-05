@@ -1,25 +1,26 @@
 <script>
-	import { page } from '$app/state';
-	import { store } from '$lib/js/store.svelte.js';
-	import District from '$lib/cmp/moderator/District.svelte';
+	import {getContext} from 'svelte';
+	import store from '$lib/js/store.svelte.js';
 	import Results from '$lib/cmp/moderator/district/Results.svelte';
 
-    let { data } = $props();
+	let { data } = $props();
 
-	const path = page.url.pathname;
+	let state     = getContext( 'state' );
+	let results  = data.results; //getContext( 'results' );
+	let year     = data.year; // getContext( 'year' );
 
-    app.title = `Leistungen für ${data.district.name}`;
-	app.menu.trail = [
-        { name:'Home',      href:'/' },
-        { name:'Obmann',    href:'/moderator' },
-        { name:data.district.short,   href:'/moderator/'+data.district.id },
-		{ name:'Leistungen', href:path },
-    ];
-	app.menu.options = [];
-
-    console.log( 'Results page', path );
+	state.title = `Leistungen für ${data.district.name}`;
+	state.menu = {
+		trail : [
+			{ name:'Home',      href:'/' },
+			{ name:'Obmann',    href:'/moderator' },
+			{ name: data.district.short,   href:`/moderator/${data.district.id}` },
+			{ name:'Leistungen', href:`/moderator/${data.district.id}/result/${data.year}` },
+		],
+		options : [],
+	};
 
 </script>
 
-<Results {...data} />
+<Results { data } />
 

@@ -24,12 +24,12 @@
 
 </script>
 
-<div class='wrapper {classname}'>
+<div class='wrapper {classname} items-center'>
 	{#if label}
 		<label class='label' for='number'> {label} </label>
 	{/if}
 	<input type='checkbox'
-	       class='input' class:valid
+	       class='input w-4 h-4 mt-2' class:valid
 	       bind:this={element} bind:checked={value}
 		   {disabled} {name} {placeholder} {title}
 	/>

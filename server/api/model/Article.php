@@ -11,14 +11,14 @@ class Article
 		if( $id ) {
 			$args = get_defined_vars();
 			$stmt = Query::prepare('
-				SELECT id, title, html
+				SELECT id, author, title, html, modified 
 				FROM article
 				WHERE id=:id
 			');
 			return Query::select($stmt, $args);
 		} else {
 			$stmt = Query::prepare('
-				SELECT id, title
+				SELECT id, author, title
 				FROM article
 				ORDER BY level
 			');
@@ -26,19 +26,19 @@ class Article
 		}
 	}
 
-    public static function new( string $title, string $html, $modifierId ) : ? int {
+    public static function new( string $author, string $title, string $html, $modifierId ) : ? int {
         $args = get_defined_vars();
         $stmt = Query::prepare( '
-            INSERT INTO article ( title, `html`, modifierId )
-            VALUES (:title, :html, :modifierId )
+            INSERT INTO article ( author, title, `html`, modifierId )
+            VALUES (:author, :title, :html, :modifierId )
         ' );
         return Query::insert( $stmt, $args ); // returns id
     }
-    public static function set( int $id,  string $title, string $html, $modifierId ) : bool {
+    public static function set( int $id, string $author, string $title, string $html, $modifierId ) : bool {
 		$args = get_defined_vars();
         $stmt = Query::prepare( '
             UPDATE article
-            SET title=:title, html=:html, modifierId=:modifierId
+            SET author=:author, title=:title, html=:html, modifierId=:modifierId
             WHERE id=:id
         ' );
         return Query::update( $stmt, $args );

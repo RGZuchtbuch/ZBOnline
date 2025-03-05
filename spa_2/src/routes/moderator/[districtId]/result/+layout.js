@@ -2,10 +2,11 @@
 import api from '$lib/js/api.js';
 //import { app } from '$lib/js/store.svelte.js';
 
-export async function load( { params } ) {
-		const response = await api.result.get( { districtId:params.districtId, year:2024 } );
-		return { results:response.results };
-};
+export async function load( { params, url } ) {
+	const year      = +url.searchParams.get( 'year' ) || new Date().getFullYear()-1;
+	const response = await api.result.get( { districtId:params.districtId, year:year } );
+	return { results:response.results, year:year };
+}
 
 
 // function structure( resultList ) {

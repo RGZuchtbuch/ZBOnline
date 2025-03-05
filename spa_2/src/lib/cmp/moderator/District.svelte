@@ -4,13 +4,8 @@
 </script>
 
 {#if district }
-	<div>District {district.name}</div>
-	<div>Room for quick links</div>
-
-	<div>Verbands daten</div>
-
-	<div>Stämme</div>
-
-	<div>Leistungen</div>
+	<p>
+		Help, statistics, leistungen
+	</p>
 
 {/if}

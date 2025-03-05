@@ -160,7 +160,7 @@ export default function validator( value ) {
 			return worker;
 		},
 		password : () => {
-			console.log('Pwd check', value );
+			console.log('Pwd check' );
 
 			valid &&= isPassword( value );
 			return worker;

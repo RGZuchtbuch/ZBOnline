@@ -3,11 +3,12 @@
 
 	import Articles from '$lib/cmp/article/Articles.svelte';
 
-	let page     = getContext( 'page' );
-	let articles = getContext( 'articles' );
+	let { data } = $props();
 
-	page.title = 'Info zum BDRG Zuchtbuch';
-	page.menu = {
+	let state    = getContext( 'state' );
+
+	state.title = 'Info zum BDRG Zuchtbuch';
+	state.menu = {
 		trail : [
 			{ name:'Start',  href:'/' },
 			{ name:'Info',   href:'/article' },
@@ -17,4 +18,4 @@
 
 </script>
 
-<Articles articles={articles} />
+<Articles {...data} />

@@ -5,13 +5,24 @@
 </script>
 
 
-<p>
-	Das Zuchtbuch ...
-</p>
-<hr>
-<h4>Artikel im Zuchtbuch</h4>
-<ul in:slide>
-	{#each articles as article}
-		<li>&#8231; <a href={`/article/${article.id}`}>{article.title}</a></li>
+<h2 class='header'>Alle Artikel zum Zuchtbuch</h2>
+<ol in:slide>
+	{#each articles as article, i}
+		<li>
+			<a class='grow' href={`/article/${article.id}`}>
+				<div class='text-right '>{i+1}.</div>
+				<div class='grow'>{article.title}</div>
+				<div class='w-32'>{article.author}</div>
+			</a>
+		</li>
 	{/each}
-</ul>
+</ol>
+
+<style>
+	a {
+		@apply flex flex-row border-b p-2 gap-x-2;
+	}
+	ol {
+		@apply mx-16 my-4;
+	}
+</style>

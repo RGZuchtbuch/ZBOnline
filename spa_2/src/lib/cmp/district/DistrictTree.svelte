@@ -9,52 +9,69 @@
 </script>
 
 <h3>
-	Verband und Zuchtbuchbmann
+	Verbände im BDRG Zuchtbuch
 </h3>
 
 
 
 {#snippet row( district, level )}
-	<tr>
-		{#each { length:level }, n }
-			<td>.</td>
-		{/each}
-		<td>→</td>
-		<td colspan={5-level}>{district.name}</td>
-		<td>{@render name( district.moderator )}</td>
-		<td class='print:hidden'>
-			<a href='/'>{@render email_icon()}</a>
-		</td>
-		<td class='print:hidden'>
-			<a href='/'>{@render link_icon()}</a>
-		</td>
-	</tr>
-	{#each district.children as child}
-		{@render row( child, level+1 ) }
-	{/each}
+	<li>
+		<div class='flex flex-row grow py-2 border-b'>
+			<div class='district'>{district.name}</div>
+			<div class='moderator'>{@render name( district.moderator )}</div>
+			<div class='email print:hidden'>
+				<a href={`/district/${district.id}/email`}>L</a>
+			</div>
+			<div class='link print:hidden'>
+				<a href={district.url}>M</a>
+			</div>
+		</div>
+		{#if district.children}
+			<ul>
+				{#each district.children as child}
+					{@render row( child, level+1 ) }
+				{/each}
+			</ul>
+		{/if}
+	</li>
 {/snippet}
 
 {#if root}
-	<table class='mx-8 table-auto'>
-		<thead>
-		<tr><th colspan='4'>Verbände </th></tr>
-		</thead>
+	<section class=''>
+		<div class='header'>
+			<div class='district'>Verbände </div>
+			<div class='moderator'>Obmann</div>
+			<div class='email' title='Email schicken'>{@render email_icon()}</div>
+			<div class='link' title='Website besuchen'>{@render link_icon()}</div>
+		</div>
 
-		<tbody>
+		<ul>
 			{@render row( root, 0 )}
-		</tbody>
-	</table>
+		</ul>
+	</section>
 {/if}
 
 <style>
-    table, th, td {
-        @apply border border-gray-600;
+    section {
+        @apply flex flex-col m-4 border border-gray-600 rounded;
     }
-    th, td {
-        @apply p-2 whitespace-nowrap;
+    li {
+        @apply pl-4 whitespace-nowrap;
     }
-    a:hover {
-	    @apply bg-inherit text-rose-800;
+    .header {
+        @apply flex flex-row bg-teal-200 p-2;
+    }
+    .district {
+	    @apply grow;
+    }
+    .moderator {
+	    @apply w-64;
+    }
+    .email {
+        @apply w-12;
+    }
+    .link {
+        @apply w-12;
     }
 
 </style>

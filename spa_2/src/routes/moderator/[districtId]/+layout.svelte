@@ -4,7 +4,6 @@
 	let { children, data } = $props();
 
 	const district = $state( data.district );
-
 	setContext( 'district', district );
 </script>
 

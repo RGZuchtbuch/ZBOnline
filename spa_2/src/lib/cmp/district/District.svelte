@@ -1,19 +1,23 @@
 <script>
-	import {page} from '$app/stores';
-	import Layout from '$lib/cmp/Page.svelte';
-	import Breeders from '../breeder/Breeders.svelte';
+	import { fade, fly, slide } from 'svelte/transition';
+
+	import BDRGMap from '$lib/cmp/district/BDRGMap.svelte';
+	import DistrictTree from '$lib/cmp/district/DistrictTree.svelte';
+
+	let { federation } = $props();
+
+	$inspect( 'F', federation )
 
 </script>
 
-	<div class='content '>
-		<p>TODO, show statistics? or directly jump to breeders</p>
+{#key federation}
 
-		Eingeben der Stammmeldungen für den Züchter
-		<hr>
-		.... <a href={$page.url.pathname+'/zuechter'}>Züchter</a>
-
+	<div class='flex flex-col items-center' in:slide>
+		<BDRGMap width={512} root={federation.root}/>
 	</div>
-
+	<hr>
+	<DistrictTree root={federation.root}/>
+{/key}
 
 <style>
 

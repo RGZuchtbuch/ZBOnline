@@ -8,8 +8,9 @@ import store from '$lib/js/store.svelte.js';
 
 let cache = {}; // empty at start
 
+// retrieve token from sessionstorage, like for when refreshed
 let authenticationToken = browser && window.sessionStorage.getItem( 'token' ); // encoded
-
+if( authenticationToken ) store.user = tokenToUser( authenticationToken );
 
 const API_BASE = browser && (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:80' : 'https://rgzuchtbuch.de';
 
@@ -78,6 +79,22 @@ const api = { // api
 				return await get( `/api/2/pair`, arg ); // arg as query
 			}
 		},
+		put: async ( id, pair ) => {
+			return await put( `/api/2/pair/${id}`, pair );
+		},
+		post: async ( pair ) => {
+			return await post( `/api/2/pair`, pair );
+		},
+		del: async ( id ) => {
+			return await del( `/api/2/pair/${id}` );
+		},
+	},
+
+	report : {
+		get: async ( query ) => {
+			console.log( 'Report', query );
+			return await get( '/api/2/report', query )
+		},
 	},
 
 	result : {
@@ -110,20 +127,26 @@ const api = { // api
 	},
 	user : {
 		login: async ( email, password ) => {
+			authenticationToken = null;
+			window.sessionStorage.setItem( 'token', authenticationToken );
 			const response = await post( '/api/2/user/login', { email:email, password:password } );
 			if( response ) {
-				window.sessionStorage.setItem( 'token', response.token );
-				app.user = tokenToUser( response.token );
-				return app.user;
+				authenticationToken = response.token;
+				window.sessionStorage.setItem( 'token', authenticationToken );
+				store.user = tokenToUser( response.token );
+				console.log( 'Store', store );
+				if( store.user ) {
+					return true;
+				}
 			}
 			console.log( 'Login Oops')
-			return null; // no user
+			return false; // no user
 		},
 		forgot: async ( email ) => {
 			return await post( '/api/2/user/forgot', { email:email } );
 		},
 		logout: async ( email ) => {
-			app.user = null;
+			store.user = null;
 			window.sessionStorage.setItem( 'token', null ); // forget token
 			return true; // always successfull
 		},

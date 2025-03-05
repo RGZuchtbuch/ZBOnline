@@ -6,29 +6,32 @@
 	console.log( districts.length );
 </script>
 
-<h3>
-	Verbände zum Verwalten !
-</h3>
-
-{#if districts}
-	<ul class='mx-8'>
-		{#each districts as district, i}
-			<li>
-				<a href={`/moderator/${district.id}`}>{district.name}</a>
-			</li>
-		{/each}
-	</ul>
-{/if}
+<section>
+	<h3 class='header'>Verbände zum Verwalten</h3>
+	{#if districts}
+		<ol in:slide>
+			{#each districts as district, i}
+				<li class='flex flex-row items-center'>
+					<a href={`/moderator/${district.id}`} title='Wählen'>
+						<div class='w-16 text-right '>{i+1}.</div>
+						<div>{district.name}</div>
+					</a>
+				</li>
+			{/each}
+		</ol>
+	{/if}
+</section>
 
 <style>
-    table, th, td {
-        @apply border border-gray-600;
+    section {
+        @apply border m-4;
     }
-    th, td {
-        @apply p-2 whitespace-nowrap;
+    .header {
+        @apply w-full bg-teal-200 rounded-t text-center
     }
-    a:hover {
-	    @apply bg-inherit text-rose-800;
+
+    a {
+        @apply flex flex-row border-b p-2 gap-x-2;
     }
 
 </style>

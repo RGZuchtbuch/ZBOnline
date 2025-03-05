@@ -1,26 +1,17 @@
 <script>
-	import { setContext } from 'svelte';
-	import { page } from '$app/state';
-	import { store } from '$lib/js/store.svelte.js';
-	import api from '$lib/js/api.js';
+	import {getContext, setContext} from 'svelte';
 	import {txt } from '$lib/js/toolbox.js';
 	import Pair from '$lib/cmp/pair/Pair.svelte';
-	import {onMount} from 'svelte';
 
-	let { data } = $props();
-
-	let standard = $state( data.standard ); // make reactive
-	let district = $state( data.district );
-	let breeder  = $state( data.breeder );
-	let pair     = $state( data.pair );
-
-	setContext( 'pair', pair );
-
-
+	let breeder  = getContext( 'breeder' );
+	let district = getContext( 'district' );
+	let page     = getContext( 'page' );
+	let pair     = getContext( 'pair' );
+	let standard = getContext( 'standard' );
 
 	if( district && breeder && pair ) {
-		app.title = `Stamm ${pair.year}.${pair.name} von Züchter ${txt(breeder.firstname)} ${ txt(breeder.infix) } ${ txt(breeder.lastname) }`;
-		app.menu.trail = [
+		page.title = `Stamm ${pair.year}.${pair.name} von Züchter ${txt(breeder.firstname)} ${ txt(breeder.infix) } ${ txt(breeder.lastname) }`;
+		page.menu.trail = [
 			{ name:'Home',      href:'/' },
 			{ name:'Obmann',    href:'/moderator' },
 			{ name:'Verband',   href:`/moderator/${district.id}` },
@@ -28,7 +19,7 @@
 			{ name:'Stämme',    href:`/moderator/${district.id}/breeder/${breeder.id}/pair` },
 			{ name:''+pair.year%100+'.'+pair.name, href:`/moderator/${district.id}/breeder/${breeder.id}/pair/${pair.id}` },
 		];
-		app.menu.options = [
+		page.menu.options = [
 		]
 
 	}
@@ -36,4 +27,4 @@
 </script>
 
 
-<Pair {pair} {standard} />
+<Pair {pair} />

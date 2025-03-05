@@ -1,26 +1,29 @@
 <script>
+	import { getContext } from 'svelte';
 	import { page } from '$app/state';
-	import { store } from '$lib/js/store.svelte.js';
+	import store from '$lib/js/store.svelte.js';
 	import { txt } from '$lib/js/toolbox.js';
 
 	let { data } = $props();
+	let state = getContext( 'state' );
 
-	if( data.breeder && data.district) {
-		app.title = `Stämme von Züchter d  ${data.breeder.firstname} ${txt( data.breeder.infix )} ${data.breeder.lastname}`;
-		app.menu.trail = [
+
+	state.title = `Stämme von Züchter d  ${data.breeder.firstname} ${txt( data.breeder.infix )} ${data.breeder.lastname}`;
+	state.menu = {
+		trail : [
 			{ name:'Home',              href:'/' },
 			{ name:'Obmann',            href:'/moderator' },
-			{ name:app.district.short,  href:'/moderator/'+data.district.id },
+			{ name: data.district.short,  href:'/moderator/'+data.district.id },
 			{ name:'Zuechter',          href:'/moderator/'+data.district.id+'/breeder' },
 			{ name:`${data.breeder.firstname.charAt(0)}.${data.breeder.lastname.charAt(0)}`, href:'/moderator/'+data.district.id+'/breeder/'+data.breeder.id },
-			{ name:'Stamm',             href:page.url.pathname },
-		];
-		app.menu.options = []
+			{ name:'Stamm',             href:data.url.pathname },
+		],
+		options : [],
+	};
 
-	}
 
 	console.log('Pairs page');
-
+	// TODO
 </script>
 
 {#if data.district && data.breeder && data.pairs}

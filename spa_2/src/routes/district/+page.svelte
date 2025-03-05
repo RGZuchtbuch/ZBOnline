@@ -1,15 +1,12 @@
 <script>
 	import { getContext } from 'svelte';
-	import { fade, fly, slide } from 'svelte/transition';
+	import District from '$lib/cmp/district/District.svelte';
 
-	import BDRGMap from '$lib/cmp/district/BDRGMap.svelte';
-	import DistrictTree from '$lib/cmp/district/DistrictTree.svelte';
+	let { data } = $props();
+	let state = getContext( 'state' )
 
-	let federation = getContext( 'federation' );
-	let page = getContext( 'page' )
-
-	page.title = 'Die BDRG Verbände im Zuchtbuch';
-	page.menu = {
+	state.title = 'Die BDRG Verbände im Zuchtbuch';
+	state.menu = {
 		trail : [
 			{ name:'Start',      href:'/' },
 			{ name:'Verbände',   href:'/district' },
@@ -20,12 +17,6 @@
 
 </script>
 
+<District {...data} />
 
 
-{#key page.title}
-	<div class='flex flex-col items-center' in:slide>
-		<BDRGMap width={384} root={federation.root}/>
-		<hr>
-		<DistrictTree root={federation.root}/>
-	</div>
-{/key}

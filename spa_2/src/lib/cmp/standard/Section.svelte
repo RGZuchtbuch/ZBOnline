@@ -12,26 +12,33 @@
 </script>
 
 {#if section}
-	<div class='row'><button type='button' onclick={toggle}>o</button><div class='grow'>{section.name}</div><div>{unfold}</div></div>
+	<li class='row'>
+		<button class='inline' type='button' title='Öffnen' onclick={toggle}>{unfold?'▽':'▷'} </button>
+		<div class='grow font-bold'>{section.name}</div><div></div>
+	</li>
 
 	{#if unfold}
-		<div class='pl-8' transition:slide={{duration:section.children.length*20}}>
+		<ul class='pl-8' transition:slide={{duration:500}}>
 			{#each section.children as child}
 				<Section section={child} />
 			{/each}
-		</div>
+		</ul>
 
-		<div class='pl-8' transition:slide={{duration:section.breeds.length*25}}>
+		<ul class='pl-8' transition:slide={{duration:500}}>
 			{#each section.breeds as breed}
 				<Breed {breed} />
 			{/each}
-		</div>
+		</ul>
 	{/if}
 {/if}
 
 <style>
-    div.row {
-        @apply flex flex-row border border-y-amber-400;
+    li {
+        @apply flex flex-row p-2 gap-x-1;
+    }
+
+    button {
+
     }
 
 

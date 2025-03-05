@@ -1,19 +1,15 @@
 <script>
-    import { page } from '$lib/js/store.svelte.js';
+    import { getContext } from 'svelte';
+
+    let state = getContext( 'state' )
 
     page.title = 'Fehler 404, nicht gefunden';
-    page.menu.trail = [
-        { name:'Home',      href:'/' },
-    ];
-    page.menu.options = [
-        { name:'Info',       href:'/article' },
-        { name:'Verbände',   href:'/district/map' },
-        { name:'Standard',   href:'/standard' },
-        { name:'Leistungen', href:'/result' },
-//			{ name:'Züchter',    href:'/breeder' },
-        { name:'Obmann',     href:'/moderator/district' },
-        { name:'Admin',      href:'/admin' },
-    ];
+    page.menu = {
+        trail: [
+            {name: 'Home', href: '/'},
+        ],
+        options: [],
+    }
 
 </script>
 

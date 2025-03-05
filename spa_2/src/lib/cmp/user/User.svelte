@@ -2,7 +2,7 @@
     import { onMount } from 'svelte';
     import { goto } from '$app/navigation';
 
-    import { store } from '$lib/js/store.svelte.js';
+    import store from '$lib/js/store.svelte.js';
     import { txt } from '$lib/js/toolbox.js';
     import Form, { validator, CheckBox, DateInput, EmailInput, NumberInput, PasswordInput, RangeInput, RingInput, Status, TextInput } from '$lib/cmp/form/Form.svelte';
     import Submit from '$lib/cmp/form/Submit.svelte';
@@ -11,7 +11,7 @@
 
     const State = { LOGIN:10, LOGGEDIN:11, FAILED:12, FORGOT:20, FORGOTTEN:21, LOGOUT:30, LOGGEDOUT:31}
 
-    let state = $state( app.user ? State.LOGOUT : State.LOGIN );
+    let state = $state( store.user ? State.LOGOUT : State.LOGIN );
 
     let email    = $state( null );
     let password = $state( null );
@@ -30,12 +30,15 @@
     }
 
     async function onLogin( event ) {
-        console.log('Logging in', email, app.user );
-        await api.user.login( email, password );
-        if( app.user ) {
+        console.log('Logging in', email );
+        let success = await api.user.login( email, password );
+        console.log('Ok', success, store.user );
+        if( success ) {
+            console.log( 'User in' )
             state = State.LOGGEDIN;
             await goto( '/' ); // home for now
         } else {
+            console.log( 'User failed' )
             state = State.FAILED;
             password = null;
             disabled = false;// TODO
@@ -88,7 +91,7 @@
     {:else if state === State.LOGGEDIN }
         <h3>Wunderbar, du bekommst eine email mit Resetlink :)</h3>
     {:else if state === State.LOGOUT }
-        <div>Profil {app.user.firstname} {app.user.infix} {app.user.lastname}</div>
+        <div>Profil {store.user.firstname} {store.user.infix} {store.user.lastname}</div>
         <div>Abmelden vom RGZuchtbuch</div>
         <Form onsubmit={onLogout} >
             <Submit class='w-64' values={{changed:'Bin dran', invalid:'Fehler', valid:'Abmelden'}} />

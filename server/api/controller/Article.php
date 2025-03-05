@@ -14,11 +14,11 @@ use Slim\Exception\HttpUnauthorizedException;
 class Article
 {
 	//added the all option, took out of get
-	public static function all( Request $request, Response $response, array $args ) : Response {
-		$articles = model\Article::get();
-		$response->getBody()->write( json_encode( [ 'articles' => $articles ], JSON_UNESCAPED_SLASHES ) );
-		return $response;
-	}
+//	public static function all( Request $request, Response $response, array $args ) : Response {
+//		$articles = model\Article::get();
+//		$response->getBody()->write( json_encode( [ 'articles' => $articles ], JSON_UNESCAPED_SLASHES ) );
+//		return $response;
+//	}
 
 	public static function get( Request $request, Response $response, array $args ) : Response {
 		$id = $args[ 'id' ] ?? null;
@@ -31,12 +31,8 @@ class Article
 				}
 				throw new HttpNotFoundException($request, 'Article not found');
 			}
-			throw new HttpBadRequestException( $request, 'Bad id' );
-		} else { // list
-			$articles = model\Article::get();
-			$response->getBody()->write( json_encode( [ 'articles' => $articles ], JSON_UNESCAPED_SLASHES ) );
-			return $response;
 		}
+		throw new HttpBadRequestException( $request, 'Missing or bad article id' );
 	}
 
 	public static function post( Request $request, Response $response, array $args ) : Response {
@@ -44,7 +40,7 @@ class Article
 		if( $requester->isAdmin() ) {
 			$body = $request->getParsedBody();
 			if( $body ) {
-				$id = model\Article::new( $body['title'], $body['html'], $requester->getId() );
+				$id = model\Article::new( $body['author'], $body['title'], $body['html'], $requester->getId() );
 				if( $id ) {
 					$response->getBody()->write(json_encode(['id' => $id], JSON_UNESCAPED_SLASHES));
 					return $response;
@@ -62,7 +58,7 @@ class Article
 			$id = $args[ 'id' ] ?? null;
 			$body = $request->getParsedBody();
 			if( is_numeric( $id ) && $body ) {
-				$updated = model\Article::set( $id, $body['title'], $body['html'], $requester->getId() );
+				$updated = model\Article::set( $id, $body['author'], $body['title'], $body['html'], $requester->getId() );
 				if( $updated ) {
 					$response->getBody()->write(json_encode(['id' => $id], JSON_UNESCAPED_SLASHES));
 					return $response;
@@ -111,3 +107,9 @@ class Article
 		}
 	}
 }
+
+//else { // list
+//	$articles = model\Article::get();
+//	$response->getBody()->write( json_encode( [ 'articles' => $articles ], JSON_UNESCAPED_SLASHES ) );
+//	return $response;
+//}

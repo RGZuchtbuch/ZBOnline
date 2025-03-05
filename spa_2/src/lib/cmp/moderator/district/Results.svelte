@@ -1,21 +1,44 @@
 <script>
-	import { page } from '$app/state';
+	import { goto } from '$app/navigation';
 	import { dec } from '$lib/js/toolbox.js';
-	let { results } = $props();
+	let { data } = $props();
+
+	let years = [];
+	let nextYear = +( new Date().getFullYear() )+1;
+	for( let year=nextYear; year>=1980; year-- ) {
+		years.push( year );
+	}
 
 
-	console.log( 'Br', results);
+	function onYearChange( event ) {
+		const year = +event.target.value;
+		data.url.searchParams.set( 'year', year );
+		goto( data.url );
+		//goto( `./${year}`);
+	}
+
+	// $effect( () => {
+	// 	goto( `./${year}`);
+	// })
+
 </script>
 
 
-<h3 class=''>Eingegebene Leistungen</h3>
+<h3 class=''>Eingegebene Leistungen im {data.district.short}
+	<select class='border border-teal-600 border-1 bg-inherit' value={data.year} onchange={onYearChange}>
+		{#each years as y}
+			<option value={y}>{y}</option>
+		{/each}
+	</select>
+</h3>
+
 <p class='info'>
-	Leistungen können als gesamt Leistung für einemn Verband eingegeben werden, oder als einzelne Meldungen beim Züchter.<br>
+	Leistungen können als gesamt Leistung für einem Verband eingegeben werden, oder als einzelne Meldungen beim Züchter.<br>
 	Hier eine Liste von alle Eingaben.
 </p>
 
 <div class='flex flex-col'>
-	{#each results.sections as section}
+	{#each data.results.sections as section}
 		<div class='flex flex-row section items-end'>
 			<span class='grow pl-2'>{section.name}</span>
 			<span class='flex flex-col'>
@@ -54,7 +77,7 @@
 				{/if}
 			</div>
 			{#each breed.colors as color}
-				<div class='flex flex-row pl-8'>
+				<div class='flex flex-row pl-8' class:pair={color.result.pairId !== null}>
 					<span class='grow italic'>{color.name}</span>
 					{@render result( color.result )}
 				</div>
@@ -64,6 +87,7 @@
 </div>
 
 {#snippet result( result )}
+	<span class='w-12 number'>{ dec( result.year ) }</span>
 	<span class='w-12 number'>{ dec( result.breeders ) }</span>
 	<span class='w-12 number'>{ dec( result.pairs ) }</span>
 	<span class='w-2'></span>
@@ -77,7 +101,10 @@
 	<span class='w-10 number'>{ result.show.count}</span>
 	<span class='w-12 number'>{ dec( result.show.score, 1 ) }</span>
 	{#if result.breeder }
-		<span class='w-10 text'>{ result.breeder.firstName.substring(0,1)}.{ result.breeder.lastName.substring(0,1)}</span>
+		<a class='w-10 text' href={`/moderator/${result.districtId}/breeder/${result.breeder.id}/pair/${result.pairId}`}>
+
+			{ result.breeder.firstName.substring(0,1)}.{ result.breeder.lastName.substring(0,1)}
+		</a>
 	{:else}
 		<span class='w-10'></span>
 	{/if}
@@ -86,7 +113,7 @@
 
 <style>
 	h3 {
-		@apply text-center text-xl font-bold;
+		@apply text-center text-xl bg-teal-200 font-bold sticky top-0;
 	}
 	p.info {
 		@apply px-8 py-4 text-center;
@@ -100,8 +127,8 @@
     .text {
         @apply px-1 text-center;
     }
-	.year {
-		@apply w-full text-center text-xl font-bold border-y bg-lime-200;
+	.pair {
+		@apply bg-teal-50;
 	}
 
 	span {

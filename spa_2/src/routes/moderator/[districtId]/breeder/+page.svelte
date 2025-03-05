@@ -1,31 +1,25 @@
 <script>
-	import { page } from '$app/state';
-	import { store } from '$lib/js/store.svelte.js';
-	import District from '$lib/cmp/moderator/District.svelte';
-	import Breeders from '$lib/cmp/moderator/Breeders.svelte';
+	import {getContext} from 'svelte';
+	import Breeders from '$lib/cmp/moderator/district/Breeders.svelte';
 
 	let { data } = $props();
+	let state = getContext( 'state' );
 
-	const path = page.url.pathname;
 
-	$effect( () => {
-		if( app.district ) {
-			app.title = `Stämme und Paare für ${data.district.name}`;
-			app.menu.trail = [
-				{name: 'Home', href: '/'},
-				{name: 'Obmann', href: '/moderator'},
-				{name: data.district.short, href: '/moderator/' + data.district.id},
-				{name: 'Stämme', href: path},
-			];
-			app.menu.options = [];
-		}
-	} );
-    console.log( 'Results page', path );
-
+	state.title = `Züchter im ${data.district.short}`;
+	state.menu = {
+		trail: [
+			{name: 'Home', href: '/'},
+			{name: 'Obmann', href: '/moderator'},
+			{name: data.district.short, href: '/moderator/' + data.district.id},
+			{name: 'Züchter', href: data.url.path },
+		],
+		options: [],
+	}
 </script>
 
 {#if data.breeders}
-	<Breeders breeders={data.breeders} />
+	<Breeders {data} />
 {/if}
 
 

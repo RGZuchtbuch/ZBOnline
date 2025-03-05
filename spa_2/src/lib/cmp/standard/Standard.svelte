@@ -5,17 +5,23 @@
 	let { standard } = $props();
 </script>
 
-<h3>
-	Standard, Sparten, Gruppen, Rassen und Farbenschläge
-</h3>
+<section>
+	<h3>Standard, Sparten, Gruppen, Rassen und Farbenschläge</h3>
 
-{#if standard }
-	<div in:slide>
-		<Section section={ standard.root } unfold={true}/>
-	</div>
-{/if}
+	{#if standard }
+		<ul in:slide>
+			<Section section={ standard.root } unfold={true}/>
+		</ul>
+	{/if}
+</section>
 
 <style>
+	section {
+		@apply m-4 border;
+	}
 
+	h3 {
+        @apply w-full bg-teal-200 rounded-t text-center
+	}
 
 </style>

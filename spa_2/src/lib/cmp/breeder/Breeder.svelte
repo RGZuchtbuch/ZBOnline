@@ -1,14 +1,13 @@
 <script>
-	import { page } from '$app/stores';
 	import Pairs from '../pair/Pairs.svelte';
 
-	export let breeder;
-	export let pairs;
+	let { data } = $props();
 
-	console.log( 'BP', breeder, pairs)
+
+	console.log( 'BP', data.breeder, data.pairs)
 </script>
 
 
 <h1>Stämme</h1>
 
-<Pairs {pairs}/>
+<Pairs pairs={data.pairs}/>

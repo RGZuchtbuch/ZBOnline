@@ -4,16 +4,17 @@
 	import {goto} from '$app/navigation';
 
 	let districts = getContext( 'districts' );
-	let page      = getContext( 'page' );
+	let state     = getContext( 'state' );
 
-    page.title = 'Obmann';
-    page.menu = {
+	state.title = 'Obmann';
+	state.menu = {
 		trail : [
 			{ name:'Start',    href:'/' },
 			{ name:'Obmann',   href:'/moderator' },
 		],
 	    options : [],
 	};
+
 
 	if( districts.length === 1 ) {
 		goto( `/moderator/${districts[0].id}`); // if only one option go there

@@ -236,36 +236,34 @@ class Pair
 	}
 
 	public static function filter( Request $request, Response $response, array $args ) : Response {
-		//$requester = new Requester( $request );
+		$requester = new Requester( $request );
 		$query      = $request->getQueryParams();
 		$breederId  = $query[ 'breederId' ] ?? null;
 		$districtId = $query[ 'districtId' ] ?? null;
 		$year       = $query[ 'year' ] ?? null;
 
 		if( is_numeric( $breederId ) && is_numeric( $year ) ) { // for breeders and some year
-			//$pairs = model\Pair::getPairsInYear( $breederId, $year );
-			$pairs = self::toPairs( model\Pair::getPairsInYear( $breederId, $year ) );
-			$response->getBody()->write( json_encode( [ 'pairs'=>$pairs ], JSON_UNESCAPED_SLASHES));
-			return $response;
-		} else if( is_numeric( $districtId ) ) { // for district, TODO should be for a year
-			//if( $requester->isAdmin() || $requester->isModerating( $districtId ) ) { //admin of the moderator or self
-				$pairs = model\District::getPairs( $districtId );
+			$breeder = model\Breeder::get( $breederId );
+			if(
+				( $breeder && $requester->hasId( $breeder['id'] ) ) ||
+				$requester->isModerating( $breeder['districtId'] ) ||
+				$requester->isAdmin()
+			) { //admin of the moderator or self
+				$pairs = model\Pair::forBreederInYear($breederId, $year);
+				$response->getBody()->write(json_encode(['pairs' => $pairs], JSON_UNESCAPED_SLASHES));
+				return $response;
+			}
+			throw new HttpUnauthorizedException( $request, 'Cannot do this' );
+		} elseif( is_numeric( $districtId ) && is_numeric( $year ) ) { // for district in year
+			if(
+				$requester->isModerating( $districtId ) ||
+				$requester->isAdmin()
+			) { //admin of the moderator or self
+				$pairs = model\Pair::forDistrictInYear( $districtId, $year );
 				$response->getBody()->write(json_encode( [ 'pairs' => $pairs ], JSON_UNESCAPED_SLASHES));
 				return $response;
-			//}
-			throw new HttpUnauthorizedException( $request, 'Cannot do this' );
-		} else if( is_numeric( $breederId ) ) { // for breeder, TODO should not be used, only for year ?
-			$breeder = model\Breeder::get($breederId);
-			if( $breeder ) {
-				$districtId = $breeder['districtId'] ?? null;
-				//if ($requester->isAdmin() || $requester->isModerating($districtId) || $requester->hasId($breederId)) { //admin of the moderator or self
-					$pairs = model\Breeder::getPairs($breederId);
-					$response->getBody()->write(json_encode(['pairs' => $pairs], JSON_UNESCAPED_SLASHES));
-					return $response;
-				//}
-				throw new HttpUnauthorizedException($request, 'Cannot do this');
 			}
-			throw new HttpNotFoundException( $request, 'Breeder unknown' );
+			throw new HttpUnauthorizedException( $request, 'Cannot do this' );
 		}
 		throw new HttpBadRequestException( $request, 'Invalid query');
 	}

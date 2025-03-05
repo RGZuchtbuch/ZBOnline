@@ -246,7 +246,7 @@ class Result
 			//print( $raw['id'].PHP_EOL );
 //			unset( $result );
 			$result = [
-				'id'=>$raw['id'], 'group'=>$raw['group'], 'pairId'=>$raw['pairId'],
+				'id'=>$raw['id'], 'districtId'=>$raw['districtId'], 'year'=>$raw['year'], 'group'=>$raw['group'], 'pairId'=>$raw['pairId'],
 				'breeders'=>$raw['breeders'], 'pairs'=>$raw['pairs'],
 				'lay'     =>[ 'dames'=>$raw['layDames'], 'eggs'=>$raw['layEggs'], 'weight'=>$raw['layWeight'] ],
 				'brood'   =>[ 'eggs'=>$raw['broodEggs'], 'fertile'=>$raw['broodFertile'], 'hatched'=>$raw['broodHatched'] ],

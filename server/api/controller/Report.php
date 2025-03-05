@@ -14,7 +14,7 @@ use Slim\Exception\HttpUnauthorizedException;
 class Report
 {
 	// getting one result for bar chart for a district and a year
-	public static function resultFor( Request $request, Response $response, array $args ) : Response // TODO ever used ?
+	public static function forTable( Request $request, Response $response, array $args ) : Response // TODO ever used ?
 	{
 		$json = model\Cache::get( 'Result', $request->getUri()->getPath(), $request->getUri()->getQuery() );
 		if( $json ) { // in cache
@@ -44,7 +44,7 @@ class Report
 	}
 
 	// for trend
-	public static function years( Request $request, Response $response, array $args ) : Response
+	public static function forTrend( Request $request, Response $response, array $args ) : Response
 	{
 		$json = model\Cache::get( 'Result', $request->getUri()->getPath(), $request->getUri()->getQuery() );
 		if( $json ) { // in cache
@@ -60,7 +60,7 @@ class Report
 		$group      = $query[ 'group' ] ?? null;
 
 		if( $districtId && $districtId>0 ) {
-			$years = model\Report::getResultsDistrictYears( $districtId, $sectionId, $breedId, $colorId, $group );
+			$years = model\Report::forTrend( $districtId, $sectionId, $breedId, $colorId, $group );
 			$json = json_encode([ 'years' => $years ], JSON_UNESCAPED_SLASHES);
 			$response->getBody()->write( $json );
 			model\Cache::set( 'Result', $request->getUri()->getPath(), $request->getUri()->getQuery(), $json );
@@ -70,7 +70,7 @@ class Report
 	}
 
 	// for map
-	public static function districts( Request $request, Response $response, array $args ) : Response
+	public static function forMap( Request $request, Response $response, array $args ) : Response
 	{
 		$json = model\Cache::get( 'Result', $request->getUri()->getPath(), $request->getUri()->getQuery() );
 		if( $json ) { // in cache
@@ -86,10 +86,64 @@ class Report
 		$group      = $query[ 'group' ] ?? null;
 
 		if( $year && $year > 0 ) {
-			$districts = model\Report::getResultsYearDistricts( $year, $sectionId, $breedId, $colorId, $group );
+			$districts = model\Report::forMap( $year, $sectionId, $breedId, $colorId, $group );
 			$json = json_encode([ 'districts' => $districts ], JSON_UNESCAPED_SLASHES);
 			$response->getBody()->write( $json );
 			model\Cache::set( 'Result', $request->getUri()->getPath(), $request->getUri()->getQuery(), $json );
+			return $response;
+		}
+		throw  new HttpBadRequestException($request, 'Bad arguments');
+	}
+
+	public static function filter( Request $request, Response $response, array $args ) : Response
+	{
+		$json = model\Cache::get( 'Report', $request->getUri()->getPath(), $request->getUri()->getQuery() );
+		if( $json ) { // in cache
+			$response->getBody()->write( $json );
+			return $response;
+		}
+//		$year       = $args['year'] ?? null;
+
+		$query          = $request->getQueryParams(); // may all be null meaning *
+		$target     = $query[ 'target' ] ?? null;
+		$districtId = $query[ 'district' ] ?? null;
+		$year       = $query[ 'year' ] ?? null;
+		$sectionId  = $query[ 'section' ] ?? null;
+		$breedId    = $query[ 'breed' ] ?? null;
+		$colorId    = $query[ 'color' ] ?? null;
+		$group      = $query[ 'group' ] ?? null;
+
+		$report = null;
+		if( $target ) {
+
+			switch( $target ) {
+				case 'chart':
+					if( $districtId && $year ) {
+						$report = model\Report::forChart($districtId, $year, $sectionId, $breedId, $colorId, $group);
+					}
+					break;
+				case 'map':
+					if( $year ) {
+						$report = [ 'districts' => model\Report::forMap($year, $sectionId, $breedId, $colorId, $group) ];
+					}
+					break;
+				case 'trend':
+					if( $districtId ) {
+						$report = [ 'years' => model\Report::forTrend($districtId, $sectionId, $breedId, $colorId, $group) ];
+					}
+					break;
+				case 'table':
+					if( $districtId && $year ) {
+						$report = model\Report::forTable($districtId, $year);
+					}
+					break;
+			}
+		}
+
+		if( $report ) {
+			$json = json_encode( [ 'report' => $report ], JSON_UNESCAPED_SLASHES );
+			$response->getBody()->write( $json );
+			model\Cache::set( 'Report', $request->getUri()->getPath(), $request->getUri()->getQuery(), $json );
 			return $response;
 		}
 		throw  new HttpBadRequestException($request, 'Bad arguments');

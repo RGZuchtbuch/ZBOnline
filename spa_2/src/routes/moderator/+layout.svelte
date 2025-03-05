@@ -1,11 +1,11 @@
 <script>
-	import { getContext, setContext } from 'svelte';
 	import store from '$lib/js/store.svelte.js';
+	import { getContext, setContext } from 'svelte';
 
-	let { children } = $props(); // get page
-	let federation = getContext( 'federation' );
+	let { children, data } = $props(); // get page
 
-	let districts = $state( getModeratorDistricts( store.data.user.moderates, federation ) );
+	const districts = $state( getModeratorDistricts( store.user.moderator, data.federation ) );
+
 	setContext( 'districts', districts );
 
 	function getModeratorDistricts( ids, federation ) {
@@ -18,6 +18,8 @@
 		return districts;
 	}
 </script>
+
+
 
 {@render children()}
 

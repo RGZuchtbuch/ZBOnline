@@ -1,27 +1,27 @@
 <script>
-	import { page } from '$app/state';
-	import { store } from '$lib/js/store.svelte.js';
+	import {getContext} from 'svelte';
+
 	import District from '$lib/cmp/moderator/District.svelte';
 	import Pairs from '$lib/cmp/moderator/district/Pairs.svelte';
 
-    let { data } = $props();
+	let { data } = $props()
+	let state    = getContext( 'state' );
 
-	const path = page.url.pathname;
+	state.title = `Stämme und Paare für ${ data.district.name }`;
+	state.menu = {
+		trail : [
+			{ name:'Home',      href:'/' },
+			{ name:'Obmann',    href:'/moderator' },
+			{ name: data.district.short,   href:`/moderator/${data.district.id}` },
+			{ name:'Stämme', href:`'/moderator/${data.district.id}/pair` },
+		],
+		options : [],
+	};
 
-    app.title = `Stämme und Paare für ${ data.district.name }`;
-	app.menu.trail = [
-        { name:'Home',      href:'/' },
-        { name:'Obmann',    href:'/moderator' },
-        { name:data.district.short,   href:'/moderator/'+data.district.id },
-		{ name:'Stämme', href:path },
-    ];
-	app.menu.options = [];
-
-    console.log( 'Results page', path );
 
 </script>
 
-<Pairs {...data} />
+<Pairs {data} />
 
 
 

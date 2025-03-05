@@ -4,9 +4,9 @@
 	import { info_icon } from '$lib/cmp/icons.svelte';
 </script>
 
-<div class='' in:slide>
+<div class='p-6' in:slide>
 
-	{@render info_icon()}
+	{@render info_icon()}  &#x1F6C8;
 
 	<a href='/article'>Articles</a>
 	<div>aaaaaa aaaaaa aaa aa a a a a a a aaaaaaa aaaaaa aaaaaa aaa aa a a a a a a aaaaaaa aaaaaa aaaaaa aaa aa a a a a a a aaaaaaa aaaaaa aaaaaa aaa aa a a a a a a aaaaaaa aaaaaa aaaaaa aaa aa a a a a a a aaaaaaa aaaaaa aaaaaa aaa aa a a a a a a aaaaaaa aaaaaa aaaaaa aaa aa a a a a a a aaaaaaa aaaaaa aaaaaa aaa aa a a a a a a aaaaaaa </div>

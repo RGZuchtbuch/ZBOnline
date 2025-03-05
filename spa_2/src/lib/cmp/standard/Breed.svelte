@@ -10,20 +10,32 @@
 </script>
 
 {#if breed}
-	<div class='row'><button type='button' onclick={toggle}>o</button><div class='grow'>{breed.name}</div><div>a</div></div>
-	{#if unfold}
-		<div class='pl-8' transition:slide={{duration:breed.colors.length*100}}>
-			{#each breed.colors as color}
-				<Color {color} />
-			{/each}
+	<li class='row'>
+		<div class='flex flex-row'>
+			<button type='button' title='Farben' onclick={toggle}>{unfold?'▽':'▷'}</button>
+			<div class='grow'>{breed.name}</div>
+			<div class='w-16'></div>
+			<div class='w-16'></div>
+			<div class='w-16'></div>
+			<div class='w-16'></div>
 		</div>
-	{/if}
+		{#if unfold}
+			<ul class='pl-12' transition:slide={{duration:breed.colors.length*25}}>
+				{#each breed.colors as color}
+					<Color {color} />
+				{/each}
+			</ul>
+		{/if}
+	</li>
 {/if}
 
 
 <style>
-    div.row {
-        @apply flex flex-row border border-y-amber-400;
+    li {
+        @apply p-1 flex flex-col;
     }
 
+    button {
+        @apply bg-inherit text-black;
+    }
 </style>

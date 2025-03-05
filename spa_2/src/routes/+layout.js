@@ -3,14 +3,13 @@ import api from '$lib/js/api.js';
 export const ssr = false; // need this once for spa only in sveltekit
 
 
-export async function load( { params } ) {
+export async function load( { params, url } ) {
 	const standard_promise = getStandardPromise();
 	const fed_promise = getFederationPromise();
-
 	const responses = await Promise.all([ fed_promise, standard_promise ])
 
-	return { federation:responses[0], standard:responses[1] }; // no return as all in stored state
-};
+	return { federation:responses[0], standard:responses[1], url:new URL( url ) }; // no return as all in stored state
+}
 
 // helpers
 

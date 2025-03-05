@@ -15,7 +15,18 @@
     }
 
     a {
-        @apply border-0 hover:bg-teal-400 px-0.5;
+        @apply border-0 bg-inherit text-black hover:text-amber-600 px-0.5 cursor-pointer;
+    }
+
+    button.inline {
+        @apply border-0 bg-inherit text-black hover:text-amber-600 px-0.5 cursor-pointer;
+    }
+
+    button {
+        @apply rounded bg-amber-500 text-white cursor-pointer px-2 ;
+    }
+    button:disabled {
+        @apply bg-slate-200 text-gray-400 cursor-not-allowed;
     }
 
     fieldset {
@@ -34,14 +45,6 @@
     h4 {
         @apply py-1 font-bold text-base;
     }
-
-    button {
-        @apply rounded bg-amber-500 px-2 text-white cursor-pointer;
-    }
-    button:disabled {
-        @apply bg-slate-200 text-gray-400;
-    }
-
     hr {
         @apply w-full h-0.5 bg-teal-100 px-2;
     }
@@ -92,6 +95,10 @@
     .breadcrumbs a:last-child:after {
         content: '';
     }
+    .header {
+        @apply w-full bg-teal-200 rounded-t text-center sticky top-0
+    }
+
     .navbar {
         @apply flex flex-col lg:flex-row gap-x-4;
     }
@@ -101,13 +108,11 @@
     }
 
     .content {
-
     }
 
     .content.list {
         @apply flex flex-col px-16 gap-y-2
     }
-
     .content.list a:before {
         content: '➢ ';
     }

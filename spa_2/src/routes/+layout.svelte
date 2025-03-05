@@ -1,23 +1,19 @@
 <script>
+    import '../app.css'; // need this once on highest level
     import { setContext } from 'svelte';
     import { fade, fly, slide } from 'svelte/transition';
-	import '../app.css'; // need this once on highest level
 
     import Header from '$lib/cmp/Header.svelte';
     import Menu from '$lib/cmp/Menu.svelte';
     import Title from '$lib/cmp/Title.svelte';
-//    import store from '$lib/js/store.svelte.js';
-
 
     let { children, data } = $props(); // get page
+    let temp = { title:'RGZuchtbuch Online 2.0', menu:{ trail:[], options:[] } }
+    //let page       = $state( temp );
+    let state = $state( temp );
+    setContext( 'state', state )
 
-    let federation = $state( data.federation )
-    let standard   = $state( data.standard )
-    let page       = $state( { title:'RGZuchtbuch Online 2.0', menu:{ trail:[], options:[] } } );
-
-    setContext( 'federation', federation );
-    setContext( 'standard',   standard );
-    setContext( 'page',       page );
+    // note: user is in store
 
     /**
     * note, this layout has header, menu and children
@@ -29,8 +25,8 @@
 <Menu />
 <Title />
 
-{#key page.title}
-    <div class='screen-scroll-y border border-teal-400 flex flex-col p-2' in:fade={{duration:1000}} >
+{#key state.title}
+    <div class='screen-scroll-y content' in:fade={{duration:1000}} >
         {@render children()}
     </div>
 {/key}
@@ -38,4 +34,7 @@
 
 
 <style>
+    .content {
+        @apply  border border-teal-400 bg-white text-black flex flex-col;
+    }
 </style>

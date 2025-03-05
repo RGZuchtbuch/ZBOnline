@@ -4,24 +4,27 @@
     import { info_icon, test } from '$lib/cmp/icons.svelte';
 	import Home from '$lib/cmp/Home.svelte';
 
-	let page = getContext( 'page' );
+	let state = getContext( 'state' );
 
     // every page should set these
-    page.title = 'Das BDRG Rassegeflügelzuchtbuch';
-	page.menu  = {
+	state.title = 'Das BDRG Rassegeflügelzuchtbuch';
+	state.menu  = {
 		trail: [
 			{name: 'Start', href: '/'},
 		],
-		options: [
+		options: [ // all public
 			{name: 'Info', href: '/article'},
 			{name: 'Verbände', href: '/district'},
 			{name: 'Standard', href: '/standard'},
-			{name: 'Leistungen', href: '/result'},
-			//         { name:'Züchter',    href:'/breeder' },
-			{name: 'Obmann', href: '/moderator'},
-			{name: 'Admin', href: '/admin'},
+			{name: 'Leistungen', href: '/report'},
 		]
 	};
+	if( store.user ) { // restricted
+		//page.menu.options.push( { name:'Züchter',    href:'/breeder' } );
+		if( store.user.moderator ) state.menu.options.push( {name: 'Obmann', href: '/moderator'} );
+		//if( store.user.admin )	 page.menu.options.push( {name: 'Admin', href: '/admin'} );
+	}
+
 
 </script>
 

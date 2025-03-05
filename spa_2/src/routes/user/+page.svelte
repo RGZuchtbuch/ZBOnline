@@ -1,17 +1,19 @@
 <script>
-    import { store } from '$lib/js/store.svelte.js';
+	import { getContext } from 'svelte';
+    import store from '$lib/js/store.svelte.js';
     import User from '$lib/cmp/user/User.svelte';
 
-    let { data } = $props();
+    let state = getContext( 'state' );
 
-	app.menu.title = 'Benutzer im RGZuchtbuch';
-	app.menu.trail = [
-        { name:'Start',    href:'/' },
-        { name:'Benützer', href:'/user' },
-    ];
-	app.menu.options = [];
+	state.title = 'Benutzer im RGZuchtbuch';
+	state.menu = {
+		trail : [
+			{ name:'Start',    href:'/' },
+			{ name:'Benützer', href:'/user' },
+		],
+		options : [],
+	};
 
-    console.log( 'User page' );
 
 </script>
 
