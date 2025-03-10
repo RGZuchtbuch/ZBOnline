@@ -1,12 +1,11 @@
 <script>
-    import { getContext } from 'svelte';
+    //import { getContext } from 'svelte';
+    import { page } from '$app/state';
+	import store from '$lib/js/store.svelte.js';
     import Report from '$lib/cmp/report/Report.svelte';
 
-    let { data } = $props();
-    let state    = getContext( 'state' );
-
-    state.title = 'Die Zuchtleistungen';
-    state.menu = {
+    const title = 'Die Zuchtleistungen';
+    const menu = {
         trail : [
             { name:'Start',       href:'/' },
             { name:'Leistungen', href:'/result' },
@@ -18,10 +17,14 @@
         ],
     };
 
-    $inspect('DF', data.reports );
+	store.title.update( () => title );
+	store.menu.update( () => menu );
 
+	// note: cmp Report Filter works the query and does the loading
 </script>
 
-<Report {data}/>
+{#if true }
+	<Report />
+{/if}
 
 

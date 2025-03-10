@@ -2,7 +2,7 @@
     import { onMount } from 'svelte';
     import { goto } from '$app/navigation';
 
-    import store from '$lib/js/store.svelte.js';
+    import store, { user } from '$lib/js/store.svelte.js';
     import { txt } from '$lib/js/toolbox.js';
     import Form, { validator, CheckBox, DateInput, EmailInput, NumberInput, PasswordInput, RangeInput, RingInput, Status, TextInput } from '$lib/cmp/form/Form.svelte';
     import Submit from '$lib/cmp/form/Submit.svelte';
@@ -11,7 +11,8 @@
 
     const State = { LOGIN:10, LOGGEDIN:11, FAILED:12, FORGOT:20, FORGOTTEN:21, LOGOUT:30, LOGGEDOUT:31}
 
-    let state = $state( store.user ? State.LOGOUT : State.LOGIN );
+    let state = $state( $user ? State.LOGOUT : State.LOGIN );
+    console.log( 'User', state, $user );
 
     let email    = $state( null );
     let password = $state( null );
@@ -26,19 +27,16 @@
         //age:      v => validator(v).number().range( 1, 10 ).orNull().isValid(),
         email:      v => validator(v).email().isValid(),
         password:   v => validator(v).password().isValid(),
-        test:       v => validator(v).string().isValid(),
+        logout:     v => validator(v).string().isValid(),
     }
 
     async function onLogin( event ) {
         console.log('Logging in', email );
         let success = await api.user.login( email, password );
-        console.log('Ok', success, store.user );
         if( success ) {
-            console.log( 'User in' )
             state = State.LOGGEDIN;
             await goto( '/' ); // home for now
         } else {
-            console.log( 'User failed' )
             state = State.FAILED;
             password = null;
             disabled = false;// TODO
@@ -53,8 +51,7 @@
 
     async function onLogout( event ) {
         state = State.LOGGEDOUT;
-        console.log( 'Logging out' );
-        const response = await api.user.logout();
+        await api.user.logout();
         await goto( '/' ); // home for now
     }
 
@@ -63,8 +60,8 @@
 
 </script>
 
-{state}
-<div class='flex flex-col gap-2 items-center'>
+
+<div class='flex flex-col py-4 gap-2 items-center'>
     {#if state === State.LOGIN || state === State.FAILED }
         {#if state === State.LOGIN}
             <h3>Sie sind noch nicht angemeldet !</h3>
@@ -82,19 +79,19 @@
     {:else if state === State.FORGOT }
         <h3>Sie wissen ihr Passwort nicht oder nicht Mehr ?</h3>
         <p>
-            Wenn man registriert ist kann man einen Resetlink über eMail beantragen.
+            Wenn man vom Obmann registriert ist kann man einen Resetlink über eMail beantragen.
         </p>
-        <Form class='w-96 flex flex-col gap-2' validateafter={500} submitafter={1000} onsubmit={onForgot} {disabled}>
+        <Form class='w-96 flex flex-col gap-2' initialState='valid' submitafter={1000} onsubmit={onForgot} {disabled}>
             <EmailInput class='w-96' name='email' label='Ihre eMail adresse' bind:value={email} error='Emailadresse ungütig' validator={validate.email} autocomplete='username'/>
-            <Submit class='w-96' values={values} />
+            <Submit class='w-96' values={ values} />
         </Form>
-    {:else if state === State.LOGGEDIN }
+    {:else if state === State.FORGOTTEN }
         <h3>Wunderbar, du bekommst eine email mit Resetlink :)</h3>
     {:else if state === State.LOGOUT }
-        <div>Profil {store.user.firstname} {store.user.infix} {store.user.lastname}</div>
+        <div>Züchter {$user.firstname} {$user.infix} {$user.lastname}</div>
         <div>Abmelden vom RGZuchtbuch</div>
-        <Form onsubmit={onLogout} >
-            <Submit class='w-64' values={{changed:'Bin dran', invalid:'Fehler', valid:'Abmelden'}} />
+        <Form initialState='valid' onsubmit={onLogout} {disabled} >
+            <Submit class='w-96' values={ values} />
         </Form>
     {:else if state === State.LOGGEDOUT }
         <h3>Wunderbar, du bist raus :)</h3>

@@ -1,24 +1,30 @@
 <script>
 	import { getContext } from 'svelte';
+
+	import store, { article } from '$lib/js/store.svelte.js';
 	import Article from '$lib/cmp/article/Article.svelte';
 
 	let { data } = $props();
 
-	let state = getContext( 'state' );
-	//let article = getContext( 'article' );
+	let app = getContext( 'state' );
 
-	$inspect( 'D', data );
+	$effect( () => {
+		if( $article ) {
+			const title = $article.title;
+			const menu = {
+				trail: [
+					{name: 'Home', href: '/'},
+					{name: 'Info', href: '/article'},
+					{name: $article.title, href: `/article/${$article.id}`},
+				],
+				options: [],
+			}
 
-	state.title = data.article.title; // to set after loading
-	state.menu = {
-		trail: [
-			{ name: 'Home', href: '/' },
-			{ name: 'Info', href: '/article' },
-			{ name: data.article.title, href: `/article/${data.article.id}` },
-		],
-		options: [],
-	};
+			store.title.update(() => title); // to set after loading
+			store.menu.update(() => menu);
+		}
+	});
 
 </script>
 
-<Article {...data} />
+<Article/>

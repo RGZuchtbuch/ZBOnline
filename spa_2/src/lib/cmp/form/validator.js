@@ -117,6 +117,9 @@ export default function validator( value ) {
 
 	let valid = true;
 	const worker = { // to stream
+		boolean: () => {
+
+		},
 		string : () =>{
 			const stringValue = toString( value );
 			if( stringValue !== null ) { // note could be ''

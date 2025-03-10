@@ -9,6 +9,12 @@ export default {
     },
     extend: {
       colors: {
+        button: '#ffffff',
+        header: '#000000',
+      },
+      backgroundColor: {
+        button: '#d97706',
+        header: '#2dd4bf',
       },
       fontFamily: {
         rgz: [ 'Nunito Sans', 'sans-serif' ],

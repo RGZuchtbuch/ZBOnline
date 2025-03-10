@@ -1,7 +1,7 @@
 <script>
 	import { getContext,  onDestroy, onMount } from 'svelte';
 
-	let { class:classname='', disabled=false, element=$bindable(), error='!', label=null, name=null, placeholder=null, title=null, validator=null, value=$bindable() } = $props();
+	let { class:classname='', disabled=false, element=$bindable(), error='!', label=null, name=null, onchange=null, placeholder=null, title=null, validator=null, value=$bindable() } = $props();
 	const form = getContext( 'form'); // store
 	let valid = $state( true );
 
@@ -15,11 +15,13 @@
 
 	onMount( () => { // catch input and register validator
 		element.addEventListener( 'input', onInput );
-		if( validator ) form.validators.push( validate ); // add this.validate with it's context
+		if( form && form.validators && validator ) form.validators.push( validate ); // add this.validate with it's context
 	});
 	onDestroy( () => { // remove validator
-		let index = form.validators.indexOf( validate );
-		if( index >= 0 ) form.validators.splice( index, 1 ); // remove this validator;
+		if( form && form.validators ) {
+			let index = form.validators.indexOf(validate);
+			if (index >= 0) form.validators.splice(index, 1); // remove this validator;
+		}
 	});
 
 </script>
@@ -32,6 +34,7 @@
 	       class='input w-4 h-4 mt-2' class:valid
 	       bind:this={element} bind:checked={value}
 		   {disabled} {name} {placeholder} {title}
+		   {onchange}
 	/>
 	<label class='error' class:valid for='number'>{error}</label>
 </div>

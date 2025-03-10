@@ -105,8 +105,11 @@ class Router {
 
 		// TODO New approach 2
 
-		$app->get( '/2/article', 		'App\controller\Article::filter'); // filter
+		$app->get( '/2/article', 				'App\controller\Article::filter'); // filter
 		$app->get( '/2/article/{id:[0-9]+}', 	'App\controller\Article::get'); // only accept uint
+		$app->put( '/2/article/{id:[0-9]+}', 	'App\controller\Article::put'); // only accept uint
+		$app->post( '/2/article', 				'App\controller\Article::post');
+		$app->delete( '/2/article/{id:[0-9]+}', 	'App\controller\Article::delete'); // only accept uint
 
 
 

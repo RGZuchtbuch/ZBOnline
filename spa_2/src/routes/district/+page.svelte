@@ -1,22 +1,27 @@
 <script>
-	import { getContext } from 'svelte';
-	import District from '$lib/cmp/district/District.svelte';
+	//import { getContext } from 'svelte';
+	import store, { federation } from '$lib/js/store.svelte.js';
 
-	let { data } = $props();
-	let state = getContext( 'state' )
+	import Districts from '$lib/cmp/district/Districts.svelte';
 
-	state.title = 'Die BDRG Verbände im Zuchtbuch';
-	state.menu = {
+	//let { data } = $props();
+	//let state = getContext( 'state' )
+
+	const title = 'Die BDRG Verbände im Zuchtbuch'
+	const menu = {
 		trail : [
 			{ name:'Start',      href:'/' },
 			{ name:'Verbände',   href:'/district' },
 		],
 		options : [],
-	};
+	}
+
+	store.title.update( () => title );
+	store.menu.update( () => menu );
 
 
 </script>
 
-<District {...data} />
+<Districts />
 
 

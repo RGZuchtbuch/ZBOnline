@@ -1,16 +1,34 @@
 <script>
-	import { getContext } from 'svelte';
+	import store, { districts, federation, user } from '$lib/js/store.svelte.js';
+	import {goto} from '$app/navigation';
+	//import { getContext } from 'svelte';
 
-	let { districts } = $props();
+	//let { districts } = $props();
+
+	function getDistricts() {
+		let modDistricts = [];
+		$user.moderator.forEach( id => {
+			modDistricts.push( $federation.districts[id] );
+		});
+		districts.update( () => modDistricts );
+	}
+
+
+
+	if( $user.moderator.length === 1 ) { // if only one option go there
+		goto( `/moderator/${$user.moderator[0]}`);
+	} else {
+		getDistricts();
+	}
 
 	console.log( districts.length );
 </script>
 
 <section>
 	<h3 class='header'>Verbände zum Verwalten</h3>
-	{#if districts}
+	{#if $districts}
 		<ol in:slide>
-			{#each districts as district, i}
+			{#each $districts as district, i}
 				<li class='flex flex-row items-center'>
 					<a href={`/moderator/${district.id}`} title='Wählen'>
 						<div class='w-16 text-right '>{i+1}.</div>

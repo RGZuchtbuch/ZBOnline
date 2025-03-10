@@ -1,6 +1,6 @@
 <script>
 	import { fade, fly, slide } from 'svelte/transition';
-	import store from '$lib/js/store.svelte.js'
+	import store, {  user } from '$lib/js/store.svelte.js'
 	import { profile_icon } from '$lib/cmp/icons.svelte';
 
 </script>
@@ -15,9 +15,10 @@
 	<div class='grow font-bold pl-32 text-sm text-center' in:fade>
 		BDRG Zuchtbuch
 	</div>
+
 	<div class='w-32 flex flex-row pr-2 text-sm justify-end print:hidden' in:fade>
-		{#if store.user}
-			<span>{store.user.firstname}</span>
+		{#if $user}
+			<span>{$user.firstname}</span>
 		{/if}
 		<a href='/user' title='An/abmelden'>{@render profile_icon()}</a>
 	</div>

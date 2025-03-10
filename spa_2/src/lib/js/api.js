@@ -10,7 +10,7 @@ let cache = {}; // empty at start
 
 // retrieve token from sessionstorage, like for when refreshed
 let authenticationToken = browser && window.sessionStorage.getItem( 'token' ); // encoded
-if( authenticationToken ) store.user = tokenToUser( authenticationToken );
+if( authenticationToken ) store.user.update( () => tokenToUser( authenticationToken ) );
 
 const API_BASE = browser && (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:80' : 'https://rgzuchtbuch.de';
 
@@ -27,15 +27,12 @@ const api = { // api
 			}
 		},
 		post: async ( article ) => {
-			//console.log( 'article.post not implemented yet' );
 			return await post( `/api/2/article`, article ); // { id, title, level }
 		},
 		put: async ( id, article ) => {
-			//console.log( 'article.put not implemented yet' );
 			return await put( `/api/2/article/${id}`, article ); // { id, title, level }
 		},
 		delete: async ( id ) => {
-			//console.log( 'article.del not implemented yet' );
 			return await del( `/api/2/article/${id}` ); // { ok }
 		}
 	},
@@ -130,14 +127,12 @@ const api = { // api
 			authenticationToken = null;
 			window.sessionStorage.setItem( 'token', authenticationToken );
 			const response = await post( '/api/2/user/login', { email:email, password:password } );
-			if( response ) {
-				authenticationToken = response.token;
-				window.sessionStorage.setItem( 'token', authenticationToken );
-				store.user = tokenToUser( response.token );
-				console.log( 'Store', store );
-				if( store.user ) {
-					return true;
-				}
+			if( response && response.token ) {
+				console.log( 'Got Token' );
+				authenticationToken = response.token; // to send with requests
+				window.sessionStorage.setItem( 'token', authenticationToken ); // over session
+				store.user.update( () => tokenToUser( response.token ) ); // user data for in app
+				return true;
 			}
 			console.log( 'Login Oops')
 			return false; // no user
@@ -146,8 +141,9 @@ const api = { // api
 			return await post( '/api/2/user/forgot', { email:email } );
 		},
 		logout: async ( email ) => {
-			store.user = null;
+			authenticationToken = null;
 			window.sessionStorage.setItem( 'token', null ); // forget token
+			store.user.update( () => null ); // no user
 			return true; // always successfull
 		},
 

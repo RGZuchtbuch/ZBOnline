@@ -38,9 +38,9 @@ class Article
 	public static function post( Request $request, Response $response, array $args ) : Response {
 		$requester = new Requester( $request );
 		if( $requester->isAdmin() ) {
-			$body = $request->getParsedBody();
-			if( $body ) {
-				$id = model\Article::new( $body['author'], $body['title'], $body['html'], $requester->getId() );
+			$article = $request->getParsedBody();
+			if( $article ) {
+				$id = model\Article::new( $article['author'], $article['title'], $article['html'], $requester->getId() );
 				if( $id ) {
 					$response->getBody()->write(json_encode(['id' => $id], JSON_UNESCAPED_SLASHES));
 					return $response;
@@ -56,9 +56,9 @@ class Article
 		$requester = new Requester( $request );
 		if( $requester->isAdmin() ) {
 			$id = $args[ 'id' ] ?? null;
-			$body = $request->getParsedBody();
-			if( is_numeric( $id ) && $body ) {
-				$updated = model\Article::set( $id, $body['author'], $body['title'], $body['html'], $requester->getId() );
+			$article = $request->getParsedBody();
+			if( is_numeric( $id ) && $article ) {
+				$updated = model\Article::set( $id, $article['author'], $article['title'], $article['html'], $requester->getId() );
 				if( $updated ) {
 					$response->getBody()->write(json_encode(['id' => $id], JSON_UNESCAPED_SLASHES));
 					return $response;

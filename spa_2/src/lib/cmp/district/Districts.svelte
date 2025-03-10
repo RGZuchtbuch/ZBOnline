@@ -1,22 +1,23 @@
 <script>
 	import { fade, fly, slide } from 'svelte/transition';
+	import store, { federation } from '$lib/js/store.svelte.js';
 
 	import BDRGMap from '$lib/cmp/district/BDRGMap.svelte';
 	import DistrictTree from '$lib/cmp/district/DistrictTree.svelte';
 
-	let { federation } = $props();
+	//let { federation } = $props();
 
-	$inspect( 'F', federation )
+	//$inspect( 'F', federation )
 
 </script>
 
-{#key federation}
+{#key $federation}
 
 	<div class='flex flex-col items-center' in:slide>
-		<BDRGMap width={512} root={federation.root}/>
+		<BDRGMap width={512} root={$federation.root}/>
 	</div>
 	<hr>
-	<DistrictTree root={federation.root}/>
+	<DistrictTree root={$federation.root}/>
 {/key}
 
 <style>

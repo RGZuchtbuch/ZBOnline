@@ -1,27 +1,35 @@
 <script>
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
+	import store, { federation, standard } from '$lib/js/store.svelte.js';
+
 	import Select from '$lib/cmp/form/input/Select.svelte';
 	import Form from '$lib/cmp/form/Form.svelte';
+	import api from '$lib/js/api.js';
+
+	//let props = $props();
 
 //	let { district, year, group, section, breed, color, type, federation, standard } = $props();
-	let { data } = $props();
+//	let { data } = $props();
 
-	const url = new URL( page.url );
+	const query = $derived( {
+		district : +page.url.searchParams.get('district') || 1,
+		year     : +page.url.searchParams.get('year') || new Date().getFullYear() - 1,
+		group    :  page.url.searchParams.get('group'),
+		section  :  page.url.searchParams.get('section'),
+		breed    :  page.url.searchParams.get('breed'),
+		color    :  page.url.searchParams.get('color'),
+	} );
 
-	let districtId = $state( +page.url.searchParams.get( 'district' ) );
-	let year       = $state( +page.url.searchParams.get( 'year' ) );
-	let group      = $state(  page.url.searchParams.get( 'group' ) );
-	let sectionId  = $state( +page.url.searchParams.get( 'section' ) ); // becomes 0 when null
-	let breedId    = $state( +page.url.searchParams.get( 'breed' ) );
-	let colorId    = $state( +page.url.searchParams.get( 'color' ) );
 
-	let district = $state( data.federation.districts[ districtId ] );
-	let section  = $state( data.standard.rootSections.find( item => item.id === sectionId ) );
-	let breed    = $state( data.standard.breeds[ breedId ] );
-	let color    = $state( data.standard.colors[ colorId ] );
+	let district = $state( $federation.districts[ query.district ] );
+	let year     = $state( query.year );
+	let group    = $state( query.group );
+	let section  = $state( $standard.rootSections.find( item => item.id === query.section ) );
+	let breed    = $state( $standard.breeds[ query.breed ] );
+	let color    = $state( $standard.colors[ query.color ] );
 
-	console.log( 'Dis', districtId, sectionId );
+	console.log( 'Filter query', query );
 
 	const groups = ['I','II','III'];
 	let years = [];
@@ -30,89 +38,122 @@
 		years.push( year );
 	}
 
+	const url =new URL( page.url ); // for query changes
+
+
 	function onDistrictChange( event ) {
 		console.log( 'ETV',  );
-		districtId = +event.target.value
-		data.url.searchParams.set( 'district', districtId );
-		goto( data.url );
+		district = $federation.districts[ +event.target.value ]
+		url.searchParams.set( 'district', district.id );
+		goto( url );
 	}
 	function onYearChange( event ) {
 		year = +event.target.value;
-		data.url.searchParams.set( 'year', year );
-		goto( data.url );
+		url.searchParams.set( 'year', year );
+		goto( url );
 	}
-
-	function onGroupChange() {
+	function onGroupChange( event ) {
+		group = event.target.value;
 		if( group ) {
-			data.url.searchParams.set('group', year);
+			url.searchParams.set('group', group);
 		} else {
-			data.url.searchParams.delete('group');
+			url.searchParams.delete('group');
 		}
-		goto( data.url );
+		goto( url );
 	}
-
 	function onSectionChange( event ) {
-		sectionId = +event.target.value
-		section = data.standard.rootSections.find( item => item.id === sectionId );
+		section = $standard.rootSections.find( item => item.id === +event.target.value );
 		breed = null;
 		color = null;
 
 		if (section) {
-			data.url.searchParams.set('section', sectionId);
-			console.log('SectionChange', section, sectionId );
+			url.searchParams.set( 'section', section.id );
 		} else {
-			data.url.searchParams.delete( 'section' );
+			url.searchParams.delete( 'section' );
 		}
-		data.url.searchParams.delete( 'breed' );
-		data.url.searchParams.delete( 'color' );
-		console.log( 'URL', data.url );
-		goto( data.url );
+		url.searchParams.delete( 'breed' );
+		url.searchParams.delete( 'color' );
+		goto( url );
 	}
 	function onBreedChange( event ) {
-		breedId = +event.target.value;
-		breed = data.standard.breeds[ breedId ];
+		breed = $standard.breeds[ +event.target.value ];
 		color = null;
-		if( breedId ) {
-			data.url.searchParams.set( 'breed', breedId );
+		if( breed ) {
+			url.searchParams.set( 'breed', breed.id );
 		} else {
-			data.url.searchParams.delete( 'breed' );
+			url.searchParams.delete( 'breed' );
 		}
-		data.url.searchParams.delete( 'color' );
-		goto( data.url );
+		url.searchParams.delete( 'color' );
+		goto( url );
 	}
 	function onColorChange( event ) {
-		colorId = +event.target.value;
-		color = data.standard.colors[ colorId ];
+		color = $standard.colors[ +event.target.value ];
 		if( color ) {
-			data.url.searchParams.set( 'color', colorId );
+			url.searchParams.set( 'color', color.id );
 		} else {
-			data.url.searchParams.delete( 'color' );
+			url.searchParams.delete( 'color' );
 		}
-		goto( data.url );
+		goto( url );
 	}
 
-	$inspect('R', districtId, year, group );
+	async function load( query ) {
+		// should get chart, map, trend and table data
+
+
+		console.log("Loading Reports", query );
+
+		const reducedQuery = {};
+		for( let key in query ) {
+			if( query[ key ] ) reducedQuery[ key ] = query[ key ];
+		}
+
+		console.log( 'RedQ', reducedQuery );
+
+		if( reducedQuery && reducedQuery.district && reducedQuery.year ) {
+			const chartPromise = getPromise('chart', reducedQuery );
+			const mapPromise   = getPromise('map',   reducedQuery );
+			const trendPromise = getPromise('trend', reducedQuery );
+			//const tablePromise = getPromise('table', query);
+
+//		const responses = await Promise.all([ chartPromise, mapPromise, trendPromise, tablePromise ])
+			const responses = await Promise.all([ chartPromise, mapPromise, trendPromise ])
+
+			store.reports.chart.update( () => responses[0] );
+			store.reports.map.update(   () => responses[1] );
+			store.reports.trend.update( () => responses[2] );
+			//store.reports.table.update( () => responses[3] );
+		}
+	}
+
+	async function getPromise( target, query ) {
+		query.target=target;
+		return api.report.get( query );
+	}
+
+	$effect( () => {
+		load( query );
+	})
 
 </script>
 
 <Form>
 <section class='flex flex-row gap-x-2 p-4' >
-	<Select class='' label='Verband' value={1} onchange={onDistrictChange}>
-		<option value={data.federation.root.id}>{data.federation.root.name}</option>/
-		{#each data.federation.root.children as district}
+	<Select class='' label='Verband' value={query.district} onchange={onDistrictChange}>
+		<option value={$federation.root.id}>{$federation.root.name}</option>/
+		{#each $federation.root.children as district}
 			<option value={district.id}>{district.name}</option>/
 			{#each district.children as district}
 				<option value={district.id}>&nbsp; &nbsp; {district.name}</option>/
 			{/each}
 		{/each}
 	</Select>
-	<Select class='' label='Jahr' value={year} onchange={onYearChange}>
+	<Select class='' label='Jahr' value={query.year} onchange={onYearChange}>
 		<option value={null}>?</option>/
 		{#each years as year}
 			<option value={year}>{year}</option>/
 		{/each}
 	</Select>
-	<Select class='' label='ZB Gruppe' value={group} onchange={onGroupChange}>
+	<Select class='' label='ZB Gruppe' value={query.group} onchange={onGroupChange}>
 		<option value={null} title='Alle Gruppen'>*</option>/
 		{#each groups as group}
 			<option value={group}>{group}</option>/
@@ -122,15 +163,15 @@
 
 
 <section class='flex flex-row gap-x-2 p-4' >
-	<Select class='w-56' label='Sparte' value={sectionId} onchange={onSectionChange}>
-		<option value={0}>*</option>
-		{#each data.standard.rootSections as section}
+	<Select class='w-56' label='Sparte' value={section?section.id:null} onchange={onSectionChange}>
+		<option value={null}>*</option>
+		{#each $standard.rootSections as section}
 			<option value={section.id}>&nbsp; {section.name}</option>/
 		{/each}
 	</Select>
 
-	<Select class='w-96' label='Rasse' value={breedId} onchange={onBreedChange}>
-		<option value={0}>*</option>/
+	<Select class='w-96' label='Rasse' value={breed?breed.id:null} onchange={onBreedChange}>
+		<option value={null}>*</option>/
 		{#if section}
 			{#each section.breeds as breed}
 				<option value={breed.id}>{breed.name}</option>/
@@ -138,8 +179,8 @@
 		{/if}
 	</Select>
 
-	<Select class='w-80' label='Farbenschlag' value={colorId} onchange={onColorChange}>
-		<option value={0}>*</option>/
+	<Select class='w-80' label='Farbenschlag' value={color?color.id:null} onchange={onColorChange}>
+		<option value={null}>*</option>/
 		{#if breed}
 			{#each breed.colors as color}
 				<option value={color.id}>{color.name}</option>/

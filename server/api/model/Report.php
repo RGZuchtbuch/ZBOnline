@@ -14,7 +14,7 @@ class Report extends Query
 
 	// for charts, one result for current district and year ( filtered for s,b,c )
 	// for 1 district and 1 year, filtered for section, brood, color or group
-	public static function forChart(int $districtId, int $year, ? int $sectionId, ? int $breedId, ? int $colorId, ? int $group ) : ? array {
+	public static function forChart(int $districtId, int $year, ? int $sectionId, ? int $breedId, ? int $colorId, ? string $group ) : ? array {
 		$args = get_defined_vars();
 		$stmt = Query::prepare('
             SELECT count(*) AS results, 

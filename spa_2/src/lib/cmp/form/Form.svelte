@@ -22,10 +22,10 @@
     import { setContext, onMount, onDestroy } from 'svelte';
     import './form.css';
 
-    let { autosubmit=false, children, class:classname='', disabled=false, legend=null, onsubmit=null, valid=$bindable(), validateafter=500, submitafter=1500 } = $props();
+    let { autosubmit=false, children, class:classname='', disabled=false, initialState='stored', legend=null, onsubmit=null, valid=$bindable(), validateafter=500, submitafter=1500 } = $props();
 
     const states = { initial:null, waiting:'waiting', changed:'changed', invalid:'invalid', valid:'valid', disabled:'disabled', stored:'stored', error:'server error :(' };
-    const form = $state( { state:states.valid, validators:[] } ); // initial comes from server, so stored
+    const form = $state( { state:states.stored, validators:[] } ); // initial comes from server, so stored
 
     //let error = false; // when post failes
 
@@ -37,6 +37,7 @@
     setContext( 'form', form ); // use getContext in input components
 
     function onInput( event ) { // called after children got input and init validate and autosave
+        console.log( 'Form input', form.state );
         form.state = states.changed;
         clearTimeout( validateTimeout ); // stop validate timer
         clearTimeout( submitTimeout ); // stop autosubmit timer
@@ -54,6 +55,7 @@
 
 
     function validate() { // all registered validators, triggered by timeout
+        console.log('F Validate')
         let valid = true;
         for( const validator of form.validators ) { // all registered validators
             valid = validator() && valid; // call validator first otherwise call will be skipped when valid already false
@@ -64,7 +66,8 @@
     async function submit() { // triggered by timeout or submit button
         if( form.state===states.valid ) {
             if( onsubmit ) {
-                const success = await onsubmit();
+                const success = await onsubmit(); // onsubmit from host !!
+                console.log( 'Form submit success', success );
                 if( success ) {
                     form.state = states.stored; // waiting
                 }
@@ -75,10 +78,13 @@
     }
 
     onMount( () => {
-        validate(); // initial validate
+        console.log('A');
+        validate(); // initial validate, why, trust server data
+        if( form.state === states.valid ) form.state = initialState
 //        form.state = states.stored; // overrule the valid
         element.addEventListener('input', onInput); // each keystroke in form
         element.addEventListener('submit', onSubmit); // catching enter
+        console.log('B');
     });
 
     onDestroy( () => {

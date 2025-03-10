@@ -1,23 +1,37 @@
 <script>
 	import { fade, fly, slide } from 'svelte/transition';
-	let {articles} = $props()
+	import store, { articles } from '$lib/js/store.svelte.js';
+	import api from '$lib/js/api.js';
+
+	async function load() {
+		console.log( 'Load articles' );
+		const response = await api.article.get();
+		if( response && response.articles ) {
+			store.articles.update(() => response.articles);
+			return true;
+		}
+		return false;
+//	return { articles:response.articles };
+	}
+
+	load();
 
 </script>
 
-
-<h2 class='header'>Alle Artikel zum Zuchtbuch</h2>
-<ol in:slide>
-	{#each articles as article, i}
-		<li>
-			<a class='grow' href={`/article/${article.id}`}>
-				<div class='text-right '>{i+1}.</div>
-				<div class='grow'>{article.title}</div>
-				<div class='w-32'>{article.author}</div>
-			</a>
-		</li>
-	{/each}
-</ol>
-
+{#if $articles}
+	<h2 class='header'>Alle Artikel zum Zuchtbuch</h2>
+	<ol in:slide>
+		{#each $articles as article, i}
+			<li class='flex flex-row gap-x-2'>
+				<a class='grow' href={`/article/${article.id}`}>
+					<div class='text-right '>{i+1}.</div>
+					<div class='grow'>{article.title}</div>
+					<div class='w-32'>{article.author}</div>
+				</a>
+			</li>
+		{/each}
+	</ol>
+{/if}
 <style>
 	a {
 		@apply flex flex-row border-b p-2 gap-x-2;

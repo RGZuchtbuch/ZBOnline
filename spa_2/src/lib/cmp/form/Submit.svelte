@@ -4,15 +4,13 @@
     // states: disabled, not changed, invalid, submittable
 	//const states = { initial:null, waiting:'waiting', changed:'changed', invalid:'invalid', valid:'valid', disabled:'disabled', stored:'stored', error:'server error :(' };
 
-	const defaultValue = { waiting:'waiting...', changed:'Changed', invalid:'Invalid', valid:'Valid', disabled:'Disabled' };
+	const defaultValue = { waiting:'waiting...', changed:'Changed', invalid:'Invalid', valid:'Valid', disabled:'Disabled', stored:'Stored' };
     let { class:classname='', disabled=false, element=$bindable(), error='!', label=null, name=null, placeholder=null, title=null, validator=null,
         values=$bindable( defaultValue ) } = $props();
 
 //    export let value = { waiting:'waiting...', changed:'Changed', invalid:'Invalid', valid:'Valid', disabled:'Disabled' };
 
     const form = getContext( 'form'); // store from form
-
-    console.log( 'F', form, values, values[ form.state ])
 
 </script>
 
@@ -28,8 +26,7 @@
 
 	input {
 		vertical-align: text-top;
-        color: black;
-        background-color: #fc5226;
+        background-color: #d97706;
         font-weight: bold;
         text-align: center;
         color: white;
@@ -50,9 +47,10 @@
 		color:white;
 		background:salmon;
     }
-	.valid {
-		color:black;
-		background: lightgreen;
+
+    input {
+        color:white;
+        background: #fb923c;
     }
 	input:disabled {
         color: white;
