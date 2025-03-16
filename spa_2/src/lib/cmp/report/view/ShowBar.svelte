@@ -4,37 +4,40 @@
 
     import { BarController, BarElement, CategoryScale, Chart, Colors, LinearScale, Tooltip } from 'chart.js';
 
-    export let districtId = null;
-    export let year = null;
-    export let sectionId = null;
-    export let breedId = null;
-    export let colorId = null;
-    export let group = null;
-
+    let { report } = $props();
+    // export let districtId = null;
+    // export let year = null;
+    // export let sectionId = null;
+    // export let breedId = null;
+    // export let colorId = null;
+    // export let group = null;
 
     let canvas = null; // ref to canvas element
-
     let chart = null; // showing chart
 
-    function update( districtId, year, sectionId, breedId, colorId, group ) {
-        updateData( districtId, year, sectionId, breedId, colorId, group ).then( data => {
-            updateChart( data.result );
-        });
-    }
+    $effect( () => {
+        updateChart( report );
+    })
 
-    function updateData( districtId, year, sectionId, breedId, colorId, group ) {
-        if( districtId && year ) { // at least
-            let a =  api.result.districtYear(districtId, year, sectionId, breedId, colorId, group);
-            return a;
-        }
-        return null;
-    }
+    // function update( districtId, year, sectionId, breedId, colorId, group ) {
+    //     updateData( districtId, year, sectionId, breedId, colorId, group ).then( data => {
+    //         updateChart( data.result );
+    //     });
+    // }
 
-    function updateChart( result ) {
-        let labels = [ '∅ Bewertung' ];
+    // function updateData( districtId, year, sectionId, breedId, colorId, group ) {
+    //     if( districtId && year ) { // at least
+    //         let a =  api.result.districtYear(districtId, year, sectionId, breedId, colorId, group);
+    //         return a;
+    //     }
+    //     return null;
+    // }
+
+    function updateChart( report ) {
+        let labels = [ '∅ Note' ];
         let datasets = [
             {
-                data: [ result.showScore ],
+                data: [ report.showScore ],
                 backgroundColor: [ '#94CBF080' ],
                 borderColor: [ '#238' ],
                 borderWidth: 1,
@@ -76,13 +79,15 @@
 
     Chart.register( BarController, BarElement, CategoryScale, Colors, LinearScale, Tooltip );
 
-    $: update( districtId, year, sectionId, breedId, colorId, group );
+//    $: update( districtId, year, sectionId, breedId, colorId, group );
 </script>
 
 <div class='flex flex-col' >
-    <h5>Schauleistung in pkt</h5>
+    <h5 title={`Durchschnitts note von ${report.showBreeders} Tieren`}>
+        Schauleistung in pkt
+        <sup>{report.showBreeders} / {report.breeders}</sup>
+    </h5>
     <canvas bind:this={canvas} width='128px' height='256px'></canvas>
-    <div> </div>
 </div>
 
 <style></style>

@@ -37,7 +37,6 @@
     setContext( 'form', form ); // use getContext in input components
 
     function onInput( event ) { // called after children got input and init validate and autosave
-        console.log( 'Form input', form.state );
         form.state = states.changed;
         clearTimeout( validateTimeout ); // stop validate timer
         clearTimeout( submitTimeout ); // stop autosubmit timer
@@ -55,7 +54,6 @@
 
 
     function validate() { // all registered validators, triggered by timeout
-        console.log('F Validate')
         let valid = true;
         for( const validator of form.validators ) { // all registered validators
             valid = validator() && valid; // call validator first otherwise call will be skipped when valid already false
@@ -78,13 +76,10 @@
     }
 
     onMount( () => {
-        console.log('A');
         validate(); // initial validate, why, trust server data
         if( form.state === states.valid ) form.state = initialState
-//        form.state = states.stored; // overrule the valid
         element.addEventListener('input', onInput); // each keystroke in form
         element.addEventListener('submit', onSubmit); // catching enter
-        console.log('B');
     });
 
     onDestroy( () => {

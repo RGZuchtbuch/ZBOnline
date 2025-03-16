@@ -62,9 +62,11 @@
 </script>
 
 <div class='flex flex-col' >
-    <h5>Legeleistung  Geflügel</h5>
+    <h5 title={`Legeleistung durchschnitt von alle Sparten von ${report.layBreeders} Tieren`}>
+        Legeleistung  Geflügel
+        <sup>{report.layBreeders} / {report.layerBreeders}</sup>
+    </h5>
     <canvas bind:this={canvas} width='192px' height='256px'></canvas>
-    <div></div>
 </div>
 
 <style></style>

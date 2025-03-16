@@ -11,14 +11,14 @@ class Article
 		if( $id ) {
 			$args = get_defined_vars();
 			$stmt = Query::prepare('
-				SELECT id, author, title, html, modified 
+				SELECT id, level, author, title, html, modified 
 				FROM article
 				WHERE id=:id
 			');
 			return Query::select($stmt, $args);
 		} else {
 			$stmt = Query::prepare('
-				SELECT id, author, title
+				SELECT id, level, author, title
 				FROM article
 				ORDER BY level
 			');

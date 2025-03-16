@@ -36,13 +36,11 @@ const api = { // api
 			return await del( `/api/2/article/${id}` ); // { ok }
 		}
 	},
-
 	breed : {
 		forSection: async ( sectionId ) => {
 			return await get( `/api/2/breed?section=${sectionId}`);
 		}
 	},
-
 	breeder : {
 		get: async ( arg=null ) => {
 			if( +arg ) { // test if number
@@ -52,7 +50,6 @@ const api = { // api
 			}
 		},
 	},
-
 	color : {
 		forBreed: async ( breedId ) => {
 			return await get( `/api/2/color?breed=${breedId}`);
@@ -67,7 +64,6 @@ const api = { // api
 			}
 		},
 	},
-
 	pair : {
 		get: async ( arg=null ) => {
 			if( +arg ) { // test if number
@@ -86,14 +82,11 @@ const api = { // api
 			return await del( `/api/2/pair/${id}` );
 		},
 	},
-
 	report : {
 		get: async ( query ) => {
-			console.log( 'Report', query );
 			return await get( '/api/2/report', query )
 		},
 	},
-
 	result : {
 		get: async ( arg=null ) => {
 			if( +arg ) { // test if number
@@ -183,30 +176,32 @@ function findRoot( data, id ) {
 // fetch methods
 async function get( url, query=null ) {
 	url += query ? '?' + new URLSearchParams( query ).toString() : '';
-	const response = await fetch( `${API_BASE}${url}`, { method:'GET', headers:headers });
+	const response = await fetch( `${API_BASE}${url}`, { method:'GET', headers:headers() });
 	return response.ok ? await response.json() : null;
 }
 
 async function post(url, body) {
-	const response = await fetch(`${API_BASE}${url}`, { method:'POST', headers:headers, body:JSON.stringify( body ) });
+	const response = await fetch(`${API_BASE}${url}`, { method:'POST', headers:headers(), body:JSON.stringify( body ) });
 	return response.ok ? await response.json() : null;
 }
 
 async function put(url, body) {
-	const response = await fetch(`${API_BASE}${url}`, { method:'PUT', headers:headers, body:JSON.stringify( body ) });
+	const response = await fetch(`${API_BASE}${url}`, { method:'PUT', headers:headers(), body:JSON.stringify( body ) });
 	return response.ok ? await response.json() : null;
 }
 
 async function del(url) { // delete is a reserved word
-	const response = await fetch(`${API_BASE}${url}`, { method:'DELETE', headers:headers } );
+	const response = await fetch(`${API_BASE}${url}`, { method:'DELETE', headers:headers() } );
 	return response.ok ? await response.json() : null;
 }
 
 // Helpers
-const headers = {
-	'Accept': 'application/json', // response
-	'Content-Type': 'application/json', // body
-	'Authorization': `Bearer ${authenticationToken}`,
+function headers() {
+ 	return {
+		'Accept': 'application/json', // response
+		'Content-Type': 'application/json', // body
+		'Authorization': `Bearer ${authenticationToken}`,
+	}
 }
 
 // session tools

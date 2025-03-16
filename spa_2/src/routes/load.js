@@ -6,11 +6,8 @@ export async function load() {
 	const standard_promise = getStandardPromise();
 	const responses = await Promise.all([ fed_promise, standard_promise ])
 
-	console.log( 'Store', store );
 	store.federation.update( () => responses[0] );
 	store.standard.update(   () => responses[1] );
-
-//	return { federation:responses[0], standard:responses[1], url:new URL( url ) }; // no return as all in stored state
 }
 
 // helpers

@@ -1,26 +1,32 @@
 <script>
-    import { createEventDispatcher } from 'svelte';
+    //import { createEventDispatcher } from 'svelte';
     import { draw, fade } from 'svelte/transition';
+    import { goto } from '$app/navigation';
+    import { page } from '$app/state';
     import api from "../../../js/api.js";
-    import {calcColor, dec, gpsToPx, pct} from '../../../js/util.js';
+    import {calcColor, dec, gpsToPx, pct} from '$lib/js/toolbox.js';
     import BdrgSVG from './BdrgSVG.svelte';
+    import Select from '$lib/cmp/form/input/Select.svelte';
 
-    export let typeId = null;
-    export let year = null;
-    export let sectionId;
-    export let breedId;
-    export let colorId;
+    // export let typeId = null;
+    // export let year = null;
+    // export let sectionId;
+    // export let breedId;
+    // export let colorId;
+    //
+    // export let districtId; //TODO for feedback, maybe should be event
 
-    export let districtId; //TODO for feedback, maybe should be event
+    const MAXBUBBLE = 35;
+
+    let { report, typeId } = $props();
 
     let canvas = null;
-    let districts = null; // districts with fields
-    let max = null; // for max values per field in district
-    let map = { labels:[], coords:[], datasets:[] }// datasets
-    let colors = {};
+//    let districts = null; // districts with fields
+    let max = $state( null ); // for max values per field in district
+    let map = $state( null ); //$state( { labels:[], coords:[], datasets:[] } )// datasets
+    let colors = $state( {} );
 
-    let type = null;
-    const resultTypes = { // what options to show
+    const types = { // what options to show
         2: {
             id: 2,
             label: 'Zuchten',
@@ -49,8 +55,8 @@
             label: 'Brutleistung Leger',
             map: (result) => [ result.broodLayerHatched === null ? null : 100*result.broodLayerHatched, result.broodLayerFertile === null ? null : 100*result.broodLayerFertile], // for map and chart
             title: (result) => result.broodLayerEggs > 0
-                    ? ` Eingelegt ${dec(result.broodLayerEggs)} Eier, ${dec(100 * result.broodLayerFertile)}% waren befruchtet und es schlüpften ${dec(100*result.broodLayerHatched)}%`
-                    : ' keine Angaben',
+                ? ` Eingelegt ${dec(result.broodLayerEggs)} Eier, ${dec(100 * result.broodLayerFertile)}% waren befruchtet und es schlüpften ${dec(100*result.broodLayerHatched)}%`
+                : ' keine Angaben',
             getMax: districts => 100,
             getMin: districts => 0,
         },
@@ -77,31 +83,12 @@
             getMin: districts => 89,
         },
     }
+    //let type = $state( types[ typeId ] );
 
-    function lon( value ) {
-        return ( value-5.74405 ) * 55;
-    }
-    function lat( value ) {
-        return ( 55.02780 - value ) * 80;
-    }
 
-    function loadDistricts( year, sectionId, breedID, colorId ) {
-        map = null;
-        let promise;
-        if( colorId ) {
-            promise = api.map.color.get( year, colorId )
-        } else if( breedId ) {
-            promise = api.map.breed.get( year, breedId )
-        } else if( sectionId ) {
-            promise = api.map.section.get( year, sectionId )
-        }
-        if( promise ) {
-            promise.then(response => {
-                districts = response.districts;
-                calcMaxValues(districts);
-            });
-        }
-    }
+    $effect( () => {
+        updateMap( report, typeId );
+    });
 
     function calcMaxValues( districts ) {
 
@@ -116,25 +103,22 @@
         }
     }
 
-
-
-    function showMap( districts, typeId ) {
-        type = resultTypes[ typeId ];
-        if( districts ) {
-            type.max = type.getMax(districts);
-            type.min = type.getMin(districts);
-        }
+    function updateMap( report, typeId ) {
+        let type = types[ typeId ];
         const labels = [];
         const coords = []
         const datasets = [];
         const titles = [];
         let max = 1;
-        if( districts ) {
+        if( report.districts ) {
+            type.max = type.getMax(report.districts);
+            type.min = type.getMin(report.districts);
             // fill label;s and datasets depending on rows
-            districts.forEach(district => {
+            for( let district of report.districts ) {
                 labels.push(district.name);
 //                coords.push( gpsToPx( 380, 512, 5.7, 15.0, 47.5, 55.0, district.longitude, district.latitude ) );
-                coords.push( gpsToPx( 360, 485, 5.7, 15.0, 47.5, 55.0, district.longitude, district.latitude ) );
+//                coords.push( gpsToPx( 360, 485, 5.7, 15.0, 47.5, 55.0, district.longitude, district.latitude ) );
+                coords.push( gpsToPx( 448, 576, 5.7, 15.0, 47.5, 55.0, district.longitude, district.latitude ) );
                 titles.push( type.title( district ) );
                 let values = type.map( district );
 
@@ -149,7 +133,7 @@
                     dataset.data.push(value);
                     if( value > max ) max = value; // remember max, for ?
                 }
-            })
+            }
             map = {
                 labels:labels,
                 coords:coords,
@@ -158,60 +142,55 @@
                 min:type.min ? type.min : 0, // take preset if set
                 max:type.max ? type.max : max,
                 colors:[ '#74abf0C0', '#cdf094C0', '#F9CA9BC0', '#F9ACBCC0' ], // for each circle
-            };
+            }
         }
     }
 
     function onClick( district ) {
         return ( event ) => {
-            districtId = district.id;
+            console.log('Select LV')
+            const url =new URL( page.url ); // for query changes
+            url.searchParams.set( 'district', district.id );
+            goto( url.href );
         }
     }
-
-
-
-    const dispatch = createEventDispatcher();
-
-    $: loadDistricts( year, sectionId, breedId, colorId );
-    $: showMap( districts, typeId );
-
 </script>
 
 
-<div class='flex flex-col border border-gray-600 rounded'>
-    <h3 class='bg-header text-white text-center'>{#if type && year } {type.label} in {year} {/if}</h3>
 
-    <div class='relative'>
-        <BdrgSVG {colors}/>
+    <div class='flex flex-col border rounded-t-none' in:fade>
 
-        <svg class='absolute top-0 bottom-0' width='360px' height='485px'>
+        <div class='relative'>
+            <BdrgSVG {colors}/>
 
             {#if map}
-                <g in:fade={{duration:1000}} >
-                    {#each districts as district, index }
-                        <circle cx={map.coords[index].x} cy={map.coords[index].y} r={1+MAXBUBBLE} stroke='none' fill='#ccf0'></circle>
-                        {#each map.datasets as dataset, d }
-                            <circle cx={map.coords[index].x} cy={map.coords[index].y}
-                                    r={Math.max( MAXBUBBLE*(dataset.data[index] - map.min)/(map.max - map.min), 0 ) }
-                                    stroke='#7777' fill={map.colors[d]} >
+                <svg class='absolute top-0 bottom-0' width='448' height='576' in:fade={{duration:1000}}>
+
+                    <g in:fade={{duration:1000}} >
+                        {#each report.districts as district, index }
+                            <circle cx={map.coords[index].x} cy={map.coords[index].y} r={1+MAXBUBBLE} stroke='none' fill='#ccf0'></circle>
+                            {#each map.datasets as dataset, d }
+                                <circle cx={map.coords[index].x} cy={map.coords[index].y}
+                                        r={Math.max( MAXBUBBLE*(dataset.data[index] - map.min)/(map.max - map.min), 0 ) }
+                                        stroke='#7777' fill={map.colors[d]} >
+                                </circle>
+                            {/each}
+                        {/each}
+
+                        {#each map.labels as label, index }
+                            <text x={map.coords[index].x} y={map.coords[index].y-10}  text-anchor="middle" stroke='#666' stroke-width='0.5' fill='#666' > {label} </text>
+                        {/each}
+
+                        {#each report.districts as district, index }
+                            <circle cx={map.coords[index].x} cy={map.coords[index].y} r={1+MAXBUBBLE} stroke='#7770' fill='#0000' on:click={onClick(district)}>
+                                <title>{map.labels[index]} : {map.titles[index]}</title>
                             </circle>
                         {/each}
-                    {/each}
-
-                    {#each map.labels as label, index }
-                        <text x={map.coords[index].x} y={map.coords[index].y-10}  text-anchor="middle" stroke='#666' stroke-width='0.5' fill='#666' > {label} </text>
-                    {/each}
-
-                    {#each districts as district, index }
-                        <circle cx={map.coords[index].x} cy={map.coords[index].y} r={1+MAXBUBBLE} stroke='#7770' fill='#0000' on:click={onClick(district)}>
-                            <title>{map.labels[index]} : {map.titles[index]}</title>
-                        </circle>
-                    {/each}
-                </g>
+                    </g>
+                </svg>
             {/if}
-        </svg>
+        </div>
     </div>
-</div>
 
 <style>
     canvas {

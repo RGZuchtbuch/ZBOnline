@@ -13,11 +13,14 @@ export const moderator = writable( null );
 export const districts = writable( null );
 export const district  = writable( null );
 
-export const reports = {
-    chart: writable( null ),
-    map  : writable( null ),
-    trend: writable( null ),
-};
+class Report {
+    chart = $state( null );
+    map   = $state( null );
+    table = $state( null );
+    trend = $state( null );
+}
+
+const report = new Report();
 
 export default {
     articles:articles,
@@ -27,7 +30,7 @@ export default {
     federation:federation,
     menu:menu,
     moderator:moderator,
-    reports:reports,
+    report:report,
     standard:standard,
     title:title,
     url:url,

@@ -52,6 +52,10 @@
     img {
     }
 
+    sup, sub {
+        @apply text-[10px];
+    }
+
     @media screen {
         body {
             @apply bg-white text-black;
@@ -65,8 +69,6 @@
         body {
             @apply bg-white text-black;
         }
-
-
     }
 }
 
@@ -120,5 +122,7 @@
 }
 
 @layer utilities {
-
+    *[title] {
+        @apply cursor-help;
+    }
 }

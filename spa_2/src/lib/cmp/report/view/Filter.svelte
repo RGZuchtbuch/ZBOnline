@@ -5,20 +5,14 @@
 
 	import Select from '$lib/cmp/form/input/Select.svelte';
 	import Form from '$lib/cmp/form/Form.svelte';
-	import api from '$lib/js/api.js';
 
-	//let props = $props();
-
-//	let { district, year, group, section, breed, color, type, federation, standard } = $props();
-//	let { data } = $props();
-
-	const query = $derived( {
+	const query = $derived( { // get value or default/null
 		district : +page.url.searchParams.get('district') || 1,
 		year     : +page.url.searchParams.get('year') || new Date().getFullYear() - 1,
 		group    :  page.url.searchParams.get('group'),
-		section  :  page.url.searchParams.get('section'),
-		breed    :  page.url.searchParams.get('breed'),
-		color    :  page.url.searchParams.get('color'),
+		section  : +page.url.searchParams.get('section') || null,
+		breed    : +page.url.searchParams.get('breed') || null,
+		color    : +page.url.searchParams.get('color') || null,
 	} );
 
 
@@ -29,8 +23,6 @@
 	let breed    = $state( $standard.breeds[ query.breed ] );
 	let color    = $state( $standard.colors[ query.color ] );
 
-	console.log( 'Filter query', query );
-
 	const groups = ['I','II','III'];
 	let years = [];
 	let nextYear = new Date().getFullYear()+1;
@@ -38,34 +30,33 @@
 		years.push( year );
 	}
 
-	const url =new URL( page.url ); // for query changes
-
-
 	function onDistrictChange( event ) {
-		console.log( 'ETV',  );
 		district = $federation.districts[ +event.target.value ]
+		const url =new URL( page.url ); // for query changes
 		url.searchParams.set( 'district', district.id );
-		goto( url );
+		goto( url.href );
 	}
 	function onYearChange( event ) {
 		year = +event.target.value;
+		const url =new URL( page.url ); // for query changes
 		url.searchParams.set( 'year', year );
-		goto( url );
+		goto( url.href );
 	}
 	function onGroupChange( event ) {
 		group = event.target.value;
+		const url =new URL( page.url ); // for query changes
 		if( group ) {
 			url.searchParams.set('group', group);
 		} else {
 			url.searchParams.delete('group');
 		}
-		goto( url );
+		goto( url.href );
 	}
 	function onSectionChange( event ) {
 		section = $standard.rootSections.find( item => item.id === +event.target.value );
 		breed = null;
 		color = null;
-
+		const url =new URL( page.url ); // for query changes
 		if (section) {
 			url.searchParams.set( 'section', section.id );
 		} else {
@@ -73,67 +64,30 @@
 		}
 		url.searchParams.delete( 'breed' );
 		url.searchParams.delete( 'color' );
-		goto( url );
+		goto( url.href );
 	}
 	function onBreedChange( event ) {
 		breed = $standard.breeds[ +event.target.value ];
 		color = null;
+		const url =new URL( page.url ); // for query changes
 		if( breed ) {
 			url.searchParams.set( 'breed', breed.id );
 		} else {
 			url.searchParams.delete( 'breed' );
 		}
 		url.searchParams.delete( 'color' );
-		goto( url );
+		goto( url.href );
 	}
 	function onColorChange( event ) {
 		color = $standard.colors[ +event.target.value ];
+		const url =new URL( page.url ); // for query changes
 		if( color ) {
 			url.searchParams.set( 'color', color.id );
 		} else {
 			url.searchParams.delete( 'color' );
 		}
-		goto( url );
+		goto( url.href );
 	}
-
-	async function load( query ) {
-		// should get chart, map, trend and table data
-
-
-		console.log("Loading Reports", query );
-
-		const reducedQuery = {};
-		for( let key in query ) {
-			if( query[ key ] ) reducedQuery[ key ] = query[ key ];
-		}
-
-		console.log( 'RedQ', reducedQuery );
-
-		if( reducedQuery && reducedQuery.district && reducedQuery.year ) {
-			const chartPromise = getPromise('chart', reducedQuery );
-			const mapPromise   = getPromise('map',   reducedQuery );
-			const trendPromise = getPromise('trend', reducedQuery );
-			//const tablePromise = getPromise('table', query);
-
-//		const responses = await Promise.all([ chartPromise, mapPromise, trendPromise, tablePromise ])
-			const responses = await Promise.all([ chartPromise, mapPromise, trendPromise ])
-
-			store.reports.chart.update( () => responses[0] );
-			store.reports.map.update(   () => responses[1] );
-			store.reports.trend.update( () => responses[2] );
-			//store.reports.table.update( () => responses[3] );
-		}
-	}
-
-	async function getPromise( target, query ) {
-		query.target=target;
-		return api.report.get( query );
-	}
-
-	$effect( () => {
-		load( query );
-	})
-
 </script>
 
 <Form>

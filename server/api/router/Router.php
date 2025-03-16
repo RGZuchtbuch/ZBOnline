@@ -127,9 +127,6 @@ class Router {
 		$app->get('/2/pair/{id:[0-9]+}', 'App\controller\Pair::get' );
 
 		$app->get('/2/report', 'App\controller\Report::filter' );
-//		$app->get('/2/report/map', 'App\controller\Report::getMap' );
-//		$app->get('/2/report/trend', 'App\controller\Report::getTrend' );
-//		$app->get('/2/report/table', 'App\controller\Report::getTable' );
 
 		$app->get('/2/result', 'App\controller\Result::filter' ); // on districtId
 		$app->get('/2/result/{id:[0-9]+}', 'App\controller\Result::get' );

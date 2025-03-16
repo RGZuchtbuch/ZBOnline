@@ -64,9 +64,11 @@
 </script>
 
 <div class='flex flex-col' >
-    <h5>Brutleistung Tauben</h5>
+    <h5 title={`Brutleistung, kKüken pro Paar für Tauben von ${report.broodPigeonBreeders} Tieren`}>
+        Brutleistung Tauben
+        <sup>{report.broodPigeonBreeders} / {report.broodBreeders}</sup>
+    </h5>
     <canvas bind:this={canvas} width='128px' height='256px'></canvas>
-    <div></div>
 </div>
 
 <style></style>
