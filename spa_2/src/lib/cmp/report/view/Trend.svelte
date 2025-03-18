@@ -12,33 +12,9 @@
     let chart = null;
 
     $effect( () => {
+        console.log('Trend');
         updateTrend( report, typeId );
     });
-
-    // function updateDistrict(districtId ) { // get district info
-    //     api.district.get( districtId ).then( response => {
-    //         district = response.district;
-    //     })
-    // }
-
-
-    // function updateData(districtId, sectionId, breedId, colorId ) {
-    //     let promise;
-    //     if( districtId ) {
-    //         if (colorId) {
-    //             promise = api.trend.color.get(districtId, colorId)
-    //         } else if (breedId) {
-    //             promise = api.trend.breed.get(districtId, breedId)
-    //         } else if (sectionId) {
-    //             promise = api.trend.section.get(districtId, sectionId)
-    //         }
-    //         if( promise ) {
-    //             promise.then(response => {
-    //                 data = response.years;
-    //             });
-    //         }
-    //     }
-    // }
 
     function extractLabels( years, type ) {
         let labels = [];
@@ -48,7 +24,7 @@
         return labels;
     }
 
-    const datasetGenerators = {
+    const datasetGenerators = { // for type, prepare data
         2 : ( years ) => [
             {label: 'Zuchten #', data: years.map( year => year.breeders ), borderWidth: 1, categoryPercentage: (0.75), tooltip:(context) => dec(context.raw) + ' gemeldete Zuchten' }
         ],
@@ -70,7 +46,7 @@
 
     const scales = {
         2:  {},
-        10: { min:0, max:140 },
+        10: { min:0, max:160 },
         20: { min:0, max:100 },
         21: {},
         30: { min: 89, max: 97 },
@@ -92,7 +68,6 @@
 
     function createChart( labels, datasets, min, max, start ) {
         const context = canvas.getContext( '2d' );
-
         chart = new Chart(
             context,
             {
@@ -142,9 +117,6 @@
 
     Chart.register( Colors, BarController, BarElement, CategoryScale, LinearScale, Tooltip );
 
-    // $: updateDistrict( districtId );
-    // $: updateData( districtId, sectionId, breedId, colorId );
-    // $: updateChart( data, typeId );
 
 </script>
 

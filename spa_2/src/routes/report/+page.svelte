@@ -20,26 +20,42 @@
 	store.title.update( () => title );
 	store.menu.update( () => menu );
 
-	let query = $derived( extractQuery( page.url ) );
+	//let query = $derived( extractQuery( page.url ) );
+	//let query = $state( null );
+	let report = $state( null );
+	//let report = $derived( load{ chart:null, map:null, trend:null, table:null	} );
+
 	//let report = null;
 	$effect( async () => {
-	 	await load( query );
+	 	await load( page.url );
 	});
 
-	async function load( query ) {
-		if( query && query.district && query.year ) {
+	async function load( url ) {
+		console.log( 'Load' );
+		const args = extractQuery( page.url );
+		if( args && args.district && args.year ) {
 			const responses = await Promise.all( [
-				getPromise('chart', query ),
-				getPromise('map',   query ),
-				getPromise('trend', query ),
-				getPromise('table', query ),
+				getPromise('chart', args ),
+				getPromise('map',   args ),
+				getPromise('trend', args ),
+				getPromise('table', args ),
 			]);
-			store.report.chart = responses[0].report; // state
-			store.report.map   = responses[1].report; // state
-			store.report.trend = responses[2].report; // state
-			store.report.table = responses[3].report; // state
+			// store.report.chart = responses[0].report; // state
+			// store.report.map   = responses[1].report; // state
+			// store.report.trend = responses[2].report; // state
+			// store.report.table = responses[3].report; // state
+			console.log('Promises loaded', responses);
+			//query = args;
+			report = {
+				query: args,
+				chart: responses[0].report,
+				map:   responses[1].report,
+				trend: responses[2].report,
+				table: responses[3].report,
+			}
 		}
 	}
+
 	async function getPromise( target, query ) {
 		return api.report.get( Object.assign( { target:target }, query ) );
 	}
@@ -58,10 +74,13 @@
 		if( value ) query[ key ] = value; // only if > 0
 	}
 
+	//$inspect( 'Report query', query );
+	//$inspect( 'Report report', report );
+
 </script>
 
-{#if true }
-	<Report {query} {...store.report} />
+{#if report }
+	<Report {report} />
 {/if}
 
 

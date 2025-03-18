@@ -164,30 +164,32 @@
             <BdrgSVG {colors}/>
 
             {#if map}
-                <svg class='absolute top-0 bottom-0' width='448' height='576' in:fade={{duration:1000}}>
+                {#key map}
+                    <svg class='absolute top-0 bottom-0' width='448' height='576' in:fade={{duration:1000}}>
 
-                    <g in:fade={{duration:1000}} >
-                        {#each report.districts as district, index }
-                            <circle cx={map.coords[index].x} cy={map.coords[index].y} r={1+MAXBUBBLE} stroke='none' fill='#ccf0'></circle>
-                            {#each map.datasets as dataset, d }
-                                <circle cx={map.coords[index].x} cy={map.coords[index].y}
-                                        r={Math.max( MAXBUBBLE*(dataset.data[index] - map.min)/(map.max - map.min), 0 ) }
-                                        stroke='#7777' fill={map.colors[d]} >
+                        <g in:fade={{duration:1000}} >
+                            {#each report.districts as district, index }
+                                <circle cx={map.coords[index].x} cy={map.coords[index].y} r={1+MAXBUBBLE} stroke='none' fill='#ccf0'></circle>
+                                {#each map.datasets as dataset, d }
+                                    <circle cx={map.coords[index].x} cy={map.coords[index].y}
+                                            r={Math.max( MAXBUBBLE*(dataset.data[index] - map.min)/(map.max - map.min), 0 ) }
+                                            stroke='#7777' fill={map.colors[d]} >
+                                    </circle>
+                                {/each}
+                            {/each}
+
+                            {#each map.labels as label, index }
+                                <text x={map.coords[index].x} y={map.coords[index].y-10}  text-anchor="middle" stroke='#666' stroke-width='0.5' fill='#666' > {label} </text>
+                            {/each}
+
+                            {#each report.districts as district, index }
+                                <circle cx={map.coords[index].x} cy={map.coords[index].y} r={1+MAXBUBBLE} stroke='#7770' fill='#0000' on:click={onClick(district)}>
+                                    <title>{map.labels[index]} : {map.titles[index]}</title>
                                 </circle>
                             {/each}
-                        {/each}
-
-                        {#each map.labels as label, index }
-                            <text x={map.coords[index].x} y={map.coords[index].y-10}  text-anchor="middle" stroke='#666' stroke-width='0.5' fill='#666' > {label} </text>
-                        {/each}
-
-                        {#each report.districts as district, index }
-                            <circle cx={map.coords[index].x} cy={map.coords[index].y} r={1+MAXBUBBLE} stroke='#7770' fill='#0000' on:click={onClick(district)}>
-                                <title>{map.labels[index]} : {map.titles[index]}</title>
-                            </circle>
-                        {/each}
-                    </g>
-                </svg>
+                        </g>
+                    </svg>
+                {/key}
             {/if}
         </div>
     </div>

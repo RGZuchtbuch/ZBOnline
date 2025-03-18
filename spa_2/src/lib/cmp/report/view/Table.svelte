@@ -1,22 +1,22 @@
 <script>
     import {fade} from 'svelte/transition';
-    import {getContext, onMount, setContext} from 'svelte';
+    import {getContext, onMount, setContext, untrack} from 'svelte';
     import { page } from '$app/state';
     import { dec, pct } from '$lib/js/toolbox.js';
 
     let { report, district, year } = $props();
 
+    //$inspect( 'Table report', report, report.sections.length );
+//$inspect( 'R', report );
+
+    //let totalledReport = $state( null );
+    //$effect( async () => {
+    //    calcTotals( report );
+    //} );
     let totalledReport = $state( null );
     $effect( () => {
-        totalledReport = calcTotals( { sections:report.sections } );
+        calcTotals( report );
     });
-//    const totalledReport = $derived( calcTotals( report ) );
-//     $effect( () => {
-//         console.log( 'Table report', report );
-//
-// //        calcTotals( report )
-//     } );
-
 
     function addTo( sum, result ) { // count and add all up to totals of section etc
         result.broods = result.broodEggs ? result.broodEggs / 2 : null; // for pigeons
@@ -58,7 +58,6 @@
             sum.showScore += result.showBreeders * result.showScore;
         }
     }
-
     function avgTotal( sum ) { // get avg from total
         const total = {};
             total.breeders = sum.breeders; // reporting layers
@@ -86,61 +85,53 @@
             total.showScore = sum.showBreeders ? sum.showScore / sum.showBreeders : null;
         return total;
     }
-
     function createTotal() {
         return { breeders:0, pairs:0, layDames:0, layShould:0, layBreeders:0, layEggs:0, layWeightBreeders:0, layWeightShould:0, layWeight:0, broodBreeders:0, broodLayerEggs:null, broodLayerFertile:0, broodLayerHatched:0, broodPigeonHatched:0, broodPigeonResult:0, showBreeders:0, showCount:null, showScore:0 };
     }
-
     function calcTotals( report ) {
-        if( report ) {
-            const totalled = { sections:report.sections };
-            const resultsSum = createTotal();
-            for( const section of totalled.sections ) {
-                const sectionSum = createTotal();
-                for( const subsection of section.subsections ) {
-                    const subsectionSum = createTotal();
-                    for( const breed of subsection.breeds ) {
-                        if( breed.result ) { // pigeons by breed
-                            addTo( resultsSum, breed.result);
-                            addTo( sectionSum, breed.result);
-                            addTo( subsectionSum, breed.result);
-                        }
-                        const breedSum = createTotal();
-                        for( const color of breed.colors ) { // layers by color
-                            if( color.result ) {
-                                addTo( resultsSum, color.result);
-                                addTo( sectionSum, color.result);
-                                addTo( subsectionSum, color.result);
-                                addTo( breedSum, color.result );
-                            }
-                        }
-                        breed.total = avgTotal( breedSum );
+        totalledReport = null;
+        const resultsSum = createTotal();
+        for( const section of report.sections ) {
+            console.log('S', section.name);
+            const sectionSum = createTotal();
+            for( const subsection of section.subsections ) {
+                const subsectionSum = createTotal();
+                for( const breed of subsection.breeds ) {
+                    if( breed.result ) { // pigeons by breed
+                        addTo( resultsSum, breed.result);
+                        addTo( sectionSum, breed.result);
+                        addTo( subsectionSum, breed.result);
                     }
-                    subsection.total = avgTotal( subsectionSum );
+                    const breedSum = createTotal();
+                    for( const color of breed.colors ) { // layers by color
+                        if( color.result ) {
+                            addTo( resultsSum, color.result);
+                            addTo( sectionSum, color.result);
+                            addTo( subsectionSum, color.result);
+                            addTo( breedSum, color.result );
+                        }
+                    }
+                    breed.total = avgTotal( breedSum );
                 }
-                section.total = avgTotal( sectionSum );
+                subsection.total = avgTotal( subsectionSum );
             }
-            totalled.total = avgTotal( resultsSum );
-            return totalled;
+            section.total = avgTotal( sectionSum );
         }
-        return null;
+        report.total = avgTotal( resultsSum );
+        totalledReport = report;
     }
+
 </script>
 
 <!-- comby of table and div for better printing results -->
 
-{#if totalledReport }
+{#if totalledReport && totalledReport.sections.length > 0 }
     {#key totalledReport }
         <div class='flex flex-col' in:fade>
-            {#each totalledReport.sections as section}
-                <table class='w-full px-2'>
-                    <!-- section header -->
-                    <tbody class=''>
-
-                    </tbody>
-                </table>
-
+            {#each totalledReport.sections as section, s}
+                <!-- table per section for nice printing per page header-->
                 <table class='w-full px-2 break-after-page'>
+                    <!-- section header -->
                     <thead>
                         <tr>
                             <th class='sticky top-9 border-y border-gray-600' colspan=14>
@@ -411,77 +402,73 @@
                             </th>
                         </tr>
                         <!-- end section total -->
-
-
                     </tbody>
 
 
-                    {#if section.id === report.sections[ report.sections.length-1 ].id } <!-- last section -->
-                        <tbody>
-                            <!-- totals -->
-                            <tr><th>-</th></tr>
-
-                            <tr><th class='border-y border-gray-600 p-2 bg-header text-center text-white text-xl' colspan=14>Gesammt Geflügel</th></tr>
-                            <tr>
-                                <th>
-                                    <div class='flex flex-row bg-gray-300 px-2 gap-x-1 font-bold'>
-                                        <div class='grow text-left'>Alle Sparten, Gruppen, Rassen & Farben</div>
-                                        <div class='flex flex-row justify-evenly gap-x-6'>
-                                            <div class='w-14 text-center'>Zuchten</div>
-                                            <div class='w-28'></div>
-                                            <div class='w-40'></div>
-                                            <div class='w-28 text-center'>Schauleistung</div>
-                                        </div>
-                                    </div>
-                                    <div class='flex flex-row bg-gray-300 px-2 gap-x-1 text-xs'>
-                                        <div class='grow text-left'></div>
-                                        <div class='flex flex-row justify-evenly gap-x-6'>
-                                            <div class='flex w-14 justify-evenly'>
-                                                <div class='th'></div>
-                                            </div>
-                                            <div class='w-28'></div>
-                                            <div class='w-40'></div>
-                                            <div class='flex w-28 justify-evenly'>
-                                                <div class='th'>Tiere</div>
-                                                <div class='th'>Punkte</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </th>
-                            </tr>
-                            <tr>
-                                <th>
-                                    <div class='flex flex-row bg-header text-white px-2 gap-x-1 justify-evenly font-bold text-sm italic border-y border-gray-600'>
-                                        <div class='grow'>Gesamt</div>
-                                        <div class='flex justify-evenly text-sm gap-x-6'>
-                                            {#if report.total}
-                                                <div class='flex w-14 justify-evenly'>
-                                                    <div class='td' title='Zahl der Zuchten / Züchter'>{dec( report.total.breeders )}</div>
-                                                </div>
-                                                <div class='w-28'></div>
-
-                                                <div class='w-40'></div>
-
-                                                <div class='flex w-28 justify-evenly'>
-                                                    <div class='td' title='Zahl der ausgestellten Tieren'>{dec( report.total.showCount )}</div>
-                                                    <div class='td' title='Durchschnitt Bewertungsnote'>{dec( report.total.showScore, 1 )}</div>
-                                                </div>
-                                            {/if}
-                                        </div>
-                                    </div>
-                                </th>
-                            </tr>
-                        </tbody>
-                    {/if}
                 </table>
                 <div class=' text-center'> - </div>
             {/each}
-            {#if totalledReport.sections.length === 0 }
-                <h2 class='p-2 bg-header text-center text-xl'>Leider keine Daten für dieses Jahr</h2>
-            {/if}
+            <table>
+                <thead>
+                    <!-- totals -->
+                    <tr><th class='border-y border-gray-600 p-2 bg-header text-center text-white text-xl' colspan=14>Gesammt Geflügel</th></tr>
+                    <tr>
+                        <th>
+                            <div class='flex flex-row bg-gray-300 px-2 gap-x-1 font-bold'>
+                                <div class='grow text-left'>Alle Sparten, Gruppen, Rassen & Farben</div>
+                                <div class='flex flex-row justify-evenly gap-x-6'>
+                                    <div class='w-14 text-center'>Zuchten</div>
+                                    <div class='w-28'></div>
+                                    <div class='w-40'></div>
+                                    <div class='w-28 text-center'>Schauleistung</div>
+                                </div>
+                            </div>
+                            <div class='flex flex-row bg-gray-300 px-2 gap-x-1 text-xs'>
+                                <div class='grow text-left'></div>
+                                <div class='flex flex-row justify-evenly gap-x-6'>
+                                    <div class='flex w-14 justify-evenly'>
+                                        <div class='th'></div>
+                                    </div>
+                                    <div class='w-28'></div>
+                                    <div class='w-40'></div>
+                                    <div class='flex w-28 justify-evenly'>
+                                        <div class='th'>Tiere</div>
+                                        <div class='th'>Punkte</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th>
+                            <div class='flex flex-row bg-header text-white px-2 gap-x-1 justify-evenly font-bold text-sm italic border-y border-gray-600'>
+                                <div class='grow'>Gesamt</div>
+                                <div class='flex justify-evenly text-sm gap-x-6'>
+                                    {#if report.total}
+                                        <div class='flex w-14 justify-evenly'>
+                                            <div class='td' title='Zahl der Zuchten / Züchter'>{report.total.breeders}</div>
+                                        </div>
+                                        <div class='w-28'></div>
 
+                                        <div class='w-40'></div>
+
+                                        <div class='flex w-28 justify-evenly'>
+                                            <div class='td' title='Zahl der ausgestellten Tieren'>{dec( report.total.showCount )}</div>
+                                            <div class='td' title='Durchschnitt Bewertungsnote'>{dec( report.total.showScore, 1 )}</div>
+                                        </div>
+                                    {/if}
+                                </div>
+                            </div>
+                        </th>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     {/key}
+{:else}
+    <h2 class='p-2 text-center text-xl'>Leider keine Daten für dieses Jahr</h2>
 {/if}
 
 
