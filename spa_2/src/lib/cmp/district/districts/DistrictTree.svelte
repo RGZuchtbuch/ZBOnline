@@ -8,11 +8,24 @@
 	let { root } = $props();
 </script>
 
-<h3>
+<h2 class='header text-center'>
 	Verbände im BDRG Zuchtbuch
-</h3>
+</h2>
 
+<section>
+	{#if root}
+		<div class='flex flex-row header'>
+			<div class='district'>Verbände </div>
+			<div class='moderator'>Obmann</div>
+			<div class='email' title='Email schicken'>{@render email_icon()}</div>
+			<div class='link' title='Website besuchen'>{@render link_icon()}</div>
+		</div>
 
+		<ul>
+			{@render row( root, 0 )}
+		</ul>
+	{/if}
+</section>
 
 {#snippet row( district, level )}
 	<li>
@@ -36,30 +49,13 @@
 	</li>
 {/snippet}
 
-{#if root}
-	<section class=''>
-		<div class='header'>
-			<div class='district'>Verbände </div>
-			<div class='moderator'>Obmann</div>
-			<div class='email' title='Email schicken'>{@render email_icon()}</div>
-			<div class='link' title='Website besuchen'>{@render link_icon()}</div>
-		</div>
-
-		<ul>
-			{@render row( root, 0 )}
-		</ul>
-	</section>
-{/if}
 
 <style>
     section {
-        @apply flex flex-col m-4 border border-gray-600 rounded;
+        @apply flex flex-col my-2 border;
     }
     li {
         @apply pl-4 whitespace-nowrap;
-    }
-    .header {
-        @apply flex flex-row bg-teal-200 p-2;
     }
     .district {
 	    @apply grow;

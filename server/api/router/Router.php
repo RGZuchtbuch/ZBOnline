@@ -89,7 +89,7 @@ class Router {
 //		$app->get('/log/clear', 'App\controller\Log::clear' );
 //
 //		$app->get(	 '/result/{id}', 'App\controller\Result::get' ); // for selecting pair for parent ring in report
-//		$app->get(	 '/result/district/{districtId}/year/{year}', 'App\controller\Result::resultFor' ); //
+//		$app->get(	 '/result/district/{districtId}/year/{year}', 'App\controller\Result::resultFor' ); // total for district & year, bar chart
 //		$app->get(	 '/results/years/district/{id}', 'App\controller\Result::years' ); //
 //		$app->get(	 '/results/districts/year/{year}', 'App\controller\Result::districts' ); //
 //

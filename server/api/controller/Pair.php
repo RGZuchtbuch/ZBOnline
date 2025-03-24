@@ -238,8 +238,8 @@ class Pair
 	public static function filter( Request $request, Response $response, array $args ) : Response {
 		$requester = new Requester( $request );
 		$query      = $request->getQueryParams();
-		$breederId  = $query[ 'breederId' ] ?? null;
-		$districtId = $query[ 'districtId' ] ?? null;
+		$breederId  = $query[ 'breeder' ] ?? null;
+		$districtId = $query[ 'district' ] ?? null;
 		$year       = $query[ 'year' ] ?? null;
 
 		if( is_numeric( $breederId ) && is_numeric( $year ) ) { // for breeders and some year

@@ -98,7 +98,10 @@
         content: '';
     }
     .header {
-        @apply w-full bg-teal-200 rounded-t text-center sticky top-0
+        @apply w-full bg-teal-200 border text-center sticky top-0;
+    }
+    .footer {
+        @apply w-full mt-4 p-2 border-t-2 border-teal-400 text-center italic;
     }
 
     .navbar {

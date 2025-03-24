@@ -1,7 +1,11 @@
 <script>
-    let { data } = $props();
+
+
+    let { breeder, district } = $props();
 </script>
 
-<div>
-    Form for showing and editting breeder {data.breeder.firstname} {data.breeder.email}
-</div>
+{#if breeder && district }
+    <div>
+        Form for showing and editting breeder {breeder.firstname} {breeder.email} in { district.short}
+    </div>
+{/if}

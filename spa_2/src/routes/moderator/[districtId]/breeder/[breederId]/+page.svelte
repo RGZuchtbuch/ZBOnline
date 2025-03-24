@@ -1,39 +1,48 @@
 <script>
 	import { getContext } from 'svelte';
 	import { page } from '$app/state';
-	import store from '$lib/js/store.svelte.js';
+	import store, { federation } from '$lib/js/store.svelte.js';
+	import api from '$lib/js/api.js';
+	import { txt } from '$lib/js/toolbox.js';
 	import Breeder from '$lib/cmp/breeder/Breeder.svelte';
 
 	let { data } = $props();
-	let state = getContext( 'state' );
+	let breeder  = $state( data.breeder );
+	let district = $state( data.district );
 
-	const path = page.url.pathname;
+	$effect( () => {
+		setHeader( breeder );
+	})
 
 
-	state.title = `Zuchter ${data.breeder.firstname} ${data.breeder.infix} ${data.breeder.lastname} im ${data.district.name}`;
-	state.menu = {
-		trail : [
-			{name: 'Home', href: '/'},
-			{name: 'Obmann', href: '/moderator'},
-			{name: data.district.short, href: '/moderator/' + data.district.id},
-			{name: 'Züchter', href: '/moderator/' + data.district.id + '/breeder'},
-			{
-				name: `${data.breeder.firstname.charAt(0)}.${data.breeder.lastname.charAt(0)}`,
-				href: '/moderator/' + data.district.id + '/breeder/' + data.breeder.id
-			},
-		],
-		options : [
-			{name: 'Stämme', href: '/moderator/' + data.district.id + '/breeder/' + data.breeder.id + '/pair'},
-			{name: 'Mitglied', href: '/moderator/' + data.district.id + '/breeder/' + data.breeder.id + '/profile'},
-		],
+	function setHeader() {
+		const title = `Zuchter ${breeder.firstname} ${txt(breeder.infix)} ${breeder.lastname} im ${district.name}`;
+		const menu = {
+			trail: [
+				{name: 'Home', href: '/'},
+				{name: 'Obmann', href: '/moderator'},
+				{name: district.short, href: `/moderator/${district.id}`},
+				{name: 'Züchter', href: `/moderator/${district.id}/breeder`},
+				{
+					name: `${breeder.firstname.charAt(0)}.${breeder.lastname.charAt(0)}`,
+					href: page.url.href,
+				},
+			],
+			options: [
+				{name: 'Stämme', href: '/moderator/' + district.id + '/breeder/' + breeder.id + '/pair'},
+				{name: 'Mitglied', href: '/moderator/' + district.id + '/breeder/' + breeder.id + '/profile'},
+			],
+		}
+		store.title.update(() => title); // to set after loading
+		store.menu.update(() => menu);
 	}
 
-	console.log( 'Results page', path );
+	$inspect( 'B', breeder );
 
 </script>
 
-{#if data.breeder}
-	<Breeder {data} />
+{#if breeder}
+	<Breeder {breeder} />
 {/if}
 
 

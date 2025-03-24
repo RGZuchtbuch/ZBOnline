@@ -1,42 +1,26 @@
 <script>
 	import { page } from '$app/state';
 	import api from '$lib/js/api.js';
-	import store, { district } from '$lib/js/store.svelte.js';
+	import store from '$lib/js/store.svelte.js';
 
+	let { district } = $props();
 
-
-
-
-	load( page.params.districtId )
-
-	export async function load( districtId ) {
-		const response = await api.district.get( districtId );
-		store.district.update( () => response.district );
-
-		let year = new Date().getFullYear();
-
-		const title = `Verbande ${$district.name} verwalten`;
-		const menu = {
-			trail: [
-				{name: 'Home', href: '/'},
-				{name: 'Obmann', href: '/moderator'},
-				{name: $district.short, href: `/moderator/${$district.id}`},
-			],
-			options: [
-				{name: 'Leistungen', href: `/moderator/${$district.id}/result`},
-				{name: 'Stämme', href: `/moderator/${$district.id}/pair`},
-				{name: 'Züchter', href: `/moderator/${$district.id}/breeder`},
-				{name: 'Berichte', href: `/moderator/${$district.id}/report/${year}`},
-			]
-		};
-		store.title.update( () => title );
-		store.menu.update( () => menu );
-	}
 </script>
 
 {#if district }
+	<h2 class='header'>Verband {district.name}</h2>
+	<p class='content'>
+		Intro Tekst
+	</p>
 	<p>
-		Help, statistics, leistungen
+		Statistiken
 	</p>
 
 {/if}
+
+
+<style>
+	p {
+		@apply px-6 pt-4;
+	}
+</style>

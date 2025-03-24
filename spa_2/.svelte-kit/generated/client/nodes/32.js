@@ -1,1 +1,1 @@
-export { default as component } from "../../../../src/routes/moderator/[districtId]/pair/+page.svelte";
+export { default as component } from "../../../../src/routes/result/+page.svelte";

@@ -1,26 +1,41 @@
 <script>
 	import {getContext} from 'svelte';
-	import store from '$lib/js/store.svelte.js';
+	import {page} from '$app/state';
+	import store, { federation } from '$lib/js/store.svelte.js';
+	import api from '$lib/js/api.js';
 	import Results from '$lib/cmp/moderator/district/Results.svelte';
 
-	let { data } = $props();
+	let district   = $derived( $federation.districts[ +page.params.districtId ] );
+	let year       = $derived( +page.url.searchParams.get( 'year' ) || new Date().getFullYear()-1 );
+	let results    = $state( null );
 
-	let state     = getContext( 'state' );
-	let results  = data.results; //getContext( 'results' );
-	let year     = data.year; // getContext( 'year' );
+	$effect( async () => {
+		await load( page.url );
+	});
 
-	state.title = `Leistungen für ${data.district.name}`;
-	state.menu = {
-		trail : [
-			{ name:'Home',      href:'/' },
-			{ name:'Obmann',    href:'/moderator' },
-			{ name: data.district.short,   href:`/moderator/${data.district.id}` },
-			{ name:'Leistungen', href:`/moderator/${data.district.id}/result/${data.year}` },
-		],
-		options : [],
-	};
+	$effect( () => {
+		const title = `Leistungen für ${district.name}`;
+		const menu = {
+			trail: [
+				{ name:'Home',      href:'/' },
+				{ name:'Obmann',    href:'/moderator' },
+				{ name: district.short,   href:`/moderator/${district.id}` },
+				{ name:'Eingaben', href: page.url.href },
+			],
+			options: [],
+		}
+		store.title.update(() => title); // to set after loading
+		store.menu.update(() => menu);
+	});
+
+	async function load( url ) {
+		console.log(' Load result', year );
+		const response = await api.result.get( { districtId:district.id, year:year } );
+		results = response.results;
+	}
 
 </script>
 
-<Results { data } />
+
+<Results {results} {district} {year} } />
 

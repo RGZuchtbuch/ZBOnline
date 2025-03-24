@@ -2,8 +2,8 @@
 	import { fade, fly, slide } from 'svelte/transition';
 	import store, { federation } from '$lib/js/store.svelte.js';
 
-	import BDRGMap from '$lib/cmp/district/BDRGMap.svelte';
-	import DistrictTree from '$lib/cmp/district/DistrictTree.svelte';
+	import BDRGMap from '$lib/cmp/district/districts/BDRGMap.svelte';
+	import DistrictTree from '$lib/cmp/district/districts/DistrictTree.svelte';
 
 	//let { federation } = $props();
 

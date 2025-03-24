@@ -1,25 +1,45 @@
 <script>
 	import {getContext} from 'svelte';
+	import {page} from '$app/state';
 	import Breeders from '$lib/cmp/moderator/district/Breeders.svelte';
+	import api from '$lib/js/api.js';
+	import store, { federation } from '$lib/js/store.svelte.js';
 
-	let { data } = $props();
-	let state = getContext( 'state' );
+	//let { breeders } = $props();
+	//let state = getContext( 'state' );
+
+	let breeders = $state( null );
+	let district = $derived( $federation.districts[ +page.params.districtId ] );
 
 
-	state.title = `Züchter im ${data.district.short}`;
-	state.menu = {
-		trail: [
-			{name: 'Home', href: '/'},
-			{name: 'Obmann', href: '/moderator'},
-			{name: data.district.short, href: '/moderator/' + data.district.id},
-			{name: 'Züchter', href: data.url.path },
-		],
-		options: [],
+	$effect( () => {
+		load( page )
+	})
+
+	async function load( page ) {
+		const response = await api.breeder.get( { districtId:page.params.districtId} );
+		breeders = response.breeders;
+		setHeader();
+	}
+
+	function setHeader() {
+		const title = `Züchter im ${district.short}`;
+		const menu = {
+			trail: [
+				{name: 'Home', href: '/'},
+				{name: 'Obmann', href: '/moderator'},
+				{name: district.short, href: `/moderator/${district.id}` },
+				{name: 'Züchter', href: page.url.href },
+			],
+			options: [],
+		}
+		store.title.update(() => title); // to set after loading
+		store.menu.update(() => menu);
 	}
 </script>
 
-{#if data.breeders}
-	<Breeders {data} />
+{#if breeders}
+	<Breeders {breeders} {district} />
 {/if}
 
 

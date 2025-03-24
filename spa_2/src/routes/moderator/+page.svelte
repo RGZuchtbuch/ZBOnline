@@ -1,28 +1,40 @@
 <script>
-	import { getContext } from 'svelte';
-    import ModeratorDistricts from '$lib/cmp/moderator/Districts.svelte';
+	import { getContext, setContext } from 'svelte';
+    import Districts from '$lib/cmp/moderator/Districts.svelte';
 	import {goto} from '$app/navigation';
-	import store from '$lib/js/store.svelte.js';
+	import store, { federation, user } from '$lib/js/store.svelte.js';
+	import {page} from '$app/state';
 
-	//let districts = getContext( 'districts' );
-	//let state     = getContext( 'state' );
+	let districts   = $state( null );
 
-	const title = 'Obmann';
-	const menu = {
-		trail : [
-			{ name:'Start',    href:'/' },
-			{ name:'Obmann',   href:'/moderator' },
-		],
-	    options : [],
-	};
+	$effect( () => {
+		load( page );
+	})
 
-	store.title.update( () => title );
-	store.menu.update( () => menu );
+	async function load( page ) {
+		let list = [];
+		$user.moderator.forEach( id => {
+			list.push( $federation.districts[id] );
+		});
+		districts = list;
+		setHeader();
+	}
 
-
+	function setHeader() {
+		const title = 'Obmann';
+		const menu = {
+			trail: [
+				{name: 'Start', href: '/'},
+				{name: 'Obmann', href:page.url.href},
+			],
+			options: [],
+		};
+		store.title.update(() => title);
+		store.menu.update(() => menu);
+	}
 </script>
 
-<ModeratorDistricts />
+<Districts {districts}/>
 
 
 
