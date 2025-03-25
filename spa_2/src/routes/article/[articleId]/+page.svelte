@@ -1,42 +1,22 @@
 <script>
-	import { getContext } from 'svelte';
-
 	import store, { user } from '$lib/js/store.svelte.js';
 	import Article from '$lib/cmp/article/Article.svelte';
 	import { page } from '$app/state';
-	import api from '$lib/js/api.js';
 
-	let article = $state( { title:'laden...' } );
-
-	//let app = getContext( 'state' );
+	let { data } = $props();
 
 	$effect( () => {
-		load( page );
+		setHeader( page );
 	})
 
 
-	async function load ( page ) {
-		const articleId = +page.params.articleId;
-		console.log( 'Aid', articleId );
-		if( articleId === 0 ) { // new article
-			article = { id:0, title:'Todo', author:$user.firstname, html:'Todo' };
-		} else { // fetch article by id
-			console.log( 'Existing', articleId )
-			const response = await api.article.get(articleId);
-			if (response && response.article) {
-				//store.article.update(() => response.article);
-				article = response.article;
-			} else { // not found
-				article = { id:0, title:'Unbekannter Beitrag !', author:null, html:'...' };
-			}
-		}
-		setHeader();
-	}
 
-	function setHeader() {
-		if( article ) {
-			const title = null; //article.title;
-			const menu = {
+
+	function setHeader( page ) {
+		console.log('Article.seth', data.article.title);
+		if( data.article ) {
+			const title = data.article.title; // to set after loading
+			const menu =  {
 				trail: [
 					{name: 'Home', href: '/'},
 					{name: 'Info', href: '/article'},
@@ -44,8 +24,7 @@
 				],
 				options: [],
 			}
-
-			store.title.update(() => title); // to set after loading
+			store.title.update( () => title );
 			store.menu.update(() => menu);
 		}
 	}
@@ -53,4 +32,4 @@
 
 </script>
 
-<Article bind:article={article}/>
+<Article bind:article={data.article}/>

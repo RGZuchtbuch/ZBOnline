@@ -1,17 +1,18 @@
 <script>
 	import { slide } from 'svelte/transition';
+	import { page } from '$app/state';
 	import store, { standard } from '$lib/js/store.svelte.js';
 	import Section from '$lib/cmp/standard/Section.svelte';
 
-	//let { standard } = $props();
+
 </script>
 
 <section>
 	<h3>Standard, Sparten, Gruppen, Rassen und Farbenschläge</h3>
 
-	{#if $standard }
+	{#if page.data.standard }
 		<ul in:slide>
-			<Section section={ $standard.root } unfold={true}/>
+			<Section section={ page.data.standard.root } unfold={true}/>
 		</ul>
 	{/if}
 </section>

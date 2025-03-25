@@ -2,7 +2,7 @@
     import '../app.css'; // need this once on highest level
     import { page } from '$app/state';
     import store, { federation, standard, menu, title, url } from '$lib/js/store.svelte.js';
-    import { load } from './load.js';
+    //import { load } from './load.js';
 
     import {onMount, setContext} from 'svelte';
     import { fade, fly, slide } from 'svelte/transition';
@@ -13,17 +13,21 @@
 
     //await load(); // updates store federation and standard
 
-    url.update( () => page.url );
+
+
+    //url.update( () => page.url );
 
     let { children, data } = $props(); // get page
     //let app = $state( { title:'RGZuchtbuch Online 2.0', menu:{ trail:[], options:[] }, changed:false } );
     //setContext( 'state', app )
 
     onMount( async () => {
-        await load(); // loads fed and standard
+        //await load(); // loads fed and standard
     })
 
     // note: user is in store
+    console.log( "data", page.data );
+
 
     /**
     * note, this layout has header, menu and children
@@ -35,7 +39,7 @@
 <Menu />
 <Title />
 
-{#if $federation && $standard }
+{#if data.federation && data.standard }
     <div class='screen-scroll-y content' in:fade={{duration:1000}} >
         {@render children()}
     </div>

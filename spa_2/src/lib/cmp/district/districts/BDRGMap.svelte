@@ -13,6 +13,8 @@
 
 </script>
 
+
+
 <svg {width} viewBox='0 0 81.57 108.32'>
 	<g id=3 style={'fill:'+colors[0]}>
 		<title>LV Baden</title>

@@ -65,9 +65,9 @@
 
 {#if article}
 
-	<h2 class='header'>
+	<!--h2 class='header'>
 		<span class='grow'>{article.title}</span>
-	</h2>
+	</h2-->
 	<div class='flex flex-row items-center justify-end gap-x-2 py-2'>
 		<span class='meta'>{article.author}, {article.modified}</span>
 		{#if authorized }

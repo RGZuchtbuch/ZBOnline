@@ -1,5 +1,6 @@
 <script>
 	//import { getContext } from 'svelte';
+	import { page } from '$app/state';
 	import store, { menu } from '$lib/js/store.svelte.js';
 	import { fade, fly, slide } from 'svelte/transition';
 

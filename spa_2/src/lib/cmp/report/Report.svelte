@@ -13,7 +13,7 @@
 	import Trend from '$lib/cmp/report/view/Trend.svelte';
 	import Select from '$lib/cmp/form/input/Select.svelte';
 
-	let { report } = $props();
+	//let { report } = $props();
 
 	const types = {
 		2: {id: 2, name: 'Zuchten'},
@@ -23,15 +23,17 @@
 		30: {id: 30, name: 'Schauleistung'}
 	};
 
-	let type     = $derived( types[ report.query.type ] );
-	let district = $derived( $federation.districts[ report.query.district || 1 ] );
-	let year     = $derived( report.query.year || new Date().getFullYear()-1 );
+	let type     = $derived( types[ page.data.query.type ] );
+	let district = $derived( page.data.federation.districts[ page.data.query.district || 1 ] );
+	let year     = $derived( page.data.query.year || new Date().getFullYear()-1 );
 
 	function onTypeChange( event ) {
 		let url = new URL( page.url );
 		url.searchParams.set( 'type', event.target.value );
 		goto( url.href );
 	}
+
+	console.log( 'L', page.data );
 
 </script>
 
@@ -41,23 +43,23 @@
 <!--Filter class='print:hidden' {...data} bind:district={district} bind:year={year} bind:group={group} bind:section={section} bind:breed={breed} bind:color={color} bind:type={type}/-->
 <Filter />
 
-{#if report && report.chart}
+{#if page.data.chart}
 	<div class='flex flex-col' open>
 		<header class=''>Gesamt Leistungen im {district.name} in {year}</header>
 		<div class='flex flex-row justify-evenly py-4'>
-			<LayBar class='' report={report.chart} />
-			<BroodBarLayers report={report.chart} />
-			<BroodBarPigeons report={report.chart} />
-			<ShowBar report={report.chart} />
+			<LayBar class='' report={page.data.chart} />
+			<BroodBarLayers report={page.data.chart} />
+			<BroodBarPigeons report={page.data.chart} />
+			<ShowBar report={page.data.chart} />
 		</div>
 	</div>
 {/if}
 
-{#if report.trend && report.map }
+{#if page.data.trend && page.data.map }
 	<div class='flex flex-col break-after-page' open>
 		<header class=''>Leistungen im Übersicht</header>
 		<div class='mt-2 flex flex-row justify-evenly'>
-			<Select class='w-64' label='Leistung' value={report.query.type} onchange={onTypeChange}>
+			<Select class='w-64' label='Leistung' value={page.data.query.type} onchange={onTypeChange}>
 				{#each Object.values( types ) as type}
 					<option value={type.id}>{type.name}</option>/
 				{/each}
@@ -66,21 +68,21 @@
 		<div class='flex flex-row justify-evenly p-4 gap-x-2 '>
 			<div class='flex flex-col'>
 				<header>Trend für {district.name}</header>
-				<Trend report={report.trend} typeId={report.query.type} />
+				<Trend report={page.data.trend} typeId={page.data.query.type} />
 			</div>
 			<div class='flex flex-col'>
 				<header>Verteilung in {year}</header>
-				<Map report={report.map} typeId={report.query.type} />
+				<Map report={page.data.map} typeId={page.data.query.type} />
 			</div>
 		</div>
 	</div>
 {/if}
 
-{#if report && report.table}
+{#if page.data.table}
 	<div class='flex flex-col break-after-page' open>
 		<header class=''>Leistungsdaten im {district.name} für {year}</header>
 		<div class='flex flex-col py-4'>
-			<Table report={report.table} {district} {year} />
+			<Table report={page.data.table} {district} {year} />
 		</div>
 	</div>
 {/if}

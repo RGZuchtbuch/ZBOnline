@@ -5,16 +5,12 @@
 	import { email_icon, link_icon } from '$lib/cmp/icons.svelte';
 	import { name } from '$lib/cmp/snippets.svelte';
 
-	let { root } = $props();
+	let { district } = $props();
 </script>
 
-<h2 class='header text-center'>
-	Verbände im BDRG Zuchtbuch
-</h2>
-
 <section>
-	{#if root}
-		<div class='flex flex-row header'>
+	{#if district}
+		<div class='flex flex-row header sticky top-0'>
 			<div class='district'>Verbände </div>
 			<div class='moderator'>Obmann</div>
 			<div class='email' title='Email schicken'>{@render email_icon()}</div>
@@ -22,14 +18,14 @@
 		</div>
 
 		<ul>
-			{@render row( root, 0 )}
+			{@render row( district, 0 )}
 		</ul>
 	{/if}
 </section>
 
 {#snippet row( district, level )}
 	<li>
-		<div class='flex flex-row grow py-2 border-b'>
+		<div class='flex flex-row grow py-2 border-b rounded-b-none'>
 			<div class='district'>{district.name}</div>
 			<div class='moderator'>{@render name( district.moderator )}</div>
 			<div class='email print:hidden'>

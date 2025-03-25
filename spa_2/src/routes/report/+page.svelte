@@ -5,20 +5,30 @@
 	import api from '$lib/js/api.js';
     import Report from '$lib/cmp/report/Report.svelte';
 
-    const title = 'Die Zuchtleistungen';
-    const menu = {
-        trail : [
-            { name:'Start',       href:'/' },
-            { name:'Leistungen', href:'/report' },
-        ],
-        options : [
-            { name:'Karte',       href:'/result/map/year/2024/type/2' },
-            { name:'Trend',       href:'/result/trend/district/1/type/2' },
-            { name:'Tabelle',       href:'/result/table/district/1/year/2024' },
-        ],
-    };
-	store.title.update( () => title );
-	store.menu.update( () => menu );
+	let { data } = $props();
+
+	$effect( () => {
+		setHeader( data );
+	});
+
+    function setHeader( data ) {
+		const title = 'Die Zuchtleistungen';
+		const menu = {
+			trail: [
+				{name: 'Start', href: '/'},
+				{name: 'Leistungen', href: '/report'},
+			],
+			options: [
+				{name: 'Karte', href: '/result/map/year/2024/type/2'},
+				{name: 'Trend', href: '/result/trend/district/1/type/2'},
+				{name: 'Tabelle', href: '/result/table/district/1/year/2024'},
+			],
+		};
+		store.title.update(() => title);
+		store.menu.update(() => menu);
+		data.title = title;
+		data.menu = menu;
+	}
 
 	//let query = $derived( extractQuery( page.url ) );
 	//let query = $state( null );
@@ -27,7 +37,7 @@
 
 	//let report = null;
 	$effect( async () => {
-	 	await load( page.url );
+	 	//await load( page.url );
 	});
 
 	async function load( url ) {
@@ -79,8 +89,7 @@
 
 </script>
 
-{#if report }
-	<Report {report} />
-{/if}
+
+	<Report />
 
 
