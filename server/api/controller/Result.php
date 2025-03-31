@@ -201,7 +201,7 @@ class Result
 	// new approach 2
 	public static function filter( Request $request, Response $response, array $args ) : Response {
 		$query = $request->getQueryParams();
-		$districtId = $query['districtId'] ?? null;
+		$districtId = $query['district'] ?? null;
 		$year = $query['year'] ?? null;
 		//$colorId = $query['color'] ?? null;
 

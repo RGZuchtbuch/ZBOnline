@@ -2,35 +2,35 @@
 	import { getContext, setContext } from 'svelte';
     import Districts from '$lib/cmp/moderator/Districts.svelte';
 	import {goto} from '$app/navigation';
-	import store, { federation, user } from '$lib/js/store.svelte.js';
+	import store from '$lib/js/store.svelte.js';
 	import {page} from '$app/state';
 
 	let districts   = $state( null );
 
 	$effect( () => {
-		load( page );
+		load( page.url );
 	})
 
-	async function load( page ) {
+	async function load( url ) {
 		let list = [];
-		$user.moderator.forEach( id => {
-			list.push( $federation.districts[id] );
+		store.user.moderator.forEach( id => {
+			list.push( store.federation.districts[id] );
 		});
 		districts = list;
-		setHeader();
+		setHeader( url );
 	}
 
-	function setHeader() {
+	function setHeader( url ) {
 		const title = 'Obmann';
 		const menu = {
 			trail: [
 				{name: 'Start', href: '/'},
-				{name: 'Obmann', href:page.url.href},
+				{name: 'Obmann', href:url.href},
 			],
 			options: [],
 		};
-		store.title.update(() => title);
-		store.menu.update(() => menu);
+		store.title = title;
+		store.menu  = menu;
 	}
 </script>
 

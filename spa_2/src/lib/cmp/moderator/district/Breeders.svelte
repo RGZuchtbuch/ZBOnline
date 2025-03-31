@@ -1,5 +1,6 @@
 <script>
 	import { page } from '$app/state';
+
 	let {breeders, district} = $props();
 
 </script>

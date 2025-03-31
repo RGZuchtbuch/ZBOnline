@@ -158,7 +158,7 @@ class Breeder // is user
 		//$requester = new Requester( $request );
 		$query = $request->getQueryParams();
 		if( $query ) {
-			$districtId  = $query['districtId'] ?? null; // for children
+			$districtId  = $query['district'] ?? null; // for children
 
 			if (is_numeric($districtId)) { // children as parentId
 				$breeders = model\Breeder::forDistrict( $districtId );

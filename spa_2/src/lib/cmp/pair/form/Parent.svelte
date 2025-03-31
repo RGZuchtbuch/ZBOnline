@@ -2,13 +2,15 @@
 	import {onMount} from 'svelte';
 	import {fade, slide} from 'svelte/transition';
 	import aab from '$lib/js/aab.js';
-	import api from '$lib/js/api.js.obs';
+	import store from '$lib/js/store.svelte.js';
+	import { Pair } from '$lib/js/pair.svelte.js';
+
 	import { dec } from '$lib/js/toolbox.js';
 	import {validator, NumberInput, RingInput, Select, TextInput } from '$lib/cmp/form/Form.svelte';
 	import { toRing } from '$lib/cmp/form/validator.js';
 
 
-	let { parent=$bindable(), pair, standard, i } = $props();
+	let { parent=$bindable(), pair, i } = $props();
 
 	let fromPairs = $state( [] ); // the parent it's parent pair options
 	let fromPair = $state( null );
@@ -28,7 +30,7 @@
 	async function onRingInput() {
 		let newRing = toRing( parent.ring ); // decode input
 		if( newRing && ( ring === null || newRing.year !== ring.year ) ) {
-			let response = await api.pair.get( { breederId:pair.breeder.id, year:newRing.year } );
+			let response = await Pair.query( { breederId:pair.breeder.id, year:newRing.year } );
 			fromPairs = response.pairs;
 			if( ring !== null ) parent.parentsPairId = null;
 			ring = newRing;

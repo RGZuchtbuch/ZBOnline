@@ -11,7 +11,6 @@
 		year:       v => validator(v).number().range( 1950, thisYear+1).isValid(),
 		name:       v => validator(v).string().orNull().isValid(),
 	}
-
 </script>
 
 

@@ -1,6 +1,6 @@
 <script>
 	import { slide } from 'svelte/transition';
-	import store, { federation, user } from '$lib/js/store.svelte.js';
+	import store from '$lib/js/store.svelte.js';
 	import {goto} from '$app/navigation';
 	//import { getContext } from 'svelte';
 

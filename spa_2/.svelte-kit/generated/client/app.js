@@ -34,39 +34,37 @@ export const nodes = [
 	() => import('./nodes/30'),
 	() => import('./nodes/31'),
 	() => import('./nodes/32'),
-	() => import('./nodes/33'),
-	() => import('./nodes/34'),
-	() => import('./nodes/35')
+	() => import('./nodes/33')
 ];
 
 export const server_loads = [];
 
 export const dictionary = {
-		"/": [11],
-		"/admin": [12,[2]],
-		"/admin/article": [13,[2,3]],
-		"/article": [14],
-		"/article/[article]": [15],
-		"/breeder/[breederId]": [16,[4]],
-		"/breeder/[breederId]/pair": [17,[4,5]],
-		"/district": [18],
-		"/moderator": [19],
-		"/moderator/[districtId]": [20,[6]],
-		"/moderator/[districtId]/breeder": [21,[6]],
-		"/moderator/[districtId]/breeder/[breederId]": [22,[6,7]],
-		"/moderator/[districtId]/breeder/[breederId]/pair": [23,[6,7]],
-		"/moderator/[districtId]/breeder/[breederId]/pair/[pairId]": [24,[6,7]],
-		"/moderator/[districtId]/breeder/[breederId]/profile": [25,[6,7]],
-		"/moderator/[districtId]/result": [26,[6]],
-		"/pair/[pairId]": [27,[8]],
-		"/report": [28],
-		"/result": [29,[9]],
-		"/result/map/year/[year]/type/[type]": [30,[9]],
-		"/result/table/district/[districtId]/year/[year]": [31,[9]],
-		"/result/trend/district/[districtId]/type/[type]": [32,[9]],
-		"/standard": [33],
-		"/test": [34,[10]],
-		"/user": [35]
+		"/": [9],
+		"/admin": [10,[2]],
+		"/admin/article": [11,[2,3]],
+		"/article": [12],
+		"/article/[article]": [13],
+		"/breeder/[breederId]": [14,[4]],
+		"/breeder/[breederId]/pair": [15,[4,5]],
+		"/district": [16],
+		"/moderator": [17],
+		"/moderator/[district]": [18],
+		"/moderator/[district]/breeder": [19],
+		"/moderator/[district]/breeder/[breeder]": [20],
+		"/moderator/[district]/breeder/[breeder]/pair": [21],
+		"/moderator/[district]/breeder/[breeder]/pair/[pair]": [22],
+		"/moderator/[district]/breeder/[breeder]/profile": [23],
+		"/moderator/[district]/result": [24],
+		"/pair/[pairId]": [25,[6]],
+		"/report": [26],
+		"/result": [27,[7]],
+		"/result/map/year/[year]/type/[type]": [28,[7]],
+		"/result/table/district/[districtId]/year/[year]": [29,[7]],
+		"/result/trend/district/[districtId]/type/[type]": [30,[7]],
+		"/standard": [31],
+		"/test": [32,[8]],
+		"/user": [33]
 	};
 
 export const hooks = {

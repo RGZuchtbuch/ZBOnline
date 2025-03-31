@@ -1,11 +1,13 @@
 <script>
 	import {fade, slide} from 'svelte/transition';
+	import store from '$lib/js/store.svelte.js';
 	import { NumberInput, RingInput, Select, TextInput, validator } from '../../form/Form.svelte';
-	import Parent from './Parent.svelte';
 	import {dec} from '$lib/js/toolbox.js';
 	import {onMount} from 'svelte';
 
-	let {pair=$bindable(), standard } = $props();
+	import Parent from './Parent.svelte';
+
+	let {pair=$bindable() } = $props();
 
 
 	function addParentTemplates() {
@@ -50,7 +52,7 @@
 	{#if pair.colorId }
 		<div transition:slide>
 			{#each pair.parents as parent, i (i) }
-				<Parent bind:parent={pair.parents[i]} {pair} {standard} {i} />
+				<Parent bind:parent={pair.parents[i]} {pair} {i} />
 			{/each}
 			<hr>
 			<div class='flex flex-row pt-1 pb-0'>

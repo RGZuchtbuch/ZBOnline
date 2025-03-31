@@ -1,6 +1,5 @@
 <script>
 	import { page } from '$app/state';
-	import api from '$lib/js/api.js.obs';
 	import store from '$lib/js/store.svelte.js';
 
 	let { district } = $props();

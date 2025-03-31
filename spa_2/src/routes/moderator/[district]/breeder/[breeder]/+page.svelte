@@ -1,17 +1,19 @@
 <script>
-	import { getContext } from 'svelte';
+
 	import { page } from '$app/state';
-	import store, { federation } from '$lib/js/store.svelte.js';
-	import api from '$lib/js/api.js.obs';
+	import store from '$lib/js/store.svelte.js';
 	import { txt } from '$lib/js/toolbox.js';
-	import Breeder from '$lib/cmp/breeder/Breeder.svelte';
+	import { Breeder } from '$lib/js/breeder.svelte.js';
+	import { District } from '$lib/js/federation.svelte.js';
+	import BreederCmp from '$lib/cmp/breeder/Breeder.svelte';
 
-	let { data } = $props();
-	let breeder  = $state( data.breeder );
-	let district = $state( data.district );
+	let breeder  = $state( null );
+	let district = $state( null );
 
-	$effect( () => {
-		setHeader( breeder );
+	$effect( async () => {
+		breeder = await Breeder.load( page.params.breeder );
+		district = await District.load( page.params.district );
+		setHeader();
 	})
 
 
@@ -33,8 +35,8 @@
 				{name: 'Mitglied', href: '/moderator/' + district.id + '/breeder/' + breeder.id + '/profile'},
 			],
 		}
-		store.title.update(() => title); // to set after loading
-		store.menu.update(() => menu);
+		store.title = title; // to set after loading
+		store.menu  = menu;
 	}
 
 	$inspect( 'B', breeder );
@@ -42,7 +44,7 @@
 </script>
 
 {#if breeder}
-	<Breeder {breeder} />
+	<BreederCmp {breeder} />
 {/if}
 
 

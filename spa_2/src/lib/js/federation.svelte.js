@@ -1,4 +1,6 @@
 import api from '$lib/js/server.js';
+import store from '$lib/js/store.svelte.js';
+import {page} from '$app/state';
 
 // for tree structure in federation
 function addDistrict( district, districts ) { // recursive for sections
@@ -9,6 +11,9 @@ function addDistrict( district, districts ) { // recursive for sections
 }
 
 export class District {
+	static async load( id ) {
+		return store.federation.districts[ +page.params.district ];
+	}
 	static async save( district ) {
 		console.log( 'District.save');
 		// TODO
