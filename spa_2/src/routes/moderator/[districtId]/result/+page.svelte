@@ -2,7 +2,7 @@
 	import {getContext} from 'svelte';
 	import {page} from '$app/state';
 	import store, { federation } from '$lib/js/store.svelte.js';
-	import api from '$lib/js/api.js';
+	import api from '$lib/js/api.js.obs';
 	import Results from '$lib/cmp/moderator/district/Results.svelte';
 
 	let district   = $derived( $federation.districts[ +page.params.districtId ] );

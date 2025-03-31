@@ -2,7 +2,7 @@
 	import { getContext } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { navigating } from '$app/state';
-	import api from '$lib/js/api.js';
+	import api from '$lib/js/api.js.obs';
 
 	import Form from '$lib/cmp/form/Form.svelte';
 	import PairHead from './form/PairHead.svelte';

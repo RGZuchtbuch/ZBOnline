@@ -1,33 +1,18 @@
 <script>
     import '../app.css'; // need this once on highest level
-    import { page } from '$app/state';
-    import store, { federation, standard, menu, title, url } from '$lib/js/store.svelte.js';
-    //import { load } from './load.js';
 
-    import {onMount, setContext} from 'svelte';
     import { fade, fly, slide } from 'svelte/transition';
+    import store from '$lib/js/store.svelte.js'
 
     import Header from '$lib/cmp/Header.svelte';
     import Menu from '$lib/cmp/Menu.svelte';
     import Title from '$lib/cmp/Title.svelte';
 
-    //await load(); // updates store federation and standard
+    let { children, data } = $props();
 
-
-
-    //url.update( () => page.url );
-
-    let { children, data } = $props(); // get page
-    //let app = $state( { title:'RGZuchtbuch Online 2.0', menu:{ trail:[], options:[] }, changed:false } );
-    //setContext( 'state', app )
-
-    onMount( async () => {
-        //await load(); // loads fed and standard
-    })
-
-    // note: user is in store
-    console.log( "data", page.data );
-
+    store.federation = data.federation;
+    store.standard   = data.standard;
+    store.user       = data.user;
 
     /**
     * note, this layout has header, menu and children
@@ -44,8 +29,6 @@
         {@render children()}
     </div>
 {/if}
-
-
 
 <style>
     .content {

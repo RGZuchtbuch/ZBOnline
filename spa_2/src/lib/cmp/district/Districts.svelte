@@ -1,16 +1,13 @@
 <script>
 	import { fade, fly, slide } from 'svelte/transition';
 	import { page } from '$app/state';
-	//import store, { federation } from '$lib/js/store.svelte.js';
+	import store from '$lib/js/store.svelte.js';
 
 	import BDRGMap from '$lib/cmp/district/districts/BDRGMap.svelte';
 	import DistrictTree from '$lib/cmp/district/districts/DistrictTree.svelte';
 
 
 	let { district } = $props(); // root district with children
-	console.log( 'D', page.data );
-
-
 
 </script>
 

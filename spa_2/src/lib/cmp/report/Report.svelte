@@ -2,18 +2,15 @@
 	import {fade} from 'svelte/transition';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
-	import store, { federation, standard } from '$lib/js/store.svelte.js';
+	import store from '$lib/js/store.svelte.js';
 	import Filter from './view/Filter.svelte';
-	import LayBar from './view/LayBar.svelte';
-	import BroodBarLayers from './view/BroodBarLayers.svelte';
-	import BroodBarPigeons from './view/BroodBarPigeons.svelte';
-	import ShowBar from '$lib/cmp/report/view/ShowBar.svelte';
 	import Map from '$lib/cmp/report/view/Map.svelte';
 	import Table from '$lib/cmp/report/view/Table.svelte';
 	import Trend from '$lib/cmp/report/view/Trend.svelte';
 	import Select from '$lib/cmp/form/input/Select.svelte';
+	import Chart from '$lib/cmp/report/view/Chart.svelte';
 
-	//let { report } = $props();
+	let { report } = $props();
 
 	const types = {
 		2: {id: 2, name: 'Zuchten'},
@@ -23,9 +20,15 @@
 		30: {id: 30, name: 'Schauleistung'}
 	};
 
-	let type     = $derived( types[ page.data.query.type ] );
-	let district = $derived( page.data.federation.districts[ page.data.query.district || 1 ] );
-	let year     = $derived( page.data.query.year || new Date().getFullYear()-1 );
+	let type     = $derived( types[ +page.url.searchParams.get('type') || 2 ] );
+	let district = $derived( store.federation.districts[ +page.url.searchParams.get('district') || 1 ] );
+	let year     = $derived( +page.url.searchParams.get('year') || new Date().getFullYear()-1 );
+
+
+
+	// let type     = $derived( types[ page.data.query.type ] );
+	// let district = $derived( page.data.federation.districts[ page.data.query.district || 1 ] );
+	// let year     = $derived( page.data.query.year || new Date().getFullYear()-1 );
 
 	function onTypeChange( event ) {
 		let url = new URL( page.url );
@@ -33,33 +36,21 @@
 		goto( url.href );
 	}
 
-	console.log( 'L', page.data );
-
 </script>
 
 
 <h3 class='header'>Zuchtleistungen</h3>
-
-<!--Filter class='print:hidden' {...data} bind:district={district} bind:year={year} bind:group={group} bind:section={section} bind:breed={breed} bind:color={color} bind:type={type}/-->
 <Filter />
 
-{#if page.data.chart}
-	<div class='flex flex-col' open>
-		<header class=''>Gesamt Leistungen im {district.name} in {year}</header>
-		<div class='flex flex-row justify-evenly py-4'>
-			<LayBar class='' report={page.data.chart} />
-			<BroodBarLayers report={page.data.chart} />
-			<BroodBarPigeons report={page.data.chart} />
-			<ShowBar report={page.data.chart} />
-		</div>
-	</div>
+{#if report && report.chart}
+	<Chart {district} report={report.chart} {year} />
 {/if}
 
-{#if page.data.trend && page.data.map }
+{#if report }
 	<div class='flex flex-col break-after-page' open>
 		<header class=''>Leistungen im Übersicht</header>
 		<div class='mt-2 flex flex-row justify-evenly'>
-			<Select class='w-64' label='Leistung' value={page.data.query.type} onchange={onTypeChange}>
+			<Select class='w-64' label='Leistung' value={type.id} onchange={onTypeChange}>
 				{#each Object.values( types ) as type}
 					<option value={type.id}>{type.name}</option>/
 				{/each}
@@ -68,21 +59,25 @@
 		<div class='flex flex-row justify-evenly p-4 gap-x-2 '>
 			<div class='flex flex-col'>
 				<header>Trend für {district.name}</header>
-				<Trend report={page.data.trend} typeId={page.data.query.type} />
+				{#if report.trend}
+					<Trend report={report.trend} typeId={type.id} />
+				{/if}
 			</div>
 			<div class='flex flex-col'>
 				<header>Verteilung in {year}</header>
-				<Map report={page.data.map} typeId={page.data.query.type} />
+				{#if report.map}
+					<Map report={report.map} typeId={type.id} />
+				{/if}
 			</div>
 		</div>
 	</div>
 {/if}
 
-{#if page.data.table}
+{#if report && report.table}
 	<div class='flex flex-col break-after-page' open>
 		<header class=''>Leistungsdaten im {district.name} für {year}</header>
 		<div class='flex flex-col py-4'>
-			<Table report={page.data.table} {district} {year} />
+			<Table report={report.table} {district} {year} />
 		</div>
 	</div>
 {/if}

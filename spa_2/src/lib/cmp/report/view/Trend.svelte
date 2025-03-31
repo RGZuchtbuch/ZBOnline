@@ -2,7 +2,6 @@
 //    import { createEventDispatcher } from 'svelte';
     import { goto } from '$app/navigation';
     import { page } from '$app/state';
-    import api from "../../../js/api.js";
     import { dec, pct } from '$lib/js/toolbox.js';
     import { BarController, BarElement, CategoryScale, Chart, Colors, LinearScale, Tooltip } from 'chart.js';
 

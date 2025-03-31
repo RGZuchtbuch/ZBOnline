@@ -1,7 +1,4 @@
 <script>
-	//import { store } from '$lib/js/store.svelte.js';
-
-	import api from '$lib/js/api.js';
 	import { email_icon, link_icon } from '$lib/cmp/icons.svelte';
 	import { name } from '$lib/cmp/snippets.svelte';
 

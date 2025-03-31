@@ -1,37 +1,35 @@
 <script>
-	import { getContext } from 'svelte';
-	import store, { } from '$lib/js/store.svelte.js';
-
+	import { page } from '$app/state';
+	import store from '$lib/js/store.svelte.js';
+	import {Article} from '$lib/js/article.svelte.js';
 	import Articles from '$lib/cmp/article/Articles.svelte';
-	import api from '$lib/js/api.js';
+
 
 	let { data } = $props();
 
-	//let articles = $state( null );
+	let articles = $state( null )
 
-	//let app    = getContext( 'state' );
 
-	$effect( ()=>{
-		setHeader( data );
+	$effect( async ()=>{
+		articles = await Article.query();
+		setHeader( page.url );
 	});
 
-
-
-
-
-	function setHeader() {
+	function setHeader( url ) {
 		const title = 'Beiträge zum BDRG Zuchtbuch';
 		const menu = {
 			trail : [
 				{ name:'Start',  href:'/' },
-				{ name:'Info',   href:'/article' },
+				{ name:'Beiträge',   href:'/article' },
 			],
 			options : [],
 		};
-		store.title.update( () => title );
-		store.menu.update( () => menu );
+		store.title = title;
+		store.menu  = menu;
 	}
 
 </script>
 
-<Articles articles={data.articles} />
+{#if articles}
+	<Articles {articles} />
+{/if}

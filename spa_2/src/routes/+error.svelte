@@ -11,8 +11,8 @@
             ],
             options : [],
         };
-        store.title.update( () => title );
-        store.menu.update( () => menu );
+        store.title = title;
+        store.menu  = menu;
     }
 
 </script>

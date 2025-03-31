@@ -1,98 +1,15 @@
 export const ssr = false; // need this once for spa only in sveltekit
 
-
-
-import api from '$lib/js/api.js';
-import store from '$lib/js/store.svelte.js';
+import { Federation } from '$lib/js/federation.svelte.js';
+import { Standard } from '$lib/js/standard.svelte.js';
+import { User } from '$lib/js/user.svelte.js';
 
 export async function load( { params } ) {
-	const fed_promise = getFederationPromise();
-	const standard_promise = getStandardPromise();
-	const responses = await Promise.all([ fed_promise, standard_promise ])
-
-	//store.federation.update( () => responses[0] );
-	//store.standard.update(   () => responses[1] );
-	return { federation:responses[0], standard:responses[1] };
+	const data = await Promise.all( [ Federation.load(), Standard.load(), User.load() ] );
+	return { federation:data[0], standard:data[1], user:data[2] };
 }
 
-// helpers for standard
-async function getStandardPromise() {
-	const response = await api.standard.get();
-	if( response ) {
-		const standard = structuredStandardTree(response.standard); // { root, sections, breed, colors }
-		standard.rootSections = getRootSections( standard )
-		return standard;
-	}
-	return null;
-}
-
-// main sections to enter results for
-function getRootSections( standard ) {
-	const sections = [
-		{ id:3,  name:'Groß u. Wassergeflügel', breeds:[] },
-		{ id:11, name:'Hühner Groß', breeds:[] },
-		{ id:12, name:'Zwerghühner', breeds:[] },
-		{ id:13, name:'LegeWachteln', breeds:[] },
-		{ id:5,  name:'Tauben', breeds:[] },
-		{ id:6,  name:'Ziergeflügel', breeds:[] },
-	];
-	for( let section of sections ) { // each rootSection, add breed and child breeds
-		addBreeds(  standard.sections[ section.id ], section.breeds ); // add to rootsection breeds, recursive
-		section.breeds.sort((a, b) => a.name.localeCompare(b.name)); // sort by name
-	}
-	return sections;
-}
-
-// make sections, breeds and colors available by id
-function structuredStandardTree( standard ) {
-	standard.sections = {};
-	standard.breeds = {};
-	standard.colors = {};
-	addSection( standard.root, standard );
-	return standard;
-}
-
-// add sections, breeds and colors for sections incl subsections
-function addSection( section, standard ) { // recursive for sections
-	standard.sections[ section.id ] = section;
-	for( const child of section.children ) {
-		addSection( child, standard );
-	}
-	for( const breed of section.breeds ) {
-		standard.breeds[ breed.id ] = breed;
-		for( const color of breed.colors ) {
-			standard.colors[ color.id ] = color;
-		}
-	}
-}
-
-function addBreeds( section, breeds ) { // for rootSections
-	for( const breed of section.breeds ) { // add these
-		breeds.push( breed );
-	}
-	for( const child of section.children ) { // add children's
-		addBreeds( child, breeds );
-	}
-}
-
-
-// helpers for federation
-async function getFederationPromise() {
-	const response = await api.district.get( { rootId:1 } );
-	if( response ) {
-		let federation = {
-			root : response.district,
-			districts: [],
-		};
-		addDistrict( response.district, federation.districts );
-		return federation;
-	}
-	return null;
-}
-
-function addDistrict( district, districts ) { // recursive for sections
-	districts[ district.id ] = district;
-	for( const child of district.children ) {
-		addDistrict( child, districts );
-	}
-}
+/*
+ * federation and standard are completely loaded for the app as they are frequently used all over
+ * user loads from sessionstorage, if there
+ */

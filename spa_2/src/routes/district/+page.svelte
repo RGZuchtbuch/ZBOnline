@@ -1,13 +1,15 @@
 <script>
-	//import { getContext } from 'svelte';
-	import store, { federation } from '$lib/js/store.svelte.js';
+	import { page } from '$app/state';
+	import store from '$lib/js/store.svelte.js';
 
 	import Districts from '$lib/cmp/district/Districts.svelte';
 
 	let { data } = $props();
 
+	let federation = $state( store.federation );
+
 	$effect( () => {
-		setHeader( data );
+		setHeader( page.url );
 	})
 	//let state = getContext( 'state' )
 	function setHeader( data ) {
@@ -19,14 +21,12 @@
 			],
 			options: [],
 		}
-
-		store.title.update(() => title);
-		store.menu.update(() => menu);
-		data.title = title;
+		store.title = title;
+		store.menu  = menu;
 	}
 
 </script>
 
-<Districts district={data.federation.root}/>
+<Districts district={federation}/>
 
 

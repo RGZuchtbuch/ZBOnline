@@ -212,7 +212,7 @@ class District
 				$children = model\District::children($parentId);
 				$response->getBody()->write(json_encode(['children' => $children], JSON_UNESCAPED_SLASHES));
 				return $response;
-			} elseif (is_numeric($rootId)) { // descandants as rootId
+			} elseif (is_numeric($rootId)) { // descendants as rootId
 				$json = model\Cache::get( 'district', $request->getUri()->getPath(), $request->getUri()->getQuery() );
 				if( $json ) { // in cache
 					$response->getBody()->write( $json );
@@ -226,7 +226,7 @@ class District
 					}
 					$rootDistrict = ToolBox::toTree($descendants);
 					if ($rootDistrict) {
-						$json = json_encode(['district' => & $rootDistrict], JSON_UNESCAPED_SLASHES);
+						$json = json_encode(['root' => & $rootDistrict], JSON_UNESCAPED_SLASHES);
 						$response->getBody()->write( $json );
 						model\Cache::set( 'district', $request->getUri()->getPath(), $request->getUri()->getQuery(), $json );
 						return $response;

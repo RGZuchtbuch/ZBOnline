@@ -3,7 +3,7 @@
 	import { page } from '$app/state';
 	import store from '$lib/js/store.svelte.js';
 	import Profile from '$lib/cmp/breeder/profile.svelte';
-	import api from '$lib/js/api.js';
+	import api from '$lib/js/api.js.obs';
 
 	let { data } = $props();
 	let breeder  = $state( data.breeder );

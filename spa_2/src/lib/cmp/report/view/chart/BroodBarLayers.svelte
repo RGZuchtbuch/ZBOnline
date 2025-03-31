@@ -1,7 +1,4 @@
 <script>
-
-    import api from "../../../js/api.js";
-
     import { BarController, BarElement, CategoryScale, Chart, Colors, LinearScale, Tooltip } from 'chart.js';
 
     let { report } = $props();
@@ -14,17 +11,16 @@
         updateChart( report );
     });
 
-    function updateChart( result ) {
-        let labels = [ 'Küken / Paar' ];
+    function updateChart( report ) {
+        let labels = [ 'Befruchtet %', 'Geschlupft %' ];
         let datasets = [
             {
-                data: [ result.broodPigeonResult ],
+                data: [ 100*report.broodLayerFertile, 100*report.broodLayerHatched ],
                 backgroundColor: [ '#CEC8' ],
                 borderColor: [ '#283' ],
                 borderWidth: 1,
             }
         ];
-
         if( chart ) {
             chart.data.labels = labels;
             chart.data.datasets = datasets;
@@ -45,11 +41,9 @@
                         }
                     },
                     scales: {
-                        x: {
-                            barPercentage: 0.5,
-                        },
                         y: {
                             min: 0,
+                            max: 100,
                         }
                     }
                 }
@@ -64,11 +58,11 @@
 </script>
 
 <div class='flex flex-col' >
-    <h5 title={`Brutleistung, kKüken pro Paar für Tauben von ${report.broodPigeonBreeders} Tieren`}>
-        Brutleistung Tauben
-        <sup>{report.broodPigeonBreeders} / {report.broodBreeders}</sup>
+    <h5 title={`Brutleistung, Befruchtung und Schlupf von alle Sparten ausser Tauben von ${report.broodLayerBreeders} Tieren`}>
+        Brutleistung Geflügel
+        <sup>{report.broodLayerBreeders} / {report.broodBreeders}</sup>
     </h5>
-    <canvas bind:this={canvas} width='128px' height='256px'></canvas>
+    <canvas bind:this={canvas} width='192px' height='256px'></canvas>
 </div>
 
 <style></style>

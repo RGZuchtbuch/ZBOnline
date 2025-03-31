@@ -1,0 +1,36 @@
+import api from '$lib/js/server.js';
+
+export class Article {
+	static async load( id ){
+
+		console.log( "Load article", id );
+		let article = null;
+		const data = await api.get(`/api/2/article/${id}` );
+		return data && data.article ? data.article : null;
+	}
+	static async query( args ){
+		console.log( 'Load articles', args );
+		const data = await api.query(`/api/2/article`, args );
+		return data && data.articles ? data.articles : null;
+	}
+	static async save( article ){
+		console.log( 'Save article', article );
+		if( article.id === 0 ) { // new
+			const data = await api.post( `/api/2/article`, article );
+			if( data && data.id > 0 ) {
+				article.id = data.id;
+				return true;
+			}
+		} else { // existing
+			const data = await api.put( `/api/2/article/${article.id}`, article );
+			if( data && data.id > 0 ) {
+				return true;
+			}
+		}
+		return false;
+	}
+	static async delete( id ){
+		console.log( 'Delete article', id );
+		return false; // TODO
+	}
+}

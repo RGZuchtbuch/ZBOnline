@@ -2,17 +2,15 @@
     import { onMount } from 'svelte';
     import { goto } from '$app/navigation';
 
-    import store, { user } from '$lib/js/store.svelte.js';
+    import store from '$lib/js/store.svelte.js';
     import { txt } from '$lib/js/toolbox.js';
     import Form, { validator, CheckBox, DateInput, EmailInput, NumberInput, PasswordInput, RangeInput, RingInput, Status, TextInput } from '$lib/cmp/form/Form.svelte';
     import Submit from '$lib/cmp/form/Submit.svelte';
-    import api from '$lib/js/api.js';
-    import TextArea from '$lib/cmp/form/input/TextArea.svelte';
+    import { User } from '$lib/js/user.svelte.js';
 
     const State = { LOGIN:10, LOGGEDIN:11, FAILED:12, FORGOT:20, FORGOTTEN:21, LOGOUT:30, LOGGEDOUT:31}
 
-    let state = $state( $user ? State.LOGOUT : State.LOGIN );
-    console.log( 'User', state, $user );
+    let state = $state( store.user ? State.LOGOUT : State.LOGIN );
 
     let email    = $state( null );
     let password = $state( null );
@@ -32,7 +30,7 @@
 
     async function onLogin( event ) {
         console.log('Logging in', email );
-        let success = await api.user.login( email, password );
+        let success = await User.login( email, password );
         if( success ) {
             state = State.LOGGEDIN;
             await goto( '/' ); // home for now
@@ -45,18 +43,15 @@
 
     async function onForgot( event ) {
         console.log('Send Reset', email);
-        api.user.forgot( email );
+        User.forgot( email );
         state = State.FORGOTTEN;
     }
 
     async function onLogout( event ) {
         state = State.LOGGEDOUT;
-        await api.user.logout();
+        await User.logout();
         await goto( '/' ); // home for now
     }
-
-    onMount( () => {
-    })
 
 </script>
 
@@ -88,7 +83,7 @@
     {:else if state === State.FORGOTTEN }
         <h3>Wunderbar, du bekommst eine email mit Resetlink :)</h3>
     {:else if state === State.LOGOUT }
-        <div>Züchter {$user.firstname} {$user.infix} {$user.lastname}</div>
+        <div>Züchter {store.user.firstname} {store.user.infix} {store.user.lastname}</div>
         <div>Abmelden vom RGZuchtbuch</div>
         <Form initialState='valid' onsubmit={onLogout} {disabled} >
             <Submit class='w-96' values={ values} />

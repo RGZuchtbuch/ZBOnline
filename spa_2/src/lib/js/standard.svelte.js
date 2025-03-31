@@ -1,27 +1,30 @@
-import api from '$lib/js/api.js';
-import store from '$lib/js/store.svelte.js';
-
-export async function load() {
-	const fed_promise = getFederationPromise();
-	const standard_promise = getStandardPromise();
-	const responses = await Promise.all([ fed_promise, standard_promise ])
-
-	store.federation.update( () => responses[0] );
-	store.standard.update(   () => responses[1] );
-}
-
-// helpers
+import api from '$lib/js/server.js'; // get post put delete
 
 
-async function getStandardPromise() {
-	const response = await api.standard.get();
-	if( response ) {
-		const standard = structuredStandardTree(response.standard); // { root, sections, breed, colors }
-		standard.rootSections = getRootSections( standard )
+
+export class Standard {
+	static async load() {
+		console.log( "Load standard" );
+		let standard = null
+		const data= await api.get(`/api/2/standard` );
+		if( data && data.standard ) {
+			standard = structuredStandardTree( data.standard ); // { root, sections, breed, colors }
+			standard.rootSections = getRootSections( standard )
+		}
 		return standard;
 	}
-	return null;
-}
+};
+
+
+// async function getStandardPromise() {
+// 	const response = await api.standard.get();
+// 	if( response ) {
+// 		const standard = structuredStandardTree(response.standard); // { root, sections, breed, colors }
+// 		standard.rootSections = getRootSections( standard )
+// 		return standard;
+// 	}
+// 	return null;
+// }
 
 // main sections to enter results for
 function getRootSections( standard ) {
@@ -48,48 +51,24 @@ function structuredStandardTree( standard ) {
 	addSection( standard.root, standard );
 	return standard;
 }
-
 // add sections, breeds and colors for sections incl subsections
 function addSection( section, standard ) { // recursive for sections
 	standard.sections[ section.id ] = section;
-	for( const child of section.children ) {
-		addSection( child, standard );
-	}
 	for( const breed of section.breeds ) {
 		standard.breeds[ breed.id ] = breed;
 		for( const color of breed.colors ) {
 			standard.colors[ color.id ] = color;
 		}
 	}
+	for( const child of section.children ) { // nesting
+		addSection( child, standard );
+	}
 }
-
 function addBreeds( section, breeds ) { // for rootSections
 	for( const breed of section.breeds ) { // add these
 		breeds.push( breed );
 	}
 	for( const child of section.children ) { // add children's
 		addBreeds( child, breeds );
-	}
-}
-
-
-
-async function getFederationPromise() {
-	const response = await api.district.get( { rootId:1 } );
-	if( response ) {
-		let federation = {
-			root : response.district,
-			districts: [],
-		};
-		addDistrict( response.district, federation.districts );
-		return federation;
-	}
-	return null;
-}
-
-function addDistrict( district, districts ) { // recursive for sections
-	districts[ district.id ] = district;
-	for( const child of district.children ) {
-		addDistrict( child, districts );
 	}
 }

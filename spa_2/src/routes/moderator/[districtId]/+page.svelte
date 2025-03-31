@@ -1,7 +1,7 @@
 <script>
 	import {setContext} from 'svelte';
 	import {page} from '$app/state';
-	import api from '$lib/js/api.js';
+	import api from '$lib/js/api.js.obs';
 	import store, { federation, user } from '$lib/js/store.svelte.js';
 	import District from '$lib/cmp/moderator/District.svelte';
 

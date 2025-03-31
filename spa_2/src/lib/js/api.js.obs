@@ -1,7 +1,7 @@
 
 import { browser } from '$app/environment'; // to find window
 import { jwtDecode } from 'jwt-decode';
-import store from '$lib/js/store.svelte.js';
+import store, { user } from '$lib/js/store.svelte.js';
 //let token = window.sessionStorage.getItem('token' ); // for auth api calls, may expire
 //export let user = writable( extractUser( token ) ); //get stored user or empty
 //console.log( 'User', extractUser( token ) );
@@ -10,9 +10,17 @@ let cache = {}; // empty at start
 
 // retrieve token from sessionstorage, like for when refreshed
 let authenticationToken = browser && window.sessionStorage.getItem( 'token' ); // encoded
-if( authenticationToken ) store.user.update( () => tokenToUser( authenticationToken ) );
+if( authenticationToken ) {
+	//const user = tokenToUser( authenticationToken )
+	//store.update( () => user );
+	//Object.assign( user, tokenToUser( authenticationToken ) );
+	user.token = authenticationToken;
+	user.user = tokenToUser( user.token );
+}
 
 const API_BASE = browser && (location.hostname === 'localhost' || location.hostname === '127.0.0.1') ? 'http://localhost:80' : 'https://rgzuchtbuch.de';
+
+console.log( 'Location.hostname', browser && location.hostname );
 
 const api = { // api
 	article: {
@@ -20,21 +28,31 @@ const api = { // api
 		//	return await get( `/api/article` );
 		//},
 		get: async ( arg=null ) => {
-			if( +arg ) { // test if number
-				return await get(`/api/2/article/${arg}`); // { id, title, level }
-			} else {
-				return await get( `/api/2/article`, arg ); // arg as query
+			if( +arg ) { // test if id > 0
+				//return await get(`/api/2/article/${arg}`); // { id, title, level }
+				const response = await get(`/api/2/article/${arg}`);
+				return response && response.article ? response.article : null;
+			// } else {
+			// 	//return await get( `/api/2/article`, arg ); // arg as query
+			// 	const response = await get( `/api/2/article`, arg ); // arg as query
+			// 	return response && response.articles ? response.articles : null;
 			}
 		},
+		query: async ( query=null ) => {
+			const response = await get( `/api/2/article`, query ); // arg as query
+			return response && response.articles ? response.articles : null;
+		},
 		post: async ( article ) => {
-			return await post( `/api/2/article`, article ); // { id, title, level }
+			const response = await post( `/api/2/article`, article ); // { id, title, level }
+			return response && response.id ? response.id : 0;
 		},
 		put: async ( id, article ) => {
-			return await put( `/api/2/article/${id}`, article ); // { id, title, level }
+			const response = await put( `/api/2/article/${id}`, article ); // { id, title, level }
+			return response && response.id ? response.id : 0;
 		},
 		delete: async ( id ) => {
 			return await del( `/api/2/article/${id}` ); // { ok }
-		}
+		},
 	},
 	breed : {
 		forSection: async ( sectionId ) => {
@@ -124,7 +142,10 @@ const api = { // api
 				console.log( 'Got Token' );
 				authenticationToken = response.token; // to send with requests
 				window.sessionStorage.setItem( 'token', authenticationToken ); // over session
-				store.user.update( () => tokenToUser( response.token ) ); // user data for in app
+				//const user = tokenToUser( response.token )
+				//store.user.update( () => user ); // user data for in app
+				//user = tokenToUser( response.token );
+				Object.assign( user, tokenToUser( authenticationToken ) );
 				return true;
 			}
 			console.log( 'Login Oops')
@@ -136,11 +157,20 @@ const api = { // api
 		logout: async ( email ) => {
 			authenticationToken = null;
 			window.sessionStorage.setItem( 'token', null ); // forget token
-			store.user.update( () => null ); // no user
+			//store.user.update( () => null ); // no user
+			user = null;
 			return true; // always successfull
 		},
 
 	},
+
+	headers: () => {
+		return {
+			'Accept': 'application/json', // response
+			'Content-Type': 'application/json', // body
+			'Authorization': `Bearer ${authenticationToken}`,
+		}
+	}
 
 }
 
@@ -159,19 +189,6 @@ function tokenToUser( token ) {
 	}
 	return null;
 }
-
-function findRoot( data, id ) {
-	for( item of data ) {
-		if( item.id === id ) {
-			return item;
-		} else {
-			const found = findRoot( item.children, id );
-			if( found ) return found;
-		}
-	}
-}
-
-
 
 // fetch methods
 async function get( url, query=null ) {
@@ -196,7 +213,7 @@ async function del(url) { // delete is a reserved word
 }
 
 // Helpers
-function headers() {
+export function headers() {
  	return {
 		'Accept': 'application/json', // response
 		'Content-Type': 'application/json', // body

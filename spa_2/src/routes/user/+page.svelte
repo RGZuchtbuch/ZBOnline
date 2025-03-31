@@ -5,19 +5,22 @@
 
     //let state = getContext( 'state' );
 
-	const title = 'Benutzer im RGZuchtbuch';
-	const menu = {
-		trail : [
-			{ name:'Start',    href:'/' },
-			{ name:'Züchter',  href:'/user' },
-		],
-		options : [],
-	};
+	$effect( () => {
+		setHeader( store.user )
+	})
 
-	store.title.update( () => title );
-	store.menu.update( () => menu );
-
-
+	function setHeader( user ) {
+		const title = 'Benutzer im RGZuchtbuch';
+		const menu = {
+			trail: [
+				{name: 'Start', href: '/'},
+				{name: 'Züchter', href: '/user'},
+			],
+			options: [],
+		};
+		store.title = title;
+		store.menu = menu;
+	}
 </script>
 
 <User />

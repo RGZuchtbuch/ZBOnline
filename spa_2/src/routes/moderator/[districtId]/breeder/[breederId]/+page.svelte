@@ -2,7 +2,7 @@
 	import { getContext } from 'svelte';
 	import { page } from '$app/state';
 	import store, { federation } from '$lib/js/store.svelte.js';
-	import api from '$lib/js/api.js';
+	import api from '$lib/js/api.js.obs';
 	import { txt } from '$lib/js/toolbox.js';
 	import Breeder from '$lib/cmp/breeder/Breeder.svelte';
 

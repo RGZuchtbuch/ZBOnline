@@ -1,29 +1,27 @@
 <script>
-
-    import api from "../../../js/api.js";
-
     import { BarController, BarElement, CategoryScale, Chart, Colors, LinearScale, Tooltip } from 'chart.js';
-
-    // export let d
 
     let { report } = $props();
     let canvas = null; // ref to canvas element
     let chart = null; // showing chart
 
+    Chart.register( BarController, BarElement, CategoryScale, Colors, LinearScale, Tooltip );
+
     $effect( () => {
         updateChart( report );
     });
 
-    function updateChart( report ) {
-        let labels = [ 'Eier %', 'Gewicht %' ];
+    function updateChart( result ) {
+        let labels = [ 'Küken / Paar' ];
         let datasets = [
             {
-                data: [ 100*report.layEggs, 100*report.layWeight ],
-                backgroundColor: [ '#FFCD5680' ],
-                borderColor: [ '#c62' ], // FF9F40 f94
+                data: [ result.broodPigeonResult ],
+                backgroundColor: [ '#CEC8' ],
+                borderColor: [ '#283' ],
                 borderWidth: 1,
             }
         ];
+
         if( chart ) {
             chart.data.labels = labels;
             chart.data.datasets = datasets;
@@ -44,9 +42,11 @@
                         }
                     },
                     scales: {
+                        x: {
+                            barPercentage: 0.5,
+                        },
                         y: {
                             min: 0,
-                            max: 160,
                         }
                     }
                 }
@@ -57,16 +57,15 @@
     }
 
 
-    Chart.register( BarController, BarElement, CategoryScale, Colors, LinearScale, Tooltip );
 
 </script>
 
 <div class='flex flex-col' >
-    <h5 title={`Legeleistung durchschnitt von alle Sparten von ${report.layBreeders} Tieren`}>
-        Legeleistung  Geflügel
-        <sup>{report.layBreeders} / {report.layerBreeders}</sup>
+    <h5 title={`Brutleistung, kKüken pro Paar für Tauben von ${report.broodPigeonBreeders} Tieren`}>
+        Brutleistung Tauben
+        <sup>{report.broodPigeonBreeders} / {report.broodBreeders}</sup>
     </h5>
-    <canvas bind:this={canvas} width='192px' height='256px'></canvas>
+    <canvas bind:this={canvas} width='128px' height='256px'></canvas>
 </div>
 
 <style></style>

@@ -6,13 +6,6 @@
 
     let { report, district, year } = $props();
 
-    //$inspect( 'Table report', report, report.sections.length );
-//$inspect( 'R', report );
-
-    //let totalledReport = $state( null );
-    //$effect( async () => {
-    //    calcTotals( report );
-    //} );
     let totalledReport = $state( null );
     $effect( () => {
         calcTotals( report );

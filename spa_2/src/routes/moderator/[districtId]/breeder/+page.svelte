@@ -2,7 +2,7 @@
 	import {getContext} from 'svelte';
 	import {page} from '$app/state';
 	import Breeders from '$lib/cmp/moderator/district/Breeders.svelte';
-	import api from '$lib/js/api.js';
+	import api from '$lib/js/api.js.obs';
 	import store, { federation } from '$lib/js/store.svelte.js';
 
 	//let { breeders } = $props();

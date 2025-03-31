@@ -2,7 +2,7 @@
 	import {onMount} from 'svelte';
 	import {fade, slide} from 'svelte/transition';
 	import aab from '$lib/js/aab.js';
-	import api from '$lib/js/api.js';
+	import api from '$lib/js/api.js.obs';
 	import { dec } from '$lib/js/toolbox.js';
 	import {validator, NumberInput, RingInput, Select, TextInput } from '$lib/cmp/form/Form.svelte';
 	import { toRing } from '$lib/cmp/form/validator.js';

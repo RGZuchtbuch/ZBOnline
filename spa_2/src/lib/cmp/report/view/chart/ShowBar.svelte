@@ -1,7 +1,4 @@
 <script>
-
-    import api from "../../../js/api.js";
-
     import { BarController, BarElement, CategoryScale, Chart, Colors, LinearScale, Tooltip } from 'chart.js';
 
     let { report } = $props();

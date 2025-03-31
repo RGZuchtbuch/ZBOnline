@@ -3,7 +3,7 @@
 	import { page } from '$app/state';
 	import store, { federation } from '$lib/js/store.svelte.js';
 	import { txt } from '$lib/js/toolbox.js';
-	import api from '$lib/js/api.js';
+	import api from '$lib/js/api.js.obs';
 
 	//let { data } = $props();
 	//let state = getContext( 'state' );

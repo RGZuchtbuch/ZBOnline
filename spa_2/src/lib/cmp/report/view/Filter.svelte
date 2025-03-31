@@ -1,7 +1,7 @@
 <script>
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
-	import store, { federation, standard } from '$lib/js/store.svelte.js';
+	import store from '$lib/js/store.svelte.js';
 
 	import Select from '$lib/cmp/form/input/Select.svelte';
 	import Form from '$lib/cmp/form/Form.svelte';
@@ -16,12 +16,12 @@
 	} );
 
 
-	let district = $state( $federation.districts[ query.district ] );
+	let district = $state( store.federation.districts[ query.district ] );
 	let year     = $state( query.year );
 	let group    = $state( query.group );
-	let section  = $state( $standard.rootSections.find( item => item.id === query.section ) );
-	let breed    = $state( $standard.breeds[ query.breed ] );
-	let color    = $state( $standard.colors[ query.color ] );
+	let section  = $state( store.standard.rootSections.find( item => item.id === query.section ) );
+	let breed    = $state( store.standard.breeds[ query.breed ] );
+	let color    = $state( store.standard.colors[ query.color ] );
 
 	const groups = ['I','II','III'];
 	let years = [];
@@ -31,7 +31,7 @@
 	}
 
 	function onDistrictChange( event ) {
-		district = $federation.districts[ +event.target.value ]
+		district = store.federation.districts[ +event.target.value ]
 		const url =new URL( page.url ); // for query changes
 		url.searchParams.set( 'district', district.id );
 		goto( url.href );
@@ -53,7 +53,7 @@
 		goto( url.href );
 	}
 	function onSectionChange( event ) {
-		section = $standard.rootSections.find( item => item.id === +event.target.value );
+		section = store.standard.rootSections.find( item => item.id === +event.target.value );
 		breed = null;
 		color = null;
 		const url =new URL( page.url ); // for query changes
@@ -67,7 +67,7 @@
 		goto( url.href );
 	}
 	function onBreedChange( event ) {
-		breed = $standard.breeds[ +event.target.value ];
+		breed = store.standard.breeds[ +event.target.value ];
 		color = null;
 		const url =new URL( page.url ); // for query changes
 		if( breed ) {
@@ -79,7 +79,7 @@
 		goto( url.href );
 	}
 	function onColorChange( event ) {
-		color = $standard.colors[ +event.target.value ];
+		color = store.standard.colors[ +event.target.value ];
 		const url =new URL( page.url ); // for query changes
 		if( color ) {
 			url.searchParams.set( 'color', color.id );
@@ -88,13 +88,15 @@
 		}
 		goto( url.href );
 	}
+
+
 </script>
 
 <Form>
 <section class='flex flex-row gap-x-2 p-4' >
 	<Select class='' label='Verband' value={query.district} onchange={onDistrictChange}>
-		<option value={$federation.root.id}>{$federation.root.name}</option>/
-		{#each $federation.root.children as district}
+		<option value={store.federation.id}>{store.federation.name}</option>/
+		{#each store.federation.children as district}
 			<option value={district.id}>{district.name}</option>/
 			{#each district.children as district}
 				<option value={district.id}>&nbsp; &nbsp; {district.name}</option>/
@@ -119,7 +121,7 @@
 <section class='flex flex-row gap-x-2 p-4' >
 	<Select class='w-56' label='Sparte' value={section?section.id:null} onchange={onSectionChange}>
 		<option value={null}>*</option>
-		{#each $standard.rootSections as section}
+		{#each store.standard.rootSections as section}
 			<option value={section.id}>&nbsp; {section.name}</option>/
 		{/each}
 	</Select>
