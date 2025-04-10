@@ -132,25 +132,25 @@ class District
 		throw new HttpBadRequestException( $request, 'Bad id' );
 	}
 
-    // for results edit list for section showing unopened breeds
-	// should be with result with filter district:districtId, year:year, section:sectionId. group:groupId
-	public static function results( Request $request, Response $response, array $args ) : Response {
-		$id = ToolBox::toInt( $args[ 'id' ] );
-		$query = $request->getQueryParams();
-		$year = ToolBox::toInt( $query[ 'year' ] ?? null );
-		$sectionId = ToolBox::toInt( $query[ 'section' ] ?? null );
-		$group = $query[ 'group' ] ?? null;
-		if( $id && $year && $sectionId && $group ) { // all not null and > 0 as all id's should
-			if( $sectionId === 9999 ) { // aoc klasse
-				$results = model\District::getAocResults( $id, $year, $group );
-			} else {
-				$results = model\District::getSectionResults( $id, $sectionId, $year, $group );
-			}
-			$response->getBody()->write(json_encode( [ 'results' => & $results ], JSON_UNESCAPED_SLASHES));
-			return $response;
-		}
-		throw new HttpBadRequestException( $request, 'Bad arguments values' );
-	}
+//    // for results edit list for section showing unopened breeds
+//	// should be with result with filter district:districtId, year:year, section:sectionId. group:groupId
+//	public static function results( Request $request, Response $response, array $args ) : Response {
+//		$id = ToolBox::toInt( $args[ 'id' ] ); // district
+//		$query = $request->getQueryParams();
+//		$year = ToolBox::toInt( $query[ 'year' ] ?? null );
+//		$sectionId = ToolBox::toInt( $query[ 'section' ] ?? null );
+//		$group = $query[ 'group' ] ?? null;
+//		if( $id && $year && $sectionId && $group ) { // all not null and > 0 as all id's should
+//			if( $sectionId === 9999 ) { // aoc klasse
+//				$results = model\District::getAocResults( $id, $year, $group );
+//			} else {
+//				$results = model\District::getSectionResults( $id, $sectionId, $year, $group );
+//			}
+//			$response->getBody()->write(json_encode( [ 'results' => & $results ], JSON_UNESCAPED_SLASHES));
+//			return $response;
+//		}
+//		throw new HttpBadRequestException( $request, 'Bad arguments values' );
+//	}
 
     // for results edit list when opening breed
 	// should be in result

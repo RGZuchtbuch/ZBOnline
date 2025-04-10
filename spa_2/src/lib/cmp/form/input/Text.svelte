@@ -49,13 +49,5 @@
         text-align: left;
         padding: 0 0.5em;
     }
-    input {
-        background-color: #FEE8;
-    }
-    input.valid {
-        background-color: transparent;
-    }
-    label.error.valid {
-        visibility: hidden;
-    }
+
 </style>

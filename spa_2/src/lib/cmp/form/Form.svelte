@@ -9,12 +9,13 @@
     import RingInput from './input/Ring.svelte';
     import Select from './input/Select.svelte';
     import Status from './Status.svelte';
+    import Submit from'./Submit.svelte';
 //    import Switch from './input/Switch.svelte.todo';
     import TextInput from './input/Text.svelte';
     import TextArea from './input/TextArea.svelte';
     import validator from './validator.js';
 
-    export { Form, CheckBox, DateInput, EmailInput, NumberInput, PasswordInput, RangeInput, RingInput, Select, Status, TextArea, TextInput, validator };
+    export { Form, CheckBox, DateInput, EmailInput, NumberInput, PasswordInput, RangeInput, RingInput, Select, Status, Submit, TextArea, TextInput, validator };
 
 </script>
 
@@ -34,9 +35,12 @@
     let submitTimeout = null; // timer
     let validateTimeout = null; // timer
 
+    console.log( 'Form auto', autosubmit );
+
     setContext( 'form', form ); // use getContext in input components
 
     function onInput( event ) { // called after children got input and init validate and autosave
+        console.log( 'Form input', validateafter, submitafter );
         form.state = states.changed;
         clearTimeout( validateTimeout ); // stop validate timer
         clearTimeout( submitTimeout ); // stop autosubmit timer
@@ -54,6 +58,7 @@
 
 
     function validate() { // all registered validators, triggered by timeout
+        console.log('Form validate' );
         let valid = true;
         for( const validator of form.validators ) { // all registered validators
             valid = validator() && valid; // call validator first otherwise call will be skipped when valid already false
@@ -62,6 +67,7 @@
     }
 
     async function submit() { // triggered by timeout or submit button
+        console.log('Form submit' );
         if( form.state===states.valid ) {
             if( onsubmit ) {
                 const success = await onsubmit(); // onsubmit from host !!

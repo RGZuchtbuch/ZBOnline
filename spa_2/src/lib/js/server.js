@@ -38,7 +38,7 @@ export async function del(url) { // delete is a reserved word
 }
 
 export default {
-	get:get, query:query, post:post, put:put, del:del,
+	get:get, query:query, post:post, put:put, delete:del,
 }
 
 

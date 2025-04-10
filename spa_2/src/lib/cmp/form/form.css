@@ -24,6 +24,9 @@ label.error { /* for inputs error label */
     padding: 0 0 0 0.5em;
     align-content: start;
 }
+label.error.valid { /* hide error when valid */
+    visibility: hidden;
+}
 
 input, textarea, select {
     margin: 0;
@@ -31,9 +34,14 @@ input, textarea, select {
     font-size: 1em;
     border: solid 1px darkgreen;
     border-radius: 0.25em;
-    background: white;
+    background-color: #FEE8;
     cursor:pointer;
 }
+
+input.valid, textarea.valid, select.valid {
+    background-color: white;
+}
+
 
 input, select {
     height: 2em;
@@ -43,6 +51,7 @@ input:disabled, select:disabled, textarea:disabled {
     color: black;
     border: solid 1px lightgrey;
 }
+
 
 textarea {
     height: 16em;

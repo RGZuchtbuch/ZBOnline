@@ -107,8 +107,8 @@ class Router {
 
 		$app->get( '/2/article', 				'App\controller\Article::filter'); // filter
 		$app->get( '/2/article/{id:[0-9]+}', 	'App\controller\Article::get'); // only accept uint
-		$app->put( '/2/article/{id:[0-9]+}', 	'App\controller\Article::put'); // only accept uint
 		$app->post( '/2/article', 				'App\controller\Article::post');
+		$app->put( '/2/article/{id:[0-9]+}', 	'App\controller\Article::put'); // only accept uint
 		$app->delete( '/2/article/{id:[0-9]+}', 	'App\controller\Article::delete'); // only accept uint
 
 
@@ -130,6 +130,9 @@ class Router {
 
 		$app->get('/2/result', 'App\controller\Result::filter' ); // on districtId
 		$app->get('/2/result/{id:[0-9]+}', 'App\controller\Result::get' );
+		$app->post( '/2/result',  		'App\controller\Result::post');
+		$app->put( '/2/result/{id:[0-9]+}','App\controller\Result::put');
+		$app->delete( '/2/result/{id:[0-9]+}','App\controller\Result::delete');
 
 		$app->get( '/2/standard', 'App\controller\Standard::get' );
 

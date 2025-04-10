@@ -9,7 +9,7 @@
 	})
 
 	function setHeader( page ) {
-		const title = 'Die anerkannten Rassen im BDRG';
+		const title = 'BDRG Rassegeflügel Standard';
 		const menu = {
 			trail: [
 				{name: 'Start', href: '/'},

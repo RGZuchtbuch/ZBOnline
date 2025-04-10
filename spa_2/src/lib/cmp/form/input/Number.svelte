@@ -40,12 +40,7 @@
         display:flex;
         flex-direction: column;
     }
-    input {
-        background-color: #FEE8;
-    }
-    input.valid {
-        background-color: transparent;
-    }
+
     input.right {
         text-align: right;
         padding: 0;

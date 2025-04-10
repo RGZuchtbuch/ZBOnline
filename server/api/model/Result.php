@@ -329,7 +329,7 @@ class Result extends Query
         return Query::selectArray($stmt, $args); // returns null, no results found, or single result
     }
 
-	// for use in district year report
+	// for use in district year report, table
 	public static function getResultsDistrictYear(int $districtId, int $year ) : ? array {
 		$args = get_defined_vars();
 		$stmt = Query::prepare("
@@ -452,11 +452,11 @@ class Result extends Query
 				LEFT JOIN pair   ON pair.id = result.pairId
 				LEFT JOIN user   ON user.id = pair.breederId		
 			WHERE result.districtId = :districtId AND result.year = :year
-			ORDER BY section.order, breed.name, color.name 
+			ORDER BY rootsection.order, breed.name, result.aocColor, color.name
         ');
 		return Query::selectArray($stmt, $args);
 	}
-	/* returns the district result for year and color */
+	/* returns the district result for year and color, for moderator overview per year */
 	public static function forDistrict( int $districtId ) : array {
 		$args = get_defined_vars();
 		$stmt = Query::prepare('
@@ -492,4 +492,109 @@ class Result extends Query
         ');
 		return Query::selectArray($stmt, $args);
 	}
+
+	// for editing district results per section, year, group
+	public static function forSectionBreeds(int $districtId, int $sectionId, int $year, string $group ) : array {
+		$args = get_defined_vars();
+
+		$stmt = Query::prepare("
+			SELECT breed.id, breed.name, section.layers AS layer, COUNT( result.id ) AS count
+			FROM breed
+			LEFT JOIN section ON section.id = breed.sectionId
+			LEFT JOIN result ON result.breedId = breed.id AND result.districtId = :districtId AND result.year = :year AND result.group = :group
+			WHERE
+				section.rootId = :sectionId
+				AND result.pairId IS NULL
+				AND result.aocColor IS NULL
+			GROUP BY breed.name
+			ORDER BY breed.name	
+        ");
+		return Query::selectArray( $stmt, $args );
+	}
+
+	public static function forBreedResult(int $districtId, int $breedId, int $year, string $group ) : array {
+		$args = get_defined_vars();
+
+		$stmt = Query::prepare("
+			SELECT 
+				:breedId AS breedId, :districtId AS districtId, :year AS `year`, :group AS `group`,
+				result.id AS id,
+				section.rootId AS sectionId, null AS colorId, null AS colorName,
+				pairId, breeders, pairs, aocColor, 
+				layDames, result.layEggs, result.layWeight,
+				broodEggs, broodFertile, broodHatched,
+				showCount, showScore				
+			FROM breed
+			    LEFT JOIN section ON section.id = breed.sectionId
+				LEFT JOIN result 
+					ON result.breedId = breed.id
+					AND result.colorId IS NULL
+					AND result.districtId = :districtId
+					AND result.year = :year
+					AND result.group = :group
+					AND result.pairId IS NULL
+					AND result.aocColor IS NULL
+			WHERE 
+				breed.id = :breedId	
+        ");
+		return Query::select( $stmt, $args );
+	}
+
+	public static function forColorsResult(int $districtId, int $breedId, int $year, string $group ) : array {
+		$args = get_defined_vars();
+
+		$stmt = Query::prepare("
+			SELECT 
+				section.rootId AS sectionId, breed.id AS breedId, color.id AS colorId, color.name AS colorName,
+				:districtId AS districtId, :year AS `year`,
+				result.id, pairId, :group AS `group`, 
+				aocColor, breeders, pairs, 
+				layDames, result.layEggs, result.layWeight,
+				broodEggs, broodFertile, broodHatched,
+				showCount, showScore				
+			FROM color
+			    LEFT JOIN breed ON breed.id = color.breedId
+			    LEFT JOIN section ON section.id = breed.sectionId
+				LEFT JOIN result 
+					ON result.colorId = color.id
+					AND result.districtId = :districtId
+					AND result.year = :year
+					AND result.group = :group
+					AND result.pairId IS NULL
+					AND result.aocColor IS NULL
+			WHERE 
+				color.breedId = :breedId
+			ORDER BY color.name	
+        ");
+		return Query::selectArray( $stmt, $args );
+	}
+
+
+	// for editing district results per section, year, group special for aoc 'section'
+	public static function forAocColors(int $districtId, int $year, string $group ) : array {
+		$args = get_defined_vars();
+
+		$stmt = Query::prepare("
+            SELECT 
+          		result.id, result.pairId, :districtId AS districtId, :year AS `year`, :group AS `group`, 
+                result.sectionId, section.name AS sectionName, section.layers,
+          		breed.id AS breedId, breed.name AS breedName, null AS colorId, result.aocColor, result.aocColor AS colorName, result.aocColor AS name,
+                breeders, pairs,
+                layDames, result.layEggs, result.layWeight,
+                broodEggs, broodFertile, broodHatched,
+                showCount, showScore
+            FROM result
+            LEFT JOIN breed   ON breed.id = result.breedId
+            LEFT JOIN section ON section.id = result.sectionId
+            
+            WHERE districtId = :districtId
+                AND year =:year
+                AND `group` = :group
+                AND result.aocColor IS NOT NULL
+            ORDER BY section.order, breed.name, aocColor
+        ");
+
+		return Query::selectArray( $stmt, $args );
+	}
+
 }

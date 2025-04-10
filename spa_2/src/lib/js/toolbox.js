@@ -28,6 +28,22 @@ export function daysBetween( start, end ) {
 	}
 }
 
+export function getLayResult( days, eggs, dames ) {
+	let fit;
+	if( days > 365 ) {
+		fit = 365;
+	} else if( days > 183 ) {
+		fit = 340.1984 - 0.7930455*days + 0.002358891*days*days;  // https://mycurvefit.com/
+	} else {
+		fit = 274;
+	}
+	const production = eggs/dames * fit/days; //fit * eggs/days/dames;
+	if( production >= 0 && production <= 366 ) {
+		return production;
+	}
+	return null;
+}
+
 
 
 // for use with map

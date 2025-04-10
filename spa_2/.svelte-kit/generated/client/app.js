@@ -34,7 +34,8 @@ export const nodes = [
 	() => import('./nodes/30'),
 	() => import('./nodes/31'),
 	() => import('./nodes/32'),
-	() => import('./nodes/33')
+	() => import('./nodes/33'),
+	() => import('./nodes/34')
 ];
 
 export const server_loads = [];
@@ -56,15 +57,16 @@ export const dictionary = {
 		"/moderator/[district]/breeder/[breeder]/pair/[pair]": [22],
 		"/moderator/[district]/breeder/[breeder]/profile": [23],
 		"/moderator/[district]/result": [24],
-		"/pair/[pairId]": [25,[6]],
-		"/report": [26],
-		"/result": [27,[7]],
-		"/result/map/year/[year]/type/[type]": [28,[7]],
-		"/result/table/district/[districtId]/year/[year]": [29,[7]],
-		"/result/trend/district/[districtId]/type/[type]": [30,[7]],
-		"/standard": [31],
-		"/test": [32,[8]],
-		"/user": [33]
+		"/moderator/[district]/result/edit": [25],
+		"/pair/[pairId]": [26,[6]],
+		"/report": [27],
+		"/result": [28,[7]],
+		"/result/map/year/[year]/type/[type]": [29,[7]],
+		"/result/table/district/[districtId]/year/[year]": [30,[7]],
+		"/result/trend/district/[districtId]/type/[type]": [31,[7]],
+		"/standard": [32],
+		"/test": [33,[8]],
+		"/user": [34]
 	};
 
 export const hooks = {

@@ -53,7 +53,4 @@
         display:flex;
         flex-direction: column;
     }
-    .error.valid {
-        visibility: hidden;
-    }
 </style>

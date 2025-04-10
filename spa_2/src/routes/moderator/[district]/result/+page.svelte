@@ -9,13 +9,13 @@
 	let results    = $state( null );
 
 	$effect( async () => {
-		results = await Result.query( { district:+page.params.district, year:year } );
+		const data = await Result.query( { district:+page.params.district, year:year } );
+		results = data.results;
 		setHeader();
 	});
 
 	function setHeader() {
-		console.log( 'Set');
-		const title = `Leistungen für ${district.name}`;
+		const title = `${district.name}`;
 		const menu = {
 			trail: [
 				{ name:'Home',      href:'/' },
@@ -23,7 +23,9 @@
 				{ name: district.short,   href:`/moderator/${district.id}` },
 				{ name:'Eingaben', href: page.url.href },
 			],
-			options: [],
+			options: [
+				{ name:'Bearbeiten', href:`/moderator/${district.id}/result/edit?year=${year}` },
+			],
 		}
 		store.title = title; // to set after loading
 		store.menu  = menu;

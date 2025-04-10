@@ -200,66 +200,66 @@ class District
     }
 	 */
 //                 CAST( SUM( IF( layEggs > 0, breeders, 0 ) ) AS UNSIGNED ) AS layBreeders,
-    public static function getSectionResults(int $districtId, int $sectionId, int $year, string $group ) : array {
-        $args = get_defined_vars();
-
-        $stmt = Query::prepare("
-            SELECT 
-          		breed.id, breed.name, 
-
-				COUNT( result.pairId ) AS reports, 
-				COUNT( result.aocColor ) AS aoc,
-          		COUNT( result.id ) AS results, 
-          		
-          		CAST( :districtId AS UNSIGNED ) AS districtId, CAST( :year AS UNSIGNED ) AS `year`, :group AS `group`, 
-                CAST( SUM( breeders ) AS UNSIGNED ) AS breeders, CAST( SUM( pairs ) AS UNSIGNED ) AS pairs,
-                CAST( SUM( result.layDames ) AS UNSIGNED ) AS layDames, AVG( result.layEggs ) AS layEggs, AVG( result.layWeight ) AS layWeight,
-                CAST( SUM( result.broodEggs) AS UNSIGNED ) AS broodEggs, CAST( SUM( broodFertile ) AS UNSIGNED ) AS broodFertile, CAST( SUM( broodHatched ) AS UNSIGNED ) AS broodHatched,
-                CAST( SUM( result.showCount ) AS UNSIGNED ) AS showCount, AVG( showScore ) AS showScore
-            FROM breed
-            LEFT JOIN result 
-                ON result.breedId = breed.id
-                AND result.districtId = :districtId
-                AND result.year = :year
-                AND result.group = :group
-            WHERE breed.sectionId IN (              
-				SELECT child.id FROM section AS parent
-					LEFT JOIN section AS child ON child.id = parent.id OR child.parentId = parent.id
-				WHERE parent.id=:sectionId OR parent.parentId=:sectionId
-            )
-            GROUP BY breed.id, breed.name
-            ORDER BY breed.name 
-        ");
-
-        return Query::selectArray( $stmt, $args );
-    }
+//    public static function getSectionResults(int $districtId, int $sectionId, int $year, string $group ) : array {
+//        $args = get_defined_vars();
+//
+//        $stmt = Query::prepare("
+//            SELECT
+//          		breed.id, breed.name,
+//
+//				COUNT( result.pairId ) AS reports,
+//				COUNT( result.aocColor ) AS aoc,
+//          		COUNT( result.id ) AS results,
+//
+//          		CAST( :districtId AS UNSIGNED ) AS districtId, CAST( :year AS UNSIGNED ) AS `year`, :group AS `group`,
+//                CAST( SUM( breeders ) AS UNSIGNED ) AS breeders, CAST( SUM( pairs ) AS UNSIGNED ) AS pairs,
+//                CAST( SUM( result.layDames ) AS UNSIGNED ) AS layDames, AVG( result.layEggs ) AS layEggs, AVG( result.layWeight ) AS layWeight,
+//                CAST( SUM( result.broodEggs) AS UNSIGNED ) AS broodEggs, CAST( SUM( broodFertile ) AS UNSIGNED ) AS broodFertile, CAST( SUM( broodHatched ) AS UNSIGNED ) AS broodHatched,
+//                CAST( SUM( result.showCount ) AS UNSIGNED ) AS showCount, AVG( showScore ) AS showScore
+//            FROM breed
+//            LEFT JOIN result
+//                ON result.breedId = breed.id
+//                AND result.districtId = :districtId
+//                AND result.year = :year
+//                AND result.group = :group
+//            WHERE breed.sectionId IN (
+//				SELECT child.id FROM section AS parent
+//					LEFT JOIN section AS child ON child.id = parent.id OR child.parentId = parent.id
+//				WHERE parent.id=:sectionId OR parent.parentId=:sectionId
+//            )
+//            GROUP BY breed.id, breed.name
+//            ORDER BY breed.name
+//        ");
+//
+//        return Query::selectArray( $stmt, $args );
+//    }
 
 	// gets all results for all sections for aoc, special case
-	public static function getAocResults(int $districtId, int $year, string $group ) : array {
-		$args = get_defined_vars();
-
-		$stmt = Query::prepare("
-            SELECT 
-          		result.id, result.pairId, :districtId AS districtId, :year AS `year`, :group AS `group`, 
-                result.sectionId, section.name AS sectionName, section.layers,
-          		breed.id AS breedId, breed.name AS breedName, null AS colorId, result.aocColor, result.aocColor AS colorName, result.aocColor AS name,
-                breeders, pairs,
-                layDames, result.layEggs, result.layWeight,
-                broodEggs, broodFertile, broodHatched,
-                showCount, showScore
-            FROM result
-            LEFT JOIN breed   ON breed.id = result.breedId
-            LEFT JOIN section ON section.id = result.sectionId
-            
-            WHERE districtId = :districtId
-                AND year =:year
-                AND `group` = :group
-                AND result.aocColor IS NOT NULL
-            ORDER BY section.order, breed.name, aocColor
-        ");
-
-		return Query::selectArray( $stmt, $args );
-	}
+//	public static function getAocResults(int $districtId, int $year, string $group ) : array {
+//		$args = get_defined_vars();
+//
+//		$stmt = Query::prepare("
+//            SELECT
+//          		result.id, result.pairId, :districtId AS districtId, :year AS `year`, :group AS `group`,
+//                result.sectionId, section.name AS sectionName, section.layers,
+//          		breed.id AS breedId, breed.name AS breedName, null AS colorId, result.aocColor, result.aocColor AS colorName, result.aocColor AS name,
+//                breeders, pairs,
+//                layDames, result.layEggs, result.layWeight,
+//                broodEggs, broodFertile, broodHatched,
+//                showCount, showScore
+//            FROM result
+//            LEFT JOIN breed   ON breed.id = result.breedId
+//            LEFT JOIN section ON section.id = result.sectionId
+//
+//            WHERE districtId = :districtId
+//                AND year =:year
+//                AND `group` = :group
+//                AND result.aocColor IS NOT NULL
+//            ORDER BY section.order, breed.name, aocColor
+//        ");
+//
+//		return Query::selectArray( $stmt, $args );
+//	}
 
     public static function getCountBreeders(int $districtId ) : int {
         $args = get_defined_vars();
