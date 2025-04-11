@@ -4,7 +4,7 @@
     // states: disabled, not changed, invalid, submittable
 	//const states = { initial:null, waiting:'waiting', changed:'changed', invalid:'invalid', valid:'valid', disabled:'disabled', stored:'stored', error:'server error :(' };
 
-	const defaultValue = { waiting:'waiting...', changed:'Changed', invalid:'Invalid', valid:'Valid', disabled:'Disabled', stored:'Stored' };
+	const defaultValue = { waiting:'...', changed:'...', invalid:'X', valid:'Ok', disabled:'x', stored:'Fertig' };
     let { class:classname='', disabled=false, element=$bindable(), error='!', label=null, name=null, placeholder=null, title=null, validator=null,
         values=$bindable( defaultValue ) } = $props();
 

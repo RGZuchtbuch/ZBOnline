@@ -4,10 +4,13 @@
     import Form, { Status, NumberInput, validator } from '$lib/cmp/form/Form.svelte';
     //import NumberInput from '../../common/form/input/NumberInput.svelte';
     //import FormStatus from '../../common/form/Status.svelte';
+    import { Result } from '$lib/js/result.svelte.js';
 
     import AddResultRow from './AddResultRow.svelte'
 
     let { section, result } = $props();
+
+    $inspect( 'AOC R', section, result );
 
     let data = $state( result );
     let breed = $derived( store.standard.breeds[ result.breedId ] );
@@ -40,42 +43,19 @@
         }
     }
 
-    // function onToggleExtend( event ) {
-    //     extended = ! extended;
-    // }
-
-    function onSubmit( event ) {
+    async function onSubmit( event ) {
         console.log( 'Submit color result' );
         if( data.breeders ) { // valid entry
-            if( data.id === 0 ) { // existing
-                // api.result.post(result).then((response) => {
-                //     result.id = response.id; // new id when inserted
-                // });
-                console.log('Create');
-                return true;
-            } else {
-                // api.result.put( result.id, result ).then((response) => {
-                //     //result.id = response.id; // new id when inserted
-                // });
-                console.log('Update');
-                return true;
-            }
+            return await Result.save( data );
         } else { // delete if no breeders count given
             if( data.id > 0 ) {
-                // api.result.delete(result.id).then((response) => {
-                //     result.id = null; // does not exist anymore, but still showing for new edit
-                // });
-                console.log('Delete');
-                return true;
+                return await Result.delete( data.id );
             }
         }
     }
 
-    // function onChange( result ) {
-    //     console.log( 'Result', result );
-    //     dispatch( 'change', result );
-    // }
 </script>
+
 
 <Form class='flex flex-col px-2 gap-x-1 text-sm' autosubmit onsubmit={onSubmit}>
     <div>{breed.name}</div>
@@ -103,14 +83,14 @@
             <div class='w-2'></div>
             <!-- lay -->
             <!-- NumberInput class='w-14' bind:value={result.layDames} error='0..99999' title='Gesamtzahl der legende Hennen' validator={validate.layDames}/ -->
-            <NumberInput class='w-14' label='Zuchten' bind:value={data.lay.eggs} error='0..366' title='Durchschnittslegeleistung' validator={validate.lay.eggs}/>
-            <NumberInput class='w-14' label='Zuchten' bind:value={data.lay.weight} error='1..999' title='Durchschnittsgewicht der gelegten Eier' validator={validate.lay.weight}/>
+            <NumberInput class='w-14' label='Eier' bind:value={data.lay.eggs} error='0..366' title='Durchschnittslegeleistung' validator={validate.lay.eggs}/>
+            <NumberInput class='w-14' label='Gewicht' bind:value={data.lay.weight} error='1..999' title='Durchschnittsgewicht der gelegten Eier' validator={validate.lay.weight}/>
 
             <div class='w-2'></div>
             <!-- brood -->
-            <NumberInput class='w-14' label='Zuchten' bind:value={data.brood.eggs}    error='0..99999' title='Eigelegte Eier' validator={validate.brood.eggs}/>
-            <NumberInput class='w-14' label='Zuchten' bind:value={data.brood.fertile} error='0..{data.brood.eggs}' title='Befruchtete Eier, nicht mehr als eingelegt' validator={validate.brood.fertile}/>
-            <NumberInput class='w-14' label='Zuchten' bind:value={data.brood.hatched} error='0..{data.brood.fertile==null ? data.brood.eggs : data.brood.fertile}' title='Geschlüpfte Küken, nicht mehr als befruchtet oder eingelegt' validator={validate.brood.hatched}/>
+            <NumberInput class='w-14' label='Eingelegt' bind:value={data.brood.eggs}    error='0..99999' title='Eigelegte Eier' validator={validate.brood.eggs}/>
+            <NumberInput class='w-14' label='Befruchtet' bind:value={data.brood.fertile} error='0..{data.brood.eggs}' title='Befruchtete Eier, nicht mehr als eingelegt' validator={validate.brood.fertile}/>
+            <NumberInput class='w-14' label='Geschlüpft' bind:value={data.brood.hatched} error='0..{data.brood.fertile==null ? data.brood.eggs : data.brood.fertile}' title='Geschlüpfte Küken, nicht mehr als befruchtet oder eingelegt' validator={validate.brood.hatched}/>
 
 
         {/if}

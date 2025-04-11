@@ -210,14 +210,15 @@ class Result
 		//$colorId = $query['color'] ?? null;
 
 		if( is_numeric( $districtId ) && is_numeric( $sectionId ) && is_numeric( $year ) && $group ) { //for edit
-			if( $sectionId == 9999 ) {
-				$results = model\Result::forAocColors( $districtId, $year, $group );
-			} else {
+			if( $sectionId == 9999 ) { // for editing aoc's
+				$results = self::formatResults( model\Result::forAocColors( $districtId, $year, $group ) );
+			} else { // breedlist for editings results
 				$results = model\Result::forSectionBreeds( $districtId, $sectionId, $year, $group );
 			}
 			$response->getBody()->write(json_encode( [ 'results'=>&$results, 'section'=>$sectionId ], JSON_UNESCAPED_SLASHES));
 			return $response;
 		} else if( is_numeric( $districtId ) && is_numeric($breedId) && is_numeric( $year ) && $group ) { // per breed edit
+			// for editing opened breeds, so breed for pigeons and colors for layers
 			$breedResult = model\Result::forBreedResult( $districtId, $breedId, $year, $group );
 			$breedResult = self::formatResult( $breedResult );
 			$colorResults = model\Result::forColorsResult($districtId, $breedId, $year, $group );
@@ -233,7 +234,7 @@ class Result
 		throw new HttpBadRequestException( $request, 'Bad filter' );
 	}
 
-	private static function formatResults( array & $results ) : array {
+	private static function formatResults( array $results ) : array {
 		$out = [];
 		foreach( $results as $result) {
 			$out[] = self::formatResult( $result );

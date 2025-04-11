@@ -34,6 +34,8 @@
 		goto( url.href );
 	}
 
+	$inspect( 'RE b', breeds );
+
 </script>
 
 {#if district && group && section && year }
@@ -68,9 +70,9 @@
 
 {#if breeds}
 	{#if section.id === 9999}
-		<AocCreate />
-		{breeds.length}
-		{#each breeds as result}
+		<AocCreate {district} {group} {year} results={breeds}/>
+
+		{#each breeds as result (result.id)}
 			<AocResult {section} {result} />
 		{/each}
 	{:else}
