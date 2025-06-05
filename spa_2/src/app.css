@@ -9,6 +9,8 @@
     html, body {
         @apply h-full w-full m-0 p-0 font-rgz;
     }
+    body {
+    }
 
     a, button, div, h1, h2, h3, h4, img, span {
         @apply rounded;

@@ -305,7 +305,9 @@ class Report extends Query
                 CAST( SUM( IF( layers = 1 AND broodHatched IS NOT NULL AND broodEggs > 0, breeders * broodHatched / broodEggs, 0 ) ) / SUM( IF( layers = 1 AND broodHatched IS NOT NULL, breeders, 0 ) ) AS DOUBLE ) AS broodLayerHatched,
                 # brood pigeons
                 CAST( SUM( IF( layers = 0 AND broodHatched IS NOT NULL, breeders, 0 ) ) AS UNSIGNED ) AS broodPigeonBreeders,                     
-                CAST( SUM( IF( layers = 0 AND broodHatched IS NOT NULL, broodHatched, 0 ) ) AS UNSIGNED ) AS broodPigeonHatched,  
+                CAST( SUM( IF( layers = 0 AND broodEggs IS NOT NULL, broodEggs, 0 ) ) AS UNSIGNED ) AS broodPigeonEggs, # Added for pigeon broods  
+                # CAST( SUM( IF( layers = 0 AND broodHatched IS NOT NULL, broodHatched, 0 ) ) AS UNSIGNED ) AS broodPigeonHatched,  
+                CAST( SUM( IF( layers = 0 AND broodHatched IS NOT NULL AND broodEggs > 0, breeders * broodHatched / broodEggs, 0 ) ) / SUM( IF( layers = 0 AND broodHatched IS NOT NULL, breeders, 0 ) ) AS DOUBLE ) AS broodPigeonHatched,
                 CAST( SUM( IF( layers = 0 AND broodHatched IS NOT NULL AND pairs > 0, breeders * broodHatched / pairs, 0 ) ) / SUM( IF( layers = 0 AND pairs > 0 AND broodHatched IS NOT NULL, breeders, 0 ) ) AS DOUBLE ) AS broodPigeonResult,               
                 # show  
                 CAST( SUM( IF( showCount > 0, breeders, 0 ) ) AS UNSIGNED ) AS showBreeders,

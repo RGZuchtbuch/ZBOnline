@@ -34,7 +34,7 @@
 		goto( url.href );
 	}
 
-	$inspect( 'RE b', breeds );
+	//$inspect( 'RE b', breeds );
 
 </script>
 

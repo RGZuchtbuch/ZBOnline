@@ -15,46 +15,65 @@
 				<span class='grow pl-2'>{section.name}</span>
 				<span class='flex flex-col'>
 					<span class='flex flex-row text-xs text-center'>
-						<span class='w-2'></span>
-						<span class='w-20'></span>
-						<span class='w-4'></span>
+						<span class='w-24'></span>
+						<span class='w-2 text-gray-400'>|</span>
+
 						{#if section.id === 5}
-							<span class='w-24'></span>
+							<span class='w-24'>-</span>
 						{:else}
 							<span class='w-24'>Legen</span>
 						{/if}
-						<span class='w-4'></span>
-							<span class='w-28'>Bruten</span>
-						<span class='w-4'></span>
-						<span class='w-20'>Schau</span>
+
+						<span class='w-2 text-gray-400'>|</span>
+
+						<span class='w-48'>Bruten</span>
+
+						<span class='w-2 text-gray-400'>|</span>
+
+						<span class='w-24'>Schau</span>
+
+						<span class='w-2 text-gray-400'>|</span>
 					</span>
 					<span class='flex flex-row text-xs text-center'>
 						<span class='w-12'>Zuchten</span>
-						<span class='w-12'>Stämme</span>
-						<span class='w-2'></span>
+						{#if section.id === 5}
+							<span class='w-12'>Paare</span>
+						{:else}
+							<span class='w-12'>Stämme</span>
+						{/if}
+
+						<span class='w-2 text-gray-400'>|</span>
+
 						{#if section.id === 5}
 							<span class='w-12'></span>
-							<span class='w-14'></span>
+							<span class='w-12'></span>
 						{:else}
 							<span class='w-12'>Eier</span>
-							<span class='w-14'>Gewicht</span>
+							<span class='w-12'>Gewicht</span>
 						{/if}
 
-						<span class='w-2'></span>
+						<span class='w-2 text-gray-400'>|</span>
+
 						{#if section.id === 5}
-							<span class='w-10'>Küken</span>
-							<span class='w-10'>Paare</span>
-							<span class='w-10'>Kü/Pa</span>
+							<span class='w-12'>Gelegt</span>
+							<span class='w-12'>-</span>
+							<span class='w-12'>Küken</span>
+							<span class='w-12'>Kü/Pa</span>
 						{:else}
-							<span class='w-10'>Eingel.</span>
-							<span class='w-10'>Befr.</span>
-							<span class='w-10'>Geschl.</span>
+							<span class='w-12'>Eingel.</span>
+							<span class='w-12'>Befr.</span>
+							<span class='w-12'>Geschl.</span>
+							<span class='w-12'>-</span>
 						{/if}
 
-						<span class='w-2'></span>
-						<span class='w-10'>Tiere</span>
-						<span class='w-12'>P.</span>
-						<span class='w-10'>Von</span>
+						<span class='w-2 text-gray-400'>|</span>
+
+						<span class='w-12'>Tiere</span>
+						<span class='w-12'>Pkt</span>
+
+						<span class='w-2 text-gray-400'>|</span>
+
+						<span class='w-8'>Zücht</span>
 					</span>
 				</span>
 			</div>
@@ -87,27 +106,38 @@
 
 
 {#snippet result( section, result )}
-	<span class='w-12 number'>{ dec( result.year ) }</span>
+
 	<span class='w-12 number'>{ dec( result.breeders ) }</span>
 	<span class='w-12 number'>{ dec( result.pairs ) }</span>
+
 	<span class='w-2'></span>
+
 	<span class='w-12 number'>{ dec( result.lay.eggs, 0 ) }</span>
-	<span class='w-14 number'>{ dec( result.lay.weight, 1 ) }</span>
+	<span class='w-12 number'>{ dec( result.lay.weight, 1 ) }</span>
+
 	<span class='w-2'></span>
+
 	{#if section.id === 5}
-		<span class='w-10 number'>{ result.brood.hatched}</span>
-		<span class='w-10 number'>{ result.pairs}</span>
-		<span class='w-10 number'>{ result.pairs?result.brood.hatched/result.pairs:null}</span>
+		<span class='w-12 number'>{ result.brood.eggs }</span>
+		<span class='w-12'></span>
+		<span class='w-12 number'>{ result.brood.hatched }</span>
+		<span class='w-12 number'>{ result.pairs?result.brood.hatched/result.pairs:null}</span>
 	{:else}
-		<span class='w-10 number'>{ result.brood.eggs}</span>
-		<span class='w-10 number'>{ result.brood.fertile}</span>
-		<span class='w-10 number'>{ result.brood.hatched}</span>
+		<span class='w-12 number'>{ result.brood.eggs}</span>
+		<span class='w-12 number'>{ result.brood.fertile}</span>
+		<span class='w-12 number'>{ result.brood.hatched}</span>
+		<span class='w-12'></span>
 	{/if}
+
 	<span class='w-2'></span>
-	<span class='w-10 number'>{ result.show.count}</span>
+
+	<span class='w-12 number'>{ result.show.count}</span>
 	<span class='w-12 number'>{ dec( result.show.score, 1 ) }</span>
+
+	<span class='w-2'></span>
+
 	{#if result.breeder }
-		<a class='w-10 text'
+		<a class='w-8 text'
 		   href={`/moderator/${result.districtId}/breeder/${result.breeder.id}/pair/${result.pairId}`}
 		   title={`Züchter ${result.breeder.firstName} ${txt(result.breeder.infix)} ${result.breeder.lastName}`}
 		>
@@ -115,7 +145,7 @@
 			{ result.breeder.firstName.substring(0,1)}.{ result.breeder.lastName.substring(0,1)}
 		</a>
 	{:else}
-		<span class='w-10'></span>
+		<span class='w-8'></span>
 	{/if}
 {/snippet}
 

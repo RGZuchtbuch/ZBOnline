@@ -125,6 +125,9 @@ class Router {
 
 		$app->get('/2/pair', 'App\controller\Pair::filter' );
 		$app->get('/2/pair/{id:[0-9]+}', 'App\controller\Pair::get' );
+		$app->post( '/2/pair',  		'App\controller\Pair::post');
+		$app->put( '/2/pair/{id:[0-9]+}','App\controller\Pair::put');
+		$app->delete( '/2/pair/{id:[0-9]+}','App\controller\Pair::delete');
 
 		$app->get('/2/report', 'App\controller\Report::filter' );
 

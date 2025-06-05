@@ -81,7 +81,11 @@ class Pair
 		throw new HttpBadRequestException( $request, 'Missing body' );
 	}
 
-	// no put
+	// put same as post as all data is replaced for the pair
+	public static function put( Request $request, Response $response, array $args ) : Response	{
+		return Pair::post( $request, $response, $args );
+	}
+
 
 	// delete the whole struct
 	public static function delete( Request $request, Response $response, array $args ) : Response

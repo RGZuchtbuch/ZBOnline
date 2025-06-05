@@ -11,6 +11,8 @@
 
     let { section, breed, result } = $props();
 
+    result.brood.broods = result.brood.eggs ? result.brood.eggs / 2 : null;
+
     let data = $state( result );
     let hasResult = $derived( data.breeders > 0 );
     let extended = $state( false ); //TODO remove ?
@@ -25,13 +27,16 @@
             weight: (v) => validator(v).number().range(1, 999).orNull().isValid(),
         },
         brood: {
-            chicks: (v) => validator(v).number().if(data.pairs > 0).range(0, data.pairs * 50).orNull().isValid(),
+//            chicks: (v) => validator(v).number().if(data.pairs > 0).range(0, data.pairs * 50).orNull().isValid(),
+            broods: (v) => validator(v).number().range(0, 99).orNull().isValid(),
+            chicks: (v) => validator(v).number().if(data.brood.broods>0).range(0, data.brood.broods * 2).orNull().isValid(),
             eggs: (v) => validator(v).number().range(1, 99999).orNull().isValid(),
-            fertile: (v) => validator(v).number().range(0, data.brood.eggs).orNull().isValid(),
+            fertile: (v) => validator(v).number().range(0, data.brood.eggs ).orNull().isValid(),
             hatched: (v) => validator(v).number().range(0, data.brood.fertile == null ? data.brood.eggs : data.brood.fertile).orNull().isValid(),
         },
         show: {
-            count    : (v) => validator(v).number().range( 1, 99999 ).orNullIf( data.show.score == null ).isValid(),
+//            count    : (v) => validator(v).number().range( 1, 99999 ).orNullIf( data.show.score == null ).isValid(),
+            count    : (v) => validator(v).number().range( 1, data.brood.hatched ? data.brood.hatched : 99999  ).orNullIf( data.show.score == null ).isValid(),
             score    : (v) => validator(v).number().range( 89, 97 ).orNullIf( data.show.count == null ).isValid(),
         },
 
@@ -44,6 +49,7 @@
     async function onSubmit( event ) {
         console.log( 'Submit color result' );
         if( data.breeders ) { // valid entry
+            result.brood.eggs = result.brood.broods * 2; // 2 eggs per brood expected
             return await Result.save( data );
         } else { // delete if no breeders count given
             if( data.id > 0 ) {
@@ -72,7 +78,7 @@
     <div class='w-14'></div> <div class='w-14'></div> <!-- div class='w-14' / -->
     <div class='w-2'></div>
     <!-- brood -->
-    <div class='w-14'></div>
+    <NumberInput class='w-14' bind:value={data.brood.broods} error='0..99' title='Bruten, jeweils 2 Eier erwarted' validator={validate.brood.broods}/>
     <NumberInput class='w-14' bind:value={data.brood.hatched} error='0..99999' title='Geschlüpfte Küken, Braucht Paare' validator={validate.brood.chicks}/>
     <div class='w-14'></div>
     <div class='w-2'></div>

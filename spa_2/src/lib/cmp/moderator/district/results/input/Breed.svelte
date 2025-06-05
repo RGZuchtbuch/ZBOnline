@@ -70,9 +70,12 @@
                 <div class='flex flex-row gap-x-1 text-xs text-center'>
                     <div class='w-14'>Zuchten</div> <div class='w-14'>Paare</div>
                     <div class='w-2'></div>
-                    <div class='w-14'></div> <div class='w-14'></div> <!-- div class='w-14'></div -->
+                    <div class='w-14'></div>
+                    <div class='w-14'></div> <!-- div class='w-14'></div -->
                     <div class='w-2'></div>
-                    <div class='w-14'></div> <div class='w-14'>Küken</div> <div class='w-14'></div>
+                    <div class='w-14'>Bruten</div>
+                    <div class='w-14'>Küken</div>
+                    <div class='w-14'></div>
                     <div class='w-2'></div>
                     <div class='w-14'>Tiere</div> <div class='w-14 whitespace-nowrap'>Note</div>
                 </div>
@@ -84,8 +87,8 @@
     {#if open && results }
         <div transition:slide>
             {#if breed.layer }
-                {#each results.colors as result}
-                    <ColorResult {result} onchange={onResultChange}/>
+                {#each results.colors as color}
+                    <ColorResult result={color} onchange={onResultChange}/>
                 {/each}
             {:else}
                 <BreedResult result={results.breed} onchange={onResultChange}/>
