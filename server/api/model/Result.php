@@ -5,7 +5,7 @@ namespace App\model;
 use Error;
 use Exception;
 
-class Result extends Query
+class Result
 {
     public static function get( $id ) {
         $args = get_defined_vars();
@@ -53,7 +53,7 @@ class Result extends Query
         return Query::update( $stmt, $args );
     }
 
-    public static function del( int $id ) {
+    public static function delete(int $id ) {
         $args = get_defined_vars();
         $stmt = Query::prepare( '
             DELETE 
@@ -64,7 +64,7 @@ class Result extends Query
     }
 
 
-    public static function delForPair(int $pairId ) {
+    public static function deleteForpair( int $pairId ) {
         $args = get_defined_vars();
         $stmt = Query::prepare( '
             DELETE 
@@ -73,6 +73,21 @@ class Result extends Query
         ' );
         return Query::delete( $stmt, $args );
     }
+
+	public static function readForPair(int $pairId): array
+	{
+		$args = get_defined_vars();
+		$stmt = Query::prepare(" 
+			SELECT pair.id, pair.breederId, pair.year, pair.name, 
+				layEggs, layWeight, 
+				broodEggs, broodFertile, broodHatched,
+				showCount, showScore
+			FROM pair
+			LEFT JOIN result ON result.pairId = pair.id
+			WHERE pair.id = :pairId
+		");
+		return Query::select($stmt, $args);
+	}
 
     /**
      * REPORTS, the bigguns

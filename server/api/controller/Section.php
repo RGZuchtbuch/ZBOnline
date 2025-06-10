@@ -19,7 +19,7 @@ class Section
 		$id = $args[ 'id' ] ?? null;
 		if( $id ) { // section
 			if( is_numeric( $id ) ) {
-				$section = model\Section::get( $id );
+				$section = model\std\Section::get( $id );
 				if ($section) {
 					$response->getBody()->write(json_encode(['section' => $section], JSON_UNESCAPED_SLASHES));
 					return $response;
@@ -28,7 +28,7 @@ class Section
 			}
 			throw new HttpBadRequestException( $request, 'Bad id' );
 		} else {
-			$sections = model\Section::get();
+			$sections = model\std\Section::get();
 			$response->getBody()->write( json_encode( [ 'sections' => $sections ], JSON_UNESCAPED_SLASHES ) );
 			return $response;
 		}
@@ -97,7 +97,7 @@ class Section
 	public static function breeds( Request $request, Response $response, array $args ) : Response {
 		$id = $args[ 'id' ] ?? null;
 		if( is_numeric( $id ) ) {
-			$breeds = model\Section::getBreeds( $id );
+			$breeds = model\std\Section::getBreeds( $id );
 			$response->getBody()->write(json_encode(['breeds' => $breeds], JSON_UNESCAPED_SLASHES));
 			return $response;
 		}
@@ -107,7 +107,7 @@ class Section
 	public static function children( Request $request, Response $response, array $args ) : Response {
 		$id = $args[ 'id' ] ?? null;
 		if( is_numeric( $id ) ) {
-			$children = model\Section::children( $id );
+			$children = model\std\Section::children( $id );
 			$response->getBody()->write(json_encode(['sections' => $children], JSON_UNESCAPED_SLASHES));
 			return $response;
 		}
@@ -117,7 +117,7 @@ class Section
 	public static function descendants( Request $request, Response $response, array $args ) : Response {
 		$id = $args[ 'id' ] ?? null;
 		if( is_numeric( $id ) ) {
-			$descendants = model\Section::descendants( $id );
+			$descendants = model\std\Section::descendants( $id );
 			$root = ToolBox::toTree( $descendants );
 			$response->getBody()->write(json_encode(['section' => $root], JSON_UNESCAPED_SLASHES));
 			return $response;

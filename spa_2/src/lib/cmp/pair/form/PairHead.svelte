@@ -9,7 +9,7 @@
 
 	const validate = {
 		year:       v => validator(v).number().range( 1950, thisYear+1).isValid(),
-		name:       v => validator(v).string().orNull().isValid(),
+		name:       v => validator(v).string().orNullIf( pair.delete ).isValid(),
 	}
 </script>
 
@@ -26,11 +26,17 @@
 				<option value={option}>{option}</option>
 			{/each}
 		</Select>
-		<div class='grow' ></div>
-		<NumberInput class='w-20' label='Abstammung' value={ dec( pair.parentsGrade, 1 ) } disabled/>
-		<NumberInput class='w-20' label='Legeleistung' value={ dec( pair.layGrade, 1 ) } disabled/>
-		<NumberInput class='w-20' label='Brutleistung' value={ dec( pair.broodGrade, 1 ) } disabled />
-		<NumberInput class='w-20' label='Schauleistung' value={ dec( pair.showGrade, 1 ) } disabled />
+
+		{#if pair.sectionId}
+			<div class='grow flex flex-row gap-x-1 justify-end' in:fade>
+				<NumberInput class='w-20' label='Abstammung' value={ dec( pair.parentsGrade, 1 ) } disabled/>
+				{#if pair.sectionId !== 5}
+					<NumberInput class='w-20' label='Legeleistung' value={ dec( pair.layGrade, 1 ) } disabled/>
+				{/if}
+				<NumberInput class='w-20' label='Brutleistung' value={ dec( pair.broodGrade, 1 ) } disabled />
+				<NumberInput class='w-20' label='Schauleistung' value={ dec( pair.showGrade, 1 ) } disabled />
+			</div>
+		{/if}
 		<CheckBox label='Löschen' title='Nur wenn Name leer ist !' bind:value={pair.delete} disabled={ pair.name }/>
 	</div>
 

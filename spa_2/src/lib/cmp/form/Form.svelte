@@ -3,6 +3,7 @@
     import CheckBox from './input/CheckBox.svelte';
     import DateInput from './input/Date.svelte';
     import EmailInput from './input/Email.svelte';
+    import Label from './input/Label.svelte';
     import NumberInput from './input/Number.svelte';
     import PasswordInput from './input/Password.svelte';
     import RangeInput from './input/Range.svelte';
@@ -15,7 +16,7 @@
     import TextArea from './input/TextArea.svelte';
     import validator from './validator.js';
 
-    export { Form, CheckBox, DateInput, EmailInput, NumberInput, PasswordInput, RangeInput, RingInput, Select, Status, Submit, TextArea, TextInput, validator };
+    export { Form, CheckBox, DateInput, EmailInput, Label, NumberInput, PasswordInput, RangeInput, RingInput, Select, Status, Submit, TextArea, TextInput, validator };
 
 </script>
 

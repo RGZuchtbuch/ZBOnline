@@ -62,7 +62,15 @@ class District
 
 
 
-
+	public static function readForModerator(int $moderatorId ) : array {
+		$args = get_defined_vars();
+		$stmt = Query::prepare('
+            SELECT id
+            FROM district
+            WHERE moderatorId=:moderatorId
+        ');
+		return Query::selectArray($stmt, $args);
+	}
 
 
     /**

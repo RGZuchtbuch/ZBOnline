@@ -27,7 +27,7 @@ class User
 					$user = model\User::get($id);
 					if( $user ) {
 						$user['name'] = $user['firstname'] . ' ' . ($user['infix'] ? $user['infix'] . ' ' : '') . $user['lastname'];
-						$user['moderator'] = array_column(model\Moderator::districts($id), 'id'); // what districts to moderate
+						$user['moderator'] = array_column(model\District::readForModerator($id), 'id'); // what districts to moderate
 						$token = model\Token::encode( $user );
 						if ($token) {
 							$response->getBody()->write(json_encode(['token' => $token ], JSON_UNESCAPED_SLASHES));
@@ -53,7 +53,7 @@ class User
 					$user = model\User::get($id);
 					if( $user ) {
 						$user['name'] = $user['firstname'] . ' ' . ($user['infix'] ? $user['infix'] . ' ' : '') . $user['lastname'];
-						$user['moderator'] = array_column(model\Moderator::districts($id), 'id'); // what districts to moderate
+						$user['moderator'] = array_column(model\District::readForModerator($id), 'id'); // what districts to moderate
 						$token = model\Token::encode( $user );
 						if ($token) {
 							$response->getBody()->write(json_encode(['token' => $token ], JSON_UNESCAPED_SLASHES));
@@ -106,7 +106,7 @@ class User
 									$user = model\User::getByEmail($email);
 									if ($user) { // add additional info
 										$user['fullname'] = $user['firstname'] . ' ' . ($user['infix'] ? $user['infix'] . ' ' : '') . $user['lastname'];
-										$user['moderator'] = array_column(model\Moderator::districts($user['id']), 'id');
+										$user['moderator'] = array_column(model\District::readForModerator($user['id']), 'id');
 										$token = model\Token::encode($user); // the login token
 										if( $token ) {
 											$response->getBody()->write(json_encode(['token' => $token], JSON_UNESCAPED_SLASHES));

@@ -17,7 +17,10 @@
 	let pairs   = $state( null );
 
 	$effect( async () => {
-		const data = await Promise.all( [Breeder.load( page.params.breeder ), Pair.query( { breeder:page.params.breeder, year:year } ) ] );
+		const data = await Promise.all( [
+			Breeder.load( page.params.breeder ),
+			Pair.query( { breeder:page.params.breeder } )
+		] );
 		breeder = data[0];
 		pairs   = data[1];
 		setHeader();

@@ -14,11 +14,12 @@
 	function onSectionChange( event ) {
 		rootSection = standard.rootSections.find( ( section ) => section.id === pair.sectionId );
 			//pair.sectionId = rootSection ? rootSection.id : null;
+		pair.sectionId = rootSection.id;
 		pair.breedId = breed = null;
 		pair.colorId = color = null;
 	}
 	function onBreedChange( event ) {
-		breed = standard.breeds[ pair.breedId ]
+		pair.breed = breed = standard.breeds[ pair.breedId ];
 		pair.colorId = color = null;
 	}
 	function onColorChange( event ) {

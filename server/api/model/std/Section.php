@@ -1,9 +1,8 @@
 <?php
 
-namespace App\model;
+namespace App\model\std;
 
-use http\Exception\InvalidArgumentException;
-use Slim\Exception\HttpNotFoundException;
+use App\model\Query;
 use Slim\Exception\HttpNotImplementedException;
 
 class Section

@@ -9,7 +9,6 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpBadRequestException;
 use Slim\Exception\HttpInternalServerErrorException;
 use Slim\Exception\HttpNotFoundException;
-use Slim\Exception\HttpNotImplementedException;
 use Slim\Exception\HttpUnauthorizedException;
 
 class Color
@@ -20,7 +19,7 @@ class Color
 		$id = $args[ 'id' ] ?? null;
 		if( $id ) {
 			if (is_numeric($id)) {
-				$color = model\Color::get($id);
+				$color = model\std\Color::get($id);
 				if ($color) {
 					$response->getBody()->write(json_encode(['color' => $color], JSON_UNESCAPED_SLASHES));
 					return $response;
@@ -29,7 +28,7 @@ class Color
 			}
 			throw new HttpBadRequestException($request, 'Bad id');
 		} else {
-			$colors = model\Color::get();
+			$colors = model\std\Color::get();
 			$response->getBody()->write( json_encode( [ 'colors' => $colors ], JSON_UNESCAPED_SLASHES ) );
 			return $response;
 		}
@@ -40,9 +39,9 @@ class Color
 		if( $requester->isAdmin() ) { // only admin can do this
 			$body = $request->getParsedBody();
 			if( $body ) {
-				$breed = model\Breed::get( $body[ 'breedId' ] );
+				$breed = model\std\Breed::get( $body[ 'breedId' ] );
 				if( $breed ) {
-					$id = model\Color::new($body['name'], $body['breedId'], null, $requester->getId() );
+					$id = model\std\Color::new($body['name'], $body['breedId'], null, $requester->getId() );
 					if ($id) {
 						model\Cache::del('standard');
 						model\Cache::del('result');
@@ -65,7 +64,7 @@ class Color
 			if( $id && is_numeric( $id ) ) {
 				$body = $request->getParsedBody();
 				if ($body) {
-					$updated = model\Color::set($id, $body['name'], null, $requester->getId());
+					$updated = model\std\Color::set($id, $body['name'], null, $requester->getId());
 					if ($updated) {
 						model\Cache::del('standard');
 						model\Cache::del('result');
@@ -87,14 +86,14 @@ class Color
         if( $requester->isAdmin() ) {
             $id = $args[ 'id' ] ?? null;
             if( $id && is_numeric( $id ) ) {
-                $color = model\Color::get( $id );
+                $color = model\std\Color::get( $id );
                 if ($color) {
-                    $pairs = model\Pair::allWithColor( $id );
+                    $pairs = model\Pair::readForColor( $id );
                     $results = model\Result::getAllWithColor( $id );
                     if( ! $pairs && ! $results ) { // not used in either
 						model\Cache::del('standard');
 						model\Cache::del('result');
-                        $success = model\Color::del( $id );
+                        $success = model\std\Color::del( $id );
                         $response->getBody()->write(json_encode(['success' => $success, 'id'=>$id], JSON_UNESCAPED_SLASHES));
                        return $response;
                    }
@@ -114,7 +113,7 @@ class Color
 		$query = $request->getQueryParams();
 		$breedId = $query['breed'] ?? null;
 		if( is_numeric( $breedId ) ) {
-			$colors = model\Color::breed( $breedId );
+			$colors = model\std\Color::breed( $breedId );
 			$response->getBody()->write(json_encode(['colors' => $colors], JSON_UNESCAPED_SLASHES));
 			return $response;
 		}

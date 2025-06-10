@@ -5,32 +5,41 @@
 	import {dec} from '$lib/js/toolbox.js';
 	import {onMount} from 'svelte';
 
-	import Parent from './Parent.svelte';
+	import ParentLayer from './Parent.Layer.svelte';
+	import ParentPigeon from './Parent.Pigeon.svelte';
 
 	let {pair=$bindable() } = $props();
 
-
-	function addParentTemplates() {
-		if( ! pair.parents ) {
-			pair.parents = [];
+	$effect( () => {
+		if( pair.sectionId ) {
+			if ( ! pair.parents ) {
+				pair.parents = [];
+			}
+			const n = pair.sectionId === 5 ? 2 : 5;
+			console.log("add parent", pair, n);
+			for (let i = pair.parents.length; i < n; i++) {
+				console.log('I',i);
+				addParent(i); // for knowing 1.0 or 0.1
+			}
 		}
-		const n = pair.breedId === 5 ? 2 : 4;
-		for( let i=pair.parents.length; i<n; i++ ) {
-			addParent( i ); // for knowing 1.0 or 0.1
-		}
-	}
+	});
 
-	function addParent(event) {
-		const parent = newParent();
-		pair.parents.push( parent );
+	function addParent( i ) {
+		pair.parents.push(
+			{ id:0, pairId:pair.id, sex:i===0?'1.0':'0.1', ring:null, score:null, parentsPairId:null }
+		);
 	}
 
 	function newParent( i ) {
-		return { id:0, pairId:pair.id, sex:i===0?'1.0':'0.1', ring:null, score:null, parentsPairId:null };
+		return ;
+	}
+
+	function onAddParent( event ) {
+		addParent( pair.parents.length );
 	}
 
 	onMount( () => {
-		addParentTemplates();
+		//addParentTemplates();
 	})
 
 	$effect( () => {
@@ -47,18 +56,22 @@
 
 
 <fieldset class='flex flex-col gap-x-2 border pt-2 px-2' in:slide>
-	<legend>Abstammung ( {dec( pair.parentsGrade, 1 )} )</legend>
+	<legend>Abstammung ( {dec( pair.parentsGrade, 1 )} ) {pair.parents.length}</legend>
 
 	{#if pair.colorId }
 		<div transition:slide>
 			{#each pair.parents as parent, i (i) }
-				<Parent bind:parent={pair.parents[i]} {pair} {i} />
+				{#if pair.sectionId === 5}
+					<ParentPigeon bind:parent={pair.parents[i]} {pair} {i} />
+				{:else}
+					<ParentLayer bind:parent={pair.parents[i]} {pair} {i} />
+				{/if}
 			{/each}
 			<hr>
-			<div class='flex flex-row pt-1 pb-0'>
-				<button class='w-6 h-6' type='button' onclick={addParent}>+</button>
+			<div class='flex flex-row py-2'>
+				<button class='w-6 h-6' type='button' onclick={onAddParent}>+</button>
 				<span class='grow'></span>
-				<NumberInput class='w-14 font-bold' label='G.Note' value={dec( pair.parentsGrade, 1 )} disabled/>
+				<NumberInput class='w-14 font-bold' label='G.Note' value={dec( pair.parentsGrade, 1 )} disabled />
 			</div>
 		</div>
 	{/if}

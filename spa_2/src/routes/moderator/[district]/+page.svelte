@@ -1,5 +1,6 @@
 <script>
 	import {page} from '$app/state';
+	import { goto } from '$app/navigation';
 
 	import store from '$lib/js/store.svelte.js';
 	import { District } from '$lib/js/federation.svelte.js';
@@ -32,7 +33,7 @@
 		store.menu  = menu;
 	}
 
-
+	//goto( `${page.url.href}/result` );
 
 </script>
 

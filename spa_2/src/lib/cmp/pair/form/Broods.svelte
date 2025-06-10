@@ -24,7 +24,7 @@
 	}
 
 	function newBrood() {
-		return { id:0, pairId:pair.id, start:null, eggs:null, fertile:null, hatched:null }
+		return { id:0, pairId:pair.id, start:null, eggs:null, fertile:null, hatched:null, chicks:[] }
 	}
 
 	$effect( () => {
@@ -40,19 +40,22 @@
 			}
 		}
 
-		if( pair.sectionId === 5 && breed ) {
-			pair.broodGrade = aab.brood.pigeon( breed.broodGroup, broods, hatched);
-			console.log( 'PG', pair.broodGrade )
-		} else {
-			pair.broodGrade = aab.brood.layer(eggs, hatched);
-		}
+		pair.broodGrade = pair.sectionId === 5 && breed ?
+			aab.brood.pigeon( breed.broodGroup, broods, hatched ) :
+			pair.broodGrade = aab.brood.layer( eggs, hatched );
+		// if( pair.sectionId === 5 && breed ) {
+		// 	pair.broodGrade = aab.brood.pigeon( breed.broodGroup, broods, hatched);
+		// 	console.log( 'PG', pair.broodGrade )
+		// } else {
+		// 	pair.broodGrade = aab.brood.layer(eggs, hatched);
+		// }
 	})
 
 </script>
 
 
 <fieldset class='flex flex-col gap-x-2 border pt-2 px-2' in:fade disabled={ ! pair.breedId }>
-	<legend>Brutleistung ({pair.broodGrade}) {pair.breedId}</legend>
+	<legend>Brutleistung ({pair.broodGrade}) Gruppe :{breed.broodGroup}</legend>
 	{#if pair.colorId }
 		<div transition:slide>
 			{#each pair.broods as brood, i }

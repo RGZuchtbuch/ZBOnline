@@ -1,6 +1,8 @@
 <?php
 
-namespace App\model;
+namespace App\model\std;
+
+use App\model\Query;
 
 class Color
 {

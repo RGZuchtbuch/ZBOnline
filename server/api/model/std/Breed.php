@@ -1,9 +1,8 @@
 <?php
 
-namespace App\model;
+namespace App\model\std;
 
-use http\Exception\BadMethodCallException;
-use Slim\Exception\HttpNotImplementedException;
+use App\model\Query;
 
 class Breed
 {

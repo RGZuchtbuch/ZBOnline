@@ -18,7 +18,7 @@ class Breed
 		$id = $args[ 'id' ] ?? null;
 		if( $id ) { // specific breed
 			if( is_numeric( $id ) ) {
-				$breed = model\Breed::get($id);
+				$breed = model\std\Breed::get($id);
 				if ($breed) {
 					$response->getBody()->write(json_encode(['breed' => $breed], JSON_UNESCAPED_SLASHES));
 					return $response;
@@ -27,7 +27,7 @@ class Breed
 			}
 			throw new HttpBadRequestException( $request, 'Bad id' );
 		} else { // list
-			$breeds = model\Breed::get();
+			$breeds = model\std\Breed::get();
 			$response->getBody()->write( json_encode( [ 'breeds' => $breeds ], JSON_UNESCAPED_SLASHES ) );
 			return $response;
 		}
@@ -38,9 +38,9 @@ class Breed
 		if( $requester->isAdmin() ) {
 			$body = $request->getParsedBody();
 			if( $body ) {
-				$section = model\Section::get( $body[ 'sectionId' ] );
+				$section = model\std\Section::get( $body[ 'sectionId' ] );
 				if( $section ) {
-					$id = model\Breed::new($body['name'], $body['sectionId'], $body['broodGroup'], $body['layEggs'], $body['layWeight'], $body['sireRing'], $body['dameRing'], $body['sireWeight'], $body['dameWeight'], null, $requester->getId()); // $data['info']
+					$id = model\std\Breed::new($body['name'], $body['sectionId'], $body['broodGroup'], $body['layEggs'], $body['layWeight'], $body['sireRing'], $body['dameRing'], $body['sireWeight'], $body['dameWeight'], null, $requester->getId()); // $data['info']
 					if ($id) {
 						model\Cache::del('standard');
 						model\Cache::del('result');
@@ -63,7 +63,7 @@ class Breed
 			$id = $args[ 'id' ] ?? null;
 			$body = $request->getParsedBody();
 			if( is_numeric( $id ) && $body ) {
-				$success = model\Breed::set( $id, $body['name'], $body['sectionId'], $body['broodGroup'], $body['layEggs'], $body['layWeight'], $body['sireRing'], $body['dameRing'], $body['sireWeight'], $body['dameWeight'], null, $requester->getId() ); //$data['info']
+				$success = model\std\Breed::set( $id, $body['name'], $body['sectionId'], $body['broodGroup'], $body['layEggs'], $body['layWeight'], $body['sireRing'], $body['dameRing'], $body['sireWeight'], $body['dameWeight'], null, $requester->getId() ); //$data['info']
 				if( $success ) {
 					model\Cache::del('standard');
 					model\Cache::del('result');
@@ -86,10 +86,10 @@ class Breed
         if( $requester->isAdmin() ) {
             $id = $args[ 'id' ] ?? null;
             if( $id && is_numeric( $id ) ) {
-                $breed = model\Breed::get( $id );
+                $breed = model\std\Breed::get( $id );
                 if ($breed) {
-                    if( ! model\Breed::getColors( $id ) && ! model\Pair::allWithBreed( $id ) && ! model\Result::getAllWithBreed( $id ) ) { // no more color, pair of result using it
-                        $success = model\Breed::delete( $id );
+                    if( ! model\std\Breed::getColors( $id ) && ! model\Pair::readForBreed( $id ) && ! model\Result::getAllWithBreed( $id ) ) { // no more color, pair of result using it
+                        $success = model\std\Breed::delete( $id );
                         if( $success ) {
                             model\Cache::del('standard');
                             model\Cache::del('result');
@@ -113,7 +113,7 @@ class Breed
 	public static function colors( Request $request, Response $response, array $args ) : Response {
 		$id = $args[ 'id' ] ?? null;
 		if( is_numeric( $id ) ) {
-			$colors = model\Breed::getColors( $id );
+			$colors = model\std\Breed::getColors( $id );
 			if ($colors) {
 				$response->getBody()->write(json_encode(['colors' => $colors], JSON_UNESCAPED_SLASHES));
 				return $response;
@@ -133,7 +133,7 @@ class Breed
 		// others ?
 		if( is_numeric( $sectionId ) ) {
 			//$breeds = model\Breed::forSection( $sectionId );
-			$breeds = model\Breed::section( $sectionId );
+			$breeds = model\std\Breed::section( $sectionId );
 			$response->getBody()->write(json_encode(['breeds' => $breeds], JSON_UNESCAPED_SLASHES));
 			return $response;
 		}

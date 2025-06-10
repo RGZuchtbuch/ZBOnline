@@ -1,5 +1,6 @@
 <script>
 
+	import { goto } from '$app/navigation';
 	import { navigating } from '$app/state';
 	import store from '$lib/js/store.svelte.js';
 	import {Pair} from '$lib/js/pair.svelte.js';
@@ -17,18 +18,16 @@
 
 	async function onSubmit() {
 		console.log( 'Pair Submit' );
-		if( pair.name ) {
-			if( pair.id > 0 ) { // existing pair
-				console.log('Put' );
-				let put = await Pair.save( pair );
-				if( put ) changed = false;
-			} else { // new pair
-				console.log( 'Post' );
-				let post = await Pair.new( pair );
-				if( post ) changed = false;
+		if( pair.breederId && pair.year && pair.name && pair.group && pair.sectionId && pair.breedId && pair.colorId ) {
+			return await Pair.save( pair );
+			//if( saved ) changed = false;
+		} else if( pair.id > 0 && pair.name === null && pair.delete ){ // name is null and delete
+			console.log( 'Delete' ) // TODO pair delete
+			const ok = Pair.delete( pair.id );
+			if( ok ) {
+				await goto(`/moderator/${pair.districtId}/breeder/${pair.breederId}/pair`);
 			}
-		} else if( pair.id > 0 && pair.delete ){ // name is null and delete
-			console.log( 'Delete' )
+			return ok;
 		}
 	}
 

@@ -5,12 +5,12 @@ namespace App\model;
 use App\controller\Controller;
 use Slim\Exception\HttpNotImplementedException;
 
-class Breeder extends Query
+class Breeder
 {
 
 
-    public static function get( int $id = null ) : ? array {
-		if( $id ) { // not null
+    public static function read( int $id = null ) : ? array {
+		if( $id ) { // single
 			$args = get_defined_vars();
 			$stmt = Query::prepare('
 				SELECT id, member, firstname, infix, lastname, email, districtId, club, start, end, info
@@ -18,7 +18,7 @@ class Breeder extends Query
 				WHERE id=:id
 			');
 			return Query::select($stmt, $args);
-		} else { // list
+		} else { // list of all (is this wise ? )
 			$stmt = Query::prepare('
 				SELECT id, member, firstname, infix, lastname, email, districtId, club, start, end, info
 				FROM user
@@ -57,7 +57,7 @@ class Breeder extends Query
     }
 
 
-	public static function getAll() : array {
+	public static function readAll() : array {
 		$args = get_defined_vars();
 		$stmt = Query::prepare('
             SELECT id, member, firstname, infix, lastname, email, districtId, club, start, end, info
@@ -66,15 +66,15 @@ class Breeder extends Query
 		return Query::selectArray($stmt, $args);
 	}
 
-    public static function getName( int $id ) : ? array {
-        $args = get_defined_vars();
-        $stmt = Query::prepare('
-            SELECT id, firstname, infix, lastname
-            FROM user
-            WHERE id=:id
-        ');
-        return Query::select($stmt, $args);
-    }
+//    public static function getName( int $id ) : ? array {
+//        $args = get_defined_vars();
+//        $stmt = Query::prepare('
+//            SELECT id, firstname, infix, lastname
+//            FROM user
+//            WHERE id=:id
+//        ');
+//        return Query::select($stmt, $args);
+//    }
 
 //    public static function getPairs( int $breederId ) : array { // TODO move to pair!
 //        $args = get_defined_vars();

@@ -2,8 +2,7 @@
 	import {fade, slide} from 'svelte/transition';
 	import aab from '$lib/js/aab.js';
 	import {daysBetween, dec, txt } from '$lib/js/toolbox.js';
-	import Form, { DateInput, NumberInput, TextInput, validator } from '../../form/Form.svelte';
-//	import Form from '$lib/form/form/Profile.svelte';
+	import { DateInput, Label, NumberInput, TextInput, validator } from '../../form/Form.svelte';
 
 	let { pair=$bindable(), standard } = $props();
 
@@ -11,7 +10,7 @@
 	let result = $state( null );
 
 	if( pair.lay === null ) { // only layers !
-		pair.lay = { start:null, end:null, dames:null, eggs:null, weight:null };
+		pair.lay = { id:0, pairId:pair.id, start:null, end:null, dames:null, eggs:null, weight:null };
 	}
 
 	const validate = {
@@ -45,8 +44,11 @@
 			<div class='w-4'></div>
 			<NumberInput class='w-20' label={`Gewicht ( ${pair.breed.layWeight} )`} bind:value={ pair.lay.weight } validator={validate.weight}/>
 			<div class='grow' />
+			<Label label={true}> → </Label>
+
 			<NumberInput class='w-16' label='Tagen' value={ days } disabled/>
 			<NumberInput class='w-20' label={`Legen ( ${pair.breed.layEggs} )`} value={ result } disabled/>
+			<Label label={true}> = </Label>
 			<NumberInput class='w-14 font-bold' label='Note' value={dec( pair.layGrade, 1 )} disabled/>
 		</div>
 	{/if}

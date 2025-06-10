@@ -7,38 +7,39 @@
 	import { Pair } from '$lib/js/pair.svelte.js';
 	import PairCmp from '$lib/cmp/pair/Pair.svelte';
 
-	// let breeder  = getContext( 'breeder' );
-	// let district = getContext( 'district' );
-	// let page     = getContext( 'page' );
-	// let pair     = getContext( 'pair' );
-	// let standard = getContext( 'standard' );
-
 	let breeder  = $state( null );
 	let district = $state( null );
 	let pair     = $state( null );
 
 	$effect( async () => {
-		const data = await Promise.all( [Breeder.load(+page.params.breeder), District.load(+page.params.district), Pair.load( +page.params.pair )] );
+		console.log('A')
+		const data = await Promise.all( [
+			//Breeder.load(+page.params.breeder),
+			District.load(+page.params.district),
+			Pair.load( +page.params.pair, +page.params.breeder, +page.params.district ) // breeder for creating new
+		] );
 		if( data ) {
-			breeder  = data[0];
-			district = data[1];
-			pair     = data[2];
+			console.log('B');
+			//breeder  = data[0];
+			district = data[0];
+			pair     = data[1];
+			console.log( data[1] );
 		}
 		setHeader();
 	});
 
 	function setHeader() {
-		const title = `Stamm ${pair.year}.${pair.name} von Züchter ${txt(breeder.firstname)} ${ txt(breeder.infix) } ${ txt(breeder.lastname) }`;
+		const title = `Stamm ${pair.year}.${pair.name} von Züchter ${txt(pair.breeder.firstname)} ${ txt(pair.breeder.infix) } ${ txt(pair.breeder.lastname) }`;
 		const menu = {
 			trail : [
 				{name: 'Home', href: '/'},
 				{name: 'Obmann', href: '/moderator'},
-				{name: 'Verband', href: `/moderator/${district.id}`},
-				{name: 'Züchter', href: `/moderator/${district.id}/breeder/${breeder.id}`},
-				{name: 'Stämme', href: `/moderator/${district.id}/breeder/${breeder.id}/pair`},
+				{name: 'Verband', href: `/moderator/${pair.districtId}`},
+				{name: 'Züchter', href: `/moderator/${pair.districtId}/breeder/${pair.breederId}`},
+				{name: 'Stämme', href: `/moderator/${pair.districtId}/breeder/${pair.breederId}/pair`},
 				{
 					name: '' + pair.year % 100 + '.' + pair.name,
-					href: `/moderator/${district.id}/breeder/${breeder.id}/pair/${pair.id}`
+					href: `/moderator/${pair.districtId}/breeder/${pair.breederId}/pair/${pair.id}`
 				},
 			],
 			options : [],

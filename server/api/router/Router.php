@@ -124,7 +124,7 @@ class Router {
 		$app->get('/2/district/{id:[0-9]+}', 'App\controller\District::get' );
 
 		$app->get('/2/pair', 'App\controller\Pair::filter' );
-		$app->get('/2/pair/{id:[0-9]+}', 'App\controller\Pair::get' );
+		$app->get('/2/pair/{id:[0-9]+}', 'App\controller\Pair::read');
 		$app->post( '/2/pair',  		'App\controller\Pair::post');
 		$app->put( '/2/pair/{id:[0-9]+}','App\controller\Pair::put');
 		$app->delete( '/2/pair/{id:[0-9]+}','App\controller\Pair::delete');
@@ -132,7 +132,7 @@ class Router {
 		$app->get('/2/report', 'App\controller\Report::filter' );
 
 		$app->get('/2/result', 'App\controller\Result::filter' ); // on districtId
-		$app->get('/2/result/{id:[0-9]+}', 'App\controller\Result::get' );
+		$app->get('/2/result/{id:[0-9]+}', 'App\controller\Result::read');
 		$app->post( '/2/result',  		'App\controller\Result::post');
 		$app->put( '/2/result/{id:[0-9]+}','App\controller\Result::put');
 		$app->delete( '/2/result/{id:[0-9]+}','App\controller\Result::delete');

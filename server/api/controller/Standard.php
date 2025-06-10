@@ -3,14 +3,9 @@
 namespace App\controller;
 
 use App\model;
-use App\model\Requester;
 use App\util\Logger;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Slim\Exception\HttpBadRequestException;
-use Slim\Exception\HttpInternalServerErrorException;
-use Slim\Exception\HttpNotFoundException;
-use Slim\Exception\HttpUnauthorizedException;
 
 class Standard
 {
@@ -24,9 +19,9 @@ class Standard
             $response->getBody()->write( $json );
 			return $response;
 		}
-		$sections = model\Section::descendants(2); // all poultry
-		$breeds = model\Breed::get();
-		$colors = model\Color::get();
+		$sections = model\std\Section::descendants(2); // all poultry
+		$breeds = model\std\Breed::get();
+		$colors = model\std\Color::get();
 		$standard = Standard::toStandardTree($sections, $breeds, $colors);
 		$json = json_encode( [ 'standard' => $standard, 'timestamp' => date( 'Y-m-d H:i:s' ) ], JSON_UNESCAPED_SLASHES );
 		$response->getBody()->write( $json );

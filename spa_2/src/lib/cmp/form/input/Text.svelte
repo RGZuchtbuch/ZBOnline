@@ -1,7 +1,7 @@
 <script>
     import { getContext,  onDestroy, onMount } from 'svelte';
 
-    let { autocomplete=null, class:classname='', disabled=false, element=$bindable(), error='!!!', label=null, maxlength=null, name=null, oninput=null, placeholder=null, title=null, type='text', validator=null, value=$bindable() } = $props();
+    let { align='left', autocomplete=null, class:classname='', disabled=false, element=$bindable(), error='!!!', label=null, maxlength=null, name=null, oninput=null, placeholder=null, title=null, type='text', validator=null, value=$bindable() } = $props();
 
     const form = getContext( 'form'); //form state
 
@@ -35,7 +35,7 @@
         <label class='label' for='number'> {label} </label>
     {/if}
     <input {type}
-           class:valid
+           class:valid class={align}
            bind:this={element} bind:value={value}
            {placeholder} {title} {maxlength} {disabled} {autocomplete}
            {oninput}
@@ -46,8 +46,16 @@
 <style>
 
     input {
-        text-align: left;
         padding: 0 0.5em;
+    }
+    .left {
+        text-align: left;
+    }
+    .middle {
+        text-align: center;
+    }
+    .right {
+        text-align: right;
     }
 
 </style>

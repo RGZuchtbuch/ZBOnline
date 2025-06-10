@@ -13,7 +13,7 @@ use Slim\Exception\HttpUnauthorizedException;
 
 class Result
 {
-	public static function get( Request $request, Response $response, array $args ) : Response {
+	public static function read(Request $request, Response $response, array $args ) : Response {
 		$id = $args[ 'id' ] ?? null;
 		if( $id ) { // specific result
 			if( is_numeric( $id ) ) {
@@ -98,7 +98,7 @@ class Result
 				$requester = new Requester($request);
 				if ($requester && ($requester->isAdmin() || $requester->isModerating($result['districtId']))) { //granted
 					model\Cache::del('result' ); // clear cache as results changed
-					$deleted = model\Result::del( $id );
+					$deleted = model\Result::delete( $id );
 					if( $deleted ) {
 						$response->getBody()->write(json_encode(['deleted' => true, 'id' => $id], JSON_UNESCAPED_SLASHES));
 						return $response;

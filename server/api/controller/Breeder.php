@@ -22,7 +22,7 @@ class Breeder // is user
 		if( $id ) { // breeder
 			if( is_numeric( $id ) ) {
 				//$requester = new Requester( $request );
-				$breeder = model\Breeder::get($id);
+				$breeder = model\Breeder::read($id);
 				if( $breeder ) {
 					$districtId = $breeder[ 'districtId' ] ?? null;
 					//if( $requester->isAdmin() || $requester->isModerating( $districtId ) || $requester->hasId( $id ) ) { //admin of the moderator or self
@@ -37,7 +37,7 @@ class Breeder // is user
 		} else { // list
 			$requester = new Requester( $request );
 			if( $requester->isAdmin() ) { // only admin
-				$breeders = model\Breeder::getAll();
+				$breeders = model\Breeder::readAll();
 				$response->getBody()->write(json_encode(['breeders' => $breeders], JSON_UNESCAPED_SLASHES));
 				return $response;
 			} else {
