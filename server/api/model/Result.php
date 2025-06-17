@@ -457,7 +457,8 @@ class Result
 				supersection.id AS supersectionId, supersection.name AS supersectionname,
 				rootsection.id AS rootsectionId, rootsection.name AS rootsectionname,
 				section.id AS sectionId, section.name AS sectionname,
-				pair.breederId, user.firstname, user.infix, user.lastname
+				pair.breederId, user.firstname, user.infix, user.lastname,
+				CONCAT(SUBSTR(user.firstname, 1, 1), ".", SUBSTR(user.lastname, 1, 1) ) AS short
 			FROM result
 				LEFT JOIN breed  ON breed.id = result.breedId
 				LEFT JOIN color  ON color.id = result.colorId
@@ -485,7 +486,8 @@ class Result
 				supersection.id AS supersectionId, supersection.name AS supersectionname,
 				rootsection.id AS rootsectionId, rootsection.name AS rootsectionname,
 				section.id AS sectionId, section.name AS sectionname,
-				pair.breederId, user.firstname, user.infix, user.lastname
+				pair.breederId, user.firstname, user.infix, user.lastname,
+				CONCAT(SUBSTR(user.firstname, 1, 1), ".", SUBSTR(user.lastname, 1, 1) ) AS short
 			FROM result
 				LEFT JOIN breed  ON breed.id = result.breedId
 				LEFT JOIN color  ON color.id = result.colorId
@@ -516,10 +518,10 @@ class Result
 			SELECT breed.id, breed.name, section.layers AS layer, COUNT( result.id ) AS count
 			FROM breed
 			LEFT JOIN section ON section.id = breed.sectionId
-			LEFT JOIN result ON result.breedId = breed.id AND result.districtId = :districtId AND result.year = :year AND result.group = :group
+			LEFT JOIN result ON  result.breedId = breed.id AND result.districtId = :districtId AND result.year = :year AND result.group = :group
 			WHERE
 				section.rootId = :sectionId
-				AND result.pairId IS NULL
+#				AND result.pairId IS NULL
 				AND result.aocColor IS NULL
 			GROUP BY breed.name
 			ORDER BY breed.name	

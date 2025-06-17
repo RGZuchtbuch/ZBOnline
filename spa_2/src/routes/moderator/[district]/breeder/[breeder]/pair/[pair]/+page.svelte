@@ -12,14 +12,14 @@
 	let pair     = $state( null );
 
 	$effect( async () => {
-		console.log('A')
+
 		const data = await Promise.all( [
 			//Breeder.load(+page.params.breeder),
 			District.load(+page.params.district),
 			Pair.load( +page.params.pair, +page.params.breeder, +page.params.district ) // breeder for creating new
 		] );
 		if( data ) {
-			console.log('B');
+			console.log( 'Data', data );
 			//breeder  = data[0];
 			district = data[0];
 			pair     = data[1];
@@ -29,13 +29,17 @@
 	});
 
 	function setHeader() {
+		console.log( 'SetHeader');
 		const title = `Stamm ${pair.year}.${pair.name} von Züchter ${txt(pair.breeder.firstname)} ${ txt(pair.breeder.infix) } ${ txt(pair.breeder.lastname) }`;
+		console.log( 'SetHeader B');
 		const menu = {
 			trail : [
 				{name: 'Home', href: '/'},
 				{name: 'Obmann', href: '/moderator'},
-				{name: 'Verband', href: `/moderator/${pair.districtId}`},
-				{name: 'Züchter', href: `/moderator/${pair.districtId}/breeder/${pair.breederId}`},
+				{name: district.short,  href:`/moderator/${pair.districtId}` },
+				{name: 'Züchter', href: `/moderator/${pair.districtId}/breeder`},
+//				{name:`${breeder.firstname.charAt(0)}.${breeder.lastname.charAt(0)}`, href:`/moderator/${pair.districtId}/breeder/${pair.breederId}` },
+				{name:`${pair.breeder.short}`, href:`/moderator/${pair.districtId}/breeder/${pair.breederId}` },
 				{name: 'Stämme', href: `/moderator/${pair.districtId}/breeder/${pair.breederId}/pair`},
 				{
 					name: '' + pair.year % 100 + '.' + pair.name,
@@ -44,6 +48,7 @@
 			],
 			options : [],
 		}
+		console.log( 'SetHeader C');
 		store.title = title; // to set after loading
 		store.menu  = menu;
 	}

@@ -50,7 +50,7 @@
 
     <div class='flex flex-row px-6 py-1 gap-x-1' title='Wähle zum Eingeben' transition:slide>
         <div class='w-80 cursor-pointer whitespace-nowrap' class:hasResults on:click={onOpen}>
-            <span class=''>{breed.name}</span>
+            <span class=''>{breed.name}</span> <span>({breed.count})</span>
         </div>
 
         <div class='w-4'></div>

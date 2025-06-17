@@ -19,7 +19,7 @@
 	$effect( () => {
 		// I do not calculate as theres only 1 brood, so no valid grade
 		brood.grade = brood.hatched != null ?
-			aab.brood.pigeon(pair.breed.broodGroup, 3, 3 * brood.hatched) :
+			aab.brood.pigeon(pair.breed.broodGroup, 2, 2 * brood.hatched) : // 2* as 1 brood does not give grade
 			null; //dcks pair.brood.eggs ? 100 * pair.brood.hatched / pair.brood.eggs : null; // TODO
 	} );
 

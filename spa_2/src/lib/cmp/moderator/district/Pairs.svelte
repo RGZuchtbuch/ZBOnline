@@ -1,5 +1,6 @@
 <script>
 	import { goto } from '$app/navigation';
+	import { slide, fade } from 'svelte/transition';
 
 	let { data } = $props();
 	let years = [];

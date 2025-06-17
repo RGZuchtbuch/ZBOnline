@@ -59,8 +59,6 @@
 		onRingInput();
 	})
 
-	$inspect( 'PpId', pair.parentsPairId );
-
 </script>
 
 <div class='w-full flex flex-row gap-x-2 items-center'>
@@ -77,26 +75,16 @@
 	</Select>
 
 	{#if parentPair}
-
-		{#if pair.sectionId === 5}
-			<div class='grow flex flex-row gap-x-1 justify-end' in:fade>
-				<Label label={i===0}> → </Label>
-				<NumberInput class='w-16' label={i===0?'Legeleistung':null} title='Von dem Elternstamm' value={ dec( parentLayGrade, 1 ) } disabled/>
-				<NumberInput class='w-16' label={i===0?'Brutleistung':null} title='Von dem Elternstamm' value={ dec( parentBroodGrade, 1 ) } disabled/>
-				<NumberInput class='w-16' label={i===0?'Schauleistung':null} title='Von dem Elternstamm' value={ dec( parentShowGrade, 1 ) } disabled/>
-				<Label label={i===0}> = </Label>
-				<NumberInput class='w-16 font-bold' label={i===0?'Note':null} title='Von dem Elternstamm' value={ dec( parentTotalGrade, 1 ) } disabled/>
-			</div>
-		{:else}
-			<div class='grow flex flex-row gap-x-1 justify-end' in:fade>
-				<Label label={i===0}> → </Label>
-				<NumberInput class='w-16' label={i===0?'Legeleistung':null} title='Von dem Elternstamm' value={ dec( parentLayGrade, 1 ) } disabled/>
-				<NumberInput class='w-16' label={i===0?'Brutleistung':null} title='Von dem Elternstamm' value={ dec( parentBroodGrade, 1 ) } disabled/>
-				<NumberInput class='w-16' label={i===0?'Schauleistung':null} title='Von dem Elternstamm' value={ dec( parentShowGrade, 1 ) } disabled/>
-				<Label label={i===0}> = </Label>
-				<NumberInput class='w-16 font-bold' label={i===0?'Note':null} title='Von dem Elternstamm' value={ dec( parentTotalGrade, 1 ) } disabled/>
-			</div>
-		{/if}
+		<div class='grow flex flex-row gap-x-1 justify-end' in:fade>
+			<Label label={i===0}> + </Label>
+			<NumberInput class='w-16' label={i===0?'Legeleistung':null} title='Von dem Elternstamm' value={ dec( parentLayGrade, 1 ) } disabled/>
+			<NumberInput class='w-16' label={i===0?'Brutleistung':null} title='Von dem Elternstamm' value={ dec( parentBroodGrade, 1 ) } disabled/>
+			<NumberInput class='w-16' label={i===0?'Schauleistung':null} title='Von dem Elternstamm' value={ dec( parentShowGrade, 1 ) } disabled/>
+			<Label label={i===0}> = </Label>
+			<NumberInput class='w-16 font-bold' label={i===0?'Note':null} value={ dec( parentTotalGrade, 1 ) } disabled
+	             title='Durchschnitt Bewertung und Elternstamm Leistungen'
+			/>
+		</div>
 	{/if}
 
 </div>

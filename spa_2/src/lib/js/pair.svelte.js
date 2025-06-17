@@ -22,6 +22,7 @@ export class Pair {
 						scores: { 89:null, 90:null, 91:null, 92:null, 93:null, 94:null, 95:null, 96:null, 97:null },
 					},
 					breeder: breeder,
+					accepted: true,
 				}
 			}
 		} else {

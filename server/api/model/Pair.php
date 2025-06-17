@@ -8,30 +8,30 @@ class Pair {
 	{
 		$args = get_defined_vars();
 		$stmt = Query::prepare('
-		SELECT id, breederId, districtId, year, `group`, sectionId, breedId, colorId, name, paired, notes
+		SELECT id, breederId, districtId, year, `group`, sectionId, breedId, colorId, name, paired, notes, accepted
 		FROM pair
 		WHERE id=:id
 	');
 		return Query::select($stmt, $args);
 	}
 
-	public static function create(int $breederId, int $districtId, int $year, string $group, int $sectionId, int $breedId, ?int $colorId, string $name, ?string $paired, ?string $notes, int $modifierId): ?int
+	public static function create(int $breederId, int $districtId, int $year, string $group, int $sectionId, int $breedId, ?int $colorId, string $name, ?string $paired, ?string $notes, int $accepted, int $modifierId): ?int
 	{
 		$args = get_defined_vars();
 		$stmt = Query::prepare('
-		INSERT INTO pair ( breederId, districtId, year, `group`, sectionId, breedId, colorId, name, paired, notes, modifierId ) 
-		VALUES ( :breederId, :districtId, :year, :group, :sectionId, :breedId, :colorId, :name, :paired, :notes, :modifierId )
+		INSERT INTO pair ( breederId, districtId, year, `group`, sectionId, breedId, colorId, name, paired, notes, accepted, modifierId ) 
+		VALUES ( :breederId, :districtId, :year, :group, :sectionId, :breedId, :colorId, :name, :paired, :notes, :accepted, :modifierId )
 	');
 		return Query::insert($stmt, $args);
 	}
 
 
-	public static function update( int $id, int $breederId, int $districtId, int $year, string $group, int $sectionId, int $breedId, ?int $colorId, string $name, ?string $paired, ?string $notes, int $modifierId): bool
+	public static function update( int $id, int $breederId, int $districtId, int $year, string $group, int $sectionId, int $breedId, ?int $colorId, string $name, ?string $paired, ?string $notes, int $accepted, int $modifierId): bool
 	{
 		$args = get_defined_vars();
 		$stmt = Query::prepare('
 			UPDATE  pair
-			SET breederId=:breederId, districtId=:districtId, year=:year, `group`=:group, sectionId=:sectionId, breedId=:breedId, colorId=:colorId, name=:name, paired=:paired, notes=:notes, modifierId=:modifierId
+			SET breederId=:breederId, districtId=:districtId, year=:year, `group`=:group, sectionId=:sectionId, breedId=:breedId, colorId=:colorId, name=:name, paired=:paired, notes=:notes, accepted=:accepted, modifierId=:modifierId
 			WHERE id=:id
 		');
 		return Query::update($stmt, $args);
@@ -87,7 +87,8 @@ class Pair {
 			breed.name AS breedName, breed.layEggs AS layEggsShould, breed.layWeight AS layWeightShould, breed.broodGroup AS broodGroup, 
 			color.name AS colorName,
 			result.layEggs, result.layWeight, result.broodEggs, result.broodFertile, result.broodHatched, 
-			result.showCount, result.showScore
+			result.showCount, result.showScore,
+			pair.accepted
 		FROM pair
 		LEFT JOIN breed ON breed.id = pair.breedId
 		LEFT JOIN color ON color.id = pair.colorId

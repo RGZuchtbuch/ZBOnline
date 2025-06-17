@@ -16,7 +16,7 @@
 	});
 
 	function setHeader() {
-		const title = null; //`Verband ${district.name}`;
+		const title = `${district.name}`;
 		const menu = {
 			trail: [
 				{name: 'Home', href: '/'},

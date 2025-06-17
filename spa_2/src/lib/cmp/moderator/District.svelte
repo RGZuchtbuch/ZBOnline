@@ -7,7 +7,6 @@
 </script>
 
 {#if district }
-	<h2 class='header'>Verband {district.name}</h2>
 	<p class='content'>
 		Intro Tekst
 	</p>

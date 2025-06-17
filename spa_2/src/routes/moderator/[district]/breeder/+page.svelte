@@ -26,7 +26,7 @@
 	// }
 
 	function setHeader() {
-		const title = `Züchter im ${district.short}`;
+		const title = `Züchter im ${district.name}`;
 		const menu = {
 			trail: [
 				{name: 'Home', href: '/'},

@@ -3,7 +3,7 @@
     import api from "../../../js/api.js.obs";
 //    import {BarController, BarElement, CategoryScale, Chart, Colors, LinearScale, Tooltip} from "chart.js";
     import { Chart, ArcElement, DoughnutController, Legend, Tooltip} from 'chart.js';
-    import {dec, pct} from "../../../js/util.js";
+    import {dec, pct} from "$lib/js/toolbox.js";
     import {onMount} from 'svelte';
 
     export let districtId = null;

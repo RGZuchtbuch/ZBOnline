@@ -119,6 +119,9 @@ class Router {
 
 		$app->get('/2/breeder', 'App\controller\Breeder::filter' );
 		$app->get('/2/breeder/{id:[0-9]+}', 'App\controller\Breeder::get' );
+		$app->post( '/2/breeder',  		'App\controller\Breeder::post');
+		$app->put( '/2/breeder/{id:[0-9]+}','App\controller\Breeder::put');
+		$app->delete( '/2/breeder/{id:[0-9]+}','App\controller\Breeder::delete');
 
 		$app->get('/2/district', 'App\controller\District::filter' );
 		$app->get('/2/district/{id:[0-9]+}', 'App\controller\District::get' );

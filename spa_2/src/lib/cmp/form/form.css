@@ -6,6 +6,7 @@ div.wrapper {
 }
 
 fieldset {
+    background: #FDFDFD;
 }
 fieldset > legend {
     padding: 0 1em;
@@ -32,9 +33,9 @@ input, textarea, select {
     margin: 0;
     color: black;
     font-size: 1em;
-    border: solid 1px darkgreen;
+    border: solid 1px #319795;
     border-radius: 0.25em;
-    background-color: #FEE8;
+    background-color: #FEE; /* if disabled ? */
     cursor:pointer;
 }
 
@@ -48,8 +49,9 @@ input, select {
     padding: 0 0.2em;
 }
 input:disabled, select:disabled, textarea:disabled {
-    color: black;
     border: solid 1px lightgrey;
+    color: #444;
+    background: #F8F8F8;
 }
 
 

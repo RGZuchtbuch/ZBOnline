@@ -14,11 +14,12 @@
 	<!--h2 class='header'>Alle Artikel zum Zuchtbuch</h2-->
 	<!--h3 class=''>{breeder.firstname}</h3-->
 	{#if authorized}
-		<div class='flex flex-row justify-end p-1'>
+		<div class='flex flex-row justify-end'>
 			<a href={`${page.url.href}/0`}>[+]</a>
 		</div>
 	{/if}
-	<ol in:slide>
+
+	{#if pairs.length > 0}
 		{#each pairs as pair, i}
 			<li class='flex flex-row gap-x-2'>
 				<a class='grow' href={`${page.url.href}/${pair.id}`} >
@@ -27,13 +28,17 @@
 					<div class='w-8 text-right'>{pair.year}</div>
 					<div class='w-16 text-center'>{pair.name}</div>
 					<div class='grow'>
-						{pair.breedName}
+						{pair.breed.breedName}
 						<sup class='w-32'>{pair.breedId}</sup>
 					</div>
 				</a>
 			</li>
 		{/each}
-	</ol>
+	{:else}
+		<div class='px-2'>
+			Noch keine Stamme/Paare eingegeben
+		</div>
+	{/if}
 {:else}
 	Keine Stämme oder Paare gefunden
 {/if}

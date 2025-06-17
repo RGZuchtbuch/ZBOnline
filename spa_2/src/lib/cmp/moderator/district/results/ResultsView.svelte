@@ -3,8 +3,6 @@
 
 	let { results, district, year } = $props();
 
-	console.log( 'R', results, district, year );
-
 </script>
 
 
@@ -139,10 +137,9 @@
 	{#if result.breeder }
 		<a class='w-8 text'
 		   href={`/moderator/${result.districtId}/breeder/${result.breeder.id}/pair/${result.pairId}`}
-		   title={`Züchter ${result.breeder.firstName} ${txt(result.breeder.infix)} ${result.breeder.lastName}`}
+		   title={`Zur Stamm von Züchter ${result.breeder.firstName} ${txt(result.breeder.infix)} ${result.breeder.lastName}`}
 		>
-
-			{ result.breeder.firstName.substring(0,1)}.{ result.breeder.lastName.substring(0,1)}
+			{ result.breeder.short }
 		</a>
 	{:else}
 		<span class='w-8'></span>

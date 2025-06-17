@@ -6,23 +6,25 @@
 </script>
 
 
-<h3 class=''>Eingegebene Leistungen im {district.short}</h3>
-
-<p class='info'>
-	Alle aktive Züchter
-</p>
+<div class='flex flex-row justify-end gap-x-4'>
+	<a href={`${page.url.href}/0`}>[+]</a>
+</div>
 
 <header class='flex flex-row header section items-end pl-6'>
 	<span class='w-12'>ZbNr</span>
 	<span class='w-48'>Name</span>
 	<span class='w-48'>Ortsverein</span>
+	<span class='w-24'>Seit</span>
+	<span class='w-24'>Bis</span>
 </header>
-{#each breeders as breeder }
 
-	<a class='' href={page.url.pathname+'/'+breeder.id}>
+{#each breeders as breeder }
+	<a class='flex' href={page.url.pathname+'/'+breeder.id}>
 		<span class='w-12'> {breeder.member}</span>
 		<span class='w-48'> {breeder.lastname}, {breeder.firstname} {breeder.infix}</span>
 		<span class='w-48'> {breeder.club}</span>
+		<span class='w-24'> {breeder.start}</span>
+		<span class='w-24'> {breeder.end}</span>
 	</a>
 {/each}
 

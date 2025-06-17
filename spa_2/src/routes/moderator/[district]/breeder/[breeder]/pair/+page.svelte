@@ -40,7 +40,9 @@
 				},
 				{ name:'Stämme', href:page.url.href },
 			],
-			options: [],
+			options: [
+				{name: 'Mitglied', href: '/moderator/' + district.id + '/breeder/' + breeder.id + '/profile'},
+			],
 		}
 		store.title = title; // to set after loading
 		store.menu  = menu;

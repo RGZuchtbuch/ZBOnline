@@ -16,9 +16,7 @@
 				pair.parents = [];
 			}
 			const n = pair.sectionId === 5 ? 2 : 5;
-			console.log("add parent", pair, n);
 			for (let i = pair.parents.length; i < n; i++) {
-				console.log('I',i);
 				addParent(i); // for knowing 1.0 or 0.1
 			}
 		}

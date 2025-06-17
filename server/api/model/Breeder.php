@@ -13,22 +13,23 @@ class Breeder
 		if( $id ) { // single
 			$args = get_defined_vars();
 			$stmt = Query::prepare('
-				SELECT id, member, firstname, infix, lastname, email, districtId, club, start, end, info
+				SELECT id, member, firstname, infix, lastname, CONCAT(SUBSTR(firstname, 1, 1), ".", SUBSTR(lastname, 1, 1) ) AS short, email, districtId, club, start, end, info
 				FROM user
 				WHERE id=:id
 			');
 			return Query::select($stmt, $args);
-		} else { // list of all (is this wise ? )
-			$stmt = Query::prepare('
-				SELECT id, member, firstname, infix, lastname, email, districtId, club, start, end, info
-				FROM user
-				ORDER BY lastname, infix, firstname
-			');
-			return Query::selectArray($stmt );
 		}
+//		else { // list of all (is this wise ? )
+//			$stmt = Query::prepare('
+//				SELECT id, member, firstname, infix, lastname, email, districtId, club, start, end, info
+//				FROM user
+//				ORDER BY lastname, infix, firstname
+//			');
+//			return Query::selectArray($stmt );
+//		}
     }
 
-    public static function new( ? string $member, string $firstname, ? string $infix, string $lastname, ? string $email, int $districtId, ? string $club, ? string $start, ? string $end, ? string $info, int $modifierId ) : ? int {
+    public static function create(? string $member, string $firstname, ? string $infix, string $lastname, ? string $email, int $districtId, ? string $club, ? string $start, ? string $end, ? string $info, int $modifierId ) : ? int {
         $args = get_defined_vars();
         $stmt = Query::prepare( '
             INSERT INTO user ( member, firstname, infix, lastname, email, districtId, club, `start`, `end`, info, modifierId )
@@ -37,7 +38,7 @@ class Breeder
         return Query::insert( $stmt, $args );
     }
 
-    public static function set( int $id, ? string $member, string $firstname, ? string $infix, string $lastname, ? string $email, ? string $club, ? string $start, ? string $end, ? string $info, int $modifierId ) : bool {
+    public static function update(int $id, ? string $member, string $firstname, ? string $infix, string $lastname, ? string $email, ? string $club, ? string $start, ? string $end, ? string $info, int $modifierId ) : bool {
         $args = get_defined_vars();
         $stmt = Query::prepare('
             UPDATE user
@@ -47,7 +48,7 @@ class Breeder
         return Query::update($stmt, $args);
     }
 
-    public static function del( int $id ) : bool { // TODO use with care, as it's could be referred to from reports
+    public static function delete( int $id ) : bool { // TODO use with care, as it's could be referred to from reports
         $args = get_defined_vars();
         $stmt = Query::prepare('
             DELETE FROM user 
@@ -115,7 +116,8 @@ class Breeder
 	public static function forDistrict( int $districtId ) {
 		$args = get_defined_vars();
 		$stmt = Query::prepare( " 
-			SELECT user.id, member, firstname, infix, lastname, districtId, district.name AS districtname, club FROM user
+			SELECT user.id, member, firstname, infix, lastname, districtId, district.name AS districtname, club, start, end
+			FROM user
 			LEFT JOIN district ON district.id = user.districtId
 			WHERE districtId IN (
 				WITH RECURSIVE districts( id ) AS (

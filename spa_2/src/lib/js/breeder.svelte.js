@@ -1,27 +1,37 @@
 import api from '$lib/js/server.js';
 
 export class Breeder {
-	static async load( id ){
-		console.log( "Load breeder", id );
-		let article = null;
-		const data = await api.get(`/api/2/breeder/${id}` );
-		return data && data.breeder ? data.breeder : null;
+	static async load( id, districtId ){
+		console.log( "Load breeder", id, districtId );
+		if( id === 0 ) { // new breeder
+			return {
+				id:0,
+				member:null, firstname:null, infix:null, lastname:null,
+				email:null, districtId:districtId, club:null,
+				start:null, end:null,
+				info:null,
+			}
+		} else {
+			let article = null;
+			const data = await api.get(`/api/2/breeder/${id}`);
+			return data && data.breeder ? data.breeder : null;
+		}
 	}
 	static async query( args ){
 		console.log( 'Load breeders', args );
 		const data = await api.query(`/api/2/breeder`, args );
 		return data && data.breeders ? data.breeders : null;
 	}
-	static async save( article ){
-		console.log( 'Save article', article );
-		if( article.id === 0 ) { // new
-			const data = await api.post( `/api/2/article`, article );
+	static async save( breeder ){
+		console.log( 'Save breeder' );
+		if( breeder.id === 0 ) { // new
+			const data = await api.post( `/api/2/breeder`, breeder );
 			if( data && data.id > 0 ) {
-				article.id = data.id;
+				breeder.id = data.id;
 				return true;
 			}
 		} else { // existing
-			const data = await api.put( `/api/2/article/${article.id}`, article );
+			const data = await api.put( `/api/2/breeder/${breeder.id}`, breeder );
 			if( data && data.id > 0 ) {
 				return true;
 			}
@@ -29,7 +39,7 @@ export class Breeder {
 		return false;
 	}
 	static async delete( id ){
-		console.log( 'Delete article', id );
-		return false; // TODO
+		console.log( 'Delete breeder', id, 'TODO' );
+		return true; // TODO
 	}
 }

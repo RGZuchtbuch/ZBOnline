@@ -225,7 +225,7 @@ class Result
 			$colorResults = self::formatResults( $colorResults );
 			$response->getBody()->write(json_encode([ 'breed'=>$breedResult, 'colors'=>$colorResults, 'query' => $query ], JSON_UNESCAPED_SLASHES));
 			return $response;
-		} else if( is_numeric( $districtId ) && is_numeric( $year ) ) { // per district and year view
+		} else if( is_numeric( $districtId ) && is_numeric( $year ) ) { // per district and year view like for moderater
 			$results = model\Result::forDistrictYear($districtId, $year);
 			$tree = self::treeResults($results);
 			$response->getBody()->write(json_encode(['results' => $tree], JSON_UNESCAPED_SLASHES));
@@ -273,7 +273,7 @@ class Result
 				'lay'     =>[ 'dames'=>$raw['layDames'], 'eggs'=>$raw['layEggs'], 'weight'=>$raw['layWeight'] ],
 				'brood'   =>[ 'eggs'=>$raw['broodEggs'], 'fertile'=>$raw['broodFertile'], 'hatched'=>$raw['broodHatched'] ],
 				'show'    =>[ 'count'=>$raw['showCount'], 'score'=>$raw['showScore'] ],
-				'pairId'=>$raw['pairId'], 'breeder' => $raw['breederId'] === NULL ? NULL : [ 'id'=>$raw['breederId'], 'firstName'=>$raw['firstname'], 'infix'=>$raw['infix'], 'lastName'=>$raw['lastname'] ],
+				'pairId'=>$raw['pairId'], 'breeder' => $raw['breederId'] === NULL ? NULL : [ 'id'=>$raw['breederId'], 'firstName'=>$raw['firstname'], 'infix'=>$raw['infix'], 'lastName'=>$raw['lastname'], 'short'=>$raw['short'] ],
 			];
 			if( $raw['rootsectionId'] !== $section['id'] ) {
 				unset( $section ); // unbind from tree

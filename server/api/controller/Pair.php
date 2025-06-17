@@ -127,9 +127,9 @@ class Pair
 	// create or update pair
 	public static function postPair( ? int $id, array $body, Requester $requester ) : int {
 		if( $id == null ) { //
-			return model\Pair::create($body['breederId'], $body['districtId'], $body['year'], $body['group'], $body['sectionId'], $body['breedId'], $body['colorId'], $body['name'], $body['paired'], $body['notes'], $requester->getId());
+			return model\Pair::create($body['breederId'], $body['districtId'], $body['year'], $body['group'], $body['sectionId'], $body['breedId'], $body['colorId'], $body['name'], $body['paired'], $body['notes'], $body['accepted'], $requester->getId());
 		} else {
-			$success = model\Pair::update($body['id'], $body['breederId'], $body['districtId'], $body['year'], $body['group'], $body['sectionId'], $body['breedId'], $body['colorId'], $body['name'], $body['paired'], $body['notes'], $requester->getId());
+			$success = model\Pair::update($body['id'], $body['breederId'], $body['districtId'], $body['year'], $body['group'], $body['sectionId'], $body['breedId'], $body['colorId'], $body['name'], $body['paired'], $body['notes'], $body['accepted'], $requester->getId());
 			if( $success ) {
 				return $id;
 			}
@@ -165,7 +165,7 @@ class Pair
 		if( $broods ) {
 			$success = true; // model\Pair::delBroods($pairId) && model\Pair::delChicks($pairId); // remove old broods and chicks
 			foreach ($broods as & $brood) {
-				if ($brood['eggs'] && $brood['hatched']) { // valid
+				if ($brood['eggs'] > 0 && $brood['hatched'] !== null) { // valid
 					$success = $success &&
 						model\pair\Brood::create( $pairId, $brood['start'], $brood['eggs'], $brood['fertile'], $brood['hatched'], $requester->getId() ) &&
 						Pair::postChicks( $pairId, $brood, $requester );
@@ -203,69 +203,64 @@ class Pair
 	public static function postResult( int $pairId, array $pair, Requester $requester ) : bool {
 		$success = model\Result::deleteForpair( $pairId );
 
-		// summarize broods
-		$broods = & $pair['broods'];
-		$broodEggs = null;
-		$broodFertile = null;
-		$broodHatched = null;
-		foreach( $broods as & $brood ) {
-			if( $brood['eggs'] !== null && $brood['eggs'] > 0 && $brood['hatched'] !== null && $brood['hatched'] >= 0 ) {
-				$broodEggs += $brood['eggs'];
-				$broodHatched += $brood['hatched'];
-				if( $brood['fertile'] !== null && $brood['fertile'] >=0 ) {
-					$broodFertile += $brood['fertile'];
+		if( $pair['accepted'] ) { // only add result if moderated accepted the pair
+
+			// summarize broods
+			$broods = &$pair['broods'];
+			$broodEggs = null;
+			$broodFertile = null;
+			$broodHatched = null;
+			foreach ($broods as & $brood) {
+				if ($brood['eggs'] !== null && $brood['eggs'] > 0 && $brood['hatched'] !== null && $brood['hatched'] >= 0) {
+					$broodEggs += $brood['eggs'];
+					$broodHatched += $brood['hatched'];
+					if ($brood['fertile'] !== null && $brood['fertile'] >= 0) {
+						$broodFertile += $brood['fertile'];
+					}
 				}
 			}
-		}
 
-		// summerize show
-		$show = & $pair['show'];
-		$scores = & $show['scores'];
+			// summerize show
+			$show = &$pair['show'];
+			$scores = &$show['scores'];
 
-		$showCount = 0;
-		$showTotal = 0;
-		$showScore = null;
-		foreach( $scores as $points => $count ) { // key = pounts, value = amount
-			$showCount = $showCount + $count;
-			$showTotal = $showTotal + $count * $points;
-		}
+			$showCount = 0;
+			$showTotal = 0;
+			$showScore = null;
+			foreach ($scores as $points => $count) { // key = pounts, value = amount
+				$showCount = $showCount + $count;
+				$showTotal = $showTotal + $count * $points;
+			}
 
-		if( $showCount > 0 ) { // avoid div by zero
-			$showScore = $showTotal / $showCount;
-		} else {
-			$showCount = null;
-		}
-//		$showCount = $show['89']+$show['90']+$show['91']+$show['92']+$show['93']+$show['94']+$show['95']+$show['96']+$show['97']; // null or count if any
-//		$showScore = null;
-//		if( $showCount > 0 ) {
-//			$showTotalScore = 89 * $show['89'] + 90 * $show['90'] + 91 * $show['91'] + 92 * $show['92'] + 93 * $show['93'] + 94 * $show['94'] + 95 * $show['95'] + 96 * $show['96'] + 97 * $show['97'];
-//			$showScore = $showTotalScore / $showCount;
-//		} else { // being 0, so none counted
-//            $showCount = null;
-//        }
+			if ($showCount > 0) { // avoid div by zero
+				$showScore = $showTotal / $showCount;
+			} else {
+				$showCount = null;
+			}
 
-		// save pigeon or layer
-		if( $pair['sectionId'] === 5 ) { // pigeon, no lay, no color
-            $success = $success && model\Result::new(
-				$pairId, $pair['districtId'], $pair['year'], $pair['group'],
-				null, $pair['breedId'], null, null,
-				1, 1,
-				null, null, null,
-				$broodEggs, null, $broodHatched,
-				$showCount, $showScore,
-                $requester->getId()
-			);
-		} else { // layers
-            $success = $success && model\Result::new(
-				$pairId, $pair['districtId'], $pair['year'], $pair['group'],
-				null, $pair['breedId'], $pair['colorId'], null,
-				1, 1,
-				$pair['lay']['dames'],$pair['lay']['eggs'], $pair['lay']['weight'],
-				$broodEggs, $broodFertile, $broodHatched,
-				$showCount, $showScore,
-                $requester->getId()
-			);
+			// save pigeon or layer
+			if ($pair['sectionId'] === 5) { // pigeon, no lay, no color
+				$success = $success && model\Result::new(
+						$pairId, $pair['districtId'], $pair['year'], $pair['group'],
+						null, $pair['breedId'], null, null,
+						1, 1,
+						null, null, null,
+						$broodEggs, null, $broodHatched,
+						$showCount, $showScore,
+						$requester->getId()
+					);
+			} else { // layers
+				$success = $success && model\Result::new(
+						$pairId, $pair['districtId'], $pair['year'], $pair['group'],
+						null, $pair['breedId'], $pair['colorId'], null,
+						1, 1,
+						$pair['lay']['dames'], $pair['lay']['eggs'], $pair['lay']['weight'],
+						$broodEggs, $broodFertile, $broodHatched,
+						$showCount, $showScore,
+						$requester->getId()
+					);
 
+			}
 		}
 		return $success;
 	}
@@ -323,6 +318,7 @@ class Pair
 		foreach( $rows as $row ) {
 			$pair            = [ 'id'=>$row['id'], 'breederId'=>$row['breederId'], 'year'=>$row['year'], 'name'=>$row['name'] ];
 			$pair['breeder'] = [ 'id'=>$row['breederId'] ]; // TODO add name but dep on Pair::getPairs
+			$pair['breed']   = [ 'sectionId'=>$row['sectionId'], 'breedId'=>$row['breedId'], 'breedName'=>$row['breedName'], 'colorId'=>$row['colorId'], 'colorName'=>$row['colorName'] ];
 			$pair['lay']     = [ 'eggs'=>$row['layEggs'], 'weight'=>$row['layWeight'], 'eggsShould'=>$row['layEggsShould'], 'weightShould'=>$row['layWeightShould'] ];
 			$pair['brood']   = [ 'eggs'=>$row['broodEggs'], 'fertile'=>$row['broodFertile'], 'hatched'=>$row['broodHatched'], 'group'=>$row['broodGroup'] ];
 			$pair['show']    = [ 'count'=>$row['showCount'], 'score'=>$row['showScore'] ];

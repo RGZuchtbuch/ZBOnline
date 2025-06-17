@@ -1,6 +1,7 @@
 import adapter from '@sveltejs/adapter-static';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte'; // tailwind
 
+
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
 	compilerOptions: {
@@ -16,5 +17,7 @@ const config = {
 
 	preprocess: vitePreprocess(), // tailwind
 };
+
+
 
 export default config;

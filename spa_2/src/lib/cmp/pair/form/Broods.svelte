@@ -55,7 +55,7 @@
 
 
 <fieldset class='flex flex-col gap-x-2 border pt-2 px-2' in:fade disabled={ ! pair.breedId }>
-	<legend>Brutleistung ({pair.broodGrade}) Gruppe :{breed.broodGroup}</legend>
+	<legend>Brutleistung ({pair.broodGrade}) </legend>
 	{#if pair.colorId }
 		<div transition:slide>
 			{#each pair.broods as brood, i }

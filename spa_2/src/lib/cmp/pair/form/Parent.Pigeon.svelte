@@ -52,7 +52,7 @@
 		parentPair = parentPairs.find( pair => pair.id === parent.parentsPairId );
 		parentBroodGrade = parentPair ? aab.brood.pigeon(parentPair.brood.group, parentPair.brood.eggs/2, parentPair.brood.hatched ) : null;
 		parentShowGrade = parentPair ? parentPair.show.score : null;
-		parent.grade = parentTotalGrade = parentBroodGrade && parentShowGrade ? ( parentBroodGrade + parentShowGrade ) / 2: null;
+		parent.grade = parentTotalGrade = parent.score && parentBroodGrade && parentShowGrade ? ( parent.score + parentBroodGrade + parentShowGrade ) / 3: null;
 	});
 
 	onMount( () => {
@@ -78,11 +78,13 @@
 
 	{#if parentPair}
 		<div class='grow flex flex-row gap-x-1 justify-end' in:fade>
-			<Label label={i===0}> → </Label>
+			<Label label={i===0}> + </Label>
 			<NumberInput class='w-16' label={i===0?'Brutleistung':null} title='Von dem Elternstamm' value={ dec( parentBroodGrade, 1 ) } disabled/>
 			<NumberInput class='w-16' label={i===0?'Schauleistung':null} title='Von dem Elternstamm' value={ dec( parentShowGrade, 1 ) } disabled/>
 			<Label label={i===0}> = </Label>
-			<NumberInput class='w-16 font-bold' label={i===0?'Note':null} title='Von dem Elternstamm' value={ dec( parentTotalGrade, 1 ) } disabled/>
+			<NumberInput class='w-16 font-bold' label={i===0?'Note':null}  value={ dec( parentTotalGrade, 1 ) } disabled
+				title='Durchschnitt Bewertung und Eltern Paar Leistungen'
+			/>
 		</div>
 	{/if}
 

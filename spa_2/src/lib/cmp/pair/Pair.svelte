@@ -22,7 +22,6 @@
 			return await Pair.save( pair );
 			//if( saved ) changed = false;
 		} else if( pair.id > 0 && pair.name === null && pair.delete ){ // name is null and delete
-			console.log( 'Delete' ) // TODO pair delete
 			const ok = Pair.delete( pair.id );
 			if( ok ) {
 				await goto(`/moderator/${pair.districtId}/breeder/${pair.breederId}/pair`);
