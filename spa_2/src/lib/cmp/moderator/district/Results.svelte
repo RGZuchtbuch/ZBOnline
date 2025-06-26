@@ -2,11 +2,11 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
 	import store from '$lib/js/store.svelte.js';
-	import { dec, txt } from '$lib/js/toolbox.js';
+	import { dec, txt } from '$lib/js/tools.js';
 
 	import ResultsView from './results/ResultsView.svelte';
 
-	let { results, district, year } = $props();
+	let { data } = $props();
 
 //	let edit = $state( false );
 //	let authorized = $derived( store.user && ( store.user.id === district.moderator.id || store.user.admin ) ); // can edit
@@ -19,19 +19,21 @@
 
 	function onYearChange( event ) {
 		const year = event.target.value;
-		let url = new URL( page.url );
-		url.searchParams.set( 'year', year );
-		goto( url.href );
+		const href=`/moderator/${data.district.id}/result/${year}`;
+		goto( href );
+		//let url = new URL( page.url );
+		//url.searchParams.set( 'year', year );
+		//goto( url.href );
 	}
 
-	$inspect( 'Results', results );
+	$inspect( 'RResults', data.results );
 //	$inspect( 'Results', edit, district.moderator.id, store.user.id, authorized );
 
 </script>
 
-{#if results && district && year}
+{#if data && data.results}
 	<h3 class=''>Leistungen für
-		<select class='border border-teal-600 border-1 bg-inherit' value={year} onchange={onYearChange}>
+		<select class='border border-teal-600 border-1 bg-inherit' value={data.year} onchange={onYearChange}>
 			{#each years as y}
 				<option value={y}>{y}</option>
 			{/each}
@@ -45,7 +47,7 @@
 		</p>
 	</div>
 
-	<ResultsView {results} {district} {year} />
+	<ResultsView {data} />
 
 {/if}
 

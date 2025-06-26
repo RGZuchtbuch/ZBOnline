@@ -1,0 +1,9 @@
+import {Result} from '$lib/js/result.svelte.js';
+import {page} from '$app/state';
+
+export async function load( { depends, params, parent } ) {
+	console.log( 'load district results', params );
+	depends( 'results' ); // as i'm not using the svelte fetch
+	const results= await Result.query( { district:+params.district, year:+params.year } );
+	return { results:results.results, year:+params.year };
+}

@@ -7,6 +7,7 @@
     import { Result } from '$lib/js/result.svelte.js';
 
     import AddResultRow from './AddResultRow.svelte'
+    import {invalidate} from '$app/navigation';
 
     let { section, result } = $props();
 
@@ -45,6 +46,7 @@
 
     async function onSubmit( event ) {
         console.log( 'Submit color result' );
+        await invalidate( 'results' ); // make results page reload data
         if( data.breeders ) { // valid entry
             return await Result.save( data );
         } else { // delete if no breeders count given
@@ -55,7 +57,6 @@
     }
 
 </script>
-
 
 <Form class='flex flex-col px-2 gap-x-1 text-sm' autosubmit onsubmit={onSubmit}>
     <div>{breed.name}</div>

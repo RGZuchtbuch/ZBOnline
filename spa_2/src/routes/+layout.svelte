@@ -1,32 +1,42 @@
 <script>
     import '../app.css'; // need this once on highest level
 
+    import { onMount } from 'svelte';
     import { fade, fly, slide } from 'svelte/transition';
-    import store from '$lib/js/store.svelte.js'
+    import { ctx } from '$lib/js/store.svelte.js'
 
     import Header from '$lib/cmp/Header.svelte';
     import Menu from '$lib/cmp/Menu.svelte';
     import Title from '$lib/cmp/Title.svelte';
+    import {Federation, Standard, User} from '$lib/js/model.js';
 
     let { children, data } = $props();
 
-    store.federation = data.federation;
-    store.standard   = data.standard;
-    store.user       = data.user;
 
-    /**
-    * note, this layout has header, menu and children
-    * these are set through app.title, app.menu.trail (breadcrumbs) and app.menu.options ( current submenu )
-    **/
+    onMount( async () => {
+        const response = await Promise.all( [
+            Federation.load(),
+            Standard.load(),
+            User.load()
+        ] );
+
+        ctx.federation = response[0];
+        ctx.standard = response[1];
+        ctx.user = response[2];
+    });
+
+    $inspect( 'F',  ctx.standard );
+
 </script>
+
 
 <Header />
 <Menu />
 <Title />
 
-{#if data.federation && data.standard }
-    <div class='screen-scroll-y content' in:fade={{duration:1000}} >
-        {@render children()}
+{#if ctx.federation && ctx.standard }
+    <div class='screen-scroll-y content' in:fade={{duration:1500}}>
+       {@render children()}
     </div>
 {/if}
 

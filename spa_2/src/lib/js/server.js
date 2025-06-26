@@ -1,13 +1,13 @@
 import { browser } from '$app/environment'; // to find window
-import store from '$lib/js/store.svelte.js';
+import { ctx } from '$lib/js/store.svelte.js'
 
 const API_BASE = browser && location.hostname === 'localhost' ? 'http://localhost:80' : ''; // dev vs prod
 
-function headers() {
+export function headers() {
 	return {
 		'Accept': 'application/json', // response
 		'Content-Type': 'application/json', // body
-		'Authorization': `Bearer ${store.user ? store.user.token : '' }`,
+		'Authorization': `Bearer ${ ctx.user ? ctx.user.token : '' }`,
 	}
 }
 

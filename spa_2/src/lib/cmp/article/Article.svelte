@@ -1,14 +1,14 @@
 <script>
-
 	import { page } from '$app/state';
 	import { fade, fly, slide } from 'svelte/transition';
 	import { navigating } from '$app/state';
-	import {goto, invalidate, invalidateAll} from '$app/navigation';
-	import store from '$lib/js/store.svelte.js';
+	import { goto, invalidate, invalidateAll} from '$app/navigation';
+	import { ctx } from '$lib/js/store.svelte.js';
 	import Form, { CheckBox, NumberInput, Status, TextArea, TextInput, validator } from '$lib/cmp/form/Form.svelte';
-	import { Article } from '$lib/js/article.svelte.js';
+	import { Article } from '$lib/js/model.js';
 
-	let { article=$bindable() } = $props();
+	let { article } = $props();
+
 	let edit = $state( false );
 	let remove = $state( false );
 
@@ -20,7 +20,7 @@
 		html  : v => validator(v).string().length( 3, 99999 ).isValid(),
 	}
 
-	let authorized = $derived( store.user && store.user.admin ); // can edit
+	let authorized = $derived( ctx.user && ctx.user.admin ); // can edit
 
 
 
@@ -36,7 +36,7 @@
 
 </script>
 
-{#if article}
+{#if ctx.article}
 
 	<!--h2 class='header'>
 		<span class='grow'>{article.title}</span>

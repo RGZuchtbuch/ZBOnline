@@ -5,44 +5,29 @@
     import BreedResult from './BreedResult.svelte';
 
 //    let { breed, district, group, section, title, year, map } = $props();
-    let { breed, district, group, year } = $props();
-
-    let results = $state( null );
-
+    let { data, breed } = $props();
     let open = $state( false );
+    let breedResults = $state( null ); // { breed, colors }
 
+    $effect( () => {
+        if( data ) open = false; // close when data changes
+    })
+
+    $effect( async () => {
+        if( open ) {
+            console.log( 'Year', data.year );
+            breedResults = null;
+            breedResults = await Result.query( { district:data.district.id, year:data.year, group:data.group, breed:breed.id })
+        }
+    })
     let hasResults = $derived( breed.count > 0 );
 
     async function onOpen() {
-        open = ! open;
-        if( open && ! results ) {
-            results = await Result.query( { breed:breed.id, district:district.id, group:group, year:year})
-        }
-    }
-
-    function onResultChange( event ) { // from ResultRows
-        // recount breeders when results change
-        // let breeders = breed.reports + breed.aoc; // to get total breeders
-        // for (let result of results) {
-        //     if (result.breeders && result.breeders > 0) {
-        //         breeders += result.breeders;
-        //     }
+        // if( ! open ) {
+        //     console.log( 'Rs', results );
         // }
-        // breed.breeders = breeders;
+        open = ! open;
     }
-
-    // function newResult( colorId = null ) {
-    //     return {
-    //         id:0, districtId:district.id, group:group, year:year,
-    //         breeder:null, pairId:null,
-    //         breeders:null, pairs:null,
-    //         sectionId:section.id, breedId:breed.id, colorId:colorId, aocColor:null,
-    //         lay:{ dames:null, eggs:null, weight:null },
-    //         brood:{ chicks:null, eggs:null, fertile:null, hatched:null},
-    //         show:{ count:null, score:null },
-    //     }
-    // }
-
 
 </script>
 
@@ -84,14 +69,14 @@
         {/if}
     </div>
 
-    {#if open && results }
+    {#if open && breedResults }
         <div transition:slide>
             {#if breed.layer }
-                {#each results.colors as color}
-                    <ColorResult result={color} onchange={onResultChange}/>
+                {#each breedResults.colors as color}
+                    <ColorResult result={color} {data}/>
                 {/each}
             {:else}
-                <BreedResult result={results.breed} onchange={onResultChange}/>
+                <BreedResult result={breedResults.breed} {data}/>
             {/if}
         </div>
     {/if}

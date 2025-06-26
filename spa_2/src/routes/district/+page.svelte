@@ -6,7 +6,7 @@
 
 	let { data } = $props();
 
-	let federation = $state( store.federation );
+	//let federation = $state( store.federation );
 
 	$effect( () => {
 		setHeader( page.url );
@@ -27,6 +27,6 @@
 
 </script>
 
-<Districts district={federation}/>
+<Districts district={data.federation}/>
 
 

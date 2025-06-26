@@ -1,17 +1,13 @@
 <script>
 	import { page } from '$app/state';
-	import store from '$lib/js/store.svelte.js';
-	import {Article} from '$lib/js/article.svelte.js';
+	import { ctx } from '$lib/js/store.svelte.js';
 	import Articles from '$lib/cmp/article/Articles.svelte';
 
 
-	let { data } = $props();
-
-	let articles = $state( null )
-
+//	let { data } = $props();
 
 	$effect( async ()=>{
-		articles = await Article.query();
+		console.log( 'Article set header' );
 		setHeader( page.url );
 	});
 
@@ -24,12 +20,12 @@
 			],
 			options : [],
 		};
-		store.title = title;
-		store.menu  = menu;
+		ctx.header.title = title;
+		ctx.header.menu  = menu;
 	}
 
 </script>
-
-{#if articles}
-	<Articles {articles} />
+G
+{#if ctx.articles}
+	<Articles articles={ctx.articles} />
 {/if}

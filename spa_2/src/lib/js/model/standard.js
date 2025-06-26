@@ -2,9 +2,8 @@ import api from '$lib/js/server.js'; // get post put delete
 
 
 
-export class Standard {
+export default class Standard {
 	static async load() {
-		console.log( "Load standard" );
 		let standard = null
 		const data= await api.get(`/api/2/standard` );
 		if( data && data.standard ) {

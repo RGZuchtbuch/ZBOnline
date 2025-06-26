@@ -1,12 +1,23 @@
 export const ssr = false; // need this once for spa only in sveltekit
 
-import { Federation } from '$lib/js/federation.svelte.js';
-import { Standard } from '$lib/js/standard.svelte.js';
-import { User } from '$lib/js/user.svelte.js';
+//import { setContext } from 'svelte';
+import { Federation, Standard, User } from '$lib/js/model.js';
 
-export async function load( { params } ) {
-	const data = await Promise.all( [ Federation.load(), Standard.load(), User.load() ] );
-	return { federation:data[0], standard:data[1], user:data[2] };
+export async function load( { depends, fetch, params } ) {
+	// depends( 'federation', 'standard', 'user' );
+	// const response = await Promise.all( [
+	// 	Federation.load( fetch ),
+	// 	Standard.load( fetch ),
+	// 	User.load()
+	// ] );
+	//
+	// return {
+	// 	federation: response[0],
+	// 	standard: response[1],
+	// 	user: response[2],
+	// 	header: { title:null, menu:{trail:[], options:[] } },
+	// }
+	return {};
 }
 
 /*

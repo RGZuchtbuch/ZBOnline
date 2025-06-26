@@ -1,14 +1,16 @@
 <script>
-	import { dec, txt } from '$lib/js/toolbox.js';
+	import { fade, slide } from 'svelte/transition';
+	import { dec, txt } from '$lib/js/tools.js';
 
-	let { results, district, year } = $props();
+	let { data } = $props();
+
+	console.log( 'RV', data.results )
 
 </script>
 
-
-<div class='flex flex-col'>
-	{#if results}
-		{#each results.sections as section}
+{#if data.results}
+	<div class='flex flex-col' in:fade>
+		{#each data.results.sections as section}
 			<div class='flex flex-row section items-end'>
 				<span class='grow pl-2'>{section.name}</span>
 				<span class='flex flex-col'>
@@ -97,8 +99,9 @@
 				{/each}
 			{/each}
 		{/each}
-	{/if}
-</div>
+
+	</div>
+{/if}
 
 
 

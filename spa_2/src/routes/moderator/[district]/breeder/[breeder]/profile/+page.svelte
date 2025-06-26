@@ -4,7 +4,7 @@
 	import store from '$lib/js/store.svelte.js';
 	import Profile from '$lib/cmp/breeder/profile.svelte';
 	import {Breeder} from '$lib/js/breeder.svelte.js';
-	import {District} from '$lib/js/federation.svelte.js';
+	import {District} from '$lib/js/model/federation.svelte.js';
 //	import api from '$lib/js/api.js.obs';
 	import { txt } from '$lib/js/toolbox.js';
 

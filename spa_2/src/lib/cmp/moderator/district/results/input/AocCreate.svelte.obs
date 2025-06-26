@@ -2,13 +2,13 @@
 	import store from '$lib/js/store.svelte.js';
 	import Form, {Select, Submit, TextInput, validator} from '$lib/cmp/form/Form.svelte';
 
-	let { district, group, year, results } = $props();
+	let { data=$bindable() } = $props();
 	// export let results;
 	// export let districtId;
 	// export let year;
 
 	let section = $state( null );
-	let breeds = $derived( section ? section.breeds : [] );
+	let breeds = $derived( section && section.breeds ? section.breeds : [] );
 	let breed = $state( null );
 	let aocColor = $state( null );
 
@@ -17,25 +17,9 @@
 		name:   (v) => validator(v).string().length( 2, 64 ).isValid(),
 	}
 
-	// function findSection( id, section ) {
-	// 	if( section.id === id ) return section;
-	// 	for( const childSection of section.children ) {
-	// 		const found = findSection( id, childSection );
-	// 		if( found ) return found;
-	// 	}
-	// 	return null; // nothing found
-	// }
-
-	// function collectBreeds( breeds, section ) {
-	// 	for( const breed of section.breeds ) breeds.push( breed );
-	// 	for( let childSection of section.children ) {
-	// 		collectBreeds( breeds, childSection );
-	// 	}
-	// }
-
 	function newResult() {
 		return {
-			id:0, districtId:district.id, group:group, year:year,
+			id:0, districtId:data.district.id, group:data.group, year:data.year,
 			breeder:null, pairId:null,
 			breeders:null, pairs:null,
 			sectionId:section.id, breedId:breed.id, colorId:null, aocColor:'AOC '+aocColor,
@@ -63,9 +47,14 @@
 		console.log('Submit' );
 		const name = 'AOC: '+aocColor;
 		const result = newResult();
-		results.unshift( result );
+		data.breeds = [ result, ...data.breeds ];//.unshift( result );
+		console.log( 'DB', data.breeds );
 		return true;
 	}
+
+	$inspect('AOCCreate', data);
+
+	$inspect('Section', section);
 
 
 </script>
@@ -73,18 +62,20 @@
 <Form class='bg-gray-50' onsubmit={onSubmit}>
 	<h2 class='text-center'>AOC Klasse, Farbenschlag hinzufügen</h2>
 	<div class='flex flex-row gap-x-2 justify-center'>
-		<Select label='Sparte' bind:value={section} validator={validate.id} on:change={onSection}>
-			{#each store.standard.rootSections as section}
+		<Select label='Sparte' bind:value={section} validator={validate.id}>
+			{#each data.standard.rootSections as section}
 				<option value={section}>{section.name}</option>
 			{/each}
 		</Select>
-		<Select class='w-96' label='Rasse' bind:value={breed} validator={validate.id}>
+		<Select class='w-96' label='Rasse' bind:value={breed} validator={validate.id} disabled={ section === null }>
 			<option value={null}>?</option>
-			{#each breeds as breed}
-				<option value={breed}>{breed.name}</option>
-			{/each}
+			{#if section && section.breeds }
+				{#each section.breeds as breed}
+					<option value={breed}>{breed.name}</option>
+				{/each}
+			{/if}
 		</Select>
-		<TextInput class='w-64' label='AOC Farbenschlag' bind:value={aocColor} validator={validate.name}/>
+		<TextInput class='w-64' label='AOC Farbenschlag' bind:value={aocColor} validator={validate.name} disabled={ breed === null } />
 		<Submit class='w-16 mt-3' noChangeValue='?' submitValue='+' invalidValue='X' errorValue='X' />
 	</div>
 </Form>

@@ -4,12 +4,13 @@
     import User from '$lib/cmp/user/User.svelte';
 
     //let state = getContext( 'state' );
+	let ctx = getContext( 'ctx' );
 
 	$effect( () => {
-		setHeader( store.user )
+		setHeader()
 	})
 
-	function setHeader( user ) {
+	function setHeader() {
 		const title = 'Benutzer im RGZuchtbuch';
 		const menu = {
 			trail: [
@@ -18,8 +19,8 @@
 			],
 			options: [],
 		};
-		store.title = title;
-		store.menu = menu;
+		ctx.header.title = title;
+		ctx.header.menu = menu;
 	}
 </script>
 

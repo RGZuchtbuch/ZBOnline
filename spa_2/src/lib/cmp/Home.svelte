@@ -1,149 +1,21 @@
 <script>
-	import { fade, fly, slide } from 'svelte/transition';
-	import store from '$lib/js/store.svelte.js'
 	import { info_icon } from '$lib/cmp/icons.svelte';
 </script>
 
-<div class='p-6' in:slide>
-
+<div class='p-6'>
 	{@render info_icon()}  &#x1F6C8;
 
+	<div>Zuchtbuch</div>
+	=
+	<div>Abstammung</div>
+	+
+	<div>LegeLeistung</div>
+	+
+	<div>Brutleistung</div>
+	+
+	<div>Schauleistung</div>
+
 	<a href='/article'>Articles</a>
-	<div>aaaaaa aaaaaa aaa aa a a a a a a aaaaaaa aaaaaa aaaaaa aaa aa a a a a a a aaaaaaa aaaaaa aaaaaa aaa aa a a a a a a aaaaaaa aaaaaa aaaaaa aaa aa a a a a a a aaaaaaa aaaaaa aaaaaa aaa aa a a a a a a aaaaaaa aaaaaa aaaaaa aaa aa a a a a a a aaaaaaa aaaaaa aaaaaa aaa aa a a a a a a aaaaaaa aaaaaa aaaaaa aaa aa a a a a a a aaaaaaa </div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<br>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>aaaaaa aaaaaa aaa aa a a a a a a aaaaaaa aaaaaa aaaaaa aaa aa a a a a a a aaaaaaa aaaaaa aaaaaa aaa aa a a a a a a aaaaaaa aaaaaa aaaaaa aaa aa a a a a a a aaaaaaa aaaaaa aaaaaa aaa aa a a a a a a aaaaaaa aaaaaa aaaaaa aaa aa a a a a a a aaaaaaa aaaaaa aaaaaa aaa aa a a a a a a aaaaaaa aaaaaa aaaaaa aaa aa a a a a a a aaaaaaa </div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<br>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
-	<div>a</div>
+
 </div>
 

@@ -1,10 +1,13 @@
 import { browser } from '$app/environment'; // to find window
 import {jwtDecode} from 'jwt-decode';
 import api from '$lib/js/server.js';
-import store from '$lib/js/store.svelte.js';
+import { ctx } from '$lib/js/store.svelte.js';
+//import {getContext} from 'svelte'; // cannot be here
+
+//let ctx = getContext( 'ctx' );
 
 
-export class User {
+export default class User {
 	static async load() {
 		let token = browser && window.sessionStorage.getItem('token'); // encoded
 		// store.user = tokenToUser( token );
@@ -15,21 +18,21 @@ export class User {
 		const response = await api.post( '/api/2/user/login', { email:email, password:password } );
 		if( response && response.token ) {
 			console.log( 'Got Token' );
-			store.user = tokenToUser( response.token );
+			ctx.user = tokenToUser( response.token );
 			browser && window.sessionStorage.setItem( 'token', response.token );
 		} else {
-			store.user = null;
+			ctx.user = null;
 			browser && window.sessionStorage.removeItem( 'token' );
 		}
 		return store.user;
 	}
-	static async forgot( email ) {
+	static async forgot( email ) { // forgot password
 		const response = await api.post( '/api/2/user/forgot', { email:email } );
 		console.log( response );
 		return true; // TODO
 	}
 	static async logout() {
-		store.user = null;
+		ctx.user = null;
 		window.sessionStorage.removeItem( 'token' ); // forget token
 		return true; // always successfull
 	}
@@ -53,7 +56,7 @@ function tokenToUser( token ) {
 function useSessionToken() {
 	let token = browser && window.sessionStorage.getItem('token'); // encoded
 	if (token) {
-		store.user = tokenToUser( token );
+		ctx.user = tokenToUser( token );
 	}
 }
 

@@ -1,5 +1,5 @@
 <script>
-    import store from '$lib/js/store.svelte.js';
+    import { ctx } from '$lib/js/store.svelte.js'
 
     setHeader();
 
@@ -11,8 +11,8 @@
             ],
             options : [],
         };
-        store.title = title;
-        store.menu  = menu;
+        ctx.header.title = title;
+        ctx.header.menu  = menu;
     }
 
 </script>

@@ -1,5 +1,6 @@
 
 import api from '$lib/js/server.js';
+import {invalidate} from '$app/navigation';
 
 export class Result {
 	static async load( id ){
@@ -9,9 +10,8 @@ export class Result {
 	}
 
 	static async query( args ) {
-		const data = await api.get( `/api/2/result`, args );
-		console.log( 'Data', data );
-		return data ? data : null; // should have for breed and for colors
+		const response = await api.get( `/api/2/result`, args );
+		return response; // should have for breed and for colors
 	}
 
 	static async save( result ){
@@ -19,6 +19,7 @@ export class Result {
 		if( result.id > 0 ) { // existing
 			const data = await api.put( `/api/2/result/${result.id}`, result );
 			if( data && data.id > 0 ) {
+
 				return true;
 			}
 		} else {// new

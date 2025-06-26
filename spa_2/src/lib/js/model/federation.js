@@ -1,8 +1,13 @@
 import api from '$lib/js/server.js';
-import store from '$lib/js/store.svelte.js';
-import {page} from '$app/state';
+import { ctx } from '$lib/js/store.svelte.js'
 
-// for tree structure in federation
+// private
+
+function districtLookup( federation ) {
+	const districts = {};
+	addDistrict( federation, districts ); // create district lookup by id
+	return districts;
+}
 function addDistrict( district, districts ) { // recursive for sections
 	districts[ district.id ] = district;
 	for( const child of district.children ) {
@@ -10,31 +15,28 @@ function addDistrict( district, districts ) { // recursive for sections
 	}
 }
 
+export default class Federation {
+
+	static async load( fetch ) {
+		let federation = null; // { bdrg object, districts }
+		const data = await api.get(`/api/2/district`, { rootId:1 } ); // root is BDRG #1
+		if( data && data.root ) {
+			federation = data.root; // district tree
+			federation.districts = districtLookup( federation ); // list of districts by id
+		}
+		return federation; // null if failed
+	}
+}
+
 export class District {
 	static async load( id ) {
-		return store.federation.districts[ +page.params.district ];
+		return store.federation.districts[ id ];
+//		return store.federation.districts[ +page.params.district ];
 	}
 	static async save( district ) {
 		console.log( 'District.save');
 		// TODO
 		return null; // or saved id;
-	}
-}
-
-export class Federation {
-//	root = $state( null ); // tree
-//	districts = $state( {} ); // find by id
-
-	static async load() {
-		console.log( "Load federation" );
-		let federation = null; // { bdrg object, districts }
-		const data = await api.get( `/api/2/district`, { rootId:1 } ); // root is BDRG #1
-		if( data && data.root ) {
-			federation = data.root; // district tree
-			federation.districts = []; // list of districts by id
-			addDistrict( federation, federation.districts );
-		}
-		return federation; // null if failed
 	}
 }
 

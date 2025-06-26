@@ -3,58 +3,65 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
 	import store from '$lib/js/store.svelte.js';
-	import { dec, txt } from '$lib/js/toolbox.js';
+	import { dec, txt } from '$lib/js/tools.js';
 	import {Select} from '$lib/cmp/form/Form.svelte';
-	import AocCreate from './results/input/AocCreate.svelte';
-	import AocResult from './results/input/AocResult.svelte';
+	import AOC from './results/input/AOC.svelte';
 	import Breed from './results/input/Breed.svelte';
 
-	let { district, group, section, year, breeds } = $props();
+	let { district, year, section, group, breeds, data } = $props();
 
-	let authorized = $derived( store.user && ( store.user.id === district.moderator.id || store.user.admin ) ); // can edit
+	let authorized = $derived( data.user && ( data.user.id === data.district.moderator.id || data.user.admin ) ); // can edit
 
 	let years = []; // for select
 	for( let year=+( new Date().getFullYear() )+1; year>=1980; year-- ) years.push( year );
 
 	function onYearChange( event ) {
 		const year = event.target.value;
-		let url = new URL( page.url );
-		url.searchParams.set( 'year', year );
-		goto( url.href );
+		//let url = new URL( page.url );
+		//url.searchParams.set( 'year', year );
+		//goto( url.href );
+		const href = `/moderator/${data.district.id}/result/${year}/edit/section/${data.section.id}/group/${data.group}`;
+		goto( href );
 	}
 
 	function onSectionChange( event ) {
-		let url = new URL( page.url );
-		url.searchParams.set( 'section', section.id );
-		goto( url.href );
+		const sectionId = event.target.value;
+		//let url = new URL( page.url );
+		//url.searchParams.set( 'section', section.id );
+		//goto( url.href );
+		const href = `/moderator/${data.district.id}/result/${data.year}/edit/section/${sectionId}/group/${data.group}`;
+		goto( href );
+
 	}
 	function onGroupChange( event ) {
-		let url = new URL( page.url );
-		url.searchParams.set( 'group', group );
-		goto( url.href );
+		const group = event.target.value;
+		const href = `/moderator/${data.district.id}/result/${data.year}/edit/section/${data.section.id}/group/${group}`;
+		//let url = new URL( page.url );
+		//url.searchParams.set( 'group', group );
+		//goto( url.href );
 	}
 
-	//$inspect( 'RE b', breeds );
+	$inspect( 'RE b', data );
 
 </script>
 
 {#if district && group && section && year }
 	<div class='flex flex-row border border-gray-400 bg-gray-50 p-2 gap-x-4 justify-center' in:fade>
 		<span class='py-3 font-bold'>Leistungen eingeben für </span>
-		<Select class='' label='Jahr' value={year} onchange={onYearChange}>
+		<Select class='' label='Jahr' value={data.year} onchange={onYearChange}>
 			{#each years as y}
 				<option value={y}>{y}</option>
 			{/each}
 		</Select>
 
-		<Select label="Sparte" bind:value={section} onchange={onSectionChange} title='Sparte zum Eingeben'>
+		<Select label="Sparte" value={data.section.id} onchange={onSectionChange} title='Sparte zum Eingeben'>
 			{#each store.standard.rootSections as section}
-				<option value={section}>{section.name}</option>
+				<option value={section.id}>{section.name}</option>
 			{/each}
-			<option value={store.aocSection}>{store.aocSection.name}</option>
+			<option value={store.aocSection.id}>{store.aocSection.name}</option>
 		</Select>
 
-		<Select label="Gruppe" bind:value={group} onchange={onGroupChange} disabled={section && section.id === 5 } title='Zuchtbuchgruppe I, II oder III'>
+		<Select class='w-16' label="ZB Gruppe" value={data.group} onchange={onGroupChange} disabled={section && section.id === 5 } title='Zuchtbuchgruppe I, II oder III'>
 			{#each store.groups as group}
 				<option value={group}>{group}</option>
 			{/each}
@@ -68,18 +75,21 @@
 	</div>
 {/if}
 
-{#if breeds}
-	{#if section.id === 9999}
-		<AocCreate {district} {group} {year} results={breeds}/>
-
-		{#each breeds as result (result.id)}
-			<AocResult {section} {result} />
-		{/each}
+{#if data.breeds}
+	{#if data.section.id === 9999}
+		<!-- div>
+			<AocCreate {data}/>
+			DB {data.breeds.length}
+			{#each data.breeds as breed}
+				A
+				<AocResult section={data.section} {breed} {data}/>
+			{/each}
+		</div -->
+		<AOC {data} />
 	{:else}
-
 		<div>
-			{#each breeds as breed (breed.id) }
-				<Breed {breed} {district} {group} {year}/>
+			{#each data.breeds as breed}
+				<Breed district={data.district} year={data.year} group={data.group} {breed} {data} />
 			{/each}
 		</div>
 	{/if}

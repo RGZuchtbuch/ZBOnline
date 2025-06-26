@@ -3,7 +3,7 @@
 	import store from '$lib/js/store.svelte.js';
 	import {txt } from '$lib/js/toolbox.js';
 	import { Breeder } from '$lib/js/breeder.svelte.js';
-	import { District } from '$lib/js/federation.svelte.js';
+	import { District } from '$lib/js/model/federation.svelte.js';
 	import { Pair } from '$lib/js/pair.svelte.js';
 	import PairCmp from '$lib/cmp/pair/Pair.svelte';
 

@@ -1,16 +1,18 @@
 <script>
-    import { onMount } from 'svelte';
+    import {getContext, onMount} from 'svelte';
     import { goto } from '$app/navigation';
 
     import store from '$lib/js/store.svelte.js';
-    import { txt } from '$lib/js/toolbox.js';
+    import { txt } from '$lib/js/tools.js';
     import Form, { validator, CheckBox, DateInput, EmailInput, NumberInput, PasswordInput, RangeInput, RingInput, Status, TextInput } from '$lib/cmp/form/Form.svelte';
     import Submit from '$lib/cmp/form/Submit.svelte';
-    import { User } from '$lib/js/user.svelte.js';
+    import { User } from '$lib/js/model.js';
+
+    let ctx = getContext( 'ctx' );
 
     const State = { LOGIN:10, LOGGEDIN:11, FAILED:12, FORGOT:20, FORGOTTEN:21, LOGOUT:30, LOGGEDOUT:31}
 
-    let state = $state( store.user ? State.LOGOUT : State.LOGIN );
+    let state = $state( ctx.user ? State.LOGOUT : State.LOGIN );
 
     let email    = $state( null );
     let password = $state( null );
