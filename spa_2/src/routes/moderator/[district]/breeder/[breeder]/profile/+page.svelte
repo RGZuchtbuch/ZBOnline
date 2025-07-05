@@ -1,26 +1,20 @@
 <script>
-	import { getContext } from 'svelte';
 	import { page } from '$app/state';
-	import store from '$lib/js/store.svelte.js';
+	import { ctx } from '$lib/js/store.svelte.js';
 	import Profile from '$lib/cmp/breeder/profile.svelte';
-	import {Breeder} from '$lib/js/breeder.svelte.js';
-	import {District} from '$lib/js/model/federation.svelte.js';
-//	import api from '$lib/js/api.js.obs';
-	import { txt } from '$lib/js/toolbox.js';
+	import { txt } from '$lib/js/tools.js';
 
 	let { data } = $props();
-	let breeder  = $state( data.breeder );
-	let district = $state( data.district );
+
+	console.log( 'BP', data );
 
 	$effect( async () => {
-		breeder = await Breeder.load( +page.params.breeder, +page.params.district );
-		district = await District.load( +page.params.district );
-		setHeader( breeder );
+		setHeader( data.breeder, data.district );
 	})
 
-	function setHeader( breeder ) {
-		const title = `Mitgliedsdaten für Züchter ${txt(breeder.firstname)} ${txt(breeder.infix)} ${txt(breeder.lastname)}`;
-		const menu = {
+	function setHeader( breeder, district ) {
+		ctx.header.title = `Mitgliedsdaten für Züchter ${txt(breeder.firstname)} ${txt(breeder.infix)} ${txt(breeder.lastname)}`;
+		ctx.header.menu = {
 			trail: [
 				{ name:'Home',              href:'/' },
 				{ name:'Obmann',            href:'/moderator' },
@@ -36,12 +30,10 @@
 				{name: 'Stämme', href: '/moderator/' + district.id + '/breeder/' + breeder.id + '/pair'},
 			],
 		}
-		store.title = title; // to set after loading
-		store.menu = menu;
 	}
 
 
 
 </script>
 
-<Profile {breeder} {district} />
+<Profile breeder={data.breeder} district={data.district} />

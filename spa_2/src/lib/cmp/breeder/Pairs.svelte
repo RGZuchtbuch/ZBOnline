@@ -1,28 +1,28 @@
 <script>
 	import { page } from '$app/state';
 	import { fade, fly, slide } from 'svelte/transition';
-	import store from '$lib/js/store.svelte.js';
+	import { ctx, store } from '$lib/js/store.svelte.js';
 
 	let { breeder, district, pairs, year } = $props();
-	let authorized = $derived( store.user && store.user.admin )
+	let authorized = $derived( ctx.user && ctx.user.admin )
 
-	$inspect( 'BPs', breeder, district, pairs );
+	$inspect( 'BPs', breeder, district, pairs, year );
 
 </script>
 
-{#if breeder && district && pairs && year}
+{#if breeder && district && pairs}
 	<!--h2 class='header'>Alle Artikel zum Zuchtbuch</h2-->
 	<!--h3 class=''>{breeder.firstname}</h3-->
 	{#if authorized}
-		<div class='flex flex-row justify-end'>
-			<a href={`${page.url.href}/0`}>[+]</a>
+		<div class='flex flex-row justify-end pt-2'>
+			<a href={`${page.url.href}/pair/0`} title='Stammm/Paar hinzufügen'>[+]</a>
 		</div>
 	{/if}
 
 	{#if pairs.length > 0}
 		{#each pairs as pair, i}
 			<li class='flex flex-row gap-x-2'>
-				<a class='grow' href={`${page.url.href}/${pair.id}`} >
+				<a class='grow' href={`${page.url.href}/pair/${pair.id}`} >
 					<div class='w-8 text-right'>{i+1}</div>
 					<div class='w-2'>:</div>
 					<div class='w-8 text-right'>{pair.year}</div>

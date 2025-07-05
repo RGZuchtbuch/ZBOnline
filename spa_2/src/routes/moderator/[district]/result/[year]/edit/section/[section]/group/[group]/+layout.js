@@ -1,4 +1,4 @@
-import {Result} from '$lib/js/result.svelte.js';
+import {Result} from '$lib/js/model/result.svelte.js';
 import store from '$lib/js/store.svelte.js';
 import { invalidate, invalidateAll } from '$app/navigation';
 

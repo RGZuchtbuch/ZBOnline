@@ -223,7 +223,7 @@ class Result
 			$breedResult = self::formatResult( $breedResult );
 			$colorResults = model\Result::forColorsResult($districtId, $breedId, $year, $group );
 			$colorResults = self::formatResults( $colorResults );
-			$response->getBody()->write(json_encode([ 'breed'=>$breedResult, 'colors'=>$colorResults, 'query' => $query ], JSON_UNESCAPED_SLASHES));
+			$response->getBody()->write(json_encode( [ 'results' => [ 'breed'=>$breedResult, 'colors'=>$colorResults, 'query' => $query ] ], JSON_UNESCAPED_SLASHES));
 			return $response;
 		} else if( is_numeric( $districtId ) && is_numeric( $year ) ) { // per district and year view like for moderater
 			$results = model\Result::forDistrictYear($districtId, $year);

@@ -1,6 +1,6 @@
 <script>
-    import { invalidate, invalidateAll } from '$app/navigation';
-    import { Result } from '$lib/js/result.svelte.js';
+    import { invalidate } from '$app/navigation';
+    import model from '$lib/js/model.js';
     import Form, { Status, NumberInput, validator } from '$lib/cmp/form/Form.svelte';
     //import NumberInput from '../../common/form/input/NumberInput.svelte';
     //import FormStatus from '../../common/form/Status.svelte';
@@ -47,13 +47,13 @@
         console.log( 'RState', result, resultState );
         let response = null;
         if( resultState.breeders > 0 ) { // valid entry
-            response = await Result.save( resultState );
+            response = await model.Result.save( resultState );
         } else { // delete if no breeders count given
             if( resultState.id > 0 ) {
-                response = await Result.delete( resultState.id );
+                response = await model.Result.delete( resultState.id );
             }
         }
-        await invalidate( 'results' ); // make results page reload data
+        //await invalidate( 'results' ); // make results page reload data
         return response;
 
     }

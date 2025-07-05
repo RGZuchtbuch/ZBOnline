@@ -1,29 +1,37 @@
 <script>
 	import { page } from '$app/state';
-	import { ctx } from '$lib/js/store.svelte.js';
-	import ArticleCmp from '$lib/cmp/article/Article.svelte';
+	import { ctx, store } from '$lib/js/store.svelte.js';
+	import Article from '$lib/cmp/article/Article.svelte';
+
+	let { data } = $props();
+
+	$effect( async () => {
+		ctx.article = data.article
+	})
+	//ctx.article = $derived( data.article );
 
  	$effect( async () => {
- 		setHeader( page.url );
- 	})
-//
-	function setHeader( url ) {
-		if( ctx.article ) {
-			ctx.header.title = ctx.article.title; // to set after loading
-			ctx.header.menu  = {
+		ctx.header = {
+			title : ctx.article.title,
+			menu : {
 				trail: [
-					{name: 'Home', href: '/'},
-					{name: 'Info', href: '/article'},
-					{name: 'Beitrag', href: url.href},
+					{name: 'Start', href: '/'},
+					{name: 'Beiträge', href: '/article'},
+					{name: ctx.article.title, href: null},
 				],
-				options: [],
-			}
-		}
-	}
+				options: [
+					{name: 'Beiträge', href: '/article'},
+					{name: 'Verbände', href: '/federation'},
+					{name: 'Standard', href: '/standard'},
+					{name: 'Leistungen', href: '/report'},
+				],
+			},
+		};
+ 	});
 
 
 </script>
 
 {#if ctx.article}
-	<ArticleCmp article={ctx.article} />
+	<Article article={ctx.article} />
 {/if}

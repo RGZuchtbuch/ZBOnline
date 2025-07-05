@@ -3,29 +3,19 @@
 
     import { onMount } from 'svelte';
     import { fade, fly, slide } from 'svelte/transition';
-    import { ctx } from '$lib/js/store.svelte.js'
+    import { ctx, store } from '$lib/js/store.svelte.js'
 
     import Header from '$lib/cmp/Header.svelte';
     import Menu from '$lib/cmp/Menu.svelte';
     import Title from '$lib/cmp/Title.svelte';
-    import {Federation, Standard, User} from '$lib/js/model.js';
+    import model from '$lib/js/model.js';
 
     let { children, data } = $props();
 
+    // user handled in model/user.js : ctx.user = data.user;
+    ctx.standard = data.standard;
+    ctx.federation = data.federation;
 
-    onMount( async () => {
-        const response = await Promise.all( [
-            Federation.load(),
-            Standard.load(),
-            User.load()
-        ] );
-
-        ctx.federation = response[0];
-        ctx.standard = response[1];
-        ctx.user = response[2];
-    });
-
-    $inspect( 'F',  ctx.standard );
 
 </script>
 
@@ -34,11 +24,9 @@
 <Menu />
 <Title />
 
-{#if ctx.federation && ctx.standard }
     <div class='screen-scroll-y content' in:fade={{duration:1500}}>
        {@render children()}
     </div>
-{/if}
 
 <style>
     .content {

@@ -1,26 +1,32 @@
 <script>
 	import { page } from '$app/state';
-	import store from '$lib/js/store.svelte.js';
+	import { ctx } from '$lib/js/store.svelte.js';
 
 	import Standard from '$lib/cmp/standard/Standard.svelte';
 
+	let { data } = $props();
+
 	$effect( () => {
-		setHeader( page.url );
+		setHeader( data.standard );
 	})
 
-	function setHeader( page ) {
-		const title = 'BDRG Rassegeflügel Standard';
-		const menu = {
-			trail: [
-				{name: 'Start', href: '/'},
-				{name: 'Standard', href: '/standard'},
-			],
-			options: [],
-		};
-		store.title = title;
-		store.menu  = menu;
+	function setHeader( standard ) {
+		ctx.header = {
+			title: 'BDRG Rassegeflügel Standard',
+			menu: {
+				trail: [
+					{name: 'Start', href: '/'},
+					{name: 'Standard', href: '/standard'},
+				],
+				options: [
+					{name: 'Beiträge', href: '/article'},
+					{name: 'Verbände', href: '/federation'},
+					{name: 'Leistungen', href: '/report'},
+				],
+			},
+		}
 	}
 </script>
 
-<Standard standard={store.standard}/>
+<Standard standard={data.standard}/>
 

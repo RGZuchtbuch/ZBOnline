@@ -1,8 +1,8 @@
 <script>
 	import { fade, slide } from 'svelte/transition';
-	import { dec, txt } from '$lib/js/toolbox.js';
+	import { dec, txt } from '$lib/js/tools.js';
 	import { CheckBox, NumberInput, TextInput, Select, Status, validator } from '$lib/cmp/form/Form.svelte';
-	import store from '$lib/js/store.svelte.js';
+	import { ctx, store } from '$lib/js/store.svelte.js';
 
 	let { pair=$bindable() } = $props();
 
@@ -41,7 +41,7 @@
 					<NumberInput class='w-20' label='Schauleistung' value={ dec( pair.showGrade, 1 ) } disabled />
 				</div>
 			{/if}
-			<CheckBox label='Obmann Ok' title='Vom Obmann begutachtet !' bind:value={pair.accepted} disabled={ pair.name === null || store.user.moderator.length === 0 }/>
+			<CheckBox label='Obmann Ok' title='Vom Obmann begutachtet !' bind:value={pair.accepted} disabled={ pair.name === null || ctx.user.moderator.length === 0 }/>
 			<CheckBox label='Löschen' title='Nur wenn Name leer ist !' bind:value={pair.delete} disabled={ pair.name }/>
 		</div>
 	</div>

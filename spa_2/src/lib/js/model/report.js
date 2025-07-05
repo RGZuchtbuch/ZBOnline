@@ -1,30 +1,28 @@
 import api from '$lib/js/server.js';
 
-export class Report {
-	static async load( params ) {
-		const query = toQuery( params );
-		console.log( 'Load report', query );
+export default class Report {
+	static async query( args ) {
+//		const query = toQuery( params );
+		console.log( 'Load report', args );
 		//const args = extractQuery( page.url );
-		if( query && query.district && query.year ) {
-			const data = await Promise.all( [
-				api.get(  `/api/2/report`, { target:'chart', ...query }),
-				api.get(  `/api/2/report`, { target:'map',   ...query }),
-				api.get(  `/api/2/report`, { target:'trend', ...query }),
-				api.get(  `/api/2/report`, { target:'table', ...query }),
+		if( args && args.district && args.year ) { // must haves
+			const response = await Promise.all( [
+				api.get(  `/api/2/report`, { target:'chart', ...args }),
+				api.get(  `/api/2/report`, { target:'map',   ...args }),
+				api.get(  `/api/2/report`, { target:'trend', ...args }),
+				api.get(  `/api/2/report`, { target:'table', ...args }),
 			]);
-			console.log('Promises loaded', data);
+			console.log('Promises loaded', response);
 
-			return { chart:data[0].report, map:data[1].report, trend:data[2].report, table:data[3].report };
+			return {
+				chart:response[0].report,
+				map:response[1].report,
+				trend:response[2].report,
+				table:response[3].report,
+			};
 		}
 		return null;
 	}
-// async function getPromise( target, query ) {
-// 	return api.report.get( Object.assign( { target:target }, query ) );
-// }
-	// function addToQuery( query, key, value ) {
-// 	if( value ) query[ key ] = value; // only if > 0
-// }
-
 }
 
 function toQuery( params ) {

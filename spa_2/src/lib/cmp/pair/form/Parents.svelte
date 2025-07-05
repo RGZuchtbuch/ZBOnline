@@ -1,8 +1,8 @@
 <script>
 	import {fade, slide} from 'svelte/transition';
-	import store from '$lib/js/store.svelte.js';
+	import { ctx, store } from '$lib/js/store.svelte.js';
 	import { NumberInput, RingInput, Select, TextInput, validator } from '../../form/Form.svelte';
-	import {dec} from '$lib/js/toolbox.js';
+	import {dec} from '$lib/js/tools.js';
 	import {onMount} from 'svelte';
 
 	import ParentLayer from './Parent.Layer.svelte';

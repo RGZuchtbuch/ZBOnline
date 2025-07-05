@@ -1,67 +1,76 @@
 <script>
 	import { fade, slide } from 'svelte/transition';
-	import { goto } from '$app/navigation';
+	import {goto, invalidate} from '$app/navigation';
 	import { page } from '$app/state';
-	import store from '$lib/js/store.svelte.js';
+	import { cfg, ctx, store } from '$lib/js/store.svelte.js';
 	import { dec, txt } from '$lib/js/tools.js';
-	import {Select} from '$lib/cmp/form/Form.svelte';
+	import { Select } from '$lib/cmp/form/Form.svelte';
 	import AOC from './results/input/AOC.svelte';
 	import Breed from './results/input/Breed.svelte';
+	import {onDestroy} from 'svelte';
 
-	let { district, year, section, group, breeds, data } = $props();
+	let { district, year, section, group, results, standard } = $props();
 
-	let authorized = $derived( data.user && ( data.user.id === data.district.moderator.id || data.user.admin ) ); // can edit
+	$inspect( 'S', section );
+
+	let authorized = $derived( ctx.user && ( ctx.user.id === district.moderator.id || ctx.user.admin ) ); // can edit
 
 	let years = []; // for select
 	for( let year=+( new Date().getFullYear() )+1; year>=1980; year-- ) years.push( year );
 
 	function onYearChange( event ) {
 		const year = event.target.value;
-		//let url = new URL( page.url );
-		//url.searchParams.set( 'year', year );
-		//goto( url.href );
-		const href = `/moderator/${data.district.id}/result/${year}/edit/section/${data.section.id}/group/${data.group}`;
-		goto( href );
+		let url = new URL( page.url );
+		url.searchParams.set( 'year', year );
+		goto( url.href );
+		//const href = `/moderator/${data.district.id}/result/${year}/edit/section/${data.section.id}/group/${data.group}`;
+		//goto( href );
 	}
 
 	function onSectionChange( event ) {
 		const sectionId = event.target.value;
-		//let url = new URL( page.url );
-		//url.searchParams.set( 'section', section.id );
-		//goto( url.href );
-		const href = `/moderator/${data.district.id}/result/${data.year}/edit/section/${sectionId}/group/${data.group}`;
-		goto( href );
 
+		let url = new URL( page.url );
+		url.searchParams.set( 'section', sectionId );
+		goto( url.href );
+		//const href = `/moderator/${data.district.id}/result/${data.year}/edit/section/${sectionId}/group/${data.group}`;
+		//goto( href );
 	}
 	function onGroupChange( event ) {
 		const group = event.target.value;
-		const href = `/moderator/${data.district.id}/result/${data.year}/edit/section/${data.section.id}/group/${group}`;
-		//let url = new URL( page.url );
-		//url.searchParams.set( 'group', group );
-		//goto( url.href );
+		//const href = `/moderator/${data.district.id}/result/${data.year}/edit/section/${data.section.id}/group/${group}`;
+		let url = new URL( page.url );
+		url.searchParams.set( 'group', group );
+		goto( url.href );
 	}
 
-	$inspect( 'RE b', data );
+	onDestroy( async () => {
+		await invalidate( 'results' ); // make results page reload data
+	})
+
 
 </script>
 
-{#if district && group && section && year }
+das
+
+{#if district && year && section && group }
+	ook
 	<div class='flex flex-row border border-gray-400 bg-gray-50 p-2 gap-x-4 justify-center' in:fade>
 		<span class='py-3 font-bold'>Leistungen eingeben für </span>
-		<Select class='' label='Jahr' value={data.year} onchange={onYearChange}>
+		<Select class='' label='Jahr' value={year} onchange={onYearChange}>
 			{#each years as y}
 				<option value={y}>{y}</option>
 			{/each}
 		</Select>
 
-		<Select label="Sparte" value={data.section.id} onchange={onSectionChange} title='Sparte zum Eingeben'>
-			{#each store.standard.rootSections as section}
+		<Select label="Sparte" value={section.id} onchange={onSectionChange} title='Sparte zum Eingeben'>
+			{#each standard.rootSections as section}
 				<option value={section.id}>{section.name}</option>
 			{/each}
-			<option value={store.aocSection.id}>{store.aocSection.name}</option>
+			<option value={cfg.aocSection.id}>{store.aocSection.name}</option>
 		</Select>
 
-		<Select class='w-16' label="ZB Gruppe" value={data.group} onchange={onGroupChange} disabled={section && section.id === 5 } title='Zuchtbuchgruppe I, II oder III'>
+		<Select class='w-16' label="ZB Gruppe" value={group} onchange={onGroupChange} disabled={section && section.id === 5 } title='Zuchtbuchgruppe I, II oder III'>
 			{#each store.groups as group}
 				<option value={group}>{group}</option>
 			{/each}
@@ -70,13 +79,13 @@
 
 	<div class ='flex flex-row bg-gray-50' in:fade>
 		<p class='grow info'>
-			Leistungsdaten gesamt eingabe per Sparte und Gruppe
+			Leistungsdaten gesamt eingabe per Sparte und Gruppe für den Verband
 		</p>
 	</div>
 {/if}
 
-{#if data.breeds}
-	{#if data.section.id === 9999}
+{#if results}
+	{#if section.id === 9999} <!-- AOC -->
 		<!-- div>
 			<AocCreate {data}/>
 			DB {data.breeds.length}
@@ -85,11 +94,12 @@
 				<AocResult section={data.section} {breed} {data}/>
 			{/each}
 		</div -->
-		<AOC {data} />
+		dsa
+		<AOC />
 	{:else}
 		<div>
-			{#each data.breeds as breed}
-				<Breed district={data.district} year={data.year} group={data.group} {breed} {data} />
+			{#each results as breed}
+				<Breed {district} {year} {section} {group} {breed} />
 			{/each}
 		</div>
 	{/if}

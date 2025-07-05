@@ -1,7 +1,7 @@
 <script>
 	import {onMount} from 'svelte';
 	import {fade, slide} from 'svelte/transition';
-	import { dec } from '$lib/js/toolbox.js';
+	import { dec } from '$lib/js/tools.js';
 	import { DateInput, NumberInput, RingInput, Select, TextInput, validator } from '../../form/Form.svelte';
 
 	let { pair=$bindable() } = $props();

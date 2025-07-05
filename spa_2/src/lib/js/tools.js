@@ -91,3 +91,41 @@ export function calcColor( min, max, value, alpha = 1, blue = 0 ) {
 }
 
 
+export let argsBuilder = {
+
+	init : () => {
+		return {};
+	},
+
+	setNumber : (args, url, key, init) => {
+		if (url.searchParams.has(key)) {
+			args[key] = +url.searchParams.get(key);
+		} else if (init) {
+			args[key] = +init;
+		}
+	},
+
+	setString : (args, url, key, init) => {
+		if (url.searchParams.has(key)) {
+			args[key] = url.searchParams.get(key);
+		} else if (init) {
+			args[key] = init;
+		}
+	},
+}
+
+export function setArgsNumber(args, url, key, init) {
+	if (url.searchParams.has(key)) {
+		args[key] = +url.searchParams.get(key);
+	} else if (init) {
+		args[key] = +init;
+	}
+}
+
+export function setArgsString (args, url, key, init) {
+	if (url.searchParams.has(key)) {
+		args[key] = url.searchParams.get(key);
+	} else if (init) {
+		args[key] = init;
+	}
+}

@@ -2,33 +2,40 @@
 
 	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
-	import store from '$lib/js/store.svelte.js';
-	import { txt } from '$lib/js/toolbox.js';
-	import { Breeder } from '$lib/js/breeder.svelte.js';
-	import { District } from '$lib/js/model/federation.svelte.js';
-	import BreederCmp from '$lib/cmp/breeder/Breeder.svelte';
+	import { ctx } from '$lib/js/store.svelte.js';
+	import { txt } from '$lib/js/tools.js';
+	import model from '$lib/js/model.js';
 
-	let breeder  = $state( null );
-	let district = $state( null );
+	//import Breeder from '$lib/cmp/breeder/Breeder.svelte';
+	import Pairs from '$lib/cmp/breeder/Pairs.svelte';
 
-	if( +page.params.breeder === 0 ) { // new
-		goto( `${page.url.href}/profile`);
-	} else {
-		goto( `${page.url.href}/pair`);
-	}
+	let { data } = $props();
+
+	console.log( 'B', data.breeder );
+
+	const district = $state( data.district )
+	const breeder = $state( data.breeder );
+	const year = $state( data.year );
+
+
+	// if( +page.params.breeder === 0 ) { // new
+	// 	goto( `${page.url.href}/profile`);
+	// } else {
+	// 	goto( `${page.url.href}/pair`);
+	// }
 
 	$effect(async () => {
-		breeder = await Breeder.load( +page.params.breeder, +page.params.district );
-		district = await District.load( +page.params.district );
-		setHeader();
+		setHeader( data.breeder, data.district );
 	})
 
 
-	function setHeader() {
-		const title = breeder.id===0 ?
+	function setHeader( breeder, district ) {
+		ctx.header.title =
+			breeder.id===0 ?
 			'Neu' :
 			`Zuchter ${breeder.firstname} ${txt(breeder.infix)} ${breeder.lastname} im ${district.name}`;
-		const menu = {
+
+		ctx.header.menu = {
 			trail: [
 				{name: 'Home', href: '/'},
 				{name: 'Obmann', href: '/moderator'},
@@ -42,20 +49,16 @@
 				},
 			],
 			options: [
-				{name: 'Stämme', href: '/moderator/' + district.id + '/breeder/' + breeder.id + '/pair'},
+//				{name: 'Stämme', href: '/moderator/' + district.id + '/breeder/' + breeder.id + '/pair'},
 				{name: 'Mitglied', href: '/moderator/' + district.id + '/breeder/' + breeder.id + '/profile'},
 			],
 		}
-		store.title = title; // to set after loading
-		store.menu  = menu;
 	}
-
-	$inspect( 'B', breeder );
 
 </script>
 
-{#if breeder}
-	<BreederCmp {breeder} {district} />
+{#if data.breeder && data.pairs}
+	<Pairs breeder={data.breeder} district={data.district} pairs={data.pairs} year={data.year} />
 {/if}
 
 

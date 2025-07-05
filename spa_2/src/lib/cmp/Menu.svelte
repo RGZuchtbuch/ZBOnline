@@ -1,36 +1,34 @@
 <script>
-	import {getContext} from 'svelte';
 	import { page } from '$app/state';
 	import { fade, fly, slide } from 'svelte/transition';
 	import { ctx } from '$lib/js/store.svelte.js';
 
 </script>
 
-
-<div class='flex flex-row border border-teal-400 bg-teal-200 print:hidden' >
-	{#if ctx.header.menu}
-		<nav class='grow flex flex-row pl-20 items-center' in:fade>
-			{#each ctx.header.menu.trail as step, i}
-				{#if i>0} / {/if}
-				{#key step.name}
-					<div class='flex flex-row'>
+{#if ctx && ctx.header && ctx.header.title && ctx.header.menu }
+	<div class='flex flex-row border border-teal-400 bg-teal-200 print:hidden' >
+		<nav class='grow flex flex-row'>
+			<nav class='flex flex-row px-4 items-center gap-x-0.0 pl-32'>
+				{#each ctx.header.menu.trail as step, i}
+					{#key step.name}
+						{#if i>0}➭{/if}
 						{#if i < ctx.header.menu.trail.length-1}
-							<a href={step.href} class='pr-1'>{step.name}</a>
+							<a href={step.href} class='pr-1' title='Zurück'> {step.name}</a>
 						{:else}
-							<a href={step.href} class='pr-1 font-bold'>{step.name}</a>
+							<span class='pr-1 font-bold' title='Hier bin ich' in:fade={{axis:'x', duration:500}}> {step.name}</span>
 						{/if}
-					</div>
-				{/key}
-			{/each} :
-			<div class='flex flex-row px-4 items-center gap-x-2' in:slide={{axis:'x', duration:500}}>
+					{/key}
+				{/each} :
+			</nav>
+			<span class='grow'></span>
+			<nav class='flex flex-row px-4 items-center gap-x-2 pr-32' in:slide={{axis:'x', duration:500}}>
 				{#each ctx.header.menu.options as option, i}
 					{#key option.name}
-						<a href={option.href}>{option.name}</a>
+						<a href={option.href} title='Wählen'>{option.name}</a>
 					{/key}
 				{/each}
-			</div>
+			</nav>
 		</nav>
-	{/if}
 
-</div>
-
+	</div>
+{/if}

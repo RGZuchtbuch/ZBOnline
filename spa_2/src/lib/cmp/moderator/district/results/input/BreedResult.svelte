@@ -1,14 +1,7 @@
 <script>
-
-//    import validator   from '$lib/cmp/form/validator.js';
-
+    import model from '$lib/js/model.js';
+    import {invalidate} from '$app/navigation';
     import Form, { Status, NumberInput, validator } from '$lib/cmp/form/Form.svelte';
-    import { Result } from '$lib/js/result.svelte.js';
-    //import NumberInput from '../../common/form/input/NumberInput.svelte';
-    //import FormStatus from '../../common/form/Status.svelte';
-
-    import AddResultRow from './AddResultRow.svelte'
-import {invalidate} from '$app/navigation';
 
     let { section, breed, result } = $props();
 
@@ -49,13 +42,13 @@ import {invalidate} from '$app/navigation';
 
     async function onSubmit( event ) {
         console.log( 'Submit color result' );
-        await invalidate( 'results' ); // make results page reload data
+        //await invalidate( 'results' ); // make results page reload data
         if( data.breeders ) { // valid entry
             result.brood.eggs = result.brood.broods * 2; // 2 eggs per brood expected
-            return await Result.save( data );
+            return await model.Result.save( data );
         } else { // delete if no breeders count given
             if( data.id > 0 ) {
-                return await Result.delete( data.id );
+                return await model.Result.delete( data.id );
             }
         }
     }

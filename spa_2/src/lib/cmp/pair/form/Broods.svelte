@@ -4,7 +4,7 @@
 	import BroodLayer from './Brood.Layer.svelte';
 	import BroodPigeon from './Brood.Pigeon.svelte';
 	import aab from '$lib/js/aab.js';
-	import {dec} from '$lib/js/toolbox.js';
+	import {dec} from '$lib/js/tools.js';
 
 	let { pair=$bindable(), standard } = $props();
 

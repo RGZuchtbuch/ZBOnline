@@ -3,7 +3,7 @@
     import { draw, fade } from 'svelte/transition';
     import { goto } from '$app/navigation';
     import { page } from '$app/state';
-    import {calcColor, dec, gpsToPx, pct} from '$lib/js/toolbox.js';
+    import {calcColor, dec, gpsToPx, pct} from '$lib/js/tools.js';
     import BdrgSVG from './BdrgSVG.svelte';
     import Select from '$lib/cmp/form/input/Select.svelte';
 
@@ -18,6 +18,7 @@
     const MAXBUBBLE = 35;
 
     let { report, typeId } = $props();
+
     console.log( 'Map type id', typeId );
 
     let canvas = null;

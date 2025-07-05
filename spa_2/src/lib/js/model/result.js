@@ -2,7 +2,7 @@
 import api from '$lib/js/server.js';
 import {invalidate} from '$app/navigation';
 
-export class Result {
+export default class Result {
 	static async load( id ){
 		console.log( "Load result", id );
 		const data = await api.get(`/api/2/result/${id}` );
@@ -11,11 +11,12 @@ export class Result {
 
 	static async query( args ) {
 		const response = await api.get( `/api/2/result`, args );
-		return response; // should have for breed and for colors
+		return response.results; // should have for breed and for colors
 	}
 
 	static async save( result ){
 		console.log( 'Save result', result );
+		//invalidate( 'result' ); // not here as it reloads the list, closing the colors
 		if( result.id > 0 ) { // existing
 			const data = await api.put( `/api/2/result/${result.id}`, result );
 			if( data && data.id > 0 ) {
@@ -33,6 +34,7 @@ export class Result {
 	}
 	static async delete( id ){
 		console.log( 'Delete result', id );
+		//invalidate( 'result' );
 		const data = await api.delete( `/api/2/result/${id}` );
 		return data && data.deleted;
 	}

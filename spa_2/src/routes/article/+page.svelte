@@ -4,28 +4,32 @@
 	import Articles from '$lib/cmp/article/Articles.svelte';
 
 
-//	let { data } = $props();
+	let { data } = $props();
+
+	$effect( () => {
+		ctx.articles = data.articles;
+	}); // in context to avoid warnings on wrong updates.
+	//ctx.articles = $derived( data.articles );
 
 	$effect( async ()=>{
-		console.log( 'Article set header' );
-		setHeader( page.url );
+		ctx.header = {
+			title : `Beiträge zum BDRG Zuchtbuch [${ctx.articles.length}]`,
+			menu : {
+				trail: [
+					{name: 'Start', href: '/'},
+					{name: 'Beiträge', href: '/article'},
+				],
+				options: [
+					{name: 'Verbände', href: '/federation'},
+					{name: 'Standard', href: '/standard'},
+					{name: 'Leistungen', href: '/report'},
+				],
+			}
+		};
 	});
 
-	function setHeader( url ) {
-		const title = 'Beiträge zum BDRG Zuchtbuch';
-		const menu = {
-			trail : [
-				{ name:'Start',  href:'/' },
-				{ name:'Beiträge',   href:'/article' },
-			],
-			options : [],
-		};
-		ctx.header.title = title;
-		ctx.header.menu  = menu;
-	}
-
 </script>
-G
+
 {#if ctx.articles}
 	<Articles articles={ctx.articles} />
 {/if}

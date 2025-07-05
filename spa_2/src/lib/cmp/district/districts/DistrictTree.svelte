@@ -2,11 +2,11 @@
 	import { email_icon, link_icon } from '$lib/cmp/icons.svelte';
 	import { name } from '$lib/cmp/snippets.svelte';
 
-	let { district } = $props();
+	let { root } = $props();
 </script>
 
 <section>
-	{#if district}
+	{#if root}
 		<div class='flex flex-row header sticky top-0'>
 			<div class='district'>Verbände </div>
 			<div class='moderator'>Obmann</div>
@@ -15,7 +15,7 @@
 		</div>
 
 		<ul>
-			{@render row( district, 0 )}
+			{@render row( root, 0 )}
 		</ul>
 	{/if}
 </section>

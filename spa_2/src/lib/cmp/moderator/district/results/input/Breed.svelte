@@ -1,23 +1,24 @@
 <script>
     import { slide } from 'svelte/transition';
-    import { Result } from '$lib/js/Result.svelte.js';
+    import model from '$lib/js/model.js';
     import ColorResult from './ColorResult.svelte';
     import BreedResult from './BreedResult.svelte';
 
 //    let { breed, district, group, section, title, year, map } = $props();
-    let { data, breed } = $props();
+    let { breed, district, group, year } = $props();
+
     let open = $state( false );
-    let breedResults = $state( null ); // { breed, colors }
+    let results = $state( null ); // { breed, colors }
 
     $effect( () => {
-        if( data ) open = false; // close when data changes
+        if( breed ) open = false; // close when data changes
     })
 
     $effect( async () => {
         if( open ) {
-            console.log( 'Year', data.year );
-            breedResults = null;
-            breedResults = await Result.query( { district:data.district.id, year:data.year, group:data.group, breed:breed.id })
+            console.log( 'Year', breed );
+            results = null;
+            results = await model.Result.query( { district:district.id, year:year, group:group, breed:breed.id })
         }
     })
     let hasResults = $derived( breed.count > 0 );
@@ -69,14 +70,14 @@
         {/if}
     </div>
 
-    {#if open && breedResults }
+    {#if open && results }
         <div transition:slide>
             {#if breed.layer }
-                {#each breedResults.colors as color}
-                    <ColorResult result={color} {data}/>
+                {#each results.colors as color}
+                    <ColorResult result={color}/>
                 {/each}
             {:else}
-                <BreedResult result={breedResults.breed} {data}/>
+                <BreedResult result={results.breed}/>
             {/if}
         </div>
     {/if}

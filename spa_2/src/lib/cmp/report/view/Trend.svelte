@@ -2,7 +2,7 @@
 //    import { createEventDispatcher } from 'svelte';
     import { goto } from '$app/navigation';
     import { page } from '$app/state';
-    import { dec, pct } from '$lib/js/toolbox.js';
+    import { dec, pct } from '$lib/js/tools.js';
     import { BarController, BarElement, CategoryScale, Chart, Colors, LinearScale, Tooltip } from 'chart.js';
 
     let { report, typeId=2 } = $props();

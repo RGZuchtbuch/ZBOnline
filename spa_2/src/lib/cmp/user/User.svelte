@@ -2,13 +2,12 @@
     import {getContext, onMount} from 'svelte';
     import { goto } from '$app/navigation';
 
-    import store from '$lib/js/store.svelte.js';
+    import { ctx } from '$lib/js/store.svelte.js';
     import { txt } from '$lib/js/tools.js';
+    import model from '$lib/js/model.js';
+
     import Form, { validator, CheckBox, DateInput, EmailInput, NumberInput, PasswordInput, RangeInput, RingInput, Status, TextInput } from '$lib/cmp/form/Form.svelte';
     import Submit from '$lib/cmp/form/Submit.svelte';
-    import { User } from '$lib/js/model.js';
-
-    let ctx = getContext( 'ctx' );
 
     const State = { LOGIN:10, LOGGEDIN:11, FAILED:12, FORGOT:20, FORGOTTEN:21, LOGOUT:30, LOGGEDOUT:31}
 
@@ -32,7 +31,7 @@
 
     async function onLogin( event ) {
         console.log('Logging in', email );
-        let success = await User.login( email, password );
+        let success = await model.User.login( email, password );
         if( success ) {
             state = State.LOGGEDIN;
             await goto( '/' ); // home for now
@@ -45,13 +44,13 @@
 
     async function onForgot( event ) {
         console.log('Send Reset', email);
-        User.forgot( email );
+        model.User.forgot( email );
         state = State.FORGOTTEN;
     }
 
     async function onLogout( event ) {
         state = State.LOGGEDOUT;
-        await User.logout();
+        await model.User.logout();
         await goto( '/' ); // home for now
     }
 
@@ -85,7 +84,7 @@
     {:else if state === State.FORGOTTEN }
         <h3>Wunderbar, du bekommst eine email mit Resetlink :)</h3>
     {:else if state === State.LOGOUT }
-        <div>Züchter {store.user.firstname} {store.user.infix} {store.user.lastname}</div>
+        <div>Züchter {ctx.user.firstname} {ctx.user.infix} {ctx.user.lastname}</div>
         <div>Abmelden vom RGZuchtbuch</div>
         <Form initialState='valid' onsubmit={onLogout} {disabled} >
             <Submit class='w-96' values={ values} />

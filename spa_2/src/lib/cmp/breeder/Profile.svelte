@@ -1,6 +1,6 @@
 <script>
-    import store from '$lib/js/store.svelte.js';
-    import { Breeder } from '$lib/js/breeder.svelte.js';
+    import { ctx } from '$lib/js/store.svelte.js';
+    import model from '$lib/js/model.js';
     import Form, { CheckBox, DateInput, EmailInput, NumberInput, TextInput, Status, validator } from '$lib/cmp/form/Form.svelte';
     import {goto} from '$app/navigation';
     import TextArea from '$lib/cmp/form/input/TextArea.svelte';
@@ -22,27 +22,13 @@
 
     async function onSubmit() {
         if( breeder.start && breeder.firstname && breeder.lastname && breeder.club ) {
-            return await Breeder.save( breeder );
+            return await model.Breeder.save( breeder );
         } else if( breeder.id > 0 && breeder.firstname === null && breeder.lastname === null && breeder.delete ) {
             console.log( 'Delete', breeder.firstname, 'TODO' );
         }
-        // if( pair.breederId && pair.year && pair.name && pair.group && pair.sectionId && pair.breedId && pair.colorId ) {
-        //     return await Pair.save( pair );
-        //     //if( saved ) changed = false;
-        // } else if( pair.id > 0 && pair.name === null && pair.delete ){ // name is null and delete
-        //     console.log( 'Delete' ) // TODO pair delete
-        //     const ok = Pair.delete( pair.id );
-        //     if( ok ) {
-        //         await goto(`/moderator/${pair.districtId}/breeder/${pair.breederId}/pair`);
-        //     }
-        //     return ok;
-        // }
     }
 
     $effect( () => {
-        // if( pair ) {
-        //     pair.delete = pair.name ? false : pair.delete;
-        // }
     })
 </script>
 

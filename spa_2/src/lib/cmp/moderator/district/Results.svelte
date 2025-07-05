@@ -1,12 +1,15 @@
 <script>
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
-	import store from '$lib/js/store.svelte.js';
+	import { ctx } from '$lib/js/store.svelte.js';
 	import { dec, txt } from '$lib/js/tools.js';
 
+	import { Select } from '$lib/cmp/form/Form.svelte';
 	import ResultsView from './results/ResultsView.svelte';
 
-	let { data } = $props();
+	let { district, year, results } = $props();
+
+	console.log( 'Y', year );
 
 //	let edit = $state( false );
 //	let authorized = $derived( store.user && ( store.user.id === district.moderator.id || store.user.admin ) ); // can edit
@@ -18,22 +21,17 @@
 	}
 
 	function onYearChange( event ) {
-		const year = event.target.value;
-		const href=`/moderator/${data.district.id}/result/${year}`;
-		goto( href );
-		//let url = new URL( page.url );
-		//url.searchParams.set( 'year', year );
-		//goto( url.href );
+		//year = event.target.value;
+		let url = new URL( page.url ); // page.url is immutable
+		url.searchParams.set( 'year', event.target.value );
+		goto( url.href );
 	}
 
-	$inspect( 'RResults', data.results );
-//	$inspect( 'Results', edit, district.moderator.id, store.user.id, authorized );
-
 </script>
-
-{#if data && data.results}
+Y {year}
+{#key year && results}
 	<h3 class=''>Leistungen für
-		<select class='border border-teal-600 border-1 bg-inherit' value={data.year} onchange={onYearChange}>
+		<select class='w-24 border border-teal-600 border-1 bg-inherit error=null' value={year} onchange={onYearChange}>
 			{#each years as y}
 				<option value={y}>{y}</option>
 			{/each}
@@ -43,13 +41,13 @@
 	<div class ='flex flex-row'>
 		<p class='grow info'>
 			Leistungen können als gesamt Leistung für einem Verband eingegeben werden, oder als einzelne Meldungen beim Züchter.<br>
-			Hier eine Liste von alle Eingaben in alle Gruppen (I, II, III).
+			Hier eine Liste von alle Eingaben in alle Zuchtbuchgruppen (I, II, III).
 		</p>
 	</div>
 
-	<ResultsView {data} />
+	<ResultsView {district} {year} {results} />
 
-{/if}
+{/key}
 
 <style>
 	h3 {

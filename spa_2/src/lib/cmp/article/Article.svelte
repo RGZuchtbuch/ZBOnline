@@ -4,13 +4,15 @@
 	import { navigating } from '$app/state';
 	import { goto, invalidate, invalidateAll} from '$app/navigation';
 	import { ctx } from '$lib/js/store.svelte.js';
+	import model from '$lib/js/model.js';
 	import Form, { CheckBox, NumberInput, Status, TextArea, TextInput, validator } from '$lib/cmp/form/Form.svelte';
-	import { Article } from '$lib/js/model.js';
+	import {onDestroy} from 'svelte';
 
 	let { article } = $props();
 
 	let edit = $state( false );
 	let remove = $state( false );
+	let changed = false; // for invalidating load article
 
 
 	const validate = {
@@ -26,25 +28,37 @@
 
 	async function onSubmit( event ) {
 		console.log( 'Submit article' );
+
 		if( article.title ) {
-			return Article.save( article );
+			changed = true;
+			return model.Article.save( article );
 		} else if( ! article.titel && remove && confirm('Lösschen?') ){ // name is null and delete
-			Article.delete( article.id );
+			changed = true;
+			model.Article.delete( article.id );
 			goto( '/article' ); // back to list, no return
 		}
 	}
 
+	onDestroy( () => {
+		if( changed ) {
+			//console.log('onDestroy invalidate');
+			//invalidate('article');
+		}
+	})
+
 </script>
 
-{#if ctx.article}
+{#if article}
 
 	<!--h2 class='header'>
 		<span class='grow'>{article.title}</span>
 	</h2-->
-	<div class='flex flex-row items-center justify-end gap-x-2 py-2'>
+	<div class='flex flex-row items-center justify-end gap-x-2 p-2'>
 		<span class='meta'>{article.author}, {article.modified}</span>
 		{#if authorized }
-			<CheckBox label='Ändern' error='' bind:value={edit} />
+			<span class='print:hidden'>
+				<CheckBox label='Ändern' error='' bind:value={edit} />
+			</span>
 		{/if}
 	</div>
 
@@ -75,7 +89,7 @@
 		{@html article.html}
 	</p>
 
-	<div class='footer'>
+	<div class='footer print:hidden'>
 		<a href='/article'>← Zurück zu den Beiträgen</a>
 	</div>
 {/if}

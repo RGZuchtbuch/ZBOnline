@@ -1,7 +1,7 @@
 <script>
 	import {page} from '$app/state';
 	import store from '$lib/js/store.svelte.js';
-	import { Result } from '$lib/js/result.svelte.js';
+	import { Result } from '$lib/js/model/result.svelte.js';
 	import ResultsEditCmp from '$lib/cmp/moderator/district/ResultsEdit.svelte';
 	import { invalidate, invalidateAll } from '$app/navigation';
 	import {onDestroy, onMount} from 'svelte';

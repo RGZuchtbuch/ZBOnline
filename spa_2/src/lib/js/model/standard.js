@@ -1,10 +1,10 @@
 import api from '$lib/js/server.js'; // get post put delete
 
-
+let standard = null; //await Standard.load();
 
 export default class Standard {
 	static async load() {
-		let standard = null
+		standard = null
 		const data= await api.get(`/api/2/standard` );
 		if( data && data.standard ) {
 			standard = structuredStandardTree( data.standard ); // { root, sections, breed, colors }
@@ -12,18 +12,16 @@ export default class Standard {
 		}
 		return standard;
 	}
+
+	static async loadRootSection( id ) {
+		return standard.rootSections.find( item => item.id === id );
+	}
+
+	static async loadRootSections(){
+		return standard.rootSections;
+	}
 };
 
-
-// async function getStandardPromise() {
-// 	const response = await api.standard.get();
-// 	if( response ) {
-// 		const standard = structuredStandardTree(response.standard); // { root, sections, breed, colors }
-// 		standard.rootSections = getRootSections( standard )
-// 		return standard;
-// 	}
-// 	return null;
-// }
 
 // main sections to enter results for
 function getRootSections( standard ) {

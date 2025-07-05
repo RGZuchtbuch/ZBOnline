@@ -1,6 +1,6 @@
 import api from '$lib/js/server.js';
 
-export class Breeder {
+export default class Breeder {
 	static async load( id, districtId ){
 		console.log( "Load breeder", id, districtId );
 		if( id === 0 ) { // new breeder

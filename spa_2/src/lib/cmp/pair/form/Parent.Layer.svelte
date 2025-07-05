@@ -2,10 +2,10 @@
 	import {onMount} from 'svelte';
 	import {fade, slide} from 'svelte/transition';
 	import aab from '$lib/js/aab.js';
-	import store from '$lib/js/store.svelte.js';
-	import { Pair } from '$lib/js/pair.svelte.js';
+	import { ctx, store } from '$lib/js/store.svelte.js';
+	import model from '$lib/js/model.js';
 
-	import { dec } from '$lib/js/toolbox.js';
+	import { dec } from '$lib/js/tools.js';
 	import {validator, Label, NumberInput, RingInput, Select, TextInput } from '$lib/cmp/form/Form.svelte';
 	import { toRing } from '$lib/cmp/form/validator.js';
 
@@ -32,7 +32,7 @@
 		let newRing = toRing( parent.ring ); // decode input
 		if( newRing ) {
 			if( newRing.year !== ringYear ) {
-				parentPairs = await Pair.query({breeder: pair.breeder.id, year: newRing.year});
+				parentPairs = await model.Pair.query({breeder: pair.breeder.id, year: newRing.year});
 				if (!parentPairs.find(pair => pair.id === parent.parentsPairId)) { // not in list
 					parentPair = null;
 					parent.parentsPairId = null;

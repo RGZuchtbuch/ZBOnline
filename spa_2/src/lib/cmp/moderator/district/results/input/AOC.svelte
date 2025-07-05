@@ -1,19 +1,17 @@
 <script>
 	import Form, {NumberInput, Select, Status, Submit, TextInput, validator} from '$lib/cmp/form/Form.svelte';
 	import AocResult from './AocResult.svelte';
-	import { Result } from '$lib/js/result.svelte.js';
+	import model from '$lib/js/model.js';
+	import { ctx } from '$lib/js/store.svelte.js';
 
 	let { data } = $props();
-	// export let results;
-	// export let districtId;
-	// export let year;
 
 	let section = $state( null );
 	let breeds = $derived( section && section.breeds ? section.breeds : [] );
 	let breed = $state( null );
 	let aocColor = $state( null );
 
-	let results = $state( data.breeds );
+	let results = $state( ctx.results ); //data.breeds );
 
 
 	const validate = {
@@ -42,7 +40,7 @@
 
 	function newResult() {
 		return {
-			id:0, districtId:data.district.id, group:data.group, year:data.year,
+			id:0, districtId:ctx.district.id, group:ctx.group, year:ctx.year,
 			breeder:null, pairId:null,
 			breeders:null, pairs:null,
 			sectionId:section.id, breedId:breed.id, colorId:null, aocColor:'AOC '+aocColor,
@@ -57,7 +55,7 @@
 		const name = 'AOC: '+aocColor;
 		const result = newResult();
 		results = [ result, ...results ];
-		data.breeds = [ result, ...data.breeds ];
+		ctx.breeds.push( result );// = [ result, ...ctx.breeds ];
 		console.log( 'DB', results );
 		return true;
 	}
@@ -73,7 +71,7 @@
 	<h2 class='text-center'>AOC Klasse, Farbenschlag hinzufügen</h2>
 	<div class='flex flex-row gap-x-2 justify-center'>
 		<Select label='Sparte' bind:value={section} validator={validate.id}>
-			{#each data.standard.rootSections as section}
+			{#each ctx.standard.rootSections as section}
 				<option value={section}>{section.name}</option>
 			{/each}
 		</Select>

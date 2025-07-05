@@ -1,0 +1,15 @@
+import {page} from '$app/state';
+import model from '$lib/js/model.js';
+
+export async function load( { depends, params } ) {
+	console.log( 'load pair', params );
+	depends( 'breeder' ); // as i'm not using the svelte fetch
+	depends ( 'pair' );
+
+
+	const response = await Promise.all( [
+		model.Pair.load( +params.pair, +params.breeder, +params.district ) // breeder for creating new
+	] );
+	console.log( 'Pair Load', response );
+	return { pair:response[0] };
+}

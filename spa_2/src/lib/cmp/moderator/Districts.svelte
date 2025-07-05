@@ -1,8 +1,7 @@
 <script>
 	import { slide } from 'svelte/transition';
-	import store from '$lib/js/store.svelte.js';
-	import {goto} from '$app/navigation';
-	//import { getContext } from 'svelte';
+	import { goto } from '$app/navigation';
+	import { ctx } from '$lib/js/store.svelte.js';
 
 	let { districts } = $props();
 	let year = new Date().getFullYear()-1;
@@ -15,7 +14,7 @@
 		<ol in:slide>
 			{#each districts as district, i}
 				<li class='flex flex-row items-center'>
-					<a href={`/moderator/${district.id}/result/${year}`} title='Verband verwalten'>
+					<a href={`/moderator/${district.id}/result`} title='Verband verwalten'>
 						<div class='w-6 text-right '>{i+1}.</div>
 						<div>{district.name}</div>
 					</a>

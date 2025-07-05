@@ -1,4 +1,4 @@
-import {daysBetween} from '$lib/js/toolbox.js';
+import { daysBetween } from '$lib/js/tools.js';
 
 export default {
 	lay: ( eggs, should ) => {

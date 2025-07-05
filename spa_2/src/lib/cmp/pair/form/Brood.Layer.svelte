@@ -1,7 +1,7 @@
 <script>
 	import {fade, slide} from 'svelte/transition';
 	import aab from '$lib/js/aab.js';
-	import { dec, pct, txt } from '$lib/js/toolbox.js';
+	import { dec, pct, txt } from '$lib/js/tools.js';
 	import { DateInput, Label, NumberInput, RingInput, Select, TextInput, validator } from '../../form/Form.svelte';
 
 	let { brood=$bindable(), pair, standard, i } = $props();

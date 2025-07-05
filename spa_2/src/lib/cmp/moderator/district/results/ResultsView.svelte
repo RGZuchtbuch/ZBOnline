@@ -2,15 +2,15 @@
 	import { fade, slide } from 'svelte/transition';
 	import { dec, txt } from '$lib/js/tools.js';
 
-	let { data } = $props();
+	let { district, year, results } = $props();
 
-	console.log( 'RV', data.results )
+	console.log('RV', results );
 
 </script>
 
-{#if data.results}
+{#if district && year && results}
 	<div class='flex flex-col' in:fade>
-		{#each data.results.sections as section}
+		{#each results.sections as section}
 			<div class='flex flex-row section items-end'>
 				<span class='grow pl-2'>{section.name}</span>
 				<span class='flex flex-col'>

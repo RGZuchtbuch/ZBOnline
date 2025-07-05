@@ -3,6 +3,8 @@ import { ctx } from '$lib/js/store.svelte.js'
 
 // private
 
+let federation = null;
+
 function districtLookup( federation ) {
 	const districts = {};
 	addDistrict( federation, districts ); // create district lookup by id
@@ -17,15 +19,18 @@ function addDistrict( district, districts ) { // recursive for sections
 
 export default class Federation {
 
-	static async load( fetch ) {
-		let federation = null; // { bdrg object, districts }
-		const data = await api.get(`/api/2/district`, { rootId:1 } ); // root is BDRG #1
-		if( data && data.root ) {
-			federation = data.root; // district tree
-			federation.districts = districtLookup( federation ); // list of districts by id
+	static async load() {
+		if( federation === null ) {
+			//federation = null; // { bdrg object, districts }
+			const data = await api.get(`/api/2/district`, {rootId: 1}); // root is BDRG #1
+			if (data && data.root) {
+				federation = data.root; // district tree
+				federation.districts = districtLookup(federation); // list of districts by id
+			}
 		}
 		return federation; // null if failed
 	}
+
 }
 
 export class District {

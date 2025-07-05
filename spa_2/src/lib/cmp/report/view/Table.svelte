@@ -2,7 +2,7 @@
     import {fade} from 'svelte/transition';
     import {getContext, onMount, setContext, untrack} from 'svelte';
     import { page } from '$app/state';
-    import { dec, pct } from '$lib/js/toolbox.js';
+    import { dec, pct } from '$lib/js/tools.js';
 
     let { report, district, year } = $props();
 

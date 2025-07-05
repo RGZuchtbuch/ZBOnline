@@ -2,10 +2,6 @@ import { browser } from '$app/environment'; // to find window
 import {jwtDecode} from 'jwt-decode';
 import api from '$lib/js/server.js';
 import { ctx } from '$lib/js/store.svelte.js';
-//import {getContext} from 'svelte'; // cannot be here
-
-//let ctx = getContext( 'ctx' );
-
 
 export default class User {
 	static async load() {
@@ -24,7 +20,7 @@ export default class User {
 			ctx.user = null;
 			browser && window.sessionStorage.removeItem( 'token' );
 		}
-		return store.user;
+		return ctx.user;
 	}
 	static async forgot( email ) { // forgot password
 		const response = await api.post( '/api/2/user/forgot', { email:email } );
@@ -38,6 +34,8 @@ export default class User {
 	}
 };
 
+
+// privates
 function tokenToUser( token ) {
 	let user = null;
 	try {

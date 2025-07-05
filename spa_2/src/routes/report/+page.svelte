@@ -1,37 +1,40 @@
 <script>
-    import { page } from '$app/state';
-	import store from '$lib/js/store.svelte.js';
-    import {Report} from '$lib/js/report.svelte.js';
+	import { ctx } from '$lib/js/store.svelte.js';
+    import Report from '$lib/cmp/report/Report.svelte';
 
-    import ReportCmp from '$lib/cmp/report/Report.svelte';
+	let { data } = $props();
 
-	//let { data } = $props();
-
-	let report = $state( null );
-
-	console.log('In Report');
+	console.log( 'RD', data );
 
 	$effect( async () => {
-		report = await Report.load( page.url.searchParams );
-		setHeader( page.url );
+		setHeader( data.report );
 	});
 
-	function setHeader( data ) {
-		const title = 'Die Zuchtleistungen';
-		const menu = {
-			trail: [
-				{name: 'Start', href: '/'},
-				{name: 'Leistungen', href: '/report'},
-			],
-			options: [],
-		};
-		store.title = title;
-		store.menu  = menu;
+	function setHeader( report ) {
+		ctx.header = {
+			title: 'Die Zuchtleistungen',
+			menu: {
+				trail: [
+					{name: 'Start', href: '/'},
+					{name: 'Leistungen', href: '/report'},
+				],
+				options: [
+					{name: 'Beiträge', href: '/article'},
+					{name: 'Verbände', href: '/federation'},
+					{name: 'Standard', href: '/standard'},
+				],
+			},
+		}
 	}
 
 </script>
 
-<ReportCmp {report} />
+<Report
+	args={data.args}
+	report={data.report}
+    federation={data.federation}
+	standard={data.standard}
+/>
 
 
 

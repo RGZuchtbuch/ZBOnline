@@ -5,18 +5,22 @@
     let { data } = $props();
     let state    = getContext( 'state' );
 
-    state.title = 'Die Zuchtleistungen';
-    state.menu = {
-        trail : [
-            { name:'Start',       href:'/' },
-            { name:'Leistungen', href:'/result' },
-        ],
-        options : [
-            { name:'Karte',       href:'/result/map/year/2024/type/2' },
-            { name:'Trend',       href:'/result/trend/district/1/type/2' },
-            { name:'Tabelle',       href:'/result/table/district/1/year/2024' },
-        ],
-    };
+    $effect( () => {
+        ctx.header = {
+            title : 'Die Zuchtleistungen',
+            menu : {
+                trail: [
+                    {name: 'Start', href: '/'},
+                    {name: 'Leistungen', href: '/result'},
+                ],
+                options: [
+                    {name: 'Karte', href: '/result/map/year/2024/type/2'},
+                    {name: 'Trend', href: '/result/trend/district/1/type/2'},
+                    {name: 'Tabelle', href: '/result/table/district/1/year/2024'},
+                ],
+            },
+        }
+    });
 
 </script>
 
