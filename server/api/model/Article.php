@@ -29,8 +29,8 @@ class Article
     public static function new( string $author, string $title, string $html, $modifierId ) : ? int {
         $args = get_defined_vars();
         $stmt = Query::prepare( '
-            INSERT INTO article ( author, title, `html`, modifierId )
-            VALUES (:author, :title, :html, :modifierId )
+            INSERT INTO article ( author, level, title, `html`, modifierId )
+            VALUES (:author, :level, :title, :html, :modifierId )
         ' );
         return Query::insert( $stmt, $args ); // returns id
     }

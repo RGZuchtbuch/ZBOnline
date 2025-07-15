@@ -7,9 +7,12 @@ export default class Article {
 
 	static async load( id ){
 		console.log( "Load article", id );
-		let article = null;
-		const data = await api.get(`/api/2/article/${id}` );
-		return data && data.article ? data.article : null;
+		if( id === 0 ) {
+			return { id:0, level:1, author:null, title:null, html:null }
+		} else {
+			const data = await api.get(`/api/2/article/${id}`);
+			return data && data.article ? data.article : null;
+		}
 	}
 	static async query( args ){
 		console.log( 'Load articles', args );
@@ -18,7 +21,7 @@ export default class Article {
 	}
 	static async save( article ){
 		console.log( 'Save article' );
-		invalidate( 'article' );
+
 		if( article.id === 0 ) { // new
 			const data = await api.post( `/api/2/article`, article );
 			if( data && data.id > 0 ) {
@@ -31,6 +34,8 @@ export default class Article {
 				return true;
 			}
 		}
+		await invalidate( 'article' );
+		await invalidate( 'articles' );
 		return false;
 	}
 	static async delete( id ){

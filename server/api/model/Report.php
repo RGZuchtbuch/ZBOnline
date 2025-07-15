@@ -279,8 +279,8 @@ class Report extends Query
                 :districtId AS districtId, :year AS `year`, 
                 sectionId, sectionName, sectionOrder, layers,
                 subsectionId, subsectionName, subsectionOrder, 
-                id AS resultId, breedId, breedName, colorId, colorName, aocColor,
-
+                id AS resultId, breedId, breedName, layShould, layWeightShould, colorId, colorName, aocColor,
+#				id AS resultId, breedId, breedName, colorId, colorName, aocColor,
                 # breeders for district and breeder results
                 CAST( SUM( breeders ) AS UNSIGNED ) AS breeders, 
                 # pairs for pigeons       
@@ -289,11 +289,11 @@ class Report extends Query
                 CAST( SUM( layDames ) AS UNSIGNED ) AS layDames, # TODO needed for now, should go
                 # lay eggs
                 CAST( SUM( IF( layEggs > 0, breeders, 0 ) ) AS UNSIGNED ) AS layBreeders,  
-                CAST( SUM( IF( layEggs > 0, breeders * layShould, 0 ) ) / SUM( IF( layEggs > 0, breeders, 0 ) ) AS DOUBLE ) AS layShould,  
-                CAST( SUM( IF( layEggs > 0, breeders * layEggs / layShould, 0 ) ) / SUM( IF( layEggs > 0, breeders, 0 ) ) AS DOUBLE ) AS layEggs,  
+#                CAST( SUM( IF( layEggs > 0, breeders * layShould, 0 ) ) / SUM( IF( layEggs > 0, breeders, 0 ) ) AS DOUBLE ) AS layShould,  # avg should
+                CAST( SUM( IF( layEggs > 0, breeders * layEggs / layShould, 0 ) ) / SUM( IF( layEggs > 0, breeders, 0 ) ) AS DOUBLE ) AS layEggs, # avg has
                 # layweight
                 CAST( SUM( IF( layWeight > 0, breeders, 0 ) ) AS UNSIGNED ) AS layWeightBreeders,  
-                CAST( SUM( IF( layWeight > 0, breeders * layWeightShould, 0 ) )             / SUM( IF( layWeight > 0, breeders, 0 ) ) AS DOUBLE ) AS layWeightShould, 
+#                CAST( SUM( IF( layWeight > 0, breeders * layWeightShould, 0 ) ) / SUM( IF( layWeight > 0, breeders, 0 ) ) AS DOUBLE ) AS layWeightShould, 
                 CAST( SUM( IF( layWeight > 0, breeders * layWeight / layWeightShould, 0 ) ) / SUM( IF( layWeight > 0, breeders, 0 ) ) AS DOUBLE ) AS layWeight,  
                  # brood all
                 # CAST( SUM( IF( broodEggs > 0, breeders, 0 ) ) AS UNSIGNED ) AS broodBreeders,
@@ -347,7 +347,6 @@ class Report extends Query
             GROUP BY subsectionOrder, breedName, colorName
             ORDER BY subsectionOrder, breedName, MAX(aocColor), colorName
         ");
-
 		return Query::selectArray( $stmt, $args );
 	}
 

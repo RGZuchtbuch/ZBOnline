@@ -2,7 +2,7 @@
 	import {fade} from 'svelte/transition';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
-//	import store from '$lib/js/store.svelte.js';
+	import { ctx } from '$lib/js/store.svelte.js';
 	import model from '$lib/js/model.js';
 
 	import Filter from './view/Filter.svelte';
@@ -14,8 +14,6 @@
 
 	let { args, report, federation, standard } = $props();
 
-	console.log( 'F', args );
-
 	const types = { // what to report
 		2: {id: 2, name: 'Zuchten'},
 		10: {id: 10, name: 'Legeleistung'},
@@ -25,7 +23,7 @@
 	};
 
 	//let type     = $derived( types[ +page.url.searchParams.get('type') || 2 ] );
-	let district = $state( federation.districts[ args.district ] );
+	let district = $derived( federation.districts[ args.district ] );
 	//let year     = $derived( +page.url.searchParams.get('year') || new Date().getFullYear()-1 );
 
 	function onTypeChange( event ) {

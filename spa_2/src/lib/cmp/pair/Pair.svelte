@@ -5,7 +5,7 @@
 	import { ctx, store } from '$lib/js/store.svelte.js';
 	import model from '$lib/js/model.js';
 
-	import Form from '$lib/cmp/form/Form.svelte';
+	import Form, { CheckBox } from '$lib/cmp/form/Form.svelte';
 	import PairHead from './form/PairHead.svelte';
 	import Breed from './form/Breed.svelte';
 	import Parents from './form/Parents.svelte';
@@ -15,6 +15,11 @@
 	import Notes from './form/Notes.svelte';
 
 	let { pair } = $props();
+
+	let edit = $state( false );
+	let remove = $state( false );
+	let changed = false; // for invalidating load article
+	let authorized = $derived( ctx.user && ( ctx.user.moderator.includes( pair.districtId ) || ctx.user.admin ) ); // can edit
 
 	async function onSubmit() {
 		console.log( 'Pair Submit' );
@@ -38,17 +43,24 @@
 
 </script>
 
-{#if store.standard && pair}
-	{pair.year}
-	<Form class='flex flex-col p-4 gap-y-4' autosubmit={true} onsubmit={onSubmit}>
+{#if ctx.standard && pair}
+	<div class='flex flex-row items-center justify-end gap-x-2 p-2 print:hidden'>
+		<span class='meta'></span>
+		{#if authorized }
+			<span class='print:hidden'>
+				<CheckBox label='Ändern' error='' bind:value={edit} />
+			</span>
+		{/if}
+	</div>
+	<Form class='flex flex-col p-4 gap-y-4' autosubmit={true} onsubmit={onSubmit} disabled={!edit}>
 		<PairHead bind:pair />
-		<Breed    bind:pair standard={store.standard} />
+		<Breed    bind:pair standard={ctx.standard} />
 		<fieldset class='flex flex-col border-0 gap-y-4' disabled={pair.sectionId === null}>
 			<Parents  bind:parents={pair.parents} bind:pair />
 			{#if pair.sectionId !== 5}
-				<Lay  bind:pair standard={store.standard} />
+				<Lay  bind:pair standard={ctx.standard} />
 			{/if}
-			<Broods   bind:pair standard={store.standard} />
+			<Broods   bind:pair standard={ctx.standard} />
 			<Show     bind:pair />
 			<Notes    bind:pair={pair} />
 		</fieldset>

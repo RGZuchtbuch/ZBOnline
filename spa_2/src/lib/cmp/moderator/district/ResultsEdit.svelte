@@ -11,8 +11,6 @@
 
 	let { district, year, section, group, results, standard } = $props();
 
-	$inspect( 'S', section );
-
 	let authorized = $derived( ctx.user && ( ctx.user.id === district.moderator.id || ctx.user.admin ) ); // can edit
 
 	let years = []; // for select
@@ -51,10 +49,7 @@
 
 </script>
 
-das
-
 {#if district && year && section && group }
-	ook
 	<div class='flex flex-row border border-gray-400 bg-gray-50 p-2 gap-x-4 justify-center' in:fade>
 		<span class='py-3 font-bold'>Leistungen eingeben für </span>
 		<Select class='' label='Jahr' value={year} onchange={onYearChange}>
@@ -94,8 +89,7 @@ das
 				<AocResult section={data.section} {breed} {data}/>
 			{/each}
 		</div -->
-		dsa
-		<AOC />
+		<AOC {district} {year} {group} />
 	{:else}
 		<div>
 			{#each results as breed}

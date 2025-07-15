@@ -11,7 +11,7 @@
 	// ☑ ⚑ ⚿ ⛔ ⏳ 😊 😲😕😪😈⚫
 </script>
 
-<span class='status {classname} {form.state}' title={titles[ form.state ]}> {value} </span>
+<span class='status {classname} {form.state} print:hidden' title={titles[ form.state ]}> {value} </span>
 
 <style>
 	.status {

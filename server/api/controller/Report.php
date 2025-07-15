@@ -114,6 +114,7 @@ class Report
 		$group      = $query[ 'group' ] ?? null;
 
 		$report = null;
+		$rows = null;
 		//print( $districtId.' '.$year.' '.$target);
 		if( $target ) {
 
@@ -135,7 +136,9 @@ class Report
 					break;
 				case 'table':
 					if( $districtId && $year ) {
-						$report = self::toReportTree( model\Report::forTable($districtId, $year) );
+						$rows = model\Report::forTable($districtId, $year);
+
+						$report = self::toReportTree( $rows );
 						//print_r( $report );
 					}
 					break;
@@ -143,7 +146,7 @@ class Report
 		}
 
 		if( $report ) {
-			$json = json_encode( [ 'report' => $report ], JSON_UNESCAPED_SLASHES );
+			$json = json_encode( [ 'report' => $report, 'rows'=>$rows ], JSON_UNESCAPED_SLASHES );
 			$response->getBody()->write( $json );
 			model\Cache::set( 'Report', $request->getUri()->getPath(), $request->getUri()->getQuery(), $json );
 			return $response;
@@ -177,8 +180,8 @@ class Report
 			}
 			if( $row[ 'breedId' ] !== $breedId ) { // next Breed
 				$breedId = $row[ 'breedId' ];
-				unset( $breed ); // to loose ref
-				$breed = [ 'id'=>$breedId, 'name'=>$row[ 'breedName' ], 'colors'=>[] ];
+				unset( $breed ); // to lose ref
+				$breed = [ 'id'=>$breedId, 'name'=>$row[ 'breedName' ], 'layEggs'=>$row['layShould'], 'layWeight'=>$row['layWeightShould'], 'colors'=>[] ];
 				$subsection[ 'breeds' ][] = & $breed; // new Breed array
 			}
 			$result = $row;

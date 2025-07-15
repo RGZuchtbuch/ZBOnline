@@ -1,8 +1,10 @@
 import model from '$lib/js/model.js';
 
 export async function load( { depends, fetch, params } ) {
-	depends( 'article' );
+	depends( 'articles' );
+
 	console.log( 'Loading Articles' );
+
 	const response = await Promise.all( [
 		model.Article.query()
 	] );

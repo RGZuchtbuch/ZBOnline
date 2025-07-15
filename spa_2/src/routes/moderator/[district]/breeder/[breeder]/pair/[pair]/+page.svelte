@@ -6,25 +6,28 @@
 
 	let { data } = $props();
 
-	let district = $state( data.district );
-	let breeder  = $state( data.breeder ); // make it reactive for the form etc
-	let pair     = $state( data.pair );
+	//let district = $state( data.district );
+	//let breeder  = $state( data.breeder ); // make it reactive for the form etc
+	//let pair     = $state( data.pair );
+
+	$effect( () => {
+		ctx.breeder = data.breeder;
+		ctx.district = data.district;
+		ctx.pair = data.pair;
+	})
 
 	$effect( async () => {
-		ctx.header.title = `Stamm ${pair.year}.${pair.name} von Züchter ${txt(breeder.firstname)} ${ txt(breeder.infix) } ${ txt(breeder.lastname) }`;
+		ctx.header.title = `Stamm ${ctx.pair.year}.${ctx.pair.name} von Züchter ${txt(ctx.breeder.firstname)} ${ txt(ctx.breeder.infix) } ${ txt(ctx.breeder.lastname) }`;
 		ctx.header.menu = {
 			trail : [
 				{name: 'Home', href: '/'},
 				{name: 'Obmann', href: '/moderator'},
-				{name: district.short,  href:`/moderator/${pair.districtId}` },
-				{name: 'Züchter', href: `/moderator/${pair.districtId}/breeder`},
+				{name: ctx.district.short,  href:`/moderator/${ctx.pair.districtId}` },
+				{name: 'Züchter', href: `/moderator/${ctx.pair.districtId}/breeder`},
 //				{name:`${breeder.firstname.charAt(0)}.${breeder.lastname.charAt(0)}`, href:`/moderator/${pair.districtId}/breeder/${pair.breederId}` },
-				{name:`${breeder.short}`, href:`/moderator/${pair.districtId}/breeder/${pair.breederId}` },
-				{name: 'Stämme', href: `/moderator/${data.pair.districtId}/breeder/${pair.breederId}`},
-				{
-					name: '' + pair.year % 100 + '.' + pair.name,
-					href: `/moderator/${pair.districtId}/breeder/${pair.breederId}/pair/${pair.id}`
-				},
+				{name:`${ctx.breeder.short}`, href:`/moderator/${ctx.pair.districtId}/breeder/$ctx.{pair.breederId}` },
+				{name: 'Stämme', href: `/moderator/${ctx.pair.districtId}/breeder/${ctx.pair.breederId}/pair`},
+				{name: `${ctx.pair.year % 100}.${ctx.pair.name}` },
 			],
 			options : [],
 		}
@@ -33,4 +36,4 @@
 </script>
 
 
-<Pair {pair} />
+<Pair pair={ctx.pair} />

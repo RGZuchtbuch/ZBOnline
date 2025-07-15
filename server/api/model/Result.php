@@ -522,7 +522,7 @@ class Result
 			WHERE
 				section.rootId = :sectionId
 #				AND result.pairId IS NULL
-				AND result.aocColor IS NULL
+#				AND result.aocColor IS NULL
 			GROUP BY breed.name
 			ORDER BY breed.name	
         ");
@@ -581,11 +581,38 @@ class Result
 					AND result.aocColor IS NULL
 			WHERE 
 				color.breedId = :breedId
-			ORDER BY color.name	
+			ORDER BY color.name		
         ");
 		return Query::selectArray( $stmt, $args );
 	}
 
+	public static function forAocColorsResult(int $districtId, int $breedId, int $year, string $group ) : array {
+		$args = get_defined_vars();
+
+		$stmt = Query::prepare("
+			SELECT 
+				section.rootId AS sectionId, result.breedId AS breedId, null AS colorId, null AS colorName,
+				result.districtId AS districtId, :year AS `year`,
+				result.id, pairId, :group AS `group`, 
+				aocColor, breeders, pairs, 
+				layDames, result.layEggs, result.layWeight,
+				broodEggs, broodFertile, broodHatched,
+				showCount, showScore				
+			FROM result
+			    LEFT JOIN breed ON breed.id = result.breedId
+			    LEFT JOIN section ON section.id = breed.sectionId
+			WHERE
+			    result.aocColor IS NOT NULL
+			    AND result.districtId=:districtId
+			    AND result.breedId=:breedId
+			    AND result.group=:group
+			    AND result.year=:year
+				AND result.pairId IS NULL
+				# AND result.colorId IS NULL
+			ORDER BY result.aocColor		
+        ");
+		return Query::selectArray( $stmt, $args );
+	}
 
 	// for editing district results per section, year, group special for aoc 'section'
 	public static function forAocColors(int $districtId, int $year, string $group ) : array {

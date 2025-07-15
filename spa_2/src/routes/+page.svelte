@@ -16,6 +16,7 @@
 					{name: 'Verbände', href: '/federation'},
 					{name: 'Standard', href: '/standard'},
 					{name: 'Leistungen', href: '/report'},
+					{name: 'Züchter', href: '/breeder'},
 				],
 			},
 		};

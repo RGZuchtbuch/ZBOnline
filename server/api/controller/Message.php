@@ -18,32 +18,32 @@ class Message
 {
 	public static function post( Request $request, Response $response, array $args ) : Response
 	{
-//		$requester = new Requester($request);
-//		if ($requester->isUser()) {
-			$body = $request->getParsedBody();
-			if ($body) {
-				if ($body['confirm'] === false) {
-					$districtId = $body['districtId'];
-					$district = model\District::get($districtId);
-					if ($district) {
-						$moderator = model\User::get($district['moderatorId']);
-						if ($moderator) {
-							$success = Message::send( $request, $moderator['email'], $body['from'], $body['name'], $body['subject'], $body['message']);
-							$response->getBody()->write(json_encode(['success' => $success], JSON_UNESCAPED_SLASHES));
-							return $response;
-						}
-						throw new HttpInternalServerErrorException( $request, 'Moderator not found' );
+		$body = $request->getParsedBody();
+		$to = $body['to'] ?? null;
+		$name = $body['name'] ?? null;
+		$email = $body['email'] ?? null;
+		$subject = $body['subject'] ?? null;
+		$message = $body['message'] ?? null;
+		if ($to && $name && $email && $subject && $message) {
+			$moderating = array_column(model\District::readForModerator($to), 'id'); // what districts to moderate
+			if (count($moderating) > 0) {
+				$breeder = model\Breeder::read($to);
+				if ($breeder && $breeder['email']) {
+					$success = Message::send($request, $breeder['email'], $email, $name, $subject, $message);
+					if( $success ) {
+						$response->getBody()->write(json_encode(['success' => $success], JSON_UNESCAPED_SLASHES));
+						return $response;
 					}
-					throw new HttpNotFoundException( $request, 'district not found');
+					throw new HttpInternalServerErrorException( $request, 'Could not send mail' );
 				}
-				throw new HttpNotFoundException( $request, 'assuming robot' );
+				throw new HttpNotFoundException($request, 'breeder not found');
 			}
-			throw new HttpBadRequestException( $request, 'Missing body' );
-//		}
-//		throw new HttpUnauthorizedException( $request, ' no way' );
+		}
+		throw new HttpBadRequestException($request, 'Wrong data provided');
 	}
 
-	/** other getters **/
+	/*************** helpers ***************/
+
 	public static function send( Request $request, string $to, string $from, string $name, string $subject, string $message ) : bool {
 		$mail = new PHPMailer( true );
 
@@ -59,14 +59,15 @@ class Message
 			$mail->Port       = MAIL_PORT;
 
 			//Recipients
-			$mail->setFrom( MAIL_SENDER );                       // Sender, look like must be MAIL_SENDER, not $from
-			$mail->addAddress( $to );                                   //Add a recipient
-			$mail->addReplyTo( $from, $name );
+			$mail->setFrom( MAIL_SENDER, 'RGZuchtbuch.de' ); // Sender, look like must be MAIL_SENDER, not $from
+			$mail->addAddress( $to );                                   // Add a recipient
+			$mail->addReplyTo( $from, $name );							// Add reply to
 
 			//Content
 			$mail->CharSet = "UTF-8";
 			$mail->isHTML(true);                                  //Set email format to HTML
-			$mail->Subject = 'RGZ: '.$subject;
+			$mail->Subject = 'RGZuchtbuch: '.$subject;
+			$message = 'Von '.$name.' &lt;'.$from.'&gt;'."\n\n".$message;
 			$mail->Body    = str_replace( "\n", "<br>", $message );
 			$mail->AltBody = str_replace( "\n", "\n\r", $message );
 			return $mail->send();

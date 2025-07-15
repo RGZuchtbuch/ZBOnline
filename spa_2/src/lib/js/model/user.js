@@ -8,7 +8,10 @@ export default class User {
 		let token = browser && window.sessionStorage.getItem('token'); // encoded
 		// store.user = tokenToUser( token );
 		// return store.user;
-		return tokenToUser( token );
+		let user = tokenToUser( token );
+		let date = Date.now()/1000;
+		console.log( 'user', user, date );
+		return user;
 	}
 	static async login ( email, password ) {
 		const response = await api.post( '/api/2/user/login', { email:email, password:password } );

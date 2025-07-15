@@ -14,5 +14,5 @@
 
 <fieldset class='flex flex-col border p-2' in:fade>
 	<legend>Notizen</legend>
-	<TextArea class='h-24' bind:value={pair.notes} />
+	<TextArea class='h-16' bind:value={pair.notes} />
 </fieldset>

@@ -217,15 +217,21 @@ class Result
 			}
 			$response->getBody()->write(json_encode( [ 'results'=>&$results, 'section'=>$sectionId ], JSON_UNESCAPED_SLASHES));
 			return $response;
-		} else if( is_numeric( $districtId ) && is_numeric($breedId) && is_numeric( $year ) && $group ) { // per breed edit
+		}
+
+		else if( is_numeric( $districtId ) && is_numeric($breedId) && is_numeric( $year ) && $group ) { // per breed edit
 			// for editing opened breeds, so breed for pigeons and colors for layers
 			$breedResult = model\Result::forBreedResult( $districtId, $breedId, $year, $group );
 			$breedResult = self::formatResult( $breedResult );
 			$colorResults = model\Result::forColorsResult($districtId, $breedId, $year, $group );
 			$colorResults = self::formatResults( $colorResults );
-			$response->getBody()->write(json_encode( [ 'results' => [ 'breed'=>$breedResult, 'colors'=>$colorResults, 'query' => $query ] ], JSON_UNESCAPED_SLASHES));
+			$aocColorResults = model\Result::forAocColorsResult($districtId, $breedId, $year, $group );
+			$aocColorResults = self::formatResults( $aocColorResults );
+			$response->getBody()->write(json_encode( [ 'results' => [ 'breed'=>$breedResult, 'colors'=>$colorResults, 'aocColors'=>$aocColorResults, 'query' => $query ] ], JSON_UNESCAPED_SLASHES));
 			return $response;
-		} else if( is_numeric( $districtId ) && is_numeric( $year ) ) { // per district and year view like for moderater
+		}
+
+		else if( is_numeric( $districtId ) && is_numeric( $year ) ) { // per district and year view like for moderater
 			$results = model\Result::forDistrictYear($districtId, $year);
 			$tree = self::treeResults($results);
 			$response->getBody()->write(json_encode(['results' => $tree], JSON_UNESCAPED_SLASHES));

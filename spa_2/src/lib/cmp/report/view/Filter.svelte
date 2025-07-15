@@ -100,7 +100,6 @@
 		goto( url.href );
 	}
 
-	console.log( 'AG', args.group, args.breed );
 </script>
 
 {#if federation && standard }

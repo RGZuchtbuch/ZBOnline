@@ -11,7 +11,6 @@
     let chart = null;
 
     $effect( () => {
-        console.log('Trend');
         updateTrend( report, typeId );
     });
 

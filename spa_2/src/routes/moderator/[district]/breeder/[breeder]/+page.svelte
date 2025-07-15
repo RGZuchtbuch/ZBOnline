@@ -4,19 +4,21 @@
 	import { goto } from '$app/navigation';
 	import { ctx } from '$lib/js/store.svelte.js';
 	import { txt } from '$lib/js/tools.js';
-	import model from '$lib/js/model.js';
-
-	//import Breeder from '$lib/cmp/breeder/Breeder.svelte';
 	import Pairs from '$lib/cmp/breeder/Pairs.svelte';
+
 
 	let { data } = $props();
 
 	console.log( 'B', data.breeder );
 
-	const district = $state( data.district )
-	const breeder = $state( data.breeder );
-	const year = $state( data.year );
+//	const district = $state( data.district )
+//	const breeder = $state( data.breeder );
+//	const year = $state( data.year );
 
+	$effect( () => {
+		ctx.breeder = data.breeder;
+		ctx.district = data.district;
+	})
 
 	// if( +page.params.breeder === 0 ) { // new
 	// 	goto( `${page.url.href}/profile`);
@@ -25,7 +27,7 @@
 	// }
 
 	$effect(async () => {
-		setHeader( data.breeder, data.district );
+		setHeader( ctx.breeder, ctx.district );
 	})
 
 
@@ -49,7 +51,7 @@
 				},
 			],
 			options: [
-//				{name: 'Stämme', href: '/moderator/' + district.id + '/breeder/' + breeder.id + '/pair'},
+				{name: 'Stämme', href: '/moderator/' + district.id + '/breeder/' + breeder.id + '/pair'},
 				{name: 'Mitglied', href: '/moderator/' + district.id + '/breeder/' + breeder.id + '/profile'},
 			],
 		}
@@ -57,8 +59,9 @@
 
 </script>
 
-{#if data.breeder && data.pairs}
-	<Pairs breeder={data.breeder} district={data.district} pairs={data.pairs} year={data.year} />
+{#if ctx.breeder}
+	Breeder info here
+	<!--Pairs breeder={data.breeder} district={data.district} pairs={data.pairs} year={data.year} /-->
 {/if}
 
 

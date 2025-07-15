@@ -1,5 +1,6 @@
 // ctx store for each layout.svelte to store loaded objects in.
 class Context {
+    args       = $state( null);
     article    = $state(null);
     articles   = $state(null);
     breed    = $state(null);
@@ -23,8 +24,8 @@ class Context {
 
 class Config {
 
-    federation = $state(null);
-    standard   = $state(null); // whole standard with sections, breeds and colors
+    // federation = $state(null);
+    // standard   = $state(null); // whole standard with sections, breeds and colors
 
     aocSection = $state( { id:9999, name:'AOC-Klasse', breeds:[] } );
     groups  = ['I', 'II', 'III'];

@@ -8,19 +8,17 @@
 	$effect( async () => {
 		ctx.article = data.article
 	})
-	//ctx.article = $derived( data.article );
 
  	$effect( async () => {
 		ctx.header = {
-			title : ctx.article.title,
+			title : ctx.article.title ? ctx.article.title : '?',
 			menu : {
 				trail: [
 					{name: 'Start', href: '/'},
 					{name: 'Beiträge', href: '/article'},
-					{name: ctx.article.title, href: null},
+					{name: ctx.article.title },
 				],
 				options: [
-					{name: 'Beiträge', href: '/article'},
 					{name: 'Verbände', href: '/federation'},
 					{name: 'Standard', href: '/standard'},
 					{name: 'Leistungen', href: '/report'},

@@ -111,8 +111,6 @@ class Router {
 		$app->put( '/2/article/{id:[0-9]+}', 	'App\controller\Article::put'); // only accept uint
 		$app->delete( '/2/article/{id:[0-9]+}', 	'App\controller\Article::delete'); // only accept uint
 
-
-
 		$app->get('/2/breed', 'App\controller\Breed::filter' );
 		$app->get('/2/breed/{id:[0-9]+}', 'App\controller\Breed::get' );
 		$app->get('/2/color', 'App\controller\Color::filter' );
@@ -125,6 +123,8 @@ class Router {
 
 		$app->get('/2/district', 'App\controller\District::filter' );
 		$app->get('/2/district/{id:[0-9]+}', 'App\controller\District::get' );
+
+		$app->post( '/2/message', 'App\controller\Message::post' );
 
 		$app->get('/2/pair', 'App\controller\Pair::filter' );
 		$app->get('/2/pair/{id:[0-9]+}', 'App\controller\Pair::read');

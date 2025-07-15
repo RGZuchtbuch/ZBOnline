@@ -1,7 +1,7 @@
 <script>
     import { invalidate } from '$app/navigation';
     import model from '$lib/js/model.js';
-    import Form, { Status, NumberInput, validator } from '$lib/cmp/form/Form.svelte';
+    import Form, { Status, NumberInput, TextInput, validator } from '$lib/cmp/form/Form.svelte';
     //import NumberInput from '../../common/form/input/NumberInput.svelte';
     //import FormStatus from '../../common/form/Status.svelte';
 
@@ -11,12 +11,11 @@
 
     let resultState = $derived( result );
     let hasResult = $derived( resultState.breeders > 0 );
-    let extended = $state( false ); //TODO remove ?
 
-    //const dispatch = createEventDispatcher();
+    // aocColor used for purging and onsubmit adding the AOC prefix
+    let aocColor = result.aocColor ? result.aocColor.substring(4) : null; // remove the AOC prefix
 
-    //result.sectionId = section.id;
-
+    // for validators
     const validate = {
         breeders     : (v) => validator(v).number().range( 1, 99999 ).orNull().isValid(),
         pairs        : (v) => validator(v).number().range( resultState.breeders, 99999 ).orNull().isValid(),
@@ -38,13 +37,10 @@
         }
     }
 
-    // function onToggleExtend( event ) {
-    //     extended = ! extended;
-    // }
-
     async function onSubmit( event ) {
         console.log( 'Submit color result' );
-        console.log( 'RState', result, resultState );
+
+        result.aocColor = aocColor ? 'AOC '+aocColor : null; // add prefix if aoc
         let response = null;
         if( resultState.breeders > 0 ) { // valid entry
             response = await model.Result.save( resultState );
@@ -55,20 +51,20 @@
         }
         //await invalidate( 'results' ); // make results page reload data
         return response;
-
     }
 
-    // function onChange( result ) {
-    //     console.log( 'Result', result );
-    //     dispatch( 'change', result );
-    // }
 </script>
 
 <Form class='flex flex-row bg-gray-50 px-2 gap-x-1 text-sm' autosubmit onsubmit={onSubmit}>
     <div class='w-4 ml-6'> &#10551; </div>
-    <div class='w-80 flex flex-row justify-between'>
-        <div class='' class:hasResult title={'Leistung ['+result.id+']'}> {resultState.colorName} {resultState.id}</div>
-        <!--button class='self-start w-6' type='button' title='Hinzufügen' on:click={onToggleExtend}>&#43;</button -->
+    <div class='w-80 flex flex-row '>
+        {#if resultState.colorId } <!-- Normal color -->
+            <div class='' class:hasResult title={'Leistung ['+result.id+']'}> {resultState.colorName} {resultState.id}</div>
+            <!--button class='self-start w-6' type='button' title='Hinzufügen' on:click={onToggleExtend}>&#43;</button -->
+        {:else} <!-- AOC -->
+            <span class='mt-1 mr-1'>AOC</span>
+            <TextInput class='w-64' bind:value={aocColor} title='AOC Farbenschlag' />
+        {/if}
     </div>
 
     <NumberInput class='w-14' bind:value={resultState.breeders} error='1..99999' title='Zahl der Zuchten/Züchter, leer lassen zum Löschen' validator={validate.breeders} />
@@ -94,10 +90,6 @@
 
     <Status class='w-4' />
 </Form>
-
-{#if extended}
-    <!--AddResultRow {sectionId} bind:result={result} on:add={onAdd}/-->
-{/if}
 
 
 <style>

@@ -9,98 +9,103 @@
 </script>
 
 {#if district && year && results}
-	<div class='flex flex-col' in:fade>
-		{#each results.sections as section}
-			<div class='flex flex-row section items-end'>
-				<span class='grow pl-2'>{section.name}</span>
-				<span class='flex flex-col'>
-					<span class='flex flex-row text-xs text-center'>
-						<span class='w-24'></span>
-						<span class='w-2 text-gray-400'>|</span>
+	{#if results.sections.length === 0}
+		<div class='text-center'>Leider noch keine Eingaben</div>
+	{:else}
+		<div class='flex flex-col' in:fade>
+			{#each results.sections as section}
+				<div class='flex flex-row section items-end'>
+					<span class='grow pl-2'>{section.name}</span>
+					<span class='flex flex-col'>
+						<span class='flex flex-row text-xs text-center'>
+							<span class='w-24'></span>
+							<span class='w-2 text-gray-400'>|</span>
 
-						{#if section.id === 5}
-							<span class='w-24'>-</span>
-						{:else}
-							<span class='w-24'>Legen</span>
-						{/if}
+							{#if section.id === 5}
+								<span class='w-24'>-</span>
+							{:else}
+								<span class='w-24'>Legen</span>
+							{/if}
 
-						<span class='w-2 text-gray-400'>|</span>
+							<span class='w-2 text-gray-400'>|</span>
 
-						<span class='w-48'>Bruten</span>
+							<span class='w-48'>Bruten</span>
 
-						<span class='w-2 text-gray-400'>|</span>
+							<span class='w-2 text-gray-400'>|</span>
 
-						<span class='w-24'>Schau</span>
+							<span class='w-24'>Schau</span>
 
-						<span class='w-2 text-gray-400'>|</span>
-					</span>
-					<span class='flex flex-row text-xs text-center'>
-						<span class='w-12'>Zuchten</span>
-						{#if section.id === 5}
-							<span class='w-12'>Paare</span>
-						{:else}
-							<span class='w-12'>Stämme</span>
-						{/if}
-
-						<span class='w-2 text-gray-400'>|</span>
-
-						{#if section.id === 5}
-							<span class='w-12'></span>
-							<span class='w-12'></span>
-						{:else}
-							<span class='w-12'>Eier</span>
-							<span class='w-12'>Gewicht</span>
-						{/if}
-
-						<span class='w-2 text-gray-400'>|</span>
-
-						{#if section.id === 5}
-							<span class='w-12'>Gelegt</span>
-							<span class='w-12'>-</span>
-							<span class='w-12'>Küken</span>
-							<span class='w-12'>Kü/Pa</span>
-						{:else}
-							<span class='w-12'>Eingel.</span>
-							<span class='w-12'>Befr.</span>
-							<span class='w-12'>Geschl.</span>
-							<span class='w-12'>-</span>
-						{/if}
-
-						<span class='w-2 text-gray-400'>|</span>
-
-						<span class='w-12'>Tiere</span>
-						<span class='w-12'>Pkt</span>
-
-						<span class='w-2 text-gray-400'>|</span>
-
-						<span class='w-8'>Zücht</span>
-					</span>
-				</span>
-			</div>
-			{#each section.breeds as breed}
-				<div class='flex flex-row pl-4'>
-					<sup class='w-4'>
-						{#if breed.result} {breed.result.group} {/if}
-					</sup>
-					<span class='grow'>{breed.name}</span>
-					{#if breed.result}
-						{@render result( section, breed.result )}
-					{/if}
-				</div>
-				{#each breed.colors as color}
-					<div class='flex flex-row pl-10' class:pair={color.result.pairId !== null}>
-						<span class='w-4'></span>
-						<span class='grow italic'>
-							{color.name}
-							<sup class='w-4' title={`Gruppe ${color.result.group}`}> {color.result.group} </sup>
+							<span class='w-2 text-gray-400'>|</span>
 						</span>
-						{@render result( section, color.result )}
+						<span class='flex flex-row text-xs text-center'>
+							<span class='w-12'>Zuchten</span>
+							{#if section.id === 5}
+								<span class='w-12'>Paare</span>
+							{:else}
+								<span class='w-12'>Stämme</span>
+							{/if}
+
+							<span class='w-2 text-gray-400'>|</span>
+
+							{#if section.id === 5}
+								<span class='w-12'></span>
+								<span class='w-12'></span>
+							{:else}
+								<span class='w-12'>Eier</span>
+								<span class='w-12'>Gewicht</span>
+							{/if}
+
+							<span class='w-2 text-gray-400'>|</span>
+
+							{#if section.id === 5}
+								<span class='w-12'>Gelegt</span>
+								<span class='w-12'>-</span>
+								<span class='w-12'>Küken</span>
+								<span class='w-12'>Kü/Pa</span>
+							{:else}
+								<span class='w-12'>Eingel.</span>
+								<span class='w-12'>Befr.</span>
+								<span class='w-12'>Geschl.</span>
+								<span class='w-12'>-</span>
+							{/if}
+
+							<span class='w-2 text-gray-400'>|</span>
+
+							<span class='w-12'>Tiere</span>
+							<span class='w-12'>Pkt</span>
+
+							<span class='w-2 text-gray-400'>|</span>
+
+							<span class='w-8'>Zücht</span>
+						</span>
+					</span>
+				</div>
+				{#each section.breeds as breed}
+					<div class='flex flex-row pl-4'>
+						<sup class='w-4'>
+							{#if breed.result} {breed.result.group} {/if}
+						</sup>
+						<span class='grow'>{breed.name}</span>
+						{#if breed.result}
+							{@render result( section, breed.result )}
+						{/if}
 					</div>
+					{#each breed.colors as color}
+						<div class='flex flex-row pl-10' class:pair={color.result.pairId !== null}>
+							<span class='w-4'></span>
+							<span class='grow italic'>
+								{color.name}
+								<sup class='w-4' title={`Gruppe ${color.result.group}`}> {color.result.group} </sup>
+							</span>
+							{@render result( section, color.result )}
+						</div>
+					{/each}
 				{/each}
 			{/each}
-		{/each}
 
-	</div>
+		</div>
+
+	{/if}
 {/if}
 
 

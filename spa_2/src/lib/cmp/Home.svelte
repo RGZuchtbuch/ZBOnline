@@ -16,6 +16,8 @@
 	<div>Schauleistung</div>
 
 	<a href='/article'>Articles</a>
-
+	<div class='flex flex-row justify-center'>
+		<img src='/assets/ZB_ALBS.png' class='w-192 self-center'>
+	</div>
 </div>
 

@@ -11,7 +11,7 @@
 			menu : {
 				trail: [
 					{name: 'Start', href: '/'},
-					{name: 'Züchter', href: '/user'},
+					{name: 'Anmeldung', href: '/user'},
 				],
 				options: [],
 			},

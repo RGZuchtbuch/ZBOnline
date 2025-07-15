@@ -41,8 +41,10 @@
 					<NumberInput class='w-20' label='Schauleistung' value={ dec( pair.showGrade, 1 ) } disabled />
 				</div>
 			{/if}
-			<CheckBox label='Obmann Ok' title='Vom Obmann begutachtet !' bind:value={pair.accepted} disabled={ pair.name === null || ctx.user.moderator.length === 0 }/>
-			<CheckBox label='Löschen' title='Nur wenn Name leer ist !' bind:value={pair.delete} disabled={ pair.name }/>
+			<div class='flex flex-row print:hidden'>
+				<CheckBox label='Obmann Ok' title='Vom Obmann begutachtet !' bind:value={pair.accepted} disabled={ pair.name === null || ctx.user.moderator.length === 0 }/>
+				<CheckBox label='Löschen' title='Nur wenn Name leer ist !' bind:value={pair.delete} disabled={ pair.name }/>
+			</div>
 		</div>
 	</div>
 

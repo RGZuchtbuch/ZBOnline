@@ -5,7 +5,7 @@
     import BreedResult from './BreedResult.svelte';
 
 //    let { breed, district, group, section, title, year, map } = $props();
-    let { breed, district, group, year } = $props();
+    let { breed, district, group, section, year } = $props();
 
     let open = $state( false );
     let results = $state( null ); // { breed, colors }
@@ -24,10 +24,22 @@
     let hasResults = $derived( breed.count > 0 );
 
     async function onOpen() {
-        // if( ! open ) {
-        //     console.log( 'Rs', results );
-        // }
         open = ! open;
+    }
+
+    function onAddAoc() {
+        console.log( 'aoc' );
+        const aocResult = {
+            id:0, districtId:district.id, group:group, year:year,
+            breeder:null, pairId:null,
+            breeders:null, pairs:null,
+            sectionId:section.id, breedId:breed.id, colorId:null, aocColor:'AOC',
+            lay:{ dames:null, eggs:null, weight:null },
+            brood:{ chicks:null, eggs:null, fertile:null, hatched:null},
+            show:{ count:null, score:null },
+        }
+        console.log( 'R', results );
+        results.colors.push( aocResult )
     }
 
 </script>
@@ -35,7 +47,7 @@
 {#if breed}
 
     <div class='flex flex-row px-6 py-1 gap-x-1' title='Wähle zum Eingeben' transition:slide>
-        <div class='w-80 cursor-pointer whitespace-nowrap' class:hasResults on:click={onOpen}>
+        <div class='w-80 cursor-pointer whitespace-nowrap' class:hasResults onclick={onOpen}>
             <span class=''>{breed.name}</span> <span>({breed.count})</span>
         </div>
 
@@ -76,10 +88,14 @@
                 {#each results.colors as color}
                     <ColorResult result={color}/>
                 {/each}
+                {#each results.aocColors as color}
+                    <ColorResult result={color}/>
+                {/each}
             {:else}
                 <BreedResult result={results.breed}/>
             {/if}
         </div>
+        <div class='flex flex-row justify-end' onclick={onAddAoc}><a>[AOC]</a></div>
     {/if}
 
 

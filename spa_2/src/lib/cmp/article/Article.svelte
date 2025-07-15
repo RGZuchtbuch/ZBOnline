@@ -10,10 +10,10 @@
 
 	let { article } = $props();
 
-	let edit = $state( false );
+	let edit = $state( article.id === 0 );
 	let remove = $state( false );
 	let changed = false; // for invalidating load article
-
+	let authorized = $derived( ctx.user && ctx.user.admin ); // can edit
 
 	const validate = {
 		level : v => validator(v).number().range( 1, 999 ).orNull().isValid(),
@@ -22,20 +22,22 @@
 		html  : v => validator(v).string().length( 3, 99999 ).isValid(),
 	}
 
-	let authorized = $derived( ctx.user && ctx.user.admin ); // can edit
-
-
-
 	async function onSubmit( event ) {
 		console.log( 'Submit article' );
-
+		//setTimeout( async () => {
+		//	console.log( 'Invalidate articles' );
+//			await invalidate('articles');
+		//}, 1000 )
 		if( article.title ) {
 			changed = true;
-			return model.Article.save( article );
+			let response = await model.Article.save( article );
+			return response;
 		} else if( ! article.titel && remove && confirm('Lösschen?') ){ // name is null and delete
 			changed = true;
-			model.Article.delete( article.id );
+			let response = await model.Article.delete( article.id );
+			//await invalidate('articles');
 			goto( '/article' ); // back to list, no return
+			//return response
 		}
 	}
 
@@ -49,7 +51,6 @@
 </script>
 
 {#if article}
-
 	<!--h2 class='header'>
 		<span class='grow'>{article.title}</span>
 	</h2-->

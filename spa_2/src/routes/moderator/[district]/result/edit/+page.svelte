@@ -25,9 +25,10 @@
 					{name: 'Obmann', href: '/moderator'},
 					{name: data.district.short, href: `/moderator/${ctx.district.id}`},
 					{name: 'Eingaben', href: `/moderator/${ctx.district.id}/result?year=${ctx.year}`},
-					{name: 'Bearbeiten'},
+					{name: 'Eingeben'},
 				],
 				options: [
+					{name: 'Eingaben', href: `/moderator/${ctx.district.id}/result?year=${ctx.year}`},
 					{name: 'Züchter', href: `/moderator/${ctx.district.id}/breeder`},
 				],
 			},
@@ -39,11 +40,9 @@
 	})
 
 	console.log( 'edit page')
-	//invalidateAll();//( `moderator/${data.district.id}/result/${data.year}` );
-
 
 </script>
 
-
-<ResultsEdit district={ctx.district} year={ctx.year} section={ctx.section} group={ctx.group} results={ctx.results} standard={ctx.standard} />
-
+{#if ctx.district && ctx.year && ctx.section && ctx.group && ctx.results } <!-- needed as ctx might not be updated yet -->
+	<ResultsEdit district={ctx.district} year={ctx.year} section={ctx.section} group={ctx.group} results={ctx.results} standard={ctx.standard} />
+{/if}

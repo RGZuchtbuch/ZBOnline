@@ -7,17 +7,22 @@
 
 	let { data } = $props();
 
+	$effect( () => {
+		ctx.breeders = data.breeders;
+		ctx.district = data.district;
+	})
+
 	$effect( async () => {
-		ctx.header.title = `Züchter im ${data.district.name}`;
+		ctx.header.title = `Züchter im ${ctx.district.name}`;
 		ctx.header.menu = {
 			trail: [
 				{name: 'Home', href: '/'},
 				{name: 'Obmann', href: '/moderator'},
-				{name: data.district.short, href: `/moderator/${data.district.id}` },
+				{name: data.district.short, href: `/moderator/${ctx.district.id}` },
 				{name: 'Züchter' },
 			],
 			options: [
-				{ name:'Eingaben', href:`/moderator/${data.district.id}/result` },
+				{ name:'Eingaben', href:`/moderator/${ctx.district.id}/result` },
 			],
 		}
 	})
@@ -25,7 +30,7 @@
 </script>
 
 {#if data.breeders}
-	<Breeders breeders={data.breeders} district={data.district} />
+	<Breeders breeders={ctx.breeders} district={ctx.district} />
 {/if}
 
 

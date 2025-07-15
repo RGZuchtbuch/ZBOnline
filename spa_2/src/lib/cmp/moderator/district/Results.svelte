@@ -28,7 +28,8 @@
 	}
 
 </script>
-Y {year}
+
+
 {#key year && results}
 	<h3 class=''>Leistungen für
 		<select class='w-24 border border-teal-600 border-1 bg-inherit error=null' value={year} onchange={onYearChange}>

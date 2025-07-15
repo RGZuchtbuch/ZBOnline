@@ -15,7 +15,7 @@
 		BDRG Zuchtbuch
 	</div>
 
-	<div class='w-32 flex flex-row pr-2 text-sm justify-end print:hidden' in:fade>
+	<div class='w-32 flex flex-row pr-2 text-sm justify-end' in:fade>
 		<span>{ ctx.user ? ctx.user.firstname : 'Gast' }</span>
 		<a href='/user' title='An/abmelden'>{@render profile_icon()}</a>
 	</div>

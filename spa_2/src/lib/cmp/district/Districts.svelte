@@ -12,7 +12,7 @@
 </script>
 
 <div class='flex flex-col items-center break-after-page' in:slide>
-	<BDRGMap width={512}/>
+	<BDRGMap width={384}/>
 </div>
 <hr>
 <DistrictTree {root}/>

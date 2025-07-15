@@ -15,19 +15,24 @@
     // user handled in model/user.js : ctx.user = data.user;
     ctx.standard = data.standard;
     ctx.federation = data.federation;
+    ctx.user = data.user;
 
 
 </script>
 
 
 <Header />
+
 <Menu />
 <Title />
 
-    <div class='screen-scroll-y content' in:fade={{duration:1500}}>
-       {@render children()}
-    </div>
+<div class='screen-scroll-y content' in:fade={{duration:1500}}>
+   {@render children()}
+</div>
 
+{#if ctx.dialog==='test'}
+    <dialog class='absolute w-full h-full bg-[#8888]'>Test</dialog>
+{/if}
 <style>
     .content {
         @apply  border border-teal-400 bg-white text-black flex flex-col;

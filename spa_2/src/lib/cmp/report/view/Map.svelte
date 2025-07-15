@@ -1,25 +1,13 @@
 <script>
-    //import { createEventDispatcher } from 'svelte';
     import { draw, fade } from 'svelte/transition';
     import { goto } from '$app/navigation';
     import { page } from '$app/state';
     import {calcColor, dec, gpsToPx, pct} from '$lib/js/tools.js';
     import BdrgSVG from './BdrgSVG.svelte';
-    import Select from '$lib/cmp/form/input/Select.svelte';
-
-    // export let typeId = null;
-    // export let year = null;
-    // export let sectionId;
-    // export let breedId;
-    // export let colorId;
-    //
-    // export let districtId; //TODO for feedback, maybe should be event
 
     const MAXBUBBLE = 35;
 
     let { report, typeId } = $props();
-
-    console.log( 'Map type id', typeId );
 
     let canvas = null;
 //    let districts = null; // districts with fields
@@ -106,7 +94,6 @@
 
     function updateMap( report, typeId ) {
         let type = types[ typeId ];
-        console.log( 'T', typeId, type, types );
         const labels = [];
         const coords = []
         const datasets = [];
@@ -150,7 +137,6 @@
 
     function onClick( district ) {
         return ( event ) => {
-            console.log('Select LV')
             const url =new URL( page.url ); // for query changes
             url.searchParams.set( 'district', district.id );
             goto( url.href );

@@ -22,7 +22,7 @@
 	{#if pairs.length > 0}
 		{#each pairs as pair, i}
 			<li class='flex flex-row gap-x-2'>
-				<a class='grow' href={`${page.url.href}/pair/${pair.id}`} >
+				<a class='grow' href={`${page.url.href}/${pair.id}`} >
 					<div class='w-8 text-right'>{i+1}</div>
 					<div class='w-2'>:</div>
 					<div class='w-8 text-right'>{pair.year}</div>

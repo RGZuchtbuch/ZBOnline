@@ -4,7 +4,8 @@
 	import model from '$lib/js/model.js';
 	import { ctx } from '$lib/js/store.svelte.js';
 
-	let { data } = $props();
+	let { district, year, group } = $props();
+	//let { district, year, group } = $props();
 
 	let section = $state( null );
 	let breeds = $derived( section && section.breeds ? section.breeds : [] );
@@ -40,7 +41,7 @@
 
 	function newResult() {
 		return {
-			id:0, districtId:ctx.district.id, group:ctx.group, year:ctx.year,
+			id:0, districtId:district.id, group:group, year:year,
 			breeder:null, pairId:null,
 			breeders:null, pairs:null,
 			sectionId:section.id, breedId:breed.id, colorId:null, aocColor:'AOC '+aocColor,
@@ -55,26 +56,23 @@
 		const name = 'AOC: '+aocColor;
 		const result = newResult();
 		results = [ result, ...results ];
-		ctx.breeds.push( result );// = [ result, ...ctx.breeds ];
+		//ctx.breeds.push( result );// = [ result, ...ctx.breeds ];
 		console.log( 'DB', results );
 		return true;
 	}
-
-	$inspect('AOCCreate', data);
-
-	$inspect('Section', section);
-
 
 </script>
 
 <Form class='bg-gray-50' onsubmit={onSubmitAdd}>
 	<h2 class='text-center'>AOC Klasse, Farbenschlag hinzufügen</h2>
 	<div class='flex flex-row gap-x-2 justify-center'>
+
 		<Select label='Sparte' bind:value={section} validator={validate.id}>
 			{#each ctx.standard.rootSections as section}
 				<option value={section}>{section.name}</option>
 			{/each}
 		</Select>
+
 		<Select class='w-96' label='Rasse' bind:value={breed} validator={validate.id} disabled={ section === null }>
 			<option value={null}>?</option>
 			{#if section && section.breeds }
@@ -83,17 +81,19 @@
 				{/each}
 			{/if}
 		</Select>
+
 		<TextInput class='w-64' label='AOC Farbenschlag' bind:value={aocColor} validator={validate.name} disabled={ breed === null } />
+
 		<Submit class='w-16 mt-3' noChangeValue='?' submitValue='+' invalidValue='X' errorValue='X' />
 	</div>
 </Form>
 
+<hr class='m-4'>
 
-
-
-{#if results}{results.length}
+<!-- show existing results -->
+{#if results}
 	{#each results as result (result.id) } <!-- result.id as unique key -->
-		<AocResult section={data.section} {result} {data}/>
+		<AocResult {section} {result}/>
 	{/each}
 {/if}
 

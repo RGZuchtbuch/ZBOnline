@@ -1,17 +1,12 @@
 <script>
-
-    import { ctx, store } from '$lib/js/store.svelte.js';
-    import Form, { Status, NumberInput, validator } from '$lib/cmp/form/Form.svelte';
-    //import NumberInput from '../../common/form/input/NumberInput.svelte';
-    //import FormStatus from '../../common/form/Status.svelte';
+    import {invalidate} from '$app/navigation';
+    import { ctx, cfg } from '$lib/js/store.svelte.js';
+    import Form, { NumberInput, Status, validator } from '$lib/cmp/form/Form.svelte';
     import model from '$lib/js/model.js';
 
     import AddResultRow from './AddResultRow.svelte'
-    import {invalidate} from '$app/navigation';
 
-    let { section, result } = $props();
-
-    $inspect( 'AOC R', section, result );
+    let { result } = $props();
 
     //let result = $state( result );
     let breed = $derived( ctx.standard.breeds[ result.breedId ] );

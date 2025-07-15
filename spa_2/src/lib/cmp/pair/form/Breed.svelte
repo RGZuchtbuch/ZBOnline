@@ -1,29 +1,30 @@
 <script>
 	import { slide } from 'svelte/transition';
+	import { ctx } from '$lib/js/store.svelte.js';
 	import { Form, Select } from '$lib/cmp/form/Form.svelte';
 
 	let { pair=$bindable(), standard } = $props();
 
 	// initial getting objects from pair
-	let rootSection = $state( standard.rootSections.find( ( section ) => section.id === pair.sectionId ) ?? null );
-	let breed   = $state( standard.breeds[ pair.breedId ] ?? null );
-	let color   = $state( standard.colors[ pair.colorId ] ?? null );
+	let rootSection = $state( ctx.standard.rootSections.find( ( section ) => section.id === pair.sectionId ) ?? null );
+	let breed   = $state( ctx.standard.breeds[ pair.breedId ] ?? null );
+	let color   = $state( ctx.standard.colors[ pair.colorId ] ?? null );
 
 	let breedId = $state( pair.breedId );
 
 	function onSectionChange( event ) {
-		rootSection = standard.rootSections.find( ( section ) => section.id === pair.sectionId );
+		rootSection = ctx.standard.rootSections.find( ( section ) => section.id === pair.sectionId );
 			//pair.sectionId = rootSection ? rootSection.id : null;
 		pair.sectionId = rootSection.id;
 		pair.breedId = breed = null;
 		pair.colorId = color = null;
 	}
 	function onBreedChange( event ) {
-		pair.breed = breed = standard.breeds[ pair.breedId ];
+		pair.breed = breed = ctx.standard.breeds[ pair.breedId ];
 		pair.colorId = color = null;
 	}
 	function onColorChange( event ) {
-		color = standard.colors[ pair.colorId ];
+		color = ctx.standard.colors[ pair.colorId ];
 	}
 
 </script>
@@ -34,7 +35,7 @@
 		<option value={null} selected={rootSection === null}>
 			Sparte ?
 		</option>
-		{#each standard.rootSections as section }
+		{#each ctx.standard.rootSections as section }
 			<option value={ section.id } selected={pair.sectionId === section.id}>
 				{section.name}
 			</option>

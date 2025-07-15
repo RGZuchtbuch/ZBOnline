@@ -34,7 +34,8 @@
         let success = await model.User.login( email, password );
         if( success ) {
             state = State.LOGGEDIN;
-            await goto( '/' ); // home for now
+            history.back();
+            //await goto( '/' ); // home for now
         } else {
             state = State.FAILED;
             password = null;

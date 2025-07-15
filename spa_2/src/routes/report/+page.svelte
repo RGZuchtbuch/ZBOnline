@@ -4,13 +4,16 @@
 
 	let { data } = $props();
 
-	console.log( 'RD', data );
+	$inspect( 'Data', data );
+
+	let a = null;
 
 	$effect( async () => {
-		setHeader( data.report );
-	});
+		ctx.args = data.args;
+		ctx.report = data.report;
+	})
 
-	function setHeader( report ) {
+	$effect( async () => {
 		ctx.header = {
 			title: 'Die Zuchtleistungen',
 			menu: {
@@ -25,16 +28,18 @@
 				],
 			},
 		}
-	}
+	});
 
 </script>
 
-<Report
-	args={data.args}
-	report={data.report}
-    federation={data.federation}
-	standard={data.standard}
-/>
+{#if ctx.args && ctx.report}
+	<Report
+		args={ctx.args}
+		report={ctx.report}
+	    federation={ctx.federation}
+		standard={ctx.standard}
+	/>
+{/if}
 
 
 

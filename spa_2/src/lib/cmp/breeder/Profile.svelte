@@ -1,11 +1,19 @@
 <script>
+    import {goto, invalidate} from '$app/navigation';
     import { ctx } from '$lib/js/store.svelte.js';
     import model from '$lib/js/model.js';
     import Form, { CheckBox, DateInput, EmailInput, NumberInput, TextInput, Status, validator } from '$lib/cmp/form/Form.svelte';
-    import {goto} from '$app/navigation';
     import TextArea from '$lib/cmp/form/input/TextArea.svelte';
 
     let { breeder, district } = $props();
+
+    let edit = $state( false );
+    let remove = $state( false );
+    let changed = false; // for invalidating load article
+
+    console.log( breeder );
+
+    let authorized = $derived( ctx.user && ( ctx.user.moderator.includes( breeder.districtId ) || ctx.user.admin ) ); // can edit
 
     const validate = {
         member:     v => validator(v).number().orNull().isValid(),
@@ -21,6 +29,7 @@
 //    name:       v => validator(v).string().orNullIf( pair.delete ).isValid(),
 
     async function onSubmit() {
+        invalidate( 'breeder' );
         if( breeder.start && breeder.firstname && breeder.lastname && breeder.club ) {
             return await model.Breeder.save( breeder );
         } else if( breeder.id > 0 && breeder.firstname === null && breeder.lastname === null && breeder.delete ) {
@@ -33,6 +42,16 @@
 </script>
 
 {#if breeder && district }
+
+    <div class='flex flex-row items-center justify-end gap-x-2 p-2'>
+        <span class='meta'></span>
+        {#if authorized }
+			<span class='print:hidden'>
+				<CheckBox label='Ändern' error='' bind:value={edit} />
+			</span>
+        {/if}
+    </div>
+
     <div class='text-center'>
         <h2>Mitgliedsdaten</h2>
         Mitglied abmelden, einfach 'bis' Datum eingeben. Damit ist dieser Züchter 'Inaktiv'.<br>
@@ -40,7 +59,7 @@
         Löschen durch Vor- und Nachnamen leermachen und Löschen ankreuzen.
     </div>
     <hr class='w-228 self-center'>
-    <Form class='flex flex-col p-4 gap-y-4' autosubmit={true} onsubmit={onSubmit}>
+    <Form class='flex flex-col p-4 gap-y-4' autosubmit={true} onsubmit={onSubmit} disabled={ !edit}>
         <div class='text-right'><Status /></div>
 
         <fieldset class='flex flex-row gap-x-2 p-4'>

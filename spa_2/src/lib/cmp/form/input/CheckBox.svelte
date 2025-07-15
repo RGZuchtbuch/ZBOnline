@@ -16,6 +16,7 @@
 	onMount( () => { // catch input and register validator
 		element.addEventListener( 'input', onInput );
 		if( form && form.validators && validator ) form.validators.push( validate ); // add this.validate with it's context
+		//console.log( 'Form', form );
 	});
 	onDestroy( () => { // remove validator
 		if( form && form.validators ) {

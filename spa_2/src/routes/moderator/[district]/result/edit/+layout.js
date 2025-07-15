@@ -1,12 +1,14 @@
-import { ctx, store } from '$lib/js/store.svelte.js';
+import { ctx, cfg, store } from '$lib/js/store.svelte.js';
 import { invalidate, invalidateAll } from '$app/navigation';
 import { setArgsNumber, setArgsString } from '$lib/js/tools.js';
 import model from '$lib/js/model.js';
 
 
-export async function load( { params, parent, url } ) {
+export async function load( { depends, params, parent, url } ) {
 	console.log( 'load edit results', params );
-	let data = await parent(); // wait for parents to have loaded
+	depends( 'result' );
+
+	let { standard } = await parent(); // wait for parents to have loaded
 
 	const args = {};
 		args.district = +params.district;
@@ -19,11 +21,8 @@ export async function load( { params, parent, url } ) {
 	const response = await Promise.all( [
 		model.Result.query( args ),
 	] );
-	const section = args.section === 9999 ? store.aocSection : data.standard.sections[ args.section ]; // aoc is special
-
+	const section = args.section === 9999 ? cfg.aocSection : standard.sections[ args.section ]; // aoc is special
+	// odd thing, despite awaiting parents, section may end up null. Solved by adding if ctx.section in +page.js
+	// order of layouts and pages unclear...
 	return { year:args.year, section:section, group:args.group, results:response[0] };
 }
-//
-// export async function load( { params, parent } ) {
-// 	return {}
-// }
