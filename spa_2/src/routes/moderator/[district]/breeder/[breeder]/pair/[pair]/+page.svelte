@@ -1,24 +1,16 @@
 <script>
-	import { page } from '$app/state';
-	import { ctx, store } from '$lib/js/store.svelte.js';
-	import { fullName, txt } from '$lib/js/tools.js';
+	import { ctx } from '$lib/js/store.svelte.js';
+	import { fullName } from '$lib/js/tools.js';
 	import Pair from '$lib/cmp/pair/Pair.svelte';
 
 	let { data } = $props();
 
+	ctx.breeder = data.breeder;
+	ctx.district = data.district;
 	ctx.pair = data.pair;
-
-	//let district = $state( data.district );
-	//let breeder  = $state( data.breeder ); // make it reactive for the form etc
-	//let pair     = $state( data.pair );
-	// ctx.breeder = data.breeder;
-	// ctx.district = data.district;
-	// ctx.pair = data.pair;
-	$effect( () => {
-		// ctx.breeder = data.breeder;
-		// ctx.district = data.district;
-		// ctx.pair = data.pair;
-	})
+	// $effect( () => {
+	// 	ctx.pair = data.pair;
+	// })
 
 	$effect( async () => {
 		ctx.header.title = `Stamm ${data.pair.year}.${data.pair.name} von Züchter ${fullName(data.breeder) }`;

@@ -1,4 +1,3 @@
-import {page} from '$app/state';
 import model from '$lib/js/model.js';
 
 export async function load( { depends, params } ) {

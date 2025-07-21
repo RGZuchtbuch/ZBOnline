@@ -8,29 +8,30 @@
 
 	console.log( 'BP', data );
 
-	$effect( async () => {
-		setHeader( data.breeder, data.district );
-	})
+	ctx.breeder = data.breeder;
+	ctx.district = data.district;
 
-	function setHeader( breeder, district ) {
-		ctx.header.title = `Mitgliedsdaten für Züchter ${txt(breeder.firstname)} ${txt(breeder.infix)} ${txt(breeder.lastname)}`;
-		ctx.header.menu = {
-			trail: [
-				{ name:'Home',              href:'/' },
-				{ name:'Obmann',            href:'/moderator' },
-				{ name:district.short, href:`/moderator/${district.id}` },
-				{ name:'Züchter',      href:`/moderator/${district.id}/breeder` },
-				{
-					name:`${breeder.firstname.charAt(0)}.${breeder.lastname.charAt(0)}`,
-					href:`/moderator/${district.id}/breeder/${breeder.id}`,
-				},
-				{ name:'Mitglied',     href:page.url.href },
-			],
-			options: [
-				{name: 'Stämme', href: '/moderator/' + district.id + '/breeder/' + breeder.id + '/pair'},
-			],
+	$effect( async () => {
+		ctx.header = {
+			title: `Mitgliedsdaten für Züchter ${txt(breeder.firstname)} ${txt(breeder.infix)} ${txt(breeder.lastname)}`
+			menu: {
+				trail: [
+					{name: 'Home', href: '/'},
+					{name: 'Obmann', href: '/moderator'},
+					{name: district.short, href: `/moderator/${district.id}`},
+					{name: 'Züchter', href: `/moderator/${district.id}/breeder`},
+					{
+						name: `${breeder.firstname.charAt(0)}.${breeder.lastname.charAt(0)}`,
+						href: `/moderator/${district.id}/breeder/${breeder.id}`,
+					},
+					{name: 'Mitglied', href: page.url.href},
+				],
+				options: [
+					{name: 'Stämme', href: '/moderator/' + district.id + '/breeder/' + breeder.id + '/pair'},
+				],
+			}
 		}
-	}
+	} );
 
 
 

@@ -1,15 +1,10 @@
 <script>
-	import {getContext, onDestroy} from 'svelte';
-	import { page } from '$app/state';
-	import { fade, fly, slide } from 'svelte/transition';
-	import { navigating } from '$app/state';
 	import { goto, invalidate, invalidateAll} from '$app/navigation';
 	import { ctx } from '$lib/js/store.svelte.js';
 	import model from '$lib/js/model.js';
 	import Form, { CheckBox, NumberInput, Status, TextArea, TextInput, validator } from '$lib/cmp/form/Form.svelte';
 
 	let { article } = $props();
-	//let article = getContext( 'article' );
 
 	let edit = $state( article && article.id === 0 );
 	let remove = $state( false );
@@ -37,14 +32,6 @@
 			//return response
 		}
 	}
-
-	onDestroy( () => {
-		if( changed ) {
-			//console.log('onDestroy invalidate');
-			//invalidate('article');
-		}
-	})
-
 </script>
 
 {#if article}

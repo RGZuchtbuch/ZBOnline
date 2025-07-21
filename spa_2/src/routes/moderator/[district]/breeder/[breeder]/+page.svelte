@@ -9,22 +9,13 @@
 
 	let { data } = $props();
 
-	console.log( 'B', data.breeder );
+	ctx.breeder = data.breeder;
+	ctx.district = data.district;
+	// $effect( () => {
+	// 	ctx.breeder = data.breeder;
+	// 	ctx.district = data.district;
+	// })
 
-//	const district = $state( data.district )
-//	const breeder = $state( data.breeder );
-//	const year = $state( data.year );
-
-	$effect( () => {
-		ctx.breeder = data.breeder;
-		ctx.district = data.district;
-	})
-
-	// if( +page.params.breeder === 0 ) { // new
-	// 	goto( `${page.url.href}/profile`);
-	// } else {
-	// 	goto( `${page.url.href}/pair`);
-	// }
 
 	$effect(async () => {
 		setHeader( ctx.breeder, ctx.district );

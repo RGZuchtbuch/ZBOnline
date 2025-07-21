@@ -7,10 +7,11 @@
 
 	let { data } = $props();
 
-	$effect( () => {
-		ctx.breeders = data.breeders;
-		ctx.district = data.district;
-	})
+	ctx.breeders = data.breeders;
+	ctx.district = data.district;
+	// $effect( () => {
+	// 	ctx.breeders = data.breeders;
+	// })
 
 	$effect( async () => {
 		ctx.header.title = `Züchter im ${ctx.district.name}`;

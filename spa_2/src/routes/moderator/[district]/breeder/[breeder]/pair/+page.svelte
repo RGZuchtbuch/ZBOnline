@@ -1,31 +1,19 @@
 <script>
-
-	import { page } from '$app/state';
-	import { goto } from '$app/navigation';
 	import { ctx } from '$lib/js/store.svelte.js';
 	import { txt } from '$lib/js/tools.js';
-	import model from '$lib/js/model.js';
-
-	//import Breeder from '$lib/cmp/breeder/Breeder.svelte';
 	import Pairs from '$lib/cmp/breeder/Pairs.svelte';
 
 	let { data } = $props();
 
-	console.log( 'B', data.breeder );
+	// ctx.breeder = data.breeder;
+	// ctx.district = data.district;
+	// ctx.pairs = data.pairs;
+	// // $effect( () => {
+	// 	ctx.breeder = data.breeder;
+	// 	ctx.district = data.district;
+	// 	ctx.pairs = data.pairs;
+	// })
 
-	//const district = $state( data.district )
-	//const breeder = $state( data.breeder );
-	//const year = $state( data.year );
-
-	$effect( () => {
-		ctx.breeder = data.breeder;
-		ctx.district = data.district;
-	})
-	// if( +page.params.breeder === 0 ) { // new
-	// 	goto( `${page.url.href}/profile`);
-	// } else {
-	// 	goto( `${page.url.href}/pair`);
-	// }
 
 	$effect(async () => {
 		ctx.header = {

@@ -1,15 +1,14 @@
 <script>
-	import { page } from '$app/state';
 	import { ctx } from '$lib/js/store.svelte.js';
 	import Articles from '$lib/cmp/article/Articles.svelte';
 
 
 	let { data } = $props();
 
+	ctx.articles = data.articles;
 	$effect( () => {
 		ctx.articles = data.articles;
-	}); // in context to avoid warnings on wrong updates.
-	//ctx.articles = $derived( data.articles );
+	});
 
 	$effect( async ()=>{
 		ctx.header = {

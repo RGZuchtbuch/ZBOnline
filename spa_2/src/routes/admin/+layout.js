@@ -1,7 +1,5 @@
-import { getContext, setContext } from 'svelte';
 
-
-export async function load( { params } ) {
+export async function load(  ) {
 
 	return {};
 }

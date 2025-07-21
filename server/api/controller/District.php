@@ -27,12 +27,8 @@ class District
 				}
 				throw new HttpNotFoundException($request, 'District not found');
 			}
-			throw new HttpBadRequestException( $request, 'Bad id' );
-		//} else {
-			//$districts = model\District::get();
-			//$response->getBody()->write( json_encode( [ 'districts' => $districts ], JSON_UNESCAPED_SLASHES ) );
-			//return $response;
 		}
+		throw new HttpBadRequestException( $request, 'Bad id' );
 	}
 
 	public static function post( Request $request, Response $response, array $args ) : Response {

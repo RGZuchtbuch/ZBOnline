@@ -1,7 +1,6 @@
 <script>
 	import { fade, fly, slide } from 'svelte/transition';
-	import {goto} from '$app/navigation';
-	import { page } from '$app/state';
+
 	import { ctx } from '$lib/js/store.svelte.js';
 
 	let { articles } = $props();

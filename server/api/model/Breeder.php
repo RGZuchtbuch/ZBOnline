@@ -18,14 +18,7 @@ class Breeder
 			');
 			return Query::select($stmt, $args);
 		}
-//		else { // list of all (is this wise ? )
-//			$stmt = Query::prepare('
-//				SELECT id, member, firstname, infix, lastname, email, districtId, club, start, end, info
-//				FROM user
-//				ORDER BY lastname, infix, firstname
-//			');
-//			return Query::selectArray($stmt );
-//		}
+		return null;
     }
 
     public static function create(? string $member, string $firstname, ? string $infix, string $lastname, ? string $email, int $districtId, ? string $club, ? string $start, ? string $end, ? string $info, int $modifierId ) : ? int {

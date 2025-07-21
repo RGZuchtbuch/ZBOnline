@@ -7,10 +7,10 @@
 
 	let { data } = $props();
 
-	ctx.district = null;
-	$effect( () => {
-		ctx.district = data.district;
-	}); // in context to avoid warnings on wrong updates.
+	// ctx.district = data.district;
+	// $effect( () => {
+	// 	ctx.district = data.district;
+	// }); // in context to avoid warnings on wrong updates.
 
 	$effect( async () => {
 		ctx.header = {

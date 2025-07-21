@@ -1,7 +1,5 @@
-import model from '$lib/js/model.js';
-import { ctx } from '$lib/js/store.svelte.js';
 
-export async function load( { depends, fetch, params, parent } ) {
+export async function load( { depends, parent } ) {
 	depends( 'user' );
 	console.log( 'Loading Moderator' );
 	const { federation, user } = await parent(); // wait for these to have loaded

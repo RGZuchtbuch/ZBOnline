@@ -7,12 +7,13 @@
 
 	let { data } = $props();
 
-	ctx.year = null;
-	ctx.results = null;
-	$effect( () => {
-		ctx.year = data.year;
-		ctx.results = data.results;
-	}); // in context to avoid warnings on wrong updates.
+	// ctx.district = data.district;
+	// ctx.year = data.year;
+	// ctx.results = data.results;
+	// $effect( () => {
+	// 	ctx.year = data.year;
+	// 	ctx.results = data.results;
+	// }); // in context to avoid warnings on wrong updates.
 
 	$effect( async () => {
 		ctx.header = {
@@ -31,14 +32,6 @@
 			}
 		}
 	});
-
-	// async function load( url ) {
-	// 	console.log(' Load result', year );
-	// 	const response = await api.result.get( { districtId:district.id, year:year } );
-	// 	results = response.results;
-	// }
-
-	console.log( 'Ctx', ctx.district );
 
 </script>
 

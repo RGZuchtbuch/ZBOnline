@@ -8,16 +8,12 @@
 
 	let { data } = $props();
 
-	// ctx.year = null;
-	// ctx.group = null;
-	// ctx.section = null;
-	// ctx.results = null;
 	ctx.year = data.year;
 	ctx.group = data.group;
 	ctx.section = data.section;
 	ctx.results = data.results;
 
-	$effect( () => {
+	$effect( () => { //TODO needed ?
 		// ctx.year = data.year;
 		// ctx.group = data.group;
 		// ctx.section = data.section;
