@@ -61,7 +61,7 @@
 				<Lay  bind:pair standard={ctx.standard} />
 			{/if}
 			<Broods   bind:pair standard={ctx.standard} />
-			<Show     bind:pair />
+			<Show     {pair} />
 			<Notes    bind:pair={pair} />
 		</fieldset>
 	</Form>

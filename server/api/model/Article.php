@@ -2,12 +2,11 @@
 
 namespace App\model;
 
-use http\Exception\InvalidArgumentException;
-use Slim\Exception\HttpNotFoundException;
+use App\util\Query;
 
 class Article
 {
-	public static function get( int $id = null ) : ? array {
+	public static function read(int $id = null ) : ? array {
 		if( $id ) {
 			$args = get_defined_vars();
 			$stmt = Query::prepare('
@@ -26,7 +25,7 @@ class Article
 		}
 	}
 
-    public static function new( string $author, string $title, string $html, $modifierId ) : ? int {
+    public static function create(string $author, string $title, string $html, $modifierId ) : ? int {
         $args = get_defined_vars();
         $stmt = Query::prepare( '
             INSERT INTO article ( author, level, title, `html`, modifierId )
@@ -34,7 +33,7 @@ class Article
         ' );
         return Query::insert( $stmt, $args ); // returns id
     }
-    public static function set( int $id, string $author, string $title, string $html, $modifierId ) : bool {
+    public static function update(int $id, string $author, string $title, string $html, $modifierId ) : bool {
 		$args = get_defined_vars();
         $stmt = Query::prepare( '
             UPDATE article
@@ -43,7 +42,7 @@ class Article
         ' );
         return Query::update( $stmt, $args );
     }
-    public static function del( int $id ) : bool {
+    public static function delete(int $id ) : bool {
 		$args = get_defined_vars();
 		$stmt = Query::prepare( '
             DELETE FROM article WHERE id=:id

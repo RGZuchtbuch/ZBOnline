@@ -1,22 +1,27 @@
 <script>
+	import {setContext} from 'svelte';
 	import { page } from '$app/state';
 	import { ctx, store } from '$lib/js/store.svelte.js';
 	import Article from '$lib/cmp/article/Article.svelte';
 
 	let { data } = $props();
 
+	let article = $state( data.article );
+	//setContext( 'article', article );
+	//ctx.article = data.article
 	$effect( async () => {
-		ctx.article = data.article
+		//ctx.article = data.article
+		//article = data.article;
 	})
 
  	$effect( async () => {
 		ctx.header = {
-			title : ctx.article.title ? ctx.article.title : '?',
+			title : article.title ? article.title : '?',
 			menu : {
 				trail: [
 					{name: 'Start', href: '/'},
 					{name: 'Beiträge', href: '/article'},
-					{name: ctx.article.title },
+					{name: article.title },
 				],
 				options: [
 					{name: 'Verbände', href: '/federation'},
@@ -30,6 +35,6 @@
 
 </script>
 
-{#if ctx.article}
-	<Article article={ctx.article} />
+{#if data.article}
+	<Article {article} />
 {/if}

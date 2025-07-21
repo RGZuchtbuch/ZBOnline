@@ -1,6 +1,6 @@
 <script>
 	import { ctx } from '$lib/js/store.svelte.js';
-	import { txt } from '$lib/js/tools.js';
+	import { shortName, fullName } from '$lib/js/tools.js';
 	import {onMount} from 'svelte';
 
 	let { data } = $props();
@@ -11,12 +11,12 @@
 
 	$effect( () => {
 		ctx.header = {
-			title: `Züchter ${txt(ctx.breeder.firstname)} ${txt(ctx.breeder.infix)} ${txt(ctx.breeder.lastname)}`,
+			title: `Züchter ${fullName( ctx.breeder )}`,
 			menu: {
 				trail: [
 					{name: 'Start', href: '/'},
 					{name: 'Züchter', href: '/breeder'},
-					{name: 'id'},
+					{name: shortName( ctx.breeder ) },
 				],
 				options: [
 					{ name:'Stämme',    href:`/breeder/${ctx.breeder.id}/pair` },

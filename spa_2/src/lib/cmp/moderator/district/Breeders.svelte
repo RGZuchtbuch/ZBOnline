@@ -1,7 +1,25 @@
 <script>
 	import { page } from '$app/state';
+	import {selectName} from '$lib/js/tools.js';
 
 	let {breeders, district} = $props();
+
+
+	function onSortByNumber() {
+		breeders.sort( (a, b) => a.member - b.member );
+	}
+	function onSortByName() {
+		breeders.sort( (a, b) => (''+selectName( a )).localeCompare( selectName(b) ) );
+	}
+	function onSortByClub() {
+		breeders.sort( (a, b) => (''+a.club).localeCompare( b.club ) );
+	}
+	function onSortByStart() {
+		breeders.sort( (a, b) => (''+a.start).localeCompare( b.start ) );
+	}
+	function onSortByEnd() {
+		breeders.sort( (a, b) => (''+a.end).localeCompare( b.end ) );
+	}
 
 </script>
 
@@ -10,16 +28,16 @@
 	<a href={`${page.url.href}/0`}>[+]</a>
 </div>
 
-<header class='flex flex-row header section items-end pl-6'>
-	<span class='w-12'>ZbNr</span>
-	<span class='w-48'>Name</span>
-	<span class='w-48'>Ortsverein</span>
-	<span class='w-24'>Seit</span>
-	<span class='w-24'>Bis</span>
+<header class='flex flex-row header section items-end px-2 py-0 pl-0 gap-x-2'>
+	<a class='w-12' onclick={onSortByNumber}>ZbNr</a>
+	<a class='w-48' onclick={onSortByName}>Name</a>
+	<a class='w-48' onclick={onSortByClub}>Ortverein</a>
+	<a class='w-24' onclick={onSortByStart}>Seit</a>
+	<a class='w-24' onclick={onSortByEnd}>Bis</a>
 </header>
 
 {#each breeders as breeder }
-	<a class='flex' href={page.url.pathname+'/'+breeder.id}>
+	<a class='flex flex-row' href={page.url.pathname+'/'+breeder.id}>
 		<span class='w-12'> {breeder.member}</span>
 		<span class='w-48'> {breeder.lastname}, {breeder.firstname} {breeder.infix}</span>
 		<span class='w-48'> {breeder.club}</span>
@@ -33,9 +51,6 @@
 <style>
     h3 {
         @apply text-center text-xl bg-teal-200 font-bold sticky top-0;
-    }
-    hesader {
-        @apply flex flex-row border-b bg-slate-100 p-2 gap-x-2 sticky top-0
     }
     p {
         @apply text-center italic;

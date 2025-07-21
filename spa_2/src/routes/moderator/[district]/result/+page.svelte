@@ -7,29 +7,26 @@
 
 	let { data } = $props();
 
+	ctx.year = null;
+	ctx.results = null;
 	$effect( () => {
-		ctx.district = data.district;
 		ctx.year = data.year;
 		ctx.results = data.results;
 	}); // in context to avoid warnings on wrong updates.
 
-	//let district   = $derived( data.federation.districts[ +page.params.district ] );
-	//let year       = $derived( +page.url.searchParams.get( 'year' ) || new Date().getFullYear()-1 );
-	//let results    = $state( null );
-
 	$effect( async () => {
 		ctx.header = {
-			title: `Eingaben für ${ctx.district.name} ${ctx.year}`,
+			title: `Eingaben für ${data.district.name} ${data.year}`,
 			menu: {
 				trail: [
 					{name: 'Home', href: '/'},
 					{name: 'Obmann', href: '/moderator'},
-					{name: ctx.district.short, href: `/moderator/${ctx.district.id}`},
+					{name: data.district.short, href: `/moderator/${data.district.id}`},
 					{name: 'Eingaben'},
 				],
 				options: [
-					{name: 'Eingeben', href: `/moderator/${ctx.district.id}/result/edit`},
-					{name: 'Züchter', href: `/moderator/${ctx.district.id}/breeder`},
+					{name: 'Eingeben', href: `/moderator/${data.district.id}/result/edit`},
+					{name: 'Züchter', href: `/moderator/${data.district.id}/breeder`},
 				],
 			}
 		}
@@ -45,8 +42,8 @@
 
 </script>
 
-{#if ctx.district && ctx.year && ctx.results}
-	<Results district={ctx.district} year={ctx.year} results={ctx.results} />
+{#if data.district && data.year && data.results}
+	<Results district={data.district} year={data.year} results={data.results} />
 {:else}
 	Warten
 {/if}

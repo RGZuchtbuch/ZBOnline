@@ -1,11 +1,15 @@
 <script>
 	import { ctx } from '$lib/js/store.svelte.js';
+	//import model from '$lib/js/model.js';
 	import { email_icon, link_icon } from '$lib/cmp/icons.svelte';
-	import { name } from '$lib/cmp/snippets.svelte';
-	import Form, { CheckBox, Status, TextInput } from '$lib/cmp/form/Form.svelte';
-	import Text from '$lib/cmp/form/input/Text.svelte';
+	//import { name } from '$lib/cmp/snippets.svelte';
+	//import Form, { CheckBox, NumberInput, Select, Status, TextInput } from '$lib/cmp/form/Form.svelte';
+	//import Text from '$lib/cmp/form/input/Text.svelte';
+	import District from './District.svelte';
 
 	let { root } = $props();
+
+	let authorized = $state( ctx.user && ctx.user.admin );
 
 </script>
 
@@ -14,43 +18,20 @@
 		<div class='flex flex-row header sticky top-0'>
 			<div class='district'>Verbände </div>
 			<div class='moderator'>Obmann</div>
-			<div class='email' title='Email schicken'>{@render email_icon()}</div>
-			<div class='link' title='Website besuchen'>{@render link_icon()}</div>
+			<div class='email' title='Email schicken'> ✉ </div>
+			<div class='link' title='Website besuchen'> 🔗 </div>
+			{#if authorized}
+				<div class='w-8' title='Admin'>!</div>
+			{/if}
+
 		</div>
 
 		<ul>
-			{@render row( root, 0 )}
+			<District district={ root } />
 		</ul>
 	{/if}
 </section>
 
-{#snippet row( district, level )}
-	<li>
-		<div class='flex flex-row grow py-2 border-b rounded-b-none'>
-			<div class='district'>{district.name}</div>
-			<div class='moderator'>{@render name( district.moderator )}</div>
-			<div class='email print:hidden'>
-				{#if district.moderator}
-					<!--a href={`mailto:${district.moderator.email}`}> ✉ </a-->
-					<a href={`/message?to=${district.moderator.id}`}> ✉ </a>
-				{/if}
-			</div>
-			<div class='link print:hidden'>
-				{#if district.url}
-					<a href={district.url} target='_blank'> 🔗 </a>
-				{/if}
-			</div>
-		</div>
-
-		{#if district.children}
-			<ul>
-				{#each district.children as child}
-					{@render row( child, level+1 ) }
-				{/each}
-			</ul>
-		{/if}
-	</li>
-{/snippet}
 
 
 <style>
@@ -73,8 +54,5 @@
         @apply w-12;
     }
 
-    .edit {
-	    @apply block;
-    }
 
 </style>

@@ -2,6 +2,8 @@
 
 namespace App\model;
 
+use App\util\Query;
+
 class Cache extends Query
 {
 

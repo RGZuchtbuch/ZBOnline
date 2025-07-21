@@ -1,5 +1,4 @@
 <script>
-	import Pairs from '../pair/Pairs.svelte';
 
 	let { breeder } = $props();
 

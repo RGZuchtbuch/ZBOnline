@@ -20,7 +20,7 @@ class District
 		$id = $args[ 'id' ] ?? null;
 		if( $id ) {
 			if( is_numeric( $id ) ) {
-				$district = model\District::get($id);
+				$district = model\District::read($id);
 				if ( $district ) {
 					$response->getBody()->write(json_encode(['district' => $district], JSON_UNESCAPED_SLASHES));
 					return $response;
@@ -40,7 +40,7 @@ class District
 		if( $requester->isAdmin() ) {
 			$body = $request->getParsedBody();
 			if( $body ) {
-				$id = model\District::new( $body['parentId'], $body['name'], $body['fullname'], $body['short'], $body['url'], $body['latitude'], $body['longitude'], $body['level'], $body['moderatorId'], $requester->getId() );
+				$id = model\District::create( $body['parentId'], $body['name'], $body['fullname'], $body['short'], $body['url'], $body['latitude'], $body['longitude'], $body['level'], $body['moderatorId'], $requester->getId() );
 				if( $id ) {
 					$response->getBody()->write(json_encode(['id' => $id], JSON_UNESCAPED_SLASHES));
 					return $response;
@@ -58,7 +58,7 @@ class District
 			$id = $args[ 'id' ] ?? null;
 			$body = $request->getParsedBody();
 			if( is_numeric( $id ) && $body ) {
-				$updated = model\District::set($body['id'], $body['name'], $body['fullname'], $body['short'], $body['url'], $body['latitude'], $body['longitude'], $body['level'], $body['moderatorId'], $requester->getId() );
+				$updated = model\District::update($body['id'], $body['name'], $body['fullname'], $body['short'], $body['url'], $body['latitude'], $body['longitude'], $body['level'], $body['moderatorId'], $requester->getId() );
 				if( $updated ) {
 					$response->getBody()->write(json_encode(['id' => $id], JSON_UNESCAPED_SLASHES));
 					return $response;
@@ -75,7 +75,7 @@ class District
 		if( $requester->isAdmin() ) {
 			$id = $args[ 'id' ] ?? null;
 			if( $id && is_numeric( $id ) ) {
-				$deleted = model\District::del( $id );
+				$deleted = model\District::delete( $id );
 				if( $deleted ) {
 					$response->getBody()->write(json_encode([ 'id'=>$id, 'success'=>true ], JSON_UNESCAPED_SLASHES));
 					return $response;

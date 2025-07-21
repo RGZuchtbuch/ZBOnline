@@ -13,10 +13,11 @@
     let { children, data } = $props();
 
     // user handled in model/user.js : ctx.user = data.user;
-    ctx.standard = data.standard;
-    ctx.federation = data.federation;
-    ctx.user = data.user;
-
+    $effect( () => {
+        ctx.standard = data.standard;
+        ctx.federation = data.federation;
+        ctx.user = data.user;
+    } );
 
 </script>
 

@@ -4,14 +4,14 @@
 
 	$effect( () => {
 		ctx.header = {
-			title: 'Admin',
+			title: 'Admin: Verbände zum Verwalten',
 			menu: {
 				trail : [
 					{ name:'Start',    href:'/' },
 					{ name:'Admin',    href:'/admin' },
+					{ name:'Verbände', href:'/admin/district' },
 				],
 				options : [
-					{ name:'Verbände', href:'/admin/district' },
 				],
 			}
 		}
@@ -19,7 +19,7 @@
 
 </script>
 
-Alles für den Admin
+Districts to moderate
 
 
 

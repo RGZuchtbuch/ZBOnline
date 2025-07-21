@@ -2,8 +2,7 @@
 
 namespace App\model;
 
-use Error;
-use Exception;
+use App\util\Query;
 
 class Result
 {

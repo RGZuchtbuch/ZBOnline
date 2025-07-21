@@ -77,10 +77,6 @@ class Breed
 		throw new HttpUnauthorizedException( $request, 'Cannot do this');
 	}
 
-//	public function del( Request $request, Response $response, array $args ) : Response {
-//		throw new HttpNotImplementedException( $request, 'Oops' );
-//	}
-
     public static function delete( Request $request, Response $response, array $args ) : Response {
         $requester = new Requester( $request );
         if( $requester->isAdmin() ) {
@@ -110,18 +106,18 @@ class Breed
 	/** other getters **/
 
 	// should be through color filter
-	public static function colors( Request $request, Response $response, array $args ) : Response {
-		$id = $args[ 'id' ] ?? null;
-		if( is_numeric( $id ) ) {
-			$colors = model\std\Breed::getColors( $id );
-			if ($colors) {
-				$response->getBody()->write(json_encode(['colors' => $colors], JSON_UNESCAPED_SLASHES));
-				return $response;
-			}
-			throw new HttpNotFoundException($request, 'Breed or colors not found');
-		}
-		throw new HttpBadRequestException( $request, 'Bad id' );
-	}
+//	public static function colors( Request $request, Response $response, array $args ) : Response {
+//		$id = $args[ 'id' ] ?? null;
+//		if( is_numeric( $id ) ) {
+//			$colors = model\std\Breed::getColors( $id );
+//			if ($colors) {
+//				$response->getBody()->write(json_encode(['colors' => $colors], JSON_UNESCAPED_SLASHES));
+//				return $response;
+//			}
+//			throw new HttpNotFoundException($request, 'Breed or colors not found');
+//		}
+//		throw new HttpBadRequestException( $request, 'Bad id' );
+//	}
 
 
 

@@ -2,13 +2,11 @@
 
 namespace App\model;
 
-use http\Exception\InvalidArgumentException;
-use Slim\Exception\HttpNotFoundException;
-use Slim\Exception\HttpNotImplementedException;
+use App\util\Query;
 
 class District
 {
-	public static function get( int $id = null ) : ? array {
+	public static function read(int $id = null ) : ? array {
 		$args = get_defined_vars();
 		if( $id ) {
 			$stmt = Query::prepare( '
@@ -21,7 +19,7 @@ class District
 		return null;
     }
 
-	public static function new(
+	public static function create(
 		int $parentId, string $name, string $fullname, string $short, // parentId cannot change
 		? string $url,
 		? float $latitude, ? float $longitude,
@@ -35,7 +33,7 @@ class District
 		return Query::insert( $stmt, $args );
 	}
 
-    public static function set(
+    public static function update(
         int $id,
         string $name, ? string $fullname, ? string $short,
 		? string $url,
@@ -50,7 +48,7 @@ class District
         ');
         return Query::update($stmt, $args);
     }
-    public static function del( int $id ) {
+    public static function delete(int $id ) {
         $args = get_defined_vars();
         $stmt = Query::prepare( '
             DELETE 
@@ -120,7 +118,7 @@ class District
     public static function descendants( int $districtId ) : array {
         $args = get_defined_vars();
         $stmt = Query::prepare( "
-            SELECT DISTINCT child.parentId, child.id, child.short, child.name, child.fullname, child.level, child.moderatorId, child.url 
+            SELECT DISTINCT child.parentId, child.id, child.short, child.name, child.fullname, child.level, child.moderatorId, child.url, child.latitude, child.longitude 
             FROM district AS parent
             LEFT JOIN district AS child ON child.id = parent.id OR child.parentId = parent.id
             WHERE parent.id=:districtId OR parent.parentId=:districtId

@@ -2,6 +2,8 @@
 
 namespace App\model;
 
+use App\util\Query;
+
 class Log extends Query
 {
     public static function new( string $method, string $uri, ? string $query, ? string $body, ? int $requesterId ) : ? int {

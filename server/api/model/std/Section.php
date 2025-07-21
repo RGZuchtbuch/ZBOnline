@@ -2,7 +2,7 @@
 
 namespace App\model\std;
 
-use App\model\Query;
+use App\util\Query;
 use Slim\Exception\HttpNotImplementedException;
 
 class Section

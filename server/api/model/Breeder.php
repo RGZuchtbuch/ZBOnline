@@ -2,8 +2,7 @@
 
 namespace App\model;
 
-use App\controller\Controller;
-use Slim\Exception\HttpNotImplementedException;
+use App\util\Query;
 
 class Breeder
 {

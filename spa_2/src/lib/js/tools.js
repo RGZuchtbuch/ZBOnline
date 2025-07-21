@@ -129,3 +129,25 @@ export function setArgsString (args, url, key, init) {
 		args[key] = init;
 	}
 }
+
+export function fullName( person ) {
+	if( person ) {
+		return `${txt(person.firstname)} ${txt(person.infix)} ${txt(person.lastname)}`;
+	}
+	return '-';
+}
+
+export function selectName( person ) {
+	if( person ) {
+		return `${txt(person.lastname)}, ${txt(person.firstname)} ${txt(person.infix)} `;
+	}
+	return '-';
+}
+
+export function shortName( person ) {
+	if( person ) {
+		return `${person.firstname.at(0)}.${person.lastname.at(0)} `;
+	}
+	return '-';
+
+}

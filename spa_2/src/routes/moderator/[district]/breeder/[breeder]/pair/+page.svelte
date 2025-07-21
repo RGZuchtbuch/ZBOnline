@@ -56,32 +56,6 @@
 	})
 
 
-	function setHeader( breeder, district ) {
-		ctx.header.title =
-			breeder.id===0 ?
-			'Neu' :
-			`Zuchter ${breeder.firstname} ${txt(breeder.infix)} ${breeder.lastname} im ${district.name}`;
-
-		ctx.header.menu = {
-			trail: [
-				{name: 'Home', href: '/'},
-				{name: 'Obmann', href: '/moderator'},
-				{name: district.short, href: `/moderator/${district.id}`},
-				{name: 'Züchter', href: `/moderator/${district.id}/breeder`},
-				{
-					name: breeder.id===0 ?
-						'Neu' :
-						`${breeder.firstname.charAt(0)}.${breeder.lastname.charAt(0)}`,
-					href: page.url.href,
-				},
-			],
-			options: [
-//				{name: 'Stämme', href: '/moderator/' + district.id + '/breeder/' + breeder.id + '/pair'},
-				{name: 'Mitglied', href: '/moderator/' + district.id + '/breeder/' + breeder.id + '/profile'},
-			],
-		}
-	}
-
 </script>
 
 {#if data.breeder && data.pairs}

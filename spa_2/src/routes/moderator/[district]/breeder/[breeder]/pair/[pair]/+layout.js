@@ -10,6 +10,6 @@ export async function load( { depends, params } ) {
 	const response = await Promise.all( [
 		model.Pair.load( +params.pair, +params.breeder, +params.district ) // breeder for creating new
 	] );
-	console.log( 'Pair Load', response );
+
 	return { pair:response[0] };
 }

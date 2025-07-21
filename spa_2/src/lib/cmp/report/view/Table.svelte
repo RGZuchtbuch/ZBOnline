@@ -150,7 +150,7 @@
                                     <div class='w-12'>Zuchten</div>
                                     <div class='w-8'></div>
                                         <div class='w-5'></div>
-                                    <div class='w-24 text-center'> {#if section.id === 5}-{:else}Legeleistung{/if} </div>
+                                    <div class='w-24 text-center'> {#if section.id === 5}Legeleistung{:else}Legeleistung{/if} </div>
                                     <div class='w-8'></div>
                                         <div class='w-2'></div>
 
@@ -180,12 +180,12 @@
                                     {#if section.id === 5}
                                         <div class='w-12 th'>Paare</div>
                                         <div class='w-12 th'>Bruten</div>
-                                        <div class='w-12 th'>Küken</div>
+                                        <div class='w-12 th'>Schl %</div>
                                         <div class='w-12 th'>Kü/Pa</div>
                                     {:else}
                                         <div class='w-12 th'>Eier</div>
-                                        <div class='w-12 th'>Befr.</div>
-                                        <div class='w-12 th'>Küken</div>
+                                        <div class='w-12 th'>Befr %</div>
+                                        <div class='w-12 th'>Schl %</div>
                                         <div class='w-12'>-</div>
                                     {/if}
 
@@ -232,12 +232,12 @@
                                             {#if section.id === 5}
                                                 <div class='w-12 th'>Paare</div>
                                                 <div class='w-12 th'>Bruten</div>
-                                                <div class='w-12 th'>Küken</div>
+                                                <div class='w-12 th'>Schl %</div>
                                                 <div class='w-12 th'>Kü/Pa</div>
                                             {:else}
                                                 <div class='w-12 th' title='Gesamtzahl eingelegten Eier'>Eier</div>
-                                                <div class='w-12 th' title='Anteil befruchteten Eier'>Befr.</div>
-                                                <div class='w-12 th' title='Anteil geschlüpften Eier'>Küken</div>
+                                                <div class='w-12 th' title='Anteil befruchteten Eier'>Befr %</div>
+                                                <div class='w-12 th' title='Anteil geschlüpften Eier'>Schl %</div>
                                                 <div class='w-12'>-</div>
                                             {/if}
 
@@ -289,12 +289,12 @@
                                                 {#if section.id === 5 && breed.result} <!-- pigeons -->
                                                     <div class='w-12 td' title='Zahl der Brutpaare'>{dec( breed.result.pairs )}</div> <!-- 2 eggs per brood -->
                                                     <div class='w-12 td' title='Zahl der Bruten'>{dec( breed.result.broodPigeonEggs / 2 )}</div> <!-- 2 eggs per brood -->
-                                                    <div class='w-12 td' title='Anteil der geschlüpften Küken'>{pct( breed.result.broodPigeonHatched ,1 ) }</div>
+                                                    <div class='w-12 td' title='Anteil der geschlüpften Küken'>{ breed.result.broodPigeonEggs ? pct( breed.result.broodPigeonHatched ,1 ) : '-' }</div>
                                                     <div class='w-12 td' title='Zahl der Küken pro Paar'>{dec( breed.result.broodPigeonResult, 1 )}</div>
                                                 {:else}
                                                     <div class='w-12 td' title='Zahl der Eingelegte Eier'>{dec( breed.total.broodLayerEggs )}</div>
-                                                    <div class='w-12 td' title='Anteil befruchteten Eier'>{pct( breed.total.broodLayerFertile, 1 )}</div>
-                                                    <div class='w-12 td' title='Anteil geschlüpfte Küken'>{pct( breed.total.broodLayerHatched, 1 )}</div>
+                                                    <div class='w-12 td' title='Anteil befruchteten Eier'>{ breed.total.broodLayerEggs ? pct( breed.total.broodLayerFertile, 1 ) : '-' }</div>
+                                                    <div class='w-12 td' title='Anteil geschlüpfte Küken'>{ breed.total.broodLayerEggs ? pct( breed.total.broodLayerHatched, 1 ) : '-'}</div>
                                                     <div class='w-12'></div>
                                                 {/if}
 
@@ -379,14 +379,14 @@
                                             <div class='w-8'></div>
                                             <!-- Brood-->
                                             {#if section.id === 5 }
+                                                <div class='w-12 td' title='Anzahl der Paare'>{dec( subsection.total.pairs ) }</div>
                                                 <div class='w-12 td' title='Anzahl Bruten, jeder mit 2 Eier'>{dec( subsection.total.broodPigeonEggs ) / 2 }</div>
-                                                <div class='w-12'></div>
                                                 <div class='w-12 td' title='Anteil geschlüpfte Küken'>{pct( subsection.total.broodPigeonHatched, 1 )}</div>
                                                 <div class='w-12 td' title='Küken pro Paar'>{dec( subsection.total.broodPigeonResult, 1 )}</div>
                                             {:else}
                                                 <div class='w-12 td' title='Eingelegte Eier'>{dec( subsection.total.broodLayerEggs )}</div>
-                                                <div class='w-12 td' title='Anteil befruchteten Eier'>{pct( subsection.total.broodLayerFertile, 1 )}</div>
-                                                <div class='w-12 td' title='Anteil geschlüpfte Küken'>{pct( subsection.total.broodLayerHatched, 1 )}</div>
+                                                <div class='w-12 td' title='Anteil befruchteten Eier'>{ subsection.total.broodLayerEggs ? pct( subsection.total.broodLayerFertile, 1 ) : '-' }</div>
+                                                <div class='w-12 td' title='Anteil geschlüpfte Küken'>{ subsection.total.broodLayerEggs ?pct( subsection.total.broodLayerHatched, 1 ) : '-' }</div>
                                                 <div class='w-12'></div>
                                             {/if}
 
@@ -426,14 +426,14 @@
                                     <div class='w-8'></div>
                                     <!-- Brood-->
                                     {#if section.id === 5 }
-                                        <div class='w-12 td' title='Anzahl Bruten, jeder mit 2 Eier'>{dec( section.total.broodPigeonEggs )}</div>
-                                        <div class='w-12'></div>
+                                        <div class='w-12 td' title='Anzal Paare'>{dec( section.total.pairs )}</div>
+                                        <div class='w-12 td' title='Anzahl Bruten, jeder mit 2 Eier'>{dec( section.total.broodPigeonEggs / 2 )}</div>
                                         <div class='w-12 td' title='Anteil befruchteten Eier'>{pct( section.total.broodPigeonHatched, 1 )}</div>
                                         <div class='w-12 td' title='Anteil geschlüpfte Küken'>{dec( section.total.broodPigeonResult, 1 )}</div>
                                     {:else}
                                         <div class='w-12 td' title='Eingelegte Eier'>{dec( section.total.broodLayerEggs )}</div>
-                                        <div class='w-12 td' title='Anteil befruchteten Eier'>{pct( section.total.broodLayerFertile, 1 )}</div>
-                                        <div class='w-12 td' title='Anteil geschlüpfte Küken'>{pct( section.total.broodLayerHatched, 1 )}</div>
+                                        <div class='w-12 td' title='Anteil befruchteten Eier'>{ section.total.broodLayerEggs ? pct( section.total.broodLayerFertile, 1 ) : '-' }</div>
+                                        <div class='w-12 td' title='Anteil geschlüpfte Küken'>{ section.total.broodLayerEggs ? pct( section.total.broodLayerHatched, 1 ) : '-' }</div>
                                         <div class='w-12'></div>
                                     {/if}
 

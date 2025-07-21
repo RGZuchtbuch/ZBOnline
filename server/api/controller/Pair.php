@@ -3,8 +3,8 @@
 namespace App\controller;
 
 use App\model;
-use App\model\Query;
 use App\model\Requester;
+use App\util\Query;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpBadRequestException;

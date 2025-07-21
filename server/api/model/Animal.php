@@ -2,6 +2,8 @@
 
 namespace App\model;
 
+use App\util\Query;
+
 class Animal {
 
 	public static function readParent( int $id ) {

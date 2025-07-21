@@ -1,4 +1,6 @@
 <script>
+	import {getContext} from 'svelte';
+
 	import { slide } from 'svelte/transition';
 	import { goto } from '$app/navigation';
 	import { ctx } from '$lib/js/store.svelte.js';
@@ -6,10 +8,13 @@
 	let { districts } = $props();
 	let year = new Date().getFullYear()-1;
 
+	//let dists = getContext( 'districts' );
+
 </script>
 
+
 <section>
-	<h3 class='header'>Verbände zum Verwalten</h3>
+	<!--h3 class='header'>Verbände zum Verwalten</h3-->
 	{#if districts}
 		<ol in:slide>
 			{#each districts as district, i}

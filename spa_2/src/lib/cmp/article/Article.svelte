@@ -1,4 +1,5 @@
 <script>
+	import {getContext, onDestroy} from 'svelte';
 	import { page } from '$app/state';
 	import { fade, fly, slide } from 'svelte/transition';
 	import { navigating } from '$app/state';
@@ -6,11 +7,11 @@
 	import { ctx } from '$lib/js/store.svelte.js';
 	import model from '$lib/js/model.js';
 	import Form, { CheckBox, NumberInput, Status, TextArea, TextInput, validator } from '$lib/cmp/form/Form.svelte';
-	import {onDestroy} from 'svelte';
 
 	let { article } = $props();
+	//let article = getContext( 'article' );
 
-	let edit = $state( article.id === 0 );
+	let edit = $state( article && article.id === 0 );
 	let remove = $state( false );
 	let changed = false; // for invalidating load article
 	let authorized = $derived( ctx.user && ctx.user.admin ); // can edit
@@ -24,10 +25,7 @@
 
 	async function onSubmit( event ) {
 		console.log( 'Submit article' );
-		//setTimeout( async () => {
-		//	console.log( 'Invalidate articles' );
-//			await invalidate('articles');
-		//}, 1000 )
+
 		if( article.title ) {
 			changed = true;
 			let response = await model.Article.save( article );
@@ -35,7 +33,6 @@
 		} else if( ! article.titel && remove && confirm('Lösschen?') ){ // name is null and delete
 			changed = true;
 			let response = await model.Article.delete( article.id );
-			//await invalidate('articles');
 			goto( '/article' ); // back to list, no return
 			//return response
 		}

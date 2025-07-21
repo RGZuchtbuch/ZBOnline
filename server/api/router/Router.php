@@ -123,6 +123,9 @@ class Router {
 
 		$app->get('/2/district', 'App\controller\District::filter' );
 		$app->get('/2/district/{id:[0-9]+}', 'App\controller\District::get' );
+		$app->post( '/2/district',  		'App\controller\District::post');
+		$app->put( '/2/district/{id:[0-9]+}','App\controller\District::put');
+
 
 		$app->post( '/2/message', 'App\controller\Message::post' );
 

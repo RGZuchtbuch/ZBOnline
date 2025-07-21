@@ -24,7 +24,7 @@ class Article
 		$id = $args[ 'id' ] ?? null;
 		if( $id ) { // specific article
 			if( is_numeric( $id ) ) {
-				$article = model\Article::get( $id );
+				$article = model\Article::read( $id );
 				if ($article) {
 					$response->getBody()->write(json_encode(['article' => $article], JSON_UNESCAPED_SLASHES));
 					return $response;
@@ -40,7 +40,7 @@ class Article
 		if( $requester->isAdmin() ) {
 			$article = $request->getParsedBody();
 			if( $article ) {
-				$id = model\Article::new( $article['author'], $article['title'], $article['html'], $requester->getId() );
+				$id = model\Article::create( $article['author'], $article['title'], $article['html'], $requester->getId() );
 				if( $id ) {
 					$response->getBody()->write(json_encode(['id' => $id], JSON_UNESCAPED_SLASHES));
 					return $response;
@@ -58,7 +58,7 @@ class Article
 			$id = $args[ 'id' ] ?? null;
 			$article = $request->getParsedBody();
 			if( is_numeric( $id ) && $article ) {
-				$updated = model\Article::set( $id, $article['author'], $article['title'], $article['html'], $requester->getId() );
+				$updated = model\Article::update( $id, $article['author'], $article['title'], $article['html'], $requester->getId() );
 				if( $updated ) {
 					$response->getBody()->write(json_encode(['id' => $id], JSON_UNESCAPED_SLASHES));
 					return $response;
@@ -75,7 +75,7 @@ class Article
 		if( $requester->isAdmin() ) {
 			$id = $args[ 'id' ] ?? null;
 			if( $id && is_numeric( $id ) ) {
-				$deleted = model\Article::del( $id );
+				$deleted = model\Article::delete( $id );
 				if( $deleted ) {
 					$response->getBody()->write(json_encode([ 'id'=>$id, 'deleted'=>true ], JSON_UNESCAPED_SLASHES));
 					return $response;
@@ -90,7 +90,7 @@ class Article
 	/** v3 **/
 	public static function filter( Request $request, Response $response, array $args ) : Response {
 		// give list of all, no filter
-		$articles = model\Article::get();
+		$articles = model\Article::read();
 		$response->getBody()->write( json_encode( [ 'articles' => $articles ], JSON_UNESCAPED_SLASHES ) );
 		return $response;
 	}

@@ -1,20 +1,26 @@
 <script>
-	import { cache, state } from '$lib/js/store.svelte.js';
+	import { ctx } from '$lib/js/store.svelte.js';
 	import {onMount} from 'svelte';
+	import {fullName, shortName} from '$lib/js/tools.js';
 
 	let { data } = $props();
 
-	onMount( () => {
-		state.title = `Züchter ${data.breeder.firstname} ${data.breeder.infix} ${data.breeder.lastname}`;
-		state.trail = [
-			{ name:'Home',      href:'/' },
-			{ name:'Züchter',   href:`/breeder/${data.breeder.id}` },
-			{ name:'Stämme',    href:`/breeder/${data.breeder.id}/pair` },
-		];
-		state.options = [
-			{ name:'Verband', href:`/district/${data.breeder.districtId}` },
-		]
-	})
+	$effect( () => {
+		ctx.header = {
+			title : `Züchter ${fullName( ctx.breeder )}`,
+			menu: {
+				trail : [
+					{name: 'Start', href: '/'},
+					{name: 'Züchter', href: '/breeder'},
+					{name: shortName( ctx.breeder ), href:`/breeder/${data.breeder.id}` },
+					{name:'Stämme' },
+				],
+				options : [
+				]
+			}
+		};
+
+	} )
 
 </script>
 

@@ -6,8 +6,6 @@
 	let { breeder, district, pairs, year } = $props();
 	let authorized = $derived( ctx.user && ctx.user.admin )
 
-	$inspect( 'BPs', breeder, district, pairs, year );
-
 </script>
 
 {#if breeder && district && pairs}

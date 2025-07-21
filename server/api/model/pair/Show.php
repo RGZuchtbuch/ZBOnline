@@ -2,7 +2,7 @@
 
 namespace App\model\pair;
 
-use App\model\Query;
+use App\util\Query;
 
 class Show {
 	//*** Lay ***//

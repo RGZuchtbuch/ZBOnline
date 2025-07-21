@@ -1,3 +1,4 @@
+import {invalidate} from '$app/navigation';
 import api from '$lib/js/server.js';
 
 export default class Breeder {
@@ -27,12 +28,14 @@ export default class Breeder {
 		if( breeder.id === 0 ) { // new
 			const data = await api.post( `/api/2/breeder`, breeder );
 			if( data && data.id > 0 ) {
+				await invalidate( 'breeders' )
 				breeder.id = data.id;
 				return true;
 			}
 		} else { // existing
 			const data = await api.put( `/api/2/breeder/${breeder.id}`, breeder );
 			if( data && data.id > 0 ) {
+				await invalidate( 'breeders' )
 				return true;
 			}
 		}

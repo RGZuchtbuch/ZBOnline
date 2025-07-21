@@ -2,6 +2,8 @@
 
 namespace App\model;
 
+use App\util\Query;
+
 class User extends Query
 {
 /*

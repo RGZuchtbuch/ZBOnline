@@ -6,11 +6,8 @@ import { ctx } from '$lib/js/store.svelte.js';
 export default class User {
 	static async load() {
 		let token = browser && window.sessionStorage.getItem('token'); // encoded
-		// store.user = tokenToUser( token );
-		// return store.user;
 		let user = tokenToUser( token );
-		let date = Date.now()/1000;
-		console.log( 'user', user, date );
+//		let date = Date.now()/1000;
 		return user;
 	}
 	static async login ( email, password ) {

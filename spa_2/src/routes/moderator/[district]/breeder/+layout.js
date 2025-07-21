@@ -3,7 +3,7 @@ import model from '$lib/js/model.js';
 
 export async function load( { depends, params } ) {
 	console.log( 'load district breeders', params );
-	depends( 'breeder' ); // as i'm not using the svelte fetch
+	depends( 'breeders' ); // as i'm not using the svelte fetch
 	const breeders = await model.Breeder.query( { district:+params.district } );
 	return { breeders:breeders };
 }

@@ -1,4 +1,4 @@
-import {invalidate} from '$app/navigation';
+import {invalidate, invalidateAll} from '$app/navigation';
 import api from '$lib/js/server.js';
 
 export default class Article {
@@ -20,22 +20,23 @@ export default class Article {
 		return data && data.articles ? data.articles : null;
 	}
 	static async save( article ){
-		console.log( 'Save article' );
-
+		console.log( 'Save article', article.id );
 		if( article.id === 0 ) { // new
 			const data = await api.post( `/api/2/article`, article );
 			if( data && data.id > 0 ) {
 				article.id = data.id;
+				await invalidate( 'articles' );
+
 				return true;
 			}
 		} else { // existing
 			const data = await api.put( `/api/2/article/${article.id}`, article );
 			if( data && data.id > 0 ) {
+				console.log('Updated article' );
+				await invalidate( 'articles' );
 				return true;
 			}
 		}
-		await invalidate( 'article' );
-		await invalidate( 'articles' );
 		return false;
 	}
 	static async delete( id ){

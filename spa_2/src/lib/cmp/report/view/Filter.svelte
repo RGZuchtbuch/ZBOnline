@@ -106,25 +106,25 @@
 	<Form>
 		<section class='flex flex-row gap-x-2 p-4' >
 			<Select class='' label='Verband' value={args.district} onchange={onDistrictChange}>
-				<option value={federation.id}>{federation.name}</option>/
+				<option value={federation.id}>{federation.name}</option>
 				{#each federation.children as district}
-					<option value={district.id}>{district.name}</option>/
+					<option value={district.id}>{district.name}</option>
 					{#each district.children as district}
-						<option value={district.id}>&nbsp; &nbsp; {district.name}</option>/
+						<option value={district.id}>&nbsp; &nbsp; {district.name}</option>
 					{/each}
 				{/each}
 			</Select>
 
 			<Select class='' label='Jahr' value={args.year} onchange={onYearChange}>
 				{#each years as year}
-					<option value={year}>{year}</option>/
+					<option value={year}>{year}</option>
 				{/each}
 			</Select>
 
 			<Select class='' label='ZB Gruppe' value={args.group} onchange={onGroupChange}>
-				<option value={undefined} title='Alle Gruppen'>*</option>/
+				<option value={undefined} title='Alle Gruppen'>*</option>
 				{#each groups as group}
-					<option value={group}>{group}</option>/
+					<option value={group}>{group}</option>
 				{/each}
 			</Select>
 		</section>

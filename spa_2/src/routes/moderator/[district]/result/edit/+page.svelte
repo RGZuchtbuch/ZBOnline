@@ -8,28 +8,36 @@
 
 	let { data } = $props();
 
+	// ctx.year = null;
+	// ctx.group = null;
+	// ctx.section = null;
+	// ctx.results = null;
+	ctx.year = data.year;
+	ctx.group = data.group;
+	ctx.section = data.section;
+	ctx.results = data.results;
+
 	$effect( () => {
-		ctx.district = data.district;
-		ctx.year = data.year;
-		ctx.group = data.group;
-		ctx.section = data.section;
-		ctx.results = data.results;
+		// ctx.year = data.year;
+		// ctx.group = data.group;
+		// ctx.section = data.section;
+		// ctx.results = data.results;
 	})
 
 	$effect( async () => {
 		ctx.header = {
-			title: `${ctx.district.name}`,
+			title: `${data.district.name}`,
 			menu: {
 				trail: [
 					{name: 'Home', href: '/'},
 					{name: 'Obmann', href: '/moderator'},
-					{name: data.district.short, href: `/moderator/${ctx.district.id}`},
-					{name: 'Eingaben', href: `/moderator/${ctx.district.id}/result?year=${ctx.year}`},
+					{name: data.district.short, href: `/moderator/${data.district.id}`},
+					{name: 'Eingaben', href: `/moderator/${data.district.id}/result?year=${data.year}`},
 					{name: 'Eingeben'},
 				],
 				options: [
-					{name: 'Eingaben', href: `/moderator/${ctx.district.id}/result?year=${ctx.year}`},
-					{name: 'Züchter', href: `/moderator/${ctx.district.id}/breeder`},
+					{name: 'Eingaben', href: `/moderator/${data.district.id}/result?year=${data.year}`},
+					{name: 'Züchter', href: `/moderator/${data.district.id}/breeder`},
 				],
 			},
 		};
@@ -43,6 +51,6 @@
 
 </script>
 
-{#if ctx.district && ctx.year && ctx.section && ctx.group && ctx.results } <!-- needed as ctx might not be updated yet -->
-	<ResultsEdit district={ctx.district} year={ctx.year} section={ctx.section} group={ctx.group} results={ctx.results} standard={ctx.standard} />
+{#if data.district && data.year && data.section && data.group && data.results } <!-- needed as ctx might not be updated yet -->
+	<ResultsEdit district={data.district} year={data.year} section={data.section} group={data.group} results={data.results} standard={ctx.standard} />
 {/if}

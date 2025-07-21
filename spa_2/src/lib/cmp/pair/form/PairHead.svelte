@@ -13,7 +13,6 @@
 		name:       v => validator(v).string().orNullIf( pair.delete ).isValid(),
 	}
 
-	$inspect( 'User', store.user );
 </script>
 
 

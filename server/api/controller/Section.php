@@ -39,7 +39,7 @@ class Section
 		if( $requester->isAdmin() ) {
 			$body = $request->getParsedBody();
 			if( $body ) {
-				$id = model\Article::new( $body['title'], $body['html'], $requester->getId() );
+				$id = model\Article::create( $body['title'], $body['html'], $requester->getId() );
 				if( $id ) {
 					model\Cache::del('standard');
 					model\Cache::del('result');
@@ -59,7 +59,7 @@ class Section
 			$id = $args[ 'id' ] ?? null;
 			$body = $request->getParsedBody();
 			if( is_numeric( $id ) && $body ) {
-				$updated = model\Article::set( $id, $body['title'], $body['html'], $requester->getId() );
+				$updated = model\Article::update( $id, $body['title'], $body['html'], $requester->getId() );
 				if( $updated ) {
 					model\Cache::del('standard');
 					model\Cache::del('result');
@@ -78,7 +78,7 @@ class Section
 		if( $requester->isAdmin() ) {
 			$id = $args[ 'id' ] ?? null;
 			if( $id && is_numeric( $id ) ) {
-				$deleted = model\Article::del( $id );
+				$deleted = model\Article::delete( $id );
 				if( $deleted ) {
 					model\Cache::del('standard');
 					model\Cache::del('result');

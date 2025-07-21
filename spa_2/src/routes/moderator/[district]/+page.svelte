@@ -6,6 +6,8 @@
 	import District from '$lib/cmp/moderator/District.svelte';
 
 	let { data } = $props();
+
+	ctx.district = null;
 	$effect( () => {
 		ctx.district = data.district;
 	}); // in context to avoid warnings on wrong updates.
@@ -30,5 +32,5 @@
 
 </script>
 
-<District district={ctx.district}/>
+<District district={data.district}/>
 

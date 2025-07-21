@@ -3,6 +3,8 @@
 namespace App\model;
 
 
+use App\util\Query;
+
 class Pair {
 	public static function read($id)
 	{

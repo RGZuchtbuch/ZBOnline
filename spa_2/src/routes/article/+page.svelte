@@ -13,7 +13,7 @@
 
 	$effect( async ()=>{
 		ctx.header = {
-			title : `Beiträge zum BDRG Zuchtbuch [${ctx.articles.length}]`,
+			title : `Beiträge zum BDRG Zuchtbuch [${data.articles.length}]`,
 			menu : {
 				trail: [
 					{name: 'Start', href: '/'},
@@ -31,5 +31,5 @@
 </script>
 
 {#if ctx.articles}
-	<Articles articles={ctx.articles} />
+	<Articles articles={data.articles} />
 {/if}
