@@ -4,14 +4,16 @@
     import { page } from '$app/state';
     import { dec, pct } from '$lib/js/tools.js';
 
-    let { report, district, year } = $props();
+    let { table, district, year } = $props();
 
-    let totalledReport = $state( null );
+    let totalledReport = null;
 
-    $inspect( 'TR', totalledReport );
-
+    calcTotals();
     $effect( () => {
-        calcTotals( report );
+        if( table !== null ) {
+            console.log( 'CalcTotals' );
+            //calcTotals();
+        }
     });
 
     function addTo( sum, result ) { // count and add all up to totals of section etc
@@ -87,10 +89,10 @@
     function createTotal() {
         return { breeders:0, pairs:0, layDames:0, layShould:0, layBreeders:0, layEggs:0, layWeightBreeders:0, layWeightShould:0, layWeight:0, broodBreeders:0, broodLayerEggs:null, broodLayerFertile:0, broodLayerHatched:0, broodPigeonEggs:null, broodPigeonHatched:null, broodPigeonResult:0, showBreeders:0, showCount:null, showScore:0 };
     }
-    function calcTotals( report ) {
-        totalledReport = null;
+    function calcTotals(  ) {
+        totalledReport = table;
         const resultsSum = createTotal();
-        for( const section of report.sections ) {
+        for( const section of totalledReport.sections ) {
             const sectionSum = createTotal();
             for( const subsection of section.subsections ) {
                 const subsectionSum = createTotal();
@@ -115,15 +117,16 @@
             }
             section.total = avgTotal( sectionSum );
         }
-        report.total = avgTotal( resultsSum );
-        totalledReport = report;
+        totalledReport.total = avgTotal( resultsSum );
+        //totalledReport = report;
+        console.log('T', totalledReport );
     }
 
 </script>
 
 <!-- comby of table and div for better printing results -->
 
-{#if totalledReport && totalledReport.sections.length > 0 }
+{#if totalledReport !== null && totalledReport.sections.length > 0 }
     {#key totalledReport }
         <div class='flex flex-col' in:fade>
             {#each totalledReport.sections as section, s}
@@ -494,17 +497,17 @@
                             <div class='flex flex-row bg-header text-white px-2 gap-x-1 justify-evenly font-bold text-base italic border-y border-gray-600'>
                                 <div class='grow'>Gesamt</div>
                                 <div class='flex justify-evenly text-base gap-x-6'>
-                                    {#if report.total}
+                                    {#if table.total}
                                         <div class='flex w-14 justify-evenly'>
-                                            <div class='td' title='Zahl der Zuchten / Züchter'>{report.total.breeders}</div>
+                                            <div class='td' title='Zahl der Zuchten / Züchter'>{table.total.breeders}</div>
                                         </div>
                                         <div class='w-28'></div>
                                         <div class='w-40'></div>
                                         <div class='w-12'></div>
 
                                         <div class='flex w-28 justify-evenly'>
-                                            <div class='td' title='Zahl der ausgestellten Tieren'>{dec( report.total.showCount )}</div>
-                                            <div class='td' title='Durchschnitt Bewertungsnote'>{dec( report.total.showScore, 1 )}</div>
+                                            <div class='td' title='Zahl der ausgestellten Tieren'>{dec( table.total.showCount )}</div>
+                                            <div class='td' title='Durchschnitt Bewertungsnote'>{dec( table.total.showScore, 1 )}</div>
                                         </div>
                                     {/if}
                                 </div>

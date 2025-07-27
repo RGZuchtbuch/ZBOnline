@@ -1,16 +1,18 @@
 <script>
 	import { page } from '$app/state';
 	import { ctx } from '$lib/js/store.svelte.js';
+	import { addCrumb } from '$lib/js/tools.js';
 
 	import Standard from '$lib/cmp/standard/Standard.svelte';
 
-	let { data } = $props();
+	//let { data } = $props();
 
 	$effect( () => {
-		setHeader( data.standard );
+		if( page.url ) setHeader();
 	})
 
-	function setHeader( standard ) {
+	function setHeader() {
+		addCrumb( { name:'Standard', url:page.url } );
 		ctx.header = {
 			title: 'BDRG Rassegeflügel Standard',
 			menu: {
@@ -28,5 +30,6 @@
 	}
 </script>
 
-<Standard standard={data.standard}/>
-
+{#if ctx.standard}
+	<Standard standard={ctx.standard}/>
+{/if}

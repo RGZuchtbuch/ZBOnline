@@ -2,54 +2,42 @@
 
 	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
-	import { ctx } from '$lib/js/store.svelte.js';
-	import { txt } from '$lib/js/tools.js';
+	import { ctx, dirty } from '$lib/js/store.svelte.js';
+	import { addCrumb, fullName, shortName, txt} from '$lib/js/tools.js';
+	import model from '$lib/js/model.js';
 	import Pairs from '$lib/cmp/breeder/Pairs.svelte';
 
+	addCrumb( { name:'Mitglied', href:page.url.href } );
 
-	let { data } = $props();
-
-	ctx.breeder = data.breeder;
-	ctx.district = data.district;
-	// $effect( () => {
-	// 	ctx.breeder = data.breeder;
-	// 	ctx.district = data.district;
-	// })
-
+	// breeder loaded in layout
 
 	$effect(async () => {
-		setHeader( ctx.breeder, ctx.district );
+		if( ctx.district !== null && ctx.breeder !== null ) setHeader();
 	})
 
-
-	function setHeader( breeder, district ) {
-		ctx.header.title =
-			breeder.id===0 ?
-			'Neu' :
-			`Zuchter ${breeder.firstname} ${txt(breeder.infix)} ${breeder.lastname} im ${district.name}`;
-
-		ctx.header.menu = {
-			trail: [
-				{name: 'Home', href: '/'},
-				{name: 'Obmann', href: '/moderator'},
-				{name: district.short, href: `/moderator/${district.id}`},
-				{name: 'Züchter', href: `/moderator/${district.id}/breeder`},
-				{
-					name: breeder.id===0 ?
-						'Neu' :
-						`${breeder.firstname.charAt(0)}.${breeder.lastname.charAt(0)}`,
-					href: page.url.href,
-				},
-			],
-			options: [
-				{name: 'Stämme', href: '/moderator/' + district.id + '/breeder/' + breeder.id + '/pair'},
-				{name: 'Mitglied', href: '/moderator/' + district.id + '/breeder/' + breeder.id + '/profile'},
-			],
+	function setHeader() {
+		console.log( 'setHeader', ctx.breeder.firstname );
+		ctx.header = {
+			title: ctx.breeder.id === 0 ? 'Neu' : `Zuchter ${fullName(ctx.breeder)} im ${ctx.district.name}`,
+			menu: {
+				trail: [
+					{name: 'Home', href: '/'},
+					{name: 'Obmann', href: '/moderator'},
+					{name: ctx.district.short, href: `/moderator/${ctx.district.id}`},
+					{name: 'Züchter', href: `/moderator/${ctx.district.id}/breeder`},
+					{name: ctx.breeder.id === 0 ? 'Neu' : `${shortName(ctx.breeder)}`},
+				],
+				options: [
+					{name: 'Stämme', href: `/moderator/${ctx.district.id}/breeder/${ctx.breeder.id}/pair`},
+					{name: 'Mitglied', href: `/moderator/${ctx.district.id}/breeder/${ctx.breeder.id}/profile`},
+				],
+			}
 		}
 	}
 
 </script>
 
+Breeder
 {#if ctx.breeder}
 	Breeder info here
 	<!--Pairs breeder={data.breeder} district={data.district} pairs={data.pairs} year={data.year} /-->

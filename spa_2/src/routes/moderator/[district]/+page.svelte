@@ -1,25 +1,26 @@
 <script>
 	import {page} from '$app/state';
 	import { goto } from '$app/navigation';
-
 	import { ctx } from '$lib/js/store.svelte.js';
+	import { addCrumb } from '$lib/js/tools.js';
 	import District from '$lib/cmp/moderator/District.svelte';
 
-	let { data } = $props();
+	let district = ctx.federation.districts[ +page.params.district ]; // ctx.district may not be known yet
+	addCrumb( { name:district.short, href:page.url.href } );
 
-	// ctx.district = data.district;
-	// $effect( () => {
-	// 	ctx.district = data.district;
-	// }); // in context to avoid warnings on wrong updates.
+	$effect( () => {
+		if( ctx.district ) setHeader();
+	});
 
-	$effect( async () => {
+	function setHeader() {
+		addCrumb( page.url.href );
 		ctx.header = {
-			title: `${data.district.name}`,
+			title: `${ctx.district.name}`,
 			menu: {
 				trail: [
 					{name: 'Home', href: '/'},
 					{name: 'Obmann', href: '/moderator'},
-					{name: data.district.short},
+					{name: ctx.district.short},
 
 				],
 				options: [
@@ -28,9 +29,9 @@
 				],
 			},
 		}
-	});
+	}
 
 </script>
 
-<District district={data.district}/>
+<District district={ctx.district}/>
 

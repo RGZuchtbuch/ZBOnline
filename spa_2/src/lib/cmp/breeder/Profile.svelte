@@ -11,9 +11,7 @@
     let remove = $state( false );
     let changed = false; // for invalidating load article
 
-    console.log( breeder );
-
-    let authorized = $derived( ctx.user && ( ctx.user.moderator.includes( breeder.districtId ) || ctx.user.admin ) ); // can edit
+    let authorized = $derived( ctx.user !== null && ( ctx.user.moderator.includes( breeder.districtId ) || ctx.user.admin ) ); // can edit
 
     const validate = {
         member:     v => validator(v).number().orNull().isValid(),
@@ -29,7 +27,6 @@
 //    name:       v => validator(v).string().orNullIf( pair.delete ).isValid(),
 
     async function onSubmit() {
-        invalidate( 'breeder' );
         if( breeder.start && breeder.firstname && breeder.lastname && breeder.club ) {
             return await model.Breeder.save( breeder );
         } else if( breeder.id > 0 && breeder.firstname === null && breeder.lastname === null && breeder.delete ) {
@@ -64,6 +61,7 @@
 
         <fieldset class='flex flex-row gap-x-2 p-4'>
             <legend>Mitglied</legend>
+            <TextInput class='w-24' label='Verband' value={district.short} disabled/>
             <NumberInput class='w-24' label='Mitgliedsnummer' bind:value={breeder.member} validator={validate.member}/>
             <span class='w-4'></span>
             <DateInput class='' label='Seit *' bind:value={breeder.start} error='Pflichtfeld' validator={validate.start}/>

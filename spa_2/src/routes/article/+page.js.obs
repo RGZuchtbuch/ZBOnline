@@ -1,0 +1,30 @@
+import model from '$lib/js/model.js';
+import { ctx } from '$lib/js/store.svelte.js';
+
+export async function load( { depends, fetch, params } ) {
+	depends( 'articles' );
+
+	console.log( 'Loading Articles' );
+
+	const response = await Promise.all( [
+		model.Article.query()
+	] );
+	ctx.articles = response[0];
+	return { articles:ctx.articles };
+
+	// const api = 'http://localhost:80';
+	// const url = `${api}/api/2/article`;
+	// const options= {
+	// 	method: 'GET',
+	// 	headers : {
+	// 		'Accept': 'application/json', // response
+	// 		'Content-Type': 'application/json', // body
+	// 		'Authorization': `Bearer ${ctx.user ? ctx.user.token : ''}`,
+	// 	}
+	// }
+	//
+	// const raw = await fetch( url, options );
+	// const response = await raw.json();
+	// ctx.articles = response.articles;
+	// return { articles:ctx.articles };
+}

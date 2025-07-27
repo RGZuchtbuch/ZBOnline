@@ -1,21 +1,22 @@
 <script>
-	import { ctx } from '$lib/js/store.svelte.js';
+	import {ctx, dirty} from '$lib/js/store.svelte.js';
 	import model from '$lib/js/model.js';
 	import { fullName, selectName } from '$lib/js/tools.js';
 	import Form, { CheckBox, NumberInput, Select, Status, TextInput } from '$lib/cmp/form/Form.svelte';
 	import District from './District.svelte';
 	import {goto} from '$app/navigation';
+	import {onDestroy} from 'svelte';
 
 	let { district } = $props();
 
 	let authorized = $state( ctx.user && ctx.user.admin );
 	let edit = $state( false );
+	let changed = false;
 	let breeders = $state( null );
 
 	$effect( async () => {
-		console.log( 'Edit', edit );
 		if( edit && breeders === null ) {
-			breeders = await model.Breeder.query( {district:district.id});
+			breeders = await model.Breeder.query( {district:district.id} );
 		}
 	})
 
@@ -28,8 +29,6 @@
 			return false;
 		}
 	}
-
-	console.log( 'DM', district.moderator );
 
 </script>
 

@@ -1,9 +1,9 @@
-import {invalidate} from '$app/navigation';
+
 import api from '$lib/js/server.js';
 
 export default class Breeder {
 	static async load( id, districtId ){
-		console.log( "Load breeder", id, districtId );
+		//console.log( "Load breeder", id, districtId );
 		if( id === 0 ) { // new breeder
 			return {
 				id:0,
@@ -19,7 +19,7 @@ export default class Breeder {
 		}
 	}
 	static async query( args ){
-		console.log( 'Load breeders', args );
+		//console.log( 'Load breeders', args );
 		const data = await api.query(`/api/2/breeder`, args );
 		return data && data.breeders ? data.breeders : null;
 	}
@@ -28,14 +28,12 @@ export default class Breeder {
 		if( breeder.id === 0 ) { // new
 			const data = await api.post( `/api/2/breeder`, breeder );
 			if( data && data.id > 0 ) {
-				await invalidate( 'breeders' )
 				breeder.id = data.id;
 				return true;
 			}
 		} else { // existing
 			const data = await api.put( `/api/2/breeder/${breeder.id}`, breeder );
 			if( data && data.id > 0 ) {
-				await invalidate( 'breeders' )
 				return true;
 			}
 		}

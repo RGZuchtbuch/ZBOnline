@@ -19,7 +19,7 @@
 		<ol in:slide>
 			{#each districts as district, i}
 				<li class='flex flex-row items-center'>
-					<a href={`/moderator/${district.id}/result`} title='Verband verwalten'>
+					<a href={`/moderator/${district.id}`} title='Verband verwalten'>
 						<div class='w-6 text-right '>{i+1}.</div>
 						<div>{district.name}</div>
 					</a>

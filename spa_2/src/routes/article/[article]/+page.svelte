@@ -1,22 +1,38 @@
 <script>
-	import { ctx } from '$lib/js/store.svelte.js';
+	import {onMount} from 'svelte';
+	import { page } from '$app/state';
+	import { ctx, dirty } from '$lib/js/store.svelte.js';
+	import model from '$lib/js/model.js';
 	import Article from '$lib/cmp/article/Article.svelte';
+	import {addCrumb} from '$lib/js/tools.js';
 
-	let { data } = $props();
+//	addCrumb( { name:'?', url:page.url } );
 
-	ctx.article = $state( data.article );
 	$effect( async () => {
-		ctx.article = data.article;
+		if ( dirty.article || page.url ) loadArticle(+page.params.article);
+	});
+	$effect( () => {
+		if( ctx.article ) {
+			addCrumb( { name:ctx.article.title.substring( 0, 8 ), url:page.url } );
+			setHeader();
+		}
 	})
 
- 	$effect( async () => {
+	async function loadArticle( id ) {
+		console.log("load Article")
+		dirty.article = false;
+		ctx.article = null;
+		ctx.article = await model.Article.load( id );
+	}
+
+	function setHeader() {
 		ctx.header = {
-			title : data.article.title ? data.article.title : '?',
+			title : ctx.article.title ? ctx.article.title : '?',
 			menu : {
 				trail: [
 					{name: 'Start', href: '/'},
 					{name: 'Beiträge', href: '/article'},
-					{name: article.title },
+					{name: ctx.article.title },
 				],
 				options: [
 					{name: 'Verbände', href: '/federation'},
@@ -25,8 +41,7 @@
 				],
 			},
 		};
- 	});
-
+	}
 
 </script>
 

@@ -1,10 +1,9 @@
 <script>
 	import { fade, slide } from 'svelte/transition';
-	import { dec, txt } from '$lib/js/tools.js';
+	import { dec, fullName, shortName, txt } from '$lib/js/tools.js';
 
 	let { district, year, results } = $props();
 
-	console.log('RV', results );
 
 </script>
 
@@ -80,6 +79,8 @@
 						</span>
 					</span>
 				</div>
+
+
 				{#each section.breeds as breed}
 					<div class='flex flex-row pl-4'>
 						<sup class='w-4'>
@@ -90,8 +91,10 @@
 							{@render result( section, breed.result )}
 						{/if}
 					</div>
+
+
 					{#each breed.colors as color}
-						<div class='flex flex-row pl-10' class:pair={color.result.pairId !== null}>
+						<div class='flex flex-row pl-10' class:accepted={color.result.pairId && color.result.accepted} class:notaccepted={color.result.pairId && !color.result.accepted}>
 							<span class='w-4'></span>
 							<span class='grow italic'>
 								{color.name}
@@ -145,9 +148,9 @@
 	{#if result.breeder }
 		<a class='w-8 text'
 		   href={`/moderator/${result.districtId}/breeder/${result.breeder.id}/pair/${result.pairId}`}
-		   title={`Zur Stamm von Züchter ${result.breeder.firstName} ${txt(result.breeder.infix)} ${result.breeder.lastName}`}
+		   title={`Zur Stamm von Züchter ${fullName(result.breeder)}`}
 		>
-			{ result.breeder.short }
+			{ shortName( result.breeder ) }
 		</a>
 	{:else}
 		<span class='w-8'></span>
@@ -171,9 +174,13 @@
     .text {
         @apply px-1 text-center;
     }
-	.pair {
+
+	.accepted {
 		@apply bg-teal-50;
 	}
+    .notaccepted {
+        @apply bg-orange-50;
+    }
 
 	span {
 		@apply align-bottom;

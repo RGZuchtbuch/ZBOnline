@@ -4,13 +4,13 @@
 	import { dec, pct, txt } from '$lib/js/tools.js';
 	import { DateInput, Label, NumberInput, RingInput, Select, TextInput, validator } from '../../form/Form.svelte';
 
-	let { brood=$bindable(), pair, standard, i } = $props();
+	let { brood, pair, standard, i } = $props();
 
 	const validate = {
 		start:      v => validator(v).date().orNull().isValid(),
 		eggs:       v => validator(v).number().range( 1, 99999 ).orNull().isValid(),
-		fertile:    v => validator(v).number().range( 0, brood.eggs ).orNullIf( brood.eggs === null ).isValid(),
-		hatched:    v => validator(v).number().range( 0, brood.fertile ).orNullIf( brood.fertile === null ).isValid(),
+		fertile:    v => validator(v).number().range( 0, brood.eggs ).orNull().isValid(),
+		hatched:    v => validator(v).number().range( 0, brood.fertile ? brood.fertile : brood.eggs ).orNullIf( brood.eggs === null ).isValid(),
 	}
 
 	$effect( () => {
@@ -31,7 +31,7 @@
 			<Label label={i===0}> → </Label>
 			<TextInput class='w-16' label={i===0?'Brutleistung':null} title='Schlüpfrate' value={ pct( brood.hatched, brood.eggs ) } align='right' disabled/>
 			<Label label={i===0}> = </Label>
-			<NumberInput class='w-16 font-bold' label={i===0?'Note':null} title='Schlüpfnote' value={ dec( brood.grade, 1 ) } disabled/>
+			<TextInput class='w-16 font-bold' label={i===0?'Note':null} title='Schlüpfnote' value={ brood.grade > 89 ? dec( brood.grade, 1 ) : 'o.B.' } disabled/>
 		</div>
 	{/if}
 

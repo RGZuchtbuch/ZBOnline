@@ -1,17 +1,16 @@
 <script>
 	import { page } from '$app/state';
-	import { ctx, store } from '$lib/js/store.svelte.js';
+	import { ctx, dirty } from '$lib/js/store.svelte.js';
 	import Article from '$lib/cmp/article/Article.svelte';
-
-	let { data } = $props();
-
-	$effect( async () => {
-
-	})
-	//ctx.article = $derived( data.article );
+	import {addCrumb} from '$lib/js/tools.js';
 
  	$effect( async () => {
-		const header = {
+		setHeader();
+		addCrumb( { name:'Züchter', url:page.url } );
+ 	});
+
+	function setHeader() {
+		const header = { // first in local to avoid retriggering when assigning
 			title : 'Züchter im Zuchtbuch',
 			menu : {
 				trail: [
@@ -19,27 +18,32 @@
 					{name: 'Züchter'},
 				],
 				options: [
-					{name: 'Beiträge', href: '/article'},
-					{name: 'Verbände', href: '/federation'},
-					{name: 'Standard', href: '/standard'},
-					{name: 'Leistungen', href: '/report'},
+					{name: 'Bewertungsrechner', href: '/breeder/grader'},
+					{name: 'Abstammungsnachweis', href: '/breeder/lineageform'},
 				],
 			},
 		};
-
 		if( ctx.user ) {
-			header.menu.options.push( {name: 'Mein Zuchtbuch', href: `/breeder/${ctx.user.id}`} );
+			header.menu.options.push( {name: 'Mein Zuchtbuch', href: `/breeder/me/${ctx.user.id}`} );
 		}
-
-		ctx.header = header;
-
- 	});
+		ctx.header = header; // triggers
+	}
 
 
 </script>
 
+<h2>Breeder page</h2>
+<ul class='list-disc pl-2'>
 
-Breeder
+	<li>Info's zum Züchter</li>
+	<li>Bewertungsrechner</li>
+	<li>Abstammungsnachweis</li>
+</ul>
 
-* Bewertungsrechner
-* Abstammungsnachweis
+
+
+<style>
+	ul {
+		@apply list-inside text-red-600;
+	}
+</style>

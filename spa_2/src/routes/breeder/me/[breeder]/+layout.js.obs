@@ -1,0 +1,18 @@
+import { ctx } from '$lib/js/store.svelte.js';
+import model from '$lib/js/model.js';
+
+export async function load({ params, parent }) {
+
+	console.log( 'Load breeder pairs' );
+	const { federation, standard, user } = await parent();
+	const response = await Promise.all( [
+		model.Breeder.load( +params.breeder ),
+	] );
+
+	console.log( 'R', response[0] )
+
+	ctx.breeder = response[0];
+	return { breeder: ctx.breeder };
+
+//	error(404, 'Not found');
+}

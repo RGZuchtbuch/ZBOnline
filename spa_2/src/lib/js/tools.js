@@ -1,3 +1,5 @@
+import { ctx } from '$lib/js/store.svelte.js';
+
 export function dec( value, dec = 0 ) {
 	value = Number( value );
 	if( value ) {
@@ -22,7 +24,6 @@ export function daysBetween( start, end ) {
 	if( start && end ) {
 		start = new Date(start);
 		end = new Date(end);
-		console.log('Start', start);
 		if( end >= start ) {
 			return 1 + (end - start) / (1000 * 60 * 60 * 24);
 		}
@@ -91,63 +92,74 @@ export function calcColor( min, max, value, alpha = 1, blue = 0 ) {
 }
 
 
-export let argsBuilder = {
+export let ArgsBuilder = {
 
 	init : () => {
 		return {};
 	},
 
-	setNumber : (args, url, key, init) => {
-		if (url.searchParams.has(key)) {
-			args[key] = +url.searchParams.get(key);
+	setNumber : (args, searchParams, key, init) => {
+		if ( searchParams.has(key) ) {
+			args[key] = +searchParams.get(key);
 		} else if (init) {
 			args[key] = +init;
 		}
 	},
 
-	setString : (args, url, key, init) => {
-		if (url.searchParams.has(key)) {
-			args[key] = url.searchParams.get(key);
+	setString : (args, searchParams, key, init) => {
+		if ( searchParams.has(key) ) {
+			args[key] = searchParams.get(key);
 		} else if (init) {
 			args[key] = init;
 		}
 	},
 }
 
-export function setArgsNumber(args, url, key, init) {
-	if (url.searchParams.has(key)) {
-		args[key] = +url.searchParams.get(key);
-	} else if (init) {
-		args[key] = +init;
-	}
-}
+// ****************** Name printing ****************//
 
-export function setArgsString (args, url, key, init) {
-	if (url.searchParams.has(key)) {
-		args[key] = url.searchParams.get(key);
-	} else if (init) {
-		args[key] = init;
-	}
-}
-
-export function fullName( person ) {
+export function fullName( person ) { // Eelco von Jannink
 	if( person ) {
 		return `${txt(person.firstname)} ${txt(person.infix)} ${txt(person.lastname)}`;
 	}
 	return '-';
 }
 
-export function selectName( person ) {
+export function selectName( person ) { // Jannink, Eelco von
 	if( person ) {
 		return `${txt(person.lastname)}, ${txt(person.firstname)} ${txt(person.infix)} `;
 	}
 	return '-';
 }
 
-export function shortName( person ) {
+export function shortName( person ) { // E.J
 	if( person ) {
 		return `${person.firstname.at(0)}.${person.lastname.at(0)} `;
 	}
 	return '-';
+}
 
+// ****************** Date helpers *******************//
+
+export function completedYear( person ) { // for guests reading
+	const now = new Date();
+	const year = now.getFullYear();
+	return now.getMonth() < 2 ? year-2 : year-1;
+}
+
+export function activeYear() { // default year, after oct 1st is this year, for moderators work
+	const now = new Date();
+	const year = now.getFullYear();
+	return now.getMonth() < 2 ? year-1 : year;
+}
+
+
+export function addCrumb( crumb ) { // { name:, url: }
+	// console.log( 'Add crumb', crumb.url.href );
+	// let index =ctx.crumbs.findIndex( c => c.url.pathname === crumb.url.pathname );
+	// if( index>= 0 ) {
+	// 	ctx.crumbs[ index ].url = crumb.url;
+	// 	ctx.crumbs.length = index+1; // remove trailing
+	// } else {
+	// 	ctx.crumbs.push( crumb );
+	// }
 }

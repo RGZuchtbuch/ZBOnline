@@ -1,10 +1,10 @@
 <script>
 	import { fade, slide } from 'svelte/transition';
-	import { dec, txt } from '$lib/js/tools.js';
+	import { dec, fullName, txt } from '$lib/js/tools.js';
 	import { CheckBox, NumberInput, TextInput, Select, Status, validator } from '$lib/cmp/form/Form.svelte';
-	import { ctx, store } from '$lib/js/store.svelte.js';
+	import { ctx } from '$lib/js/store.svelte.js';
 
-	let { pair=$bindable() } = $props();
+	let { breeder, pair } = $props();
 
 	const thisYear = new Date().getFullYear();
 
@@ -17,10 +17,10 @@
 
 
 <fieldset class='flex flex-col p-2 gap-x-4 border border-base rounded bg-white' in:slide>
-	<legend>{pair ? pair.sectionId === 5 ? 'Tauben Paar' : 'Geflügel Stamm' : 'Paar/Stamm'} ({pair.id})</legend>
-	<div class='text-right'><Status /></div>
+	<legend>{pair ? pair.sectionId === 5 ? 'Tauben Paar' : 'Geflügel Stamm' : 'Paar/Stamm'} <Status /></legend>
+
 	<div class='flex flex-row gap-x-4 '>
-		<TextInput class='w-56' label='Züchter' value={txt( pair.breeder.firstname ) + ' ' + txt( pair.breeder.infix ) + ' ' + txt( pair.breeder.lastname ) } disabled  />
+		<TextInput class='w-56' label='Züchter' value={ fullName( breeder ) } disabled  />
 		<NumberInput class='w-16' label='Jahr*' bind:value={pair.year} error={'Fehler'} validator={validate.year} />
 		<TextInput class='w-24' label='Name*' bind:value={pair.name} error='Fehler' validator={validate.name} />
 		<Select label='Gruppe*' bind:value={pair.group}>

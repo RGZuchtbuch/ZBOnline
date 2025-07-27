@@ -1,0 +1,27 @@
+
+import {page} from '$app/state';
+import { ctx } from '$lib/js/store.svelte.js';
+import model from '$lib/js/model.js';
+
+export async function load( { depends, params, parent } ) {
+	console.log( 'load pair', params );
+	depends( 'breeder' ); // as i'm not using the svelte fetch
+	depends ( 'pair' );
+
+	let { breeder } = await parent();
+
+	let id = +params.pair;
+
+	console.log( 'ly', breeder, id)
+
+	if( id ===0 ) {
+		console.log( 'BBR', breeder );
+		ctx.pair = await model.Pair.new( breeder ); // new for this breeder
+	} else {
+		const response = await Promise.all([
+			model.Pair.load(+params.pair, breeder) // breeder for creating new
+		]);
+		ctx.pair = response[0];
+	}
+	return { pair: ctx.pair };
+}

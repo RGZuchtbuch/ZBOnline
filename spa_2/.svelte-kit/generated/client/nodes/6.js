@@ -1,3 +1,1 @@
-import * as universal from "../../../../src/routes/breeder/[breeder]/+layout.js";
-export { universal };
-export { default as component } from "../../../../src/routes/breeder/[breeder]/+layout.svelte";
+export { default as component } from "../../../../src/routes/moderator/[district]/+layout.svelte";

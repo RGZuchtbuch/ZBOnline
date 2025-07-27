@@ -5,7 +5,9 @@
     import BreedResult from './BreedResult.svelte';
 
 //    let { breed, district, group, section, title, year, map } = $props();
-    let { breed, district, group, section, year } = $props();
+    let { breed, district, group, sectionId, year } = $props();
+
+    //console.log( 'Prop section', sectionId )
 
     let open = $state( false );
     let results = $state( null ); // { breed, colors }
@@ -28,17 +30,15 @@
     }
 
     function onAddAoc() {
-        console.log( 'aoc' );
         const aocResult = {
             id:0, districtId:district.id, group:group, year:year,
             breeder:null, pairId:null,
             breeders:null, pairs:null,
-            sectionId:section.id, breedId:breed.id, colorId:null, aocColor:'AOC',
+            sectionId:sectionId, breedId:breed.id, colorId:null, aocColor:'AOC',
             lay:{ dames:null, eggs:null, weight:null },
             brood:{ chicks:null, eggs:null, fertile:null, hatched:null},
             show:{ count:null, score:null },
         }
-        console.log( 'R', results );
         results.colors.push( aocResult )
     }
 

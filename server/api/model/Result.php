@@ -442,7 +442,7 @@ class Result
         return Query::selectArray( $stmt, $args );
     }
 
-	// new version 2 getters
+	// new version 2 getters, for moderator result view
 	public static function forDistrictYear( int $districtId, int $year ) : array {
 		$args = get_defined_vars();
 		$stmt = Query::prepare('
@@ -457,7 +457,8 @@ class Result
 				rootsection.id AS rootsectionId, rootsection.name AS rootsectionname,
 				section.id AS sectionId, section.name AS sectionname,
 				pair.breederId, user.firstname, user.infix, user.lastname,
-				CONCAT(SUBSTR(user.firstname, 1, 1), ".", SUBSTR(user.lastname, 1, 1) ) AS short
+				CONCAT(SUBSTR(user.firstname, 1, 1), ".", SUBSTR(user.lastname, 1, 1) ) AS short,
+				pair.accepted			
 			FROM result
 				LEFT JOIN breed  ON breed.id = result.breedId
 				LEFT JOIN color  ON color.id = result.colorId

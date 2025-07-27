@@ -39,7 +39,6 @@
     setContext( 'form', form ); // use getContext in input components
 
     function onInput( event ) { // called after children got input and init validate and autosave
-        console.log( 'Form input', validateafter, submitafter );
         form.state = states.changed;
         clearTimeout( validateTimeout ); // stop validate timer
         clearTimeout( submitTimeout ); // stop autosubmit timer

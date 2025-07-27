@@ -5,7 +5,7 @@
 	import { browser } from '$app/environment';
 
 	// stores
-	let { stores, page, constructors, components = [], form, data_0 = null, data_1 = null, data_2 = null, data_3 = null, data_4 = null, data_5 = null, data_6 = null, data_7 = null } = $props();
+	let { stores, page, constructors, components = [], form, data_0 = null, data_1 = null, data_2 = null, data_3 = null, data_4 = null } = $props();
 
 	if (!browser) {
 		setContext('__svelte__', stores);
@@ -17,7 +17,7 @@
 		stores.page.set(page);
 	}
 	$effect(() => {
-		stores;page;constructors;components;form;data_0;data_1;data_2;data_3;data_4;data_5;data_6;data_7;
+		stores;page;constructors;components;form;data_0;data_1;data_2;data_3;data_4;
 		stores.page.notify();
 	});
 
@@ -39,7 +39,7 @@
 		return unsubscribe;
 	});
 
-	const Pyramid_7=$derived(constructors[7])
+	const Pyramid_4=$derived(constructors[4])
 </script>
 
 {#if constructors[1]}
@@ -58,44 +58,8 @@
 																									{@const Pyramid_3 = constructors[3]}
 																															<!-- svelte-ignore binding_property_non_reactive -->
 																															<Pyramid_3 bind:this={components[3]} data={data_3} {form}>
-																																{#if constructors[5]}
-																																	{@const Pyramid_4 = constructors[4]}
-																																							<!-- svelte-ignore binding_property_non_reactive -->
-																																							<Pyramid_4 bind:this={components[4]} data={data_4} {form}>
-																																								{#if constructors[6]}
-																																									{@const Pyramid_5 = constructors[5]}
-																																															<!-- svelte-ignore binding_property_non_reactive -->
-																																															<Pyramid_5 bind:this={components[5]} data={data_5} {form}>
-																																																{#if constructors[7]}
-																																																	{@const Pyramid_6 = constructors[6]}
-																																																							<!-- svelte-ignore binding_property_non_reactive -->
-																																																							<Pyramid_6 bind:this={components[6]} data={data_6} {form}>
-																																																								<!-- svelte-ignore binding_property_non_reactive -->
-																																																										<Pyramid_7 bind:this={components[7]} data={data_7} {form} />
-																																																							</Pyramid_6>
-																																																	
-																																																{:else}
-																																																	{@const Pyramid_6 = constructors[6]}
-																																																	<!-- svelte-ignore binding_property_non_reactive -->
-																																																	<Pyramid_6 bind:this={components[6]} data={data_6} {form} />
-																																																	
-																																																{/if}
-																																															</Pyramid_5>
-																																									
-																																								{:else}
-																																									{@const Pyramid_5 = constructors[5]}
-																																									<!-- svelte-ignore binding_property_non_reactive -->
-																																									<Pyramid_5 bind:this={components[5]} data={data_5} {form} />
-																																									
-																																								{/if}
-																																							</Pyramid_4>
-																																	
-																																{:else}
-																																	{@const Pyramid_4 = constructors[4]}
-																																	<!-- svelte-ignore binding_property_non_reactive -->
-																																	<Pyramid_4 bind:this={components[4]} data={data_4} {form} />
-																																	
-																																{/if}
+																																<!-- svelte-ignore binding_property_non_reactive -->
+																																		<Pyramid_4 bind:this={components[4]} data={data_4} {form} />
 																															</Pyramid_3>
 																									
 																								{:else}

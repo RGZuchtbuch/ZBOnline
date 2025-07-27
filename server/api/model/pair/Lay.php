@@ -16,7 +16,7 @@ class Lay {
 		return Query::select($stmt, $args);
 	}
 
-	public static function create(int $pairId, string $start, string $end, int $eggs, ?int $dames, ?int $weight, int $modifierId): int
+	public static function create(int $pairId, string $start, string $end, int $eggs, ?int $dames, ?float $weight, int $modifierId): int
 	{
 		$args = get_defined_vars();
 		$stmt = Query::prepare('
@@ -26,7 +26,7 @@ class Lay {
 		return Query::insert($stmt, $args);
 	}
 
-	public static function update(int $id, int $pairId, string $start, string $end, int $eggs, ?int $dames, ?int $weight, int $modifierId): bool
+	public static function update(int $id, int $pairId, string $start, string $end, int $eggs, ?int $dames, ?float $weight, int $modifierId): bool
 	{
 		$args = get_defined_vars();
 		$stmt = Query::prepare('

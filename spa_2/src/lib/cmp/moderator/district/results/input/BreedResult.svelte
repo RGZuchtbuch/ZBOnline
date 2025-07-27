@@ -1,6 +1,7 @@
 <script>
     import model from '$lib/js/model.js';
-    import {invalidate} from '$app/navigation';
+    import { dirty } from '$lib/js/store.svelte.js';
+
     import Form, { Status, NumberInput, validator } from '$lib/cmp/form/Form.svelte';
 
     let { section, breed, result } = $props();
@@ -43,6 +44,7 @@
     async function onSubmit( event ) {
         console.log( 'Submit color result' );
         //await invalidate( 'results' ); // make results page reload data
+        dirty.results = true;
         if( data.breeders ) { // valid entry
             result.brood.eggs = result.brood.broods * 2; // 2 eggs per brood expected
             return await model.Result.save( data );

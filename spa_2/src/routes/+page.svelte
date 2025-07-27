@@ -1,10 +1,17 @@
 <script>
 	import { page } from '$app/state';
 	import { ctx } from '$lib/js/store.svelte.js'
+	import { addCrumb } from '$lib/js/tools.js';
 
 	import Home from '$lib/cmp/Home.svelte';
 
+	addCrumb( { name:'Start', url:page.url } );
+
 	$effect( () => {
+		ctx.header = setHeader();
+	})
+
+	function setHeader() {
 		const header = {
 			title: 'Das BDRG Zuchtbuch',
 			menu: {
@@ -24,8 +31,10 @@
 			if ( ctx.user.moderator) header.menu.options.push({name: 'Obmann', href: '/moderator'});
 			if ( ctx.user.admin) header.menu.options.push({name: 'Admin', href: '/admin'});
 		}
-		ctx.header = header; // single trigger
-	})
+		return header;
+	}
+
+
 
 </script>
 

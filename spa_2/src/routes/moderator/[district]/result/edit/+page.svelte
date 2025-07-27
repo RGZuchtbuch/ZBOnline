@@ -1,43 +1,66 @@
 <script>
-	import {page} from '$app/state';
-	import { ctx, store } from '$lib/js/store.svelte.js';
-	//import model from '$lib/js/model.js';
-	import ResultsEdit from '$lib/cmp/moderator/district/ResultsEdit.svelte';
-	import { invalidate } from '$app/navigation';
-	import {onDestroy, onMount} from 'svelte';
+	import { onDestroy, onMount} from 'svelte';
+	import { page } from '$app/state';
+	import { cfg, ctx, dirty } from '$lib/js/store.svelte.js';
+	import ResultsEdit from '$lib/cmp/moderator/district/results/ResultsEdit.svelte';
+	import { ArgsBuilder, activeYear } from '$lib/js/tools.js';
+	import model from '$lib/js/model.js';
 
-	let { data } = $props();
+	// let { data } = $props();
+	//
+	// ctx.year = data.year;
+	// ctx.group = data.group;
+	// ctx.section = data.section;
+	// ctx.results = data.results;
+//	debugger;
 
-	ctx.year = data.year;
-	ctx.group = data.group;
-	ctx.section = data.section;
-	ctx.results = data.results;
+	let args = $derived( getArgs( page ) )
 
-	$effect( () => { //TODO needed ?
-		// ctx.year = data.year;
-		// ctx.group = data.group;
-		// ctx.section = data.section;
-		// ctx.results = data.results;
+	$effect( async () => {
+		if( dirty.resultsEdit || page.url ) await loadResultsForEdit( args );
 	})
 
 	$effect( async () => {
+		if( ctx.district || page.url ) setHeader();
+	})
+
+	async function loadResultsForEdit( args ) {
+		console.log( 'load edit results', page.params );
+		dirty.results = false;
+		ctx.resultsEdit = null;
+		ctx.resultsEdit = await model.Result.query( args );
+	}
+
+	function getArgs( page ) { // collect arguments and optionals and defaults
+		console.log( 'Get Args', page.params );
+		let query = page.url.searchParams;
+		const args = ArgsBuilder.init();
+			args.district = +page.params.district;
+			ArgsBuilder.setNumber( args, query, 'year', activeYear() );
+			ArgsBuilder.setNumber( args, query, 'section', 3 );
+			ArgsBuilder.setString( args, query, 'group', 'I' );
+			console.log( 'Artgs', args )
+		return args;
+	}
+
+	function setHeader() {
 		ctx.header = {
-			title: `${data.district.name}`,
+			title: `${ctx.district.name}`,
 			menu: {
 				trail: [
 					{name: 'Home', href: '/'},
 					{name: 'Obmann', href: '/moderator'},
-					{name: data.district.short, href: `/moderator/${data.district.id}`},
-					{name: 'Eingaben', href: `/moderator/${data.district.id}/result?year=${data.year}`},
+					{name: ctx.district.short, href: `/moderator/${ctx.district.id}`},
+					{name: 'Eingaben', href: `/moderator/${ctx.district.id}/result?year=${ctx.year}`},
 					{name: 'Eingeben'},
 				],
 				options: [
-					{name: 'Eingaben', href: `/moderator/${data.district.id}/result?year=${data.year}`},
-					{name: 'Züchter', href: `/moderator/${data.district.id}/breeder`},
+					{name: 'Eingaben', href: `/moderator/${ctx.district.id}/result?year=${ctx.year}`},
+					{name: 'Züchter', href: `/moderator/${ctx.district.id}/breeder`},
 				],
 			},
 		};
-	})
+	}
 
 	onDestroy( () => {
 		//invalidate( 'result' ); //( 'app:changed' );
@@ -46,7 +69,8 @@
 	console.log( 'edit page')
 
 </script>
-
-{#if data.district && data.year && data.section && data.group && data.results } <!-- needed as ctx might not be updated yet -->
-	<ResultsEdit district={data.district} year={data.year} section={data.section} group={data.group} results={data.results} standard={ctx.standard} />
+AA {ctx.year}
+{#if ctx.district && args && ctx.resultsEdit } <!-- needed as ctx might not be updated yet -->
+	<!--ResultsEdit district={ctx.district} year={ctx.year} section={ctx.section} group={ctx.group} results={ctx.results} /-->
+	<ResultsEdit district={ctx.district} {args} results={ctx.resultsEdit} />
 {/if}

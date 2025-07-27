@@ -1,18 +1,11 @@
 <script>
-	import { getContext, setContext } from 'svelte';	import {page} from '$app/state';
-	import {goto} from '$app/navigation';
+	import { page } from '$app/state';
 	import { ctx } from '$lib/js/store.svelte.js';
+	import { addCrumb } from '$lib/js/tools.js';
 	import Districts from '$lib/cmp/moderator/Districts.svelte';
 
-	let { data } = $props();
 
-	let districts = $state( null );
-	setContext( 'districts', districts );
-	ctx.districts = null; // clear old districts
-	$effect( () => {
-		ctx.districts = data.districts;
-		districts = data.districts;
-	}); // in context to avoid warnings on wrong updates.
+	addCrumb( { name:'Obmann', href:page.url } );
 
 	$effect( () => {
 		ctx.header = {
@@ -29,7 +22,7 @@
 
 </script>
 
-<Districts districts={data.districts}/>
+<Districts districts={ctx.districts}/>
 
 
 

@@ -1,11 +1,12 @@
 <script>
 	import { slide } from 'svelte/transition';
 	import { ctx } from '$lib/js/store.svelte.js';
-	import { Form, Select } from '$lib/cmp/form/Form.svelte';
+	import { Form, Select, Status } from '$lib/cmp/form/Form.svelte';
 
-	let { pair=$bindable(), standard } = $props();
+	let { pair } = $props();
 
 	// initial getting objects from pair
+
 	let rootSection = $state( ctx.standard.rootSections.find( ( section ) => section.id === pair.sectionId ) ?? null );
 	let breed   = $state( ctx.standard.breeds[ pair.breedId ] ?? null );
 	let color   = $state( ctx.standard.colors[ pair.colorId ] ?? null );
@@ -30,8 +31,8 @@
 </script>
 
 <fieldset class='flex flex-row p-2 gap-x-2 border' in:slide>
-	<legend>Standard</legend>
-	<Select class='w-56' label={'Sparte'} bind:value={pair.sectionId} onchange={onSectionChange} disabled={breed}>
+	<legend>Standard <Status /></legend>
+	<Select class='w-56' label={'Sparte'} bind:value={pair.sectionId} onchange={onSectionChange}>
 		<option value={null} selected={rootSection === null}>
 			Sparte ?
 		</option>
@@ -49,7 +50,7 @@
 		{#if rootSection}
 			{#each rootSection.breeds as breed }
 				<option value={breed.id} selected={pair.breedId === breed.id}>
-					{breed.name} ({breed.id})
+					{breed.name}
 				</option>
 			{/each}
 		{/if}

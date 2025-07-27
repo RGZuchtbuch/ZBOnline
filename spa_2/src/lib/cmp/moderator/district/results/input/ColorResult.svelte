@@ -1,5 +1,6 @@
 <script>
     import { invalidate } from '$app/navigation';
+    import { dirty } from '$lib/js/store.svelte.js';
     import model from '$lib/js/model.js';
     import Form, { Status, NumberInput, TextInput, validator } from '$lib/cmp/form/Form.svelte';
     //import NumberInput from '../../common/form/input/NumberInput.svelte';
@@ -9,7 +10,7 @@
 
     let { result, data } = $props();
 
-    let resultState = $derived( result );
+    let resultState = $derived( result ); // why is this needed ?
     let hasResult = $derived( resultState.breeders > 0 );
 
     // aocColor used for purging and onsubmit adding the AOC prefix
@@ -38,7 +39,8 @@
     }
 
     async function onSubmit( event ) {
-        console.log( 'Submit color result' );
+        console.log( 'Submit color result', resultState );
+        dirty.results = true;
 
         result.aocColor = aocColor ? 'AOC '+aocColor : null; // add prefix if aoc
         let response = null;

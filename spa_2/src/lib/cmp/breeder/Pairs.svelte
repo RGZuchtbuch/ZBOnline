@@ -1,22 +1,21 @@
 <script>
 	import { page } from '$app/state';
 	import { fade, fly, slide } from 'svelte/transition';
-	import { ctx, store } from '$lib/js/store.svelte.js';
+	import { ctx } from '$lib/js/store.svelte.js';
 
-	let { breeder, district, pairs, year } = $props();
+	let { breeder, pairs } = $props();
 	let authorized = $derived( ctx.user && ctx.user.admin )
+
 
 </script>
 
-{#if breeder && district && pairs}
-	<!--h2 class='header'>Alle Artikel zum Zuchtbuch</h2-->
-	<!--h3 class=''>{breeder.firstname}</h3-->
+
+{#if breeder && pairs}
 	{#if authorized}
 		<div class='flex flex-row justify-end pt-2'>
-			<a href={`${page.url.href}/pair/0`} title='Stammm/Paar hinzufügen'>[+]</a>
+			<a href={`/breeder/${breeder.id}/pair/0`} title='Stammm/Paar hinzufügen'>[+]</a>
 		</div>
 	{/if}
-
 	{#if pairs.length > 0}
 		{#each pairs as pair, i}
 			<li class='flex flex-row gap-x-2'>

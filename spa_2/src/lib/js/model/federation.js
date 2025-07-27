@@ -21,14 +21,14 @@ function addDistrict( district, districts ) { // recursive for sections
 export default class Federation {
 
 	static async load() {
-		if( federation === null ) {
+		//if( federation === null ) {
 			//federation = null; // { bdrg object, districts }
 			const data = await api.get(`/api/2/district`, {rootId: 1}); // root is BDRG #1
 			if (data && data.root) {
 				federation = data.root; // district tree
 				federation.districts = districtLookup(federation); // list of districts by id
 			}
-		}
+		//}
 		return federation; // null if failed
 	}
 

@@ -2,7 +2,7 @@
 	import {onMount} from 'svelte';
 	import {fade, slide} from 'svelte/transition';
 	import aab from '$lib/js/aab.js';
-	import { ctx, store } from '$lib/js/store.svelte.js';
+	import { ctx } from '$lib/js/store.svelte.js';
 	import model from '$lib/js/model.js';
 
 	import { dec } from '$lib/js/tools.js';
@@ -10,7 +10,7 @@
 	import { toRing } from '$lib/cmp/form/validator.js';
 
 
-	let { parent=$bindable(), pair, i } = $props();
+	let { parent, pair, i } = $props();
 
 	let parentPairs = $state( [] ); // the parent it's parent pair options
 	let parentPair = $state( null ); // the parents pair
@@ -48,9 +48,8 @@
 	}
 
 	$effect( () => {
-		console.log('Effect for grade')
 		parentPair = parentPairs.find( pair => pair.id === parent.parentsPairId );
-		parentBroodGrade = parentPair ? aab.brood.pigeon(parentPair.brood.group, parentPair.brood.eggs/2, parentPair.brood.hatched ) : null;
+		parentBroodGrade = parentPair ? aab.brood.pigeon(pair.breed.broodGroup, parentPair.brood.eggs/2, parentPair.brood.hatched ) : null;
 		parentShowGrade = parentPair ? parentPair.show.score : null;
 		parent.grade = parentTotalGrade = parent.score && parentBroodGrade && parentShowGrade ? ( parent.score + parentBroodGrade + parentShowGrade ) / 3: null;
 	});
@@ -58,8 +57,6 @@
 	onMount( () => {
 		onRingInput();
 	})
-
-	$inspect( 'PpId', pair.parentsPairId );
 
 </script>
 

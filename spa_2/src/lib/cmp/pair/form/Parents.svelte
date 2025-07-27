@@ -1,35 +1,29 @@
 <script>
 	import {fade, slide} from 'svelte/transition';
-	import { ctx, store } from '$lib/js/store.svelte.js';
-	import { NumberInput, RingInput, Select, TextInput, validator } from '../../form/Form.svelte';
+	import { ctx } from '$lib/js/store.svelte.js';
+	import { NumberInput, RingInput, Select, Status, TextInput, validator } from '../../form/Form.svelte';
 	import {dec} from '$lib/js/tools.js';
 	import {onMount} from 'svelte';
 
 	import ParentLayer from './Parent.Layer.svelte';
 	import ParentPigeon from './Parent.Pigeon.svelte';
 
-	let {pair=$bindable() } = $props();
+	let { pair } = $props();
 
-	$effect( () => {
-		if( pair.sectionId ) {
-			if ( ! pair.parents ) {
-				pair.parents = [];
-			}
-			const n = pair.sectionId === 5 ? 2 : 5;
-			for (let i = pair.parents.length; i < n; i++) {
-				addParent(i); // for knowing 1.0 or 0.1
-			}
+	if( pair.sectionId ) {
+		if ( ! pair.parents ) {
+			pair.parents = [];
 		}
-	});
+		const n = pair.sectionId === 5 ? 2 : 5;
+		for (let i = pair.parents.length; i < 2; i++) {
+			addParent(i); // for knowing 1.0 or 0.1
+		}
+	}
 
 	function addParent( i ) {
 		pair.parents.push(
 			{ id:0, pairId:pair.id, sex:i===0?'1.0':'0.1', ring:null, score:null, parentsPairId:null }
 		);
-	}
-
-	function newParent( i ) {
-		return ;
 	}
 
 	function onAddParent( event ) {
@@ -54,20 +48,20 @@
 
 
 <fieldset class='flex flex-col gap-x-2 border pt-2 px-2' in:slide>
-	<legend>Abstammung ( {dec( pair.parentsGrade, 1 )} ) {pair.parents.length}</legend>
-
-	{#if pair.colorId }
+	<legend>Abstammung <Status /></legend>
+	{#if pair.sectionId === 5 }
+		<div transition:slide>
+			<ParentPigeon parent={pair.parents[0]} {pair} i={0} />
+			<ParentPigeon parent={pair.parents[1]} {pair} i={1} />
+		</div>
+	{:else}
 		<div transition:slide>
 			{#each pair.parents as parent, i (i) }
-				{#if pair.sectionId === 5}
-					<ParentPigeon bind:parent={pair.parents[i]} {pair} {i} />
-				{:else}
-					<ParentLayer bind:parent={pair.parents[i]} {pair} {i} />
-				{/if}
+				<ParentLayer bind:parent={pair.parents[i]} {pair} {i} />
 			{/each}
 			<hr>
 			<div class='flex flex-row py-2'>
-				<button class='w-6 h-6' type='button' onclick={onAddParent}>+</button>
+				<button class='w-6 h-6 print:hidden' type='button' onclick={onAddParent}>+</button>
 				<span class='grow'></span>
 				<NumberInput class='w-14 font-bold' label='G.Note' value={dec( pair.parentsGrade, 1 )} disabled />
 			</div>

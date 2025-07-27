@@ -12,7 +12,7 @@
 	import Select from '$lib/cmp/form/input/Select.svelte';
 	import Chart from '$lib/cmp/report/view/Chart.svelte';
 
-	let { args, report, federation, standard } = $props();
+	let { report } = $props();
 
 	const types = { // what to report
 		2: {id: 2, name: 'Zuchten'},
@@ -23,8 +23,9 @@
 	};
 
 	//let type     = $derived( types[ +page.url.searchParams.get('type') || 2 ] );
-	let district = $derived( federation.districts[ args.district ] );
+	let district = $derived( ctx.federation.districts[ ctx.report.args.district ] );
 	//let year     = $derived( +page.url.searchParams.get('year') || new Date().getFullYear()-1 );
+	console.log( 'In Report, district', district.name )
 
 	function onTypeChange( event ) {
 		let url = new URL( page.url );
@@ -34,50 +35,50 @@
 
 </script>
 
+{#if report !== null }
 
-<Filter {args} {federation} {standard} />
+	<Filter {report} />
+	{#if report !== null}
+		<Chart {district} report={report.chart} year={report.args.year} />
+	{/if}
 
-{#if report && report.chart}
-	<Chart {district} report={report.chart} year={args.year} />
-{/if}
-
-{#if report }
-	<div class='flex flex-col break-after-page' open>
-		<header class=''>Leistungen im Übersicht</header>
-		<div class='mt-2 flex flex-row justify-evenly'>
-			<Select class='w-64' label='Leistung' value={args.type} onchange={onTypeChange}>
-				{#each Object.values( types ) as type}
-					<option value={type.id}>{type.name}</option>/
-				{/each}
-			</Select>
-		</div>
-
-		<div class='flex flex-row justify-evenly p-4 gap-x-2 '>
-			<div class='flex flex-col'>
-				<header>Trend für {district.name}</header>
-				{#if report.trend}
-					<Trend report={report.trend} typeId={args.type} />
-				{/if}
+	{#if report !== null }
+		<div class='flex flex-col break-after-page' open>
+			<header class=''>Leistungen im Übersicht</header>
+			<div class='mt-2 flex flex-row justify-evenly'>
+				<Select class='w-64' label='Leistung' value={report.args.type} onchange={onTypeChange}>
+					{#each Object.values( types ) as type}
+						<option value={type.id}>{type.name}</option>/
+					{/each}
+				</Select>
 			</div>
-			<div class='flex flex-col'>
-				<header>Verteilung in {args.year}</header>
-				{#if report.map}
-					<Map report={report.map} typeId={args.type} />
-				{/if}
+
+			<div class='flex flex-row justify-evenly p-4 gap-x-2 '>
+				<div class='flex flex-col'>
+					<header>Trend für {district.name}</header>
+					{#if report.trend}
+						<Trend report={report.trend} typeId={report.args.type} />
+					{/if}
+				</div>
+				<div class='flex flex-col'>
+					<header>Verteilung in {report.args.year}</header>
+					{#if report.map}
+						<Map report={report.map} typeId={report.args.type} />
+					{/if}
+				</div>
 			</div>
 		</div>
-	</div>
-{/if}
+	{/if}
 
-{#if report && report.table}
-	<div class='flex flex-col break-after-page' open>
-		<header class=''>Leistungsdaten im {district.name} für {args.year}</header>
-		<div class='flex flex-col py-4'>
-			<Table report={report.table} {district} year={args.year} />
+	{#if report !== null }
+		<div class='flex flex-col break-after-page' open>
+			<header class=''>Leistungsdaten im {district.name} für {report.args.year}</header>
+			<div class='flex flex-col py-4'>
+				<Table table={report.table} {district} year={report.args.year} />
+			</div>
 		</div>
-	</div>
+	{/if}
 {/if}
-
 
 <style>
 	header {

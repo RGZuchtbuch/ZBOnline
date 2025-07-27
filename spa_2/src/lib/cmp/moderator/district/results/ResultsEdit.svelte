@@ -2,27 +2,27 @@
 	import { fade, slide } from 'svelte/transition';
 	import {goto, invalidate} from '$app/navigation';
 	import { page } from '$app/state';
-	import { cfg, ctx, store } from '$lib/js/store.svelte.js';
+	import { cfg, ctx } from '$lib/js/store.svelte.js';
 	import { dec, txt } from '$lib/js/tools.js';
 	import { Select } from '$lib/cmp/form/Form.svelte';
-	import AOC from './results/input/AOC.svelte';
-	import Breed from './results/input/Breed.svelte';
+	import AOC from './input/AOC.svelte';
+	import Breed from './input/Breed.svelte';
 	import {onDestroy} from 'svelte';
 
-	let { district, year, section, group, results, standard } = $props();
+	let { args, results } = $props();
 
-	let authorized = $derived( ctx.user && ( ctx.user.id === district.moderator.id || ctx.user.admin ) ); // can edit
+	$inspect( 'r', args )
+
+	let authorized = $derived( ctx.user && ( ctx.user.id === ctx.district.moderator.id || ctx.user.admin ) ); // can edit
 
 	let years = []; // for select
-	for( let year=+( new Date().getFullYear() )+1; year>=1980; year-- ) years.push( year );
+	for( let year=+( new Date().getFullYear() )+1; year>=1980; year-- ) years.push( year ); // Todo, move to tools as function ?
 
 	function onYearChange( event ) {
 		const year = event.target.value;
-		let url = new URL( page.url );
+		let url = new URL( page.url ); // needed tro work
 		url.searchParams.set( 'year', year );
 		goto( url.href );
-		//const href = `/moderator/${data.district.id}/result/${year}/edit/section/${data.section.id}/group/${data.group}`;
-		//goto( href );
 	}
 
 	function onSectionChange( event ) {
@@ -49,24 +49,24 @@
 
 </script>
 
-{#if district && year && section && group }
+{#if ctx.district && args }
 	<div class='flex flex-row border border-gray-400 bg-gray-50 p-2 gap-x-4 justify-center' in:fade>
 		<span class='py-3 font-bold'>Leistungen eingeben für </span>
-		<Select class='' label='Jahr' value={year} onchange={onYearChange}>
-			{#each years as y}
-				<option value={y}>{y}</option>
+		<Select class='' label='Jahr' value={args.year} onchange={onYearChange}>
+			{#each years as year}
+				<option value={year}>{year}</option>
 			{/each}
 		</Select>
 
-		<Select label="Sparte" value={section.id} onchange={onSectionChange} title='Sparte zum Eingeben'>
-			{#each standard.rootSections as section}
+		<Select label="Sparte" value={args.section.id} onchange={onSectionChange} title='Sparte zum Eingeben'>
+			{#each ctx.standard.rootSections as section}
 				<option value={section.id}>{section.name}</option>
 			{/each}
-			<option value={cfg.aocSection.id}>{store.aocSection.name}</option>
+			<!--option-- value={cfg.aocSection.id}>{ cfg.aocSection.name }</option-->
 		</Select>
 
-		<Select class='w-16' label="ZB Gruppe" value={group} onchange={onGroupChange} disabled={section && section.id === 5 } title='Zuchtbuchgruppe I, II oder III'>
-			{#each store.groups as group}
+		<Select class='w-16' label="ZB Gruppe" value={args.group} onchange={onGroupChange} disabled={args.section && args.section.id === 5 } title='Zuchtbuchgruppe I, II oder III'>
+			{#each cfg.groups as group}
 				<option value={group}>{group}</option>
 			{/each}
 		</Select>
@@ -80,7 +80,7 @@
 {/if}
 
 {#if results}
-	{#if section.id === 9999} <!-- AOC -->
+	{#if args.section.id === 9999} <!-- AOC -->
 		<!-- div>
 			<AocCreate {data}/>
 			DB {data.breeds.length}
@@ -89,11 +89,11 @@
 				<AocResult section={data.section} {breed} {data}/>
 			{/each}
 		</div -->
-		<AOC {district} {year} {group} />
+		<!--AOC {district} {year} {group} /-->
 	{:else}
 		<div>
 			{#each results as breed}
-				<Breed {district} {year} {section} {group} {breed} />
+				<Breed district={ctx.district} year={args.year} sectionId={args.section} group={args.group} {breed} />
 			{/each}
 		</div>
 	{/if}

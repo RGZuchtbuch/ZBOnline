@@ -1,34 +1,49 @@
 <script>
-	import { ctx } from '$lib/js/store.svelte.js';
-	import {onMount} from 'svelte';
-	import {fullName, shortName} from '$lib/js/tools.js';
+	import { page } from '$app/state';
+	import { ctx, dirty } from '$lib/js/store.svelte.js';
+	import {addCrumb, fullName, shortName} from '$lib/js/tools.js';
+	import Pairs from '$lib/cmp/breeder/Pairs.svelte';
+	import model from '$lib/js/model.js';
 
-	let { data } = $props();
+	$effect( async () => {
+		if( dirty.pairs || page.url ) await loadPairs( +page.params.breeder );
+	})
 
-	$effect( () => {
+	$effect(async () => {
+		if( ctx.district && ctx.breeder && ctx.pairs ) {
+			setHeader();
+			addCrumb( { name:'Stämme', url:page.url } );
+		}
+	})
+
+	async function loadPairs( breederId ) {
+		console.log( 'Load breeder pairs' );
+		ctx.pairs = null;
+		ctx.pairs = await model.Pair.query( { breeder:page.params.breeder } );
+	}
+
+	function setHeader() {
 		ctx.header = {
-			title : `Züchter ${fullName( ctx.breeder )}`,
+			title: `Züchter ${fullName(ctx.breeder)}`,
 			menu: {
-				trail : [
+				trail: [
 					{name: 'Start', href: '/'},
 					{name: 'Züchter', href: '/breeder'},
-					{name: shortName( ctx.breeder ), href:`/breeder/${data.breeder.id}` },
-					{name:'Stämme' },
+					{name: shortName(ctx.breeder), href: `/breeder/${ctx.breeder.id}`},
+					{name: 'Stämme'},
 				],
-				options : [
+				options: [
+					{name: 'Mitglied', href: `/breeder/${ctx.breeder.id}/profile`},
 				]
 			}
 		};
-
-	} )
+	}
 
 </script>
+{#if ctx.breeder && ctx.pairs}
+	<div class='text-xs text-center italic'>
+		Stämme für {ctx.breeder.firstname}
+	</div>
 
-<div class='text-xs text-center italic'>
-	Stämme für {data.breeder.firstname}
-</div>
-<ul>
-	{#each data.pairs as pair}
-		<li><a href=''>{pair.id}</a></li>
-	{/each}
-</ul>
+	<Pairs breeder={ctx.breeder} pairs={ctx.pairs}  />
+{/if}

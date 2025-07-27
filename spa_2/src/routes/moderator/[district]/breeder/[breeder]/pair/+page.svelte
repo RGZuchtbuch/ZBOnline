@@ -1,26 +1,33 @@
 <script>
-	import { ctx } from '$lib/js/store.svelte.js';
-	import { txt } from '$lib/js/tools.js';
+	import { page } from '$app/state';
+	import { ctx, dirty } from '$lib/js/store.svelte.js';
+	import { addCrumb, fullName, shortName, txt } from '$lib/js/tools.js';
 	import Pairs from '$lib/cmp/breeder/Pairs.svelte';
+	import model from '$lib/js/model.js';
 
-	let { data } = $props();
+	addCrumb( { name:'Stämme', href:page.url.href });
 
-	// ctx.breeder = data.breeder;
-	// ctx.district = data.district;
-	// ctx.pairs = data.pairs;
-	// // $effect( () => {
-	// 	ctx.breeder = data.breeder;
-	// 	ctx.district = data.district;
-	// 	ctx.pairs = data.pairs;
-	// })
 
+	$effect( async () => {
+		if( dirty.pairs || page.url ) await loadPairs( +page.params.breeder );
+	})
 
 	$effect(async () => {
+		if( ctx.district && ctx.breeder && ctx.pairs ) setHeader();
+	})
+
+	async function loadPairs( breederId ) {
+		dirty.pairs = false;
+		ctx.pairs = null;
+		ctx.pairs = await model.Pair.query( { breeder:breederId } );
+	}
+
+	function setHeader() {
 		ctx.header = {
 			title :
 				ctx.breeder.id===0 ?
-				'Neu' :
-				`Zuchter ${ctx.breeder.firstname} ${txt(ctx.breeder.infix)} ${ctx.breeder.lastname} Stämme/Paare`,
+					'Neu' :
+					`Zuchter ${ fullName( ctx.breeder) } Stämme/Paare`,
 			menu : {
 				trail: [
 					{name: 'Home', href: '/'},
@@ -28,9 +35,7 @@
 					{name: ctx.district.short, href: `/moderator/${ctx.district.id}`},
 					{name: 'Züchter', href: `/moderator/${ctx.district.id}/breeder`},
 					{
-						name: ctx.breeder.id === 0 ?
-							'Neu' :
-							`${ctx.breeder.firstname.charAt(0)}.${ctx.breeder.lastname.charAt(0)}`,
+						name: ctx.breeder.id === 0 ? 'Neu' : shortName( ctx.breeder ),
 						href: `/moderator/${ctx.district.id}/breeder/${ctx.breeder.id}`,
 					},
 					{name: 'Stämme'},
@@ -41,13 +46,14 @@
 				],
 			}
 		}
-	})
+	}
 
 
 </script>
 
-{#if data.breeder && data.pairs}
-	<Pairs breeder={data.breeder} district={data.district} pairs={data.pairs} year={data.year} />
+Pairs
+{#if ctx.breeder && ctx.pairs}
+	<Pairs breeder={ctx.breeder} district={ctx.district} pairs={ctx.pairs} year={ctx.year} />
 {/if}
 
 

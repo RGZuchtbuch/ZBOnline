@@ -2,11 +2,11 @@
 	import {onMount} from 'svelte';
 	import {fade, slide} from 'svelte/transition';
 	import aab from '$lib/js/aab.js';
-	import { ctx, store } from '$lib/js/store.svelte.js';
+	import { ctx } from '$lib/js/store.svelte.js';
 	import model from '$lib/js/model.js';
 
 	import { dec } from '$lib/js/tools.js';
-	import {validator, Label, NumberInput, RingInput, Select, TextInput } from '$lib/cmp/form/Form.svelte';
+	import { Label, NumberInput, RingInput, Select, TextInput, validator } from '$lib/cmp/form/Form.svelte';
 	import { toRing } from '$lib/cmp/form/validator.js';
 
 

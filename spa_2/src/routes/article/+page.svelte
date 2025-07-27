@@ -1,18 +1,33 @@
 <script>
-	import { ctx } from '$lib/js/store.svelte.js';
+	import {onMount} from 'svelte';
+	import { page } from '$app/state';
+	import { ctx, dirty } from '$lib/js/store.svelte.js';
+	import model from '$lib/js/model.js';
+
 	import Articles from '$lib/cmp/article/Articles.svelte';
+	import {addCrumb} from '$lib/js/tools.js';
 
 
-	let { data } = $props();
+	addCrumb( { name:'Beitrag', url:page.url } );
 
-	ctx.articles = data.articles;
-	$effect( () => {
-		ctx.articles = data.articles;
-	});
+	$effect( async () => {
+		if ( dirty.articles || page.url ) await loadArticles();
+	})
 
-	$effect( async ()=>{
+	$effect( async () => {
+		if( ctx.articles ) setHeader();
+	})
+
+	async function loadArticles() {
+		console.log( 'Load Articles' );
+		dirty.articles = false;
+		ctx.articles = null;
+		ctx.articles = await model.Article.query();
+	}
+
+	function setHeader() {
 		ctx.header = {
-			title : `Beiträge zum BDRG Zuchtbuch [${data.articles.length}]`,
+			title : `Beiträge zum BDRG Zuchtbuch [${ctx.articles.length}]`,
 			menu : {
 				trail: [
 					{name: 'Start', href: '/'},
@@ -25,10 +40,8 @@
 				],
 			}
 		};
-	});
+	}
 
 </script>
 
-{#if ctx.articles}
-	<Articles articles={data.articles} />
-{/if}
+<Articles articles={ctx.articles} />

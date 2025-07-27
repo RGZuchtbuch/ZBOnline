@@ -5,7 +5,7 @@
 	import Form, { DateInput, Label, NumberInput, RingInput, Select, TextInput, validator } from '../../form/Form.svelte';
 	//	import Form from '$lib/form/form/Profile.svelte';
 
-	let { brood=$bindable(), pair, standard, i } = $props();
+	let { brood, pair, standard, i } = $props();
 	brood.eggs = 2; // default 2 eggs per brood for pigeons
 
 	const validate = {
@@ -41,8 +41,9 @@
 		<div class='grow flex flex-row gap-x-1 justify-end' in:fade>
 			<Label label={i===0}> → </Label>
 			<TextInput class='w-16' label={i===0 ? 'Brutleistung' : null} title='Schlüpfrate' value={ pct( brood.hatched, 2 ) } align='right' disabled />
-			<Label label={i===0}> = </Label>
-			<NumberInput class='w-16 font-bold' label={i===0?'Note':null} title='Schlüpfnote' value={ dec( brood.grade, 1 ) } disabled/>
+			<Label label={i===0} title='Kann keine Note geben'> = </Label>
+			<!--NumberInput class='w-16 font-bold' label={i===0?'Note':null} title='Kann Schlüpfnote nicht vergeben' value={ dec( brood.grade, 1 ) } disabled/-->
+			<TextInput class='w-16 font-bold' label={i===0?'Note':null} title='Kann Schlüpfnote nicht vergeben auf einer Brut' value={ '    x' } disabled/>
 		</div>
 	{/if}
 </div>

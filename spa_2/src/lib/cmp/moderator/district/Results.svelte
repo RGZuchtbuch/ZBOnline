@@ -9,7 +9,7 @@
 
 	let { district, year, results } = $props();
 
-	console.log( 'Y', year );
+	console.log( 'Y', results );
 
 //	let edit = $state( false );
 //	let authorized = $derived( store.user && ( store.user.id === district.moderator.id || store.user.admin ) ); // can edit
@@ -29,8 +29,8 @@
 
 </script>
 
-
-{#key year && results}
+R
+{#key district && year && results}
 	<h3 class=''>Leistungen für
 		<select class='w-24 border border-teal-600 border-1 bg-inherit error=null' value={year} onchange={onYearChange}>
 			{#each years as y}
@@ -46,8 +46,9 @@
 		</p>
 	</div>
 
-	<ResultsView {district} {year} {results} />
-
+	{#if district && year && results}
+		<ResultsView {district} {year} {results} />
+	{/if}
 {/key}
 
 <style>

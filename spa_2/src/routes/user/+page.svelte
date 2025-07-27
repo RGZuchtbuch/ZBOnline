@@ -5,19 +5,22 @@
 
 	let { data } = $props();
 
-	//$effect( () => {
-		const header = {
-			title : 'Benutzer im RGZuchtbuch',
-			menu : {
+	$effect( () => {
+		setHeader();
+	})
+
+	function setHeader() {
+		ctx.header = {
+			title: 'Benutzer im RGZuchtbuch',
+			menu: {
 				trail: [
 					{name: 'Start', href: '/'},
 					{name: 'Anmeldung', href: '/user'},
 				],
 				options: [],
 			},
-		};
-		ctx.header = header;
-	//})
+		}
+	}
 </script>
 
 <User />

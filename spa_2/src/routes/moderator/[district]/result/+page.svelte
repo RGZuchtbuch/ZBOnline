@@ -1,42 +1,51 @@
 <script>
 	//import { invalidate } from '$app/navigation';
-	import {page} from '$app/state';
-	import { ctx } from '$lib/js/store.svelte.js';
+	import { page } from '$app/state';
+	import { ctx, dirty } from '$lib/js/store.svelte.js';
+	import { activeYear, addCrumb } from '$lib/js/tools.js';
 	import model from '$lib/js/model.js';
 	import Results from '$lib/cmp/moderator/district/Results.svelte';
 
-	let { data } = $props();
+	addCrumb( { name:'Eingabe', href:page.url.href } );
 
-	// ctx.district = data.district;
-	// ctx.year = data.year;
-	// ctx.results = data.results;
-	// $effect( () => {
-	// 	ctx.year = data.year;
-	// 	ctx.results = data.results;
-	// }); // in context to avoid warnings on wrong updates.
+	$effect( () => { console.log( 'results: page.url', page.url )} );
 
 	$effect( async () => {
+		if( dirty.results || page.url ) await loadResults( page.params, page.url.searchParams );
+	})
+
+	$effect( () => {
+		if( ctx.district && ctx.year && ctx.results ) setHeaders();
+	})
+
+	async function loadResults( params, query ) {
+		console.log( 'load district results', params, query );
+		dirty.results = false;
+		ctx.year = query.has( 'year') ? +query.get( 'year' ) : activeYear();
+		ctx.results = null;
+		ctx.results = await model.Result.query( { district:+params.district, year:ctx.year } );
+	}
+
+	function setHeaders() {
 		ctx.header = {
-			title: `Eingaben für ${data.district.name} ${data.year}`,
+			title: `Eingaben für ${ctx.district.name} ${ctx.year}`,
 			menu: {
 				trail: [
 					{name: 'Home', href: '/'},
 					{name: 'Obmann', href: '/moderator'},
-					{name: data.district.short, href: `/moderator/${data.district.id}`},
+					{name: ctx.district.short, href: `/moderator/${ctx.district.id}`},
 					{name: 'Eingaben'},
 				],
 				options: [
-					{name: 'Eingeben', href: `/moderator/${data.district.id}/result/edit`},
-					{name: 'Züchter', href: `/moderator/${data.district.id}/breeder`},
+					{name: 'Eingeben', href: `/moderator/${ctx.district.id}/result/edit`},
+					{name: 'Züchter', href: `/moderator/${ctx.district.id}/breeder`},
 				],
 			}
 		}
-	});
+	}
 
 </script>
 
-{#if data.district && data.year && data.results}
-	<Results district={data.district} year={data.year} results={data.results} />
-{:else}
-	Warten
+{#if ctx.district!==null && ctx.year!==null && ctx.results!==null}
+	<Results district={ctx.district} year={ctx.year} results={ctx.results} />
 {/if}

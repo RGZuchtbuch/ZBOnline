@@ -1,18 +1,22 @@
 <script>
 	import { page } from '$app/state';
 	import { ctx } from '$lib/js/store.svelte.js';
+	import { addCrumb } from '$lib/js/tools.js';
 
 	import Districts from '$lib/cmp/district/Districts.svelte';
 
-	let { data } = $props();
-
 	$effect( () => {
+		if( page.url ) setHeader();
+	});
+
+	function setHeader() {
+		addCrumb( { name:'Verbände', url:page.url } );
 		ctx.header = {
 			title : 'Landesverbände im BDRG Zuchtbuch',
 			menu : {
 				trail: [
 					{name: 'Start', href: '/'},
-					{name: 'Verbände', href: '/district'},
+					{name: 'Verbände'},
 				],
 				options: [
 					{name: 'Beiträge', href: '/article'},
@@ -21,25 +25,11 @@
 				],
 			},
 		}
-	});
-	//let state = getContext( 'state' )
-	function setHeader( data ) {
-		ctx.header.title = 'Landesverbände im BDRG Zuchtbuch'
-		ctx.header.menu = {
-			trail: [
-				{name: 'Start', href: '/'},
-				{name: 'Verbände', href: '/district'},
-			],
-			options: [
-				{name: 'Beiträge', href: '/article'},
-				{name: 'Standard', href: '/standard'},
-				{name: 'Leistungen', href: '/report'},
-			],
-		}
 	}
 
 </script>
 
-<Districts root={ctx.federation}/>
-
+{#if ctx.federation}
+	<Districts root={ctx.federation}/>
+{/if}
 

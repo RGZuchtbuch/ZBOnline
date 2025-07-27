@@ -1,6 +1,6 @@
 <script>
 	import {fade, slide} from 'svelte/transition';
-	import Form, { DateInput, TextArea, validator } from '../../form/Form.svelte';
+	import Form, { DateInput, Status, TextArea, validator } from '../../form/Form.svelte';
 	import {onMount} from 'svelte';
 	//	import Form from '$lib/form/form/Profile.svelte';
 
@@ -13,6 +13,6 @@
 
 
 <fieldset class='flex flex-col border p-2' in:fade>
-	<legend>Notizen</legend>
+	<legend>Notizen <Status /></legend>
 	<TextArea class='h-16' bind:value={pair.notes} />
 </fieldset>

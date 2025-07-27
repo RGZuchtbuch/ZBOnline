@@ -4,14 +4,10 @@
 	import {daysBetween, dec, txt } from '$lib/js/tools.js';
 	import { DateInput, Label, NumberInput, TextInput, validator } from '../../form/Form.svelte';
 
-	let { pair=$bindable(), standard } = $props();
+	let { pair, standard } = $props();
 
 	let days = $state( null );
 	let result = $state( null );
-
-	if( pair.lay === null ) { // only layers !
-		pair.lay = { id:0, pairId:pair.id, start:null, end:null, dames:null, eggs:null, weight:null };
-	}
 
 	const validate = {
 		start:      v => validator(v).date().orNullIf( pair.lay.end === null ).isValid(),

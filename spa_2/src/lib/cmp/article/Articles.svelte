@@ -2,6 +2,7 @@
 	import { fade, fly, slide } from 'svelte/transition';
 
 	import { ctx } from '$lib/js/store.svelte.js';
+	import District from '$lib/cmp/district/districts/District.svelte';
 
 	let { articles } = $props();
 
@@ -17,15 +18,20 @@
 		</div>
 	{/if}
 
+	<header class='header'>
+		<div class='w-4'>#</div>
+		<div class='grow'>Beitrag</div>
+		<div class='w-32'> Von </div>
+	</header>
+
 	<ol in:slide>
 
 		{#each articles as article, i}
-			<li class='flex flex-row gap-x-2'>
+			<li class=''>
 				<a class='grow' href={`/article/${article.id}`}>
-					<div class='text-right '>{i+1}</div>
+					<div class='w-4 text-right '>{i+1}</div>
 					<div class='grow'>{article.title}</div>
 					<div class='w-32'>{article.author}</div>
-					<sup class='w-6'>{article.id}</sup>
 				</a>
 			</li>
 		{/each}
@@ -36,10 +42,15 @@
 
 
 <style>
-	li a {
-		@apply flex flex-row border-b p-2 gap-x-2;
+	header {
+        @apply flex flex-row border-b px-8 py-2 gap-x-2 sticky top-0 text-left;
 	}
-	ol {
-		@apply px-6 py-4;
+    ol {
+        @apply px-6 py-4;
+    }
+	a {
+		@apply flex flex-row border-b p-4 gap-x-2;
 	}
+
 </style>
+

@@ -1,11 +1,18 @@
 <script>
     import { getContext } from 'svelte';
     import Report from '$lib/cmp/report/Report.svelte';
+    import {page} from '$app/state';
+    import {addCrumb} from '$lib/js/tools.js';
 
     let { data } = $props();
     let state    = getContext( 'state' );
 
     $effect( () => {
+        if( page.url ) setHeader();
+    });
+
+    function setHeader() {
+        addCrumb( { name:'Standard', url:page.url } );
         ctx.header = {
             title : 'Die Zuchtleistungen',
             menu : {
@@ -20,7 +27,7 @@
                 ],
             },
         }
-    });
+    }
 
 </script>
 

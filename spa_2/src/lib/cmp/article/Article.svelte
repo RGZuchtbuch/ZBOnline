@@ -1,6 +1,7 @@
 <script>
+	import {onDestroy} from 'svelte';
 	import { goto, invalidate, invalidateAll} from '$app/navigation';
-	import { ctx } from '$lib/js/store.svelte.js';
+	import { ctx, dirty } from '$lib/js/store.svelte.js';
 	import model from '$lib/js/model.js';
 	import Form, { CheckBox, NumberInput, Status, TextArea, TextInput, validator } from '$lib/cmp/form/Form.svelte';
 
@@ -11,6 +12,8 @@
 	let changed = false; // for invalidating load article
 	let authorized = $derived( ctx.user && ctx.user.admin ); // can edit
 
+	let destroyed = false;
+
 	const validate = {
 		level : v => validator(v).number().range( 1, 999 ).orNull().isValid(),
 		author: v => validator(v).string().length( 3, 64 ).orNull().isValid(),
@@ -20,7 +23,7 @@
 
 	async function onSubmit( event ) {
 		console.log( 'Submit article' );
-
+		dirty.articles = true;
 		if( article.title ) {
 			changed = true;
 			let response = await model.Article.save( article );
@@ -28,10 +31,12 @@
 		} else if( ! article.titel && remove && confirm('Lösschen?') ){ // name is null and delete
 			changed = true;
 			let response = await model.Article.delete( article.id );
-			goto( '/article' ); // back to list, no return
+			await goto('/article'); // back to list, no return
 			//return response
 		}
 	}
+
+
 </script>
 
 {#if article}

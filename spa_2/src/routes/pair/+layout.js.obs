@@ -1,0 +1,17 @@
+import { ctx } from '$lib/js/store.svelte.js';
+import model from '$lib/js/model.js';
+
+export async function load( { depends, params, parent } ) {
+	console.log( 'load pairs', params );
+	depends ( 'pairs' );
+
+	let { breeder } = await parent();
+
+	const response = await Promise.all( [
+		model.Pair.query( { breeder:breeder.id} ),
+	] );
+
+	ctx.pairs = response[0];
+
+	return { pairs:ctx.pairs };
+}

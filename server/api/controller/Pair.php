@@ -203,7 +203,7 @@ class Pair
 	public static function postResult( int $pairId, array $pair, Requester $requester ) : bool {
 		$success = model\Result::deleteForpair( $pairId );
 
-		if( $pair['accepted'] ) { // only add result if moderated accepted the pair
+		//if( $pair['accepted'] ) { // only add result if moderated accepted the pair
 
 			// summarize broods
 			$broods = &$pair['broods'];
@@ -261,7 +261,7 @@ class Pair
 					);
 
 			}
-		}
+		//}
 		return $success;
 	}
 

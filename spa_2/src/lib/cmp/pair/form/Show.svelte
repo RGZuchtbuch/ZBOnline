@@ -2,7 +2,7 @@
 	import {onMount} from 'svelte';
 	import {fade, slide} from 'svelte/transition';
 	import { dec } from '$lib/js/tools.js';
-	import { DateInput, NumberInput, RingInput, Select, TextInput, validator } from '../../form/Form.svelte';
+	import { DateInput, NumberInput, RingInput, Select, Status, TextInput, validator } from '../../form/Form.svelte';
 
 	let { pair } = $props();
 
@@ -16,9 +16,6 @@
 	}
 
 	$effect( () => {
-		//count      = pair.show.scores.reduce( ( sum, score ) => sum += score.count, 0 );
-		//const sum  = pair.show.scores.reduce( ( sum, score ) => sum += score.count*score.points, 0 )
-		//pair.showGrade = count > 0 ?  sum / count : null;
 		let counter = 0;
 		let total = 0;
 		for( const key in pair.show.scores ) {
@@ -33,8 +30,8 @@
 
 
 <fieldset class='border p-2' in:fade>
-	<legend>Schauleistung</legend>
-	{#if pair.colorId }
+	<legend>Schauleistung <Status /></legend>
+	{#if true }
 		<div class='flex flex-row gap-x-2' transition:slide>
 			<div class='w-8'></div>
 			{#each [89,90,91,92,93,94,95,96,97] as points, i}

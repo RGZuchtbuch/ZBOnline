@@ -1,20 +1,20 @@
 <script>
 	import { fade, slide } from 'svelte/transition';
-	import { NumberInput } from '$lib/cmp/form/Form.svelte';
+	import { NumberInput, Status } from '$lib/cmp/form/Form.svelte';
 	import BroodLayer from './Brood.Layer.svelte';
 	import BroodPigeon from './Brood.Pigeon.svelte';
 	import aab from '$lib/js/aab.js';
 	import {dec} from '$lib/js/tools.js';
 
-	let { pair=$bindable(), standard } = $props();
+	let { pair, standard } = $props();
 
 	let breed = $derived( standard.breeds[ pair.breedId ] );
 
-	if( ! pair.broods ) {
-		console.log('Create broods')
-		pair.broods = [];
-	}
-	for( let i=pair.broods.length; i<3; i++ ) {
+	// if( ! pair.broods ) {
+	// 	console.log('Create broods')
+	// 	pair.broods = [];
+	// }
+	for( let i=pair.broods.length; i<1; i++ ) {
 		addBrood();
 	}
 
@@ -33,7 +33,7 @@
 		let hatched = 0;
 
 		for( let brood of pair.broods ) {
-			if( brood.eggs && brood.hatched ) {
+			if( brood.eggs && brood.hatched >= 0 ) {
 				broods += 1;
 				eggs += brood.eggs;
 				hatched += brood.hatched;
@@ -55,22 +55,24 @@
 
 
 <fieldset class='flex flex-col gap-x-2 border pt-2 px-2' in:fade disabled={ ! pair.breedId }>
-	<legend>Brutleistung ({pair.broodGrade}) </legend>
-	{#if pair.colorId }
+	<legend>Brutleistung <Status /></legend>
+
+	{#if true }
 		<div transition:slide>
 			{#each pair.broods as brood, i }
 				{#if pair.sectionId === 5 }
-					<BroodPigeon bind:brood={pair.broods[i]} bind:pair {standard} {i}/>
+					<BroodPigeon brood={pair.broods[i]} {pair} {standard} {i}/>
 				{:else}
-					<BroodLayer  bind:brood={pair.broods[i]} bind:pair {standard} {i}/>
+					<BroodLayer  brood={pair.broods[i]} {pair} {standard} {i}/>
 				{/if}
 			{/each}
 			<hr>
 			<div class='flex flex-row pt-1'>
-				<button class='w-6 h-6' type='button' onclick={addBrood}>+</button>
+				<button class='w-6 h-6 print:hidden' type='button' onclick={addBrood}>+</button>
 				<span class='grow'></span>
-				<NumberInput class='w-14 font-bold' label='G.Note' value={dec( pair.broodGrade, 1 )} disabled/>
+				<NumberInput class='w-14 font-bold' label='G.Note' value={dec( pair.broodGrade, 1 )} title='Gesamt Brutnote' disabled/>
 			</div>
 		</div>
 	{/if}
+
 </fieldset>
