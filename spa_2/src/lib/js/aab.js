@@ -1,5 +1,9 @@
 import { daysBetween } from '$lib/js/tools.js';
 
+/**
+ * The grading calculations taken from the BDRG Statuten/aab
+ */
+
 export default {
 	lay: ( eggs, should ) => {
 		if( eggs >= 0 && should > 0 ) {
@@ -12,7 +16,7 @@ export default {
 			else if( fraction >= 0.5 ) return 92;
 			else if( fraction >= 0.4 ) return 91;
 			else if( fraction >= 0.3 ) return 90;
-			return 0;
+			return 89; // original 0
 		}
 		return null;
 	},
@@ -50,9 +54,9 @@ export default {
 					const low = Math.floor(relChicks);
 					const high = Math.ceil(relChicks);
 					const lowGrade = broodPigeon[group][6][low];
-					if (low === high) {
+					if (low === high) { // equal then simple calc
 						return lowGrade;
-					} else {
+					} else { // interpolate
 						const highGrade = broodPigeon[group][6][high];
 //						console.log(low, relChicks, high, lowGrade, highGrade);
 						return lowGrade + (relChicks - low) / (high - low) * (highGrade - lowGrade);
@@ -63,6 +67,7 @@ export default {
 			return null;
 		}
 	},
+	// should be curve or other. And what to do for goose etc, now assuming 3/4 of year optimal lay
 	layProduction( start, end, dames, eggs ) {
 		const days = daysBetween( start, end );
 		if( days && dames >= 1 && eggs >= 0 ) {
@@ -128,7 +133,7 @@ const broodLayer = { // eggs, chicks => points
 // }
 
 const broodPigeon = { // group, broods, chicks => points
-	// replaces 0 pts with 89
+	// replaces 0 pts with 89, and has a grade for 2 broods ( formally 3 required )
 	1: {
 		2: { 0:89, 1:91, 2:93, 3:94, 4:96 }, // To few broods....
  		3: { 0:89, 1:90, 2:92, 3:93, 4:94, 5:95, 6:97 },

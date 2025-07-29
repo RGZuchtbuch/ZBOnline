@@ -1,6 +1,6 @@
 <script>
 	import { ctx } from '$lib/js/store.svelte.js';
-    import Districts from '$lib/cmp/admin/districts/DistrictTree.svelte';
+    import Districts from '$lib/cmp/moderator/Districts.svelte';
 
 	$effect( async () => {
 		if( true ) await load();
@@ -23,9 +23,9 @@
 					{ name:'Verbände', href:'/admin/district' },
 				],
 				options : [
-					//{ name:'Verbände', href:'/admin/district' },
+					{ name:'Verbände', href:'/admin/district' },
 					{ name:'Settings', href:'/admin/setting' },
-					{ name:'Logs', href:'/admin/log' },
+					//{ name:'Logs', href:'/admin/log' },
 				],
 			}
 		}
@@ -33,9 +33,7 @@
 
 </script>
 
-Districts to moderate as obmann
-{#if ctx.federation}
-	<Districts root={ctx.federation}/>
-{/if}
+Logs im Bild, TODO
+
 
 

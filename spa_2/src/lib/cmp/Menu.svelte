@@ -6,7 +6,7 @@
 </script>
 
 {#if ctx && ctx.header && ctx.header.title && ctx.header.menu }
-	<div class='flex flex-row border border-teal-400 bg-teal-200 print:hidden' >
+	<div class='flex flex-row border-header bg-header text-header print:hidden' >
 		<nav class='grow flex flex-row'>
 			<nav class='flex flex-row px-4 items-center gap-x-0.0 pl-24'>
 				{#each ctx.header.menu.trail as step, i}

@@ -146,7 +146,7 @@
 </script>
 
 <div class='flex flex-col' >
-    <h5 class='border border-gray-400 rounded bg-header text-center text-white'> Zuchten / Sparte {#if district && year}im {district.name} in {year} {/if}</h5>
+    <h5 class='border border-gray-400 rounded bg-header text-header text-center'> Zuchten / Sparte {#if district && year}im {district.name} in {year} {/if}</h5>
     <canvas id='fractions' bind:this={pieCanvas} width='360px' height='128px'></canvas>
 </div>
 

@@ -40,7 +40,7 @@ class Article
 		if( $requester->isAdmin() ) {
 			$article = $request->getParsedBody();
 			if( $article ) {
-				$id = model\Article::create( $article['author'], $article['title'], $article['html'], $requester->getId() );
+				$id = model\Article::create( $article['level'], $article['author'], $article['title'], $article['html'], $requester->getId() );
 				if( $id ) {
 					$response->getBody()->write(json_encode(['id' => $id], JSON_UNESCAPED_SLASHES));
 					return $response;
@@ -58,7 +58,7 @@ class Article
 			$id = $args[ 'id' ] ?? null;
 			$article = $request->getParsedBody();
 			if( is_numeric( $id ) && $article ) {
-				$updated = model\Article::update( $id, $article['author'], $article['title'], $article['html'], $requester->getId() );
+				$updated = model\Article::update( $id, $article['level'], $article['author'], $article['title'], $article['html'], $requester->getId() );
 				if( $updated ) {
 					$response->getBody()->write(json_encode(['id' => $id], JSON_UNESCAPED_SLASHES));
 					return $response;

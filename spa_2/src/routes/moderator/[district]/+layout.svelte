@@ -21,7 +21,9 @@
 	function loadDistrict( id ) {
 		console.log( 'Load district' );
 		dirty.district = false;
+
 		ctx.district = ctx.federation.districts[ id ];//store.federation.districts[ +page.params.district ];
+		console.log('district', ctx.district );
 	}
 
 </script>

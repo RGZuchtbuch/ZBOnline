@@ -58,29 +58,42 @@
     // $inspect( 'Federation', ctx.federation );
     // $inspect( 'Standard', ctx.standard );
     //
-    $inspect( 'Dirty', dirty.articles );
+//    $inspect( 'Dirty', dirty.articles );
+
+    let dialog_test = null;
+
+    $effect( () => {
+        console.log( 'test', ctx.dialog )
+        if( ctx.dialog === 'test' && dialog_test ) {
+            dialog_test.showModal()
+        } else {
+            dialog_test.close();
+        }
+
+    });
 
 
 </script>
 
-
+<!--div class='bg-header text-header text-center'>Test</div-->
 <Header />
 
 <Menu />
 <Title />
 
+<dialog bind:this={ dialog_test }>
+    <div class='w-128 h-64 flex flex-col gap-y-4 justify-center items-center border-header bg-header text-header'>
+        <div>Wilkommen im RGZuchtbuch</div>
+        <button onclick={ () => ctx.dialog=null }>OK</button>
+    </div>
+</dialog>
 
 {#if ctx.federation !== null && ctx.standard !== null }
-
     <div class='screen-scroll-y content' in:fade={{duration:1500}}>
        {@render children()}
     </div>
-
-    {#if ctx.dialog==='test'}
-        <dialog class='absolute w-full h-full bg-[#8888]'>Test</dialog>
-    {/if}
-
 {/if}
+
 <style>
     .content {
         @apply  border border-teal-400 bg-white text-black flex flex-col;

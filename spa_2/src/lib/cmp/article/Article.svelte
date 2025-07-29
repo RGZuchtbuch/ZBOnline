@@ -9,7 +9,7 @@
 
 	let edit = $state( article && article.id === 0 );
 	let remove = $state( false );
-	let changed = false; // for invalidating load article
+	//let changed = false; // for invalidating load article
 	let authorized = $derived( ctx.user && ctx.user.admin ); // can edit
 
 	let destroyed = false;
@@ -25,11 +25,11 @@
 		console.log( 'Submit article' );
 		dirty.articles = true;
 		if( article.title ) {
-			changed = true;
+			//changed = true;
 			let response = await model.Article.save( article );
 			return response;
 		} else if( ! article.titel && remove && confirm('Lösschen?') ){ // name is null and delete
-			changed = true;
+			//changed = true;
 			let response = await model.Article.delete( article.id );
 			await goto('/article'); // back to list, no return
 			//return response
@@ -79,9 +79,7 @@
 		{@html article.html}
 	</p>
 
-	<div class='footer print:hidden'>
-		<a href='/article'>← Zurück zu den Beiträgen</a>
-	</div>
+
 {/if}
 
 <style>

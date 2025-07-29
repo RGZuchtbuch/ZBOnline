@@ -12,7 +12,7 @@
 {#if breed}
 	<li class='row'>
 		<div class='flex flex-row'>
-			<button type='button' title='Farben' onclick={toggle}>{unfold?'▽':'▷'}</button>
+			<button class='inline' type='button' title='Farben' onclick={toggle}>{unfold?'▽':'▷'}</button>
 			<div class='grow'>{breed.name}</div>
 			<div class='w-16'></div>
 			<div class='w-16'></div>

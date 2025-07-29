@@ -461,7 +461,11 @@
             <table>
                 <thead>
                     <!-- totals -->
-                    <tr><th class='border-y border-gray-600 p-2 bg-header text-center text-white text-xl' colspan=14>Gesammt Geflügel</th></tr>
+                    <tr>
+                        <th class='border-y border-gray-600 p-2 bg-header text-header text-center text-xl' colspan=14>
+                            Gesammt Geflügel
+                        </th>
+                    </tr>
                     <tr>
                         <th>
                             <div class='flex flex-row bg-gray-300 px-2 gap-x-1 font-bold'>

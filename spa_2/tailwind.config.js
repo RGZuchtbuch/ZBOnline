@@ -10,11 +10,11 @@ export default {
     extend: {
       colors: {
         button: '#ffffff',
-        header: '#000000',
+        //header: '#000000', // in app.css components
       },
       backgroundColor: {
         button: '#d97706',
-        header: '#2dd4bf',
+        //header: '#2dd4bf',
       },
       fontFamily: {
         rgz: [ 'Nunito Sans', 'sans-serif' ],

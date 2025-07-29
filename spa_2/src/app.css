@@ -17,7 +17,7 @@
     }
 
     a {
-        @apply border-0 bg-inherit text-black hover:text-amber-600 px-0.5 cursor-pointer;
+        @apply border-0 hover:font-extrabold px-0.5 cursor-pointer;
     }
 
     button.inline {
@@ -79,10 +79,13 @@
         @apply text-gray-400;
     }
     .text-header {
-        @apply text-slate-50 dark:text-slate-800;
+        @apply font-bold text-white dark:text-slate-800;
     }
     .bg-header {
-        @apply bg-teal-500 dark:bg-teal-100;
+        @apply bg-teal-400 dark:bg-teal-100;
+    }
+    .border-header {
+        @apply border border-teal-800 dark:border-teal-50;
     }
     .text-button {
         @apply text-center text-white;

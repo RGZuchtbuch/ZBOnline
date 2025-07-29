@@ -25,19 +25,19 @@ class Article
 		}
 	}
 
-    public static function create(string $author, string $title, string $html, $modifierId ) : ? int {
+    public static function create( int $level, string $author, string $title, string $html, $modifierId ) : ? int {
         $args = get_defined_vars();
         $stmt = Query::prepare( '
-            INSERT INTO article ( author, level, title, `html`, modifierId )
-            VALUES (:author, :level, :title, :html, :modifierId )
+            INSERT INTO article ( level, author, title, `html`, modifierId )
+            VALUES ( :level, :author, :title, :html, :modifierId )
         ' );
         return Query::insert( $stmt, $args ); // returns id
     }
-    public static function update(int $id, string $author, string $title, string $html, $modifierId ) : bool {
+    public static function update(int $id, int $level, string $author, string $title, string $html, $modifierId ) : bool {
 		$args = get_defined_vars();
         $stmt = Query::prepare( '
             UPDATE article
-            SET author=:author, title=:title, html=:html, modifierId=:modifierId
+            SET level=:level, author=:author, title=:title, html=:html, modifierId=:modifierId
             WHERE id=:id
         ' );
         return Query::update( $stmt, $args );

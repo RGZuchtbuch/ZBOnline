@@ -1,15 +1,26 @@
 <script>
 	import { page } from '$app/state';
-	import { ctx } from '$lib/js/store.svelte.js'
+	import { ctx, dirty } from '$lib/js/store.svelte.js'
+	import model from '$lib/js/model.js';
 	import { addCrumb } from '$lib/js/tools.js';
 
-	import Home from '$lib/cmp/Home.svelte';
+	import Article from '$lib/cmp/article/Article.svelte';
 
 	addCrumb( { name:'Start', url:page.url } );
 
-	$effect( () => {
-		ctx.header = setHeader();
+	$effect( async () => {
+		if( true ) await loadArticle( 1 );
 	})
+	$effect( () => {
+		if( true ) ctx.header = setHeader();
+	})
+
+	async function loadArticle( id ) {
+		console.log("load Article", id )
+		dirty.article = false;
+		ctx.article = null;
+		ctx.article = await model.Article.load( id );
+	}
 
 	function setHeader() {
 		const header = {
@@ -38,5 +49,5 @@
 
 </script>
 
-<Home />
+<Article article={ctx.article}/>
 

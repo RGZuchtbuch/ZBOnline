@@ -1,4 +1,7 @@
-// ctx store for each layout.svelte to store loaded objects in.
+/**
+ * ctx store for each layout/page.svelte to store loaded objects in for children to use.
+ * this is accompanied by the dirty flags, that triggers a list of object as an object has been changed. This is substituting the invalidate sveltekit load option, that did not work for this app, too little control.
+ */
 class Context {
     //args       = $state( null);
     article    = $state(null);
@@ -22,16 +25,19 @@ class Context {
     standard   = $state(null); // whole standard with sections, breeds and colors
     user       = $state(null);
 
-    crumbs   = $state([]);
+    //crumbs   = $state([]);
+    dialog = $state( null );
 }
 
-
+/**
+ * Hold constants and predefined objects ( not changed )
+ */
 class Config {
 
     // federation = $state(null);
     // standard   = $state(null); // whole standard with sections, breeds and colors
 
-    aocSection = $state( { id:9999, name:'AOC-Klasse', breeds:[] } );
+    aocSection = $state( { id:9999, name:'AOC-Klasse', breeds:[] } ); // TODO obsolete
     groups  = ['I', 'II', 'III'];
 }
 
@@ -51,9 +57,10 @@ class Dirty { // flag dirty, for reloading
     pairs  = $state( true );
 
     report  = $state( true );
+
     result  = $state( true );
-    results  = $state( true );
-    resultsEdit  = $state( true );
+    results  = $state( true ); // list of entered results
+    resultsEdit  = $state( true ); // list of editable results
 
     standard = $state( true );
 

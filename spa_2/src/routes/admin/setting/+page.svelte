@@ -2,26 +2,38 @@
 	import { ctx } from '$lib/js/store.svelte.js';
     import Districts from '$lib/cmp/moderator/Districts.svelte';
 
+	$effect( async () => {
+		if( true ) await load();
+	})
 	$effect( () => {
+		if( true ) setHeader();
+	})
+
+	async function load() {
+
+	}
+
+	function setHeader() {
 		ctx.header = {
-			title: 'Admin',
+			title: 'Admin: System settings',
 			menu: {
 				trail : [
 					{ name:'Start',    href:'/' },
-					{ name:'Admin' },
+					{ name:'Admin',    href:'/admin' },
+					{ name:'Settings' },
 				],
 				options : [
 					{ name:'Verbände', href:'/admin/district' },
-					{ name:'Setting', href:'/admin/setting' },
+					//{ name:'Settings', href:'/admin/setting' },
 					{ name:'Logs', href:'/admin/log' },
 				],
 			}
 		}
-	})
+	}
 
 </script>
 
-Alles für den Admin
+System settings, TODO
 
 
 

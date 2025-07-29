@@ -6,14 +6,13 @@
 	import District from '$lib/cmp/moderator/District.svelte';
 
 	let district = ctx.federation.districts[ +page.params.district ]; // ctx.district may not be known yet
-	addCrumb( { name:district.short, href:page.url.href } );
 
 	$effect( () => {
 		if( ctx.district ) setHeader();
 	});
 
 	function setHeader() {
-		addCrumb( page.url.href );
+		//addCrumb( { name:'Verband', url:page.url } );
 		ctx.header = {
 			title: `${ctx.district.name}`,
 			menu: {
@@ -33,5 +32,9 @@
 
 </script>
 
-<District district={ctx.district}/>
+{#if ctx.district}
+	<District district={ctx.district}/>
+{:else}
+	Gibts nicht
+{/if}
 

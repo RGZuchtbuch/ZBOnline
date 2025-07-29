@@ -33,7 +33,7 @@
 </script>
 
 <li class='pl-4'>
-	<div class='flex flex-row grow py-2 '>
+	<div class='flex flex-row grow py-2 border-b rounded-b-none'>
 		<div class='district'>{district.name}</div>
 		<div class='moderator'>{ fullName( district.moderator ) }</div>
 		<div class='email print:hidden'>
@@ -42,12 +42,41 @@
 				<a href={`/message?to=${district.moderator.id}`} title='Email schicken'> ✉ </a>
 			{/if}
 		</div>
-		<div class='link print:hidden'>
-			{#if district.url}
-				<a href={district.url} class='' title='Website besuchen' target='_blank'> ℹ </a>
-			{/if}
+
+		<div class='goto'>
+			<a href={`/moderator/${district.id}`} title='Verband verwalten als Obmann'> ☉ </a>
+		</div>
+
+		<div class='edit' title='Daten bearbeiten'>
+			<CheckBox bind:value={edit} />
 		</div>
 	</div>
+
+	{#if authorized && edit}
+		<Form autosubmit onsubmit={onSubmit} >
+			<fieldset class='rounded px-4'>
+				<legend>Verbandsdaten ändern</legend>
+				<div class='flex flex-row justify-end'><Status /></div>
+				<TextInput class='w-128' label='Name' bind:value={district.name} />
+				<TextInput class='w-192' label='Name voll' bind:value={district.fullname} />
+				<TextInput class='w-192' label='Name abk.' bind:value={district.short} />
+				<TextInput class='w-192' label='Name voll' bind:value={district.url} />
+				<div class='flex flex-row gap-x-2'>
+					<NumberInput class='w-32' label='latitude' bind:value={district.latitude} />
+					<NumberInput class='w-32' label='longitude' bind:value={district.longitude} />
+				</div>
+
+				<Select label='Obmann' bind:value={district.moderatorId}>
+					<option value={null} >?</option>
+					{#if breeders}
+						{#each breeders as breeder}
+							<option value={breeder.id} > {selectName( breeder ) } </option>
+						{/each}
+					{/if}
+				</Select>
+			</fieldset>
+		</Form>
+	{/if}
 
 	{#if district.children}
 		<ul>
@@ -61,7 +90,9 @@
 
 
 <style>
-
+    section {
+        @apply flex flex-col my-2 border;
+    }
     li {
         @apply pl-4 whitespace-nowrap;
     }
@@ -74,8 +105,10 @@
     .email {
         @apply w-12 text-center;
     }
-    .link {
-        @apply w-12 text-center;
+    .goto {
+        @apply w-20 text-center;
     }
-
+    .edit {
+        @apply w-20 text-center print:hidden;
+    }
 </style>

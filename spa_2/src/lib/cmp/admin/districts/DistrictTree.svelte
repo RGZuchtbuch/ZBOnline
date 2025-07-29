@@ -14,12 +14,13 @@
 </script>
 
 <section>
-	{#if root}
-		<div class='flex flex-row border-header bg-header text-header pl-4 sticky top-1'>
+	{#if authorized && root}
+		<div class='flex flex-row header sticky top-0'>
 			<div class='district'>Verbände </div>
 			<div class='moderator'>Obmann</div>
 			<div class='email' title='Email schicken'> ✉ </div>
-			<div class='link' title='Website besuchen'> ℹ </div>
+			<div class='goto' title='Als Obmann bearbeiten'> Obmann </div>
+			<div class='edit' title='Daten bearbeiten'>Bearbeiten</div>
 		</div>
 
 		<ul>
@@ -32,7 +33,7 @@
 
 <style>
     section {
-        @apply flex flex-col m-4;
+        @apply flex flex-col my-2 border;
     }
     li {
         @apply pl-4 whitespace-nowrap;
@@ -44,10 +45,13 @@
 	    @apply w-64;
     }
     .email {
-        @apply w-12 text-center;
+	    @apply w-12;
     }
-    .link {
-        @apply w-12 text-center;
+    .goto {
+        @apply w-20 text-center;
+    }
+    .edit {
+        @apply w-20 text-center print:hidden;
     }
 
 
