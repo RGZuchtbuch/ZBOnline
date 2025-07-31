@@ -5,14 +5,12 @@
 
 	import Standard from '$lib/cmp/standard/Standard.svelte';
 
-	//let { data } = $props();
 
 	$effect( () => {
 		if( page.url ) setHeader();
 	})
 
 	function setHeader() {
-		addCrumb( { name:'Standard', url:page.url } );
 		ctx.header = {
 			title: 'BDRG Rassegeflügel Standard',
 			menu: {
@@ -23,6 +21,7 @@
 				options: [
 					{name: 'Beiträge', href: '/article'},
 					{name: 'Verbände', href: '/federation'},
+					{name: 'Standard', href: '/standard'},
 					{name: 'Leistungen', href: '/report'},
 				],
 			},

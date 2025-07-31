@@ -6,8 +6,6 @@
 
 	import Article from '$lib/cmp/article/Article.svelte';
 
-	addCrumb( { name:'Start', url:page.url } );
-
 	$effect( async () => {
 		if( true ) await loadArticle( 1 );
 	})

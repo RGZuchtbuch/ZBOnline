@@ -7,7 +7,7 @@
 </script>
 
 <section>
-	<h3>Standard, Sparten, Gruppen, Rassen und Farbenschläge</h3>
+	<header class='p-2 border-header bg-header text-header text-center'>Standard, Sparten, Rassen und Farbenschläge</header>
 
 	{#if standard }
 		<ul in:slide>

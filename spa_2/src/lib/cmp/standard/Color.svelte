@@ -5,11 +5,11 @@
 </script>
 
 {#if color}
-	<li class='row'><div class='grow italic'>{color.name}</div></li>
+	<li class='' title='Farbenschlag'><div class='grow italic'>• {color.name}</div></li>
 {/if}
 
 <style>
-    div.row {
+    li {
         @apply flex flex-row italic;
     }
 </style>

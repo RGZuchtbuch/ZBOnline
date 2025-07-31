@@ -10,6 +10,7 @@
 	import {onDestroy} from 'svelte';
 
 	let { args, results } = $props();
+	// ex. args => { district:7, group:'I', section:12, year:2025 }
 
 	$inspect( 'r', args )
 
@@ -46,7 +47,6 @@
 		await invalidate( 'results' ); // make results page reload data
 	})
 
-
 </script>
 
 {#if ctx.district && args }
@@ -58,7 +58,7 @@
 			{/each}
 		</Select>
 
-		<Select label="Sparte" value={args.section.id} onchange={onSectionChange} title='Sparte zum Eingeben'>
+		<Select label="Sparte" value={args.section} onchange={onSectionChange} title='Sparte zum Eingeben'>
 			{#each ctx.standard.rootSections as section}
 				<option value={section.id}>{section.name}</option>
 			{/each}

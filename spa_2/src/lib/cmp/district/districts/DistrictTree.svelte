@@ -19,7 +19,7 @@
 			<div class='district'>Verbände </div>
 			<div class='moderator'>Obmann</div>
 			<div class='email' title='Email schicken'> ✉ </div>
-			<div class='link' title='Website besuchen'> ℹ </div>
+			<div class='link' title='Website besuchen'> ⓘ </div>
 		</div>
 
 		<ul>

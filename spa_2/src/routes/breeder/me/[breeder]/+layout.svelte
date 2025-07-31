@@ -11,7 +11,7 @@
 	let authorized = $state( ctx.user !== null && ( ctx.user.id === +page.params.breeder || ctx.user.admin ) );
 
 	$effect( async () => {
-		if (dirty.breeder) {
+		if ( dirty.breeder || page.url ) {
 			await loadBreeder(+page.params.breeder);
 			loadDistrict( ctx.breeder.districtId );
 		}
@@ -31,7 +31,8 @@
 
 </script>
 
-{#if authorized }
+
+{#if ctx.breeder && authorized }
 	{@render children()}
 {:else}
 	<User />

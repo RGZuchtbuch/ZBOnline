@@ -14,8 +14,6 @@
 
     loadUser(); // only once, the rest is handled by login/out
 
-    ctx.crumbs = [];
-
     $effect( () => {
         if( dirty.federation ) loadFederation();
     });

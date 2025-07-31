@@ -7,8 +7,6 @@
 	import model from '$lib/js/model.js';
 	import Pairs from '$lib/cmp/breeder/Pairs.svelte';
 
-	addCrumb( { name:'Mitglied', href:page.url.href } );
-
 	// breeder loaded in layout
 
 	$effect(async () => {

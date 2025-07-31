@@ -28,7 +28,7 @@
 	<a href={`${page.url.href}/0`}>[+]</a>
 </div>
 
-<header class='flex flex-row header section items-end px-2 py-0 pl-0 gap-x-2'>
+<header class='flex flex-row border-header bg-header text-header section items-end px-2 py-0 pl-0 gap-x-2'>
 	<a class='w-12' onclick={onSortByNumber}>ZbNr</a>
 	<a class='w-48' onclick={onSortByName}>Name</a>
 	<a class='w-48' onclick={onSortByClub}>Ortverein</a>

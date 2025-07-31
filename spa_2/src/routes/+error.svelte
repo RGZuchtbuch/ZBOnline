@@ -17,10 +17,10 @@
 
 </script>
 
-<h2 class='header'>Fehler 404, Seite nicht gefunden</h2>
-<div class='text-center'>
-    Du hast eine Adresse / URL eingegeben der nicht gefunden werden kann...
-    <a href='/'>Neustart...</a>
+<h2 class='m-8 border-header bg-header text-header text-center'>Fehler 404, Seite nicht gefunden</h2>
+<div class='m-4 flex flex-col items-center justify-center'>
+    <div>Du hast eine Adresse / URL eingegeben der nicht gefunden werden kann...</div>
+    <a class='m-8 w-24 border-button bg-button text-button p-2' href='/'>Neustart...</a>
 
 </div>
 

@@ -5,6 +5,7 @@
 	import {addCrumb, ArgsBuilder, completedYear} from '$lib/js/tools.js';
 	import model from '$lib/js/model.js';
 	import {onMount} from 'svelte';
+	import Table from '$lib/cmp/report/view/Table.svelte';
 
 	ctx.report = null;
 
@@ -17,11 +18,9 @@
 	});
 
 	async function loadReport( args ) {
-		console.log( 'Loading Report', args );
 		dirty.report = false;
 		ctx.report = null; //clear while waiting
-		let report = await model.Report.query( args );
-		console.log( 'In load', report );
+		let report = await model.Report.loadTable( args );
 			report.args = args;
 		ctx.report = report; // single trigger
 	}
@@ -47,14 +46,15 @@
 			title: `Zuchtleistungen`,
 			menu: {
 				trail: [
-					{name: 'Start', href: '/'},
+					{name: 'Home', href: '/'},
+					{name: 'Obmann', href: '/moderator'},
+					{name: ctx.district.short, href:`/moderator/${ctx.district.id}`},
 					{name: 'Leistungen' },
 				],
 				options: [
-					{name: 'Beiträge', href: '/article'},
-					{name: 'Verbände', href: '/federation'},
-					{name: 'Standard', href: '/standard'},
-					{name: 'Leistungen'},
+					{name: 'Leistungen' },
+					{name: 'Eingaben', href: `/moderator/${ctx.district.id}/result?year=${ctx.year}`},
+					{name: 'Züchter', href: `/moderator/${ctx.district.id}/breeder`},
 				],
 			},
 		}
@@ -64,7 +64,13 @@
 </script>
 
 {#if ctx.report !== null }
-	<Report	report={ctx.report}	/>
+	<div class='flex flex-col break-after-page' open>
+		<h2 class='text-center'>Leistungsdaten im {ctx.district.name} für {ctx.report.args.year}</h2>
+		<p>Das Jahr past sich das Jahr der Eingaben an !</p>
+		<div class='flex flex-col py-4'>
+			<Table table={ctx.report} district={ctx.district} year={ctx.report.args.year} />
+		</div>
+	</div>
 {/if}
 
 

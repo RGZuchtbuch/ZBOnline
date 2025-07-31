@@ -6,7 +6,9 @@ import { daysBetween } from '$lib/js/tools.js';
 
 export default {
 	lay: ( eggs, should ) => {
-		if( eggs >= 0 && should > 0 ) {
+		console.log('Lay', eggs, eggs !== null && eggs >= 0, should );
+		if( eggs !== null && eggs >= 0 && should > 0 ) {
+			console.log('Tuut');
 			const fraction = eggs / should;
 			if( fraction >= 1.0 ) return 97;
 			else if( fraction >= 0.9 ) return 96;
@@ -18,6 +20,7 @@ export default {
 			else if( fraction >= 0.3 ) return 90;
 			return 89; // original 0
 		}
+		console.log('Lay', null );
 		return null;
 	},
 	brood: {
@@ -70,7 +73,7 @@ export default {
 	// should be curve or other. And what to do for goose etc, now assuming 3/4 of year optimal lay
 	layProduction( start, end, dames, eggs ) {
 		const days = daysBetween( start, end );
-		if( days && dames >= 1 && eggs >= 0 ) {
+		if( days > 0 && dames > 0 && eggs !== null && eggs >= 0 ) {
 			let yearEggs = 365 * eggs / dames / days;
 			let correctedEggs = yearEggs * ( 0.75 + 0.0000456621*days - 2.502033e-7*days*days - 5.483908e-9*days*days*days + 3.004881e-11*days*days*days*days );
 			return Math.round( 10 * correctedEggs ) / 10;

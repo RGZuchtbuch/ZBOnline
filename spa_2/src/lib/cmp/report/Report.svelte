@@ -44,7 +44,7 @@
 
 	{#if report !== null }
 		<div class='flex flex-col break-after-page' open>
-			<header class=''>Leistungen im Übersicht</header>
+			<header class='border-header bg-header text-header'>Leistungen im Übersicht</header>
 			<div class='mt-2 flex flex-row justify-evenly'>
 				<Select class='w-64' label='Leistung' value={report.args.type} onchange={onTypeChange}>
 					{#each Object.values( types ) as type}
@@ -82,7 +82,7 @@
 
 <style>
 	header {
-		@apply px-4 py-2 bg-teal-200 text-xl font-bold sticky top-0 text-center;
+		@apply px-4 py-2 text-xl text-center sticky top-1;
 	}
     summary {
         @apply px-4 py-2 bg-teal-200 text-xl font-bold sticky top-0 text-center;

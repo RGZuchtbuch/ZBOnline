@@ -6,8 +6,6 @@
 	import model from '$lib/js/model.js';
 	import Results from '$lib/cmp/moderator/district/Results.svelte';
 
-	addCrumb( { name:'Eingabe', href:page.url.href } );
-
 	$effect( () => { console.log( 'results: page.url', page.url )} );
 
 	$effect( async () => {
@@ -19,7 +17,6 @@
 	})
 
 	async function loadResults( params, query ) {
-		console.log( 'load district results', params, query );
 		dirty.results = false;
 		ctx.year = query.has( 'year') ? +query.get( 'year' ) : activeYear();
 		ctx.results = null;
@@ -37,6 +34,8 @@
 					{name: 'Eingaben'},
 				],
 				options: [
+					{name: 'Leistungen', href:`/moderator/${ctx.district.id}/report?year=${ctx.year}` },
+					{name: 'Eingaben' },
 					{name: 'Eingeben', href: `/moderator/${ctx.district.id}/result/edit`},
 					{name: 'Züchter', href: `/moderator/${ctx.district.id}/breeder`},
 				],

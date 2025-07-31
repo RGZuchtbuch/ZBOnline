@@ -3,6 +3,7 @@
 	import aab from '$lib/js/aab.js';
 	import {daysBetween, dec, txt } from '$lib/js/tools.js';
 	import { DateInput, Label, NumberInput, TextInput, validator } from '../../form/Form.svelte';
+	import Status from '$lib/cmp/form/Status.svelte';
 
 	let { pair, standard } = $props();
 
@@ -11,7 +12,7 @@
 
 	const validate = {
 		start:      v => validator(v).date().orNullIf( pair.lay.end === null ).isValid(),
-		end:        v => validator(v).date().after( pair.lay.start ).orNullIf( pair.lay.start === null ).isValid(),
+		end:        v => validator(v).date().after( pair.lay.start ).orNullIf( pair.lay.start === null || pair.lay.eggs === null ).isValid(),
 		dames:      v => validator(v).number().range( 1,   99 ).orNullIf( pair.lay.end === null ).isValid(),
 		eggs:       v => validator(v).number().range( 0, 9999 ).orNullIf( pair.lay.end === null ).isValid(),
 		weight:     v => validator(v).number().range( 0,  399 ).orNull().isValid(),
@@ -28,7 +29,7 @@
 
 
 <fieldset class='border p-2' in:fade>
-	<legend>Legeleistung ({pair.layGrade}) {pair.sectionId}</legend>
+	<legend>Legeleistung <Status /></legend>
 	{#if pair.colorId && pair.sectionId !== 5 }
 		<div class='flex flex-row gap-x-2' transition:slide>
 			<div class='w-8'></div>

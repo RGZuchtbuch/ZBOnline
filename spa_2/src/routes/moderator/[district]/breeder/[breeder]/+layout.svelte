@@ -10,7 +10,6 @@
 
 	let { children } = $props();
 
-	addCrumb( { name:`${shortName(ctx.breeder)}`, href:page.url.href } );
 
 	$effect( async () => {
 		const breederId = +page.params.breeder;

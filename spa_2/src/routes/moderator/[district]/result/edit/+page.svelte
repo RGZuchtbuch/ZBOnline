@@ -32,14 +32,12 @@
 	}
 
 	function getArgs( page ) { // collect arguments and optionals and defaults
-		console.log( 'Get Args', page.params );
 		let query = page.url.searchParams;
 		const args = ArgsBuilder.init();
 			args.district = +page.params.district;
 			ArgsBuilder.setNumber( args, query, 'year', activeYear() );
 			ArgsBuilder.setNumber( args, query, 'section', 3 );
 			ArgsBuilder.setString( args, query, 'group', 'I' );
-			console.log( 'Artgs', args )
 		return args;
 	}
 

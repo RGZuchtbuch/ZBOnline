@@ -8,8 +8,6 @@
 	import Breeders from '$lib/cmp/moderator/district/Breeders.svelte';
 	import model from '$lib/js/model.js';
 
-	addCrumb( { name:'Züchter', href:page.url.href } );
-
 	$effect( async () => {
 		const districtId = +page.params.district;
 		console.log( districtId );

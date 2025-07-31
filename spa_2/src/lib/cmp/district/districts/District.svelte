@@ -44,7 +44,7 @@
 		</div>
 		<div class='link print:hidden'>
 			{#if district.url}
-				<a href={district.url} class='' title='Website besuchen' target='_blank'> ℹ </a>
+				<a href={district.url} class='' title='Website besuchen' target='_blank'> ⓘ </a>
 			{/if}
 		</div>
 	</div>

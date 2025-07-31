@@ -14,7 +14,7 @@
 {#if section}
 	<li class='row'>
 		<button class='inline' type='button' title='Öffnen' onclick={toggle}>{unfold?'▽':'▷'} </button>
-		<div class='grow font-bold'>{section.name}</div><div></div>
+		<div class='grow font-bold' title='Sparte'>{section.name}</div><div></div>
 	</li>
 
 	{#if unfold}

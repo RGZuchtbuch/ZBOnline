@@ -18,7 +18,6 @@
 
     $effect( async () => {
         if( open ) {
-            console.log( 'Year', breed );
             results = null;
             results = await model.Result.query( { district:district.id, year:year, group:group, breed:breed.id })
         }
@@ -95,7 +94,9 @@
                 <BreedResult result={results.breed}/>
             {/if}
         </div>
-        <div class='flex flex-row justify-end' onclick={onAddAoc}><a>[AOC]</a></div>
+        {#if sectionId !== 5}
+            <div class='flex flex-row justify-end' onclick={onAddAoc}><a>[AOC]</a></div>
+        {/if}
     {/if}
 
 

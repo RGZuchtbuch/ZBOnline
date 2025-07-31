@@ -24,7 +24,7 @@
 	async function onSubmit() {
 		console.log( 'Pair Submit' );
 		dirty.pairs = true;
-		if( pair.breederId && pair.year && pair.name && pair.group && pair.sectionId && pair.breedId && pair.colorId ) {
+		if( pair.breederId && pair.year && pair.name && pair.group && pair.sectionId && pair.breedId && ( pair.sectionId === 5 || pair.colorId ) ) {
 			return await model.Pair.save( pair );
 			//if( saved ) changed = false;
 		} else if( pair.id > 0 && pair.name === null && pair.delete ){ // name is null and delete

@@ -24,7 +24,11 @@
 			<nav class='flex flex-row px-4 items-center gap-x-2 pr-24' in:slide={{axis:'x', duration:500}}>
 				{#each ctx.header.menu.options as option, i}
 					{#key option.name}
-						<a href={option.href} title='Wählen'>{option.name}</a>
+						{#if option.href}
+							<a href={option.href} title={'Zum '+option.name}>{option.name}</a>
+						{:else}
+							<a title='Jetzige Wahl'>{option.name}</a>
+						{/if}
 					{/key}
 				{/each}
 			</nav>

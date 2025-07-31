@@ -5,9 +5,6 @@
 	import Pairs from '$lib/cmp/breeder/Pairs.svelte';
 	import model from '$lib/js/model.js';
 
-	addCrumb( { name:'Stämme', href:page.url.href });
-
-
 	$effect( async () => {
 		if( dirty.pairs || page.url ) await loadPairs( +page.params.breeder );
 	})

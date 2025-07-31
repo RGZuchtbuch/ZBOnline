@@ -20,4 +20,15 @@ export default class Report {
 		}
 		return null;
 	}
+
+	static async loadTable( args ) {
+		console.log( 'Report.query', args )
+		if( args && args.district && args.year ) { // must haves
+			let response = await api.get(  `/api/2/report`, { target:'table', ...args });
+			if( response ) {
+				return response.report;
+			}
+		}
+		return null;
+	}
 }

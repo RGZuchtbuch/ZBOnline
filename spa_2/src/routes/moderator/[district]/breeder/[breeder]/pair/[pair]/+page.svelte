@@ -5,8 +5,6 @@
 	import Pair from '$lib/cmp/pair/Pair.svelte';
 	import model from '$lib/js/model.js';
 
-	addCrumb( {name: `${ctx.pair.year % 100}.${ctx.pair.name}`, href:page.url.href } );
-
 	$effect( async () => {
 		if( dirty.pair || page.url ) await loadPair( +page.params.pair );
 	})

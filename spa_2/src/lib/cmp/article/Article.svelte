@@ -83,9 +83,6 @@
 {/if}
 
 <style>
-	.header {
-		@apply flex flex-row px-4;
-	}
 	.meta {
 		font-size: 0.6em;
 		@apply italic;

@@ -78,20 +78,27 @@
     .text-neutral {
         @apply text-gray-400;
     }
-    .text-header {
-        @apply font-bold text-white dark:text-slate-800;
-    }
-    .bg-header {
-        @apply bg-teal-400 dark:bg-teal-100;
+
+    /* header */
+    .header {
+        @apply w-full bg-teal-200 border text-center;
     }
     .border-header {
         @apply border border-teal-800 dark:border-teal-50;
     }
+    .bg-header {
+        @apply bg-teal-400 dark:bg-teal-100;
+    }
+    .text-header {
+        @apply font-bold text-white dark:text-slate-800;
+    }
+
+    /* button */
     .text-button {
         @apply text-center text-white;
     }
 
-
+    /* breadcrumbs, obsolete */
     .breadcrumbs {
         @apply hidden lg:block flex flex-col lg:flex-row gap-x-1;
     }
@@ -102,9 +109,7 @@
     .breadcrumbs a:last-child:after {
         content: '';
     }
-    .header {
-        @apply w-full bg-teal-200 border text-center;
-    }
+
     .footer {
         @apply w-full mt-4 p-2 border-t-2 border-teal-400 text-center italic;
     }

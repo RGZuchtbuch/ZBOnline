@@ -135,8 +135,8 @@
                     <!-- section header -->
                     <thead>
                         <tr>
-                            <th class='sticky top-9 border-y border-gray-600' colspan=14>
-                                <div class='flex flex-row p-2 bg-teal-200'>
+                            <th class='border-y border-gray-600 sticky top-1' colspan=14>
+                                <div class='flex flex-row p-2 border-header bg-header text-header'>
                                     <small class='w-48 pr-2 text-left self-end'>{#if district} {district.short} {/if}</small>
                                     <div class='grow text-center text-xl italic'>Sparte {section.name}</div>
                                     <small class='w-48 pr-2 text-right self-end'>{#if district} {year} {/if}</small>
@@ -410,7 +410,7 @@
                         <!-- section total -->
                         <tr>
                             <th>
-                                <div class='flex flex-row border-y border-gray-600 bg-teal-200 px-2 py-1 font-bold text-right text-base italic gap-x-1'>
+                                <div class='flex flex-row border-y border-header bg-header text-header px-2 py-1 text-right text-base italic gap-x-1'>
                                     <div class='grow pl-4 text-left '> Gesamt {section.name} </div>
 
                                     <div class='w-12 td' title='Zahl der Zuchten / Züchter'>{dec( section.total.breeders )}</div>

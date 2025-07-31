@@ -32,9 +32,6 @@
 <style>
     section {
     }
-    .header {
-        @apply w-full bg-teal-200 rounded-t text-center
-    }
 
     a {
         @apply w-full flex flex-row border-b p-2 gap-x-2;

@@ -20,6 +20,7 @@
 				],
 				options: [
 					{name: 'Beiträge', href: '/article'},
+					{name: 'Verbände', href: '/federation'},
 					{name: 'Standard', href: '/standard'},
 					{name: 'Leistungen', href: '/report'},
 				],
