@@ -1,7 +1,7 @@
 <script>
     import '../app.css'; // need this once on highest level
 
-    import { onMount } from 'svelte';
+    import {goto} from '$app/navigation';
     import { fade, fly, slide } from 'svelte/transition';
     import { ctx, dirty } from '$lib/js/store.svelte.js'
 
@@ -20,6 +20,20 @@
     $effect( () => {
         if( dirty.standard ) loadStandard();
     });
+
+    console.log('SetInterval');
+    let expired = setInterval( () => {
+        //clearInterval( expired ); // in case one already runs
+        const now = Date.now() / 1000; // ms to s
+        //if( ctx.user ) console.log( this, 'Check', now, ctx.user.exp, ( now - ctx.user.exp )/ 1, ' mins left');
+        if( ctx.user !== null && now - ctx.user.exp > -10 ) { // 10 s before expire
+            console.log( 'Threw user out, expired')
+            model.User.logout();
+            goto( '/user' );
+        } else {
+            //console.log( "Tiick" );
+        }
+    }, 5000 )
 
     // async function load() {
     //     const response = await Promise.all([
@@ -75,7 +89,6 @@
 
 <!--div class='bg-header text-header text-center'>Test</div-->
 <Header />
-
 <Menu />
 <Title />
 

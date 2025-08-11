@@ -144,6 +144,12 @@ class Router {
 		$app->delete( '/2/result/{id:[0-9]+}','App\controller\Result::delete');
 
 		$app->get( '/2/standard', 'App\controller\Standard::get' );
+		$app->post( '/2/standard/breed', 'App\controller\Breed::post');
+		$app->put( '/2/standard/breed/{id:[0-9]+}', 'App\controller\Breed::put');
+		$app->delete( '/2/standard/breed/{id:[0-9]+}', 'App\controller\Breed::delete');
+		$app->post( '/2/standard/color', 'App\controller\Color::post');
+		$app->put( '/2/standard/color/{id:[0-9]+}', 'App\controller\Color::put');
+		$app->delete( '/2/standard/color/{id:[0-9]+}', 'App\controller\Color::delete');
 
 		$app->post('/2/user/login', 'App\controller\User::newLogin' ); // post credentials, replies token!
 		$app->post('/2/user/forgot', 'App\controller\User::newForgot' ); // post forgot password email, sends email

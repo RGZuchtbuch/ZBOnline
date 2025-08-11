@@ -1,1 +1,1 @@
-export { default as component } from "../../../../src/routes/federation/+page.svelte";
+export { default as component } from "../../../../src/routes/calculator/lineage/+page.svelte";

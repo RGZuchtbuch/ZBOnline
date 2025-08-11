@@ -10,22 +10,27 @@
 	});
 
 	function setHeader() {
-		addCrumb( { name:'Verbände', url:page.url } );
-		ctx.header = {
-			title : 'Landesverbände im BDRG Zuchtbuch',
-			menu : {
-				trail: [
-					{name: 'Start', href: '/'},
-					{name: 'Verbände'},
-				],
-				options: [
-					{name: 'Beiträge', href: '/article'},
-					{name: 'Verbände', href: '/federation'},
-					{name: 'Standard', href: '/standard'},
-					{name: 'Leistungen', href: '/report'},
-				],
-			},
-		}
+		ctx.title = 'Landesverbände im BDRG Zuchtbuch';
+		ctx.submenu = [];
+		ctx.crumbs = [
+			{name: 'Start', href: '/'},
+			{name: 'Verbände'},
+		];
+		// ctx.header = {
+		// 	title : 'Landesverbände im BDRG Zuchtbuch',
+		// 	menu : {
+		// 		trail: [
+		// 			{name: 'Start', href: '/'},
+		// 			{name: 'Verbände'},
+		// 		],
+		// 		options: [
+		// 			{name: 'Beiträge', href: '/article'},
+		// 			{name: 'Verbände', href: '/federation'},
+		// 			{name: 'Standard', href: '/standard'},
+		// 			{name: 'Leistungen', href: '/report'},
+		// 		],
+		// 	},
+		// }
 	}
 
 </script>

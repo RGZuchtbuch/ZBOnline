@@ -7,6 +7,7 @@ export default class User {
 	static async load() {
 		let token = browser && window.sessionStorage.getItem('token'); // encoded
 		let user = tokenToUser( token );
+//		console.log( 'User', user)
 //		let date = Date.now()/1000;
 		return user;
 	}

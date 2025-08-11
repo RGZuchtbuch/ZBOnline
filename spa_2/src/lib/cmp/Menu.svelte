@@ -3,25 +3,54 @@
 	import { fade, fly, slide } from 'svelte/transition';
 	import { ctx } from '$lib/js/store.svelte.js';
 
+	//let mainmenu = $state( { options:[], roles:[] } );
+
+	$effect( () => {
+		let options = [
+			{ name: 'Infos', href: '/article'},
+			{ name: 'Verbände', href: '/federation'},
+			{ name: 'Standard', href: '/standard'},
+			{ name: 'Leistungen', href: '/report'},
+			{ name: 'Rechner', href: '/calculator'},
+		]
+		let roles = [];
+		if( ctx.user ) {
+			roles.push( {name: 'Züchter', href: `/breeder` } );
+			if (ctx.user.moderator.length > 0) roles.push({name: 'Obmann', href: '/moderator'});
+			if (ctx.user.admin) roles.push({name: 'Admin', href: '/admin'});
+		}
+		ctx.menu = { options:options, roles:roles }; // single trigger
+		console.log( 'Menu page', page.url.pathname );
+	});
+
+
 </script>
 
-{#if ctx && ctx.header && ctx.header.title && ctx.header.menu }
-	<div class='flex flex-row border-header bg-header text-header print:hidden' >
-		<nav class='grow flex flex-row'>
-			<nav class='flex flex-row px-4 items-center gap-x-0.0 pl-24'>
-				{#each ctx.header.menu.trail as step, i}
-					{#key step.name}
-						{#if i>0}➭{/if}
-						{#if i < ctx.header.menu.trail.length-1}
-							<a href={step.href} class='pr-1' title='Zurück'> {step.name}</a>
-						{:else}
-							<span class='pr-1 font-bold cursor-default' title='Hier bist du' in:fade={{axis:'x', duration:500}}> {step.name}</span>
-						{/if}
-					{/key}
-				{/each} :
+{#if ctx && ctx.title && ctx.menu }
+	<div class='flex flex-col border-header bg-header text-header print:hidden' >
+		<div class='grow flex flex-row justify-end gap-x-2 py-1 pr-8'>
+			<nav class='flex flex-row gap-x-2'>
+				{#each ctx.menu.options as option}
+					{#if page.url.pathname.startsWith( option.href ) }
+						<a class='underline' href={ctx.menustate[ option.href ]} title={'Zum '+option.name}>{option.name}</a>
+					{:else}
+						<a href={ctx.menustate[ option.href ]} title={'Zum '+option.name}>{option.name}</a>
+					{/if}
+				{/each}
 			</nav>
-			<span class='grow'></span>
-			<nav class='flex flex-row px-4 items-center gap-x-2 pr-24' in:slide={{axis:'x', duration:500}}>
+			{#if ctx.menu.roles.length > 0}
+				:
+				<nav class='flex flex-row gap-x-2'>
+					{#each ctx.menu.roles as role}
+						{#if page.url.pathname.startsWith( role.href ) }
+							<a class='underline' href={ctx.menustate[ role.href ]} title={'Zum '+role.name}>{role.name}</a>
+						{:else}
+							<a href={ctx.menustate[ role.href ]} title={'Zum '+role.name}>{role.name}</a>
+						{/if}
+					{/each}
+				</nav>
+			{/if}
+			<!--nav class='flex flex-row px-4 items-center gap-x-2 pr-24' in:slide={{axis:'x', duration:500}}>
 				{#each ctx.header.menu.options as option, i}
 					{#key option.name}
 						{#if option.href}
@@ -31,8 +60,35 @@
 						{/if}
 					{/key}
 				{/each}
+			</nav-->
+		</div>
+		<div class='grow flex flex-row text-sm gap-x-2'>
+			<nav class='grow flex flex-row justify-end gap-x-1 italic'>
+				{#each ctx.crumbs as crumb, i}
+					{#key crumb.name}
+						{#if i>0}➭{/if}
+						{#if i < ctx.crumbs.length-1}
+							<a href={crumb.href} class='pr-1' title='Zurück'> {crumb.name}</a>
+						{:else}
+							<span class='pr-1 font-bold cursor-default' title='Hier bist du' in:fade={{axis:'x', duration:500}}> {crumb.name}</span>
+						{/if}
+					{/key}
+				{/each}
 			</nav>
-		</nav>
-
+			{#if ctx.submenu.length > 0}
+				⇒
+			{/if}
+			<nav class='flex flex-row pr-20 gap-x-1'>
+				{#each ctx.submenu as option, i}
+					{#key option.name}
+						{#if option.href}
+							<a href={option.href} title={'Zum '+option.name}>{option.name}</a>
+						{:else}
+							<a title='Jetzige Wahl'>{option.name}</a>
+						{/if}
+					{/key}
+				{/each}
+			</nav>
+		</div>
 	</div>
 {/if}

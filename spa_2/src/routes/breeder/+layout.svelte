@@ -1,5 +1,6 @@
 <script>
-	import {page} from '$app/state';
+	import { fade } from 'svelte/transition';
+	import { page } from '$app/state';
 	import {goto} from '$app/navigation';
 	import { ctx, dirty } from '$lib/js/store.svelte.js';
 	import Districts from '$lib/cmp/moderator/Districts.svelte';
@@ -8,11 +9,12 @@
 
 	let { children, data } = $props();
 
-	let authorized = $state( ctx.user !== null && ( ctx.user.id === +page.params.breeder || ctx.user.admin ) );
+	let authorized = $state( ctx.user !== null );//&& ( ctx.user.id === +page.params.breeder || ctx.user.admin ) );
 
 	$effect( async () => {
 		if ( dirty.breeder || page.url ) {
-			await loadBreeder(+page.params.breeder);
+//			await loadBreeder( +page.params.breeder);
+			await loadBreeder( ctx.user.id );
 			loadDistrict( ctx.breeder.districtId );
 		}
 	});
@@ -25,15 +27,18 @@
 			ctx.breeder = await model.Breeder.load( id );
 		}
 	}
-	async function loadDistrict( id ) {
+	function loadDistrict( id ) {
 		ctx.district = ctx.federation.districts[ id ];
 	}
 
 </script>
 
-
-{#if ctx.breeder && authorized }
-	{@render children()}
+{#if ctx.user }
+	{#if ctx.breeder && authorized }
+		<div in:fade>
+			{@render children()}
+		</div>
+	{/if}
 {:else}
 	<User />
 {/if}

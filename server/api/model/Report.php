@@ -271,7 +271,7 @@ class Report extends Query
 
 
 	// for use in district year report table?
-	public static function forTable(int $districtId, int $year ) : ? array {
+	public static function forTable(int $districtId, int $year, ? string $group ) : ? array {
 		$args = get_defined_vars();
 		$stmt = Query::prepare("
             SELECT COUNT(*),
@@ -340,6 +340,9 @@ class Report extends Query
                             LEFT JOIN district AS child ON child.id = parent.id OR child.parentId = parent.id
                         WHERE parent.id=:districtId OR parent.parentId = :districtId                
                     )
+                  
+                	AND ( :group IS NULL OR result.group  = :group )
+                
                 GROUP BY result.year, result.districtId, result.breedId, result.colorId, result.aocColor, result.group, pair.breederId                                
             ) AS results            
             

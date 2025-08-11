@@ -17,7 +17,7 @@
 		{/each}
 	</div-->
 	<div class='grow font-bold pl-32 text-sm text-center' onclick={ () => ctx.dialog='test' } in:fade>
-		BDRG Zuchtbuch
+		BDRG Zuchtbuch {ctx.menustate['/moderator']}
 	</div>
 
 	<div class='w-32 flex flex-row pr-2 gap-x-2 text-sm justify-end' in:fade>

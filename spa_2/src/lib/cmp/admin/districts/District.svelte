@@ -34,7 +34,9 @@
 
 <li class='pl-4'>
 	<div class='flex flex-row grow py-2 border-b rounded-b-none'>
-		<div class='district'>{district.name}</div>
+		<div class='district'>
+			<a href={`/moderator/${district.id}`}>{district.name}</a>
+		</div>
 		<div class='moderator'>{ fullName( district.moderator ) }</div>
 		<div class='email print:hidden'>
 			{#if district.moderator}

@@ -1,5 +1,5 @@
 <script>
-
+	import { fade } from 'svelte/transition';
 	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
 	import { ctx, dirty } from '$lib/js/store.svelte.js';
@@ -25,8 +25,11 @@
 
 </script>
 
-Layout Breeder
-{@render children()}
+{#if ctx.breeder}
+	<div in:fade>
+		{@render children()}
+	</div>
+{/if}
 
 
 

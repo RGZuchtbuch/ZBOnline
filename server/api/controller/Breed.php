@@ -44,7 +44,7 @@ class Breed
 					if ($id) {
 						model\Cache::del('standard');
 						model\Cache::del('result');
-
+						model\Cache::del('report' ); // clear cache as results changed
 						$response->getBody()->write(json_encode(['id' => $id], JSON_UNESCAPED_SLASHES));
 						return $response;
 					}
@@ -67,6 +67,7 @@ class Breed
 				if( $success ) {
 					model\Cache::del('standard');
 					model\Cache::del('result');
+					model\Cache::del('report' ); // clear cache as results changed
 					$response->getBody()->write(json_encode(['id' => $id], JSON_UNESCAPED_SLASHES));
 					return $response;
 				}
@@ -87,8 +88,9 @@ class Breed
                     if( ! model\std\Breed::getColors( $id ) && ! model\Pair::readForBreed( $id ) && ! model\Result::getAllWithBreed( $id ) ) { // no more color, pair of result using it
                         $success = model\std\Breed::delete( $id );
                         if( $success ) {
-                            model\Cache::del('standard');
-                            model\Cache::del('result');
+							model\Cache::del('standard');
+							model\Cache::del('result');
+							model\Cache::del('report' ); // clear cache as results changed
                             $response->getBody()->write(json_encode(['success' => $success, 'id' => $id], JSON_UNESCAPED_SLASHES));
                             return $response;
                         }

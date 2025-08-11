@@ -26,21 +26,29 @@
 	}
 
 	function setHeader() {
-		ctx.header = {
-			title : ctx.article.title ? ctx.article.title : '?',
-			menu : {
-				trail: [
-					{name: 'Start', href: '/'},
-					{name: 'Beiträge', href: '/article'},
-					{name: ctx.article.title },
-				],
-				options: [
-					{name: 'Verbände', href: '/federation'},
-					{name: 'Standard', href: '/standard'},
-					{name: 'Leistungen', href: '/report'},
-				],
-			},
-		};
+		//ctx.menustate[ '/article' ] = page.url.href;
+		ctx.title = ctx.article.title ? ctx.article.title : '?';
+		ctx.submenu = [];
+		ctx.crumbs = [
+			{name: 'Start', href: '/'},
+			{name: 'Infos', href: '/article'},
+			{name: ctx.article.title.substring( 0, 20 )+'..' },
+		];
+		// ctx.header = {
+		// 	title : ctx.article.title ? ctx.article.title : '?',
+		// 	menu : {
+		// 		trail: [
+		// 			{name: 'Start', href: '/'},
+		// 			{name: 'Beiträge', href: '/article'},
+		// 			{name: ctx.article.title },
+		// 		],
+		// 		options: [
+		// 			{name: 'Verbände', href: '/federation'},
+		// 			{name: 'Standard', href: '/standard'},
+		// 			{name: 'Leistungen', href: '/report'},
+		// 		],
+		// 	},
+		// };
 	}
 
 </script>

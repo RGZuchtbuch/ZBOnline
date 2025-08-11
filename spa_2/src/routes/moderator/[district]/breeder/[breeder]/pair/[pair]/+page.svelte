@@ -20,25 +20,41 @@
 	}
 
 	function setHeader() {
-		ctx.header = {
-			title: `Stamm ${ctx.pair.year % 100}.${ctx.pair.name} von Züchter ${fullName(ctx.breeder)}`,
-			menu: {
-				trail: [
-					{name: 'Home', href: '/'},
-					{name: 'Obmann', href: '/moderator'},
-					{name: ctx.district.short, href: `/moderator/${ctx.pair.districtId}`},
-					{name: 'Züchter', href: `/moderator/${ctx.pair.districtId}/breeder`},
-					//				{name:`${breeder.firstname.charAt(0)}.${breeder.lastname.charAt(0)}`, href:`/moderator/${pair.districtId}/breeder/${pair.breederId}` },
-					{
-						name: `${shortName( ctx.breeder )}`,
-						href: `/moderator/${ctx.pair.districtId}/breeder/$ctx.{pair.breederId}`
-					},
-					{name: 'Stämme', href: `/moderator/${ctx.pair.districtId}/breeder/${ctx.pair.breederId}/pair`},
-					{name: `${ctx.pair.year % 100}.${ctx.pair.name}`},
-				],
-				options: [],
-			}
-		}
+		ctx.menustate[ '/moderator' ] = page.url.href;
+		ctx.title = `Verband ${ctx.district.name}, Züchter ${fullName(ctx.breeder)}, Stämm ${ctx.pair.year % 100}.${ctx.pair.name}`;
+		ctx.submenu = [
+//			{name: 'Stämme', href: `/moderator/${ctx.district.id}/breeder/${ctx.breeder.id}/pair`},
+//			{name: 'Mitglied', href: `/moderator/${ctx.district.id}/breeder/${ctx.breeder.id}/profile`},
+		];
+		ctx.crumbs = [
+			{name: 'Start', href: '/'},
+			{name: 'Obmann', href: '/moderator'},
+			{name: ctx.district.short, href: `/moderator/${ctx.district.id}`},
+			{name: 'Züchter', href: `/moderator/${ctx.district.id}/breeder`},
+			{name: `${shortName(ctx.breeder)}`, href:`/moderator/${ctx.district.id}/breeder/${ctx.breeder.id}`},
+			{name: 'Stämme', href: `/moderator/${ctx.pair.districtId}/breeder/${ctx.pair.breederId}/pair`},
+			{name: `${ctx.pair.year % 100}.${ctx.pair.name}`},
+		];
+
+		// ctx.header = {
+		// 	title: `Stamm ${ctx.pair.year % 100}.${ctx.pair.name} von Züchter ${fullName(ctx.breeder)}`,
+		// 	menu: {
+		// 		trail: [
+		// 			{name: 'Home', href: '/'},
+		// 			{name: 'Obmann', href: '/moderator'},
+		// 			{name: ctx.district.short, href: `/moderator/${ctx.pair.districtId}`},
+		// 			{name: 'Züchter', href: `/moderator/${ctx.pair.districtId}/breeder`},
+		// 			//				{name:`${breeder.firstname.charAt(0)}.${breeder.lastname.charAt(0)}`, href:`/moderator/${pair.districtId}/breeder/${pair.breederId}` },
+		// 			{
+		// 				name: `${shortName( ctx.breeder )}`,
+		// 				href: `/moderator/${ctx.pair.districtId}/breeder/$ctx.{pair.breederId}`
+		// 			},
+		// 			{name: 'Stämme', href: `/moderator/${ctx.pair.districtId}/breeder/${ctx.pair.breederId}/pair`},
+		// 			{name: `${ctx.pair.year % 100}.${ctx.pair.name}`},
+		// 		],
+		// 		options: [],
+		// 	}
+		// }
 	}
 
 

@@ -42,22 +42,35 @@
 	}
 
 	function setHeader() {
-		ctx.header = {
-			title: `${ctx.district.name}`,
-			menu: {
-				trail: [
-					{name: 'Home', href: '/'},
-					{name: 'Obmann', href: '/moderator'},
-					{name: ctx.district.short, href: `/moderator/${ctx.district.id}`},
-					{name: 'Eingaben', href: `/moderator/${ctx.district.id}/result?year=${ctx.year}`},
-					{name: 'Eingeben'},
-				],
-				options: [
-					{name: 'Eingaben', href: `/moderator/${ctx.district.id}/result?year=${ctx.year}`},
-					{name: 'Züchter', href: `/moderator/${ctx.district.id}/breeder`},
-				],
-			},
-		};
+		ctx.menustate[ '/moderator' ] = page.url.href;
+		ctx.title = `Verband ${ctx.district.name}, Daten eingeben`;
+		ctx.submenu = [
+			{name: 'Eingaben', href: `/moderator/${ctx.district.id}/result?year=${ctx.year}`},
+		];
+		ctx.crumbs = [
+			{name: 'Start', href: '/'},
+			{name: 'Obmann', href: '/moderator'},
+			{name: ctx.district.short, href:`/moderator/${ctx.district.id}`},
+			{name: 'Eingaben', href: `/moderator/${ctx.district.id}/result?year=${ctx.year}`},
+			{name: 'Eingeben'},
+		];
+
+		// ctx.header = {
+		// 	title: `${ctx.district.name}`,
+		// 	menu: {
+		// 		trail: [
+		// 			{name: 'Home', href: '/'},
+		// 			{name: 'Obmann', href: '/moderator'},
+		// 			{name: ctx.district.short, href: `/moderator/${ctx.district.id}`},
+		// 			{name: 'Eingaben', href: `/moderator/${ctx.district.id}/result?year=${ctx.year}`},
+		// 			{name: 'Eingeben'},
+		// 		],
+		// 		options: [
+		// 			{name: 'Eingaben', href: `/moderator/${ctx.district.id}/result?year=${ctx.year}`},
+		// 			{name: 'Züchter', href: `/moderator/${ctx.district.id}/breeder`},
+		// 		],
+		// 	},
+		// };
 	}
 
 	onDestroy( () => {

@@ -9,6 +9,7 @@
 	ctx.report = null;
 
 	$effect( async () => {
+		console.log( 'LoadReport', dirty.report, page.url );
 		if( dirty.report || page.url ) await loadReport( getArgs( page.url.searchParams ) );
 	})
 
@@ -18,7 +19,7 @@
 
 	async function loadReport( args ) {
 		console.log( 'Loading Report', args );
-		dirty.report = false;
+		//dirty.report = false; // hmm retriggers effect
 		ctx.report = null; //clear while waiting
 		let report = await model.Report.query( args );
 		console.log( 'In load', report );
@@ -42,22 +43,28 @@
 
 
 	function setHeader() {
-		addCrumb( { name:'Leistungen', url:page.url } );
-		ctx.header = {
-			title: `Zuchtleistungen`,
-			menu: {
-				trail: [
-					{name: 'Start', href: '/'},
-					{name: 'Leistungen' },
-				],
-				options: [
-					{name: 'Beiträge', href: '/article'},
-					{name: 'Verbände', href: '/federation'},
-					{name: 'Standard', href: '/standard'},
-					{name: 'Leistungen'},
-				],
-			},
-		}
+		ctx.menustate[ '/report' ] = page.url.href;
+		ctx.title = `Leistungen im Zuchtbuch`;
+		ctx.submenu = [];
+		ctx.crumbs = [
+			{name: 'Start', href: '/'},
+			{name: 'Leistungen', href: '/report'},
+		];
+		// ctx.header = {
+		// 	title: `Zuchtleistungen`,
+		// 	menu: {
+		// 		trail: [
+		// 			{name: 'Start', href: '/'},
+		// 			{name: 'Leistungen' },
+		// 		],
+		// 		options: [
+		// 			{name: 'Beiträge', href: '/article'},
+		// 			{name: 'Verbände', href: '/federation'},
+		// 			{name: 'Standard', href: '/standard'},
+		// 			{name: 'Leistungen'},
+		// 		],
+		// 	},
+		// }
 	};
 
 

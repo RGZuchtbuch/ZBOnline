@@ -11,21 +11,28 @@
 	})
 
 	function setHeader() {
-		ctx.header = {
-			title: 'BDRG Rassegeflügel Standard',
-			menu: {
-				trail: [
-					{name: 'Start', href: '/'},
-					{name: 'Standard', href: '/standard'},
-				],
-				options: [
-					{name: 'Beiträge', href: '/article'},
-					{name: 'Verbände', href: '/federation'},
-					{name: 'Standard', href: '/standard'},
-					{name: 'Leistungen', href: '/report'},
-				],
-			},
-		}
+		ctx.title = `BDRG Rassegeflügel Standard`;
+		ctx.submenu = [
+		];
+		ctx.crumbs = [
+			{name: 'Start', href: '/'},
+			{name: 'Standard', href: '/standard'},
+		];
+		// ctx.header = {
+		// 	title: 'BDRG Rassegeflügel Standard',
+		// 	menu: {
+		// 		trail: [
+		// 			{name: 'Start', href: '/'},
+		// 			{name: 'Standard', href: '/standard'},
+		// 		],
+		// 		options: [
+		// 			{name: 'Beiträge', href: '/article'},
+		// 			{name: 'Verbände', href: '/federation'},
+		// 			{name: 'Standard', href: '/standard'},
+		// 			{name: 'Leistungen', href: '/report'},
+		// 		],
+		// 	},
+		// }
 	}
 </script>
 

@@ -26,21 +26,28 @@
 	}
 
 	function setHeader() {
-		ctx.header = {
-			title : `Beiträge zum BDRG Zuchtbuch [${ctx.articles.length}]`,
-			menu : {
-				trail: [
-					{name: 'Start', href: '/'},
-					{name: 'Beiträge', href: '/article'},
-				],
-				options: [
-					{name: 'Beiträge', href: '/article'},
-					{name: 'Verbände', href: '/federation'},
-					{name: 'Standard', href: '/standard'},
-					{name: 'Leistungen', href: '/report'},
-				],
-			}
-		};
+		//ctx.menustate[ '/article' ] = page.url.href;
+		ctx.title = `Beiträge zum BDRG Zuchtbuch [${ctx.articles.length}]`;
+		ctx.submenu = [];
+		ctx.crumbs = [
+			{name: 'Start', href: '/'},
+			{name: 'Infos', href: '/article'},
+		];
+		// ctx.header = {
+		// 	title : `Beiträge zum BDRG Zuchtbuch [${ctx.articles.length}]`,
+		// 	menu : {
+		// 		trail: [
+		// 			{name: 'Start', href: '/'},
+		// 			{name: 'Beiträge', href: '/article'},
+		// 		],
+		// 		options: [
+		// 			{name: 'Beiträge', href: '/article'},
+		// 			{name: 'Verbände', href: '/federation'},
+		// 			{name: 'Standard', href: '/standard'},
+		// 			{name: 'Leistungen', href: '/report'},
+		// 		],
+		// 	}
+		// };
 	}
 
 </script>

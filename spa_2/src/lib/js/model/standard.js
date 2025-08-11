@@ -20,6 +20,75 @@ export default class Standard {
 	static async loadRootSections(){
 		return standard.rootSections;
 	}
+
+	static createBreed( sectionId ) {
+		return {
+			id:0, name: 'Neu !', sectionId: sectionId,
+			broodGroup:null, layEggs:null, layWeight:null,
+			sireWeight:null, dameWeight:null, sireRing:null, dameRing:null,
+			colors:[],
+			// info:null,
+		}
+	}
+
+	static createColor( breedId ) {
+		return {
+			id:0, name: 'Neu !', breedId: breedId,
+			// info:null,
+		}
+	}
+
+	static async saveBreed( breed ){
+		//console.log( 'Save article', article.id );
+		if( breed.id === 0 ) { // new
+			const data = await api.post( `/api/2/standard/breed`, breed );
+			if( data && data.id > 0 ) {
+				breed.id = data.id; // use new id from db
+				return true;
+			}
+		} else { // existing
+			const data = await api.put( `/api/2/standard/breed/${breed.id}`, breed );
+			if( data && data.id > 0 ) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	static async deleteBreed( id ) {
+		console.log( 'Delete breed', id );
+		let ok = false;
+		if( id > 0 ) {
+			ok = await api.delete( `/api/2/standard/breed/${id}` );
+		}
+		return ok;
+	}
+
+	static async saveColor( color ){
+		//console.log( 'Save article', article.id );
+		if( color.id === 0 ) { // new
+			const data = await api.post( `/api/2/standard/color`, color );
+			if( data && data.id > 0 ) {
+				color.id = data.id; // use new id from db
+				return true;
+			}
+		} else { // existing
+			const data = await api.put( `/api/2/standard/color/${color.id}`, color );
+			if( data && data.id > 0 ) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	static async deleteColor( id ) {
+		console.log( 'Delete color', id );
+		let ok = false;
+		if( id > 0 ) {
+			ok = await api.delete( `/api/2/standard/color/${id}` );
+		}
+		return ok;
+	}
 };
 
 
@@ -69,3 +138,5 @@ function addBreeds( section, breeds ) { // for rootSections
 		addBreeds( child, breeds );
 	}
 }
+
+

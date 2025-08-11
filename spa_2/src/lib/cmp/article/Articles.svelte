@@ -16,7 +16,7 @@
 
 		{#if canEdit}
 			<div class='flex flex-row justify-end'>
-				<a href='/article/0'>[+]</a>
+				<a href='/article/0' title='Neuer Beitrag'>[+]</a>
 			</div>
 		{/if}
 

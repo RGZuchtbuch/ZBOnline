@@ -1,15 +1,22 @@
 <script>
 	import { slide } from 'svelte/transition';
+	import {ctx} from '$lib/js/store.svelte.js';
 
 	let { color } = $props();
+	let authorized = $state( ctx.user && ctx.user.admin );
 </script>
 
 {#if color}
-	<li class='' title='Farbenschlag'><div class='grow italic'>• {color.name}</div></li>
+	<li class='italic' title='Farbenschlag'>• {color.name}</li>
 {/if}
 
 <style>
     li {
-        @apply flex flex-row italic;
+        @apply flex flex-row p-2 italic;
+    }
+
+
+    button {
+        @apply bg-inherit text-black;
     }
 </style>

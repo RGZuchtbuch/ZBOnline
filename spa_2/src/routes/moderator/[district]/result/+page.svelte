@@ -24,23 +24,35 @@
 	}
 
 	function setHeaders() {
-		ctx.header = {
-			title: `Eingaben für ${ctx.district.name} ${ctx.year}`,
-			menu: {
-				trail: [
-					{name: 'Home', href: '/'},
-					{name: 'Obmann', href: '/moderator'},
-					{name: ctx.district.short, href: `/moderator/${ctx.district.id}`},
-					{name: 'Eingaben'},
-				],
-				options: [
-					{name: 'Leistungen', href:`/moderator/${ctx.district.id}/report?year=${ctx.year}` },
-					{name: 'Eingaben' },
-					{name: 'Eingeben', href: `/moderator/${ctx.district.id}/result/edit`},
-					{name: 'Züchter', href: `/moderator/${ctx.district.id}/breeder`},
-				],
-			}
-		}
+		ctx.menustate[ '/moderator' ] = page.url.href;
+		ctx.title = `Verband ${ctx.district.name}, Eingaben`;
+		ctx.submenu = [
+			{name: 'Eingeben', href: `/moderator/${ctx.district.id}/result/edit`},
+		];
+		ctx.crumbs = [
+			{name: 'Start', href: '/'},
+			{name: 'Obmann', href: '/moderator'},
+			{name: ctx.district.short, href:`/moderator/${ctx.district.id}`},
+			{name: 'Eingaben' },
+		];
+
+		// ctx.header = {
+		// 	title: `Eingaben für ${ctx.district.name} ${ctx.year}`,
+		// 	menu: {
+		// 		trail: [
+		// 			{name: 'Home', href: '/'},
+		// 			{name: 'Obmann', href: '/moderator'},
+		// 			{name: ctx.district.short, href: `/moderator/${ctx.district.id}`},
+		// 			{name: 'Eingaben'},
+		// 		],
+		// 		options: [
+		// 			{name: 'Leistungen', href:`/moderator/${ctx.district.id}/report?year=${ctx.year}` },
+		// 			{name: 'Eingaben' },
+		// 			{name: 'Eingeben', href: `/moderator/${ctx.district.id}/result/edit`},
+		// 			{name: 'Züchter', href: `/moderator/${ctx.district.id}/breeder`},
+		// 		],
+		// 	}
+		// }
 	}
 
 </script>

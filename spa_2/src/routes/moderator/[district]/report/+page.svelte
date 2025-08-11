@@ -41,23 +41,35 @@
 
 
 	function setHeader() {
-		addCrumb( { name:'Leistungen', url:page.url } );
-		ctx.header = {
-			title: `Zuchtleistungen`,
-			menu: {
-				trail: [
-					{name: 'Home', href: '/'},
-					{name: 'Obmann', href: '/moderator'},
-					{name: ctx.district.short, href:`/moderator/${ctx.district.id}`},
-					{name: 'Leistungen' },
-				],
-				options: [
-					{name: 'Leistungen' },
-					{name: 'Eingaben', href: `/moderator/${ctx.district.id}/result?year=${ctx.year}`},
-					{name: 'Züchter', href: `/moderator/${ctx.district.id}/breeder`},
-				],
-			},
-		}
+		ctx.menustate[ '/moderator' ] = page.url.href;
+		ctx.title = `Verband ${ctx.district.name}, Zuchtleistungen`;
+		ctx.submenu = [
+			{name: 'Eingaben', href: `/moderator/${ctx.district.id}/result?year=${ctx.year}`},
+			{name: 'Züchter', href: `/moderator/${ctx.district.id}/breeder`},
+		];
+		ctx.crumbs = [
+			{name: 'Start', href: '/'},
+			{name: 'Obmann', href: '/moderator'},
+			{name: ctx.district.short, href:`/moderator/${ctx.district.id}`},
+			{name: 'Leistungen' },
+		];
+
+		// ctx.header = {
+		// 	title: `Zuchtleistungen`,
+		// 	menu: {
+		// 		trail: [
+		// 			{name: 'Home', href: '/'},
+		// 			{name: 'Obmann', href: '/moderator'},
+		// 			{name: ctx.district.short, href:`/moderator/${ctx.district.id}`},
+		// 			{name: 'Leistungen' },
+		// 		],
+		// 		options: [
+		// 			{name: 'Leistungen' },
+		// 			{name: 'Eingaben', href: `/moderator/${ctx.district.id}/result?year=${ctx.year}`},
+		// 			{name: 'Züchter', href: `/moderator/${ctx.district.id}/breeder`},
+		// 		],
+		// 	},
+		// }
 	};
 
 

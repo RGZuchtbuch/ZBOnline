@@ -43,6 +43,7 @@ class Section
 				if( $id ) {
 					model\Cache::del('standard');
 					model\Cache::del('result');
+					model\Cache::del('report' ); // clear cache as results changed
 					$response->getBody()->write(json_encode(['id' => $id], JSON_UNESCAPED_SLASHES));
 					return $response;
 				}
@@ -63,6 +64,7 @@ class Section
 				if( $updated ) {
 					model\Cache::del('standard');
 					model\Cache::del('result');
+					model\Cache::del('report' ); // clear cache as results changed
 					$response->getBody()->write(json_encode(['id' => $id], JSON_UNESCAPED_SLASHES));
 					return $response;
 				}
@@ -82,6 +84,7 @@ class Section
 				if( $deleted ) {
 					model\Cache::del('standard');
 					model\Cache::del('result');
+					model\Cache::del('report' ); // clear cache as results changed
 					$response->getBody()->write(json_encode([ 'id'=>$id, 'deleted'=>true ], JSON_UNESCAPED_SLASHES));
 					return $response;
 				}

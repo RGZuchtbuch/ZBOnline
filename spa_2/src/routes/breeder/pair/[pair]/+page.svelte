@@ -36,20 +36,31 @@
 	}
 
 	function setHeader() {
-		ctx.header = {
-			title: `Stamm ${ctx.pair.year % 100}.${ctx.pair.name} von Züchter ${fullName(ctx.breeder)}`,
-			menu: {
-				trail: [
-					{name: 'Start', href: '/'},
-					{name: 'Züchter', href: '/breeder'},
-					{name: shortName(ctx.breeder), href: `/breeder/me/${ctx.breeder.id}`},
-					{name: 'Stämme', href: `/breeder/me/${ctx.pair.breederId}/pair`},
-					{name: `${ctx.pair.year % 100}.${ctx.pair.name}`},
-				],
-				options: [],
-			}
-		}
+		ctx.menustate[ '/breeder' ] = page.url.href;
 
+		ctx.title = `Züchter ${fullName(ctx.breeder)}, Stämm ${ctx.pair.year % 100}.${ctx.pair.name}`;
+		ctx.submenu = [
+//			{name: 'Stämme', href: `/breeder/pair`},
+			//{name: 'Mitglied', href: `/breeder/profile`},
+		];
+		ctx.crumbs = [
+			{name: 'Start', href: '/'},
+			{name: `Züchter ${shortName(ctx.breeder)}`, href: `/breeder` },
+			{name: 'Stämme', href: `/breeder/pair`},
+			{name: `${ctx.pair.year % 100}.${ctx.pair.name}`},
+		];
+		// ctx.header = {
+		// 	title: `Stamm ${ctx.pair.year % 100}.${ctx.pair.name} von Züchter ${fullName(ctx.breeder)}`,
+		// 	menu: {
+		// 		trail: [
+		// 			{name: 'Start', href: '/'},
+		// 			{name: `Züchter ${shortName(ctx.breeder)}` },
+		// 			{name: 'Stämme', href: `/breeder/pair`},
+		// 			{name: `${ctx.pair.year % 100}.${ctx.pair.name}`},
+		// 		],
+		// 		options: [],
+		// 	}
+		// }
 	}
 
 </script>

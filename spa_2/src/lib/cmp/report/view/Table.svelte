@@ -135,16 +135,70 @@
                     <!-- section header -->
                     <thead>
                         <tr>
-                            <th class='border-y border-gray-600 sticky top-1' colspan=14>
-                                <div class='flex flex-row p-2 border-header bg-header text-header'>
-                                    <small class='w-48 pr-2 text-left self-end'>{#if district} {district.short} {/if}</small>
-                                    <div class='grow text-center text-xl italic'>Sparte {section.name}</div>
-                                    <small class='w-48 pr-2 text-right self-end'>{#if district} {year} {/if}</small>
+                            <th class='sticky top-1' colspan=14>
+                                <div class='flex flex-col'>
+                                    <div class='flex flex-row p-1 rounded-b-none border-header bg-header text-header'>
+                                        <small class='w-48 pr-2 text-left self-end'>{#if district} {district.short} {/if}</small>
+                                        <div class='grow text-center text-xl italic'>Sparte {section.name}</div>
+                                        <small class='w-48 pr-2 text-right self-end'>{#if district} {year} {/if}</small>
+                                    </div>
+                                    <div class='rounded-none flex flex-row bg-gray-300 px-2 text-center'>
+                                        <div class='grow text-left'>Gruppe, Rasse & Farbe</div>
+                                        <div class='w-1'></div>
+                                        <div class='w-12'>Zuchten</div>
+                                        <div class='w-8'></div>
+                                        <div class='w-5'></div>
+                                        <div class='w-24 text-center'> {#if section.id === 5}Legeleistung{:else}Legeleistung{/if} </div>
+                                        <div class='w-8'></div>
+                                        <div class='w-2'></div>
+
+                                        <div class='w-48 text-center'>Brutleistung</div>
+                                        <div class='w-8'></div>
+                                        <div class='w-4'></div>
+
+                                        <div class='w-24 text-center'>Schauleistung</div>
+                                        <div class='w-4'></div>
+                                    </div>
+                                    <div class='flex flex-row rounded-t-none border-b border-gray-600 bg-gray-300 px-2 text-xs text-center gap-x-1'>
+                                        <div class='grow text-left'>Rasse & Farbe</div>
+                                        <div class='w-12 th'>Zuchten</div>
+
+                                        <div class='w-8 text-gray-400'>|</div>
+
+                                        {#if section.id === 5}
+                                            <div class='w-12 th'>-</div>
+                                            <div class='w-12 th'>-</div>
+                                        {:else}
+                                            <div class='w-12 th'>Eier/J</div>
+                                            <div class='w-12 th'>Gewicht</div>
+                                        {/if}
+
+                                        <div class='w-8 text-gray-400'>|</div>
+
+                                        {#if section.id === 5}
+                                            <div class='w-12 th'>Paare</div>
+                                            <div class='w-12 th'>Bruten</div>
+                                            <div class='w-12 th'>Schl %</div>
+                                            <div class='w-12 th'>Kü/Pa</div>
+                                        {:else}
+                                            <div class='w-12 th'>Eier</div>
+                                            <div class='w-12 th'>Befr %</div>
+                                            <div class='w-12 th'>Schl %</div>
+                                            <div class='w-12'>-</div>
+                                        {/if}
+
+                                        <div class='w-8 text-gray-400'>|</div>
+
+                                        <div class='w-12 th'>Tiere</div>
+                                        <div class='w-12 th'>Punkte</div>
+
+                                        <div class='w-2'></div>
+                                    </div>
                                 </div>
                             </th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <!--tbody>
                         <tr>
                             <th>
                                 <div class='flex flex-row bg-gray-300 px-2 text-center'>
@@ -201,7 +255,7 @@
                                 </div>
                             </th>
                         </tr>
-                    </tbody>
+                    </tbody-->
 
                         {#each section.subsections as subsection}
                             <!-- subsection header -->

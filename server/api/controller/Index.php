@@ -2,14 +2,8 @@
 
 namespace App\controller;
 
-use App\Model;
-use App\controller\Controller;
-use Exception;
-use http\Exception\InvalidArgumentException;
-use PDOException;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Slim\Exception\HttpNotFoundException;
 
 class Index
 {

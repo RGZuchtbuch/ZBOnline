@@ -37,7 +37,8 @@ class Result
 		if ($result) {
 			$requester = new Requester($request);
 			if ($requester && ($requester->isAdmin() || $requester->isModerating($result['districtId']))) { //granted
-				model\Cache::del('result' ); // clear cache as results changed
+				//model\Cache::del('result' ); // clear cache as results changed
+				model\Cache::del('report' ); // clear cache as results changed
 				$id = model\Result::new(
 					$result['pairId'], $result['districtId'], $result['year'], $result['group'],
 					$result['sectionId'], $result['breedId'], $result['colorId'], $result['aocColor'],
@@ -65,7 +66,8 @@ class Result
 			if ($result) {
 				$requester = new Requester($request);
 				if ($requester && ($requester->isAdmin() || $requester->isModerating($result['districtId']))) { //granted
-					model\Cache::del('result' ); // clear cache as results changed
+					//model\Cache::del('result' ); // clear cache as results changed
+					model\Cache::del('report' ); // clear cache as results changed
 					$updated = model\Result::set( // change
 						$result['id'],
 						$result['pairId'], $result['districtId'], $result['year'], $result['group'],
@@ -97,7 +99,8 @@ class Result
 			if( $result ) {
 				$requester = new Requester($request);
 				if ($requester && ($requester->isAdmin() || $requester->isModerating($result['districtId']))) { //granted
-					model\Cache::del('result' ); // clear cache as results changed
+					//model\Cache::del('result' ); // clear cache as results changed
+					model\Cache::del('report' ); // clear cache as results changed
 					$deleted = model\Result::delete( $id );
 					if( $deleted ) {
 						$response->getBody()->write(json_encode(['deleted' => true, 'id' => $id], JSON_UNESCAPED_SLASHES));
@@ -209,7 +212,10 @@ class Result
 		$group      = $query['group'] ?? null;
 		//$colorId = $query['color'] ?? null;
 
+		// no cache yet, needed ?
+
 		if( is_numeric( $districtId ) && is_numeric( $sectionId ) && is_numeric( $year ) && $group ) { //for edit
+			// TODO, next still valid as now aoc are not in separate section anymore
 			if( $sectionId == 9999 ) { // for editing aoc's
 				$results = self::formatResults( model\Result::forAocColors( $districtId, $year, $group ) );
 			} else { // breedlist for editings results

@@ -61,7 +61,7 @@
 <div class='flex flex-col py-4 gap-2 items-center'>
     {#if state === State.LOGIN || state === State.FAILED }
         {#if state === State.LOGIN}
-            <h3>Sie sind noch nicht angemeldet !</h3>
+            <h3>Sie sind nicht angemeldet !</h3>
         {:else}
             <h3>Das hat nicht geklappt, versuche es nochmals !</h3>
         {/if}

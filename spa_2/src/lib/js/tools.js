@@ -1,5 +1,9 @@
 import { ctx } from '$lib/js/store.svelte.js';
 
+export function dat( date, format='de') {
+	return date ? date.getDate().toString().padStart( 2, '0' )+'.'+(date.getMonth()+1).toString().padStart( 2, '0' )+'.'+date.getFullYear().toString().padStart(4, '0') : null; // to formatted locale
+}
+
 export function dec( value, dec = 0 ) {
 	value = Number( value );
 	if( value ) {

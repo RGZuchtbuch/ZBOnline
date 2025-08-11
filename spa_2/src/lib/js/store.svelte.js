@@ -25,6 +25,23 @@ class Context {
     standard   = $state(null); // whole standard with sections, breeds and colors
     user       = $state(null);
 
+    // for managing page title and menu with crumbs
+    title = $state(null);
+    menu = $state(null);
+    submenu = $state(null);
+    crumbs = $state(null);
+
+    menustate = $state({ // having last href for menu item
+        '/article'   : '/article',
+        '/federation': '/federation',
+        '/standard'  : '/standard',
+        '/report'    : '/report',
+        '/calculator': '/calculator',
+        '/breeder'   : '/breeder',
+        '/moderator' : '/moderator',
+        '/admin'     : '/admin',
+    });
+
     //crumbs   = $state([]);
     dialog = $state( null );
 }
@@ -33,38 +50,67 @@ class Context {
  * Hold constants and predefined objects ( not changed )
  */
 class Config {
-
-    // federation = $state(null);
-    // standard   = $state(null); // whole standard with sections, breeds and colors
-
-    aocSection = $state( { id:9999, name:'AOC-Klasse', breeds:[] } ); // TODO obsolete
+//    aocSection = $state( { id:9999, name:'AOC-Klasse', breeds:[] } ); // TODO obsolete
     groups  = ['I', 'II', 'III'];
+    broodGroups = [ 1, 2, 3, 4 ];
+    pigeons = 5; // note, not for subsections
+    // rootSections defined in js/model/standard.js
 }
 
-class Dirty { // flag dirty, for reloading
-    article  = $state( true );
-    articles = $state( true );
+class Dirty { // flag dirty, for forcing reloading in +page
+    article  = $state( 1 );
+    articles = $state( 1 );
 
-    breeder  = $state( true );
-    breeders  = $state( true );
+    breeder  = $state( 1 );
+    breeders  = $state( 1 );
 
-    district  = $state( true );
-    districts  = $state( true );
+    district  = $state( 1 );
+    districts  = $state( 1 );
 
-    federation = $state( true );
+    federation = $state( 1 );
 
-    pair  = $state( true );
-    pairs  = $state( true );
+    pair  = $state( 1 );
+    pairs  = $state( 1 );
 
-    report  = $state( true );
+    report  = $state( 1 );
 
-    result  = $state( true );
-    results  = $state( true ); // list of entered results
-    resultsEdit  = $state( true ); // list of editable results
+    result  = $state( 1 );
+    results  = $state( 1 ); // list of entered results
+    resultsEdit  = $state( 1 ); // list of editable results
 
-    standard = $state( true );
-
+    standard = $state( 1);
 }
+
+
+// class Manu {
+//     info       = $state( { name:'Info', href:'/article' } );
+//     federation = $state( { name:'Verbände', href:'/federation' } );
+//     standard   = $state( { name:'Standard', href:'/standard' } );
+//     report     = $state( { name:'Leistungen', href:'/report' } );
+//     calculator = $state( { name:'Rechner', href:'/calculator' } );
+//     breeder    = $state( { name:'Züchter', href:'/breeder' } );
+//     moderator  = $state( { name:'Obmann', href:'/moderator' } );
+//     admin      = $state( { name:'Obmann', href:'/admin' } );
+// }
+
+// let Menu  = [
+//     { name:'Info', href:'/article' },
+//     { name:'Verbände', href:'/federation' },
+//     { name:'Standard', href:'/standard' },
+//     { name:'Leistungen', href:'/report' },
+//     { name:'Rechner', href:'/standard' },
+//     { name:'Züchter', href:'/standard' },
+//     { name:'Obmann', href:'/moderator', submenu: [
+//         { name:'Verbände', href:'/moderator/district', submenu: [
+//             { name:'Eingaben', href:'/standard' },
+//         ] },
+//         { name:'Verbänd', href:'/moderator/district', submenu: [
+//             { name:'Eingaben', href:'/standard' },
+//         ] },
+//     ] },
+//     { name:'Admin', href:'/standard' },
+//
+// ];
 
 export let ctx = new Context(); // loaded stuff
 //export let store = new Store(); // obsolete

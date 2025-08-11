@@ -26,20 +26,30 @@
 	}
 
 	function setHeader() {
-		ctx.header = {
-			title : `Züchter im ${ctx.district.name}`,
-			menu  : {
-				trail: [
-					{name: 'Home', href: '/'},
-					{name: 'Obmann', href: '/moderator'},
-					{name: ctx.district.short, href: `/moderator/${ctx.district.id}`},
-					{name: 'Züchter'},
-				],
-				options: [
-					{name: 'Eingaben', href: `/moderator/${ctx.district.id}/result`},
-				],
-			}
-		}
+		ctx.menustate[ '/moderator' ] = page.url.href;
+		ctx.title = `Verband ${ctx.district.name}, Züchter`;
+		ctx.submenu = [
+		];
+		ctx.crumbs = [
+			{name: 'Start', href: '/'},
+			{name: 'Obmann', href: '/moderator'},
+			{name: ctx.district.short, href: `/moderator/${ctx.district.id}`},
+			{name: 'Züchter'},
+		];
+		// ctx.header = {
+		// 	title : `Züchter im ${ctx.district.name}`,
+		// 	menu  : {
+		// 		trail: [
+		// 			{name: 'Home', href: '/'},
+		// 			{name: 'Obmann', href: '/moderator'},
+		// 			{name: ctx.district.short, href: `/moderator/${ctx.district.id}`},
+		// 			{name: 'Züchter'},
+		// 		],
+		// 		options: [
+		// 			//{name: 'Eingaben', href: `/moderator/${ctx.district.id}/result`},
+		// 		],
+		// 	}
+		// }
 	}
 
 </script>

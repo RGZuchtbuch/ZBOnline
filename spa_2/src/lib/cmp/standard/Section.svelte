@@ -1,21 +1,38 @@
 <script>
 	import { slide } from 'svelte/transition';
+	import { ctx } from '$lib/js/store.svelte.js';
 	import Section from '$lib/cmp/standard/Section.svelte';
 	import Breed from '$lib/cmp/standard/Breed.svelte';
+	import Form, { CheckBox, TextInput, Status, validator } from '$lib/cmp/form/Form.svelte';
 
 	let { section=null, unfold=false } = $props();
+
+	let authorized = $derived( ctx.user && ctx.user.admin );
+	let edit = $state( false );
 
 	function toggle() {
 		unfold = ! unfold;
 	}
 
+	function onEdit() {
+		edit = ! edit;
+	}
+
+	function onAddChild() {
+		console.log( 'Add child' );
+	}
+	function onAddBreed() {
+		console.log( 'Add breed' );
+	}
+
 </script>
 
 {#if section}
-	<li class='row'>
+	<li class=''>
 		<button class='inline' type='button' title='Öffnen' onclick={toggle}>{unfold?'▽':'▷'} </button>
-		<div class='grow font-bold' title='Sparte'>{section.name}</div><div></div>
+		<div class='grow font-bold' title='Sparte'>{section.name}</div>
 	</li>
+
 
 	{#if unfold}
 		<ul class='pl-8' transition:slide={{duration:500}}>
@@ -36,10 +53,10 @@
     li {
         @apply flex flex-row p-2 gap-x-1;
     }
-
     button {
-
+        @apply bg-inherit text-black;
     }
+
 
 
 </style>

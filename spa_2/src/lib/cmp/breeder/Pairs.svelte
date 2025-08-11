@@ -13,7 +13,7 @@
 {#if breeder && pairs}
 	{#if authorized}
 		<div class='flex flex-row justify-end pt-2'>
-			<a href={`/breeder/${breeder.id}/pair/0`} title='Stammm/Paar hinzufügen'>[+]</a>
+			<a href={`/breeder/pair/0`} title='Stammm/Paar hinzufügen'>[+]</a>
 		</div>
 	{/if}
 	{#if pairs.length > 0}

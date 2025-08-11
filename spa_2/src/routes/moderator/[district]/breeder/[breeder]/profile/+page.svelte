@@ -2,39 +2,54 @@
 	import { page } from '$app/state';
 	import { ctx } from '$lib/js/store.svelte.js';
 	import Profile from '$lib/cmp/breeder/profile.svelte';
-	import { txt } from '$lib/js/tools.js';
+	import { fullName, shortName } from '$lib/js/tools.js';
 
-	let { data } = $props();
 
-	console.log( 'BP', data );
-
-	ctx.breeder = data.breeder;
-	ctx.district = data.district;
 
 	$effect( async () => {
-		ctx.header = {
-			title: `Mitgliedsdaten für Züchter ${txt(breeder.firstname)} ${txt(breeder.infix)} ${txt(breeder.lastname)}`
-			menu: {
-				trail: [
-					{name: 'Home', href: '/'},
-					{name: 'Obmann', href: '/moderator'},
-					{name: district.short, href: `/moderator/${district.id}`},
-					{name: 'Züchter', href: `/moderator/${district.id}/breeder`},
-					{
-						name: `${breeder.firstname.charAt(0)}.${breeder.lastname.charAt(0)}`,
-						href: `/moderator/${district.id}/breeder/${breeder.id}`,
-					},
-					{name: 'Mitglied', href: page.url.href},
-				],
-				options: [
-					{name: 'Stämme', href: '/moderator/' + district.id + '/breeder/' + breeder.id + '/pair'},
-				],
-			}
-		}
-	} );
+		if( ctx.breeder ) setHeader();
+	});
+
+
+	function setHeader() {
+		ctx.menustate[ '/moderator' ] = page.url.href;
+		ctx.title = `Verband ${ctx.district.name}, Züchter ${fullName(ctx.breeder)}`;
+		ctx.submenu = [
+			{name: 'Stämme', href: `/moderator/${ctx.district.id}/breeder/${ctx.breeder.id}/pair`},
+//			{name: 'Mitglied', href: `/moderator/${ctx.district.id}/breeder/${ctx.breeder.id}/profile`},
+		];
+		ctx.crumbs = [
+			{name: 'Start', href: '/'},
+			{name: 'Obmann', href: '/moderator'},
+			{name: ctx.district.short, href: `/moderator/${ctx.district.id}`},
+			{name: 'Züchter', href: `/moderator/${ctx.district.id}/breeder`},
+			{name: `${shortName(ctx.breeder)}`, href:`/moderator/${ctx.district.id}/breeder/${ctx.breeder.id}`},
+			{name: 'Mitglied' },
+		];
+
+		// ctx.header = {
+		// 	title: `Mitgliedsdaten für Züchter ${ fullName( ctx.breeder )}`,
+		// 	menu: {
+		// 		trail: [
+		// 			{name: 'Home', href: '/'},
+		// 			{name: 'Obmann', href: '/moderator'},
+		// 			{name: ctx.district.short, href: `/moderator/${ctx.district.id}`},
+		// 			{name: 'Züchter', href: `/moderator/${ctx.district.id}/breeder`},
+		// 			{
+		// 				name: shortName( ctx.breeder ),
+		// 				href: `/moderator/${ctx.district.id}/breeder/${ctx.breeder.id}`,
+		// 			},
+		// 			{name: 'Mitglied' },
+		// 		],
+		// 		options: [
+		// 			{name: 'Stämme', href: `/moderator/${ctx.district.id}/breeder/${ctx.breeder.id}/pair`},
+		// 		],
+		// 	}
+		// }
+	};
 
 
 
 </script>
 
-<Profile breeder={data.breeder} district={data.district} />
+<Profile breeder={ctx.breeder} district={ctx.district} />

@@ -68,6 +68,7 @@ class Pair
                 ) {
 					Query::commit();
 					model\Cache::del('result' ); // clear cache as results changed
+					model\Cache::del('report' ); // clear cache as results changed
 					$response->getBody()->write( json_encode([ 'id' => $id ], JSON_UNESCAPED_SLASHES) );
 					return $response;
 				} else {
@@ -96,6 +97,8 @@ class Pair
 				$requester = new Requester($request);
 				if ($requester && ($requester->isAdmin() || $requester->isModerating($pair['districtId']) || $requester->hasId($pair['breederId']))) {
 					Query::begin();
+					model\Cache::del('result' ); // clear cache as results changed
+					model\Cache::del('report' ); // clear cache as results changed
 					if(
 						model\Pair::delete( $id ) &&
 						model\Animal::deleteParentsForPair( $id ) &&
@@ -265,12 +268,19 @@ class Pair
 		return $success;
 	}
 
+	// NO cache used here
 	public static function filter( Request $request, Response $response, array $args ) : Response {
 		$requester = new Requester( $request );
 		$query      = $request->getQueryParams();
 		$breederId  = $query[ 'breeder' ] ?? null;
 		$districtId = $query[ 'district' ] ?? null;
 		$year       = $query[ 'year' ] ?? null;
+
+//		$json = model\Cache::get( 'pairs', $request->getUri()->getPath(), $request->getUri()->getQuery() );
+//		if( $json ) { // in cache
+//			$response->getBody()->write( $json );
+//			return $response;
+//		}
 
 		if( is_numeric( $breederId ) && is_numeric( $year ) ) { // for parent pairs in year
 			$breeder = model\Breeder::read( $breederId );
@@ -280,7 +290,8 @@ class Pair
 				$requester->isAdmin()
 			) { //admin of the moderator or self
 				$pairs = Pair::toPairs( model\Pair::readForBreederInYear($breederId, $year) );
-				$response->getBody()->write(json_encode(['pairs' => $pairs], JSON_UNESCAPED_SLASHES));
+				$json = json_encode(['pairs' => $pairs], JSON_UNESCAPED_SLASHES);
+				$response->getBody()->write( $json );
 				return $response;
 			}
 			throw new HttpUnauthorizedException( $request, 'Cannot do this' );

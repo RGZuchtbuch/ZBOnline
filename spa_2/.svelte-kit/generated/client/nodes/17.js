@@ -1,1 +1,1 @@
-export { default as component } from "../../../../src/routes/breeder/lineageform/+page.svelte";
+export { default as component } from "../../../../src/routes/breeder/pair/+page.svelte";

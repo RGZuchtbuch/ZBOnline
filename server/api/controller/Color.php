@@ -45,6 +45,7 @@ class Color
 					if ($id) {
 						model\Cache::del('standard');
 						model\Cache::del('result');
+						model\Cache::del('report' ); // clear cache as results changed
 						$response->getBody()->write(json_encode(['id' => $id], JSON_UNESCAPED_SLASHES));
 						return $response;
 					}
@@ -68,6 +69,7 @@ class Color
 					if ($updated) {
 						model\Cache::del('standard');
 						model\Cache::del('result');
+						model\Cache::del('report' ); // clear cache as results changed
 						$response->getBody()->write(json_encode(['id' => $id, 'updated'=>$updated], JSON_UNESCAPED_SLASHES));
 						return $response;
 					}
@@ -93,6 +95,7 @@ class Color
                     if( ! $pairs && ! $results ) { // not used in either
 						model\Cache::del('standard');
 						model\Cache::del('result');
+						model\Cache::del('report' ); // clear cache as results changed
                         $success = model\std\Color::del( $id );
                         $response->getBody()->write(json_encode(['success' => $success, 'id'=>$id], JSON_UNESCAPED_SLASHES));
                        return $response;
