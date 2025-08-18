@@ -109,19 +109,6 @@
 	p.info {
 		@apply px-8 py-4 text-center;
 	}
-	.section {
-		@apply mt-4 py-1 font-bold bg-teal-200;
-	}
-    .number {
-        @apply px-1 text-right;
-    }
-    .text {
-        @apply px-1 text-center;
-    }
-	.pair {
-		@apply bg-teal-50;
-	}
-
 	span {
 		@apply align-bottom;
 	}

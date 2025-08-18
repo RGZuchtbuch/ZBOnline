@@ -3,8 +3,8 @@
 	import { page } from '$app/state';
 	import { ctx, dirty } from '$lib/js/store.svelte.js';
 	import model from '$lib/js/model.js';
-	import Article from '$lib/cmp/article/Article.svelte';
-	import {addCrumb} from '$lib/js/tools.js';
+	import Article from '$lib/cmp/admin/article/Article.svelte';
+
 
 //	addCrumb( { name:'?', url:page.url } );
 
@@ -12,10 +12,7 @@
 		if ( dirty.article || page.url ) loadArticle(+page.params.article);
 	});
 	$effect( () => {
-		if( ctx.article ) {
-			addCrumb( { name:ctx.article.title.substring( 0, 8 ), url:page.url } );
-			setHeader();
-		}
+		if( ctx.article ) setHeader();
 	})
 
 	async function loadArticle( id ) {
@@ -26,13 +23,14 @@
 	}
 
 	function setHeader() {
-		//ctx.menustate[ '/article' ] = page.url.href;
-		ctx.title = ctx.article.title ? ctx.article.title : '?';
+		ctx.menustate[ '/admin' ] = page.url.href;
+
+		ctx.title = `Admin: ${ctx.article.title ? ctx.article.title : '?'}`;
 		ctx.submenu = [];
 		ctx.crumbs = [
-			//{name: 'Start', href: '/'},
-			{name: 'Infos', href: '/article'},
-			{name: ctx.article.title.substring( 0, 20 )+'..' },
+			{ name:'Admin',    href:'/admin' },
+			{name: 'Infos', href: `${ page.url.pathname.substring( 0, page.url.pathname.lastIndexOf( "/") ) }` },//'/article'},
+			{name: ctx.article.title ? ctx.article.title.substring( 0, 20 )+'..' : '?' },
 		];
 		// ctx.header = {
 		// 	title : ctx.article.title ? ctx.article.title : '?',

@@ -27,7 +27,7 @@
 //			{name: 'Mitglied', href: `/moderator/${ctx.district.id}/breeder/${ctx.breeder.id}/profile`},
 		];
 		ctx.crumbs = [
-			{name: 'Start', href: '/'},
+			//{name: 'Start', href: '/'},
 			{name: 'Obmann', href: '/moderator'},
 			{name: ctx.district.short, href: `/moderator/${ctx.district.id}`},
 			{name: 'Züchter', href: `/moderator/${ctx.district.id}/breeder`},

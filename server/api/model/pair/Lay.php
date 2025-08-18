@@ -9,29 +9,29 @@ class Lay {
 	{
 		$args = get_defined_vars();
 		$stmt = Query::prepare('
-			SELECT id, pairId, start, end, eggs, dames, weight
+			SELECT id, pairId, start, end, dames, eggs, weight
 			FROM pair_lay
 			WHERE pairId=:pairId
 		');
 		return Query::select($stmt, $args);
 	}
 
-	public static function create(int $pairId, string $start, string $end, int $eggs, ?int $dames, ?float $weight, int $modifierId): int
+	public static function create(int $pairId, ? string $start, ? string $end, ? int $dames, int $eggs, ?float $weight, int $modifierId): int
 	{
 		$args = get_defined_vars();
 		$stmt = Query::prepare('
-			INSERT INTO pair_lay ( pairId, start, end, eggs, dames, weight, modifierId ) 
-			VALUES ( :pairId, :start, :end, :eggs, :dames, :weight, :modifierId )
+			INSERT INTO pair_lay ( pairId, start, end, dames, eggs, weight, modifierId ) 
+			VALUES ( :pairId, :start, :end, :dames, :eggs, :weight, :modifierId )
 		');
 		return Query::insert($stmt, $args);
 	}
 
-	public static function update(int $id, int $pairId, string $start, string $end, int $eggs, ?int $dames, ?float $weight, int $modifierId): bool
+	public static function update(int $id, int $pairId, string $start, string $end, ?int $dames, int $eggs, ?float $weight, int $modifierId): bool
 	{
 		$args = get_defined_vars();
 		$stmt = Query::prepare('
 			UPDATE pair_lay
-			SET pairId=:pairId, start=:start, end=:end, eggs=:eggs, dames=:dames, weight=:weight, modifierId=:modifierId
+			SET pairId=:pairId, start=:start, end=:end, dames=:dames, eggs=:eggs, weight=:weight, modifierId=:modifierId
 			WHERE id=:id
 		');
 		return Query::update($stmt, $args);

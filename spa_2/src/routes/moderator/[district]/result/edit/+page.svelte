@@ -27,6 +27,7 @@
 	async function loadResultsForEdit( args ) {
 		console.log( 'load edit results', page.params );
 		dirty.results = false;
+		ctx.year = args.year || activeYear(); //query.has( 'year') ? +query.get( 'year' ) : activeYear();
 		ctx.resultsEdit = null;
 		ctx.resultsEdit = await model.Result.query( args );
 	}
@@ -48,7 +49,7 @@
 			{name: 'Eingaben', href: `/moderator/${ctx.district.id}/result?year=${ctx.year}`},
 		];
 		ctx.crumbs = [
-			{name: 'Start', href: '/'},
+			//{name: 'Start', href: '/'},
 			{name: 'Obmann', href: '/moderator'},
 			{name: ctx.district.short, href:`/moderator/${ctx.district.id}`},
 			{name: 'Eingaben', href: `/moderator/${ctx.district.id}/result?year=${ctx.year}`},

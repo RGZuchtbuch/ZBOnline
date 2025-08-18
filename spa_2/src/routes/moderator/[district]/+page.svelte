@@ -19,7 +19,7 @@
 			{name: 'Züchter', href: `${page.url.href}/breeder`},
 		];
 		ctx.crumbs = [
-			{name: 'Start', href: '/'},
+			//{name: 'Start', href: '/'},
 			{name: 'Obmann', href: '/moderator'},
 			{name: ctx.district.short},
 		];

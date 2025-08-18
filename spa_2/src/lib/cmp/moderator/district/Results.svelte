@@ -1,4 +1,5 @@
 <script>
+	//import './src/app.css'; // need this once on highest level
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
 	import { ctx } from '$lib/js/store.svelte.js';
@@ -8,11 +9,6 @@
 	import ResultsView from './results/ResultsView.svelte';
 
 	let { district, year, results } = $props();
-
-	console.log( 'Y', results );
-
-//	let edit = $state( false );
-//	let authorized = $derived( store.user && ( store.user.id === district.moderator.id || store.user.admin ) ); // can edit
 
 	let years = [];
 	let nextYear = +( new Date().getFullYear() )+1;
@@ -29,15 +25,16 @@
 
 </script>
 
-R
+
 {#key district && year && results}
-	<h3 class=''>Leistungen für
-		<select class='w-24 border border-teal-600 border-1 bg-inherit error=null' value={year} onchange={onYearChange}>
+	<div class='flex flex-row border-header bg-header text-header text-xl justify-center gap-x-2 p-1 sticky top-1'>
+		<span class='pt-2 '>Leistungen für</span>
+		<select class='w-24 border border-header bg-header text-header error=null' value={year} onchange={onYearChange}>
 			{#each years as y}
 				<option value={y}>{y}</option>
 			{/each}
 		</select>
-	</h3>
+	</div>
 
 	<div class ='flex flex-row'>
 		<p class='grow info'>
@@ -53,24 +50,11 @@ R
 
 <style>
 	h3 {
-		@apply text-center text-xl bg-teal-200 font-bold sticky top-0;
+		@apply text-center text-2xl border-header bg-header text-header;
 	}
 	p.info {
 		@apply px-8 py-4 text-center;
 	}
-	.section {
-		@apply mt-4 py-1 font-bold bg-teal-200;
-	}
-    .number {
-        @apply px-1 text-right;
-    }
-    .text {
-        @apply px-1 text-center;
-    }
-	.pair {
-		@apply bg-teal-50;
-	}
-
 	span {
 		@apply align-bottom;
 	}

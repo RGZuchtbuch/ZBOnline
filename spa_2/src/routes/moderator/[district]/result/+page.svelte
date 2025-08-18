@@ -27,10 +27,10 @@
 		ctx.menustate[ '/moderator' ] = page.url.href;
 		ctx.title = `Verband ${ctx.district.name}, Eingaben`;
 		ctx.submenu = [
-			{name: 'Eingeben', href: `/moderator/${ctx.district.id}/result/edit`},
+			{name: 'Eingeben', href: `/moderator/${ctx.district.id}/result/edit?year=${ctx.year}`},
 		];
 		ctx.crumbs = [
-			{name: 'Start', href: '/'},
+			//{name: 'Start', href: '/'},
 			{name: 'Obmann', href: '/moderator'},
 			{name: ctx.district.short, href:`/moderator/${ctx.district.id}`},
 			{name: 'Eingaben' },

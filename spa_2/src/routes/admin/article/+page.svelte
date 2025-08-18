@@ -1,23 +1,28 @@
 <script>
-	import { ctx } from '$lib/js/store.svelte.js';
-    import Districts from '$lib/cmp/admin/district/DistrictTree.svelte';
-	import {page} from '$app/state';
+	import { page } from '$app/state';
+	import { cfg, ctx, dirty } from '$lib/js/store.svelte.js';
+	import model from '$lib/js/model.js';
+
+	import Articles from '$lib/cmp/admin/article/Articles.svelte';
 
 	$effect( async () => {
-		if( true ) await load();
+		if( dirty.articles || page.url ) await load();
 	})
 	$effect( () => {
 		if( true ) setHeader();
 	})
 
 	async function load() {
-
+		console.log( 'Load Articles' );
+		dirty.articles = false;
+		ctx.articles = null;
+		ctx.articles = await model.Article.query();
 	}
 
 	function setHeader() {
 		ctx.menustate[ '/admin' ] = page.url.href;
 
-		ctx.title = 'Admin: Verbände zum Verwalten';
+		ctx.title = 'Admin: Infos zum Bearbeiten';
 		ctx.submenu = [
 			//{ name:'Settings', href:'/admin/setting' },
 			//{ name:'Logs', href:'/admin/log' },
@@ -25,7 +30,7 @@
 		ctx.crumbs = [
 			//{ name:'Start',    href:'/' },
 			{ name:'Admin',    href:'/admin' },
-			{ name:'Verbände', href:'/admin/district' },
+			{ name:'Infos', href:'/admin/article' },
 		];
 		// ctx.header = {
 		// 	title: 'Admin: Verbände zum Verwalten',
@@ -46,9 +51,8 @@
 
 </script>
 
-Districts to moderate as obmann
 {#if ctx.federation}
-	<Districts root={ctx.federation}/>
+	<Articles articles={ctx.articles}/>
 {/if}
 
 

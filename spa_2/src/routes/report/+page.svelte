@@ -20,7 +20,7 @@
 	async function loadReport( args ) {
 		console.log( 'Loading Report', args );
 		//dirty.report = false; // hmm retriggers effect
-		ctx.report = null; //clear while waiting
+		//ctx.report = null; //clear while waiting, no it disturbs the view
 		let report = await model.Report.query( args );
 		console.log( 'In load', report );
 			report.args = args;
@@ -47,7 +47,7 @@
 		ctx.title = `Leistungen im Zuchtbuch`;
 		ctx.submenu = [];
 		ctx.crumbs = [
-			{name: 'Start', href: '/'},
+			//{name: 'Start', href: '/'},
 			{name: 'Leistungen', href: '/report'},
 		];
 		// ctx.header = {

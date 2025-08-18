@@ -33,7 +33,7 @@
 	<legend>Schauleistung <Status /></legend>
 	{#if true }
 		<div class='flex flex-row gap-x-2' transition:slide>
-			<div class='w-8'></div>
+			<div class='w-0'></div>
 			{#each [89,90,91,92,93,94,95,96,97] as points, i}
 				<NumberInput class='w-16' label={labels[i]} bind:value={ pair.show.scores[points] } validator={validate.score} />
 			{/each}

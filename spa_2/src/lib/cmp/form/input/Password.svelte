@@ -3,7 +3,7 @@
     import '../form.css';
     import TextInput from '$lib/cmp/form/input/Text.svelte';
 
-    let { class:classname='', disabled=false, element=$bindable(), error='!', label=null, name=null, placeholder=null, title=null, validator=null, value=$bindable() } = $props();
+    let { class:classname='', disabled=false, element=$bindable(), error='Fehler', label=null, name=null, placeholder=null, title=null, validator=null, value=$bindable() } = $props();
 
     let valid = true;
 

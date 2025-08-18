@@ -7,6 +7,7 @@
 		ctx.menustate[ '/admin' ] = page.url.href;
 		ctx.title = 'Admin';
 		ctx.submenu = [
+			{ name:'Infos', href:'/admin/article' },
 			{ name:'Verbände', href:'/admin/district' },
 			{ name:'Standard', href:'/admin/standard' },
 			{ name:'Setting', href:'/admin/setting' },

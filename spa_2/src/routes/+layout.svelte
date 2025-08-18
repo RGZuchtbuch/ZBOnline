@@ -100,7 +100,7 @@
 </dialog>
 
 {#if ctx.federation !== null && ctx.standard !== null }
-    <div class='screen-scroll-y content' in:fade={{duration:1500}}>
+    <div class='pl-4 pt-4 screen-scroll-y content' in:fade={{duration:1500}}>
        {@render children()}
     </div>
 {/if}

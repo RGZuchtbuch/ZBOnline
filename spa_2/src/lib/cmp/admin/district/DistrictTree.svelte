@@ -15,7 +15,7 @@
 
 <section>
 	{#if authorized && root}
-		<div class='flex flex-row border-header bg-header text-header sticky top-1'>
+		<div class='flex flex-row border-header bg-header text-header px-2 sticky top-1'>
 			<div class='district'>Verbände </div>
 			<div class='moderator'>Obmann</div>
 			<div class='email' title='Email schicken'> ✉ </div>

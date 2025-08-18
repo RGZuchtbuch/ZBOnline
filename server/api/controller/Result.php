@@ -239,7 +239,13 @@ class Result
 
 		else if( is_numeric( $districtId ) && is_numeric( $year ) ) { // per district and year view like for moderater
 			$results = model\Result::forDistrictYear($districtId, $year);
+//			print( "ooooooooooooooo\n");
+//			print_r( $results );
+//			print( "-----------\n");
 			$tree = self::treeResults($results);
+//			print( "uuuuuuuuuuuuuuuuuu\n");
+//			print_r( $tree );
+//			print( "-----------\n");
 			$response->getBody()->write(json_encode(['results' => $tree], JSON_UNESCAPED_SLASHES));
 			return $response;
 		}
@@ -293,7 +299,8 @@ class Result
 				$section = [ 'id'=>$raw['rootsectionId'], 'name'=>$raw['rootsectionname'], 'breeds'=>[] ];
 				$tree['sections'][] = & $section;
 			}
-			if( $raw['breedId'] !== $breed['id'] ) {
+//			if( $raw['breedId'] !== $breed['id'] ) {
+			if( true ) {
 				unset( $breed ); // unbind from tree
 				$breed = [ 'id'=>$raw['breedId'], 'name'=>$raw['breedname'], 'colors'=>[] ];
 				if( $raw['colorId'] === NULL && $raw['aocColor'] === NULL ) $breed['result'] = $result; // if no color, like pigeons

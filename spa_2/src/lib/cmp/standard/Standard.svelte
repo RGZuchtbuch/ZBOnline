@@ -18,7 +18,7 @@
 
 <style>
 	section {
-		@apply m-4 border;
+		@apply border;
 	}
 
 	h3 {

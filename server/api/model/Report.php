@@ -64,6 +64,9 @@ class Report extends Query
                     LEFT JOIN section ON section.id = breed.sectionId
                 WHERE 
                     result.year = :year 
+
+                   	AND ( pair.id IS NULL OR pair.accepted = 1 )
+                  
                     AND result.districtId IN ( # district or subdistrict
                         SELECT DISTINCT child.id 
                         FROM district AS parent
@@ -156,6 +159,9 @@ class Report extends Query
                         LEFT JOIN section ON section.id = subsection.parentId
                     WHERE 
                         result.year = :year
+
+                       	AND ( pair.id IS NULL OR pair.accepted = 1 )                     
+                      
                         AND ( :sectionId IS NULL OR breed.sectionId IN (
                             SELECT DISTINCT child.id FROM section AS parent                                  # root could be 2, geflügel 
                                 LEFT JOIN section AS child ON child.parentId=parent.id OR child.id=parent.id # and children and repeat parent 
@@ -259,7 +265,10 @@ class Report extends Query
                         ))
                         AND ( :breedId IS NULL OR result.breedId = :breedId )
                         AND ( :colorId IS NULL OR result.colorId = :colorId )
-                        AND ( :group   IS NULL OR result.group   = :group )                    
+                        AND ( :group   IS NULL OR result.group   = :group )    
+
+                       	AND ( pair.id IS NULL OR pair.accepted = 1 )
+
                     GROUP BY result.year, result.districtId, result.breedId, result.colorId, result.group, pair.breederId                                
                 ) AS results ON results.year = years.year                 
           
@@ -335,6 +344,9 @@ class Report extends Query
                     LEFT JOIN section ON section.id = subsection.parentId
                 WHERE 
                     result.year = :year 
+                  
+                  	AND ( pair.id IS NULL OR pair.accepted = 1 )
+                  
                     AND result.districtId IN ( # also get subdistricts
                         SELECT child.id FROM district AS parent
                             LEFT JOIN district AS child ON child.id = parent.id OR child.parentId = parent.id
@@ -353,25 +365,25 @@ class Report extends Query
 	}
 
 	// for checking before deleting breed that might have results or pairs yet
-	public static function getAllWithBreed(int $id ) : array {
-		$args = get_defined_vars();
-		$stmt = Query::prepare( '
-            SELECT id, breedId
-            FROM result
-            WHERE breedId=:id
-        ' );
-		return Query::selectArray( $stmt, $args );
-	}
+//	public static function getAllWithBreed(int $id ) : array {
+//		$args = get_defined_vars();
+//		$stmt = Query::prepare( '
+//            SELECT id, breedId
+//            FROM result
+//            WHERE breedId=:id
+//        ' );
+//		return Query::selectArray( $stmt, $args );
+//	}
 
 	// for checking before deleting color that might have results or pairs
-	public static function getAllWithColor(int $id ) : array {
-		$args = get_defined_vars();
-		$stmt = Query::prepare( '
-            SELECT id, colorId
-            FROM result
-            WHERE colorId=:id
-        ' );
-		return Query::selectArray( $stmt, $args );
-	}
+//	public static function getAllWithColor(int $id ) : array {
+//		$args = get_defined_vars();
+//		$stmt = Query::prepare( '
+//            SELECT id, colorId
+//            FROM result
+//            WHERE colorId=:id
+//        ' );
+//		return Query::selectArray( $stmt, $args );
+//	}
 
 }

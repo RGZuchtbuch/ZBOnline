@@ -3,7 +3,7 @@
 	import {toDate, toDateISO, toDateString} from '../validator.js';
 	import TextInput from './Text.svelte';
 
-    let { class:classname='', disabled=false, element=$bindable(), error='!', label=null, name=null, placeholder=null, title=null, validator=null, value=$bindable() } = $props();
+    let { class:classname='', disabled=false, element=$bindable(), error='Fehler', label=null, name=null, placeholder=null, title=null, validator=null, value=$bindable() } = $props();
 
 	let date = toDate( value );
 

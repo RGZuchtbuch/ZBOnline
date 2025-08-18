@@ -54,6 +54,16 @@ class Config {
     groups  = ['I', 'II', 'III'];
     broodGroups = [ 1, 2, 3, 4 ];
     pigeons = 5; // note, not for subsections
+    ringColors = [
+        // start at 2022, then repeat every 6 years
+        // get color by index = year % 6;
+        { name:'schwarz', color:'#000' },
+        { name:'gelb', color:'#FF0' },
+        { name:'blau', color:'#00F' },
+        { name:'grün', color:'#0F0' },
+        { name:'grau', color:'#444' },
+        { name:'weiß', color:'#FFF' },
+    ]
     // rootSections defined in js/model/standard.js
 }
 

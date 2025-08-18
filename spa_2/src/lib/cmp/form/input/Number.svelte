@@ -1,7 +1,7 @@
 <script>
     import { getContext,  onDestroy, onMount } from 'svelte';
 
-    let { class:classname='', disabled=false, element=$bindable(), error='!!!', label=null, max=null, maxlength=null, min=null, name=null, oninput=null, placeholder=null, step=1, title=null, type='text', validator=null, value=$bindable() } = $props();
+    let { class:classname='', disabled=false, element=$bindable(), error='Fehler', label=null, max=null, maxlength=null, min=null, name=null, oninput=null, placeholder=null, step=1, title=null, type='text', validator=null, value=$bindable() } = $props();
 
     let valid = $state( true );
 

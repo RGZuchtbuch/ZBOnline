@@ -5,10 +5,7 @@
 	import model from '$lib/js/model.js';
 
 	import Articles from '$lib/cmp/article/Articles.svelte';
-	import {addCrumb} from '$lib/js/tools.js';
 
-
-	addCrumb( { name:'Beitrag', url:page.url } );
 
 	$effect( async () => {
 		if ( dirty.articles || page.url ) await loadArticles();
@@ -30,7 +27,7 @@
 		ctx.title = `Beiträge zum BDRG Zuchtbuch [${ctx.articles.length}]`;
 		ctx.submenu = [];
 		ctx.crumbs = [
-			{name: 'Start', href: '/'},
+			//{name: 'Start', href: '/'},
 			{name: 'Infos', href: '/article'},
 		];
 		// ctx.header = {

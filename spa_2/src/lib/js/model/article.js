@@ -40,7 +40,6 @@ export default class Article {
 	}
 
 	static async delete( id ){
-		//console.log( 'Delete article', id );
-		return false; // TODO
+		return await api.delete( `/api/2/article/${id}` );
 	}
 }

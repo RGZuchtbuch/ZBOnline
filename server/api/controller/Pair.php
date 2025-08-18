@@ -33,6 +33,11 @@ class Pair
 						$parent['parentsPair'] = $parent['parentsPairId'] !== null ? model\Result::readForPair( $parent['parentsPairId'] ) : null;
 					}
 					$pair['lay']     = model\pair\Lay::readForPair( $pair['id'] );
+					// adjusting for counting or averaging lay result
+					if( $pair['lay']['start'] === null ) { // no period, so avg given
+						$pair['lay']['average'] = $pair['lay']['eggs'];
+						$pair['lay']['eggs'] = null;
+					}
 					$pair['broods']  = model\pair\Brood::readForPair( $pair['id'] );
 					foreach( $pair['broods'] as & $brood ) {
 						$brood['chicks'] = model\Animal::readForBrood( $brood['id'] );
@@ -156,9 +161,16 @@ class Pair
 
 	public static function postLay( int $pairId, ? array $lay, Requester $requester ) : bool {
 		model\pair\Lay::deleteForPair( $pairId );
-        if( $lay && $lay['start'] && $lay['end'] && $lay['dames'] && $lay['eggs'] ) { // valid
-			return model\pair\Lay::create( $pairId, $lay['start'], $lay['end'], $lay['eggs'], $lay['dames'], $lay['weight'], $requester->getId() );
-        }
+		if( $lay ) {
+			if( $lay['average'] ) { // valid avg, same as $lay['result'], result stored as eggs
+				return model\pair\Lay::create( $pairId, null, null, null, $lay['average'], $lay['weight'], $requester->getId() );
+			} else if( $lay['start'] && $lay['end'] && $lay['dames'] && $lay['eggs'] ) { // valid period, now counted eggs stored as eggs
+				return model\pair\Lay::create( $pairId, $lay['start'], $lay['end'], $lay['dames'], $lay['eggs'], $lay['weight'], $requester->getId() );
+			}
+		}
+//        if( $lay && $lay['start'] && $lay['end'] && $lay['dames'] && $lay['eggs'] ) { // valid
+//			return model\pair\Lay::create( $pairId, $lay['start'], $lay['end'], $lay['dames'], $lay['eggs'], $lay['weight'], $requester->getId() );
+//        }
         return true; // no lay is ok
 	}
 
@@ -203,8 +215,9 @@ class Pair
 		return true; // no show is ok
 	}
 
-	public static function postResult( int $pairId, array $pair, Requester $requester ) : bool {
-		$success = model\Result::deleteForpair( $pairId );
+	public static function postResult( int $pairId, array $pair, Requester $requester ) : bool
+	{
+		$success = model\Result::deleteForpair($pairId);
 
 		//if( $pair['accepted'] ) { // only add result if moderated accepted the pair
 
@@ -253,16 +266,21 @@ class Pair
 						$requester->getId()
 					);
 			} else { // layers
-				$success = $success && model\Result::new(
-						$pairId, $pair['districtId'], $pair['year'], $pair['group'],
-						null, $pair['breedId'], $pair['colorId'], null,
-						1, 1,
-						$pair['lay']['dames'], $pair['lay']['eggs'], $pair['lay']['weight'],
-						$broodEggs, $broodFertile, $broodHatched,
-						$showCount, $showScore,
-						$requester->getId()
-					);
+				if ($pair && $pair['lay']['average']) { // avg provided
+					$layResult = $pair['lay']['average'];
 
+				} else {
+					$layResult = $pair['lay']['result'];//
+				}
+				$success = $success && model\Result::new(
+					$pairId, $pair['districtId'], $pair['year'], $pair['group'],
+					null, $pair['breedId'], $pair['colorId'], null,
+					1, 1,
+					$pair['lay']['dames'], $layResult, $pair['lay']['weight'],
+					$broodEggs, $broodFertile, $broodHatched,
+					$showCount, $showScore,
+					$requester->getId()
+				);
 			}
 		//}
 		return $success;

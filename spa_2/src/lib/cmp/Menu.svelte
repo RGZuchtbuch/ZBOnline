@@ -30,7 +30,8 @@
 	<div class='flex flex-col border-header bg-header text-header print:hidden' >
 		<div class='grow flex flex-row justify-end gap-x-2 py-1 pr-8'>
 			<nav class='flex flex-row gap-x-2'>
-				{#each ctx.menu.options as option}
+				{#each ctx.menu.options as option, i}
+					{#if i>0} • {/if}
 					{#if page.url.pathname.startsWith( option.href ) }
 						<a class='underline' href={ctx.menustate[ option.href ]} title={'Zum '+option.name}>{option.name}</a>
 					{:else}
@@ -41,7 +42,8 @@
 			{#if ctx.menu.roles.length > 0}
 				:
 				<nav class='flex flex-row gap-x-2'>
-					{#each ctx.menu.roles as role}
+					{#each ctx.menu.roles as role, i}
+						{#if i>0} • {/if}
 						{#if page.url.pathname.startsWith( role.href ) }
 							<a class='underline' href={ctx.menustate[ role.href ]} title={'Zum '+role.name}>{role.name}</a>
 						{:else}
@@ -80,6 +82,7 @@
 			{/if}
 			<nav class='flex flex-row pr-20 gap-x-1'>
 				{#each ctx.submenu as option, i}
+					{#if i>0} • {/if}
 					{#key option.name}
 						{#if option.href}
 							<a href={option.href} title={'Zum '+option.name}>{option.name}</a>

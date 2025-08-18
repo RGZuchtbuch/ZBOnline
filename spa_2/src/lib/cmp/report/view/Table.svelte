@@ -1,7 +1,6 @@
 <script>
     import {fade} from 'svelte/transition';
-    import {getContext, onMount, setContext, untrack} from 'svelte';
-    import { page } from '$app/state';
+    import { cfg } from '$lib/js/store.svelte.js';
     import { dec, pct } from '$lib/js/tools.js';
 
     let { table, district, year } = $props();

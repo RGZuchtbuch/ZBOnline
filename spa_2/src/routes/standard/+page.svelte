@@ -15,7 +15,7 @@
 		ctx.submenu = [
 		];
 		ctx.crumbs = [
-			{name: 'Start', href: '/'},
+			//{name: 'Start', href: '/'},
 			{name: 'Standard', href: '/standard'},
 		];
 		// ctx.header = {

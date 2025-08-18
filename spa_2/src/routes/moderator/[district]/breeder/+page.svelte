@@ -31,7 +31,7 @@
 		ctx.submenu = [
 		];
 		ctx.crumbs = [
-			{name: 'Start', href: '/'},
+			//{name: 'Start', href: '/'},
 			{name: 'Obmann', href: '/moderator'},
 			{name: ctx.district.short, href: `/moderator/${ctx.district.id}`},
 			{name: 'Züchter'},
@@ -53,7 +53,8 @@
 	}
 
 </script>
-Breeders
+
+
 {#if ctx.breeders != null}
 	<Breeders breeders={ctx.breeders} district={ctx.district} />
 {/if}

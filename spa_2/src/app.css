@@ -1,6 +1,11 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/*@tailwind base;*/
+/*@tailwind components;*/
+/*@tailwind utilities;*/
+
+@import "tailwindcss";
+
+/*@import "tailwindcss";*/
+/*@config "../tailwind.config.js";*/
 
 @layer base {
     * {
@@ -57,10 +62,16 @@
     sup, sub {
         @apply text-[10px];
     }
+    ul {
+        @apply list-inside list-disc;
+    }
+    ul li {
+        @apply pl-4;
+    }
 
     @media screen {
         body {
-            @apply bg-white text-black bg-slate-200;
+            @apply bg-slate-200 text-black;
         }
         .screen-scroll-y { /* only scroll on screen, for content section */
             @apply h-full min-h-0 overflow-y-scroll;
@@ -79,26 +90,23 @@
         @apply text-gray-400;
     }
 
-    /* header */
-    .header {
-        @apply w-full bg-teal-200 border text-center;
-    }
-    .border-header {
-        @apply border border-teal-800 dark:border-teal-50;
-    }
-    .bg-header {
-        @apply bg-teal-400 dark:bg-teal-100;
-    }
-    .text-header {
-        @apply font-bold text-white dark:text-slate-800;
-    }
-
     /* button */
     .text-button {
         @apply text-center text-white;
     }
 
-    /* breadcrumbs, obsolete */
+    /* header */
+    .border-header {
+        @apply border border-teal-800 dark:border-teal-50;
+    }
+    .bg-header {
+        @apply bg-teal-200 dark:bg-teal-500;
+    }
+    .text-header {
+        @apply font-bold text-black dark:text-slate-900;
+    }
+
+    /* breadcrumbs, obsolete
     .breadcrumbs {
         @apply hidden lg:block flex flex-col lg:flex-row gap-x-1;
     }
@@ -109,7 +117,7 @@
     .breadcrumbs a:last-child:after {
         content: '';
     }
-
+*/
     .footer {
         @apply w-full mt-4 p-2 border-t-2 border-teal-400 text-center italic;
     }

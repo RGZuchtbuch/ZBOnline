@@ -6,9 +6,8 @@
 	let { standard } = $props();
 </script>
 
-Admin:
 <section>
-	<header class='p-2 border-header bg-header text-header text-center'>Standard, Sparten, Rassen und Farbenschläge</header>
+	<header class='border-header bg-header text-header text-center'>Standard, Sparten, Rassen und Farbenschläge</header>
 
 	{#if standard }
 		<ul in:slide>
@@ -19,7 +18,7 @@ Admin:
 
 <style>
 	section {
-		@apply m-4 border;
+		@apply border;
 	}
 
 	h3 {

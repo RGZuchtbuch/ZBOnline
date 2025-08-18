@@ -1,7 +1,7 @@
 <script>
 	import TextInput from './Text.svelte';
 
-    let { autocomplete=null, class:classname='', disabled=false, element=$bindable(), error='!', label=null, name=null, placeholder=null, title=null, validator=null, value=$bindable() } = $props();
+    let { autocomplete=null, class:classname='', disabled=false, element=$bindable(), error='Fehler', label=null, name=null, placeholder=null, title=null, validator=null, value=$bindable() } = $props();
 </script>
 
 

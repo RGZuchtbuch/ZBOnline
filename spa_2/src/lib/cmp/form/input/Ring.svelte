@@ -1,22 +1,22 @@
 <script>
 
     import {getContext, onMount} from 'svelte';
+	import { cfg } from '$lib/js/store.svelte.js';
 	import {toRing, toRingString} from '../validator.js';
 	import TextInput from './Text.svelte';
 
-    let { class:classname='', disabled=false, element=$bindable(), error='!!!', label=null, name=null, oninput=null, placeholder=null, title=null, validator=null, value=$bindable() } = $props();
+    let { class:classname='', disabled=false, element=$bindable(), error='Fehler', label=null, name=null, oninput=null, placeholder=null, title=null, validator=null, value=$bindable() } = $props();
 
     let localValue = $state( value ); // D
     let tempValue = value; // for detecting extern change from parent on page reload oid
-
-//    function update( v ) {
-//        if( value !== tempValue ) { // changed extern
-//            tempValue = localValue = value;
-//        }
-//    }
+	let ringColor = $state( null );
 
     function onInput( event ) { // from intern
         const ring  = toRing( localValue );
+		if( ring ) {
+			ringColor = cfg.ringColors[ ring.year % 6 ];
+			console.log( 'Ring', ring, ringColor );
+		}
         value = tempValue = ring ? toRingString( ring ) : localValue; // valid date or faulty as was
     }
 
@@ -42,4 +42,5 @@
     {disabled} {error} {label} {placeholder} {title} {validator}
     {oninput}
 />
+<!--span class='w-2' style:background={ringColor ? ringColor.color : '#FFF'}> . </span-->
 

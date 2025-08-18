@@ -25,7 +25,7 @@ class Article
 		}
 	}
 
-    public static function create( int $level, string $author, string $title, string $html, $modifierId ) : ? int {
+    public static function create( ? int $level, string $author, string $title, string $html, $modifierId ) : ? int {
         $args = get_defined_vars();
         $stmt = Query::prepare( '
             INSERT INTO article ( level, author, title, `html`, modifierId )
@@ -33,7 +33,7 @@ class Article
         ' );
         return Query::insert( $stmt, $args ); // returns id
     }
-    public static function update(int $id, int $level, string $author, string $title, string $html, $modifierId ) : bool {
+    public static function update(int $id, ? int $level, string $author, string $title, string $html, $modifierId ) : bool {
 		$args = get_defined_vars();
         $stmt = Query::prepare( '
             UPDATE article

@@ -31,7 +31,7 @@
 			<Label label={i===0}> → </Label>
 			<TextInput class='w-16' label={i===0?'Brutleistung':null} title='Schlüpfrate' value={ pct( brood.hatched, brood.eggs ) } align='right' disabled/>
 			<Label label={i===0}> = </Label>
-			<TextInput class='w-16 font-bold' label={i===0?'Note':null} title='Schlüpfnote' value={ brood.grade > 89 ? dec( brood.grade, 1 ) : 'o.B.' } disabled/>
+			<TextInput class='w-14 font-bold' label={i===0?'Note':null} title='Schlüpfnote' value={ brood.grade > 89 ? dec( brood.grade, 1 ) : 'o.B.' } disabled/>
 		</div>
 	{/if}
 

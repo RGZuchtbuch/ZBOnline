@@ -14,7 +14,7 @@
 			title: 'Benutzer im RGZuchtbuch',
 			menu: {
 				trail: [
-					{name: 'Start', href: '/'},
+					//{name: 'Start', href: '/'},
 					{name: 'Anmeldung', href: '/user'},
 				],
 				options: [],

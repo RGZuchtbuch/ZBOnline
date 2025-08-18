@@ -1,5 +1,6 @@
 <script>
 	import { fade, slide } from 'svelte/transition';
+	import { cfg } from '$lib/js/store.svelte.js';
 	import { dec, fullName, shortName, txt } from '$lib/js/tools.js';
 
 	let { district, year, results } = $props();
@@ -13,7 +14,7 @@
 	{:else}
 		<div class='flex flex-col' in:fade>
 			{#each results.sections as section}
-				<div class='flex flex-row section items-end'>
+				<div class='flex flex-row section items-end sticky top-14'>
 					<span class='grow pl-2'>{section.name}</span>
 					<span class='flex flex-col'>
 						<span class='flex flex-row text-xs text-center'>
@@ -75,19 +76,23 @@
 
 							<span class='w-2 text-gray-400'>|</span>
 
-							<span class='w-8'>Zücht</span>
+							<span class='w-8' title='Züchter wenn als Stamm eingegeben'>Zücht</span>
 						</span>
 					</span>
 				</div>
 
 
 				{#each section.breeds as breed}
-					<div class='flex flex-row pl-4'>
-						<sup class='w-4'>
-							{#if breed.result} {breed.result.group} {/if}
-						</sup>
-						<span class='grow'>{breed.name}</span>
+					<div class='flex flex-row pl-4' class:accepted={breed.result && breed.result.pairId && breed.result.accepted} class:notaccepted={breed.result && breed.result.pairId && !breed.result.accepted}>
+						<span class='w-4'></span>
+						<span class='grow'>
+							{breed.name}
+							{#if breed.result}
+								<sup class='' title={`Gruppe ${breed.result.group}`}> {breed.result.group} </sup>
+							{/if}
+						</span>
 						{#if breed.result}
+
 							{@render result( section, breed.result )}
 						{/if}
 					</div>
@@ -98,7 +103,7 @@
 							<span class='w-4'></span>
 							<span class='grow italic'>
 								{color.name}
-								<sup class='w-4' title={`Gruppe ${color.result.group}`}> {color.result.group} </sup>
+								<sup class='' title={`Gruppe ${color.result.group}`}> {color.result.group} </sup>
 							</span>
 							{@render result( section, color.result )}
 						</div>
@@ -126,11 +131,11 @@
 
 	<span class='w-2'></span>
 
-	{#if section.id === 5}
-		<span class='w-12 number'>{ result.brood.eggs }</span>
+	{#if section.id === cfg.pigeons}
+		<span class='w-12 number'>{ dec( result.brood.eggs ) }</span>
 		<span class='w-12'></span>
-		<span class='w-12 number'>{ result.brood.hatched }</span>
-		<span class='w-12 number'>{ result.pairs?result.brood.hatched/result.pairs:null}</span>
+		<span class='w-12 number'>{ dec( result.brood.hatched ) }</span>
+		<span class='w-12 number'>{ dec( result.pairs?result.brood.hatched/result.pairs:null, 1 )}</span>
 	{:else}
 		<span class='w-12 number'>{ result.brood.eggs}</span>
 		<span class='w-12 number'>{ result.brood.fertile}</span>
@@ -160,13 +165,13 @@
 
 <style>
 	h3 {
-		@apply text-center text-xl bg-teal-200 font-bold sticky top-0;
+		@apply text-center text-xl border-header bg-header text-header font-bold sticky top-1;
 	}
 	p.info {
 		@apply px-8 py-4 text-center;
 	}
 	.section {
-		@apply mt-4 py-1 font-bold bg-teal-200;
+		@apply mt-4 py-1 font-bold border-header bg-teal-200 text-black; /* somehow the app.css classes are overridden. */
 	}
     .number {
         @apply px-1 text-right;
