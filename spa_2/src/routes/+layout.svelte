@@ -1,26 +1,27 @@
 <script>
+    import "../app.css";
     import '../app.css'; // need this once on highest level
-
+    
     import {goto} from '$app/navigation';
     import { fade, fly, slide } from 'svelte/transition';
     import { ctx, dirty } from '$lib/js/store.svelte.js'
-
+    
     import Header from '$lib/cmp/Header.svelte';
     import Menu from '$lib/cmp/Menu.svelte';
     import Title from '$lib/cmp/Title.svelte';
     import model from '$lib/js/model.js';
-
+    
     let { children } = $props();
-
+    
     loadUser(); // only once, the rest is handled by login/out
-
+    
     $effect( () => {
         if( dirty.federation ) loadFederation();
     });
     $effect( () => {
         if( dirty.standard ) loadStandard();
     });
-
+    
     console.log('SetInterval');
     let expired = setInterval( () => {
         //clearInterval( expired ); // in case one already runs
@@ -34,7 +35,7 @@
             //console.log( "Tiick" );
         }
     }, 5000 )
-
+    
     // async function load() {
     //     const response = await Promise.all([
     //         model.Federation.load(),
@@ -45,35 +46,35 @@
     //     ctx.standard = response[1];
     //     ctx.user = response[2];
     // }
-
+    
     async function loadFederation() {
         console.log( 'load F' );
         dirty.federation = false; // first, to avoid retrigger
         ctx.federation = await model.Federation.load();
     }
-
+    
     async function loadStandard() {
         console.log( 'load S' );
         dirty.standard = false;
         ctx.standard = await model.Standard.load();
     }
-
+    
     async function loadUser() {
         console.log( 'load U' );
         ctx.user = await model.User.load();
         //dirty.user = false;
     }
-
+    
     // $inspect( 'Header', ctx.header );
     // $inspect( 'Articles', ctx.articles );
     // $inspect( 'Article', ctx.article );
     // $inspect( 'Federation', ctx.federation );
     // $inspect( 'Standard', ctx.standard );
     //
-//    $inspect( 'Dirty', dirty.articles );
-
+    //    $inspect( 'Dirty', dirty.articles );
+    
     let dialog_test = null;
-
+    
     $effect( () => {
         console.log( 'test', ctx.dialog )
         if( ctx.dialog === 'test' && dialog_test ) {
@@ -81,10 +82,8 @@
         } else {
             dialog_test.close();
         }
-
+    
     });
-
-
 </script>
 
 <!--div class='bg-header text-header text-center'>Test</div-->

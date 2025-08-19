@@ -32,13 +32,13 @@
 
 </script>
 
-<li class='pl-4'>
-	<div class='flex flex-row grow py-2 '>
+<div class='flex flex-col pl-6'>
+	<div class='flex flex-row py-2 '>
+		<span class='w-4'>•</span>
 		<div class='district'>{district.name}</div>
 		<div class='moderator'>{ fullName( district.moderator ) }</div>
 		<div class='email print:hidden'>
 			{#if district.moderator}
-				<!--a href={`mailto:${district.moderator.email}`}> ✉ </a-->
 				<a href={`/message?to=${district.moderator.id}`} title='Email schicken'> ✉ </a>
 			{/if}
 		</div>
@@ -47,8 +47,8 @@
 				<a href={district.url} class='' title='Website besuchen' target='_blank'> ⓘ </a>
 			{/if}
 		</div>
-	</div>
 
+	</div>
 	{#if district.children}
 		<ul>
 			{#each district.children as child}
@@ -56,17 +56,17 @@
 			{/each}
 		</ul>
 	{/if}
-</li>
+</div>
 
 
 
 <style>
 
     li {
-        @apply pl-4 whitespace-nowrap;
+        @apply pl-4;
     }
     .district {
-        @apply grow;
+        @apply grow whitespace-nowrap;
     }
     .moderator {
         @apply w-64;

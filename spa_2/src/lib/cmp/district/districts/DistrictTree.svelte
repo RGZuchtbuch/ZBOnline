@@ -15,16 +15,16 @@
 
 <section>
 	{#if root}
-		<div class='flex flex-row border-header bg-header text-header pl-4 sticky top-1'>
+		<div class='flex flex-row header pl-4 sticky top-0'>
 			<div class='district'>Verbände </div>
 			<div class='moderator'>Obmann</div>
-			<div class='email' title='Email schicken'> ✉ </div>
-			<div class='link' title='Website besuchen'> ⓘ </div>
+			<div class='email' title='Email schicken'> Email </div>
+			<div class='link' title='Website besuchen'> Web </div>
 		</div>
 
-		<ul>
+		<div class=''>
 			<District district={ root } />
-		</ul>
+		</div>
 	{/if}
 </section>
 
@@ -32,10 +32,7 @@
 
 <style>
     section {
-        @apply flex flex-col m-4;
-    }
-    li {
-        @apply pl-4 whitespace-nowrap;
+        @apply flex flex-col border border-red-600;
     }
     .district {
 	    @apply grow;

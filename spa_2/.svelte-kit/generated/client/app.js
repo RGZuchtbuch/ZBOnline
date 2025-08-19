@@ -39,11 +39,7 @@ export const nodes = [
 	() => import('./nodes/35'),
 	() => import('./nodes/36'),
 	() => import('./nodes/37'),
-	() => import('./nodes/38'),
-	() => import('./nodes/39'),
-	() => import('./nodes/40'),
-	() => import('./nodes/41'),
-	() => import('./nodes/42')
+	() => import('./nodes/38')
 ];
 
 export const server_loads = [];
@@ -79,12 +75,8 @@ export const dictionary = {
 		"/moderator/[district]/result": [34,[4,5]],
 		"/moderator/[district]/result/edit": [35,[4,5]],
 		"/report": [36],
-		"/result": [37],
-		"/result/map/year/[year]/type/[type]": [38],
-		"/result/table/district/[districtId]/year/[year]": [39],
-		"/result/trend/district/[districtId]/type/[type]": [40],
-		"/standard": [41],
-		"/user": [42]
+		"/standard": [37],
+		"/user": [38]
 	};
 
 export const hooks = {

@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 
 export default {
-  content: ["./src/**/*.{html,js,svelte}"],
+  content: ["./src/**/*.{html,js,svelte}", "./src/**/*.{html,js,svelte,ts}"],
   darkMode: 'selector',
   theme: {
     screens: {
@@ -10,11 +10,14 @@ export default {
     extend: {
       colors: {
         button: '#ffffff',
-        //header: '#000000', // in app.css components
+        header: '#000000', // in app.css components
       },
       backgroundColor: {
         button: '#d97706',
-        //header: '#2dd4bf',
+        header: '#99F6E4',
+      },
+      borderColor: {
+        header: '#115E59',
       },
       fontFamily: {
         rgz: [ 'Nunito Sans', 'sans-serif' ],
@@ -41,4 +44,3 @@ export default {
   },
   plugins: [],
 }
-
