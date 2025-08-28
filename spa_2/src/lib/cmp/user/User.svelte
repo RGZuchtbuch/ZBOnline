@@ -74,9 +74,10 @@
     {:else if state === State.LOGGEDIN }
         <h3>Wunderbar, du bist drin :)</h3>
     {:else if state === State.FORGOT }
-        <h3>Sie wissen ihr Passwort nicht oder nicht Mehr ?</h3>
+        <h3>Sie wissen ihr Passwort nicht oder nicht mehr, oder hatten noch keiner ?</h3>
         <p>
-            Wenn man vom Obmann registriert ist kann man einen Resetlink über eMail beantragen.
+            Wenn man vom Obmann registriert ist kann man einen Reset Link über eMail beantragen.<br>
+            Über diesen Link können Sie ein neues Passwort eingeben.
         </p>
         <Form class='w-96 flex flex-col gap-2' initialState='valid' submitafter={1000} onsubmit={onForgot} {disabled}>
             <EmailInput class='w-96' name='email' label='Ihre eMail adresse' bind:value={email} error='Emailadresse ungütig' validator={validate.email} autocomplete='username'/>

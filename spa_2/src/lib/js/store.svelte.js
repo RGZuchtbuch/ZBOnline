@@ -36,7 +36,7 @@ class Context {
         '/federation': '/federation',
         '/standard'  : '/standard',
         '/report'    : '/report',
-        '/calculator': '/calculator',
+        '/tool'      : '/tool',
         '/breeder'   : '/breeder',
         '/moderator' : '/moderator',
         '/admin'     : '/admin',
@@ -90,37 +90,6 @@ class Dirty { // flag dirty, for forcing reloading in +page
 
     standard = $state( 1);
 }
-
-
-// class Manu {
-//     info       = $state( { name:'Info', href:'/article' } );
-//     federation = $state( { name:'Verbände', href:'/federation' } );
-//     standard   = $state( { name:'Standard', href:'/standard' } );
-//     report     = $state( { name:'Leistungen', href:'/report' } );
-//     calculator = $state( { name:'Rechner', href:'/calculator' } );
-//     breeder    = $state( { name:'Züchter', href:'/breeder' } );
-//     moderator  = $state( { name:'Obmann', href:'/moderator' } );
-//     admin      = $state( { name:'Obmann', href:'/admin' } );
-// }
-
-// let Menu  = [
-//     { name:'Info', href:'/article' },
-//     { name:'Verbände', href:'/federation' },
-//     { name:'Standard', href:'/standard' },
-//     { name:'Leistungen', href:'/report' },
-//     { name:'Rechner', href:'/standard' },
-//     { name:'Züchter', href:'/standard' },
-//     { name:'Obmann', href:'/moderator', submenu: [
-//         { name:'Verbände', href:'/moderator/district', submenu: [
-//             { name:'Eingaben', href:'/standard' },
-//         ] },
-//         { name:'Verbänd', href:'/moderator/district', submenu: [
-//             { name:'Eingaben', href:'/standard' },
-//         ] },
-//     ] },
-//     { name:'Admin', href:'/standard' },
-//
-// ];
 
 export let ctx = new Context(); // loaded stuff
 //export let store = new Store(); // obsolete

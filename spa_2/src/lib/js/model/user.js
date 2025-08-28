@@ -23,11 +23,28 @@ export default class User {
 		}
 		return ctx.user;
 	}
+
 	static async forgot( email ) { // forgot password
 		const response = await api.post( '/api/2/user/forgot', { email:email } );
 		console.log( response );
 		return true; // TODO
 	}
+
+	static async reset( token, password ) { // forgot password
+		const response = await api.post( '/api/2/user/reset', { token:token, password:password } );
+		console.log( 'Reset', response );
+		if( response && response.token ) {
+			console.log('Got login token')
+			ctx.user = tokenToUser( response.token );
+			browser && window.sessionStorage.setItem( 'token', response.token );
+			return true;
+		} else {
+			ctx.user = null;
+			browser && window.sessionStorage.removeItem( 'token' );
+			return false;
+		}
+	}
+
 	static async logout() {
 		ctx.user = null;
 		window.sessionStorage.removeItem( 'token' ); // forget token

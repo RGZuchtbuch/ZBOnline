@@ -32,7 +32,7 @@
 
 <style>
     section {
-        @apply flex flex-col border border-red-600;
+        @apply flex flex-col border;
     }
     .district {
 	    @apply grow;

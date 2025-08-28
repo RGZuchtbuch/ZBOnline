@@ -26,28 +26,6 @@
 		ctx.crumbs = [
 			//{name: 'Gast', href: '/'}
 		];
-		// const header = {
-		// 	title: 'Das BDRG Zuchtbuch',
-		// 	menu: {
-		// 		trail: [
-		// 			//{name: 'Start', href: '/'},
-		// 			{name: 'Gast', href: '/'},
-		// 		],
-		// 		options: [
-		// 			// {name: 'Beiträge', href: '/article'},
-		// 			// {name: 'Verbände', href: '/federation'},
-		// 			// {name: 'Standard', href: '/standard'},
-		// 			// {name: 'Leistungen', href: '/report'},
-		// 			// {name: 'Rechner', href: '/calculator'},
-		// 		],
-		// 	},
-		// };
-		// if ( ctx.user ) { // restricted
-		// 	header.menu.options.push( {name: 'Züchter', href: `/breeder` } );
-		// 	if ( ctx.user.moderator) header.menu.options.push({name: 'Obmann', href: '/moderator'});
-		// 	if ( ctx.user.admin) header.menu.options.push({name: 'Admin', href: '/admin'});
-		// }
-		// ctx.header = header;
 	}
 
 

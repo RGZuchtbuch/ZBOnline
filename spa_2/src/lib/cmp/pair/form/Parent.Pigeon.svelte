@@ -10,7 +10,7 @@
 	import { toRing } from '$lib/cmp/form/validator.js';
 
 
-	let { parent, pair, i } = $props();
+	let { parent=$bindable(), pair, i } = $props();
 
 	let parentPairs = $state( [] ); // the parent it's parent pair options
 	let parentPair = $state( null ); // the parents pair

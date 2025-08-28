@@ -5,8 +5,9 @@
 	import { DateInput, Label, NumberInput, TextInput, validator } from '../../form/Form.svelte';
 	import Status from '$lib/cmp/form/Status.svelte';
 
-	let { pair, standard } = $props();
+	let { pair=$bindable(), standard } = $props();
 
+	console.log( 'pla', pair.lay.average );
 	if( ! pair.lay.average ) pair.lay.average = null; // when undefined
 
 	let days = $state( null );

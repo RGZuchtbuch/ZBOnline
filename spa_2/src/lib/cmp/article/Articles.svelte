@@ -4,13 +4,12 @@
 	let { articles } = $props();
 </script>
 
-
 <section>
 	{#if articles}
 		<header class='flex flex-row px-2 gap-x-2 border-header bg-header text-header'>
 			<div class='w-4'>#</div>
-			<div class='grow'>Beitrag</div>
-			<div class='w-32'> Von </div>
+			<div class='grow'>Titel</div>
+			<div class='w-32'>Von</div>
 		</header>
 
 		<ol in:slide>
@@ -27,9 +26,9 @@
 				{/if}
 			{/each}
 		</ol>
-
-	{:else}
-		Keine Beiträge gefunden
+	{/if}
+	{#if articles && articles.length === 0 }
+		Keine Info's gefunden.....
 	{/if}
 </section>
 

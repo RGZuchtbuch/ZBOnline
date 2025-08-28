@@ -13,7 +13,7 @@
 		ctx.title = 'Landesverbände im BDRG Zuchtbuch';
 		ctx.submenu = [];
 		ctx.crumbs = [
-			{name: 'Start', href: '/'},
+			//{name: 'Start', href: '/'},
 			{name: 'Verbände'},
 		];
 		// ctx.header = {

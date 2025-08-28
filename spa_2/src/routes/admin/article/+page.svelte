@@ -14,7 +14,7 @@
 
 	async function load() {
 		console.log( 'Load Articles' );
-		dirty.articles = false;
+		//dirty.articles = false;
 		ctx.articles = null;
 		ctx.articles = await model.Article.query();
 	}
@@ -51,8 +51,8 @@
 
 </script>
 
-{#if ctx.federation}
-	<Articles articles={ctx.articles}/>
-{/if}
+
+<Articles articles={ctx.articles}/>
+
 
 

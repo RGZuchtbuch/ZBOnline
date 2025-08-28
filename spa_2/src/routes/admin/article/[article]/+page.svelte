@@ -9,7 +9,8 @@
 //	addCrumb( { name:'?', url:page.url } );
 
 	$effect( async () => {
-		if ( dirty.article || page.url ) loadArticle(+page.params.article);
+		//if ( page.url ) loadArticle( +page.params.article );
+		loadArticle( +page.params.article );
 	});
 	$effect( () => {
 		if( ctx.article ) setHeader();
@@ -17,8 +18,7 @@
 
 	async function loadArticle( id ) {
 		console.log("load Article")
-		dirty.article = false;
-		ctx.article = null;
+		//ctx.article = null;
 		ctx.article = await model.Article.load( id );
 	}
 

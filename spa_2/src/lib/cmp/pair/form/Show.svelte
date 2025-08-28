@@ -4,7 +4,7 @@
 	import { dec } from '$lib/js/tools.js';
 	import { DateInput, NumberInput, RingInput, Select, Status, TextInput, validator } from '../../form/Form.svelte';
 
-	let { pair } = $props();
+	let { pair=$bindable() } = $props();
 
 	let count = $state( null );
 	let average = $state( null );

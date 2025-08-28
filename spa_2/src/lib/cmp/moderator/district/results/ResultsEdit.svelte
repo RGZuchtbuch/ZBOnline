@@ -9,7 +9,7 @@
 	import Breed from './input/Breed.svelte';
 	import {onDestroy} from 'svelte';
 
-	let { args, results } = $props();
+	let { args, results=$bindable() } = $props();
 	// ex. args => { district:7, group:'I', section:12, year:2025 }
 
 	$inspect( 'r', args )

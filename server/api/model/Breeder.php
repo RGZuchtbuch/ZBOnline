@@ -50,14 +50,14 @@ class Breeder
     }
 
 
-	public static function readAll() : array {
-		$args = get_defined_vars();
-		$stmt = Query::prepare('
-            SELECT id, member, firstname, infix, lastname, email, districtId, club, start, end, info
-            FROM user
-        ');
-		return Query::selectArray($stmt, $args);
-	}
+//	public static function readAll() : array {
+//		$args = get_defined_vars();
+//		$stmt = Query::prepare('
+//            SELECT id, member, firstname, infix, lastname, email, districtId, club, start, end, info
+//            FROM user
+//        ');
+//		return Query::selectArray($stmt, $args);
+//	}
 
 //    public static function getName( int $id ) : ? array {
 //        $args = get_defined_vars();

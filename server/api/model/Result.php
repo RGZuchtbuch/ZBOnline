@@ -73,7 +73,7 @@ class Result
         return Query::delete( $stmt, $args );
     }
 
-	public static function readForPair(int $pairId): array
+	public static function readForPair(int $pairId): ? array // may not be there
 	{
 		$args = get_defined_vars();
 		$stmt = Query::prepare(" 

@@ -8,7 +8,7 @@
 
 </script>
 
-{#if district && year && results}
+{#if district && year && results && results.sections}
 	{#if results.sections.length === 0}
 		<div class='text-center'>Leider noch keine Eingaben</div>
 	{:else}

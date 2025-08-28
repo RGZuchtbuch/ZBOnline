@@ -8,7 +8,7 @@
 
     import AddResultRow from './AddResultRow.svelte'
 
-    let { result, data } = $props();
+    let { result=$bindable(), data } = $props();
 
     let resultState = $derived( result ); // why is this needed ?
     let hasResult = $derived( resultState.breeders > 0 );
@@ -39,10 +39,10 @@
     }
 
     async function onSubmit( event ) {
-        console.log( 'Submit color result', resultState );
-        dirty.results = true;
+        dirty.results++;
+        dirty.report++;
 
-        result.aocColor = aocColor ? 'AOC '+aocColor : null; // add prefix if aoc
+        resultState.aocColor = aocColor ? 'AOC '+aocColor : null; // add prefix if aoc
         let response = null;
         if( resultState.breeders > 0 ) { // valid entry
             response = await model.Result.save( resultState );

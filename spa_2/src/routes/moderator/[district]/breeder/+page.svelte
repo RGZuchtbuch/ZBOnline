@@ -9,9 +9,9 @@
 	import model from '$lib/js/model.js';
 
 	$effect( async () => {
+		console.log('Load Breeders', dirty.breeders, page.url.href );
 		const districtId = +page.params.district;
-		console.log( districtId );
-		if( dirty.breeders || ( ctx.district && ctx.district.id !== districtId ) ) await loadBreeders( districtId );
+		if( dirty.breeders && page.url ) await loadBreeders( districtId );
 	})
 
 	$effect( async () => {
@@ -20,7 +20,6 @@
 
 	async function loadBreeders( districtId ) {
 		console.log( 'load district breeders' );
-		dirty.breeders = false;
 		ctx.breeders = null;
 		ctx.breeders = await model.Breeder.query( { district:districtId } );
 	}

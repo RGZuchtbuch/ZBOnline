@@ -1,6 +1,6 @@
 <script>
     import {invalidate} from '$app/navigation';
-    import { ctx, cfg } from '$lib/js/store.svelte.js';
+    import {ctx, cfg, dirty} from '$lib/js/store.svelte.js';
     import Form, { NumberInput, Status, validator } from '$lib/cmp/form/Form.svelte';
     import model from '$lib/js/model.js';
 
@@ -49,6 +49,8 @@
                 return await model.Result.delete( result.id );
             }
         }
+        dirty.results++; // inc to trigger
+        dirty.report++;
     }
 
 </script>

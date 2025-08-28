@@ -12,7 +12,6 @@ export function dec( value, dec = 0 ) {
 	return '';
 }
 export function pct(a, b, decimals= 0 ) {
-	console.log( 'Pct', a, b, decimals );
 	if( a != null && b != null && b !== 0 ) {
 		return (100 * a / b).toFixed( decimals )+'﹪';
 	}
@@ -137,7 +136,7 @@ export function selectName( person ) { // Jannink, Eelco von
 }
 
 export function shortName( person ) { // E.J
-	if( person ) {
+	if( person && person.firstname && person.lastname ) {
 		return `${person.firstname.at(0)}.${person.lastname.at(0)} `;
 	}
 	return '-';

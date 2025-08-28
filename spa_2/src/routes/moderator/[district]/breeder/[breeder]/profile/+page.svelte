@@ -26,30 +26,10 @@
 			{name: `${shortName(ctx.breeder)}`, href:`/moderator/${ctx.district.id}/breeder/${ctx.breeder.id}`},
 			{name: 'Mitglied' },
 		];
-
-		// ctx.header = {
-		// 	title: `Mitgliedsdaten für Züchter ${ fullName( ctx.breeder )}`,
-		// 	menu: {
-		// 		trail: [
-		// 			{name: 'Home', href: '/'},
-		// 			{name: 'Obmann', href: '/moderator'},
-		// 			{name: ctx.district.short, href: `/moderator/${ctx.district.id}`},
-		// 			{name: 'Züchter', href: `/moderator/${ctx.district.id}/breeder`},
-		// 			{
-		// 				name: shortName( ctx.breeder ),
-		// 				href: `/moderator/${ctx.district.id}/breeder/${ctx.breeder.id}`,
-		// 			},
-		// 			{name: 'Mitglied' },
-		// 		],
-		// 		options: [
-		// 			{name: 'Stämme', href: `/moderator/${ctx.district.id}/breeder/${ctx.breeder.id}/pair`},
-		// 		],
-		// 	}
-		// }
 	};
 
 
 
 </script>
 
-<Profile breeder={ctx.breeder} district={ctx.district} />
+<Profile bind:breeder={ctx.breeder} district={ctx.district} />

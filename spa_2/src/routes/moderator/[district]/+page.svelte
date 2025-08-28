@@ -23,22 +23,6 @@
 			{name: 'Obmann', href: '/moderator'},
 			{name: ctx.district.short},
 		];
-
-		// ctx.header = {
-		// 	title: `${ctx.district.name}`,
-		// 	menu: {
-		// 		trail: [
-		// 			{name: 'Home', href: '/'},
-		// 			{name: 'Obmann', href: '/moderator'},
-		// 			{name: ctx.district.short},
-		//
-		// 		],
-		// 		options: [
-		// 			{name: 'Eingaben', href: `${page.url.href}/result`},
-		// 			{name: 'Züchter', href: `${page.url.href}/breeder`},
-		// 		],
-		// 	},
-		// }
 	}
 
 </script>

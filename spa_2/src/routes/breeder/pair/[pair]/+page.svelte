@@ -8,12 +8,10 @@
 
 	console.log( "pair", +page.params.pair );
 
-	//ctx.pair = null;
 
 	$effect( async () => {
-		//console.log("+page, Load pair", +page.params.pair )
-		let id = +page.params.pair;
-		if( dirty.pair || ( ctx.pair && ctx.pair.id !== id ) ) await loadPair( id )//ctx.pair = await load( +page.params.pair );
+		//if( dirty.pair || ( ctx.pair && ctx.pair.id !== id ) ) await loadPair( id )//ctx.pair = await load( +page.params.pair );
+		if( page.url ) await loadPair( +page.params.pair )
 	});
 
 	$effect( async () => {
@@ -24,16 +22,25 @@
 	// onMount( async () => {
 	// 	ctx.pair = await load( +page.params.pair );
 	// })
-
-
 	async function loadPair( id ) {
-		console.log( 'Load Pair' );
-		dirty.pair = false;
-		ctx.pair = null;
+		console.log('Load Pair');
+		//ctx.pair = null; // would trigger extra redraw, and error on null. Donno why
 		ctx.pair = id === 0 ?
-			await model.Pair.new( ctx.breeder ) : // new for this breeder
-			await model.Pair.load( id, ctx.breeder);
+			await model.Pair.new( ctx.breeder) : // new for this breeder
+//			await model.Pair.load( id, ctx.breeder);
+			await model.Pair.load( id );
+		console.log('Loaded pair');
 	}
+
+	// async function loadPair( id ) {
+	// 	console.log( 'Load Pair' );
+	// 	dirty.pair = false;
+	// 	//ctx.pair = null; // would trigger extra redraw, and error on null. Donno why
+	// 	ctx.pair = id === 0 ?
+	// 		await model.Pair.new( ctx.breeder ) : // new for this breeder
+	// 		await model.Pair.load( id, ctx.breeder);
+	// 	console.log( 'Loaded pair' );
+	// }
 
 	function setHeader() {
 		ctx.menustate[ '/breeder' ] = page.url.href;
@@ -49,18 +56,6 @@
 			{name: 'Stämme', href: `/breeder/pair`},
 			{name: `${ctx.pair.year % 100}.${ctx.pair.name}`},
 		];
-		// ctx.header = {
-		// 	title: `Stamm ${ctx.pair.year % 100}.${ctx.pair.name} von Züchter ${fullName(ctx.breeder)}`,
-		// 	menu: {
-		// 		trail: [
-		// 			{name: 'Start', href: '/'},
-		// 			{name: `Züchter ${shortName(ctx.breeder)}` },
-		// 			{name: 'Stämme', href: `/breeder/pair`},
-		// 			{name: `${ctx.pair.year % 100}.${ctx.pair.name}`},
-		// 		],
-		// 		options: [],
-		// 	}
-		// }
 	}
 
 </script>

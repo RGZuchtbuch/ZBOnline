@@ -9,7 +9,7 @@
 	$effect( () => { console.log( 'results: page.url', page.url )} );
 
 	$effect( async () => {
-		if( dirty.results || page.url ) await loadResults( page.params, page.url.searchParams );
+		if( dirty.results && page.url ) await loadResults( page.params, page.url.searchParams );
 	})
 
 	$effect( () => {
@@ -17,9 +17,9 @@
 	})
 
 	async function loadResults( params, query ) {
-		dirty.results = false;
+		//dirty.results = false;
 		ctx.year = query.has( 'year') ? +query.get( 'year' ) : activeYear();
-		ctx.results = null;
+		//ctx.results = null;
 		ctx.results = await model.Result.query( { district:+params.district, year:ctx.year } );
 	}
 

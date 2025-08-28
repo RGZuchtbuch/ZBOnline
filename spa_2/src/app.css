@@ -37,7 +37,7 @@
     }
 
     fieldset {
-        @apply border border-teal-600 rounded;
+        @apply border border-teal-600 rounded px-4 py-2;
     }
 
     h1 {

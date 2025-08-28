@@ -2,21 +2,33 @@
 import api from '$lib/js/server.js';
 
 export default class Breeder {
-	static async load( id, districtId ){
-		//console.log( "Load breeder", id, districtId );
-		if( id === 0 ) { // new breeder
-			return {
-				id:0,
-				member:null, firstname:null, infix:null, lastname:null,
-				email:null, districtId:districtId, club:null,
-				start:null, end:null,
-				info:null,
-			}
-		} else {
-			let article = null;
-			const data = await api.get(`/api/2/breeder/${id}`);
-			return data && data.breeder ? data.breeder : null;
+
+	static new( districtId ) {
+		return {
+			districtId:districtId, id:0,
+			member:null, start:null, end:null,
+			firstname:null, infix:null, lastname:null,
+			email:null, club:null,
+			info:null,
 		}
+	}
+	static async load( id ){
+		//console.log( "Load breeder", id, districtId );
+		// if( id === 0 ) { // new breeder
+		// 	return {
+		// 		id:0,
+		// 		member:null, firstname:null, infix:null, lastname:null,
+		// 		email:null, districtId:ctx.district.id, club:null,
+		// 		start:null, end:null,
+		// 		info:null,
+		// 	}
+		// } else {
+		// 	let article = null;
+		// 	const data = await api.get(`/api/2/breeder/${id}`);
+		// 	return data && data.breeder ? data.breeder : null;
+		// }
+		const data = await api.get(`/api/2/breeder/${id}`);
+		return data && data.breeder ? data.breeder : null;
 	}
 	static async query( args ){
 		//console.log( 'Load breeders', args );

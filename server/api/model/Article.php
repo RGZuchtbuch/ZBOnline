@@ -15,14 +15,15 @@ class Article
 				WHERE id=:id
 			');
 			return Query::select($stmt, $args);
-		} else {
-			$stmt = Query::prepare('
-				SELECT id, level, author, title
-				FROM article
-				ORDER BY level
-			');
-			return Query::selectArray($stmt );
 		}
+//		else {
+//			$stmt = Query::prepare('
+//				SELECT id, level, author, title
+//				FROM article
+//				ORDER BY level
+//			');
+//			return Query::selectArray($stmt );
+//		}
 	}
 
     public static function create( ? int $level, string $author, string $title, string $html, $modifierId ) : ? int {
@@ -49,4 +50,13 @@ class Article
         ' );
 		return Query::delete( $stmt, $args );
     }
+
+	public static function all() : array {
+		$stmt = Query::prepare('
+				SELECT id, level, author, title, modified
+				FROM article
+				ORDER BY level
+			');
+		return Query::selectArray($stmt );
+	}
 }

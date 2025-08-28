@@ -12,23 +12,24 @@
 
 
 	$effect( async () => {
-		const breederId = +page.params.breeder;
-		if( dirty.breeder || page.url ) await loadBreeder( breederId );
+		await loadBreeder( +page.params.breeder );
 	})
 
 
 	async function loadBreeder( id ) {
-		dirty.breeder = false;
-		ctx.breeder = null;
-		ctx.breeder = await model.Breeder.load( id );
+//		dirty.breeder = false;
+//		ctx.breeder = null;
+		if( id === 0 ) {
+			ctx.breeder = model.Breeder.new( ctx.district.id );
+		} else {
+			ctx.breeder = await model.Breeder.load(id);
+		}
 	}
 
 </script>
 
 {#if ctx.breeder}
-	<div in:fade>
-		{@render children()}
-	</div>
+	{@render children()}
 {/if}
 
 

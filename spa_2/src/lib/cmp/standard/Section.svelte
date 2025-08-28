@@ -1,6 +1,6 @@
 <script>
 	import { slide } from 'svelte/transition';
-	import { ctx } from '$lib/js/store.svelte.js';
+	import { cfg, ctx } from '$lib/js/store.svelte.js';
 	import Section from '$lib/cmp/standard/Section.svelte';
 	import Breed from '$lib/cmp/standard/Breed.svelte';
 	import Form, { CheckBox, TextInput, Status, validator } from '$lib/cmp/form/Form.svelte';
@@ -28,9 +28,22 @@
 </script>
 
 {#if section}
-	<li class=''>
+	<li class='font-bold'>
 		<button class='inline' type='button' title='Öffnen' onclick={toggle}>{unfold?'▽':'▷'} </button>
-		<div class='grow font-bold' title='Sparte'>{section.name}</div>
+		<div class='grow' title='Sparte'>{section.name}</div>
+		{#if unfold && section.breeds.length > 0}
+			<div class='w-16 text-right' title='Brutgruppe'>
+				{#if section.parentId === cfg.pigeons} Brutgruppe {/if}
+			</div>
+			<div class='w-16 text-right' title='Legeleistung'>
+				{#if section.parentId !== cfg.pigeons} Eier/J {/if}</div>
+			<div class='w-16 text-right' title='Bruteigewicht'>
+				{#if section.parentId !== cfg.pigeons} Gewicht {/if}
+			</div>
+			<div class='w-32 text-center' title='Zielgewicht der Hähne'>Tiergewicht</div>
+			<div class='w-24 text-center' title='Ringgröße Hahn'>Ring</div>
+
+		{/if}
 	</li>
 
 

@@ -23,11 +23,11 @@
 
 	async function onSubmit( event ) {
 		console.log( 'Submit article' );
-		dirty.articles = true;
 		if( article.title ) {
 			//changed = true;
-			let response = await model.Article.save( article );
-			return response;
+			let ok = await model.Article.save( article );
+			dirty.articles++; // use ++ to not have to set back to false, we only want to detect change for reloading in articles/+page $effect
+			return ok;
 		} else if( ! article.titel && remove && confirm('Lösschen?') ){ // name is null and delete
 			//changed = true;
 			let response = await model.Article.delete( article.id );
@@ -39,48 +39,45 @@
 
 </script>
 
-{#if article}
-	<!--h2 class='header'>
-		<span class='grow'>{article.title}</span>
-	</h2-->
-	<div class='flex flex-row items-center justify-end gap-x-2 p-2'>
-		<span class='meta'>{article.author}, {article.modified}</span>
-		{#if authorized }
-			<span class='print:hidden'>
-				<CheckBox label='Ändern' error='' bind:value={edit} />
-			</span>
+<section>
+	{#if article}
+		<div class='flex flex-row items-center justify-end gap-x-2 p-2'>
+			<span class='meta'>{article.author}, {article.modified}</span>
+			{#if authorized }
+				<span class='print:hidden'>
+					<CheckBox label='Ändern' error='' bind:value={edit} />
+				</span>
+			{/if}
+		</div>
+
+		{#if authorized && edit}
+			<Form class='p-4' autosubmit onsubmit={onSubmit} submitafter=2500>
+				<div></div>
+				<div class='flex flex-row gap-x-4 justify-between'>
+					<NumberInput class='w-16' label='Folge' bind:value={article.level} validator={ validate.level } />
+					<TextInput class='grow' label='Titel' bind:value={article.title} validator={ validate.title }/>
+					<CheckBox bind:value={ remove }
+						label='Löschen'
+					    title={article.id>1?'Nur wenn alles leer!':'Hauptartikel nicht Löschbar'}
+						disabled={article.id===1 || article.title}
+					/>
+					<Status />
+				</div>
+
+				<div class='flex flex-row'>
+					<TextInput class='w-96' label='Autor' bind:value={article.author} validator={ validate.author } />
+				</div>
+
+				<TextArea class='h-64' label='Beitrag' bind:value={article.html} validator={ validate.html }/>
+			</Form>
 		{/if}
-	</div>
 
-	{#if authorized && edit}
-		<Form class='p-4' autosubmit onsubmit={onSubmit} submitafter=2500>
-			<div></div>
-			<div class='flex flex-row gap-x-4 justify-between'>
-				<NumberInput class='w-16' label='Folge' bind:value={article.level} validator={ validate.level } />
-				<TextInput class='grow' label='Titel' bind:value={article.title} validator={ validate.title }/>
-				<CheckBox bind:value={ remove }
-					label='Löschen'
-				    title={article.id>1?'Nur wenn alles leer!':'Hauptartikel nicht Löschbar'}
-					disabled={article.id===1 || article.title}
-				/>
-				<Status />
-			</div>
-
-			<div class='flex flex-row'>
-				<TextInput class='w-96' label='Autor' bind:value={article.author} validator={ validate.author } />
-			</div>
-
-			<TextArea class='h-64' label='Beitrag' bind:value={article.html} validator={ validate.html }/>
-		</Form>
+		<p class='px-6 py-2'>
+			{@html article.html}
+		</p>
 	{/if}
+</section>
 
-
-	<p class='px-6 py-2'>
-		{@html article.html}
-	</p>
-
-
-{/if}
 
 <style>
 	.meta {

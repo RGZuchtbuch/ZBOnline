@@ -39,7 +39,7 @@
 		<div class='moderator'>{ fullName( district.moderator ) }</div>
 		<div class='email print:hidden'>
 			{#if district.moderator}
-				<a href={`/message?to=${district.moderator.id}`} title='Email schicken'> ✉ </a>
+				<a href={`/federation/message?district=${district.id}&to=${district.moderator.id}`} title='Email schicken'> ✉ </a>
 			{/if}
 		</div>
 		<div class='link print:hidden'>

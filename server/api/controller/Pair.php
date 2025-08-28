@@ -26,22 +26,33 @@ class Pair
 					$pair['color']   = model\std\Color::get( $pair['colorId'] );
 
 					$pair['breeder'] = model\Breeder::read( $pair['breederId'] );
+
 					$pair['parents'] = model\Animal::readParentsForPair( $pair['id'] );
 					// get pairs parents results
 					foreach( $pair['parents'] as & $parent ) {
 						//$brood['chicks'] = model\Pair::getChicks( $brood['id'] );
 						$parent['parentsPair'] = $parent['parentsPairId'] !== null ? model\Result::readForPair( $parent['parentsPairId'] ) : null;
 					}
-					$pair['lay']     = model\pair\Lay::readForPair( $pair['id'] );
+
+					$pair['lay'] = model\pair\Lay::readForPair( $pair['id'] );
 					// adjusting for counting or averaging lay result
-					if( $pair['lay']['start'] === null ) { // no period, so avg given
-						$pair['lay']['average'] = $pair['lay']['eggs'];
-						$pair['lay']['eggs'] = null;
+					if( $pair['lay'] ) { // deduct average and eggs from lay data
+						if( $pair['lay']['start'] === null ) { // no period, so avg given
+							$pair['lay']['average'] = $pair['lay']['eggs'];
+							$pair['lay']['eggs'] = null;
+						} else {
+							$pair['lay']['average'] = null;
+						}
 					}
+
 					$pair['broods']  = model\pair\Brood::readForPair( $pair['id'] );
 					foreach( $pair['broods'] as & $brood ) {
 						$brood['chicks'] = model\Animal::readForBrood( $brood['id'] );
+						if( count( $brood['chicks'] ) > 0 ) {
+							$brood['ringed'] = $brood['chicks'][0]['ringed'];
+						}
 					}
+
 					$pair['show'] = self::toShow( model\pair\Show::readForPair( $pair['id'] ) );
 
 					$response->getBody()->write(json_encode([ 'pair' => $pair ], JSON_UNESCAPED_SLASHES));
@@ -162,7 +173,7 @@ class Pair
 	public static function postLay( int $pairId, ? array $lay, Requester $requester ) : bool {
 		model\pair\Lay::deleteForPair( $pairId );
 		if( $lay ) {
-			if( $lay['average'] ) { // valid avg, same as $lay['result'], result stored as eggs
+			if( $lay['average'] ?? null ) { // valid avg, same as $lay['result'], result stored as eggs
 				return model\pair\Lay::create( $pairId, null, null, null, $lay['average'], $lay['weight'], $requester->getId() );
 			} else if( $lay['start'] && $lay['end'] && $lay['dames'] && $lay['eggs'] ) { // valid period, now counted eggs stored as eggs
 				return model\pair\Lay::create( $pairId, $lay['start'], $lay['end'], $lay['dames'], $lay['eggs'], $lay['weight'], $requester->getId() );

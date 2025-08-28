@@ -4,7 +4,7 @@
 	import { dec, pct, txt } from '$lib/js/tools.js';
 	import { DateInput, Label, NumberInput, RingInput, Select, TextInput, validator } from '../../form/Form.svelte';
 
-	let { brood, pair, standard, i } = $props();
+	let { brood=$bindable(), pair=$bindable(), standard, i } = $props();
 
 	const validate = {
 		start:      v => validator(v).date().orNull().isValid(),

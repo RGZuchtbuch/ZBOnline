@@ -157,14 +157,10 @@ export default function validator( value ) {
 			return worker;
 		},
 		email : () => {
-			console.log('Email check', value );
-
 			valid &&= isEmail( value );
 			return worker;
 		},
 		password : () => {
-			console.log('Pwd check' );
-
 			valid &&= isPassword( value );
 			return worker;
 		},

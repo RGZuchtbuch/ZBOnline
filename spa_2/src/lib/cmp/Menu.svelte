@@ -3,16 +3,14 @@
 	import { fade, fly, slide } from 'svelte/transition';
 	import { ctx } from '$lib/js/store.svelte.js';
 
-	//let mainmenu = $state( { options:[], roles:[] } );
-
 	$effect( () => {
 		let options = [
-			{ name: 'Infos', href: '/article'},
-			{ name: 'Verbände', href: '/federation'},
-			{ name: 'Standard', href: '/standard'},
-			{ name: 'Leistungen', href: '/report'},
-			{ name: 'Rechner', href: '/calculator'},
-		]
+			{ name: 'Infos',        href: '/article'},
+			{ name: 'Verbände',     href: '/federation'},
+			{ name: 'Standard',     href: '/standard'},
+			{ name: 'Leistungen',   href: '/report'},
+			{ name: 'Toolbox',      href: '/tool'},
+		];
 		let roles = [];
 		if( ctx.user ) {
 			roles.push( {name: 'Züchter', href: `/breeder` } );
@@ -20,9 +18,8 @@
 			if (ctx.user.admin) roles.push({name: 'Admin', href: '/admin'});
 		}
 		ctx.menu = { options:options, roles:roles }; // single trigger
-		console.log( 'Menu page', page.url.pathname );
 	});
-
+	// ➭
 
 </script>
 
@@ -52,23 +49,12 @@
 					{/each}
 				</nav>
 			{/if}
-			<!--nav class='flex flex-row px-4 items-center gap-x-2 pr-24' in:slide={{axis:'x', duration:500}}>
-				{#each ctx.header.menu.options as option, i}
-					{#key option.name}
-						{#if option.href}
-							<a href={option.href} title={'Zum '+option.name}>{option.name}</a>
-						{:else}
-							<a title='Jetzige Wahl'>{option.name}</a>
-						{/if}
-					{/key}
-				{/each}
-			</nav-->
 		</div>
 		<div class='grow flex flex-row text-sm gap-x-2'>
 			<nav class='grow flex flex-row justify-end gap-x-1 italic'>
 				{#each ctx.crumbs as crumb, i}
 					{#key crumb.name}
-						{#if i>0}➭{/if}
+						{#if i>0} ➜ {/if}
 						{#if i < ctx.crumbs.length-1}
 							<a href={crumb.href} class='pr-1' title='Zurück'> {crumb.name}</a>
 						{:else}
@@ -78,7 +64,7 @@
 				{/each}
 			</nav>
 			{#if ctx.submenu.length > 0}
-				⇒
+				:
 			{/if}
 			<nav class='flex flex-row pr-20 gap-x-1'>
 				{#each ctx.submenu as option, i}

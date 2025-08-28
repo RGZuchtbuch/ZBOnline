@@ -20,7 +20,6 @@ export default class Pair {
 	}
 
 	static async load( id ){
-		console.log( "Model Load pair", id );
 		let data= await api.get(`/api/2/pair/${id}`);
 		if( data && data.pair ) {
 			let pair = data.pair;

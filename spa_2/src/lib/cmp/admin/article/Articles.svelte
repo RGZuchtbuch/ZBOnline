@@ -25,6 +25,7 @@
 			<div class='w-12'>Level</div>
 			<div class='grow'>Titel</div>
 			<div class='w-32'>Von</div>
+			<div class='w-48'>Geändert</div>
 		</header>
 
 		<ol in:slide>
@@ -35,6 +36,7 @@
 						<div class='w-12 text-right '> {article.level}</div>
 						<div class='grow'>{article.title}</div>
 						<div class='w-32'>{article.author}</div>
+						<div class='w-48'>{article.modified}</div>
 					</a>
 				</li>
 			{/each}

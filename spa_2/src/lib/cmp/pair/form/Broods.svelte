@@ -1,12 +1,14 @@
 <script>
 	import { fade, slide } from 'svelte/transition';
+	import { ctx } from '$lib/js/store.svelte.js';
+	import aab from '$lib/js/aab.js';
+	import {dec} from '$lib/js/tools.js';
 	import { NumberInput, Status } from '$lib/cmp/form/Form.svelte';
 	import BroodLayer from './Brood.Layer.svelte';
 	import BroodPigeon from './Brood.Pigeon.svelte';
-	import aab from '$lib/js/aab.js';
-	import {dec} from '$lib/js/tools.js';
 
-	let { pair, standard } = $props();
+	let { standard, pair=$bindable() } = $props();
+
 
 	let breed = $derived( standard.breeds[ pair.breedId ] );
 
@@ -14,9 +16,11 @@
 	// 	console.log('Create broods')
 	// 	pair.broods = [];
 	// }
-	for( let i=pair.broods.length; i<1; i++ ) {
-		addBrood();
-	}
+	$effect( ()=> {
+		for( let i=pair.broods.length; i<1; i++ ) { // minimum of 1
+			addBrood();
+		}
+	})
 
 	function addBrood() {
 		const brood = newBrood();
@@ -61,9 +65,9 @@
 		<div transition:slide>
 			{#each pair.broods as brood, i }
 				{#if pair.sectionId === 5 }
-					<BroodPigeon brood={pair.broods[i]} {pair} {standard} {i}/>
+					<BroodPigeon bind:brood={pair.broods[i]} bind:pair={pair} {standard} {i}/>
 				{:else}
-					<BroodLayer  brood={pair.broods[i]} {pair} {standard} {i}/>
+					<BroodLayer  bind:brood={pair.broods[i]} bind:pair={pair} {standard} {i}/>
 				{/if}
 			{/each}
 			<hr>

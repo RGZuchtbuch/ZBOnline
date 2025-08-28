@@ -1,7 +1,7 @@
 <script>
 	import { slide } from 'svelte/transition';
 	import Color from '$lib/cmp/standard/Color.svelte';
-	import {ctx} from '$lib/js/store.svelte.js';
+	import {cfg, ctx} from '$lib/js/store.svelte.js';
 
 	let { breed, unfold=false } = $props();
 	let authorized = $state( ctx.user && ctx.user.admin );
@@ -14,7 +14,9 @@
 	<li class=''>
 		<button class='inline' type='button' title='Farben' onclick={toggle}>{unfold?'▽':'▷'}</button>
 		<div class='grow' title='Rasse'>{breed.name}</div>
-		<div class='w-16 text-right' title='Brutgruppe'>{breed.broodGroup}</div>
+		<div class='w-16 text-right' title='Brutgruppe'>
+			{#if breed.broodGroup}{breed.broodGroup}{/if}
+		</div>
 		<div class='w-16 text-right' title='Legeleistung'>{breed.layEggs}</div>
 		<div class='w-16 text-right' title='Bruteigewicht'>{breed.layWeight}</div>
 		<div class='w-16 text-right' title='Zielgewicht der Hähne'>{breed.sireWeight}</div>

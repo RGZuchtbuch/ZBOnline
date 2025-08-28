@@ -173,7 +173,7 @@
 		}
 	}
 
-	function grade( value, dec = 0 ) {
+	function grade( value, dec = 1 ) {
 		return value === 0 ? '0' : value === '?' ? '?' : value.toFixed( dec );
 	}
 
@@ -185,26 +185,24 @@
 
 <main class='w-full p-4 bg-gray-100 text-xl transition:slide'>
 	<Form autoSave={false}>
-		<header>
+		<fieldset>
 			<h1 class='flex flex-row gap-x-4 justify-center text-2xl'>
 				BDRG Zuchtbuch, Abstammungsnachweis
 			</h1>
 
-			<fieldset class='flex flex-row px-2 gap-x-2'>
+			<fieldset class='border-0 flex flex-row px-2 gap-x-2'>
 				<span class='w-40 mt-6'> Ausstellung am </span>
 				<DateInput class='w-32' label='Datum'/>
 				<span class='w-8 mt-6 text-center'> in </span>
 				<TextInput class='grow' label='Schau'/>
 				<TextInput class='w-24' label='Käfig-Nr.' />
 			</fieldset>
-		</header>
 
-		<main>
-			<fieldset class='flex flex-row px-2 gap-x-2'>
+			<fieldset class='border-0 flex flex-row px-2 gap-x-2'>
 				<span class='w-40 mt-6'> Züchter </span>
 				<TextInput class='grow' label='Züchter'/><TextInput class='w-32' label='Zuchtbuch-Nr' />
 			</fieldset>
-			<fieldset class='flex flex-col'>
+			<fieldset class='border-0 flex flex-col'>
 				<div class='flex flex-row gap-x-2 px-2 print:hidden'>
 					<span class='w-40 mt-6'> Sparte </span>
 					<Select class='w-96' label='Sparte *' bind:value={pair.section} error='Pflichtfeld' onchange={clearResults}>
@@ -235,7 +233,7 @@
 					</Select>
 				</div>
 			</fieldset>
-		</main>
+		</fieldset>
 
 		{#if pair.breed}
 			<div class='flex flex-col gap-y-2 mt-4' transition:slide>
@@ -285,7 +283,7 @@
 													<span class='w-8 my-6 mx-1'>{grandParent.sex}</span>
 													<RingInput class='w-36' label='Bundesring {grandParent.sex}'/>
 												</div>
-												{#if grandParent.sex === '0.1'}
+												{#if false && grandParent.sex === '0.1'}
 													<div class='text-center font-bold'>{ grade( grandParent.grade )}</div>
 												{/if}
 											</div>
@@ -310,6 +308,12 @@
 													<span class='w-4 mt-6 mx-1 text-center'>→</span>
 													<output class='w-8 mt-6 mx-1 text-xl font-bold text-center'>{ grade( grandParent.brood.grade )}</output>
 												</fieldset>
+
+												{#if false && grandParent.sex === '0.1'}
+													<div class='grow border-black border-t rounded-none flex flex-row justify-end'>
+														<output class='w-8 mt-2 mx-1 text-xl font-bold text-center'>{ grade( grandParent.grade) }</output>
+													</div>
+												{/if}
 											</div>
 										</div>
 									{/if}

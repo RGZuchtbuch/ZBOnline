@@ -27,7 +27,7 @@ export {};
 
 declare module "$app/types" {
 	export interface AppTypes {
-		RouteId(): "/" | "/admin" | "/admin/article" | "/admin/article/[article]" | "/admin/district" | "/admin/log" | "/admin/setting" | "/admin/standard" | "/article" | "/article/[article]" | "/breeder" | "/breeder/pair" | "/breeder/pair/[pair]" | "/breeder/profile" | "/calculator" | "/calculator/grader" | "/calculator/lineage" | "/federation" | "/message" | "/moderator" | "/moderator/[district]" | "/moderator/[district]/breeder" | "/moderator/[district]/breeder/[breeder]" | "/moderator/[district]/breeder/[breeder]/pair" | "/moderator/[district]/breeder/[breeder]/pair/[pair]" | "/moderator/[district]/breeder/[breeder]/profile" | "/moderator/[district]/report" | "/moderator/[district]/result" | "/moderator/[district]/result/edit" | "/report" | "/standard" | "/user";
+		RouteId(): "/" | "/admin" | "/admin/article" | "/admin/article/[article]" | "/admin/district" | "/admin/log" | "/admin/setting" | "/admin/standard" | "/article" | "/article/[article]" | "/breeder" | "/breeder/pair" | "/breeder/pair/[pair]" | "/breeder/profile" | "/federation" | "/federation/message" | "/moderator" | "/moderator/[district]" | "/moderator/[district]/breeder" | "/moderator/[district]/breeder/[breeder]" | "/moderator/[district]/breeder/[breeder]/pair" | "/moderator/[district]/breeder/[breeder]/pair/[pair]" | "/moderator/[district]/breeder/[breeder]/profile" | "/moderator/[district]/report" | "/moderator/[district]/result" | "/moderator/[district]/result/edit" | "/report" | "/standard" | "/tool" | "/tool/grader" | "/tool/lineage" | "/user" | "/user/reset";
 		RouteParams(): {
 			"/admin/article/[article]": { article: string };
 			"/article/[article]": { article: string };
@@ -57,11 +57,8 @@ declare module "$app/types" {
 			"/breeder/pair": { pair?: string };
 			"/breeder/pair/[pair]": { pair: string };
 			"/breeder/profile": Record<string, never>;
-			"/calculator": Record<string, never>;
-			"/calculator/grader": Record<string, never>;
-			"/calculator/lineage": Record<string, never>;
 			"/federation": Record<string, never>;
-			"/message": Record<string, never>;
+			"/federation/message": Record<string, never>;
 			"/moderator": { district?: string; breeder?: string; pair?: string };
 			"/moderator/[district]": { district: string; breeder?: string; pair?: string };
 			"/moderator/[district]/breeder": { district: string; breeder?: string; pair?: string };
@@ -74,9 +71,13 @@ declare module "$app/types" {
 			"/moderator/[district]/result/edit": { district: string };
 			"/report": Record<string, never>;
 			"/standard": Record<string, never>;
-			"/user": Record<string, never>
+			"/tool": Record<string, never>;
+			"/tool/grader": Record<string, never>;
+			"/tool/lineage": Record<string, never>;
+			"/user": Record<string, never>;
+			"/user/reset": Record<string, never>
 		};
-		Pathname(): "/" | "/admin" | "/admin/article" | `/admin/article/${string}` & {} | "/admin/district" | "/admin/log" | "/admin/setting" | "/admin/standard" | "/article" | `/article/${string}` & {} | "/breeder" | "/breeder/pair" | `/breeder/pair/${string}` & {} | "/breeder/profile" | "/calculator" | "/calculator/grader" | "/calculator/lineage" | "/federation" | "/message" | "/moderator" | `/moderator/${string}` & {} | `/moderator/${string}/breeder` & {} | `/moderator/${string}/breeder/${string}` & {} | `/moderator/${string}/breeder/${string}/pair` & {} | `/moderator/${string}/breeder/${string}/pair/${string}` & {} | `/moderator/${string}/breeder/${string}/profile` & {} | `/moderator/${string}/report` & {} | `/moderator/${string}/result` & {} | `/moderator/${string}/result/edit` & {} | "/report" | "/standard" | "/user";
+		Pathname(): "/" | "/admin" | "/admin/article" | `/admin/article/${string}` & {} | "/admin/district" | "/admin/log" | "/admin/setting" | "/admin/standard" | "/article" | `/article/${string}` & {} | "/breeder" | "/breeder/pair" | `/breeder/pair/${string}` & {} | "/breeder/profile" | "/federation" | "/federation/message" | "/moderator" | `/moderator/${string}` & {} | `/moderator/${string}/breeder` & {} | `/moderator/${string}/breeder/${string}` & {} | `/moderator/${string}/breeder/${string}/pair` & {} | `/moderator/${string}/breeder/${string}/pair/${string}` & {} | `/moderator/${string}/breeder/${string}/profile` & {} | `/moderator/${string}/report` & {} | `/moderator/${string}/result` & {} | `/moderator/${string}/result/edit` & {} | "/report" | "/standard" | "/tool" | "/tool/grader" | "/tool/lineage" | "/user" | "/user/reset";
 		ResolvedPathname(): `${"" | `/${string}`}${ReturnType<AppTypes['Pathname']>}`;
 		Asset(): "/assets/bdrg_logo_r.png" | "/assets/bdrg_zuchtbuch.jpg" | "/assets/bdrg_zuchtbuch.png" | "/assets/icons/user-profile.svg" | "/assets/ZB_ALBS.png" | "/favicon.png";
 	}

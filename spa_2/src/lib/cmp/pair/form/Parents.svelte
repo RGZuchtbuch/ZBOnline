@@ -1,6 +1,6 @@
 <script>
 	import {fade, slide} from 'svelte/transition';
-	import { ctx } from '$lib/js/store.svelte.js';
+	import { cfg, ctx } from '$lib/js/store.svelte.js';
 	import { NumberInput, RingInput, Select, Status, TextInput, validator } from '../../form/Form.svelte';
 	import {dec} from '$lib/js/tools.js';
 	import {onMount} from 'svelte';
@@ -8,17 +8,21 @@
 	import ParentLayer from './Parent.Layer.svelte';
 	import ParentPigeon from './Parent.Pigeon.svelte';
 
-	let { pair } = $props();
+	let { pair=$bindable() } = $props();
 
-	if( pair.sectionId ) {
-		if ( ! pair.parents ) {
-			pair.parents = [];
+	$effect( () => {
+		if( pair.sectionId ) {
+			if ( ! pair.parents ) {
+				pair.parents = [];
+			}
+			const n = pair.sectionId === cfg.pigeons ? 2 : 3;
+			for (let i = pair.parents.length; i < n; i++) {
+				addParent(i); // for knowing 1.0 or 0.1
+			}
 		}
-		const n = pair.sectionId === 5 ? 2 : 5;
-		for (let i = pair.parents.length; i < 2; i++) {
-			addParent(i); // for knowing 1.0 or 0.1
-		}
-	}
+
+	})
+
 
 	function addParent( i ) {
 		pair.parents.push(
@@ -51,8 +55,8 @@
 	<legend>Abstammung <Status /></legend>
 	{#if pair.sectionId === 5 }
 		<div transition:slide>
-			<ParentPigeon parent={pair.parents[0]} {pair} i={0} />
-			<ParentPigeon parent={pair.parents[1]} {pair} i={1} />
+			<ParentPigeon bind:parent={pair.parents[0]} {pair} i={0} />
+			<ParentPigeon bind:parent={pair.parents[1]} {pair} i={1} />
 		</div>
 	{:else}
 		<div transition:slide>

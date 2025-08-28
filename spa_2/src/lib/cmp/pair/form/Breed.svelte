@@ -3,7 +3,7 @@
 	import { ctx } from '$lib/js/store.svelte.js';
 	import { Form, Select, Status } from '$lib/cmp/form/Form.svelte';
 
-	let { pair } = $props();
+	let { pair=$bindable() } = $props();
 
 	// initial getting objects from pair
 

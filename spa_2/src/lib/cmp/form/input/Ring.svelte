@@ -15,7 +15,7 @@
         const ring  = toRing( localValue );
 		if( ring ) {
 			ringColor = cfg.ringColors[ ring.year % 6 ];
-			console.log( 'Ring', ring, ringColor );
+			//console.log( 'Ring', ring, ringColor );
 		}
         value = tempValue = ring ? toRingString( ring ) : localValue; // valid date or faulty as was
     }

@@ -10,7 +10,7 @@
 	ctx.report = null;
 
 	$effect( async () => {
-		if( dirty.report || page.url ) await loadReport( getArgs( page.url.searchParams ) );
+		if( dirty.report && page.url ) await loadReport( getArgs( page.url.searchParams ) );
 	})
 
 	$effect( () => {
@@ -18,15 +18,14 @@
 	});
 
 	async function loadReport( args ) {
-		dirty.report = false;
-		ctx.report = null; //clear while waiting
+		//dirty.report = false;
+		//ctx.report = null; //clear while waiting
 		let report = await model.Report.loadTable( args );
-			report.args = args;
+		report.args = args;
 		ctx.report = report; // single trigger
 	}
 
 	function getArgs( params ) { // collect arguments and optionals and defaults
-		console.log( 'Get Args', params );
 		const args = ArgsBuilder.init();
 			ArgsBuilder.setNumber( args, params, 'district', 1 );
 			ArgsBuilder.setNumber( args, params, 'year', completedYear() );
@@ -53,24 +52,7 @@
 			{name: ctx.district.short, href:`/moderator/${ctx.district.id}`},
 			{name: 'Leistungen' },
 		];
-
-		// ctx.header = {
-		// 	title: `Zuchtleistungen`,
-		// 	menu: {
-		// 		trail: [
-		// 			{name: 'Home', href: '/'},
-		// 			{name: 'Obmann', href: '/moderator'},
-		// 			{name: ctx.district.short, href:`/moderator/${ctx.district.id}`},
-		// 			{name: 'Leistungen' },
-		// 		],
-		// 		options: [
-		// 			{name: 'Leistungen' },
-		// 			{name: 'Eingaben', href: `/moderator/${ctx.district.id}/result?year=${ctx.year}`},
-		// 			{name: 'Züchter', href: `/moderator/${ctx.district.id}/breeder`},
-		// 		],
-		// 	},
-		// }
-	};
+	}
 
 
 </script>

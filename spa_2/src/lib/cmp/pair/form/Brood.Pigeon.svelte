@@ -5,7 +5,7 @@
 	import Form, { DateInput, Label, NumberInput, RingInput, Select, TextInput, validator } from '../../form/Form.svelte';
 	//	import Form from '$lib/form/form/Profile.svelte';
 
-	let { brood, pair, standard, i } = $props();
+	let { brood=$bindable(), pair=$bindable(), standard, i } = $props();
 	brood.eggs = 2; // default 2 eggs per brood for pigeons
 
 	const validate = {

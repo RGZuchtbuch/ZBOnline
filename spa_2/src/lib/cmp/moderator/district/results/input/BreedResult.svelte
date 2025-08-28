@@ -4,7 +4,7 @@
 
     import Form, { Status, NumberInput, validator } from '$lib/cmp/form/Form.svelte';
 
-    let { section, breed, result } = $props();
+    let { section, breed, result=$bindable() } = $props();
 
     result.brood.broods = result.brood.eggs ? result.brood.eggs / 2 : null;
 
@@ -44,7 +44,6 @@
     async function onSubmit( event ) {
         console.log( 'Submit color result' );
         //await invalidate( 'results' ); // make results page reload data
-        dirty.results = true;
         if( data.breeders ) { // valid entry
             result.brood.eggs = result.brood.broods * 2; // 2 eggs per brood expected
             return await model.Result.save( data );
@@ -53,6 +52,7 @@
                 return await model.Result.delete( data.id );
             }
         }
+        dirty.results++; // inc to trigger
     }
 
     // function onChange( result ) {

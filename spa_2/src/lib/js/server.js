@@ -8,6 +8,7 @@ export function headers() {
 		'Accept': 'application/json', // response
 		'Content-Type': 'application/json', // body
 		'Authorization': `Bearer ${ ctx.user ? ctx.user.token : '' }`,
+
 	}
 }
 

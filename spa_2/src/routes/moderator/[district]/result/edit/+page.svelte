@@ -17,18 +17,15 @@
 	let args = $derived( getArgs( page ) )
 
 	$effect( async () => {
-		if( dirty.resultsEdit || page.url ) await loadResultsForEdit( args );
+		if( dirty.resultsEdit && page.url ) await loadResultsForEdit( args );
 	})
 
 	$effect( async () => {
-		if( ctx.district || page.url ) setHeader();
+		if( ctx.district && page.url ) setHeader();
 	})
 
 	async function loadResultsForEdit( args ) {
-		console.log( 'load edit results', page.params );
-		dirty.results = false;
 		ctx.year = args.year || activeYear(); //query.has( 'year') ? +query.get( 'year' ) : activeYear();
-		ctx.resultsEdit = null;
 		ctx.resultsEdit = await model.Result.query( args );
 	}
 
@@ -55,34 +52,9 @@
 			{name: 'Eingaben', href: `/moderator/${ctx.district.id}/result?year=${ctx.year}`},
 			{name: 'Eingeben'},
 		];
-
-		// ctx.header = {
-		// 	title: `${ctx.district.name}`,
-		// 	menu: {
-		// 		trail: [
-		// 			{name: 'Home', href: '/'},
-		// 			{name: 'Obmann', href: '/moderator'},
-		// 			{name: ctx.district.short, href: `/moderator/${ctx.district.id}`},
-		// 			{name: 'Eingaben', href: `/moderator/${ctx.district.id}/result?year=${ctx.year}`},
-		// 			{name: 'Eingeben'},
-		// 		],
-		// 		options: [
-		// 			{name: 'Eingaben', href: `/moderator/${ctx.district.id}/result?year=${ctx.year}`},
-		// 			{name: 'Züchter', href: `/moderator/${ctx.district.id}/breeder`},
-		// 		],
-		// 	},
-		// };
 	}
-
-	onDestroy( () => {
-		//invalidate( 'result' ); //( 'app:changed' );
-	})
-
-	console.log( 'edit page')
-
 </script>
-AA {ctx.year}
+
 {#if ctx.district && args && ctx.resultsEdit } <!-- needed as ctx might not be updated yet -->
-	<!--ResultsEdit district={ctx.district} year={ctx.year} section={ctx.section} group={ctx.group} results={ctx.results} /-->
-	<ResultsEdit district={ctx.district} {args} results={ctx.resultsEdit} />
+	<ResultsEdit district={ctx.district} {args} bind:results={ctx.resultsEdit} />
 {/if}

@@ -16,14 +16,17 @@ class Color
 				WHERE id=:id
 			');
 			return Query::select($stmt, $args);
-		} else { // by id
-			$stmt = Query::prepare('
-				SELECT id, name, breedId
-				FROM color
-				ORDER BY name;
-			');
-			return Query::selectArray($stmt );
 		}
+		return null;
+
+//		else { // by id
+//			$stmt = Query::prepare('
+//				SELECT id, name, breedId
+//				FROM color
+//				ORDER BY name;
+//			');
+//			return Query::selectArray($stmt );
+//		}
 	}
 
     public static function new( string $name, int $breedId, ? string $info, int $modifierId ) : ? int {

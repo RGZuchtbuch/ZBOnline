@@ -90,7 +90,7 @@ class Article
 	/** v3 **/
 	public static function filter( Request $request, Response $response, array $args ) : Response {
 		// give list of all, no filter
-		$articles = model\Article::read();
+		$articles = model\Article::all();
 		$response->getBody()->write( json_encode( [ 'articles' => $articles ], JSON_UNESCAPED_SLASHES ) );
 		return $response;
 	}

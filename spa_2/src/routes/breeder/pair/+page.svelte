@@ -1,25 +1,27 @@
 <script>
 	import { page } from '$app/state';
 	import { ctx, dirty } from '$lib/js/store.svelte.js';
-	import {addCrumb, fullName, shortName} from '$lib/js/tools.js';
+	import { fullName, shortName} from '$lib/js/tools.js';
 	import Pairs from '$lib/cmp/breeder/Pairs.svelte';
 	import model from '$lib/js/model.js';
 
 	$effect( async () => {
 //		if( dirty.pairs || page.url ) await loadPairs( +page.params.breeder );
+		//if( dirty.pairs || page.url ) await loadPairs( ctx.user.id );
 		if( dirty.pairs || page.url ) await loadPairs( ctx.user.id );
 	})
 
 	$effect(async () => {
 		if( ctx.district && ctx.breeder && ctx.pairs ) {
 			setHeader();
-			addCrumb( { name:'Stämme', url:page.url } );
+			//addCrumb( { name:'Stämme', url:page.url } );
 		}
 	})
 
 	async function loadPairs( breederId ) {
 		console.log( 'Load breeder pairs' );
-		ctx.pairs = null;
+		//ctx.pairs = null;
+		//dirty.pairs = false; // no need as I do dirty.pairs++ in pair submit
 		ctx.pairs = await model.Pair.query( { breeder:breederId } );
 	}
 
@@ -33,8 +35,8 @@
 			//{name: 'Mitglied', href: `/breeder/profile`},
 		];
 		ctx.crumbs = [
-			{name: 'Start', href: '/'},
-			{name: `Züchter ${shortName(ctx.breeder)}`, href: `/breeder` },
+			//{name: 'Start', href: '/'},
+			{name: `Züchter`, href: `/breeder` },
 			{name: 'Stämme'},
 		];
 // 		ctx.header = {

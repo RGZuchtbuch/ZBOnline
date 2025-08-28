@@ -192,7 +192,7 @@
 							</div>
 						</fieldset>
 
-						<fieldset class='flex flex-col md:flex-row gap-x-4'>
+						<fieldset class='flex flex-col md:flex-row p-4 gap-x-4'>
 							<span class='w-40 mt-6 text-left'>Brutleistung</span>
 							<div class='flex flex-row'>
 								<NumberInput class='w-32' label='Eingelegt' bind:value={brood.eggs} validator={ validate.layer.brood.eggs } />
@@ -205,9 +205,10 @@
 					{/if}
 				</div>
 			{:else}
-				<div class='m-16 text-center italic'>
-					Der Leistungsdatenteil erscheint sobalt die Rasse ausgewählt worden ist
-				</div>
+				<p class='m-16 text-center italic'>
+					Der Leistungsdatenteil erscheint sobalt die Rasse ausgewählt worden ist.<br>
+					Beachte: diese Daten werden nicht gespeichert !
+				</p>
 			{/if}
 		</Form>
 	</div>

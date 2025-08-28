@@ -15,7 +15,7 @@
 
 	function setHeader() {
 		ctx.menustate[ '/moderator' ] = page.url.href;
-		ctx.title = `Verband ${ctx.district.name}, Züchter ${fullName(ctx.breeder)}`;
+		ctx.title = `Verband ${ctx.district.short}, Züchter ${fullName(ctx.breeder)}`;
 		ctx.submenu = [
 			{name: 'Stämme', href: `/moderator/${ctx.district.id}/breeder/${ctx.breeder.id}/pair`},
 			{name: 'Mitglied', href: `/moderator/${ctx.district.id}/breeder/${ctx.breeder.id}/profile`},
@@ -27,23 +27,8 @@
 			{name: 'Züchter', href: `/moderator/${ctx.district.id}/breeder`},
 			{name: ctx.breeder.id === 0 ? 'Neu' : `${shortName(ctx.breeder)}`},
 		];
-		// ctx.header = {
-		// 	title: ctx.breeder.id === 0 ? 'Neu' : `Zuchter ${fullName(ctx.breeder)} im ${ctx.district.name}`,
-		// 	menu: {
-		// 		trail: [
-		// 			{name: 'Home', href: '/'},
-		// 			{name: 'Obmann', href: '/moderator'},
-		// 			{name: ctx.district.short, href: `/moderator/${ctx.district.id}`},
-		// 			{name: 'Züchter', href: `/moderator/${ctx.district.id}/breeder`},
-		// 			{name: ctx.breeder.id === 0 ? 'Neu' : `${shortName(ctx.breeder)}`},
-		// 		],
-		// 		options: [
-		// 			{name: 'Stämme', href: `/moderator/${ctx.district.id}/breeder/${ctx.breeder.id}/pair`},
-		// 			{name: 'Mitglied', href: `/moderator/${ctx.district.id}/breeder/${ctx.breeder.id}/profile`},
-		// 		],
-		// 	}
-		// }
 	}
+
 
 </script>
 

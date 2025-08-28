@@ -4,7 +4,7 @@
 	import { CheckBox, NumberInput, TextInput, Select, Status, validator } from '$lib/cmp/form/Form.svelte';
 	import { ctx } from '$lib/js/store.svelte.js';
 
-	let { breeder, pair } = $props();
+	let { pair=$bindable() } = $props();
 
 	const thisYear = new Date().getFullYear();
 
@@ -20,7 +20,7 @@
 	<legend>{pair ? pair.sectionId === 5 ? 'Tauben Paar' : 'Geflügel Stamm' : 'Paar/Stamm'} <Status /></legend>
 
 	<div class='flex flex-row gap-x-4 '>
-		<TextInput class='w-56' label='Züchter' value={ fullName( breeder ) } disabled  />
+		<TextInput class='w-56' label='Züchter' value={ fullName( pair.breeder ) } disabled  />
 		<NumberInput class='w-16' label='Jahr*' bind:value={pair.year} error={'Fehler'} validator={validate.year} />
 		<TextInput class='w-24' label='Name*' bind:value={pair.name} error='Fehler' validator={validate.name} />
 		<Select label='Gruppe*' bind:value={pair.group}>

@@ -84,11 +84,11 @@
     {#if open && results }
         <div transition:slide>
             {#if breed.layer }
-                {#each results.colors as color}
-                    <ColorResult result={color}/>
+                {#each results.colors as colorResult}
+                    <ColorResult result={colorResult}/>
                 {/each}
-                {#each results.aocColors as color}
-                    <ColorResult result={color}/>
+                {#each results.aocColors as colorResult}
+                    <ColorResult result={colorResult}/>
                 {/each}
             {:else}
                 <BreedResult result={results.breed}/>

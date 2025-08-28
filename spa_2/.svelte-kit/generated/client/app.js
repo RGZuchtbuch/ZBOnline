@@ -39,7 +39,8 @@ export const nodes = [
 	() => import('./nodes/35'),
 	() => import('./nodes/36'),
 	() => import('./nodes/37'),
-	() => import('./nodes/38')
+	() => import('./nodes/38'),
+	() => import('./nodes/39')
 ];
 
 export const server_loads = [];
@@ -59,24 +60,25 @@ export const dictionary = {
 		"/breeder/pair": [18,[3]],
 		"/breeder/pair/[pair]": [19,[3]],
 		"/breeder/profile": [20,[3]],
-		"/calculator": [21],
-		"/calculator/grader": [22],
-		"/calculator/lineage": [23],
-		"/federation": [24],
-		"/message": [25],
-		"/moderator": [26,[4]],
-		"/moderator/[district]": [27,[4,5]],
-		"/moderator/[district]/breeder": [28,[4,5]],
-		"/moderator/[district]/breeder/[breeder]": [29,[4,5,6]],
-		"/moderator/[district]/breeder/[breeder]/pair": [30,[4,5,6]],
-		"/moderator/[district]/breeder/[breeder]/pair/[pair]": [31,[4,5,6]],
-		"/moderator/[district]/breeder/[breeder]/profile": [32,[4,5,6]],
-		"/moderator/[district]/report": [33,[4,5]],
-		"/moderator/[district]/result": [34,[4,5]],
-		"/moderator/[district]/result/edit": [35,[4,5]],
-		"/report": [36],
-		"/standard": [37],
-		"/user": [38]
+		"/federation": [21],
+		"/federation/message": [22],
+		"/moderator": [23,[4]],
+		"/moderator/[district]": [24,[4,5]],
+		"/moderator/[district]/breeder": [25,[4,5]],
+		"/moderator/[district]/breeder/[breeder]": [26,[4,5,6]],
+		"/moderator/[district]/breeder/[breeder]/pair": [27,[4,5,6]],
+		"/moderator/[district]/breeder/[breeder]/pair/[pair]": [28,[4,5,6]],
+		"/moderator/[district]/breeder/[breeder]/profile": [29,[4,5,6]],
+		"/moderator/[district]/report": [30,[4,5]],
+		"/moderator/[district]/result": [31,[4,5]],
+		"/moderator/[district]/result/edit": [32,[4,5]],
+		"/report": [33],
+		"/standard": [34],
+		"/tool": [35],
+		"/tool/grader": [36],
+		"/tool/lineage": [37],
+		"/user": [38],
+		"/user/reset": [39]
 	};
 
 export const hooks = {

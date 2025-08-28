@@ -6,7 +6,7 @@ import { daysBetween } from '$lib/js/tools.js';
 
 export default {
 	lay: ( eggs, should ) => {
-		console.log('Lay', eggs, eggs !== null && eggs >= 0, should );
+		//console.log('Lay', eggs, eggs !== null && eggs >= 0, should );
 		if( eggs !== null && eggs >= 0 && should > 0 ) {
 			console.log('Tuut');
 			const fraction = eggs / should;
@@ -20,7 +20,7 @@ export default {
 			else if( fraction >= 0.3 ) return 90;
 			return 89; // original 0
 		}
-		console.log('Lay', null );
+		//console.log('Lay', null );
 		return null;
 	},
 	brood: {

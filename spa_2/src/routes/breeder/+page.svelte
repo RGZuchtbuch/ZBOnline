@@ -5,6 +5,7 @@
 	import {page} from '$app/state';
 	import {redirect} from '@sveltejs/kit';
 	import {goto} from '$app/navigation';
+	import Breeder from '$lib/cmp/breeder/Breeder.svelte';
 
 	$effect( () => {
 		if( ctx.breeder ) setHeader();
@@ -18,8 +19,8 @@
 			{name: 'Mitglied', href: `/breeder/profile`},
 		];
 		ctx.crumbs = [
-			{name: 'Start', href: '/'},
-			{name: `Züchter ${shortName(ctx.breeder)}` },
+			//{name: 'Start', href: '/'},
+			{name: `Züchter` },
 		];
 		// ctx.header = {
 		// 	title: `Züchter ${fullName(ctx.breeder)}`,
@@ -39,5 +40,5 @@
 </script>
 
 {#if ctx.breeder}
-	Hier gehts zu deine Stämme oder deine Kontaktdaten
+	<Breeder breeder={ctx.breeder} district={ctx.district} />
 {/if}

@@ -12,18 +12,18 @@
 	let authorized = $state( ctx.user !== null );//&& ( ctx.user.id === +page.params.breeder || ctx.user.admin ) );
 
 	$effect( async () => {
-		if ( dirty.breeder || page.url ) {
-//			await loadBreeder( +page.params.breeder);
-			await loadBreeder( ctx.user.id );
-			loadDistrict( ctx.breeder.districtId );
-		}
+		await loadBreeder( ctx.user.id );
+	});
+
+	$effect( async () => {
+		ctx.district = ctx.breeder ? ctx.federation.districts[ ctx.breeder.districtId ] : null;
 	});
 
 	async function loadBreeder( id ) {
 		console.log( 'Load Breeder', authorized )
 		if( authorized ) {
-			dirty.breeder = false;
-			ctx.breeder = null;
+			//dirty.breeder = false;
+			//ctx.breeder = null;
 			ctx.breeder = await model.Breeder.load( id );
 		}
 	}
@@ -34,7 +34,7 @@
 </script>
 
 {#if ctx.user }
-	{#if ctx.breeder && authorized }
+	{#if ctx.breeder && ctx.district && authorized }
 		<div in:fade>
 			{@render children()}
 		</div>

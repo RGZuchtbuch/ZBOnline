@@ -10,7 +10,7 @@
 
 	$effect( () => {
 		const districtId = +page.params.district
-		if( dirty.district || page.url ) loadDistrict( districtId );
+		if( dirty.district && page.url ) loadDistrict( districtId );
 	});
 
 	$effect( () => {
@@ -19,7 +19,6 @@
 
 
 	function loadDistrict( id ) {
-		dirty.district = false;
 		ctx.district = ctx.federation.districts[ id ];//store.federation.districts[ +page.params.district ];
 	}
 

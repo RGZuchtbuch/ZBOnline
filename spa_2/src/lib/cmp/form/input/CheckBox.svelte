@@ -14,9 +14,8 @@
 	}
 
 	onMount( () => { // catch input and register validator
-		element.addEventListener( 'input', onInput );
-		if( form && form.validators && validator ) form.validators.push( validate ); // add this.validate with it's context
-		//console.log( 'Form', form );
+		element.addEventListener('input', onInput);
+		if (form && form.validators && validator) form.validators.push(validate); // add this.validate with it's context
 	});
 	onDestroy( () => { // remove validator
 		if( form && form.validators ) {
@@ -33,7 +32,7 @@
 	{/if}
 	<input type='checkbox'
 	       class='input w-4 h-4 mt-2' class:valid
-	       bind:this={element} bind:checked={value}
+	       bind:this='{element}' bind:checked={value}
 		   {disabled} {name} {placeholder} {title}
 		   {onchange}
 	/>

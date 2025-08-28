@@ -7,7 +7,7 @@ use Slim\Factory\AppFactory;
 use App\router;
 
 // allow cross-origin from all, could use Slim for this ?
-header('Access-Control-Allow-Origin: *' );
+header('Access-Control-Allow-Origin: *' ); // TODO open for all ?
 header('Access-Control-Allow-Methods:  GET, POST, PUT, DELETE, PATCH, OPTIONS' );
 header('Access-Control-Allow-Headers:  Accept, Authorization, Content-Type, Origin, X-Requested-With' );
 header('Access-Control-Allow-Credentials: true' );
