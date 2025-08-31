@@ -1,6 +1,8 @@
 <script>
+	import {onMount} from 'svelte';
 	import { page } from '$app/state';
-	import { ctx } from '$lib/js/store.svelte.js';
+	import { fade } from 'svelte/transition';
+	import { cfg, ctx } from '$lib/js/store.svelte.js';
 	import model from '$lib/js/model.js';
 
 	import Message from '$lib/cmp/message/Message.svelte';
@@ -12,10 +14,14 @@
 
 	let district = districtId ? ctx.federation.districts[ districtId ] : null;
 
-	console.log( 'ID', to )
+	let mounted = $state( false );
 
 	$effect( () => {
+		if( district ) setHeader();
 
+	});
+
+	function setHeader() {
 		ctx.menustate[ '/tools' ] = page.url.href;
 
 		ctx.title = `Nachricht am Obmann vom ${district.name}`;
@@ -26,13 +32,16 @@
 			//{name: 'Verbände', href: '/federation'},
 			{name: 'Nachricht' },
 		];
-	});
+	}
 
+	onMount( () => mounted = true );
 
 </script>
 
-{#if to }
-	<Message {to} />
+{#if to && mounted}
+	<main in:fade={{duration:cfg.fadeIn}}>
+		<Message {to} />
+	</main>
 {/if}
 
 

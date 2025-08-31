@@ -19,11 +19,12 @@ class Context {
     report     = $state(null);
     result     = $state(null);
     results    = $state(null);
-    resultsEdit    = $state(null);
-    section   = $state(null);
+    resultsEdit= $state(null);
+    section    = $state(null);
     sections   = $state(null);
     standard   = $state(null); // whole standard with sections, breeds and colors
     user       = $state(null);
+    year       = $state(null);
 
     // for managing page title and menu with crumbs
     title = $state(null);
@@ -63,7 +64,8 @@ class Config {
         { name:'grün', color:'#0F0' },
         { name:'grau', color:'#444' },
         { name:'weiß', color:'#FFF' },
-    ]
+    ];
+    fadeIn = 1500; // for fade in duration
     // rootSections defined in js/model/standard.js
 }
 

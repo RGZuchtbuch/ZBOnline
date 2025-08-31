@@ -3,11 +3,9 @@
 	import {goto, invalidate} from '$app/navigation';
 	import { page } from '$app/state';
 	import { cfg, ctx } from '$lib/js/store.svelte.js';
-	import { dec, txt } from '$lib/js/tools.js';
+
 	import { Select } from '$lib/cmp/form/Form.svelte';
-	import AOC from './input/AOC.svelte';
 	import Breed from './input/Breed.svelte';
-	import {onDestroy} from 'svelte';
 
 	let { args, results=$bindable() } = $props();
 	// ex. args => { district:7, group:'I', section:12, year:2025 }
@@ -16,7 +14,7 @@
 
 	let authorized = $derived( ctx.user && ( ctx.user.id === ctx.district.moderator.id || ctx.user.admin ) ); // can edit
 
-	let years = []; // for select
+	let years = []; // create years array for select
 	for( let year=+( new Date().getFullYear() )+1; year>=1980; year-- ) years.push( year ); // Todo, move to tools as function ?
 
 	function onYearChange( event ) {
@@ -40,19 +38,15 @@
 		//const href = `/moderator/${data.district.id}/result/${data.year}/edit/section/${data.section.id}/group/${group}`;
 		let url = new URL( page.url );
 		url.searchParams.set( 'group', group );
-		goto( url.href );
+		//goto( url.href );
 	}
-
-	onDestroy( async () => {
-		await invalidate( 'results' ); // make results page reload data
-	})
 
 </script>
 
 {#if ctx.district && args }
 	<div class='flex flex-row border border-gray-400 bg-gray-50 p-2 gap-x-4 justify-center' in:fade>
 		<span class='py-3 font-bold'>Leistungen eingeben für </span>
-		<Select class='' label='Jahr' value={args.year} onchange={onYearChange}>
+		<Select class='' label='Jahr' value={ctx.year} onchange={onYearChange}>
 			{#each years as year}
 				<option value={year}>{year}</option>
 			{/each}

@@ -12,7 +12,7 @@
 </script>
 
 <section>
-	<div class='flex flex-col items-center break-after-page' in:slide>
+	<div class='flex flex-col items-center break-after-page' >
 		<BDRGMap width={384}/>
 	</div>
 	<hr class='my-2'>

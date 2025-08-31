@@ -1,6 +1,0 @@
-import model from '$lib/js/model.js';
-
-export async function load( { params, parent } ) {
-	console.log( 'Generic breeder stuff, does not require login' );
-	return {};
-}

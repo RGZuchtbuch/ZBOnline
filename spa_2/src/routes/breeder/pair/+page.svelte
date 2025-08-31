@@ -1,9 +1,13 @@
 <script>
 	import { page } from '$app/state';
-	import { ctx, dirty } from '$lib/js/store.svelte.js';
+	import { fade } from 'svelte/transition';
+	import {cfg, ctx, dirty} from '$lib/js/store.svelte.js';
 	import { fullName, shortName} from '$lib/js/tools.js';
 	import Pairs from '$lib/cmp/breeder/Pairs.svelte';
 	import model from '$lib/js/model.js';
+	import {onMount} from 'svelte';
+
+	let mounted = $state( false );
 
 	$effect( async () => {
 //		if( dirty.pairs || page.url ) await loadPairs( +page.params.breeder );
@@ -39,28 +43,18 @@
 			{name: `Züchter`, href: `/breeder` },
 			{name: 'Stämme'},
 		];
-// 		ctx.header = {
-// 			title: `Züchter ${fullName(ctx.breeder)}`,
-// 			menu: {
-// 				trail: [
-// 					{name: 'Start', href: '/'},
-// //					{name: `Züchter ${shortName(ctx.breeder)}`, href: `/breeder/${ctx.breeder.id}` },
-// 					{name: `Züchter ${shortName(ctx.breeder)}`, href: `/breeder` },
-// 					{name: 'Stämme'},
-// 				],
-// 				options: [
-// //					{name: 'Mitglied', href: `/breeder/${ctx.breeder.id}/profile`},
-// 					{name: 'Mitglied', href: `/breeder/profile`},
-// 				]
-// 			}
-// 		};
 	}
+	onMount( () => mounted = true );
 
 </script>
-{#if ctx.breeder && ctx.pairs}
-	<div class='text-xs text-center italic'>
-		Stämme für {ctx.breeder.firstname}
-	</div>
 
-	<Pairs breeder={ctx.breeder} pairs={ctx.pairs}  />
+
+{#if ctx.breeder && ctx.pairs && mounted}
+	<main in:fade={{duration:cfg.fadeIn}}>
+		<div class='text-xs text-center italic'>
+			Stämme für {ctx.breeder.firstname}
+		</div>
+
+		<Pairs breeder={ctx.breeder} pairs={ctx.pairs}  />
+	</main>
 {/if}

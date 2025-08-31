@@ -1,13 +1,12 @@
 <script>
 
 	import { page } from '$app/state';
-	import { goto } from '$app/navigation';
-	import { ctx, dirty } from '$lib/js/store.svelte.js';
+	import { fade } from 'svelte/transition';
+	import {cfg, ctx, dirty} from '$lib/js/store.svelte.js';
 	import { addCrumb, fullName, shortName, txt} from '$lib/js/tools.js';
-	import model from '$lib/js/model.js';
-	import Pairs from '$lib/cmp/breeder/Pairs.svelte';
+	import {onMount} from 'svelte';
 
-	// breeder loaded in layout
+	let mounted = $state( false );
 
 	$effect(async () => {
 		if( ctx.district !== null && ctx.breeder !== null ) setHeader();
@@ -25,17 +24,32 @@
 			{name: 'Obmann', href: '/moderator'},
 			{name: ctx.district.short, href: `/moderator/${ctx.district.id}`},
 			{name: 'Züchter', href: `/moderator/${ctx.district.id}/breeder`},
-			{name: ctx.breeder.id === 0 ? 'Neu' : `${shortName(ctx.breeder)}`},
+			{name: ctx.breeder.id === 0 ? 'Neu' : `${fullName(ctx.breeder)}`},
 		];
 	}
 
+	onMount( () => mounted = true );
 
 </script>
 
-Breeder
-{#if ctx.breeder}
-	Breeder info here
-	<!--Pairs breeder={data.breeder} district={data.district} pairs={data.pairs} year={data.year} /-->
+{#if ctx.breeder && mounted}
+	<main class='flex flex-col mt-32 items-center' in:fade={{duration:cfg.fadeIn}}>
+		<h2>Züchter verwaltung von {`${ fullName( ctx.breeder )}`}</h2>
+		<p>Hier kannst du die
+			<a href={`/moderator/${ctx.breeder.districtId}/breeder/${ctx.breeder.id}/pair`}>
+				Stämme/Paare
+			</a>
+			und
+			<a href={`/moderator/${ctx.breeder.districtId}/breeder/${ctx.breeder.id}/profile`}>
+				Mitgliedsdaten
+			</a>
+			des Züchters verwalten
+		</p>
+		<ul>
+			<li><a href={`/moderator/${ctx.breeder.districtId}/breeder/${ctx.breeder.id}/pair`}>Stämme</a>
+			<li><a href={`/moderator/${ctx.breeder.districtId}/breeder/${ctx.breeder.id}/profile`}>Mitgliedsdaten</a>
+		</ul>
+	</main>
 {/if}
 
 

@@ -1,7 +1,9 @@
 <script>
 	import {onMount} from 'svelte';
 	import { page } from '$app/state';
-	import { ctx, dirty } from '$lib/js/store.svelte.js';
+	import { fade } from 'svelte/transition';
+
+	import { cfg, ctx, dirty } from '$lib/js/store.svelte.js';
 	import model from '$lib/js/model.js';
 	import Article from '$lib/cmp/article/Article.svelte';
 	import {addCrumb} from '$lib/js/tools.js';
@@ -36,5 +38,10 @@
 
 </script>
 
+<main in:fade={{duration:cfg.fadeIn}}>
+	<Article article={ctx.article} />
+</main>
 
-<Article article={ctx.article} />
+<style>
+
+</style>

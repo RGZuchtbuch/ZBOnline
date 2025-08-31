@@ -1,7 +1,8 @@
 <script>
 
 	import {page} from '$app/state';
-	import { ctx, dirty } from '$lib/js/store.svelte.js';
+	import { fade } from 'svelte/transition';
+	import {cfg, ctx, dirty} from '$lib/js/store.svelte.js';
 	import { addCrumb } from '$lib/js/tools.js';
 
 
@@ -35,27 +36,15 @@
 			{name: ctx.district.short, href: `/moderator/${ctx.district.id}`},
 			{name: 'Züchter'},
 		];
-		// ctx.header = {
-		// 	title : `Züchter im ${ctx.district.name}`,
-		// 	menu  : {
-		// 		trail: [
-		// 			{name: 'Home', href: '/'},
-		// 			{name: 'Obmann', href: '/moderator'},
-		// 			{name: ctx.district.short, href: `/moderator/${ctx.district.id}`},
-		// 			{name: 'Züchter'},
-		// 		],
-		// 		options: [
-		// 			//{name: 'Eingaben', href: `/moderator/${ctx.district.id}/result`},
-		// 		],
-		// 	}
-		// }
 	}
 
 </script>
 
 
-{#if ctx.breeders != null}
-	<Breeders breeders={ctx.breeders} district={ctx.district} />
+{#if ctx.breeders && ctx.district}
+	<main in:fade={{duration:cfg.fadeIn}}>
+		<Breeders breeders={ctx.breeders} district={ctx.district} />
+	</main>
 {/if}
 
 

@@ -35,12 +35,10 @@
 
 {#if ctx.user }
 	{#if ctx.breeder && ctx.district && authorized }
-		<div in:fade>
-			{@render children()}
-		</div>
+		{@render children()}
 	{/if}
 {:else}
-	<User />
+	<User /> <!-- login -->
 {/if}
 
 

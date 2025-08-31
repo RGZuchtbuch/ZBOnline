@@ -42,7 +42,7 @@
 					{#each ctx.menu.roles as role, i}
 						{#if i>0} • {/if}
 						{#if page.url.pathname.startsWith( role.href ) }
-							<a class='underline' href={ctx.menustate[ role.href ]} title={'Zum '+role.name}>{role.name}</a>
+							<a class='underline font-bold' href={ctx.menustate[ role.href ]} title={'Zum '+role.name}>{role.name}</a>
 						{:else}
 							<a href={ctx.menustate[ role.href ]} title={'Zum '+role.name}>{role.name}</a>
 						{/if}
@@ -54,11 +54,11 @@
 			<nav class='grow flex flex-row justify-end gap-x-1 italic'>
 				{#each ctx.crumbs as crumb, i}
 					{#key crumb.name}
-						{#if i>0} ➜ {/if}
+						{#if i>0} / {/if}
 						{#if i < ctx.crumbs.length-1}
 							<a href={crumb.href} class='pr-1' title='Zurück'> {crumb.name}</a>
 						{:else}
-							<span class='pr-1 font-bold cursor-default' title='Hier bist du' in:fade={{axis:'x', duration:500}}> {crumb.name}</span>
+							<span class='pr-1 underline font-bold cursor-default' title='Hier bist du' in:fade={{axis:'x', duration:500}}> {crumb.name}</span>
 						{/if}
 					{/key}
 				{/each}

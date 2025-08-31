@@ -1,8 +1,7 @@
 <script>
-	import { getContext } from 'svelte';
 	import { page } from '$app/state';
-	import {jwtDecode} from 'jwt-decode';
-    import { ctx } from '$lib/js/store.svelte.js';
+	import { fade } from 'svelte/transition';
+	import { cfg, ctx } from '$lib/js/store.svelte.js';
     import Reset from '$lib/cmp/user/Reset.svelte';
 
 	//let { data } = $props();
@@ -28,7 +27,9 @@
 </script>
 
 {#if token}
-	<Reset {token}/>
+	<main class='' in:fade={{duration:cfg.fadeIn}}>
+		<Reset {token}/>
+	</main>
 {/if}
 
 

@@ -2,7 +2,7 @@
 
 </script>
 
-<section class='mx-auto mt-16'>
+<section class='flex flex-row justify-center mt-16'>
 
 	<ul class=''>
 		Hier gibt es einige Hilfsmittel für den Züchter und Obmann

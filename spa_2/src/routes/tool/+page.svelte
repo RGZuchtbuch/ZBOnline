@@ -1,7 +1,9 @@
 <script>
 	import { page } from '$app/state';
-	import { ctx, dirty } from '$lib/js/store.svelte.js';
-	import Tools from '$lib/cmp/tools/Tools.svelte';
+	import { fade } from 'svelte/transition';
+	import { cfg, ctx } from '$lib/js/store.svelte.js';
+
+	import Tools from '$lib/cmp/toolbox/Tools.svelte';
 
 
  	$effect( async () => {
@@ -25,7 +27,9 @@
 
 </script>
 
-<Tools/>
+<main class='' in:fade={{duration:cfg.fadeIn}}>
+	<Tools/>
+</main>
 
 
 

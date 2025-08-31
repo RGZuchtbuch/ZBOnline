@@ -60,45 +60,46 @@
 			}
 		}
 		pair.parents = parents;
+		pair.grade = '?';
 		//console.log( 'Pair', pair );
 	}
 
-	function updateBreeds( event ) { // should do with rootSection.breeds
-		console.log( 'UpdateBreeds' );
-		// const section = pair.section;
-		// if( section && section.id > 0 ) {
-		// 	breeds = [];
-		// 	const foundSection = findSection( section.id, ctx.standard );
-		// 	if( foundSection ) {
-		// 		collectBreeds(foundSection, breeds);
-		// 		breeds.sort( (a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0 );
-		// 	}
-		// 	pair.breed = null;
+	// function updateBreeds( event ) { // should do with rootSection.breeds
+	// 	console.log( 'UpdateBreeds' );
+	// 	// const section = pair.section;
+	// 	// if( section && section.id > 0 ) {
+	// 	// 	breeds = [];
+	// 	// 	const foundSection = findSection( section.id, ctx.standard );
+	// 	// 	if( foundSection ) {
+	// 	// 		collectBreeds(foundSection, breeds);
+	// 	// 		breeds.sort( (a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0 );
+	// 	// 	}
+	// 	// 	pair.breed = null;
+	//
+	// 	 	clearResults();
+	// 	// }
+	//
+	// }
 
-		 	clearResults();
-		// }
+	// function onBreedChange( event ) {
+	// 	clearResults();
+	// }
 
-	}
+	// function findSection( id, section ) { // find section to id
+	// 	if( section.id === id ) return section;
+	// 	for( let child of section.children ) {
+	// 		const foundSection = findSection( id, child );
+	// 		if( foundSection ) return foundSection;
+	// 	}
+	// 	return null;
+	// }
 
-	function onBreedChange( event ) {
-		clearResults();
-	}
-
-	function findSection( id, section ) { // find section to id
-		if( section.id === id ) return section;
-		for( let child of section.children ) {
-			const foundSection = findSection( id, child );
-			if( foundSection ) return foundSection;
-		}
-		return null;
-	}
-
-	function collectBreeds( section, breeds ) { // collect breeds for sections and it's subsections
-		breeds.push( ...section.breeds );
-		for( let childSection of section.children ) {
-			collectBreeds( childSection, breeds );
-		}
-	}
+	// function collectBreeds( section, breeds ) { // collect breeds for sections and it's subsections
+	// 	breeds.push( ...section.breeds );
+	// 	for( let childSection of section.children ) {
+	// 		collectBreeds( childSection, breeds );
+	// 	}
+	// }
 
 	function gradeLay( lay ) {
 		if( pair.breed && pair.breed.layEggs > 0 && lay && lay.eggs > 0 ) {
@@ -179,11 +180,11 @@
 
 	createData();
 
-	$inspect( 'Pair', pair );
+	//$inspect( 'Pair', pair );
 
 </script>
 
-<main class='w-full p-4 bg-gray-100 text-xl transition:slide'>
+<main class='text-xl transition:slide'>
 	<Form autoSave={false}>
 		<fieldset>
 			<h1 class='flex flex-row gap-x-4 justify-center text-2xl'>
@@ -191,7 +192,7 @@
 			</h1>
 
 			<fieldset class='border-0 flex flex-row px-2 gap-x-2'>
-				<span class='w-40 mt-6'> Ausstellung am </span>
+				<span class='w-28 mt-6'> Ausstellung</span>
 				<DateInput class='w-32' label='Datum'/>
 				<span class='w-8 mt-6 text-center'> in </span>
 				<TextInput class='grow' label='Schau'/>
@@ -199,22 +200,22 @@
 			</fieldset>
 
 			<fieldset class='border-0 flex flex-row px-2 gap-x-2'>
-				<span class='w-40 mt-6'> Züchter </span>
+				<span class='w-28 mt-6'> Züchter </span>
 				<TextInput class='grow' label='Züchter'/><TextInput class='w-32' label='Zuchtbuch-Nr' />
 			</fieldset>
-			<fieldset class='border-0 flex flex-col'>
-				<div class='flex flex-row gap-x-2 px-2 print:hidden'>
-					<span class='w-40 mt-6'> Sparte </span>
-					<Select class='w-96' label='Sparte *' bind:value={pair.section} error='Pflichtfeld' onchange={clearResults}>
+			<fieldset class='border-0 flex flex-col px-2'>
+				<div class='flex flex-row gap-x-2 print:hidden'>
+					<span class='w-28 mt-6'> Sparte </span>
+					<Select class='80' label='Sparte *' bind:value={pair.section} error='Pflichtfeld' onchange={clearResults}>
 						<option value={null}>?</option>
 						{#each ctx.standard.rootSections as section }
 							<option value={section}>{section.name}</option>
 						{/each}
 					</Select>
 				</div>
-				<div class='flex flex-row px-2 gap-x-2'>
-					<span class='w-40 mt-6'> Rasse </span>
-					<Select class='w-96' label={'Rasse *'} bind:value={pair.breed} error='Pflichtfeld' onchange={clearResults}>
+				<div class='flex flex-row gap-x-2'>
+					<span class='w-28 mt-6'> Rasse </span>
+					<Select class='w-80' label={'Rasse *'} bind:value={pair.breed} error='Pflichtfeld' onchange={clearResults}>
 						<option value={null}>?</option>
 						{#if pair.section}
 							{#each pair.section.breeds as breed }
@@ -236,7 +237,7 @@
 		</fieldset>
 
 		{#if pair.breed}
-			<div class='flex flex-col gap-y-2 mt-4' transition:slide>
+			<div class='flex flex-col mt-4 gap-y-2' transition:slide>
 				<div class='flex flex-row'>
 					<div class='w-64 mx-4'>
 						Stamm
@@ -251,53 +252,51 @@
 				</div>
 
 				{#each pair.parents as parent }
-					<fieldset class='flex flex-col gap-y-2 border border-gray-400 rounded p-1'>
+					<fieldset class='flex flex-col gap-y-0 border border-gray-400 rounded p-0'>
 						<div class='flex flex-row'>
 							<div class='flex flex-col'>
-								<div class='flex flex-row p-4'>
+								<div class='flex flex-row p-2'>
 									<span class='w-8 mt-6 mx-2'>{parent.sex}</span>
 									<RingInput class='w-36' label='Bundesring {parent.sex}'/>
 								</div>
-								<output class='text-2xl text-center font-bold'>{ grade( parent.grade ) }</output>
+								<div class='text-center text-xs'>Abstammungsnote</div>
+								<output class='text-2xl text-center font-bold'>{ grade( parent.grade, 1 ) }</output>
 							</div>
 
-							<div class='grow lex flex-col gap-y-1'>
+							<div class='grow lex flex-col gap-y-0'>
 								{#each parent.parents as grandParent}
 									{#if pair.section.id === cfg.pigeons} <!-- Pigeons -->
-										<div class='flex flex-row border border-gray-400 rounded p-2 justify-evenly'>
+										<div class='flex flex-row border border-gray-400 rounded pt-2 px-2 justify-evenly'>
 											<span class='w-8 my-6 mx-1'>{grandParent.sex}</span>
 											<RingInput class='w-36' label='Bundesring {grandParent.sex}'/>
-											<fieldset class='grow border-0 flex flex-row gap-x-2 justify-evenly' on:input={ () => gradeBrood( grandParent.brood ) }>
+											<div class='grow border-0 flex flex-row gap-x-2 justify-evenly' on:input={ () => gradeBrood( grandParent.brood ) }>
 												<span class='w-36 mt-6 text-left'>→ Bruten</span>
 												<NumberInput class='w-24' label='Bruten' bind:value={grandParent.brood.count} validator={validate.pigeon.brood.count} />
 												<span class='w-8 mt-6'>mit</span>
 												<NumberInput class='w-32' label='Beringte Jungtauben' bind:value={grandParent.brood.hatched} validator={validate.pigeon.brood.hatched( grandParent.brood )}  />
 												<span class='w-4 mt-6'>→</span>
-												<output class='w-8 mt-6 mx-1 text-xl font-bold text-center'>{ grade( grandParent.brood.grade )}</output>
-											</fieldset>
+												<output class='w-8 mt-6 mx-1 text-xl font-bold text-center'>{ grade( grandParent.brood.grade, 0 )}</output>
+											</div>
 										</div>
 									{:else} <!-- Layers -->
-										<div class='flex flex-row border border-gray-400 rounded p-2 justify-evenly'> <!-- parent -->
+										<div class='flex flex-row border border-gray-400 rounded -mb-2 p-1 px-2 justify-evenly'> <!-- parent -->
 											<div class='flex flex-col'>
-												<div class='flex flex-row'>
+												<div class='flex flex-row pt-2'>
 													<span class='w-8 my-6 mx-1'>{grandParent.sex}</span>
 													<RingInput class='w-36' label='Bundesring {grandParent.sex}'/>
 												</div>
-												{#if false && grandParent.sex === '0.1'}
-													<div class='text-center font-bold'>{ grade( grandParent.grade )}</div>
-												{/if}
 											</div>
 
 											<div class='grow flex flex-col'>
 												{#if grandParent.sex === '0.1'}
-													<fieldset class='grow border-0 flex flex-row justify-evenly' on:input={ () => gradeLay( grandParent.lay ) }>
+													<div class='grow border-0 flex flex-row justify-evenly' on:input={ () => gradeLay( grandParent.lay ) }>
 														<div class='w-32 mt-6 mx-1 text-left'>→ Legen</div>
 														<NumberInput class='w-32' label='Legen e/j' bind:value={ grandParent.lay.eggs } validator={validate.layer.lay.eggs}/>
 														<div class='w-8 mt-6 mx-1 text-center'>von</div>
 														<NumberInput class='w-32' label='SOLL Legen' value={pair.breed ? pair.breed.layEggs : '?'} disabled />
 														<div class='w-4 mt-6 mx-1 text-center'>→</div>
-														<output class='w-8 mt-6 mx-1 text-xl font-bold text-center'>{ grade( grandParent.lay.grade) }</output>
-													</fieldset>
+														<output class='w-8 mt-6 mx-1 text-xl font-bold text-center'>{ grade( grandParent.lay.grade, 0) }</output>
+													</div>
 												{/if}
 
 												<fieldset class='grow border-0 flex flex-row justify-evenly' on:input={ () => gradeBrood( grandParent.brood ) }>
@@ -306,7 +305,7 @@
 													<span class='w-8 mt-6 mx-1 text-center'>mit</span>
 													<NumberInput class='w-32' label='Geschlüpft' bind:value={grandParent.brood.hatched} validator={ validate.layer.brood.hatched(grandParent.brood) } />
 													<span class='w-4 mt-6 mx-1 text-center'>→</span>
-													<output class='w-8 mt-6 mx-1 text-xl font-bold text-center'>{ grade( grandParent.brood.grade )}</output>
+													<output class='w-8 mt-6 mx-1 text-xl font-bold text-center'>{ grade( grandParent.brood.grade, 0 )}</output>
 												</fieldset>
 
 												{#if false && grandParent.sex === '0.1'}

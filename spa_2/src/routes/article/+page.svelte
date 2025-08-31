@@ -1,10 +1,13 @@
 <script>
 	import {onMount} from 'svelte';
 	import { page } from '$app/state';
-	import { ctx, dirty } from '$lib/js/store.svelte.js';
+	import { fade, fly, slide } from 'svelte/transition';
+
+	import {cfg, ctx, dirty} from '$lib/js/store.svelte.js';
 	import model from '$lib/js/model.js';
 
 	import Articles from '$lib/cmp/article/Articles.svelte';
+	import Article from '$lib/cmp/article/Article.svelte';
 
 
 	$effect( async () => {
@@ -35,4 +38,7 @@
 
 </script>
 
-<Articles articles={ctx.articles} />
+<main in:fade={{duration:cfg.fadeIn}}>
+	<Articles articles={ctx.articles} />
+</main>
+

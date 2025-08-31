@@ -1,6 +1,7 @@
 <script>
-	import { getContext } from 'svelte';
-    import { ctx } from '$lib/js/store.svelte.js';
+	import { fade } from 'svelte/transition';
+    import { cfg, ctx } from '$lib/js/store.svelte.js';
+
     import User from '$lib/cmp/user/User.svelte';
 
 	let { data } = $props();
@@ -23,6 +24,7 @@
 	}
 </script>
 
-<User />
-
+<main class='' in:fade={{duration:cfg.fadeIn}}>
+	<User />
+</main>
 

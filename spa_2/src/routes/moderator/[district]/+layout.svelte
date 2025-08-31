@@ -1,28 +1,31 @@
 <script>
-	import {page} from '$app/state';
-	import { goto } from '$app/navigation';
-	import { ctx, dirty } from '$lib/js/store.svelte.js';
-	import { addCrumb } from '$lib/js/tools.js';
 
-	import District from '$lib/cmp/moderator/District.svelte';
+	import { ctx, dirty } from '$lib/js/store.svelte.js';
+	import {activeYear} from '$lib/js/tools.js';
+	import {page} from '$app/state';
 
 	let { children } = $props();
 
 	$effect( () => {
-		const districtId = +page.params.district
-		if( dirty.district && page.url ) loadDistrict( districtId );
+
+		//ctx.year = +( page.url.searchParams.get( 'year') ?? activeYear() ); // error
+		///ctx.year = ctx.year ?? activeYear();
+
+		const query = page.url.searchParams;
+		ctx.year = query.has( 'year') ? +query.get( 'year' ) : activeYear();
+		ctx.district = ctx.federation.districts[ page.params.district ];
+		//console.log( 'effect', ctx.year ); // cyclic
+		//loadDistrict(6);
 	});
 
-	$effect( () => {
-		//if( ctx.district ) addCrumb( { name:ctx.district.short, href:page.url.href } );
-	})
-
-
-	function loadDistrict( id ) {
-		ctx.district = ctx.federation.districts[ id ];//store.federation.districts[ +page.params.district ];
-	}
+	// function loadDistrict( id ) {
+	// 	console.log( 'Layout loads district' );
+	// 	ctx.district = ctx.federation.districts[ id ];//store.federation.districts[ +page.params.district ];
+	// }
 
 </script>
 
-{@render children()}
+{#if ctx.district}
+	{@render children()}
+{/if}
 

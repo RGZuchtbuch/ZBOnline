@@ -1,15 +1,9 @@
 <script>
-	import { ctx } from '$lib/js/store.svelte.js';
 	import {page} from '$app/state';
-	import Grader from '$lib/cmp/tools/Grader.svelte';
+	import { fade } from 'svelte/transition';
+	import { cfg, ctx } from '$lib/js/store.svelte.js';
 
-	//let { data } = $props();
-
-	console.log( 'page grader' );
-
-	// $effect( () => {
-	// 	ctx.breeder = data.breeder;
-	// });
+	import Grader from '$lib/cmp/toolbox/Grader.svelte';
 
 	$effect( () => {
 		if( true ) {
@@ -32,4 +26,6 @@
 
 </script>
 
-<Grader />
+<main class='' in:fade={{duration:cfg.fadeIn}}>
+	<Grader />
+</main>

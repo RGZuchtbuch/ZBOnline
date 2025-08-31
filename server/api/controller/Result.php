@@ -299,8 +299,8 @@ class Result
 				$section = [ 'id'=>$raw['rootsectionId'], 'name'=>$raw['rootsectionname'], 'breeds'=>[] ];
 				$tree['sections'][] = & $section;
 			}
-//			if( $raw['breedId'] !== $breed['id'] ) {
-			if( true ) {
+			if( $raw['breedId'] !== $breed['id'] || ( $raw['colorId'] === NULL && $raw['aocColor'] === NULL ) ) {
+//			if( true ) { // causes double breed entry
 				unset( $breed ); // unbind from tree
 				$breed = [ 'id'=>$raw['breedId'], 'name'=>$raw['breedname'], 'colors'=>[] ];
 				if( $raw['colorId'] === NULL && $raw['aocColor'] === NULL ) $breed['result'] = $result; // if no color, like pigeons

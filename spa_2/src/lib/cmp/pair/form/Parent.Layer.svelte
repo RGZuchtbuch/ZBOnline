@@ -29,6 +29,7 @@
 
 	// should the pair hold the parentspair object
 	async function onRingInput() {
+		console.log( 'pi', parent.id);
 		let newRing = toRing( parent.ring ); // decode input
 		if( newRing ) {
 			if( newRing.year !== ringYear ) {
@@ -56,12 +57,12 @@
 	});
 
 	onMount( () => {
-		onRingInput();
+		onRingInput(); // to get parentspairs for select ?
 	})
 
 </script>
 
-<div class='w-full flex flex-row gap-x-2 items-center'>
+<section class='w-full flex flex-row gap-x-2 items-center'>
 	<TextInput class='w-8 px-0 border-0' label={i===0?' #':null} value={i+1} disabled />
 	<TextInput class='w-12' label={i===0?'♂.♀':null} value={parent.sex} disabled />
 	<RingInput label={i===0?'Ring':null} bind:value={parent.ring} oninput={onRingInput} validator={validate.ring}/>
@@ -87,4 +88,4 @@
 		</div>
 	{/if}
 
-</div>
+</section>

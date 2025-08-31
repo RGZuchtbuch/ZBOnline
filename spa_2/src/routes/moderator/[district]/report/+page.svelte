@@ -1,10 +1,9 @@
 <script>
 	import { page } from '$app/state';
-	import { ctx, dirty } from '$lib/js/store.svelte.js';
-    import Report from '$lib/cmp/report/Report.svelte';
-	import {addCrumb, ArgsBuilder, completedYear} from '$lib/js/tools.js';
+	import { fade } from 'svelte/transition';
+	import {cfg, ctx, dirty} from '$lib/js/store.svelte.js';
+	import { ArgsBuilder, completedYear} from '$lib/js/tools.js';
 	import model from '$lib/js/model.js';
-	import {onMount} from 'svelte';
 	import Table from '$lib/cmp/report/view/Table.svelte';
 
 	ctx.report = null;
@@ -58,13 +57,13 @@
 </script>
 
 {#if ctx.report !== null }
-	<div class='flex flex-col break-after-page' open>
+	<main class='flex flex-col break-after-page' in:fade={{duration:cfg.fadeIn}}>
 		<h2 class='text-center'>Leistungsdaten im {ctx.district.name} für {ctx.report.args.year}</h2>
 		<p>Das Jahr past sich das Jahr der Eingaben an !</p>
 		<div class='flex flex-col py-4'>
 			<Table table={ctx.report} district={ctx.district} year={ctx.report.args.year} />
 		</div>
-	</div>
+	</main>
 {/if}
 
 

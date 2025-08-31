@@ -1,10 +1,12 @@
 <script>
 	import { page } from '$app/state';
-	import { ctx } from '$lib/js/store.svelte.js';
-	import { addCrumb } from '$lib/js/tools.js';
+	import { fade } from 'svelte/transition';
+	import { cfg, ctx } from '$lib/js/store.svelte.js';
 
 	import Standard from '$lib/cmp/standard/Standard.svelte';
+	import {onMount} from 'svelte';
 
+	let mounted = $state( false ); // to force transition
 
 	$effect( () => {
 		if( page.url ) setHeader();
@@ -18,24 +20,14 @@
 			//{name: 'Start', href: '/'},
 			{name: 'Standard', href: '/standard'},
 		];
-		// ctx.header = {
-		// 	title: 'BDRG Rassegeflügel Standard',
-		// 	menu: {
-		// 		trail: [
-		// 			{name: 'Start', href: '/'},
-		// 			{name: 'Standard', href: '/standard'},
-		// 		],
-		// 		options: [
-		// 			{name: 'Beiträge', href: '/article'},
-		// 			{name: 'Verbände', href: '/federation'},
-		// 			{name: 'Standard', href: '/standard'},
-		// 			{name: 'Leistungen', href: '/report'},
-		// 		],
-		// 	},
-		// }
 	}
+
+	onMount( () => mounted = true );
+
 </script>
 
-{#if ctx.standard}
-	<Standard standard={ctx.standard}/>
+{#if ctx.standard && mounted}
+	<main class='' in:fade={{duration:cfg.fadeIn}}>
+		<Standard standard={ctx.standard}/>
+	</main>
 {/if}

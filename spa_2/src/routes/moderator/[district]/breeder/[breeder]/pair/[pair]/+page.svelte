@@ -1,11 +1,13 @@
 <script>
+	import { fade } from 'svelte/transition';
 	import { page } from '$app/state';
-	import { ctx, dirty } from '$lib/js/store.svelte.js';
+	import { cfg, ctx, dirty } from '$lib/js/store.svelte.js';
 	import { addCrumb, fullName, shortName } from '$lib/js/tools.js';
 	import Pair from '$lib/cmp/pair/Pair.svelte';
 	import model from '$lib/js/model.js';
+	import {onMount} from 'svelte';
 
-	//ctx.pair = null;
+	let mounted = $state( false );
 
 	$effect( async () => {
 		if( page.url ) await loadPair( +page.params.pair );
@@ -40,11 +42,12 @@
 		];
 
 	}
-
+	onMount( () => mounted = true );
 
 </script>
 
-{#if ctx.federation && ctx.standard && ctx.breeder && ctx.pair }
-	p{ctx.pair.id}p
+{#if ctx.federation && ctx.standard && ctx.breeder && ctx.pair && mounted }
+	<main in:fade={{duration:cfg.fadeIn}}>
 	<Pair pair={ctx.pair} />
+	</main>
 {/if}

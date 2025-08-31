@@ -1,9 +1,13 @@
 <script>
+	import {onMount} from 'svelte';
 	import { page } from '$app/state';
-	import { ctx } from '$lib/js/store.svelte.js';
+	import { fade } from 'svelte/transition';
+	import {cfg, ctx} from '$lib/js/store.svelte.js';
 	import { addCrumb } from '$lib/js/tools.js';
 
 	import Districts from '$lib/cmp/district/Districts.svelte';
+
+	let mounted = $state( false );
 
 	$effect( () => {
 		if( page.url ) setHeader();
@@ -16,26 +20,15 @@
 			//{name: 'Start', href: '/'},
 			{name: 'Verbände'},
 		];
-		// ctx.header = {
-		// 	title : 'Landesverbände im BDRG Zuchtbuch',
-		// 	menu : {
-		// 		trail: [
-		// 			{name: 'Start', href: '/'},
-		// 			{name: 'Verbände'},
-		// 		],
-		// 		options: [
-		// 			{name: 'Beiträge', href: '/article'},
-		// 			{name: 'Verbände', href: '/federation'},
-		// 			{name: 'Standard', href: '/standard'},
-		// 			{name: 'Leistungen', href: '/report'},
-		// 		],
-		// 	},
-		// }
 	}
+
+	onMount( () => mounted = true );
 
 </script>
 
-{#if ctx.federation}
-	<Districts root={ctx.federation}/>
+{#if ctx.federation && mounted}
+	<main in:fade={{duration:cfg.fadeIn}}>
+		<Districts root={ctx.federation}/>
+	</main>
 {/if}
 

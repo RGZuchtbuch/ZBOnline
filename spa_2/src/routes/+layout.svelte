@@ -69,15 +69,13 @@
 </dialog>
 
 {#if ctx.federation !== null && ctx.standard !== null }
-    {#key page.url}
-        <div class='pl-4 pt-4 screen-scroll-y content' in:fade={{duration:500}}>
-           {@render children()}
-        </div>
-    {/key}
+    <div class='screen-scroll-y content' in:fade={{duration:500}}><!-- fade does not work here -->
+       {@render children()}
+    </div>
 {/if}
 
 <style>
     .content {
-        @apply  border border-teal-400 bg-white text-black flex flex-col;
+        @apply bg-white text-black flex flex-col;
     }
 </style>

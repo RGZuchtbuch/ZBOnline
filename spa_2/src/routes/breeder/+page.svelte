@@ -1,11 +1,13 @@
 <script>
-	import { ctx } from '$lib/js/store.svelte.js';
-	import {shortName, fullName, addCrumb} from '$lib/js/tools.js';
-	import {onMount} from 'svelte';
 	import {page} from '$app/state';
-	import {redirect} from '@sveltejs/kit';
-	import {goto} from '$app/navigation';
+	import { fade } from 'svelte/transition';
+	import { cfg, ctx } from '$lib/js/store.svelte.js';
+	import {shortName, fullName, addCrumb} from '$lib/js/tools.js';
+
 	import Breeder from '$lib/cmp/breeder/Breeder.svelte';
+	import {onMount} from 'svelte';
+
+	let mounted = $state( false );
 
 	$effect( () => {
 		if( ctx.breeder ) setHeader();
@@ -22,23 +24,18 @@
 			//{name: 'Start', href: '/'},
 			{name: `Züchter` },
 		];
-		// ctx.header = {
-		// 	title: `Züchter ${fullName(ctx.breeder)}`,
-		// 	menu: {
-		// 		trail: [
-		// 			{name: 'Start', href: '/'},
-		// 			{name: `Züchter ${shortName(ctx.breeder)}` },
-		// 		],
-		// 		options: [
-		// 			{name: 'Stämme', href: `/breeder/pair`},
-		// 			{name: 'Mitglied', href: `/breeder/profile`},
-		// 		],
-		// 	}
-		// }
 	}
+	onMount( () => mounted = true );
 
 </script>
 
-{#if ctx.breeder}
-	<Breeder breeder={ctx.breeder} district={ctx.district} />
+{#if ctx.breeder && mounted}
+	<main in:fade={{duration:cfg.fadeIn}}>
+		<Breeder breeder={ctx.breeder} district={ctx.district} />
+	</main>
 {/if}
+
+
+<style>
+
+</style>

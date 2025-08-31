@@ -14,7 +14,7 @@
 
 
 	function loadDistricts() {
-		dirty.districts = false;
+		//dirty.districts = false;
 		let districts = [];
 		if( ctx.federation && ctx.user ) {
 			ctx.user.moderator.forEach(id => {
@@ -24,6 +24,7 @@
 		ctx.districts = districts;
 	}
 </script>
+
 
 {#if authorized }
 	{@render children()}

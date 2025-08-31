@@ -12,11 +12,14 @@
 
 
 	$effect( async () => {
-		await loadBreeder( +page.params.breeder );
+		const breederId = +page.params.breeder;
+		if( dirty.breeder && page.url ) await loadBreeder( +page.params.breeder );
+		//await loadBreeder( +page.params.breeder );
 	})
 
 
 	async function loadBreeder( id ) {
+		console.log( 'Layout loads breeder');
 //		dirty.breeder = false;
 //		ctx.breeder = null;
 		if( id === 0 ) {

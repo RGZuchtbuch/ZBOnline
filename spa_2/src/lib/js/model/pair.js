@@ -11,7 +11,7 @@ export default class Pair {
 			sectionId: null, breedId: null, colorId: null,
 			paired: null, notes: null,
 			parents: [],
-			lay: { id:0, pairId:0, start:null, end:null, dames:null, eggs:null, weight:null },
+			lay: { id:0, pairId:0, start:null, end:null, dames:null, eggs:null, average: null, weight:null },
 			broods: [],
 			show: { id:0, pairId:0, scores: { 89:null, 90:null, 91:null, 92:null, 93:null, 94:null, 95:null, 96:null, 97:null } },
 			breeder: breeder, // needed ??
@@ -31,8 +31,10 @@ export default class Pair {
 				end: null,
 				dames: null,
 				eggs: null,
+				average: null, // virtual field, is eggs in db.pair.lay with no start
 				weight: null
 			};
+
 			if ( pair.show === null) pair.show = {
 				id: 0,
 				pairId: pair.id,

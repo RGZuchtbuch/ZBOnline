@@ -35,7 +35,7 @@
 
 </script>
 
-{#if report !== null }
+{#key report }
 
 	<Filter {report} />
 	{#if report !== null}
@@ -78,7 +78,7 @@
 			</div>
 		</div>
 	{/if}
-{/if}
+{/key}
 
 <style>
 	header {

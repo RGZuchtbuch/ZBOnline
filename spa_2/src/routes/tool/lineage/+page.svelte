@@ -1,9 +1,10 @@
 <script>
-	import { ctx } from '$lib/js/store.svelte.js';
-	import {page} from '$app/state';
-	import Lineage from '$lib/cmp/tools/Lineage.svelte';
+	import { page } from '$app/state';
+	import { fade } from 'svelte/transition';
+	import { cfg, ctx } from '$lib/js/store.svelte.js';
 
-	console.log( 'Lineage' );
+	import Lineage from '$lib/cmp/toolbox/Lineage.svelte';
+
 
 	$effect( () => {
 		if( true ) {
@@ -14,7 +15,7 @@
 	function setHeader() {
 		ctx.menustate[ '/tool' ] = page.url.href;
 
-		ctx.title = `Abstammungsnachweis`;
+		ctx.title = `BDRG Zuchtbuch, Abstammungsnachweis`;
 		ctx.submenu = [
 		];
 		ctx.crumbs = [
@@ -26,4 +27,6 @@
 
 </script>
 
-<Lineage />
+<main class='' in:fade={{duration:cfg.fadeIn}}>
+	<Lineage />
+</main>

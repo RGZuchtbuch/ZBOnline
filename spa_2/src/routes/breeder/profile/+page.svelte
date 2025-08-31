@@ -1,10 +1,12 @@
 <script>
 	import { page } from '$app/state';
-	import { ctx } from '$lib/js/store.svelte.js';
+	import { fade } from 'svelte/transition';
+	import {cfg, ctx} from '$lib/js/store.svelte.js';
 	import Profile from '$lib/cmp/breeder/profile.svelte';
 	import {addCrumb, fullName, shortName, txt} from '$lib/js/tools.js';
+	import {onMount} from 'svelte';
 
-	console.log( 'Q', ctx.breeder, ctx.district );
+	let mounted = $state( false );
 
 	$effect( async () => {
 		if( ctx.breeder ) setHeader();
@@ -26,10 +28,14 @@
 		];
 	}
 
+	onMount( () => mounted = true );
+
 
 
 </script>
 
-{#if ctx.breeder && ctx.district }
-	<Profile bind:breeder={ctx.breeder} district={ctx.district} readonly/>
+{#if ctx.breeder && ctx.district && mounted }
+	<main in:fade={{duration:cfg.fadeIn}}>
+		<Profile bind:breeder={ctx.breeder} district={ctx.district} readonly/>
+	</main>
 {/if}

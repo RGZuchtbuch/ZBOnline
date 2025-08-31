@@ -1,18 +1,13 @@
 <script>
-	import { onDestroy, onMount} from 'svelte';
 	import { page } from '$app/state';
+	import { fade } from 'svelte/transition';
 	import { cfg, ctx, dirty } from '$lib/js/store.svelte.js';
 	import ResultsEdit from '$lib/cmp/moderator/district/results/ResultsEdit.svelte';
 	import { ArgsBuilder, activeYear } from '$lib/js/tools.js';
 	import model from '$lib/js/model.js';
+	import {onMount} from 'svelte';
 
-	// let { data } = $props();
-	//
-	// ctx.year = data.year;
-	// ctx.group = data.group;
-	// ctx.section = data.section;
-	// ctx.results = data.results;
-//	debugger;
+	let mounted = $state( false );
 
 	let args = $derived( getArgs( page ) )
 
@@ -25,7 +20,7 @@
 	})
 
 	async function loadResultsForEdit( args ) {
-		ctx.year = args.year || activeYear(); //query.has( 'year') ? +query.get( 'year' ) : activeYear();
+		//ctx.year = args.year || activeYear(); //query.has( 'year') ? +query.get( 'year' ) : activeYear();
 		ctx.resultsEdit = await model.Result.query( args );
 	}
 
@@ -49,12 +44,17 @@
 			//{name: 'Start', href: '/'},
 			{name: 'Obmann', href: '/moderator'},
 			{name: ctx.district.short, href:`/moderator/${ctx.district.id}`},
-			{name: 'Eingaben', href: `/moderator/${ctx.district.id}/result?year=${ctx.year}`},
-			{name: 'Eingeben'},
+			{name: 'Leistungen', href: `/moderator/${ctx.district.id}/result?year=${ctx.year}`},
+			{name: 'Verbandsmeldungen eingeben'},
 		];
 	}
+
+	onMount( () => { mounted = true })
+
 </script>
 
-{#if ctx.district && args && ctx.resultsEdit } <!-- needed as ctx might not be updated yet -->
-	<ResultsEdit district={ctx.district} {args} bind:results={ctx.resultsEdit} />
+{#if ctx.district && args && ctx.resultsEdit && mounted } <!-- needed as ctx might not be updated yet -->
+	<main class='' in:fade={{duration:cfg.fadeIn}}>
+		<ResultsEdit district={ctx.district} {args} bind:results={ctx.resultsEdit} />
+	</main>
 {/if}

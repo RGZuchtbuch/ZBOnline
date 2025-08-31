@@ -7,6 +7,7 @@
 
 	import { Select } from '$lib/cmp/form/Form.svelte';
 	import ResultsView from './results/ResultsView.svelte';
+	import CheckBox from '$lib/cmp/form/input/CheckBox.svelte';
 
 	let { district, year, results } = $props();
 
@@ -26,27 +27,30 @@
 </script>
 
 
-{#key district && year && results}
+{#if district && year && results}
 	<div class='flex flex-row border-header bg-header text-header text-xl justify-center gap-x-2 p-1 sticky top-1'>
-		<span class='pt-2 '>Leistungen für</span>
-		<select class='w-24 border border-header bg-header text-header error=null' value={year} onchange={onYearChange}>
-			{#each years as y}
-				<option value={y}>{y}</option>
-			{/each}
-		</select>
+		<span class='grow flex flex-row justify-center'>
+			<span class='pt-2 '>Leistungen für</span>
+			<select class='w-24 border border-header bg-white text-header error=null' value={year} onchange={onYearChange}>
+				{#each years as y}
+					<option value={y}>{y}</option>
+				{/each}
+			</select>
+		</span>
+
 	</div>
 
-	<div class ='flex flex-row'>
-		<p class='grow info'>
-			Leistungen können als gesamt Leistung für einem Verband eingegeben werden, oder als einzelne Meldungen beim Züchter.<br>
-			Hier eine Liste von alle Eingaben in alle Zuchtbuchgruppen (I, II, III).
-		</p>
-	</div>
+	<p class='grow info'>
+		Leistungen können als gesamt Leistung für einem Verband eingegeben werden, oder als einzelne Meldungen beim Züchter.<br>
+		Hier eine Liste von alle Eingaben in alle Zuchtbuchgruppen (I, II, III).
+	</p>
+
+	<div class='flex flex-row justify-end'> <a class='pt-2' href={`/moderator/${district.id}/result/edit?year=${year}`}>[Edit]</a></div>
 
 	{#if district && year && results}
 		<ResultsView {district} {year} {results} />
 	{/if}
-{/key}
+{/if}
 
 <style>
 	h3 {

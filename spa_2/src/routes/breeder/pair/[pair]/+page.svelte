@@ -1,12 +1,13 @@
 <script>
 	import { page } from '$app/state';
-	import { ctx, dirty } from '$lib/js/store.svelte.js';
+	import { fade } from 'svelte/transition';
+	import {cfg, ctx, dirty} from '$lib/js/store.svelte.js';
 	import {fullName, shortName} from '$lib/js/tools.js';
 	import Pair from '$lib/cmp/pair/Pair.svelte';
 	import model from '$lib/js/model.js';
 	import {onMount} from 'svelte';
 
-	console.log( "pair", +page.params.pair );
+	let mounted = $state( false );
 
 
 	$effect( async () => {
@@ -19,28 +20,14 @@
 	});
 
 
-	// onMount( async () => {
-	// 	ctx.pair = await load( +page.params.pair );
-	// })
 	async function loadPair( id ) {
 		console.log('Load Pair');
 		//ctx.pair = null; // would trigger extra redraw, and error on null. Donno why
 		ctx.pair = id === 0 ?
 			await model.Pair.new( ctx.breeder) : // new for this breeder
-//			await model.Pair.load( id, ctx.breeder);
 			await model.Pair.load( id );
 		console.log('Loaded pair');
 	}
-
-	// async function loadPair( id ) {
-	// 	console.log( 'Load Pair' );
-	// 	dirty.pair = false;
-	// 	//ctx.pair = null; // would trigger extra redraw, and error on null. Donno why
-	// 	ctx.pair = id === 0 ?
-	// 		await model.Pair.new( ctx.breeder ) : // new for this breeder
-	// 		await model.Pair.load( id, ctx.breeder);
-	// 	console.log( 'Loaded pair' );
-	// }
 
 	function setHeader() {
 		ctx.menustate[ '/breeder' ] = page.url.href;
@@ -57,9 +44,13 @@
 			{name: `${ctx.pair.year % 100}.${ctx.pair.name}`},
 		];
 	}
+	onMount( () => mounted = true );
 
 </script>
 
-{#if ctx.federation && ctx.standard && ctx.breeder && ctx.pair }
-	<Pair breeder={ctx.breeder} pair={ctx.pair} />
+
+{#if ctx.federation && ctx.standard && ctx.breeder && ctx.pair && mounted}
+	<main in:fade={{duration:cfg.fadeIn}}>
+		<Pair breeder={ctx.breeder} pair={ctx.pair} />
+	</main>
 {/if}

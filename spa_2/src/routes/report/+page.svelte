@@ -1,16 +1,16 @@
 <script>
 	import { page } from '$app/state';
-	import { ctx, dirty } from '$lib/js/store.svelte.js';
+	import { fade } from 'svelte/transition';
+	import {cfg, ctx, dirty} from '$lib/js/store.svelte.js';
     import Report from '$lib/cmp/report/Report.svelte';
-	import {addCrumb, ArgsBuilder, completedYear} from '$lib/js/tools.js';
+	import { ArgsBuilder, completedYear } from '$lib/js/tools.js';
 	import model from '$lib/js/model.js';
 	import {onMount} from 'svelte';
 
-	ctx.report = null;
+	let mounted = $state( false );
 
 	$effect( async () => {
-		console.log( 'LoadReport', dirty.report, page.url );
-		if( dirty.report || page.url ) await loadReport( getArgs( page.url.searchParams ) );
+		if( dirty.report && page.url ) await loadReport( getArgs( page.url.searchParams ) );
 	})
 
 	$effect( () => {
@@ -18,17 +18,13 @@
 	});
 
 	async function loadReport( args ) {
-		console.log( 'Loading Report', args );
-		//dirty.report = false; // hmm retriggers effect
-		//ctx.report = null; //clear while waiting, no it disturbs the view
+		console.log('Load report', args)
 		let report = await model.Report.query( args );
-		console.log( 'In load', report );
-			report.args = args;
+		report.args = args;
 		ctx.report = report; // single trigger
 	}
 
 	function getArgs( params ) { // collect arguments and optionals and defaults
-		console.log( 'Get Args', params );
 		const args = ArgsBuilder.init();
 			ArgsBuilder.setNumber( args, params, 'district', 1 );
 			ArgsBuilder.setNumber( args, params, 'year', completedYear() );
@@ -50,28 +46,16 @@
 			//{name: 'Start', href: '/'},
 			{name: 'Leistungen', href: '/report'},
 		];
-		// ctx.header = {
-		// 	title: `Zuchtleistungen`,
-		// 	menu: {
-		// 		trail: [
-		// 			{name: 'Start', href: '/'},
-		// 			{name: 'Leistungen' },
-		// 		],
-		// 		options: [
-		// 			{name: 'Beiträge', href: '/article'},
-		// 			{name: 'Verbände', href: '/federation'},
-		// 			{name: 'Standard', href: '/standard'},
-		// 			{name: 'Leistungen'},
-		// 		],
-		// 	},
-		// }
-	};
+	}
 
+	onMount( () => mounted = true );
 
 </script>
 
-{#if ctx.report !== null }
-	<Report	report={ctx.report}	/>
+{#if ctx.report && mounted}
+	<main class='' in:fade={{duration:cfg.fadeIn}}>
+		<Report	report={ctx.report}	/>
+	</main>
 {/if}
 
 

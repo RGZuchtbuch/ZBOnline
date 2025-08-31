@@ -49,7 +49,6 @@
 </script>
 
 {#if ctx.pair}
-	{ctx.pair.sectionId}
 	<div class='flex flex-row items-center justify-end gap-x-2 p-2 -mb-2 print:hidden'>
 		<span class='meta'></span>
 		{#if authorized }
