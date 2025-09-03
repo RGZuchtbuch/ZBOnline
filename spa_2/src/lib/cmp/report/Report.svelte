@@ -22,10 +22,7 @@
 		30: {id: 30, name: 'Schauleistung'}
 	};
 
-	//let type     = $derived( types[ +page.url.searchParams.get('type') || 2 ] );
 	let district = $derived( ctx.federation.districts[ ctx.report.args.district ] );
-	//let year     = $derived( +page.url.searchParams.get('year') || new Date().getFullYear()-1 );
-	console.log( 'In Report, district', district.name )
 
 	function onTypeChange( event ) {
 		let url = new URL( page.url );

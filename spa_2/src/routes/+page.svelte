@@ -15,7 +15,6 @@
 	})
 
 	async function loadArticle( id ) {
-		console.log("load Article", id )
 		dirty.article = false;
 		ctx.article = null;
 		ctx.article = await model.Article.load( id );

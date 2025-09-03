@@ -1,10 +1,7 @@
 <script>
 	import { page } from '$app/state';
-	import { ctx } from '$lib/js/store.svelte.js'
 	let { breeder } = $props();
 
-
-	console.log( 'BP', ctx.user.admin )
 </script>
 
 <section class='mt-32 flex flex-col items-center'>

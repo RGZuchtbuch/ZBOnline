@@ -18,7 +18,6 @@
 	});
 
 	async function loadReport( args ) {
-		console.log('Load report', args)
 		let report = await model.Report.query( args );
 		report.args = args;
 		ctx.report = report; // single trigger

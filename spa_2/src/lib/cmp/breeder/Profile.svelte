@@ -43,14 +43,7 @@
 {#if breeder && district }
 
     <section>
-        <div class='flex flex-row items-center justify-end gap-x-2 p-2'>
-            <span class='meta'></span>
-            {#if authorized }
-                <span class='print:hidden'>
-                    <CheckBox label='Ändern' error='' bind:value={edit} />
-                </span>
-            {/if}
-        </div>
+
 
         <div class='text-center'>
             <h2>Mitgliedsdaten</h2>
@@ -66,13 +59,15 @@
             {/if}
         </div>
 
-        <Form class='flex flex-col px-4 gap-y-4' autosubmit={true} onsubmit={onSubmit} disabled={ !edit}>
-            {#if authorized}
-                <div class='text-right'><Status /></div>
-            {/if}
+        {#if authorized }
+            <div class='flex flex-row justify-end p-2 print:hidden'>
+                <CheckBox label='Ändern' error='' bind:value={edit} />
+            </div>
+        {/if}
 
+        <Form class='flex flex-col px-4 gap-y-4' autosubmit={true} onsubmit={onSubmit} disabled={ !edit}>
             <fieldset class='flex flex-row gap-x-2 p-4'>
-                <legend>Mitglied</legend>
+                <legend>Mitglied <Status /></legend>
                 <TextInput class='w-24' label='Verband' value={district.short} disabled/>
                 <NumberInput class='w-24' label='Mitgliedsnummer' bind:value={breeder.member} validator={validate.member}/>
                 <span class='w-4'></span>
@@ -88,7 +83,7 @@
             </fieldset>
 
             <fieldset class='p-4'>
-                <legend>Anschrift</legend>
+                <legend>Anschrift <Status /></legend>
                 <div class='flex flex-row gap-x-2'>
                     <TextInput class='w-64' label='Vorname *' bind:value={breeder.firstname} error='Pflichtfeld' validator={validate.firstname}/>
                     <TextInput class='w-28' label='Zusatz' bind:value={breeder.infix} validator={validate.infix}/>

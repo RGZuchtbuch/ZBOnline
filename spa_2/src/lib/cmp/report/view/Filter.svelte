@@ -10,8 +10,6 @@
 
 	let { report } = $props();
 
-	console.log( 'In Filter', report ? report.args : '?' );
-
 	let district = $state( ctx.federation.districts[ report.args.district ] )
 	let year     = $state( report.args.year );
 	let group    = $state( report.args.group );
@@ -31,7 +29,6 @@
 
 	function onDistrictChange( event ) {
 		let districtId = +event.target.value
-		//district = federation.districts[ districtId ]
 		const url =new URL( page.url ); // for query changes
 		url.searchParams.set( 'district', districtId );
 		goto( url.href );

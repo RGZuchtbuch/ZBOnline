@@ -21,21 +21,15 @@
 
 
 	async function loadPair( id ) {
-		console.log('Load Pair');
-		//ctx.pair = null; // would trigger extra redraw, and error on null. Donno why
 		ctx.pair = id === 0 ?
 			await model.Pair.new( ctx.breeder) : // new for this breeder
 			await model.Pair.load( id );
-		console.log('Loaded pair');
 	}
 
 	function setHeader() {
 		ctx.menustate[ '/breeder' ] = page.url.href;
-
 		ctx.title = `Züchter ${fullName(ctx.breeder)}, Stämm ${ctx.pair.year % 100}.${ctx.pair.name}`;
 		ctx.submenu = [
-//			{name: 'Stämme', href: `/breeder/pair`},
-			//{name: 'Mitglied', href: `/breeder/profile`},
 		];
 		ctx.crumbs = [
 			{name: 'Start', href: '/'},

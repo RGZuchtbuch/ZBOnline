@@ -21,13 +21,6 @@
 	let filledParents = $state( 1 );
 
 	$effect( () => {
-		//addParentTemplates();
-		console.log( 'Fill parents' );
-		//if( page.url && filledParents ) fillParents();
-		//filledParents = true;
-	})
-
-	$effect( () => {
 		let count = 0;
 		let sum = null;
 		for( let parent of pair.parents ) {
@@ -36,19 +29,6 @@
 		}
 		pair.parentsGrade = count > 0 ? sum / count : null;
 	})
-
-	function fillParents() {
-		if ( pair.sectionId ) {
-			const n = pair.sectionId === cfg.pigeons ? 2 : 4;
-			for (let i = pair.parents.length; i < n; i++) {
-				pair.parents.push( model.Pair.newParent( pair ) );
-			}
-		}
-	}
-
-	// function addParent( i ) { // used by fill and button
-	// 	pair.parents.push( model.Pair.newParent( pair ) );
-	// }
 
 	function onAddParent( event ) {
 		pair.parents.push( model.Pair.newParent( pair ) );

@@ -6,7 +6,6 @@
 
 	import Form, { DateInput, NumberInput, RingInput, Select, TextInput, validator } from '$lib/cmp/form/Form.svelte';
 
-	//const sections = [ { id:3, name:'Groß und Wassergeflügel', display:'Hühner' }, { id:11, name:'Große Hühner', display:'Hühner' }, { id:12, name:'Zwerghühner und Wachteln', display:'Hühner' }, { id:5, name:'Tauben', display:'Tauben' } ];
 	const sections = ctx.standard.rootSections;
 	let breeds = $state( null );
 	let colors = $state( null );
@@ -55,7 +54,6 @@
 	}
 
 	function clearResults() {
-		console.log( 'ClearResults');
 		const parents = [];
 		if( pair.section ) {
 			const max = pair.section.id === cfg.pigeons ? 2 : 3;
@@ -73,7 +71,6 @@
 		}
 		pair.parents = parents;
 		pair.grade = '?';
-		//console.log( 'Pair', pair );
 	}
 
 	function gradeLay( lay ) {
@@ -108,8 +105,6 @@
 	}
 
 	function recalculateGrades() { // when updating any part of pair, could be optimized surely
-		console.log( 'grade pair' );
-
 		if( pair.section && pair.breed ) {
 			for( const parent of pair.parents ) {
 				for( const grandParent of parent.parents ) { // grandparents
@@ -123,7 +118,6 @@
 							grandParent.grade = ( grandParent.brood.grade + grandParent.lay.grade ) / 2.0
 						}
 					} else {
-						console.log( 'Grading 1.0' );
 						grandParent.grade = grandParent.brood.grade;
 					}
 				}
@@ -151,9 +145,6 @@
 	function grade( value, dec = 1 ) {
 		return value === 0 ? '0' : value === '?' ? '?' : value.toFixed( dec );
 	}
-
-
-	//$inspect( 'Pair', pair );
 
 </script>
 

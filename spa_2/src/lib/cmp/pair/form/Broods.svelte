@@ -18,15 +18,6 @@
 	let breed = $derived( standard.breeds[ pair.breedId ] );
 
 	$effect( () => {
-		console.log( 'FilleBroods' );
-		// if( page.url && filledBroods ) {
-		// 	for (let i = pair.broods.length; i < 3; i++) { // minimum of 4
-		// 		pair.broods.push(model.Pair.newBrood(pair));
-		// 	}
-		// }
-	});
-
-	$effect( () => {
 		let broods = 0;
 		let eggs = 0;
 		let hatched = 0;

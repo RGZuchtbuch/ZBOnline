@@ -3,29 +3,10 @@
 //	import { meta } from 'tinro';
 	import { cfg, ctx } from '$lib/js/store.svelte.js';
 	import aab from '$lib/js/aab.js';
-//	import { dat, dec } from '$lib/js/tools.js';
-//	import { standard } from '../../js/store.js'
-//	import validator from '../../js/validator.js';
 
 	import Form, { Select, NumberInput, validator } from '$lib/cmp/form/Form.svelte';
-	// import Form from '../common/form/Form.svelte';
-	// import Select from '../common/form/input/Select.svelte';
-	// import NumberInput from '../common/form/input/NumberInput.svelte';
-	// import Page from '../common/Page.svelte';
 
-
-	// const route = meta();
-	//$inspect( 'Standard rootsections', ctx.standard.rootSections );
-
-	//const PIGEONS = 5;
 	const sections = ctx.standard.rootSections;
-	// [
-	// 	{ id:3, name:'Groß und Wassergeflügel', display:'Hühner' },
-	// 	{ id:11, name:'Große Hühner', display:'Hühner' },
-	// 	{ id:12, name:'Zwerghühner und Wachteln', display:'Hühner' },
-	// 	{ id:5, name:'Tauben', display:'Tauben' } ];
-	//let breeds = null;
-
 
 	let section = $state( null );
 	let breed = $state( null );
@@ -56,48 +37,22 @@
 	}
 
 	function sectionChanged(event ) {
-		console.log( 'Section Changed' );
 		if( section && section.id > 0 ) {
-			//breeds = section.breeds;//[];
-			// const foundSection = findSection( section.id, $standard );
-			// if( foundSection ) {
-			// 	collectBreeds(foundSection, breeds);
-			// 	breeds.sort( (a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0 );
-			// }
 			breed = null;
 			breedChanged();
 		}
 	}
 
-	// function findSection( id, section ) { // find section to id
-	// 	if( section.id === id ) return section;
-	// 	for( let child of section.children ) {
-	// 		const foundSection = findSection( id, child );
-	// 		if( foundSection ) return foundSection;
-	// 	}
-	// 	return null;
-	// }
-
-	// function collectBreeds( section, breeds ) { // collect breeds for sections and it's subsections
-	// 	breeds.push( ...section.breeds );
-	// 	for( let childSection of section.children ) {
-	// 		collectBreeds( childSection, breeds );
-	// 	}
-	// }
 
 	function gradeLay( lay ) {
-		console.log( 'Grade Lay', lay );
 		if( breed && breed.layEggs > 0 && lay && lay.eggs > 0 ) {
 			const grade = aab.lay(lay.eggs, breed.layEggs);
-			console.log( 'G', grade );
 			lay.grade = grade === null ? '?' : grade;
 			lay = lay;
 		}
-		console.log( 'Grade Lay after', lay );
 	}
 
 	function gradeBrood( brood ) {
-		console.log( 'Grade Brood', brood);
 		if( section ) {
 			if( section.id === cfg.pigeons ) {
 				if( brood && brood.count > 0 && brood.hatched !== null ) {
@@ -121,7 +76,6 @@
 
 
 	function grade( value, dec = 0 ) {
-		console.log( 'Grade', value );
 		return value === null ? '?' : value === 0 ? '0' : value === '?' ? '?' : value.toFixed( dec );
 	}
 

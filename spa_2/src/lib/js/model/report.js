@@ -2,7 +2,6 @@ import api from '$lib/js/server.js';
 
 export default class Report {
 	static async query( args ) {
-		console.log( 'Report.query', args )
 		if( args && args.district && args.year ) { // must haves
 			const response = await Promise.all( [
 				api.get(  `/api/2/report`, { target:'chart', ...args }),
@@ -22,7 +21,6 @@ export default class Report {
 	}
 
 	static async loadTable( args ) {
-		console.log( 'Report.query', args )
 		if( args && args.district && args.year ) { // must haves
 			let response = await api.get(  `/api/2/report`, { target:'table', ...args });
 			if( response ) {

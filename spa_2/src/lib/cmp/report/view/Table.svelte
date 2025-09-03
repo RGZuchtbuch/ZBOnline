@@ -8,12 +8,11 @@
     let totalledReport = null;
 
     calcTotals();
-    $effect( () => {
-        if( table !== null ) {
-            console.log( 'CalcTotals' );
-            //calcTotals();
-        }
-    });
+    // $effect( () => {
+    //     if( table !== null ) {
+    //         //calcTotals();
+    //     }
+    // });
 
     function addTo( sum, result ) { // count and add all up to totals of section etc
         result.broods = result.broodEggs ? result.broodEggs / 2 : null; // for pigeons
@@ -118,7 +117,6 @@
         }
         totalledReport.total = avgTotal( resultsSum );
         //totalledReport = report;
-        console.log('T', totalledReport );
     }
 
 </script>
