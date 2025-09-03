@@ -7,23 +7,22 @@
 </script>
 
 {#if district }
-	<p class='content'>
-		Uber diese Seiten können die Meldungen der Zuchten vom Obmann eingegeben werden.<br>
-		Mann hat Zwei möglichkeiten: Man gibt zu daten ein pro Rasse und evt. den Farbenschlag, wobei mann selbst dus Zahlen zusammen rechnet.
-		Oder man gibt jeder vom Züchter gemeldeter Stamm ein, wobei mann einige Daten mehr eingeben muss, braucht dafür aber selbst nichts zusammen zu rechnen.
+	<section class='m-16 p-6'>
+		<h3 class=''>
+			Den Verband {district.name} kann man hier verwalten. .
+		</h3>
 
-	</p>
-	<p>Wähle jetzt
-		<a href=''>Eingaben</a> für eine Tabelle und Eingabe der Leistungen, oder <a href=''>Züchter</a> um Züchter ein zu geben und deren Meldungen.</p>
-	<p>
-		Hier kommen statistiken
-	</p>
+		<ol>
+			<li>Leistungen
+			<li>Züchter
+		</ol>
 
+
+
+	</section>
 {/if}
 
 
 <style>
-	p {
-		@apply px-6 pt-4;
-	}
+
 </style>

@@ -1,5 +1,4 @@
 <script>
-    import "../app.css";
     import '../app.css'; // need this once on highest level
     
     import {goto} from '$app/navigation';
@@ -69,13 +68,15 @@
 </dialog>
 
 {#if ctx.federation !== null && ctx.standard !== null }
-    <div class='screen-scroll-y content' in:fade={{duration:500}}><!-- fade does not work here -->
+    <div class='screen-scroll-y content'><!-- fade does not work here -->
        {@render children()}
     </div>
 {/if}
 
 <style>
+
     .content {
-        @apply bg-white text-black flex flex-col;
+        /*@apply  bg-gradient-to-br from-violet-500 to-fuchsia-500 text-black flex flex-col;*/
+        @apply bg-[url('/assets/bg_bdrg_zuchtbuch.png')] bg-top bg-contain text-black flex flex-col;
     }
 </style>

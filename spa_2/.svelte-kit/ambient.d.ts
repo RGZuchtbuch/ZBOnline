@@ -38,8 +38,6 @@ declare module '$env/static/private' {
 	export const DriverData: string;
 	export const EDITOR: string;
 	export const EFC_1756: string;
-	export const FPS_BROWSER_APP_PROFILE_STRING: string;
-	export const FPS_BROWSER_USER_PROFILE_STRING: string;
 	export const GOPATH: string;
 	export const HOME: string;
 	export const HOMEDRIVE: string;
@@ -125,8 +123,6 @@ declare module '$env/static/public' {
  * 
  * This module cannot be imported into client-side code.
  * 
- * Dynamic environment variables cannot be used during prerendering.
- * 
  * ```ts
  * import { env } from '$env/dynamic/private';
  * console.log(env.DEPLOYMENT_SPECIFIC_VARIABLE);
@@ -148,8 +144,6 @@ declare module '$env/dynamic/private' {
 		DriverData: string;
 		EDITOR: string;
 		EFC_1756: string;
-		FPS_BROWSER_APP_PROFILE_STRING: string;
-		FPS_BROWSER_USER_PROFILE_STRING: string;
 		GOPATH: string;
 		HOME: string;
 		HOMEDRIVE: string;
@@ -224,8 +218,6 @@ declare module '$env/dynamic/private' {
  * Similar to [`$env/dynamic/private`](https://svelte.dev/docs/kit/$env-dynamic-private), but only includes variables that begin with [`config.kit.env.publicPrefix`](https://svelte.dev/docs/kit/configuration#env) (which defaults to `PUBLIC_`), and can therefore safely be exposed to client-side code.
  * 
  * Note that public dynamic environment variables must all be sent from the server to the client, causing larger network requests — when possible, use `$env/static/public` instead.
- * 
- * Dynamic environment variables cannot be used during prerendering.
  * 
  * ```ts
  * import { env } from '$env/dynamic/public';

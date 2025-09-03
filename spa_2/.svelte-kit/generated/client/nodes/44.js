@@ -1,1 +1,1 @@
-export { default as component } from "../../../../src/routes/tools/lineage/+page.svelte";
+export { default as component } from "../../../../src/routes/user/+page.svelte";

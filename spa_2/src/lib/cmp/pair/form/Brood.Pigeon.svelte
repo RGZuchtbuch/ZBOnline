@@ -34,8 +34,8 @@
 	<span class='w-4' ></span>
 	<DateInput class='w-24' label={i===0?'Beringt am':null} bind:value={brood.ringed} validator={validate.ringed} />
 	<span class='w-2' ></span>
-	<RingInput class='' label={i===0?'Küken #1':null} bind:value={brood.chicks[0]} validator={validate.ring} />
-	<RingInput class='' label={i===0?'Küken #1':null} bind:value={brood.chicks[1]} validator={validate.ring} />
+	<RingInput class='' label={i===0?'Ring Küken #1':null} bind:value={brood.chicks[0]} validator={validate.ring} />
+	<RingInput class='' label={i===0?'Ring Küken #1':null} bind:value={brood.chicks[1]} validator={validate.ring} />
 
 	{#if brood.hatched != null }
 		<div class='grow flex flex-row gap-x-1 justify-end' in:fade>

@@ -1,35 +1,30 @@
 <script>
+	import { page } from '$app/state';
 	import { fade, slide } from 'svelte/transition';
-	import { ctx } from '$lib/js/store.svelte.js';
+
 	import aab from '$lib/js/aab.js';
 	import {dec} from '$lib/js/tools.js';
+	import model from '$lib/js/model.js';
+	import { cfg } from '$lib/js/store.svelte.js';
+
 	import { NumberInput, Status } from '$lib/cmp/form/Form.svelte';
 	import BroodLayer from './Brood.Layer.svelte';
 	import BroodPigeon from './Brood.Pigeon.svelte';
 
 	let { standard, pair=$bindable() } = $props();
 
+	let filledBroods = $state( 1 );
 
 	let breed = $derived( standard.breeds[ pair.breedId ] );
 
-	// if( ! pair.broods ) {
-	// 	console.log('Create broods')
-	// 	pair.broods = [];
-	// }
-	$effect( ()=> {
-		for( let i=pair.broods.length; i<1; i++ ) { // minimum of 1
-			addBrood();
-		}
-	})
-
-	function addBrood() {
-		const brood = newBrood();
-		pair.broods.push( brood );
-	}
-
-	function newBrood() {
-		return { id:0, pairId:pair.id, start:null, eggs:null, fertile:null, hatched:null, chicks:[] }
-	}
+	$effect( () => {
+		console.log( 'FilleBroods' );
+		// if( page.url && filledBroods ) {
+		// 	for (let i = pair.broods.length; i < 3; i++) { // minimum of 4
+		// 		pair.broods.push(model.Pair.newBrood(pair));
+		// 	}
+		// }
+	});
 
 	$effect( () => {
 		let broods = 0;
@@ -44,16 +39,16 @@
 			}
 		}
 
-		pair.broodGrade = pair.sectionId === 5 && breed ?
+		pair.broodGrade = pair.sectionId === cfg.pigeons && breed ?
 			aab.brood.pigeon( breed.broodGroup, broods, hatched ) :
 			pair.broodGrade = aab.brood.layer( eggs, hatched );
-		// if( pair.sectionId === 5 && breed ) {
-		// 	pair.broodGrade = aab.brood.pigeon( breed.broodGroup, broods, hatched);
-		// 	console.log( 'PG', pair.broodGrade )
-		// } else {
-		// 	pair.broodGrade = aab.brood.layer(eggs, hatched);
-		// }
 	})
+
+	function onAddBrood() {
+		pair.broods.push( model.Pair.newBrood( pair ) );
+	}
+
+	//$inspect( 'PB', pair.broods );
 
 </script>
 
@@ -61,7 +56,7 @@
 <fieldset class='flex flex-col gap-x-2 border pt-2 px-2' in:fade disabled={ ! pair.breedId }>
 	<legend>Brutleistung <Status /></legend>
 
-	{#if true }
+	{#if pair.broods.length >=2 }
 		<div transition:slide>
 			{#each pair.broods as brood, i }
 				{#if pair.sectionId === 5 }
@@ -72,7 +67,7 @@
 			{/each}
 			<hr>
 			<div class='flex flex-row pt-1'>
-				<button class='w-6 h-6 print:hidden' type='button' onclick={addBrood}>+</button>
+				<button class='w-6 h-6 print:hidden' type='button' onclick={onAddBrood}>+</button>
 				<span class='grow'></span>
 				<NumberInput class='w-14 font-bold' label='G.Note' value={dec( pair.broodGrade, 1 )} title='Gesamt Brutnote' disabled/>
 			</div>

@@ -94,7 +94,6 @@
 
 </script>
 
-Check
 {#if ctx.federation && ctx.standard && report.args }
 	<Form>
 		<section class='flex flex-row gap-x-2 p-4' >

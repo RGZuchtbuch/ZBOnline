@@ -4,7 +4,7 @@
 	let { articles } = $props();
 </script>
 
-<section>
+<section class='pl-6 pr-2 py-4'>
 	{#if articles}
 		<header class='flex flex-row px-2 gap-x-2 border-header bg-header text-header'>
 			<div class='w-4'>#</div>

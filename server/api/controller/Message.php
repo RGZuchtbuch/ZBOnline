@@ -4,6 +4,7 @@ namespace App\controller;
 
 use App\model;
 use App\model\Requester;
+use App\util\Logger;
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
@@ -18,6 +19,7 @@ class Message
 {
 	public static function post( Request $request, Response $response, array $args ) : Response
 	{
+		Logger::log( null, $request, null );
 		$body = $request->getParsedBody();
 		$to = $body['to'] ?? null;
 		$name = $body['name'] ?? null;

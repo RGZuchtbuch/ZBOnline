@@ -42,7 +42,7 @@ class Breeder // is user
 		if( $districtId ) {
 			$requester = new Requester( $request );
 			if ( $requester->isAdmin() || $requester->isModerating( $districtId ) ) { //admin or the moderator
-				$id = model\Breeder::create( $body['member'], $body['firstname'], $body['infix'], $body['lastname'], $body['email'], $body['districtId'], $body['club'], $body['start'], $body['end'], $body['info'], $requester->getId());
+				$id = model\Breeder::create( $body['member'], $body['firstname'], $body['infix'], $body['lastname'], $body['email'], $body['districtId'], $body['club'], $body['start'], $body['end'], $body['active'], $body['info'], $requester->getId());
 				if ($id) {
 					$response->getBody()->write(json_encode(['id' => $id], JSON_UNESCAPED_SLASHES));
 					return $response;
@@ -61,7 +61,7 @@ class Breeder // is user
 			$districtId = $body['districtId'] ?? null;
 			$requester = new Requester( $request );
 			if( $requester->isAdmin() || $requester->isModerating( $districtId ) ) { //admin of the moderator
-				$success = model\Breeder::update($id, $body['member'], $body['firstname'], $body['infix'], $body['lastname'], $body['email'], $body['club'], $body['start'], $body['end'], $body['info'], $requester->getId());
+				$success = model\Breeder::update($id, $body['member'], $body['firstname'], $body['infix'], $body['lastname'], $body['email'], $body['club'], $body['start'], $body['end'], $body['active'], $body['info'], $requester->getId());
 				if ($success) {
 					$response->getBody()->write(json_encode(['id' => $id], JSON_UNESCAPED_SLASHES));
 					return $response;

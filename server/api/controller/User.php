@@ -3,6 +3,7 @@
 namespace App\controller;
 
 use App\model;
+use App\util\Logger;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpBadRequestException;
@@ -16,37 +17,38 @@ class User
 
 	/** other getters **/
 
-	public static function login( Request $request, Response $response, array $args ) : Response { // get token
-		$body = $request->getParsedBody();
-		if( $body ) {
-			$email = $body[ 'email' ] ?? null;
-			$password = $body[ 'password' ] ?? null;
-			if( $email && $password ) {
-				$id = model\User::authenticate( $email, $password );
-				if( $id ) {
-					$user = model\User::get($id);
-					if( $user ) {
-						$user['name'] = $user['firstname'] . ' ' . ($user['infix'] ? $user['infix'] . ' ' : '') . $user['lastname'];
-						$user['moderator'] = array_column(model\District::readForModerator($id), 'id'); // what districts to moderate
-						$token = model\Token::encode( $user );
-						if ($token) {
-							$response->getBody()->write(json_encode(['token' => $token ], JSON_UNESCAPED_SLASHES));
-							return $response;
-						}
-					}
-				}
-				throw new HttpNotFoundException($request, 'User not found');
-			}
-			throw new HttpBadRequestException( $request, 'Bad credentials' );
-		}
-		throw new HttpBadRequestException( $request, 'Bad body' );
-	}
+//	public static function login( Request $request, Response $response, array $args ) : Response { // get token
+//		$body = $request->getParsedBody();
+//		if( $body ) {
+//			$email = $body[ 'email' ] ?? null;
+//			$password = $body[ 'password' ] ?? null;
+//			if( $email && $password ) {
+//				$id = model\User::authenticate( $email, $password );
+//				if( $id ) {
+//					$user = model\User::get($id);
+//					if( $user ) {
+//						$user['name'] = $user['firstname'] . ' ' . ($user['infix'] ? $user['infix'] . ' ' : '') . $user['lastname'];
+//						$user['moderator'] = array_column(model\District::readForModerator($id), 'id'); // what districts to moderate
+//						$token = model\Token::encode( $user );
+//						if ($token) {
+//							$response->getBody()->write(json_encode(['token' => $token ], JSON_UNESCAPED_SLASHES));
+//							return $response;
+//						}
+//					}
+//				}
+//				throw new HttpNotFoundException($request, 'User not found');
+//			}
+//			throw new HttpBadRequestException( $request, 'Bad credentials' );
+//		}
+//		throw new HttpBadRequestException( $request, 'Bad body' );
+//	}
 
 	public static function newLogin( Request $request, Response $response, array $args ) : Response { // get token with query
 		$body = $request->getParsedBody();
 		if( $body ) {
 			$email = $body[ 'email' ] ?? null;
 			$password = $body[ 'password' ] ?? null;
+			Logger::log( null, null, "Login ".$email ); // cannot log $request as it has password in body
 			if( $email && $password ) {
 				$id = model\User::authenticate( $email, $password );
 				if( $id ) {
@@ -70,6 +72,7 @@ class User
 
 
 	public static function newForgot( Request $request, Response $response, array $args ) : Response { // get token
+		Logger::log( null, $request, "Login forgotten" );
 		$body = $request->getParsedBody();
 		if( $body ) {
 
@@ -142,6 +145,7 @@ class User
 							if( $tokenEmail ) {
 								$success = model\User::setPassword( $tokenEmail, $password );
 								if ($success) {
+									Logger::log( null, null, "Login reset ok, ".$tokenEmail );
 									$user = model\User::getByEmail($tokenEmail);
 									if ($user) { // add additional info
 										$user['fullname'] = $user['firstname'] . ' ' . ($user['infix'] ? $user['infix'] . ' ' : '') . $user['lastname'];
@@ -151,19 +155,24 @@ class User
 											$response->getBody()->write(json_encode(['token' => $token], JSON_UNESCAPED_SLASHES));
 											return $response;
 										}
+										Logger::log( null, null, "Login reset error, could not make token, ".$tokenEmail );
 										throw new HttpInternalServerErrorException( $request, 'could not create login token');
 									}
-									throw new HttpNotFoundException($request, 'User not found');
 								}
-								throw new HttpInternalServerErrorException( $request, 'could not update password');
+							} else {
+								Logger::log( null, null, "Login reset, invalid token" );
+								throw new HttpBadRequestException( $request, 'Could not update password');
 							}
 						}
 					}
 				}
-				throw new HttpBadRequestException( $request, 'Invalid token' );
+				Logger::log( null, null, "Login reset, invalid reset token" );
+				throw new HttpBadRequestException( $request, 'Invalid reset token' );
 			}
-			throw new HttpBadRequestException( $request, 'Bad credentials' );
+			Logger::log( null, null, "Login reset, bad password" );
+			throw new HttpBadRequestException( $request, 'Invalid password' );
 		}
+		Logger::log( null, null, "Login reset, bad request" );
 		throw new HttpBadRequestException( $request, 'Bad body' );
 	}
 

@@ -4,6 +4,7 @@ namespace App\controller;
 
 use App\model;
 use App\model\Requester;
+use App\util\Logger;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpBadRequestException;
@@ -204,6 +205,9 @@ class Result
 
 	// new approach 2
 	public static function filter( Request $request, Response $response, array $args ) : Response {
+		$requester = new Requester( $request );
+		Logger::log( $requester, $request, "Article" );
+
 		$query = $request->getQueryParams();
 		$districtId = $query['district'] ?? null;
 		$sectionId  = $query['section'] ?? null;
@@ -214,7 +218,7 @@ class Result
 
 		// no cache yet, needed ?
 
-		if( is_numeric( $districtId ) && is_numeric( $sectionId ) && is_numeric( $year ) && $group ) { //for edit
+		if( ( $requester && ( $requester->isAdmin() || $requester->isModerating( $districtId ) ) ) && is_numeric( $districtId ) && is_numeric( $sectionId ) && is_numeric( $year ) && $group ) { //for edit
 			// TODO, next still valid as now aoc are not in separate section anymore
 			if( $sectionId == 9999 ) { // for editing aoc's
 				$results = self::formatResults( model\Result::forAocColors( $districtId, $year, $group ) );
@@ -237,15 +241,9 @@ class Result
 			return $response;
 		}
 
-		else if( is_numeric( $districtId ) && is_numeric( $year ) ) { // per district and year view like for moderater
+		else if( is_numeric( $districtId ) && is_numeric( $year ) ) { // per district and year, moderator results view
 			$results = model\Result::forDistrictYear($districtId, $year);
-//			print( "ooooooooooooooo\n");
-//			print_r( $results );
-//			print( "-----------\n");
 			$tree = self::treeResults($results);
-//			print( "uuuuuuuuuuuuuuuuuu\n");
-//			print_r( $tree );
-//			print( "-----------\n");
 			$response->getBody()->write(json_encode(['results' => $tree], JSON_UNESCAPED_SLASHES));
 			return $response;
 		}

@@ -32,8 +32,8 @@
 		console.log( 'pi', parent.id);
 		let newRing = toRing( parent.ring ); // decode input
 		if( newRing ) {
-			if( newRing.year !== ringYear ) {
-				parentPairs = await model.Pair.query({breeder: pair.breeder.id, year: newRing.year});
+			if( newRing.year !== ringYear ) { // year changed
+				parentPairs = await model.Pair.query({breeder: pair.breeder.id, breed:pair.breedId, year: newRing.year});
 				if (!parentPairs.find(pair => pair.id === parent.parentsPairId)) { // not in list
 					parentPair = null;
 					parent.parentsPairId = null;
@@ -68,7 +68,7 @@
 	<RingInput label={i===0?'Ring':null} bind:value={parent.ring} oninput={onRingInput} validator={validate.ring}/>
 	<NumberInput class='w-16' label={i===0?'Bewertung':null} bind:value={parent.score} step={0.1} validator={validate.score}/>
 	<div class='w-4'></div>
-	<Select class='w-32' label={i===0?'Aus Stamm':null} bind:value={parent.parentsPairId} disabled={ parentPairs.length === 0 }>
+	<Select class='w-32' label={i===0?'Abstammung':null} bind:value={parent.parentsPairId} title='Eltern Stamm, wahl aus Ringjahr Stämme' disabled={ parentPairs.length === 0 }>
 		<option value={null} ></option>
 		{#each parentPairs as parentPair}
 			<option value={parentPair.id} >{(parentPair.year%100)+'.'+parentPair.name}</option>
@@ -77,13 +77,13 @@
 
 	{#if parentPair}
 		<div class='grow flex flex-row gap-x-1 justify-end' in:fade>
-			<Label label={i===0}> + </Label>
+			<Label label={i===0}> Abstammung : </Label>
 			<NumberInput class='w-16' label={i===0?'Legeleistung':null} title='Von dem Elternstamm' value={ dec( parentLayGrade, 1 ) } disabled/>
 			<NumberInput class='w-16' label={i===0?'Brutleistung':null} title='Von dem Elternstamm' value={ dec( parentBroodGrade, 1 ) } disabled/>
 			<NumberInput class='w-16' label={i===0?'Schauleistung':null} title='Von dem Elternstamm' value={ dec( parentShowGrade, 1 ) } disabled/>
 			<Label label={i===0}> = </Label>
-			<NumberInput class='w-16 font-bold' label={i===0?'Note':null} value={ dec( parentTotalGrade, 1 ) } disabled
-	             title='Durchschnitt Bewertung und Elternstamm Leistungen'
+			<NumberInput class='w-16 font-bold' label={i===0?'A.Note':null} value={ dec( parentTotalGrade, 1 ) } disabled
+	             title='Durchschnitt Abstammungsnote'
 			/>
 		</div>
 	{/if}

@@ -157,6 +157,7 @@
 		>
 			{ shortName( result.breeder ) }
 		</a>
+
 	{:else}
 		<span class='w-8'></span>
 	{/if}

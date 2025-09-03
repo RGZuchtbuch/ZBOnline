@@ -15,11 +15,11 @@ class Report
 {
 	public static function filter( Request $request, Response $response, array $args ) : Response
 	{
-		$json = model\Cache::get( 'Report', $request->getUri()->getPath(), $request->getUri()->getQuery() );
-		if( $json ) { // in cache
-			$response->getBody()->write( $json );
-			return $response;
-		}
+//		$json = model\Cache::get( 'Report', $request->getUri()->getPath(), $request->getUri()->getQuery() );
+//		if( $json ) { // in cache
+//			$response->getBody()->write( $json );
+//			return $response;
+//		}
 //		$year       = $args['year'] ?? null;
 
 		$query          = $request->getQueryParams(); // may all be null meaning *

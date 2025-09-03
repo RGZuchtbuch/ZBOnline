@@ -1,6 +1,6 @@
 <script>
 	import { page } from '$app/state';
-	import { fade, fly, slide } from 'svelte/transition';
+
 	import { ctx } from '$lib/js/store.svelte.js';
 
 	let { breeder } = $props();
@@ -8,23 +8,30 @@
 
 </script>
 
+<section>
 	{#if authorized}
 		<div class='flex flex-row justify-end pt-2'>
-			<a href={`${page.url.href}/0`} title='Stammm/Paar hinzufügen'>[+]</a>
+			<a href={`${page.url.pathname}/0`} title='Stammm/Paar hinzufügen'>[+]</a>
 		</div>
 	{/if}
 	{#if ctx.pairs && ctx.pairs.length > 0}
 		{#each ctx.pairs as pair, i}
 			<li class='flex flex-row gap-x-2'>
-				<a class='grow' href={`${page.url.href}/${pair.id}`} >
+				<a class='grow' href={`${page.url.pathname}/${pair.id}`} >
 					<div class='w-8 text-right'>{i+1}</div>
 					<div class='w-2'>:</div>
 					<div class='w-8 text-right'>{pair.year}</div>
 					<div class='w-16 text-center'>{pair.name}</div>
-					<div class='grow'>
-						{pair.breed.breedName}
-						<sup class='w-32'>{pair.breedId}</sup>
+					<div class='w-96'>
+						{pair.breed.name}
+						<!--sup class='w-32'>{pair.breed.id}</sup-->
 					</div>
+					<div class='grow'>
+						{pair.color.name}
+						<!--sup-- class='w-32'>{pair.color.id}</sup-->
+					</div>
+
+					<span class='text-red-600' class:accepted={pair.accepted}>{pair.accepted ? '✓' : '✗'}</span>
 				</a>
 			</li>
 		{/each}
@@ -34,7 +41,7 @@
 		</div>
 	{/if}
 
-
+</section>
 
 <style>
     li a {
@@ -42,6 +49,10 @@
     }
     ol {
         @apply px-6 py-4;
+    }
+
+    .accepted {
+	    @apply text-green-600;
     }
 </style>
 

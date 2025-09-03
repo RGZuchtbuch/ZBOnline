@@ -85,9 +85,10 @@ class Pair {
 		$stmt = Query::prepare('
 		SELECT pair.id, pair.year, pair.group, pair.districtId, pair.breederId, 
 			user.firstname, user.infix, user.lastname, user.member, 
-			pair.sectionId, pair.breedId, pair.colorId, pair.name, 
-			breed.name AS breedName, breed.layEggs AS layEggsShould, breed.layWeight AS layWeightShould, breed.broodGroup AS broodGroup, 
-			color.name AS colorName,
+			pair.name,
+			pair.sectionId,  
+			pair.breedId, breed.name AS breedName, breed.layEggs AS layEggsShould, breed.layWeight AS layWeightShould, breed.broodGroup AS broodGroup, 
+			pair.colorId, color.name AS colorName,
 			result.layEggs, result.layWeight, result.broodEggs, result.broodFertile, result.broodHatched, 
 			result.showCount, result.showScore,
 			pair.accepted
@@ -97,14 +98,14 @@ class Pair {
 		LEFT JOIN result ON result.pairId = pair.id
 		LEFT JOIN user ON user.id = pair.breederId
 		WHERE pair.breederId=:breederId
-		ORDER BY pair.year DESC, pair.name
+		ORDER BY pair.year DESC, breed.name, color.name, pair.name
 	');
 		return Query::selectArray($stmt, $args);
 	}
 
 
 	// for finding parents pair
-	public static function readForBreederInYear(int $breederId, int $year): array
+	public static function readForBreederBreedYear(int $breederId, int $breedId, int $year): array
 	{ // TODO move to pair!
 		$args = get_defined_vars();
 		$stmt = Query::prepare('
@@ -120,7 +121,9 @@ class Pair {
 		LEFT JOIN color ON color.id = pair.colorId
 		LEFT JOIN result ON result.pairId = pair.id
 		LEFT JOIN user ON user.id = pair.breederId
-		WHERE pair.breederId=:breederId AND pair.year=:year
+		WHERE pair.breederId=:breederId
+		  AND pair.breedId=:breedId
+		  AND pair.year=:year
 		ORDER BY pair.name
 	');
 		return Query::selectArray($stmt, $args);

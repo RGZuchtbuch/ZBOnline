@@ -13,9 +13,9 @@ fieldset > legend {
 }
 
 label.label { /* for inputs label */
-    line-height: 1.25em;
+    line-height: 1.15em;
     font-size: 0.6em;
-    padding-left: 0.5em;
+    padding-left: 0.25em;
 }
 
 label.error { /* for inputs error label */

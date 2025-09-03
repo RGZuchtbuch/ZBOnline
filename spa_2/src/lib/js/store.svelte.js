@@ -65,7 +65,7 @@ class Config {
         { name:'grau', color:'#444' },
         { name:'weiß', color:'#FFF' },
     ];
-    fadeIn = 1500; // for fade in duration
+    fadeIn = 500; // for fade in duration
     // rootSections defined in js/model/standard.js
 }
 

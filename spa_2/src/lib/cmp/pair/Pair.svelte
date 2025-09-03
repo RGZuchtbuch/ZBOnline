@@ -1,5 +1,6 @@
 <script>
 
+	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
 	import { navigating } from '$app/state';
 	import { ctx, dirty } from '$lib/js/store.svelte.js';
@@ -19,7 +20,7 @@
 
 	let edit = $state( ctx.pair.id === 0 );
 	//let remove = $state( false );
-	let authorized = $derived( ctx.user && ctx.pair && ( ctx.user.moderator.includes( ctx.pair.districtId ) || ctx.user.admin ) ); // can edit
+	let authorized = $derived( ctx.user && ctx.pair && ( (ctx.user.id === ctx.pair.breeder.id && ctx.user.active) || ctx.user.moderator.includes( ctx.pair.districtId ) || ctx.user.admin ) ); // can edit
 
 	async function onSubmit() {
 		console.log( 'Pair Submit' );
@@ -30,7 +31,8 @@
 		} else if( ctx.pair.id > 0 && ctx.pair.name === null && ctx.pair.delete ){ // name is null and delete
 			ok = model.Pair.delete( ctx.pair.id );
 			if( ok ) {
-				await goto(`/breeder/${ctx.pair.breederId}/pair`);
+				const path = page.url.pathname;
+				await goto( path.slice( 0, path.lastIndexOf( '/' ) ) ); // loose pair id
 			}
 		}
 		dirty.pairs++; // only change, to avoid loadpairs has to reset and thus retrigger

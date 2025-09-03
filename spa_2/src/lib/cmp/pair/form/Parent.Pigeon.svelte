@@ -14,7 +14,7 @@
 
 	let parentPairs = $state( [] ); // the parent it's parent pair options
 	let parentPair = $state( null ); // the parents pair
-	let parentLayGrade = $state( null );
+	//let parentLayGrade = $state( null );
 	let parentBroodGrade = $state( null );
 	let parentShowGrade = $state( null );
 	let parentTotalGrade = $state( null );
@@ -32,7 +32,7 @@
 		let newRing = toRing( parent.ring ); // decode input
 		if( newRing ) {
 			if( newRing.year !== ringYear ) {
-				parentPairs = await model.Pair.query({breeder: pair.breeder.id, year: newRing.year});
+				parentPairs = await model.Pair.query({breeder: pair.breeder.id, breed:pair.breedId, year: newRing.year});
 				if (!parentPairs.find(pair => pair.id === parent.parentsPairId)) { // not in list
 					parentPair = null;
 					parent.parentsPairId = null;

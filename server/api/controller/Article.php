@@ -4,6 +4,7 @@ namespace App\controller;
 
 use App\model;
 use App\model\Requester;
+use App\util\Logger;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpBadRequestException;
@@ -21,6 +22,9 @@ class Article
 //	}
 
 	public static function get( Request $request, Response $response, array $args ) : Response {
+		$requester = new Requester( $request );
+		Logger::log( $requester, $request, "Article" );
+
 		$id = $args[ 'id' ] ?? null;
 		if( $id ) { // specific article
 			if( is_numeric( $id ) ) {

@@ -4,6 +4,7 @@ namespace App\controller;
 
 use App\model;
 use App\model\Requester;
+use App\util\Logger;
 use App\util\Query;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -16,11 +17,13 @@ class Pair
 {
 	// get the whole thing
 	public static function read(Request $request, Response $response, array $args ) : Response {
+		$requester = new Requester( $request );
+		Logger::log( $requester, $request, "Reading pair" );
 		$id = $args[ 'id' ] ?? null;
 		if( is_numeric( $id ) ) {
 			$pair = model\Pair::read( $id ); // get pair main data
 			if( $pair ) {
-				$requester = new Requester( $request );
+				//$requester = new Requester( $request );
 				if( $requester && ( $requester->isAdmin() || $requester->isModerating( $pair[ 'districtId' ] ) || $requester->hasId( $pair[ 'breederId' ] ) ) ) {
 					$pair['breed']   = model\std\Breed::get( $pair['breedId'] );
 					$pair['color']   = model\std\Color::get( $pair['colorId'] );
@@ -302,6 +305,8 @@ class Pair
 		$requester = new Requester( $request );
 		$query      = $request->getQueryParams();
 		$breederId  = $query[ 'breeder' ] ?? null;
+		$breedId    = $query[ 'breed' ] ?? null;
+		$sectionId  = $query[ 'section' ] ?? null;
 		$districtId = $query[ 'district' ] ?? null;
 		$year       = $query[ 'year' ] ?? null;
 
@@ -311,14 +316,14 @@ class Pair
 //			return $response;
 //		}
 
-		if( is_numeric( $breederId ) && is_numeric( $year ) ) { // for parent pairs in year
+		if( is_numeric( $breederId ) && is_numeric( $breedId ) && is_numeric( $year ) ) { // for parent pairs in year
 			$breeder = model\Breeder::read( $breederId );
 			if(
 				( $breeder && $requester->hasId( $breeder['id'] ) ) ||
 				$requester->isModerating( $breeder['districtId'] ) ||
 				$requester->isAdmin()
 			) { //admin of the moderator or self
-				$pairs = Pair::toPairs( model\Pair::readForBreederInYear($breederId, $year) );
+				$pairs = Pair::toPairs( model\Pair::readForBreederBreedYear($breederId, $breedId, $year) );
 				$json = json_encode(['pairs' => $pairs], JSON_UNESCAPED_SLASHES);
 				$response->getBody()->write( $json );
 				return $response;
@@ -356,9 +361,11 @@ class Pair
 	public static function toPairs( array $rows ) : array {
 		$pairs = [];
 		foreach( $rows as $row ) {
-			$pair            = [ 'id'=>$row['id'], 'breederId'=>$row['breederId'], 'year'=>$row['year'], 'name'=>$row['name'] ];
+			$pair            = [ 'id'=>$row['id'], 'breederId'=>$row['breederId'], 'year'=>$row['year'], 'name'=>$row['name'], 'accepted'=>$row['accepted'] ];
 			$pair['breeder'] = [ 'id'=>$row['breederId'] ]; // TODO add name but dep on Pair::getPairs
-			$pair['breed']   = [ 'sectionId'=>$row['sectionId'], 'breedId'=>$row['breedId'], 'breedName'=>$row['breedName'], 'colorId'=>$row['colorId'], 'colorName'=>$row['colorName'] ];
+			$pair['section'] = [ 'sectionId'=>$row['sectionId'] ];
+			$pair['breed']   = [ 'id'=>$row['breedId'], 'name'=>$row['breedName'] ];
+			$pair['color']   = [ 'id'=>$row['colorId'], 'name'=>$row['colorName'] ];
 			$pair['lay']     = [ 'eggs'=>$row['layEggs'], 'weight'=>$row['layWeight'], 'eggsShould'=>$row['layEggsShould'], 'weightShould'=>$row['layWeightShould'] ];
 			$pair['brood']   = [ 'eggs'=>$row['broodEggs'], 'fertile'=>$row['broodFertile'], 'hatched'=>$row['broodHatched'], 'group'=>$row['broodGroup'] ];
 			$pair['show']    = [ 'count'=>$row['showCount'], 'score'=>$row['showScore'] ];

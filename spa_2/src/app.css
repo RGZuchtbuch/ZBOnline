@@ -1,8 +1,8 @@
+/*@import 'tailwindcss';*/
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-/*@import 'tailwindcss';*/
 
 /*@import "tailwindcss";*/
 /*@config "../tailwind.config.js";*/
@@ -15,6 +15,7 @@
         @apply h-full w-full m-0 p-0 font-rgz;
     }
     body {
+        @apply bg-slate-50;
     }
 
     a, button, div, h1, h2, h3, h4, img, span {
@@ -41,32 +42,40 @@
     }
 
     h1 {
-        @apply py-2 font-bold text-xl;
+        @apply pt-4 pb-2 font-bold text-xl;
     }
     h2 {
-        @apply py-2 font-bold text-lg;
+        @apply pt-4 pb-2 font-bold text-lg;
     }
     h3 {
-        @apply py-1 font-bold text-lg;
+        @apply pt-2 pb-1 font-bold text-lg;
     }
     h4 {
-        @apply py-1 font-bold text-base;
+        @apply pt-2 pb-1 font-bold text-base;
     }
     hr {
         @apply w-full h-0.5 bg-teal-100 px-2;
     }
 
     img {
+
+    }
+
+    p {
+        @apply py-1;
     }
 
     sup, sub {
         @apply text-[10px];
     }
+    ol {
+        @apply list-decimal;
+    }
     ul {
         @apply list-inside list-disc;
     }
-    ul li {
-        @apply pl-4;
+    li {
+        @apply ml-4 pl-2;
     }
 
     @media screen {

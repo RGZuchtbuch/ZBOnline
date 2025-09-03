@@ -315,8 +315,15 @@
                                 <tbody class='print-no-break'>
                                     <tr>
                                         <th>
-                                            <div class='flex flex-row px-2 py-1 bg-gray-100 text-right text-base font-semibold gap-x-1'>
-                                                <div class='grow text-left '> {breed.name} </div>
+                                            <div class='flex flex-row px-2 py-1 text-right text-base font-semibold gap-x-1'>
+                                                <div class='grow text-left '>
+                                                    {breed.name}
+                                                    {#if section.id === cfg.pigeons}
+                                                        <span class='text-xs'>
+                                                            (Gesamt)
+                                                        </span>
+                                                    {/if}
+                                                </div>
 
                                                 {#if breed.result}
                                                     <div class='w-12 td' title='Zahl der Zuchten / Züchter'>{dec( breed.result.breeders )}</div>

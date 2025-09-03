@@ -57,16 +57,16 @@
             {#if authorized}
                 <p>
                     Mitglied abmelden, einfach 'bis' Datum eingeben. Damit ist dieser Züchter 'Inaktiv'.<br>
-                    Ein Mitglied löschen geht nur wenn es keine Meldungen eingegeben sind.<br>
+                    Ein Mitglied löschen geht nur wenn es keine Meldungen far ihm eingegeben sind.<br>
                     Löschen durch Vor- und Nachnamen leermachen und Löschen ankreuzen.
                 </p>
-                <hr class='w-228 self-center'>
+                <hr class='w-192 mx-auto'>
             {:else}
                 <p>Nur lesen</p>
             {/if}
         </div>
 
-        <Form class='flex flex-col p-0 gap-y-4' autosubmit={true} onsubmit={onSubmit} disabled={ !edit}>
+        <Form class='flex flex-col px-4 gap-y-4' autosubmit={true} onsubmit={onSubmit} disabled={ !edit}>
             {#if authorized}
                 <div class='text-right'><Status /></div>
             {/if}
@@ -79,6 +79,8 @@
                 <DateInput class='' label='Seit *' bind:value={breeder.start} error='Pflichtfeld' validator={validate.start}/>
                 <span class='pt-4'>:</span>
                 <DateInput class='' label='Bis' bind:value={breeder.end} validator={validate.end}/>
+                <span class='pt-8'></span>
+                <CheckBox label='Online' title='Meldet selbst' bind:value={breeder.active}/>
                 <span class='grow'></span>
                 {#if authorized}
                     <CheckBox label='Löschen' title='Nur wenn Name leer ist !' bind:value={breeder.delete} disabled={ breeder.firstname || breeder.lastname }/>

@@ -4,6 +4,7 @@ namespace App\model;
 
 use App\util\Query;
 
+// Still work in progress, not usefull for now but prep for more aniamal based parents/chicks.
 class Animal {
 
 	public static function readParent( int $id ) {

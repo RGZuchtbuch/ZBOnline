@@ -6,11 +6,11 @@ use App\util\Query;
 
 class Log extends Query
 {
-    public static function new( string $method, string $uri, ? string $query, ? string $body, ? int $requesterId ) : ? int {
+    public static function log( ? string $method, ? string $uri, ? string $query, ? string $body, ? int $requesterId, ? string $message ) : ? int {
         $args = get_defined_vars();
         $stmt = Query::prepare( '
-            INSERT INTO _log ( method, uri, query, body, modifierId )
-            VALUES ( :method, :uri, :query, :body, :requesterId )
+            INSERT INTO _log ( method, uri, query, body, modifierId, message )
+            VALUES ( :method, :uri, :query, :body, :requesterId, :message )
         ' );
         return Query::insert( $stmt, $args ); // returns id
     }

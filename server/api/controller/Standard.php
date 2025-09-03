@@ -12,7 +12,7 @@ class Standard
 
 	public static function get( Request $request, Response $response, array $args ) : Response { // get whole standard
 
-		Logger::add( null, $request );
+		Logger::log( null, $request, "Standard" );
 
 		$json = model\Cache::get( 'standard', $request->getUri()->getPath(), $request->getUri()->getQuery() );
 		if( $json ) { // in cache
@@ -22,9 +22,10 @@ class Standard
 		$sections = model\std\Section::descendants(2); // all poultry
 		$breeds = model\std\Breed::get();
 		$colors = model\std\Color::get();
+		//print_r( 'Colors'.$colors );
 		$standard = Standard::toStandardTree($sections, $breeds, $colors);
 		$json = json_encode( [ 'standard' => $standard, 'timestamp' => date( 'Y-m-d H:i:s' ) ], JSON_UNESCAPED_SLASHES );
-		model\Cache::set( 'standard', $request->getUri()->getPath(), $request->getUri()->getQuery(), $json );
+		//model\Cache::set( 'standard', $request->getUri()->getPath(), $request->getUri()->getQuery(), $json );
 		$response->getBody()->write( $json );
         return $response;
 	}
@@ -52,13 +53,13 @@ class Standard
 			}
 		}
 		// add breeds to their section
-		foreach($breedsArray as & $breed ) { // add breeds to sections
+		foreach( $breedsArray as & $breed ) { // add breeds to sections
 			$breed[ 'colors' ] = [];
 			$breeds[ $breed[ 'id' ] ] = & $breed;
 			$sections[ $breed[ 'sectionId' ] ][ 'breeds' ][] = & $breed;
 		}
 		// arr colors to their breeds
-		foreach($colorsArray as & $color ) { // add colors to breeds
+		foreach( $colorsArray as & $color ) { // add colors to breeds
 			$colors[ $color[ 'id'] ] = & $color;
 			$breeds[ $color[ 'breedId' ] ][ 'colors' ][] = & $color;
 		}

@@ -1,10 +1,11 @@
 import api from '$lib/js/server.js';
 import model from '$lib/js/model.js';
+import {cfg} from '$lib/js/store.svelte.js';
 
 export default class Pair {
 	static async new( breeder ) {
 		console.log( 'Br', breeder );
-		return {
+		let pair = {
 			id: 0, breederId: breeder.id, districtId: breeder.districtId,
 			year: new Date().getFullYear(), group: 'I',
 			name: null,
@@ -17,12 +18,35 @@ export default class Pair {
 			breeder: breeder, // needed ??
 			accepted: true, // by moderator
 		}
+
+		for (let i = pair.parents.length; i < 2; i++) {
+			pair.parents.push( Pair.newParent( pair ) );
+		}
+
+		for (let i = pair.broods.length; i < 3; i++) { // minimum of 4
+			pair.broods.push( Pair.newBrood(pair) );
+		}
+
+		return pair;
+	}
+
+	static newBrood( pair ) {
+		return { id:0, pairId:pair.id, start:null, eggs:null, fertile:null, hatched:null, chicks:[] }
+	}
+	static newParent( pair ) {
+		const index = pair.parents.length;
+		return { id:0, pairId:pair.id, sex:index===0?'1.0':'0.1', ring:null, score:null, parentsPairId:null };
+
 	}
 
 	static async load( id ){
 		let data= await api.get(`/api/2/pair/${id}`);
 		if( data && data.pair ) {
 			let pair = data.pair;
+
+			for (let i = pair.parents.length; i < 2; i++) {
+				pair.parents.push( Pair.newParent( pair ) );
+			}
 
 			if ( pair.lay === null) pair.lay = {
 				id: 0,
@@ -34,6 +58,10 @@ export default class Pair {
 				average: null, // virtual field, is eggs in db.pair.lay with no start
 				weight: null
 			};
+
+			for (let i = pair.broods.length; i < 3; i++) { // minimum of 4
+				pair.broods.push( Pair.newBrood(pair) );
+			}
 
 			if ( pair.show === null) pair.show = {
 				id: 0,

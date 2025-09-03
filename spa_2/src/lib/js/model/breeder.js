@@ -8,30 +8,15 @@ export default class Breeder {
 			districtId:districtId, id:0,
 			member:null, start:null, end:null,
 			firstname:null, infix:null, lastname:null,
-			email:null, club:null,
+			email:null, club:null, active:false,
 			info:null,
 		}
 	}
 	static async load( id ){
-		//console.log( "Load breeder", id, districtId );
-		// if( id === 0 ) { // new breeder
-		// 	return {
-		// 		id:0,
-		// 		member:null, firstname:null, infix:null, lastname:null,
-		// 		email:null, districtId:ctx.district.id, club:null,
-		// 		start:null, end:null,
-		// 		info:null,
-		// 	}
-		// } else {
-		// 	let article = null;
-		// 	const data = await api.get(`/api/2/breeder/${id}`);
-		// 	return data && data.breeder ? data.breeder : null;
-		// }
 		const data = await api.get(`/api/2/breeder/${id}`);
 		return data && data.breeder ? data.breeder : null;
 	}
 	static async query( args ){
-		//console.log( 'Load breeders', args );
 		const data = await api.query(`/api/2/breeder`, args );
 		return data && data.breeders ? data.breeders : null;
 	}

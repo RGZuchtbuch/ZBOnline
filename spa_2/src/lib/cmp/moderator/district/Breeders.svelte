@@ -20,6 +20,9 @@
 	function onSortByEnd() {
 		breeders.sort( (a, b) => (''+a.end).localeCompare( b.end ) );
 	}
+	function onSortByActive() {
+		breeders.sort( (b, a) => (''+a.active).localeCompare( b.active ) );
+	}
 
 </script>
 
@@ -34,6 +37,7 @@
 	<a class='w-48' onclick={onSortByClub}>Ortverein</a>
 	<a class='w-24' onclick={onSortByStart}>Seit</a>
 	<a class='w-24' onclick={onSortByEnd}>Bis</a>
+	<a class='w-12' onclick={onSortByActive}>Online</a>
 </header>
 
 {#each breeders as breeder }
@@ -43,6 +47,7 @@
 		<span class='w-48'> {breeder.club}</span>
 		<span class='w-24'> {breeder.start}</span>
 		<span class='w-24'> {breeder.end}</span>
+		<span class='w-12 text-red-600 text-center' class:active={breeder.active}> {breeder.active ? '✓' : '✗'}</span>
 	</a>
 {/each}
 
@@ -57,5 +62,11 @@
     }
     a {
         @apply border-b flex flex-row p-2 pl-6 gap-x-2;
+    }
+    a.disabled {
+	    @apply pointer-events-none;
+    }
+    .active {
+	    @apply text-green-600;
     }
 </style>
