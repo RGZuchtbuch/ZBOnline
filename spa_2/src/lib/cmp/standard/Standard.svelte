@@ -6,13 +6,11 @@
 	let { standard } = $props();
 </script>
 
-<section>
+<section class='pl-6'>
 	<header class='p-2 border-header bg-header text-header text-center'>Standard, Sparten, Rassen und Farbenschläge</header>
 
 	{#if standard }
-		<ul in:slide>
-			<Section section={ standard.root } unfold={true}/>
-		</ul>
+		<Section section={ standard.root } unfold={true}/>
 	{/if}
 </section>
 

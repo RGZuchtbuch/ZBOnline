@@ -28,49 +28,44 @@
 </script>
 
 {#if section}
-	<li class='font-bold'>
-		<button class='inline' type='button' title='Öffnen' onclick={toggle}>{unfold?'▽':'▷'} </button>
-		<div class='grow' title='Sparte'>{section.name}</div>
+	<button class='bg-inherit text-black font-bold w-full flex flex-row py-2 gap-x-2 text-left' type='button' title='Öffnen' onclick={toggle}>
+		<span class='w-4'>{unfold?'▽':'▷'}</span>
+		<span class='grow text-left' title='Sparte'>{section.name}</span>
 		{#if unfold && section.breeds.length > 0}
-			<div class='w-16 text-right' title='Brutgruppe'>
-				{#if section.parentId === cfg.pigeons} Brutgruppe {/if}
-			</div>
-			<div class='w-16 text-right' title='Legeleistung'>
-				{#if section.parentId !== cfg.pigeons} Eier/J {/if}
-			</div>
-			<div class='w-16 text-right' title='Bruteigewicht'>
-				{#if section.parentId !== cfg.pigeons} Gewicht {/if}
-			</div>
-			<div class='w-32 text-center' title='Zielgewicht der Hähne'>Tiergewicht</div>
-			<div class='w-24 text-center' title='Ringgröße Hahn'>Ring</div>
-
+			<span class='w-16 text-right' title='Brutgruppe'>
+				{#if section.parentId === cfg.pigeons}B.G.{/if}
+			</span>
+			<span class='w-16 text-right' title='Legeleistung'>
+				{#if section.parentId !== cfg.pigeons}Eier{/if}
+			</span>
+			<span class='w-16 text-right' title='Bruteigewicht'>
+				{#if section.parentId !== cfg.pigeons}Gewicht{/if}
+			</span>
+			<span class='w-32 text-center' title='Zielgewicht der Hähne'>Tiergewicht</span>
+			<span class='w-24 text-center' title='Ringgröße Hahn'>Ring</span>
 		{/if}
-	</li>
+	</button>
+
+
 
 
 	{#if unfold}
-		<ul class='pl-8' transition:slide={{duration:500}}>
+		<div class='pl-8' transition:slide={{duration:500}}>
 			{#each section.children as child}
 				<Section section={child} />
 			{/each}
-		</ul>
+		</div>
 
-		<ul class='pl-8' transition:slide={{duration:500}}>
+		<div class='pl-8' transition:slide={{duration:500}}>
 			{#each section.breeds as breed}
 				<Breed {breed} />
 			{/each}
-		</ul>
+		</div>
 	{/if}
 {/if}
 
+
+
 <style>
-    li {
-        @apply flex flex-row p-2 gap-x-1;
-    }
-    button {
-        @apply bg-inherit text-black;
-    }
-
-
 
 </style>

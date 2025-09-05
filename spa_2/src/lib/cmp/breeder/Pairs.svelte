@@ -10,8 +10,8 @@
 
 <section>
 	{#if authorized}
-		<div class='flex flex-row justify-end pt-2'>
-			<a class='border-button bg-button text-button py-0 px-2' href={`${page.url.pathname}/0`} title='Stammm/Paar hinzufügen'>+</a>
+		<div class='flex flex-row justify-end p-2'>
+			<a class='w-8 border-button bg-button text-button py-0 px-2' href={`${page.url.pathname}/0`} title='Stammm/Paar hinzufügen'>✙</a>
 		</div>
 	{/if}
 	<div class='flex flex-row p-2 gap-x-2 border-header bg-header text-header py-0 px-2'>

@@ -7,18 +7,15 @@
 </script>
 
 {#if district }
-	<section class='m-16 p-6'>
+	<section class='m-64 mt-32'>
 		<h3 class=''>
 			Den Verband {district.name} kann man hier verwalten. .
 		</h3>
 
-		<ol>
-			<li>Leistungen</li>
-			<li>Züchter</li>
+		<ol class='ml-16'>
+			<li><a href={`/moderator/district/${ctx.district.id}/result`}>Leistungen</a></li>
+			<li><a href={`/moderator/district/${ctx.district.id}/breeder`}>Züchter</a></li>
 		</ol>
-
-
-
 	</section>
 {/if}
 

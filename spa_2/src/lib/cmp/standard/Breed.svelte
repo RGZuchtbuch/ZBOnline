@@ -11,25 +11,24 @@
 </script>
 
 {#if breed}
-	<li class=''>
-		<button class='inline' type='button' title='Farben' onclick={toggle}>{unfold?'▽':'▷'}</button>
-		<div class='grow' title='Rasse'>{breed.name}</div>
-		<div class='w-16 text-right' title='Brutgruppe'>
+	<button class='w-full flex flex-row py-2 gap-x-2' type='button' title='Farben' onclick={toggle}>
+		<span class='w-4'>{unfold?'▽':'▷'} </span>
+		<span class='grow text-left' title='Rasse'>{breed.name}</span>
+		<span class='w-16 text-center' title='Brutgruppe'>
 			{#if breed.broodGroup}{breed.broodGroup}{/if}
-		</div>
-		<div class='w-16 text-right' title='Legeleistung'>{breed.layEggs}</div>
-		<div class='w-16 text-right' title='Bruteigewicht'>{breed.layWeight}</div>
-		<div class='w-16 text-right' title='Zielgewicht der Hähne'>{breed.sireWeight}</div>
-		<div class='w-16 text-left' title='Zielgewicht der Hennen'>.{breed.dameWeight}</div>
-		<div class='w-12 text-right' title='Ringgröße Hahn'>{breed.sireRing}</div>
-		<div class='w-12 text-left' title='Ringgröße Henne'>.{breed.dameRing}</div>
-	</li>
+		</span>
+		<span class='w-16 text-right' title='Legeleistung'>{breed.layEggs}</span>
+		<span class='w-16 text-right' title='Bruteigewicht'>{breed.layWeight}</span>
+		<span class='w-32 text-center' title='Zielgewicht der Hahne.Henne'>{breed.sireWeight}.{breed.dameWeight}</span>
+		<span class='w-24 text-center' title='Ringgröße Hahn.Henne'>{breed.sireRing}.{breed.dameRing}</span>
+	</button>
+
 	{#if unfold}
-		<ul class='pl-12' transition:slide={{duration:breed.colors.length*25}}>
+		<div class='pl-12' transition:slide={{duration:breed.colors.length*25}}>
 			{#each breed.colors as color}
 				<Color {color} />
 			{/each}
-		</ul>
+		</div>
 	{/if}
 {/if}
 

@@ -37,7 +37,7 @@ declare module '$env/static/private' {
 	export const ComSpec: string;
 	export const DriverData: string;
 	export const EDITOR: string;
-	export const EFC_9844: string;
+	export const EFC_10980: string;
 	export const GOPATH: string;
 	export const HOME: string;
 	export const HOMEDRIVE: string;
@@ -143,7 +143,7 @@ declare module '$env/dynamic/private' {
 		ComSpec: string;
 		DriverData: string;
 		EDITOR: string;
-		EFC_9844: string;
+		EFC_10980: string;
 		GOPATH: string;
 		HOME: string;
 		HOMEDRIVE: string;

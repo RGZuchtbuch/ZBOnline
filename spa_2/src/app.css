@@ -37,6 +37,13 @@
         @apply bg-slate-200 text-gray-400 cursor-not-allowed;
     }
 
+    dl dt {
+        @apply font-bold;
+    }
+    dl dd {
+        @apply pl-4 italic;
+    }
+
     fieldset {
         @apply border border-teal-600 rounded px-4 py-2;
     }

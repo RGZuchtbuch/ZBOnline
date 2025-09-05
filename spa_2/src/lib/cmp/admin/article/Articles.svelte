@@ -24,7 +24,7 @@
 			<span class='w-8 text-right'>#</span>
 			<span class='w-12 text-right'>Folge</span>
 			<span class='grow'>Titel</span>
-			<span class='w-32'>Von</span>
+			<span class='w-48'>Von</span>
 			<span class='w-48'>Geändert</span>
 		</header>
 
@@ -33,7 +33,7 @@
 				<div class='w-8 text-right '> {i}</div>
 				<div class='w-12 text-right '> {article.level}</div>
 				<div class='grow'>{article.title}</div>
-				<div class='w-32'>{article.author}</div>
+				<div class='w-48'>{article.author}</div>
 				<div class='w-48'>{article.modified}</div>
 			</a>
 		{/each}
