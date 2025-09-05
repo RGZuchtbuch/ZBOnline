@@ -39,11 +39,7 @@
 
 
 {#if ctx.breeder && ctx.pairs && mounted}
-	<main in:fade={{duration:cfg.fadeIn}}>
-		<div class='text-xs text-center italic'>
-			Stämme für {ctx.breeder.firstname}
-		</div>
-
+	<section in:fade={{duration:cfg.fadeIn}}>
 		<Pairs breeder={ctx.breeder} pairs={ctx.pairs}  />
-	</main>
+	</section>
 {/if}

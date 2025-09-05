@@ -36,7 +36,8 @@
 				{#if section.parentId === cfg.pigeons} Brutgruppe {/if}
 			</div>
 			<div class='w-16 text-right' title='Legeleistung'>
-				{#if section.parentId !== cfg.pigeons} Eier/J {/if}</div>
+				{#if section.parentId !== cfg.pigeons} Eier/J {/if}
+			</div>
 			<div class='w-16 text-right' title='Bruteigewicht'>
 				{#if section.parentId !== cfg.pigeons} Gewicht {/if}
 			</div>

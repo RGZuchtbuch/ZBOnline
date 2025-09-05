@@ -13,31 +13,23 @@
 
 </script>
 
-<section>
+<section class='flex flex-col pl-4'>
 	{#if authorized && root}
-		<div class='flex flex-row border-header bg-header text-header px-2 sticky top-1'>
-			<div class='district'>Verbände </div>
-			<div class='moderator'>Obmann</div>
-			<div class='email' title='Email schicken'> ✉ </div>
-			<div class='goto' title='Als Obmann bearbeiten'> Obmann </div>
-			<div class='edit' title='Daten bearbeiten'>Bearbeiten</div>
-		</div>
+		<header class='flex flex-row border-header bg-header text-header px-2 sticky top-1'>
+			<span class='grow'>Verbände </span>
+			<span class='w-64'>Obmann</span>
+			<span class='w-16 text-center' title='Email schicken'>Email</span>
+			<span class='w-16 text-center' title='Als Obmann bearbeiten'>Verw.</span>
+			<span class='w-16 text-center' title='Daten bearbeiten'>Bearb.</span>
+		</header>
 
-		<ul>
-			<District district={ root } />
-		</ul>
+		<District district={ root } />
 	{/if}
 </section>
 
 
 
 <style>
-    section {
-        @apply flex flex-col my-2 border;
-    }
-    li {
-        @apply pl-4 whitespace-nowrap;
-    }
     .district {
 	    @apply grow;
     }

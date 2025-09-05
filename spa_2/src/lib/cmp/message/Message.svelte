@@ -1,13 +1,14 @@
 <script>
 	import {goto, invalidate} from '$app/navigation';
 	import { ctx } from '$lib/js/store.svelte.js';
+	import { fullName } from '$lib/js/tools.js';
 	import model from '$lib/js/model.js';
 	import Form, { CheckBox, DateInput, EmailInput, NumberInput, TextInput, Status, Submit, validator } from '$lib/cmp/form/Form.svelte';
 	import TextArea from '$lib/cmp/form/input/TextArea.svelte';
 
 	let { to } = $props();
 
-	let message = $state( { to:to, email:null, name:null, subject:null, message:null });
+	let message = $state( { to:to, email:ctx.user ? ctx.user.email : null, name:ctx.user ? fullName( ctx.user ) : null, subject:null, message:null });
 	let disabled = $state( false );
 	// submit button text
 	const values = { initial:null, waiting:'Moment...', changed:'Controlle', invalid:'Verschicken geht noch nicht', valid:'Verschicken', disabled:'Geht nicht', stored:'Bericht ist verschickt', error:'Oops, Server Fehler :(' };

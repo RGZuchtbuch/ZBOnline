@@ -4,28 +4,25 @@
 	let { articles } = $props();
 </script>
 
-<section class='pl-6 pr-2 py-4'>
+<section class='py-4'>
 	{#if articles}
 		<header class='flex flex-row px-2 gap-x-2 border-header bg-header text-header'>
-			<div class='w-4'>#</div>
-			<div class='grow'>Titel</div>
-			<div class='w-32'>Von</div>
+			<span class='w-4 text-right'>#</span>
+			<span class='w-12 text-right'>Folge</span>
+			<span class='grow'>Titel</span>
+			<span class='w-32'>Von</span>
 		</header>
 
-		<ol in:slide>
-
-			{#each articles as article, i}
-				{#if article.level !== null }
-					<li class=''>
-						<a class='grow flex flex-row gap-x-2 py-2' href={`${page.url.pathname}/${article.id}`}>
-							<div class='w-4 text-right '>{i+1}</div>
-							<div class='grow'>{article.title}</div>
-							<div class='w-32'>{article.author}</div>
-						</a>
-					</li>
-				{/if}
-			{/each}
-		</ol>
+		{#each articles as article, i}
+			{#if article.level !== null }
+				<a class='grow flex flex-row gap-x-2 p-2' href={`${page.url.pathname}/${article.id}`}>
+					<span class='w-4 text-right '>{i+1}</span>
+					<span class='w-12 text-right '>{i+1}</span>
+					<span class='grow'>{article.title}</span>
+					<span class='w-32'>{article.author}</span>
+				</a>
+			{/if}
+		{/each}
 	{/if}
 	{#if articles && articles.length === 0 }
 		Keine Info's gefunden.....
@@ -35,7 +32,7 @@
 
 <style>
 	section {
-		@apply m-0;
+		@apply ml-4;
 	}
 
     ol {

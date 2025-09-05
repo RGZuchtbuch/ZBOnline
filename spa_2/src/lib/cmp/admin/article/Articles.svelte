@@ -12,52 +12,41 @@
 </script>
 
 <section>
-	{#if articles}
-		<!--h2 class='header'>Alle Artikel zum Zuchtbuch</h2-->
+	{#if canEdit}
+		<div class='flex flex-row justify-end p-2'>
+			<a class='border-button bg-button text-button py-0 px-2' href='/admin/article/0' title='Neuer Beitrag'>+</a>
+		</div>
+	{/if}
 
-		{#if canEdit}
-			<div class='flex flex-row justify-end'>
-				<a href='/admin/article/0' title='Neuer Beitrag'>[+]</a>
-			</div>
-		{/if}
+	{#if articles}
 
 		<header class='flex flex-row px-2 gap-x-2 border-header bg-header text-header'>
-			<div class='w-12'>Level</div>
-			<div class='grow'>Titel</div>
-			<div class='w-32'>Von</div>
-			<div class='w-48'>Geändert</div>
+			<span class='w-8 text-right'>#</span>
+			<span class='w-12 text-right'>Folge</span>
+			<span class='grow'>Titel</span>
+			<span class='w-32'>Von</span>
+			<span class='w-48'>Geändert</span>
 		</header>
 
-		<ol in:slide>
-
-			{#each articles as article, i}
-				<li class=''>
-					<a class='grow flex flex-row gap-x-2 py-2' href={`${page.url.pathname}/${article.id}`}>
-						<div class='w-12 text-right '> {article.level}</div>
-						<div class='grow'>{article.title}</div>
-						<div class='w-32'>{article.author}</div>
-						<div class='w-48'>{article.modified}</div>
-					</a>
-				</li>
-			{/each}
-		</ol>
-
+		{#each articles as article, i}
+			<a class='grow flex flex-row gap-x-2 p-2' href={`${page.url.pathname}/${article.id}`}>
+				<div class='w-8 text-right '> {i}</div>
+				<div class='w-12 text-right '> {article.level}</div>
+				<div class='grow'>{article.title}</div>
+				<div class='w-32'>{article.author}</div>
+				<div class='w-48'>{article.modified}</div>
+			</a>
+		{/each}
 	{:else}
-		Keine Beiträge gefunden
+		<h2 class='mt-32 text-center text-xl'>
+			Keine Beiträge gefunden
+		</h2>
 	{/if}
 </section>
 
 <style>
 	section {
-		@apply m-0;
+		@apply ml-4;
 	}
-	hewader {
-        @apply flex flex-row border-b px-8 py-2 gap-x-2 sticky top-0 text-left;
-	}
-    ol {
-        @apply px-2 py-4;
-    }
-
-
 </style>
 

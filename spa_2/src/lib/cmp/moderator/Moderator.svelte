@@ -43,9 +43,9 @@
 		<h3>Leistungdaten eingeben</h3>
 		<ol class =''>
 			Mann hat Zwei möglichkeiten zum eingeben der Leistungsdaten :
-			<li class=''>Verbandseingabe pro Rasse und Farbenschlag ( nicht bei Tauben ). Mann mus selbst die gesamtzahlen aus den Meldungen berechnen.
+			<li class=''>Verbandseingabe pro Rasse und Farbenschlag ( nicht bei Tauben ). Mann mus selbst die gesamtzahlen aus den Meldungen berechnen.</li>
 			<li class=''>Einzelne Meldungen als Stamm/Paar eingeben. Hier mus man mert Daten eingeben, braucht dafür aber nichts zu berechnen, was auch von Vorteil ist wenn Nachmeldungen kommen. Dies ist auch nützling für die Bewertung der Zuchtbuchschaustämme.
-				Aber, jeder Meldung nur auf die eine ODER die andere Art verarbeiten um doppelte Meldungen zu vermeiden.
+				Aber, jeder Meldung nur auf die eine ODER die andere Art verarbeiten um doppelte Meldungen zu vermeiden.</li>
 		</ol>
 
 		<h3>Züchter verwalten</h3>

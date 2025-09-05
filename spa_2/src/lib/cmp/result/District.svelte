@@ -27,15 +27,14 @@
 		let url = new URL( page.url );
 		url.searchParams.set( 'section', sectionId );
 		goto( url.href );
-		//const href = `/moderator/${data.district.id}/result/${data.year}/edit/section/${sectionId}/group/${data.group}`;
-		//goto( href );
 	}
 	function onGroupChange( event ) {
+		console.log('Group', event.target.value)
 		const group = event.target.value;
 		//const href = `/moderator/${data.district.id}/result/${data.year}/edit/section/${data.section.id}/group/${group}`;
 		let url = new URL( page.url );
 		url.searchParams.set( 'group', group );
-		//goto( url.href );
+		goto( url.href );
 	}
 
 </script>

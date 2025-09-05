@@ -122,8 +122,8 @@
 							<div class='flex flex-row pl-4' class:accepted={breed.result && breed.result.pairId && breed.result.accepted} class:notaccepted={breed.result && breed.result.pairId && !breed.result.accepted}>
 								<span class='w-4'></span>
 								<span class='grow'>
-									{breed.name}
-											{#if breed.result}
+									<span>{breed.name}</span>
+									{#if breed.result}
 										<sup class='' title={`Gruppe ${breed.result.group}`}> {breed.result.group} </sup>
 									{/if}
 								</span>

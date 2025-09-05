@@ -77,6 +77,6 @@
 
     .content {
         /*@apply  bg-gradient-to-br from-violet-500 to-fuchsia-500 text-black flex flex-col;*/
-        @apply bg-[url('/assets/bg_bdrg_zuchtbuch.png')] bg-top bg-contain text-black flex flex-col;
+        @apply  text-black flex flex-col;
     }
 </style>

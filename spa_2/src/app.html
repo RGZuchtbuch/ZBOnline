@@ -8,7 +8,9 @@
 		%sveltekit.head%
 	</head>
 	<!-- body data-sveltekit-preload-data="hover" -->
-	<body class='bg-slate-100'>
-		<div class='relative h-full w-full lg:w-256 m-auto flex flex-col '>%sveltekit.body%</div>
+	<body class='flex flex-row justify-center'>
+		<div class='grow bg-[url("/assets/bg_bdrg_zuchtbuch.png")] bg-top bg-contain'></div>
+		<div class='relative h-full w-full lg:w-256 m-auto flex flex-col border rounded bg-[url("/assets/bg_bdrg_zuchtbuch.png")] bg-top bg-contain'>%sveltekit.body%</div>
+		<div class='grow bg-[url("/assets/bg_bdrg_zuchtbuch.png")] bg-top bg-contain'></div>
 	</body>
 </html>

@@ -9,7 +9,7 @@ export default {
     },
     extend: {
       colors: {
-        button: '#ffffff',
+        button: '#fff',
         header: '#000000', // in app.css components
       },
       backgroundColor: {
@@ -17,6 +17,7 @@ export default {
         header: '#99F6E4',
       },
       borderColor: {
+        button: '#F88',
         header: '#115E59',
       },
       fontFamily: {

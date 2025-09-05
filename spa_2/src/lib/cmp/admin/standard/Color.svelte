@@ -5,10 +5,15 @@
 	import model from '$lib/js/model.js';
 	import {goto} from '$app/navigation';
 
-	let { breed, color } = $props();
+	let { breed, color=$bindable() } = $props();
+
+	console.log('Color cmp');
+
 	let authorized = $derived( ctx.user && ctx.user.admin );
 	let edit = $state( false );
 	let remove = $state( false );
+
+	if( color.id === 0 ) edit = true;
 
 	const validate = {
 		name   : v => validator(v).string().length( 2, 64 ).orNullIf( remove ).isValid(),
@@ -40,42 +45,42 @@
 
 </script>
 
-{#if color}
-	<li class='' title='Farbenschlag'><div class='grow italic'>• {color.name}</div>
-		{#if authorized}
-			<button class='w-8' onclick={onEdit}>e</button>
-		{:else}
+<div class='flex flex-col'>
+	{#if color}
+		<div class='flex flex-rowflex flex-row p-2 gap-x-1' title='Farbenschlag'><div class='grow italic'>• {color.name}</div>
+			{#if authorized}
+				<button class='w-8 border-button bg-button text-button' onclick={onEdit}>
+					{#if edit}⯇{:else}▶{/if}
+				</button>
+			{:else}
+				<div class='w-8'></div>
+			{/if}
 			<div class='w-8'></div>
+		</div>
+
+		{#if authorized && edit}
+			<Form autosubmit onsubmit={onSubmit}>
+				<fieldset class='ml-8 flex flex-col px-2'>
+					<div class='flex flex-row gap-x-2'>
+						<TextInput class='w-8' label='Id' value={color.id} disabled />
+						<TextInput class='w-128' label='Name' bind:value={color.name} validator={validate.name}/>
+						<div class='grow'></div>
+						<CheckBox bind:value={ remove }
+						          label='Löschen'
+						          title='Nur wenn Name leer und keine meldungen'
+						          disabled={color.name}
+						/>
+						<Status />
+					</div>
+
+				</fieldset>
+			</Form>
 		{/if}
-	</li>
-
-	{#if authorized && edit}
-		<Form autosubmit onsubmit={onSubmit}>
-			<fieldset class='ml-8 flex flex-col px-2'>
-				<div class='flex flex-row gap-x-2'>
-					<TextInput class='w-8' label='Id' value={color.id} disabled />
-					<TextInput class='w-128' label='Name' bind:value={color.name} validator={validate.name}/>
-					<div class='grow'></div>
-					<CheckBox bind:value={ remove }
-					          label='Löschen'
-					          title='Nur wenn Name leer und keine meldungen'
-					          disabled={color.name}
-					/>
-					<Status />
-				</div>
-
-			</fieldset>
-		</Form>
 	{/if}
-{/if}
+</div>
 
 <style>
     li {
         @apply flex flex-row p-2 italic;
-    }
-
-
-    button {
-        @apply bg-inherit text-black;
     }
 </style>

@@ -47,8 +47,8 @@
 			des Züchters verwalten
 		</p>
 		<ul>
-			<li><a href={`/moderator/district/${ctx.breeder.districtId}/breeder/${ctx.breeder.id}/pair`}>Stämme</a>
-			<li><a href={`/moderator/district/${ctx.breeder.districtId}/breeder/${ctx.breeder.id}/profile`}>Mitgliedsdaten</a>
+			<li><a href={`/moderator/district/${ctx.breeder.districtId}/breeder/${ctx.breeder.id}/pair`}>Stämme</a></li>
+			<li><a href={`/moderator/district/${ctx.breeder.districtId}/breeder/${ctx.breeder.id}/profile`}>Mitgliedsdaten</a></li>
 		</ul>
 	</main>
 {/if}

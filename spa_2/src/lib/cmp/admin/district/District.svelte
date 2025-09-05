@@ -20,6 +20,10 @@
 		}
 	})
 
+	function onEdit() {
+		edit = ! edit;
+	}
+
 	async function onSubmit() {
 		if( authorized ) {
 			console.log('Submit', district.name);
@@ -32,25 +36,24 @@
 
 </script>
 
-<li class='pl-4'>
+<div class='ml-6 flex flex-col py-2'>
 	<div class='flex flex-row grow py-2 border-b rounded-b-none'>
-		<div class='district'>
-			<a href={`/moderator/${district.id}`}>{district.name}</a>
-		</div>
-		<div class='moderator'>{ fullName( district.moderator ) }</div>
-		<div class='email print:hidden'>
-			{#if district.moderator}
-				<!--a href={`mailto:${district.moderator.email}`}> ✉ </a-->
-				<a href={`/message?to=${district.moderator.id}`} title='Email schicken'> ✉ </a>
+		<span class='grow'>{district.name}</span>
+		<span class='w-64'>{ fullName( district.moderator ) }</span>
+		<div class='w-16 text-center'>
+			{#if district.moderator && district.moderator.email}
+				<a class='px-2 border-button bg-button text-button text-center print:hidden' href={`/federation/message?district=${district.id}&to=${district.moderator.id}`} title='Email schicken'> ✉ </a>
 			{/if}
 		</div>
 
-		<div class='goto'>
-			<a href={`/moderator/${district.id}`} title='Verband verwalten als Obmann'> ☉ </a>
-		</div>
+		<span class='w-16 text-center'>
+			<a class='px-2 border-button bg-button text-button text-center' href={`/moderator/district/${district.id}`} title='Verband verwalten als Obmann'> ⚙ </a>
+		</span>
 
-		<div class='edit' title='Daten bearbeiten'>
-			<CheckBox bind:value={edit} />
+		<div class='w-16 text-center'>
+			<button class='px-2 border-button bg-button text-button' title='Daten bearbeiten' onclick={onEdit}>
+				{#if edit}⯇{:else}▶{/if}
+			</button>
 		</div>
 	</div>
 
@@ -81,13 +84,11 @@
 	{/if}
 
 	{#if district.children}
-		<ul>
-			{#each district.children as child}
-				<District district={child} />
-			{/each}
-		</ul>
+		{#each district.children as child}
+			<District district={child} />
+		{/each}
 	{/if}
-</li>
+</div>
 
 
 

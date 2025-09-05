@@ -34,7 +34,4 @@
 
 
 <style>
-	ul {
-		@apply list-inside list-disc text-red-600;
-	}
 </style>

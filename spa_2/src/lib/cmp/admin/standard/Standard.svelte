@@ -1,6 +1,6 @@
 <script>
 	import { slide } from 'svelte/transition';
-	import { page } from '$app/state';
+	import { ctx } from '$lib/js/store.svelte.js';
 	import Section from './Section.svelte';
 
 	let { standard } = $props();
@@ -10,19 +10,13 @@
 	<header class='border-header bg-header text-header text-center'>Standard, Sparten, Rassen und Farbenschläge</header>
 
 	{#if standard }
-		<ul in:slide>
-			<Section section={ standard.root } unfold={true}/>
-		</ul>
+		<Section bind:section={ ctx.standard.root } unfold={true}/>
 	{/if}
 </section>
 
 <style>
 	section {
 		@apply border;
-	}
-
-	h3 {
-        @apply w-full bg-teal-200 rounded-t text-center
 	}
 
 </style>

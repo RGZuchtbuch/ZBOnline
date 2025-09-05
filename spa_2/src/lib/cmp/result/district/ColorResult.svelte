@@ -30,11 +30,11 @@
             chicks: (v) => validator(v).number().if(resultState.pairs > 0).range(0, resultState.pairs * 50).orNull().isValid(),
             eggs: (v) => validator(v).number().range(1, 99999).orNull().isValid(),
             fertile: (v) => validator(v).number().range(0, resultState.brood.eggs).orNull().isValid(),
-            hatched: (v) => validator(v).number().range(0, resultState.brood.fertile == null ? resultState.brood.eggs : resultState.brood.fertile).orNull().isValid(),
+            hatched: (v) => validator(v).number().range(0, resultState.brood.fertile === null ? resultState.brood.eggs : resultState.brood.fertile).orNull().isValid(),
         },
         show: {
-            count: (v) => validator(v).number().range(1, 99999).orNullIf(resultState.show.score == null).isValid(),
-            score: (v) => validator(v).number().range(89, 97).orNullIf(resultState.show.count == null).isValid(),
+            count: (v) => validator(v).number().range(1, 99999).orNullIf(resultState.show.score === null).isValid(),
+            score: (v) => validator(v).number().range(89, 97).orNullIf(resultState.show.count === null).isValid(),
         }
     }
 
@@ -56,7 +56,7 @@
     }
 
 </script>
-
+QQ
 <Form class='flex flex-row bg-gray-50 px-2 gap-x-1 text-sm' autosubmit onsubmit={onSubmit}>
     <div class='w-4 ml-6'> &#10551; </div>
     <div class='w-80 flex flex-row '>
@@ -85,10 +85,10 @@
     <NumberInput class='w-14' bind:value={resultState.brood.hatched} error='0..{resultState.brood.fertile==null ? resultState.brood.eggs : resultState.brood.fertile}' title='Geschlüpfte Küken, nicht mehr als befruchtet oder eingelegt' validator={validate.brood.hatched}/>
 
     <div class='w-2'></div>
-
-    <NumberInput class='w-14' bind:value={resultState.show.count} error='1..99999' title='Zahl der ausgestellten Tiere' validator={validate.showcount}/>
-    <NumberInput class='w-14' bind:value={resultState.show.score} step={0.1} error='89..97' title='Durchschnittsbewertung u/o=89, 90..97 Punkte, braucht Zahl der ausgestellen Tiere' validator={validate.show.score}/>
-
+    S
+    <NumberInput class='w-14' bind:value={resultState.show.count} error='1..99999' title='Zahl der ausgestellten Tiere' validator={validate.show.count}/>
+    <NumberInput class='w-14' bind:value={resultState.show.score} min=89 max=97 step={0.1} error='89..97' title='Durchschnittsbewertung u/o=89, 90..97 Punkte, braucht Zahl der ausgestellen Tiere' validator={validate.show.score}/>
+S
 
     <Status class='w-4' />
 </Form>

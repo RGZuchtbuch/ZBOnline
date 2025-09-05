@@ -72,7 +72,7 @@
 			</Form>
 		{/if}
 
-		<p class='px-6 py-2'>
+		<p class='px-16 py-2'>
 			{@html article.html}
 		</p>
 	{/if}

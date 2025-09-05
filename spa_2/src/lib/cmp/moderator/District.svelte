@@ -13,8 +13,8 @@
 		</h3>
 
 		<ol>
-			<li>Leistungen
-			<li>Züchter
+			<li>Leistungen</li>
+			<li>Züchter</li>
 		</ol>
 
 

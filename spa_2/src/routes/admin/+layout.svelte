@@ -5,8 +5,8 @@
 	let { children, data } = $props();
 
 	let authorized = $state( ctx.user && ctx.user.admin );
-	console.log( 'cu', ctx.user );
 
+	// layout protects role with authorized
 </script>
 
 {#if authorized }

@@ -1,7 +1,7 @@
 <script>
 	import { ctx } from '$lib/js/store.svelte.js';
-    import Districts from '$lib/cmp/moderator/Districts.svelte';
 	import {page} from '$app/state';
+	import Admin from '$lib/cmp/admin/Admin.svelte';
 
 	$effect( () => {
 		ctx.menustate[ '/admin' ] = page.url.href;
@@ -17,25 +17,11 @@
 			//{ name:'Start',    href:'/' },
 			{ name:'Admin',    href:'/admin' },
 		];
-		// ctx.header = {
-		// 	title: 'Admin',
-		// 	menu: {
-		// 		trail : [
-		// 			{ name:'Start',    href:'/' },
-		// 			{ name:'Admin' },
-		// 		],
-		// 		options : [
-		// 			{ name:'Verbände', href:'/admin/district' },
-		// 			{ name:'Setting', href:'/admin/setting' },
-		// 			{ name:'Logs', href:'/admin/log' },
-		// 		],
-		// 	}
-		// }
 	})
 
 </script>
 
-Alles für den Admin
+<Admin />
 
 
 

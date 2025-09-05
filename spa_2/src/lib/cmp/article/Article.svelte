@@ -7,12 +7,12 @@
 </script>
 
 {#if article}
-	<section>
+	<section class='px-16'>
 		<div class='flex flex-row items-center justify-end gap-x-2 p-2 text-xs italic'>
 			{article.author}, {article.modified}
 		</div>
 
-		<p class='px-6 py-2'>
+		<p class=''>
 			{@html article.html}
 		</p>
 	</section>
@@ -20,8 +20,4 @@
 {/if}
 
 <style>
-	.meta {
-		font-size: 0.6em;
-		@apply italic;
-	}
 </style>
