@@ -1,4 +1,5 @@
 import { ctx } from '$lib/js/store.svelte.js';
+import { page } from '$app/state';
 
 export function dat( date, format='de') {
 	return date ? date.getDate().toString().padStart( 2, '0' )+'.'+(date.getMonth()+1).toString().padStart( 2, '0' )+'.'+date.getFullYear().toString().padStart(4, '0') : null; // to formatted locale
@@ -156,14 +157,8 @@ export function activeYear() { // default year, after oct 1st is this year, for 
 	return now.getMonth() < 2 ? year-1 : year;
 }
 
-
-export function addCrumb( crumb ) { // { name:, url: }
-	// console.log( 'Add crumb', crumb.url.href );
-	// let index =ctx.crumbs.findIndex( c => c.url.pathname === crumb.url.pathname );
-	// if( index>= 0 ) {
-	// 	ctx.crumbs[ index ].url = crumb.url;
-	// 	ctx.crumbs.length = index+1; // remove trailing
-	// } else {
-	// 	ctx.crumbs.push( crumb );
-	// }
+// if current path is /breeders/15 then swap for 16 to /breeders/16. possible searchparams are lost
+export function swapHrefId( id ) {
+		const path = page.url.pathname;
+		return path.substring( 0, path.lastIndexOf( '/' ) )+'/'+id;
 }

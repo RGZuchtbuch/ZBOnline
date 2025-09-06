@@ -9,7 +9,7 @@
 	let authorized = $state( ctx.user && ( ctx.user.moderator.length > 0 || ctx.user.admin ) );
 
 	$effect( () => {
-		if( dirty.districts || page.url ) loadDistricts();
+		if( dirty.districts || ctx.federation || ctx.user ) loadDistricts();
 	})
 
 

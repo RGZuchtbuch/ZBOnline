@@ -5,7 +5,7 @@
 	import { ctx } from '$lib/js/store.svelte.js';
 	import model from '$lib/js/model.js';
 
-	import { dec } from '$lib/js/tools.js';
+	import {dec, swapHrefId} from '$lib/js/tools.js';
 	import {validator, Label, NumberInput, RingInput, Select, TextInput } from '$lib/cmp/form/Form.svelte';
 	import { toRing } from '$lib/cmp/form/validator.js';
 
@@ -72,6 +72,9 @@
 			<option value={parentPair.id} >{(parentPair.year%100)+'.'+parentPair.name}</option>
 		{/each}
 	</Select>
+	{#if parent.parentsPairId}
+		<a href={ swapHrefId( parent.parentsPairId )} title='Zum Elternpaar'>◎</a>
+	{/if}
 
 	{#if parentPair}
 		<div class='grow flex flex-row gap-x-1 justify-end' in:fade>

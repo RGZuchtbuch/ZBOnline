@@ -12,7 +12,7 @@
 	let mounted = $state( false );
 
 	$effect( async () => {
-		if( page.url ) await loadPair( +page.params.pair );
+		if( page.params.pair ) await loadPair( +page.params.pair );
 	})
 
 	$effect( async () => {
@@ -23,7 +23,6 @@
 		ctx.pair = id === 0 ?
 			await model.Pair.new( ctx.breeder) : // new for this breeder
 			await model.Pair.load( id );
-		console.log('Loaded pair');
 	}
 
 	function setHeader() {
@@ -49,7 +48,6 @@
 
 </script>
 
-{ctx.year}
 {#if ctx.federation && ctx.standard && ctx.breeder && ctx.pair && mounted }
 	<main in:fade={{duration:cfg.fadeIn}}>
 	<Pair pair={ctx.pair} />

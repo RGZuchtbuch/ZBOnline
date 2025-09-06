@@ -2,8 +2,8 @@
 	import {onMount} from 'svelte';
 	import { page } from '$app/state';
 	import { fade } from 'svelte/transition';
+
 	import {cfg, ctx} from '$lib/js/store.svelte.js';
-	import { addCrumb } from '$lib/js/tools.js';
 
 	import Districts from '$lib/cmp/district/Districts.svelte';
 

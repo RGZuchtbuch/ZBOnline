@@ -7,9 +7,6 @@
 
 	let { pair=$bindable(), standard } = $props();
 
-	console.log( 'pla', pair.lay.average );
-	//if( ! pair.lay.average ) pair.lay.average = null; // when undefined
-
 	let days = $state( null );
 	let result = $state( null );
 
@@ -28,8 +25,6 @@
 		pair.lay.result = pair.lay.average ? pair.lay.average : aab.layProduction( pair.lay.start, pair.lay.end, pair.lay.dames, pair.lay.eggs );
 		pair.layGrade = breed ? aab.lay( pair.lay.result, breed.layEggs ) : null;
 	})
-
-	console.log( 'pla', pair.lay.average)
 
 </script>
 

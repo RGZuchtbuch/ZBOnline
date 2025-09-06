@@ -3,7 +3,7 @@
 	import { page } from '$app/state';
 	import { fade } from 'svelte/transition';
 	import {cfg, ctx, dirty} from '$lib/js/store.svelte.js';
-	import { addCrumb, fullName, shortName, txt} from '$lib/js/tools.js';
+	import { fullName } from '$lib/js/tools.js';
 	import {onMount} from 'svelte';
 
 	let mounted = $state( false );

@@ -16,11 +16,6 @@
         return valid;
     }
 
-   // function onchange() { console.log( 'Select Change'); }
-
-//    function onInput( event ) {
-        //dirty = true; // needs validation
-//    }
     onMount( () => { // catch input and register validator
 //        element.addEventListener( 'input', onInput );
         if( form && validator ) form.validators.push( validate ); // add this.validate with it's context

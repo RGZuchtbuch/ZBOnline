@@ -1,11 +1,12 @@
 <script>
+	import { page } from '$app/state';
 	import {onMount} from 'svelte';
 	import {fade, slide} from 'svelte/transition';
 	import aab from '$lib/js/aab.js';
 	import { ctx } from '$lib/js/store.svelte.js';
 	import model from '$lib/js/model.js';
 
-	import { dec } from '$lib/js/tools.js';
+	import { dec, swapHrefId } from '$lib/js/tools.js';
 	import { Label, NumberInput, RingInput, Select, TextInput, validator } from '$lib/cmp/form/Form.svelte';
 	import { toRing } from '$lib/cmp/form/validator.js';
 
@@ -29,7 +30,6 @@
 
 	// should the pair hold the parentspair object
 	async function onRingInput() {
-		console.log( 'pi', parent.id);
 		let newRing = toRing( parent.ring ); // decode input
 		if( newRing ) {
 			if( newRing.year !== ringYear ) { // year changed
@@ -60,6 +60,8 @@
 		onRingInput(); // to get parentspairs for select ?
 	})
 
+
+
 </script>
 
 <section class='w-full flex flex-row gap-x-2 items-center'>
@@ -74,6 +76,9 @@
 			<option value={parentPair.id} >{(parentPair.year%100)+'.'+parentPair.name}</option>
 		{/each}
 	</Select>
+	{#if parent.parentsPairId}
+		<a href={ swapHrefId( parent.parentsPairId )} title='Zum Elternstamm'>◎</a>
+	{/if}
 
 	{#if parentPair}
 		<div class='grow flex flex-row gap-x-1 justify-end' in:fade>

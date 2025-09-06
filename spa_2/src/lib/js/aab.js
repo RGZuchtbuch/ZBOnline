@@ -8,7 +8,6 @@ export default {
 	lay: ( eggs, should ) => {
 		//console.log('Lay', eggs, eggs !== null && eggs >= 0, should );
 		if( eggs !== null && eggs >= 0 && should > 0 ) {
-			console.log('Tuut');
 			const fraction = eggs / should;
 			if( fraction >= 1.0 ) return 97;
 			else if( fraction >= 0.9 ) return 96;
@@ -18,9 +17,8 @@ export default {
 			else if( fraction >= 0.5 ) return 92;
 			else if( fraction >= 0.4 ) return 91;
 			else if( fraction >= 0.3 ) return 90;
-			return 89; // original 0
+			return 89; // original 0, but that is killing for avg
 		}
-		//console.log('Lay', null );
 		return null;
 	},
 	brood: {

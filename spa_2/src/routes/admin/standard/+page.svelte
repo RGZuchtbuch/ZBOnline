@@ -1,7 +1,7 @@
 <script>
 	import { page } from '$app/state';
+
 	import { ctx } from '$lib/js/store.svelte.js';
-	import { addCrumb } from '$lib/js/tools.js';
 
 	import Standard from '$lib/cmp/admin/standard/Standard.svelte';
 

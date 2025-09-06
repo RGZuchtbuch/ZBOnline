@@ -79,23 +79,11 @@
 {/if}
 
 {#if results}
-	{#if args.section.id === 9999} <!-- AOC -->
-		<!-- div>
-			<AocCreate {data}/>
-			DB {data.breeds.length}
-			{#each data.breeds as breed}
-				A
-				<AocResult section={data.section} {breed} {data}/>
-			{/each}
-		</div -->
-		<!--AOC {district} {year} {group} /-->
-	{:else}
-		<div>
-			{#each results as breed}
-				<Breed district={ctx.district} year={args.year} sectionId={args.section} group={args.group} {breed} />
-			{/each}
-		</div>
-	{/if}
+	<div>
+		{#each results as breed}
+			<Breed district={ctx.district} year={args.year} sectionId={args.section} group={args.group} {breed} />
+		{/each}
+	</div>
 {/if}
 
 

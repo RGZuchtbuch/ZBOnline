@@ -3,7 +3,7 @@
 	import { page } from '$app/state';
 	import { fade } from 'svelte/transition';
 	import {cfg, ctx, dirty} from '$lib/js/store.svelte.js';
-	import { activeYear, addCrumb } from '$lib/js/tools.js';
+	import { activeYear } from '$lib/js/tools.js';
 	import model from '$lib/js/model.js';
 
 //	import Results from '$lib/cmp/moderator/district/Results.svelte';

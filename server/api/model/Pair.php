@@ -115,7 +115,8 @@ class Pair {
 			breed.name AS breedName, breed.layEggs AS layEggsShould, breed.layWeight AS layWeightShould, breed.broodGroup AS broodGroup, 
 			color.name AS colorName,
 			result.layEggs, result.layWeight, result.broodEggs, result.broodFertile, result.broodHatched, 
-			result.showCount, result.showScore
+			result.showCount, result.showScore,
+			pair.accepted
 		FROM pair
 		LEFT JOIN breed ON breed.id = pair.breedId
 		LEFT JOIN color ON color.id = pair.colorId

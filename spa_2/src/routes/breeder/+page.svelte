@@ -1,11 +1,11 @@
 <script>
-	import {page} from '$app/state';
+	import { onMount } from 'svelte';
+	import { page } from '$app/state';
 	import { fade } from 'svelte/transition';
 	import { cfg, ctx } from '$lib/js/store.svelte.js';
-	import {shortName, fullName, addCrumb} from '$lib/js/tools.js';
+	import {shortName, fullName } from '$lib/js/tools.js';
 
 	import Breeder from '$lib/cmp/breeder/Breeder.svelte';
-	import {onMount} from 'svelte';
 
 	let mounted = $state( false );
 

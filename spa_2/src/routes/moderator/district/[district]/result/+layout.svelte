@@ -12,12 +12,11 @@
 		if( query.has( 'year') ) {
 			ctx.year = +query.get('year');
 		} else {
-			console.log( 'Set year')
 			const year = activeYear();
 			ctx.year = year;
-			const url = new URL( page.url );
-			url.searchParams.set( 'year', year );
-			goto( url.href );
+			// const url = new URL( page.url );
+			// url.searchParams.set( 'year', year );
+			//goto( url.href );
 		}
 		ctx.district = ctx.federation.districts[ page.params.district ];
 	});

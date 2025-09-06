@@ -1,8 +1,8 @@
 <script>
 	import { fade } from 'svelte/transition';
 	import { page } from '$app/state';
-	import { cfg, ctx, dirty } from '$lib/js/store.svelte.js';
-	import { addCrumb, fullName, shortName } from '$lib/js/tools.js';
+	import { cfg, ctx } from '$lib/js/store.svelte.js';
+	import { fullName } from '$lib/js/tools.js';
 	import Pair from '$lib/cmp/pair/Pair.svelte';
 	import model from '$lib/js/model.js';
 	import {onMount} from 'svelte';

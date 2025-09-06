@@ -184,7 +184,7 @@
 	.accepted {
 		@apply bg-teal-50;
 	}
-    .notaccepted {
+    .not-accepted {
         @apply bg-orange-50;
     }
 

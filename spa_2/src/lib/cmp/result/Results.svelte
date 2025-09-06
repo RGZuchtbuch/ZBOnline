@@ -119,29 +119,56 @@
 						</div>
 
 						{#each section.breeds as breed}
-							<div class='flex flex-row pl-4' class:accepted={breed.result && breed.result.pairId && breed.result.accepted} class:notaccepted={breed.result && breed.result.pairId && !breed.result.accepted}>
-								<span class='w-4'></span>
-								<span class='grow'>
+							{#if breed.result} <!-- clickable to edit-->
+								<a class='flex flex-row pl-4'
+								   class:accepted={breed.result && breed.result.pairId && breed.result.accepted}
+								   class:not-accepted={breed.result && breed.result.pairId && !breed.result.accepted}
+								   href={breed.result.pairId
+									? `${page.url.pathname}/breeder/${breed.result.breeder.id}/pair/${breed.result.pairId}`
+								    : `/moderator/district/6/result/district?year=${breed.result.year}&section=${breed.result.rootSectionId}&group=${breed.result.group}` }>
+								>
+									<span class='w-4'></span>
+									<span class='grow'>
 									<span>{breed.name}</span>
+										{#if breed.result}
+											<sup class='' title={`Gruppe ${breed.result.group}`}> {breed.result.group} </sup>
+										{/if}
+									</span>
 									{#if breed.result}
+										<Result section result={breed.result} />
+									{/if}
+								</a>
+							{:else}
+								<div class='flex flex-row pl-4'	>
+									<span class='w-4'></span>
+									<span class='grow'>
+									<span>{breed.name}</span>
+										{#if breed.result}
 										<sup class='' title={`Gruppe ${breed.result.group}`}> {breed.result.group} </sup>
 									{/if}
 								</span>
-								{#if breed.result}
-									<Result section result={breed.result} />
-								{/if}
-							</div>
+									{#if breed.result}
+										<Result section result={breed.result} />
+									{/if}
+								</div>
+							{/if}
 
 
 							{#each breed.colors as color}
-								<div class='flex flex-row pl-10' class:accepted={color.result.pairId && color.result.accepted} class:notaccepted={color.result.pairId && !color.result.accepted}>
+								<a class='flex flex-row pl-10'
+									class:accepted={color.result.pairId && color.result.accepted}
+								    class:not-accepted="{color.result.pairId && !color.result.accepted}"
+								    href={color.result.pairId
+								        ? `${page.url.pathname}/breeder/${color.result.breeder.id}/pair/${color.result.pairId}`
+								        : `/moderator/district/6/result/district?year=${color.result.year}&section=${color.result.rootSectionId}&color=${color.result.colorId}&group=${color.result.group}` }>
+								>
 									<span class='w-4'></span>
 									<span class='grow italic'>
 										{color.name}
 										<sup class='' title={`Gruppe ${color.result.group}`}> {color.result.group} </sup>
 									</span>
 									<Result {section} result={color.result} />
-								</div>
+								</a>
 							{/each}
 						{/each}
 					{/each}
@@ -173,7 +200,7 @@
     .accepted {
         @apply bg-teal-50;
     }
-    .notaccepted {
+    .not-accepted {
         @apply bg-orange-100;
     }
 </style>

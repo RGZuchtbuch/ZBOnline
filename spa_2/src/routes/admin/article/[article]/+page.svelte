@@ -1,12 +1,10 @@
 <script>
-	import {onMount} from 'svelte';
 	import { page } from '$app/state';
+
 	import { ctx, dirty } from '$lib/js/store.svelte.js';
 	import model from '$lib/js/model.js';
+
 	import Article from '$lib/cmp/admin/article/Article.svelte';
-
-
-//	addCrumb( { name:'?', url:page.url } );
 
 	$effect( async () => {
 		//if ( page.url ) loadArticle( +page.params.article );

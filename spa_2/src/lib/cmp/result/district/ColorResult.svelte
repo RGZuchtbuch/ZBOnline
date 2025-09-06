@@ -56,12 +56,12 @@
     }
 
 </script>
-QQ
+
 <Form class='flex flex-row bg-gray-50 px-2 gap-x-1 text-sm' autosubmit onsubmit={onSubmit}>
     <div class='w-4 ml-6'> &#10551; </div>
     <div class='w-80 flex flex-row '>
         {#if resultState.colorId } <!-- Normal color -->
-            <div class='' class:hasResult title={'Leistung ['+result.id+']'}> {resultState.colorName} {resultState.id}</div>
+            <div class='' class:hasResult title={'Leistung ['+result.id+']'}> {resultState.colorName} </div>
             <!--button class='self-start w-6' type='button' title='Hinzufügen' on:click={onToggleExtend}>&#43;</button -->
         {:else} <!-- AOC -->
             <span class='mt-1 mr-1'>AOC</span>
@@ -85,10 +85,10 @@ QQ
     <NumberInput class='w-14' bind:value={resultState.brood.hatched} error='0..{resultState.brood.fertile==null ? resultState.brood.eggs : resultState.brood.fertile}' title='Geschlüpfte Küken, nicht mehr als befruchtet oder eingelegt' validator={validate.brood.hatched}/>
 
     <div class='w-2'></div>
-    S
+
     <NumberInput class='w-14' bind:value={resultState.show.count} error='1..99999' title='Zahl der ausgestellten Tiere' validator={validate.show.count}/>
     <NumberInput class='w-14' bind:value={resultState.show.score} min=89 max=97 step={0.1} error='89..97' title='Durchschnittsbewertung u/o=89, 90..97 Punkte, braucht Zahl der ausgestellen Tiere' validator={validate.show.score}/>
-S
+
 
     <Status class='w-4' />
 </Form>

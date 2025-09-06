@@ -45,13 +45,17 @@
 		{#if pair.sectionId === 5 }
 			<div transition:slide>
 				{#each pair.parents as parent, i (i) }
-					<ParentPigeon bind:parent={pair.parents[i]} {pair} {i} />
+					{#key pair.parents[i]}
+						<ParentPigeon bind:parent={pair.parents[i]} {pair} {i} />
+					{/key}
 				{/each}
 			</div>
 		{:else}
 			<div transition:slide>
 				{#each pair.parents as parent, i (i) }
-					<ParentLayer bind:parent={pair.parents[i]} {pair} {i} />
+					{#key pair.parents[i]}
+						<ParentLayer bind:parent={pair.parents[i]} {pair} {i} />
+					{/key}
 				{/each}
 				<hr>
 				<div class='flex flex-row py-2'>

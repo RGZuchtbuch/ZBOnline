@@ -3,7 +3,6 @@
 	import { fade } from 'svelte/transition';
 	import { cfg, ctx, dirty } from '$lib/js/store.svelte.js'
 	import model from '$lib/js/model.js';
-	import { addCrumb } from '$lib/js/tools.js';
 
 	import Article from '$lib/cmp/article/Article.svelte';
 

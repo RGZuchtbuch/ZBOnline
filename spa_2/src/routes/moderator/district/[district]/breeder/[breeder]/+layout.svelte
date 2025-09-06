@@ -1,22 +1,16 @@
 <script>
-	import { fade } from 'svelte/transition';
 	import { page } from '$app/state';
-	import { goto } from '$app/navigation';
-	import { ctx, dirty } from '$lib/js/store.svelte.js';
-	import { addCrumb, fullName, shortName, txt} from '$lib/js/tools.js';
-	import model from '$lib/js/model.js';
-	import Pairs from '$lib/cmp/breeder/Pairs.svelte';
 
+	import { ctx, dirty } from '$lib/js/store.svelte.js';
+	import model from '$lib/js/model.js';
 
 	let { children } = $props();
-
 
 	$effect( async () => {
 		//const breederId = +page.params.breeder;
 		if( dirty.breeder && page.url ) await loadBreeder( +page.params.breeder );
 		//await loadBreeder( +page.params.breeder );
 	})
-
 
 	async function loadBreeder( id ) {
 		if( id === 0 ) {

@@ -104,15 +104,18 @@
 }
 
 @layer components {
+/*
     .text-neutral {
         @apply text-gray-400;
     }
-
+*/
     /* button */
+    /*
     .text-button {
+
         @apply text-center text-white;
     }
-
+*/
 
 
     /* breadcrumbs, obsolete

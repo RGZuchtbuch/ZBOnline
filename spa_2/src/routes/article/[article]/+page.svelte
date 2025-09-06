@@ -5,11 +5,8 @@
 
 	import { cfg, ctx, dirty } from '$lib/js/store.svelte.js';
 	import model from '$lib/js/model.js';
-	import Article from '$lib/cmp/article/Article.svelte';
-	import {addCrumb} from '$lib/js/tools.js';
 
-//	addCrumb( { name:'?', url:page.url } );
-	//ctx.article = null;
+	import Article from '$lib/cmp/article/Article.svelte';
 
 	$effect( async () => {
 		loadArticle(+page.params.article);

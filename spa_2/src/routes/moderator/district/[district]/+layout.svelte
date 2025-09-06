@@ -7,19 +7,9 @@
 	let { children } = $props();
 
 	$effect( () => {
-
-		//ctx.year = +( page.url.searchParams.get( 'year') ?? activeYear() ); // error
-		///ctx.year = ctx.year ?? activeYear();
-
 		ctx.district = ctx.federation.districts[ page.params.district ];
-		//console.log( 'effect', ctx.year ); // cyclic
-		//loadDistrict(6);
 	});
 
-	// function loadDistrict( id ) {
-	// 	console.log( 'Layout loads district' );
-	// 	ctx.district = ctx.federation.districts[ id ];//store.federation.districts[ +page.params.district ];
-	// }
 
 </script>
 

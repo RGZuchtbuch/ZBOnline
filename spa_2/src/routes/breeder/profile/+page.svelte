@@ -3,7 +3,7 @@
 	import { fade } from 'svelte/transition';
 	import {cfg, ctx} from '$lib/js/store.svelte.js';
 	import Profile from '$lib/cmp/breeder/profile.svelte';
-	import {addCrumb, fullName, shortName, txt} from '$lib/js/tools.js';
+	import { fullName } from '$lib/js/tools.js';
 	import {onMount} from 'svelte';
 
 	let mounted = $state( false );
@@ -18,8 +18,6 @@
 
 		ctx.title = `Züchter ${fullName(ctx.breeder)}, Mitglied`;
 		ctx.submenu = [
-//			{name: 'Stämme', href: `/breeder/pair`},
-			//{name: 'Mitglied', href: `/breeder/profile`},
 		];
 		ctx.crumbs = [
 			//{name: 'Start', href: '/'},

@@ -43,15 +43,16 @@ input.valid, textarea.valid, select.valid {
     background-color: white;
 }
 
-
 input, select {
     height: 2em;
     padding: 0 0.2em;
 }
+
 input:disabled, select:disabled, textarea:disabled {
     border: solid 1px lightgrey;
-    color: #444;
     background: #F8F8F8;
+    color:black;
+    opacity: 1.0;
 }
 
 
