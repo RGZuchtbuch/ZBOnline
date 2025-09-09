@@ -16,7 +16,7 @@
 </script>
 
 
-<fieldset class='flex flex-col p-2 gap-x-4 border border-base rounded bg-white' in:slide>
+<fieldset class='flex flex-col p-2 gap-x-4 border border-base rounded' in:slide>
 	<legend>{pair ? pair.sectionId === 5 ? 'Tauben Paar' : 'Geflügel Stamm' : 'Paar/Stamm'} <Status /></legend>
 
 	<div class='flex flex-row gap-x-4 '>

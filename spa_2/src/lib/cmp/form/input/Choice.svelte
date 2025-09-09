@@ -21,7 +21,7 @@
 	const state = getContext( 'form'); // store
 </script>
 
-<div class={'border'+className}>
+<div class={'border'+classname}>
 	{#if label}
 		<label class='label' for='radio'> {label} </label>
 	{/if}

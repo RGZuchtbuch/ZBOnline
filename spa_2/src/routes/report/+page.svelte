@@ -53,7 +53,9 @@
 
 {#if ctx.report && mounted}
 	<main class='' in:fade={{duration:cfg.fadeIn}}>
-		<Report	report={ctx.report}	/>
+		{#key ctx.report}
+			<Report	report={ctx.report}	/>
+		{/key}
 	</main>
 {/if}
 

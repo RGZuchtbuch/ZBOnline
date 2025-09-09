@@ -17,7 +17,7 @@ class User extends Query
         // TODO does breeder not handle this, needs check
         $args = get_defined_vars();
         $stmt = Query::prepare('
-            SELECT id, firstname, infix, lastname, email, districtId, clubId, start, end, info, admin
+            SELECT id, firstname, infix, lastname, email, districtId, clubId, start, end, active, info, admin
             FROM user
             WHERE id=:id
         ');

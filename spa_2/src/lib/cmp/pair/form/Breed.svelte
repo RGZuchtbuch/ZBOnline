@@ -14,19 +14,16 @@
 	let breedId = $state( pair.breedId );
 
 	function onSectionChange( event ) {
-		console.log( 'OnSectionChange' );
-		rootSection = ctx.standard.rootSections.find( ( section ) => section.id === pair.sectionId );
-			//pair.sectionId = rootSection ? rootSection.id : null;
+		//rootSection = ctx.standard.rootSections.find( ( section ) => section.id === pair.sectionId );
+		rootSection = ctx.standard.sections[ pair.sectionId ];
+		//pair.sectionId = rootSection ? rootSection.id : null;
 		pair.sectionId = rootSection.id;
 		pair.breedId = breed = null;
 		pair.colorId = color = null;
 	}
 	function onBreedChange( event ) {
-		console.log( 'OnBreedChange' );
 		pair.breed = breed = ctx.standard.breeds[ pair.breedId ];
 		pair.colorId = color = null;
-		console.log( 'OnBreedChange', pair.breed );
-
 	}
 	function onColorChange( event ) {
 		color = ctx.standard.colors[ pair.colorId ];
@@ -67,7 +64,7 @@
 		{#if breed}
 			{#each breed.colors as color }
 				<option value={color.id} selected={pair.colorId === color.id}>
-					{color.name} ({color.id})
+					{color.name}
 				</option>
 			{/each}
 		{/if}

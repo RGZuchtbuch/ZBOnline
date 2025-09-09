@@ -8,18 +8,38 @@ export default class Standard {
 		const data= await api.get(`/api/2/standard` );
 		if( data && data.standard ) {
 			standard = structuredStandardTree( data.standard ); // { root, sections, breed, colors }
-			standard.rootSections = getRootSections( standard )
+			//standard.rootSections = getRootSections( standard )
+			standard.rootSections = [
+				standard.sections[ 3 ],
+				standard.sections[ 11 ],
+				standard.sections[ 12 ],
+				standard.sections[ 13 ],
+				standard.sections[ 5 ],
+				standard.sections[ 6 ],
+			];
+
+			console.log( 'Standard', standard );
 		}
 		return standard;
 	}
 
-	static async loadRootSection( id ) {
-		return standard.rootSections.find( item => item.id === id );
-	}
 
-	static async loadRootSections(){
-		return standard.rootSections;
-	}
+	// const sections = [
+	// 	{ id:3,  name:'Groß u. Wassergeflügel', breeds:[] },
+	// 	{ id:11, name:'Hühner Groß', breeds:[] },
+	// 	{ id:12, name:'Zwerghühner', breeds:[] },
+	// 	{ id:13, name:'LegeWachteln', breeds:[] },
+	// 	{ id:5,  name:'Tauben', breeds:[] },
+	// 	{ id:6,  name:'Ziergeflügel', breeds:[] },
+	// ];
+
+	// static async loadRootSection( id ) {
+	// 	return standard.rootSections.find( item => item.id === id );
+	// }
+	//
+	// static async loadRootSections(){
+	// 	return standard.rootSections;
+	// }
 
 	static createBreed( sectionId ) {
 		return {
@@ -92,22 +112,22 @@ export default class Standard {
 };
 
 
-// main sections to enter results for
-function getRootSections( standard ) {
-	const sections = [
-		{ id:3,  name:'Groß u. Wassergeflügel', breeds:[] },
-		{ id:11, name:'Hühner Groß', breeds:[] },
-		{ id:12, name:'Zwerghühner', breeds:[] },
-		{ id:13, name:'LegeWachteln', breeds:[] },
-		{ id:5,  name:'Tauben', breeds:[] },
-		{ id:6,  name:'Ziergeflügel', breeds:[] },
-	];
-	for( let section of sections ) { // each rootSection, add breed and child breeds
-		addBreeds(  standard.sections[ section.id ], section.breeds ); // add to rootsection breeds, recursive
-		section.breeds.sort((a, b) => a.name.localeCompare(b.name)); // sort by name
-	}
-	return sections;
-}
+// // main sections to enter results for
+// function getRootSections( standard ) {
+// 	const sections = [
+// 		{ id:3,  name:'Groß u. Wassergeflügel', breeds:[] },
+// 		{ id:11, name:'Hühner Groß', breeds:[] },
+// 		{ id:12, name:'Zwerghühner', breeds:[] },
+// 		{ id:13, name:'LegeWachteln', breeds:[] },
+// 		{ id:5,  name:'Tauben', breeds:[] },
+// 		{ id:6,  name:'Ziergeflügel', breeds:[] },
+// 	];
+// 	// for( let section of sections ) { // each rootSection, add breed and child breeds
+// 	// 	addBreeds(  standard.sections[ section.id ], section.breeds ); // add to rootsection breeds, recursive
+// 	// 	section.breeds.sort((a, b) => a.name.localeCompare(b.name)); // sort by name
+// 	// }
+// 	return sections;
+// }
 
 // make sections, breeds and colors available by id
 function structuredStandardTree( standard ) {
@@ -128,7 +148,9 @@ function addSection( section, standard ) { // recursive for sections
 	}
 	for( const child of section.children ) { // nesting
 		addSection( child, standard );
+		addBreeds( child, section.breeds ); // add child breeds to this sections breeds
 	}
+	section.breeds.sort( ( a, b ) => a.name.localeCompare( b.name ));
 }
 function addBreeds( section, breeds ) { // for rootSections
 	for( const breed of section.breeds ) { // add these

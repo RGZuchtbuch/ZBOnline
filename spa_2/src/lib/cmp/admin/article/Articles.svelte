@@ -29,13 +29,15 @@
 		</header>
 
 		{#each articles as article, i}
-			<a class='grow flex flex-row gap-x-2 p-2' href={`${page.url.pathname}/${article.id}`}>
-				<div class='w-8 text-right '> {i}</div>
-				<div class='w-12 text-right '> {article.level}</div>
-				<div class='grow'>{article.title}</div>
-				<div class='w-48'>{article.author}</div>
-				<div class='w-48'>{article.modified}</div>
-			</a>
+			{#key article}
+				<a class='grow flex flex-row gap-x-2 p-2' href={`${page.url.pathname}/${article.id}`}>
+					<div class='w-8 text-right '> {i}</div>
+					<div class='w-12 text-right '> {article.level}</div>
+					<div class='grow'>{article.title}</div>
+					<div class='w-48'>{article.author}</div>
+					<div class='w-48'>{article.modified}</div>
+				</a>
+			{/key}
 		{/each}
 	{:else}
 		<h2 class='mt-32 text-center text-xl'>

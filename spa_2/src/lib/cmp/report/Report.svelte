@@ -32,54 +32,51 @@
 
 </script>
 
-{#key report }
-
+{#if report }
 	<Filter {report} />
-	{#if report !== null}
+
+	<div class='flex flex-col break-after-page'>
+		<header class='border-header bg-header text-header'>Gesamtleistungen im {district.name} in {report.args.year}</header>
 		<Chart {district} report={report.chart} year={report.args.year} />
-	{/if}
 
-	{#if report !== null }
-		<div class='flex flex-col break-after-page' open>
-			<header class='border-header bg-header text-header'>Leistungen im Übersicht</header>
-			<div class='mt-2 flex flex-row justify-evenly'>
-				<Select class='w-64' label='Leistung' value={report.args.type} onchange={onTypeChange}>
-					{#each Object.values( types ) as type}
-						<option value={type.id}>{type.name}</option>/
-					{/each}
-				</Select>
+		<header class='border-header bg-header text-header'>Leistungen im Übersicht</header>
+		<div class='mt-2 flex flex-row justify-evenly'>
+			<Select class='w-64' label='Leistung' value={report.args.type} onchange={onTypeChange}>
+				{#each Object.values( types ) as type}
+					<option value={type.id}>{type.name}</option>/
+				{/each}
+			</Select>
+		</div>
+
+		<div class='flex flex-row justify-evenly gap-x-2 '>
+			<div class='flex flex-col'>
+				<header>Trend für {district.name}</header>
+				{#if report.trend}
+					<Trend report={report.trend} typeId={report.args.type} />
+				{/if}
 			</div>
-
-			<div class='flex flex-row justify-evenly p-4 gap-x-2 '>
-				<div class='flex flex-col'>
-					<header>Trend für {district.name}</header>
-					{#if report.trend}
-						<Trend report={report.trend} typeId={report.args.type} />
-					{/if}
-				</div>
-				<div class='flex flex-col'>
-					<header>Verteilung in {report.args.year}</header>
-					{#if report.map}
-						<Map report={report.map} typeId={report.args.type} />
-					{/if}
-				</div>
+			<div class='flex flex-col'>
+				<header>Verteilung in {report.args.year}</header>
+				{#if report.map}
+					<Map report={report.map} typeId={report.args.type} />
+				{/if}
 			</div>
 		</div>
-	{/if}
+	</div>
 
-	{#if report !== null }
-		<div class='flex flex-col break-after-page' open>
-			<header class=''>Leistungsdaten im {district.name} für {report.args.year}</header>
-			<div class='flex flex-col py-4'>
-				<Table table={report.table} {district} year={report.args.year} />
-			</div>
+	<div class='flex flex-col break-after-page' open>
+		<header class=''>Leistungsdaten im {district.name} für {report.args.year}</header>
+		<div class='flex flex-col py-4'>
+			<Table table={report.table} {district} year={report.args.year} />
 		</div>
-	{/if}
-{/key}
+	</div>
+{:else}
+	Bericht wird geladen...
+{/if}
 
 <style>
 	header {
-		@apply px-4 py-2 text-xl text-center sticky top-1;
+		@apply px-4 py-2 text-xl text-center font-bold screen:sticky screen:top-1;
 	}
     summary {
         @apply px-4 py-2 bg-teal-200 text-xl font-bold sticky top-0 text-center;

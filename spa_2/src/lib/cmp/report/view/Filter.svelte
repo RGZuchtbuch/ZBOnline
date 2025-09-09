@@ -1,21 +1,27 @@
 <script>
 	import { goto } from '$app/navigation';
+	import { onMount } from 'svelte';
 	import { page } from '$app/state';
 	import { ctx } from '$lib/js/store.svelte.js';
+	import { activeYear, getArgNum, getArgStr } from '$lib/js/tools.js';
 	import model from '$lib/js/model.js';
 
 	import Select from '$lib/cmp/form/input/Select.svelte';
 	import Form from '$lib/cmp/form/Form.svelte';
-	import {onMount} from 'svelte';
+
+
 
 	let { report } = $props();
 
-	let district = $state( ctx.federation.districts[ report.args.district ] )
-	let year     = $state( report.args.year );
-	let group    = $state( report.args.group );
-	let section  = $state( ctx.standard.rootSections.find( item => item.id === report.args.section ) );
-	let breed    = $state( ctx.standard.breeds[ report.args.breed ] );
-	let color    = $state( ctx.standard.colors[ report.args.color ] );
+	let district = $derived( ctx.federation.districts[ getArgNum( page.url, 'district', 1 ) ] ); //report.args.district ] )
+	let year     = $derived( getArgNum( page.url, 'year', activeYear() ) ); //report.args.year );
+	let group    = $derived( getArgStr( page.url, 'group', null ) );
+//	let section  = $derived( ctx.standard.rootSections.find( item => item.id === report.args.section ) );
+	let section  = $derived( ctx.standard.sections[ getArgNum( page.url, 'section', 2 ) ] );
+//	let section  = $derived( ctx.standard.sections[ report.args.section ] );
+//	let breed    = $state( ctx.standard.breeds[ report.args.breed ] );
+	let breed    = $derived( ctx.standard.breeds[ getArgNum( page.url, 'breed', null ) ] );
+	let color    = $derived( ctx.standard.colors[ getArgNum( page.url, 'color', null ) ] );
 
 	const groups = ['I','II','III'];
 	let years = [];
@@ -51,7 +57,9 @@
 	}
 	function onSectionChange( event ) {
 		let sectionId = +event.target.value;
-		section = ctx.standard.rootSections.find( item => item.id === sectionId );
+		console.log( 'Section', sectionId );
+		//section = ctx.standard.rootSections.find( item => item.id === sectionId );
+		section = ctx.standard.sections[ sectionId ];
 		breed = null;
 		//color = null;
 		const url =new URL( page.url ); // for query changes
@@ -89,17 +97,21 @@
 		goto( url.href );
 	}
 
+	//const testSections = [ ctx.standard.sections[2], ctx.standard.sections[13], ctx.standard.sections[17] ];
+	// ctx.standard.rootSections
+	const testSections = ctx.standard.root;
 </script>
 
 {#if ctx.federation && ctx.standard && report.args }
 	<Form>
-		<section class='flex flex-row gap-x-2 p-4' >
+		<h3 class='text-center print:hidden'>Filter</h3>
+		<section class='flex flex-row gap-x-2 px-4 print:hidden' >
 			<Select class='' label='Verband' value={report.args.district} onchange={onDistrictChange}>
 				<option value={ctx.federation.id}>{ctx.federation.name}</option>
 				{#each ctx.federation.children as district}
-					<option value={district.id}>{district.name}</option>
+					<option value={district.id}>▸&nbsp;{district.name}</option>
 					{#each district.children as district}
-						<option value={district.id}>&nbsp; &nbsp; {district.name}</option>
+						<option value={district.id}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;◦&nbsp;&nbsp;{district.name}</option>
 					{/each}
 				{/each}
 			</Select>
@@ -119,15 +131,25 @@
 		</section>
 
 
-		<section class='flex flex-row gap-x-2 p-4' >
-			<Select class='w-56' label='Sparte' value={report.args.section} onchange={onSectionChange}>
-				<option value={undefined}>*</option>
-				{#each ctx.standard.rootSections as section}
-					<option value={section.id}>{section.name}</option>
+		<section class='flex flex-row gap-x-2 px-4 print:hidden' >
+			<Select class='' label='Sparte' value={report.args.section} onchange={onSectionChange}>
+				<option value={ctx.standard.root.id}>*</option>
+				{#each ctx.standard.root.children as section}
+					<option value={section.id}>▸&nbsp;{section.name}</option>
+					{#each section.children as subSection}
+						<option value={subSection.id}>&nbsp;&nbsp;&nbsp;&nbsp;◦&nbsp;&nbsp;{subSection.name}</option>
+					{/each}
 				{/each}
 			</Select>
 
-			<Select class='w-96' label='Rasse' value={report.args.breed} onchange={onBreedChange}>
+			<!--Select class='w-56' label='Sparte' value={report.args.section} onchange={onSectionChange}>
+				<option value={undefined}>*</option>
+				{#each testSections as section}
+					<option value={section.id}>{section.name}</option>
+				{/each}
+			</Select-->
+
+			<Select class='min-w-64' label='Rasse' value={report.args.breed} onchange={onBreedChange}>
 				<option value={undefined}>*</option>
 				{#if section}
 					{#each section.breeds as breed}
@@ -136,7 +158,7 @@
 				{/if}
 			</Select>
 
-			<Select class='w-80' label='Farbenschlag' value={report.args.color} onchange={onColorChange}>
+			<Select class='min-w-64' label='Farbenschlag' value={report.args.color} onchange={onColorChange}>
 				<option value={undefined}>*</option>
 				{#if breed}
 					{#each breed.colors as color}
@@ -145,6 +167,19 @@
 				{/if}
 			</Select>
 
+		</section>
+
+		<section class='screen:hidden'>
+			<h1 class='flex flex-row mx-16 justify-center gap-x-8'>
+				<span>{year}</span>
+				<span>{district.name}</span>
+				<span>{group?group:'*'}</span>
+			</h1>
+			<h2 class='flex flex-row mx-16 justify-center gap-x-8'>
+				<span>{section ? section.name : 'Alle Sparten, Rassen und Farbenschläge'}</span>
+				<span>{breed   ? breed.name   : 'Alle Rassen'}</span>
+				<span>{color   ? color.name   : 'Alle Farbenschläge'}</span>
+			</h2>
 		</section>
 	</Form>
 {/if}

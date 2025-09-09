@@ -18,12 +18,14 @@
 	{#if districts}
 		<ol in:slide>
 			{#each districts as district, i}
-				<li class='flex flex-row items-center'>
-					<a href={`/moderator/district/${district.id}`} title='Verband verwalten'>
-						<div class='w-6 text-right '>{i+1}.</div>
-						<div>{district.name}</div>
-					</a>
-				</li>
+				{#key district}
+					<li class='flex flex-row items-center'>
+						<a href={`/moderator/district/${district.id}`} title='Verband verwalten'>
+							<div class='w-6 text-right '>{i+1}.</div>
+							<div>{district.name}</div>
+						</a>
+					</li>
+				{/key}
 			{/each}
 		</ol>
 	{/if}

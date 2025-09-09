@@ -52,7 +52,9 @@
 	{#if district.children}
 		<ul>
 			{#each district.children as child}
-				<District district={child} />
+				{#key child}
+					<District district={child} />
+				{/key}
 			{/each}
 		</ul>
 	{/if}

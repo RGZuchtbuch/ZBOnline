@@ -5,13 +5,13 @@
     import Form, { CheckBox, DateInput, EmailInput, NumberInput, TextInput, Status, validator } from '$lib/cmp/form/Form.svelte';
     import TextArea from '$lib/cmp/form/input/TextArea.svelte';
 
-    let { breeder=$bindable(), district, readonly } = $props();
+    let { breeder=$bindable(), district } = $props();
 
     let edit = $state( false );
     let remove = $state( false );
     let changed = false; // for invalidating load article
 
-    let authorized = $derived( ! readonly && breeder !== null && ctx.user !== null && ( ctx.user.moderator.includes( breeder.districtId ) || ctx.user.admin ) ); // can edit
+    let authorized = $derived( ctx.user !== null && ( ctx.user.admin || ctx.user.moderator.includes( breeder.districtId ) ) ); // can edit
 
     const validate = {
         member:     v => validator(v).number().orNull().isValid(),
@@ -43,7 +43,7 @@
 {#if breeder && district }
 
     <section>
-
+        {authorized ? 'Y' : 'n'}
 
         <div class='text-center'>
             <h2>Mitgliedsdaten</h2>

@@ -18,16 +18,17 @@ class Standard
 		if( $json ) { // in cache
             $response->getBody()->write( $json );
 			return $response;
+		} else {
+			$sections = model\std\Section::descendants(2); // all poultry
+			$breeds = model\std\Breed::get();
+			$colors = model\std\Color::get();
+			//print_r( 'Colors'.$colors );
+			$standard = Standard::toStandardTree($sections, $breeds, $colors);
+			$json = json_encode(['standard' => $standard, 'timestamp' => date('Y-m-d H:i:s')], JSON_UNESCAPED_SLASHES);
+			model\Cache::set('standard', $request->getUri()->getPath(), $request->getUri()->getQuery(), $json);
+			$response->getBody()->write($json);
+			return $response;
 		}
-		$sections = model\std\Section::descendants(2); // all poultry
-		$breeds = model\std\Breed::get();
-		$colors = model\std\Color::get();
-		//print_r( 'Colors'.$colors );
-		$standard = Standard::toStandardTree($sections, $breeds, $colors);
-		$json = json_encode( [ 'standard' => $standard, 'timestamp' => date( 'Y-m-d H:i:s' ) ], JSON_UNESCAPED_SLASHES );
-		//model\Cache::set( 'standard', $request->getUri()->getPath(), $request->getUri()->getQuery(), $json );
-		$response->getBody()->write( $json );
-        return $response;
 	}
 
 	/** other getters **/

@@ -59,8 +59,8 @@
 
 <div class='flex flex-col' >
     <h5 title={`Brutleistung, Befruchtung und Schlupf von alle Sparten ausser Tauben von ${report.broodLayerBreeders} Tieren`}>
-        Brutleistung Geflügel
-        <sup>{report.broodLayerBreeders} / {report.broodBreeders}</sup>
+        Bruten Geflügel
+        <sup>{report.broodLayerBreeders} / {report.breeders}</sup>
     </h5>
     <canvas bind:this={canvas} width='192px' height='256px'></canvas>
 </div>

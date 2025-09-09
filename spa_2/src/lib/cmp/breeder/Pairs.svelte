@@ -4,7 +4,9 @@
 	import { ctx } from '$lib/js/store.svelte.js';
 
 	let { breeder } = $props();
-	let authorized = $derived( ctx.user && ctx.user.admin )
+	//let authorized = $derived( ctx.user && ctx.user.admin )
+	let authorized = $derived( ctx.user && ( ( ctx.user.active && ctx.user.id === ctx.breeder.id ) || ctx.user.admin || ctx.user.moderator.includes( breeder.districtId ) ) ); // can edit
+
 
 </script>
 
@@ -25,24 +27,26 @@
 	</div>
 	{#if ctx.pairs && ctx.pairs.length > 0}
 		{#each ctx.pairs as pair, i}
-			<a class='grow flex flex-row gap-x-2 p-2' href={`${page.url.pathname}/${pair.id}`} >
-				<span class='w-8 text-right'>{i+1}</span>
-				<span class='w-2'>:</span>
-				<span class='w-8 text-right'>{pair.year}</span>
-				<span class='w-20 text-center'>{pair.name}</span>
-				<span class='w-96'>
-					{pair.breed.name}
-					<!--sup class='w-32'>{pair.breed.id}</sup-->
-				</span>
-				<span class='grow'>
-					{pair.color.name}
-					<!--sup-- class='w-32'>{pair.color.id}</sup-->
-				</span>
+			{#key pair}
+				<a class='grow flex flex-row gap-x-2 p-2' href={`${page.url.pathname}/${pair.id}`} >
+					<span class='w-8 text-right'>{i+1}</span>
+					<span class='w-2'>:</span>
+					<span class='w-8 text-right'>{pair.year}</span>
+					<span class='w-20 text-center'>{pair.name}</span>
+					<span class='w-96'>
+						{pair.breed.name}
+						<!--sup class='w-32'>{pair.breed.id}</sup-->
+					</span>
+					<span class='grow'>
+						{pair.color.name}
+						<!--sup-- class='w-32'>{pair.color.id}</sup-->
+					</span>
 
-				<span class='w-8 text-center text-red-600' class:accepted={pair.accepted} title='Ok vom Obmann ?'>
-					{pair.accepted ? '✓' : '✗'}
-				</span>
-			</a>
+					<span class='w-8 text-center text-red-600' class:accepted={pair.accepted} title='Ok vom Obmann ?'>
+						{pair.accepted ? '✓' : '✗'}
+					</span>
+				</a>
+			{/key}
 		{/each}
 	{:else}
 		<div class='px-2'>

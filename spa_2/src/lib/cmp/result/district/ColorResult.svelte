@@ -6,7 +6,7 @@
     //import NumberInput from '../../common/form/input/NumberInput.svelte';
     //import FormStatus from '../../common/form/Status.svelte';
 
-    import AddResultRow from './AddResultRow.svelte'
+    //import AddResultRow from './AddResultRow.svelte'
 
     let { result=$bindable(), data } = $props();
 
@@ -57,14 +57,14 @@
 
 </script>
 
-<Form class='flex flex-row bg-gray-50 px-2 gap-x-1 text-sm' autosubmit onsubmit={onSubmit}>
+<Form class='flex flex-row px-2 gap-x-1 ' autosubmit onsubmit={onSubmit}>
     <div class='w-4 ml-6'> &#10551; </div>
-    <div class='w-80 flex flex-row '>
+    <div class='grow flex flex-row '>
         {#if resultState.colorId } <!-- Normal color -->
-            <div class='' class:hasResult title={'Leistung ['+result.id+']'}> {resultState.colorName} </div>
+            <div class='italic' class:hasResult title={'Leistung ['+result.id+']'}> {resultState.colorName} </div>
             <!--button class='self-start w-6' type='button' title='Hinzufügen' on:click={onToggleExtend}>&#43;</button -->
         {:else} <!-- AOC -->
-            <span class='mt-1 mr-1'>AOC</span>
+            <span class='mt-1 mr-1 italic'>AOC</span>
             <TextInput class='w-64' bind:value={aocColor} title='AOC Farbenschlag' />
         {/if}
     </div>
@@ -72,19 +72,19 @@
     <NumberInput class='w-14' bind:value={resultState.breeders} error='1..99999' title='Zahl der Zuchten/Züchter, leer lassen zum Löschen' validator={validate.breeders} />
     <div class='w-14'></div>
 
-    <div class='w-2'></div>
+    <div class='w-4'></div>
     <!-- lay -->
     <!-- NumberInput class='w-14' bind:value={result.layDames} error='0..99999' title='Gesamtzahl der legende Hennen' validator={validate.layDames}/ -->
     <NumberInput class='w-14' bind:value={resultState.lay.eggs} error='0..366' title='Durchschnittslegeleistung' validator={validate.lay.eggs}/>
     <NumberInput class='w-14' bind:value={resultState.lay.weight} error='1..999' title='Durchschnittsgewicht der gelegten Eier' validator={validate.lay.weight}/>
 
-    <div class='w-2'></div>
+    <div class='w-4'></div>
     <!-- brood -->
     <NumberInput class='w-14' bind:value={resultState.brood.eggs} error='0..99999' title='Eigelegte Eier' validator={validate.brood.eggs}/>
     <NumberInput class='w-14' bind:value={resultState.brood.fertile} error='0..{resultState.brood.eggs}' title='Befruchtete Eier, nicht mehr als eingelegt' validator={validate.brood.fertile}/>
     <NumberInput class='w-14' bind:value={resultState.brood.hatched} error='0..{resultState.brood.fertile==null ? resultState.brood.eggs : resultState.brood.fertile}' title='Geschlüpfte Küken, nicht mehr als befruchtet oder eingelegt' validator={validate.brood.hatched}/>
 
-    <div class='w-2'></div>
+    <div class='w-4'></div>
 
     <NumberInput class='w-14' bind:value={resultState.show.count} error='1..99999' title='Zahl der ausgestellten Tiere' validator={validate.show.count}/>
     <NumberInput class='w-14' bind:value={resultState.show.score} min=89 max=97 step={0.1} error='89..97' title='Durchschnittsbewertung u/o=89, 90..97 Punkte, braucht Zahl der ausgestellen Tiere' validator={validate.show.score}/>

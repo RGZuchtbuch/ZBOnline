@@ -33,6 +33,8 @@
 			args.district = +page.params.district;
 			ArgsBuilder.setNumber( args, query, 'year', activeYear() );
 			ArgsBuilder.setNumber( args, query, 'section', 3 );
+			ArgsBuilder.setNumber( args, query, 'breed', null );
+			ArgsBuilder.setNumber( args, query, 'color', null );
 			ArgsBuilder.setString( args, query, 'group', 'I' );
 		return args;
 	}

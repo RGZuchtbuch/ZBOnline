@@ -34,6 +34,6 @@
 
 {#if ctx.breeder && ctx.district && mounted }
 	<main in:fade={{duration:cfg.fadeIn}}>
-		<Profile bind:breeder={ctx.breeder} district={ctx.district} readonly/>
+		<Profile bind:breeder={ctx.breeder} district={ctx.district} />
 	</main>
 {/if}

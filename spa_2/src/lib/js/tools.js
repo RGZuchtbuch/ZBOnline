@@ -120,6 +120,22 @@ export let ArgsBuilder = {
 	},
 }
 
+export function getArgNum( url, name, def ) {
+	if ( url.searchParams.has( name  ) ) {
+		return +url.searchParams.get( name );
+	} else {
+		return def;
+	}
+}
+
+export function getArgStr( url, name, def ) {
+	if ( url.searchParams.has( name  ) ) {
+		return url.searchParams.get( name );
+	} else {
+		return def;
+	}
+}
+
 // ****************** Name printing ****************//
 
 export function fullName( person ) { // Eelco von Jannink

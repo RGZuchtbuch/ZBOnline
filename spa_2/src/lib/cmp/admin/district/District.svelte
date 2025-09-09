@@ -75,7 +75,9 @@
 					<option value={null} >?</option>
 					{#if breeders}
 						{#each breeders as breeder}
-							<option value={breeder.id} > {selectName( breeder ) } </option>
+							{#key breeder}
+								<option value={breeder.id} > {selectName( breeder ) } </option>
+							{/key}
 						{/each}
 					{/if}
 				</Select>
@@ -85,7 +87,9 @@
 
 	{#if district.children}
 		{#each district.children as child}
-			<District district={child} />
+			{#key child}
+				<District district={child} />
+			{/key}
 		{/each}
 	{/if}
 </div>

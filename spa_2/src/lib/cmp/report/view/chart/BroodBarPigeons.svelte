@@ -2,16 +2,62 @@
     import { BarController, BarElement, CategoryScale, Chart, Colors, LinearScale, Tooltip } from 'chart.js';
 
     let { report } = $props();
-    let canvas = null; // ref to canvas element
-    let chart = null; // showing chart
+    let prodCanvas = null; // ref to canvas element
+    let hatchCanvas = null;
+    let prodChart = null; // showing chart
+    let hatchChart = null; // showing chart
 
     Chart.register( BarController, BarElement, CategoryScale, Colors, LinearScale, Tooltip );
 
     $effect( () => {
-        updateChart( report );
+        updateChartHatch( report );
+        updateChartProd( report );
     });
 
-    function updateChart( result ) {
+    function updateChartHatch( result ) {
+        let labels = [ 'Geschlüpft %' ];
+        let datasets = [
+            {
+                data: [ 100*result.broodPigeonHatched ],
+                backgroundColor: [ '#CEC8' ],
+                borderColor: [ '#283' ],
+                borderWidth: 1,
+            }
+        ];
+
+        if( hatchChart ) {
+            hatchChart.data.labels = labels;
+            hatchChart.data.datasets = datasets;
+            hatchChart.update();
+        } else {
+            const config = {
+                type: 'bar',
+                data: {
+                    labels:labels,
+                    datasets:datasets,
+                },
+                options: {
+                    responsive:false,
+                    plugins: {
+                        legend: {
+                            display: false,
+                            position: 'right',
+                        }
+                    },
+                    scales: {
+                        y: {
+                            min: 0,
+                            max: 100,
+                        }
+                    }
+                }
+            }
+            const context = hatchCanvas.getContext( '2d' );
+            hatchChart = new Chart( context, config );
+        }
+    }
+
+    function updateChartProd( result ) {
         let labels = [ 'Küken / Paar' ];
         let datasets = [
             {
@@ -22,10 +68,10 @@
             }
         ];
 
-        if( chart ) {
-            chart.data.labels = labels;
-            chart.data.datasets = datasets;
-            chart.update();
+        if( prodChart ) {
+            prodChart.data.labels = labels;
+            prodChart.data.datasets = datasets;
+            prodChart.update();
         } else {
             const config = {
                 type: 'bar',
@@ -51,21 +97,22 @@
                     }
                 }
             }
-            const context = canvas.getContext( '2d' );
-            chart = new Chart( context, config );
+            const context = prodCanvas.getContext( '2d' );
+            prodChart = new Chart( context, config );
         }
     }
-
-
 
 </script>
 
 <div class='flex flex-col' >
     <h5 title={`Brutleistung, kKüken pro Paar für Tauben von ${report.broodPigeonBreeders} Tieren`}>
-        Brutleistung Tauben
-        <sup>{report.broodPigeonBreeders} / {report.broodBreeders}</sup>
+        Bruten Tauben
+        <sup>{report.broodPigeonBreeders} / {report.breeders}</sup>
     </h5>
-    <canvas bind:this={canvas} width='128px' height='256px'></canvas>
+    <div class='flex flex-row'>
+        <canvas bind:this={hatchCanvas} width='96px' height='256px'></canvas>
+        <canvas bind:this={prodCanvas} width='96px' height='256px'></canvas>
+    </div>
 </div>
 
 <style></style>

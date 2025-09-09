@@ -70,15 +70,15 @@
 
     <NumberInput class='w-14' bind:value={data.breeders} error='1..99999' title='Zahl der Zuchten/Züchter, leer lassen zum Löschen' validator={validate.breeders} />
     <NumberInput class='w-14' bind:value={data.pairs}  error={ (data.breeders ? data.breeders : '1')+'..99999'} title='Zahl der Stämme/Paare' validator={validate.pairs} />
-    <div class='w-2'></div>
+    <div class='w-4'></div>
     <!-- lay -->
     <div class='w-14'></div> <div class='w-14'></div> <!-- div class='w-14' / -->
-    <div class='w-2'></div>
+    <div class='w-4'></div>
     <!-- brood -->
     <NumberInput class='w-14' bind:value={data.brood.broods} error='0..99' title='Bruten, jeweils 2 Eier erwarted' validator={validate.brood.broods}/>
     <NumberInput class='w-14' bind:value={data.brood.hatched} error='0..99999' title='Geschlüpfte Küken, Braucht Paare' validator={validate.brood.chicks}/>
     <div class='w-14'></div>
-    <div class='w-2'></div>
+    <div class='w-4'></div>
     <!-- show -->
     <NumberInput class='w-14' bind:value={data.show.count} error='1..99999' title='Zahl der ausgestellten Tiere' validator={validate.show.count}/>
     <NumberInput class='w-14' bind:value={data.show.score} step={0.1} error='89..97' title='Durchschnittsbewertung u/o=89, 90..97 Punkte, braucht Zahl der ausgestellen Tiere' validator={validate.show.score}/>

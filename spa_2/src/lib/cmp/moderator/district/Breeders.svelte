@@ -41,14 +41,16 @@
 </header>
 
 {#each breeders as breeder }
-	<a class='flex flex-row' href={page.url.pathname+'/'+breeder.id}>
-		<span class='w-12'> {breeder.member}</span>
-		<span class='w-48'> {breeder.lastname}, {breeder.firstname} {breeder.infix}</span>
-		<span class='w-48'> {breeder.club}</span>
-		<span class='w-24'> {breeder.start}</span>
-		<span class='w-24'> {breeder.end}</span>
-		<span class='w-12 text-red-600 text-center' class:active={breeder.active}> {breeder.active ? '✓' : '✗'}</span>
-	</a>
+	{#key breeder}
+		<a class='flex flex-row' href={page.url.pathname+'/'+breeder.id}>
+			<span class='w-12'> {breeder.member}</span>
+			<span class='w-48'> {breeder.lastname}, {breeder.firstname} {breeder.infix}</span>
+			<span class='w-48'> {breeder.club}</span>
+			<span class='w-24'> {breeder.start}</span>
+			<span class='w-24'> {breeder.end}</span>
+			<span class='w-12 text-red-600 text-center' class:active={breeder.active}> {breeder.active ? '✓' : '✗'}</span>
+		</a>
+	{/key}
 {/each}
 
 

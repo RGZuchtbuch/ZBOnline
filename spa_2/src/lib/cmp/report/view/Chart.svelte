@@ -10,7 +10,7 @@
 
 
 <div class='flex flex-col' open>
-	<header class='border-header bg-header text-header'>Gesamt Leistungen im {district.name} in {year}</header>
+	<!--header class='border-header bg-header text-header'>Gesamt Leistungen im {district.name} in {year}</header-->
 	<div class='flex flex-row justify-evenly py-4'>
 		<LayBar class='' report={report} />
 		<BroodBarLayers  report={report} />

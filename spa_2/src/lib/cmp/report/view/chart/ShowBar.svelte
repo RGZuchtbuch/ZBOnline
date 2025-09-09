@@ -81,7 +81,7 @@
 
 <div class='flex flex-col' >
     <h5 title={`Durchschnitts note von ${report.showBreeders} Tieren`}>
-        Schauleistung in pkt
+        Schaunote
         <sup>{report.showBreeders} / {report.breeders}</sup>
     </h5>
     <canvas bind:this={canvas} width='128px' height='256px'></canvas>

@@ -13,13 +13,15 @@
 		</header>
 
 		{#each articles as article, i}
-			{#if article.level !== null }
-				<a class='grow flex flex-row gap-x-4 p-2' href={`${page.url.pathname}/${article.id}`}>
-					<span class='w-8 text-right '>{i+1}</span>
-					<span class='grow'>{article.title}</span>
-					<span class='w-48'>{article.author}</span>
-				</a>
-			{/if}
+			{#key article}
+				{#if article.level !== null }
+					<a class='grow flex flex-row gap-x-4 p-2' href={`${page.url.pathname}/${article.id}`}>
+						<span class='w-8 text-right '>{i+1}</span>
+						<span class='grow'>{article.title}</span>
+						<span class='w-48'>{article.author}</span>
+					</a>
+				{/if}
+			{/key}
 		{/each}
 	{/if}
 	{#if articles && articles.length === 0 }

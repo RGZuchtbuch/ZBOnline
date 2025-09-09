@@ -148,6 +148,9 @@ class Pair
 
 	// create or update pair
 	public static function postPair( ? int $id, array $body, Requester $requester ) : int {
+		if( ! $requester->isAdmin() && ! $requester->isModerating( $body[ 'districtId' ] ) ) {
+			$body['accepted'] = 0; // can only be set by mod
+		}
 		if( $id == null ) { //
 			return model\Pair::create($body['breederId'], $body['districtId'], $body['year'], $body['group'], $body['sectionId'], $body['breedId'], $body['colorId'], $body['name'], $body['paired'], $body['notes'], $body['accepted'], $requester->getId());
 		} else {

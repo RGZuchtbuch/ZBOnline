@@ -9,6 +9,8 @@
 
 	let { args, results=$bindable() } = $props();
 
+	$inspect( 'Args', args );
+
 	let authorized = $derived( ctx.user && ( ctx.user.id === ctx.district.moderator.id || ctx.user.admin ) ); // can edit
 
 	let years = []; // create years array for select
@@ -26,6 +28,8 @@
 
 		let url = new URL( page.url );
 		url.searchParams.set( 'section', sectionId );
+		//url.searchParams.delete( 'breed' );
+		//url.searchParams.delete( 'color' );
 		goto( url.href );
 	}
 	function onGroupChange( event ) {
@@ -71,17 +75,19 @@
 		</div>
 	</div>
 
-	<div class ='flex flex-row bg-gray-50' in:fade>
-		<p class='grow info'>
+	<div class ='flex flex-row' in:fade>
+		<h2 class='grow mx-16 border-b text-center'>
 			Leistungsdaten gesamt eingabe per Sparte und Gruppe für den Verband
-		</p>
+		</h2>
 	</div>
 {/if}
 
 {#if results}
 	<div>
 		{#each results as breed}
-			<Breed district={ctx.district} year={args.year} sectionId={args.section} group={args.group} {breed} />
+			{#key breed}
+				<Breed district={ctx.district} year={args.year} sectionId={args.section} group={args.group} {breed} />
+			{/key}
 		{/each}
 	</div>
 {/if}

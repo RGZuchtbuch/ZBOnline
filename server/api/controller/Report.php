@@ -34,8 +34,9 @@ class Report
 		$cached = null;
 		$report = null;
 		$rows = null;
-		//print( $districtId.' '.$year.' '.$target);
-		$cached = model\Cache::get('report', $request->getUri()->getPath(), $request->getUri()->getQuery());
+
+		// disabled for dev $cached = model\Cache::get('report', $request->getUri()->getPath(), $request->getUri()->getQuery());
+
 		if( $cached ) {
 			$response->getBody()->write( $cached );
 			return $response;

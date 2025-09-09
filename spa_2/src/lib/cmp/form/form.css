@@ -5,9 +5,6 @@ div.wrapper {
     flex-direction: column;
 }
 
-fieldset {
-    background: #FDFDFD;
-}
 fieldset > legend {
     padding: 0 1em;
 }

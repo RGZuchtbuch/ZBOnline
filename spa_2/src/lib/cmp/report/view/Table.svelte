@@ -5,9 +5,12 @@
 
     let { table, district, year } = $props();
 
-    let totalledReport = null;
+    let totalledReport = $state( null );
 
-    calcTotals();
+    //$effect( () => {
+        calcTotals();
+        console.log( 'Calc');
+    //} );
     // $effect( () => {
     //     if( table !== null ) {
     //         //calcTotals();
@@ -132,7 +135,7 @@
                     <!-- section header -->
                     <thead>
                         <tr>
-                            <th class='sticky top-1' colspan=14>
+                            <th class='screen:sticky screen:top-1' colspan=14>
                                 <div class='flex flex-col'>
                                     <div class='flex flex-row p-1 rounded-b-none border-header bg-header text-header'>
                                         <small class='w-48 pr-2 text-left self-end'>{#if district} {district.short} {/if}</small>

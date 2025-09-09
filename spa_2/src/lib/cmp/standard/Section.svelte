@@ -55,13 +55,16 @@
 				<Section section={child} />
 			{/each}
 		</div>
+	{/if}
 
+	{#if unfold && section.children.length === 0}
 		<div class='pl-8' transition:slide={{duration:500}}>
 			{#each section.breeds as breed}
 				<Breed {breed} />
 			{/each}
 		</div>
 	{/if}
+
 {/if}
 
 

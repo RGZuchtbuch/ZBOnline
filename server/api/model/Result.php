@@ -561,27 +561,27 @@ class Result
 		$args = get_defined_vars();
 
 		$stmt = Query::prepare("
-			SELECT 
+			SELECT
 				section.rootId AS sectionId, breed.id AS breedId, color.id AS colorId, color.name AS colorName,
 				:districtId AS districtId, :year AS `year`,
-				result.id, pairId, :group AS `group`, 
-				aocColor, breeders, pairs, 
+				result.id, pairId, :group AS `group`,
+				aocColor, breeders, pairs,
 				layDames, result.layEggs, result.layWeight,
 				broodEggs, broodFertile, broodHatched,
-				showCount, showScore				
+				showCount, showScore
 			FROM color
 			    LEFT JOIN breed ON breed.id = color.breedId
 			    LEFT JOIN section ON section.id = breed.sectionId
-				LEFT JOIN result 
+				LEFT JOIN result
 					ON result.colorId = color.id
 					AND result.districtId = :districtId
 					AND result.year = :year
 					AND result.group = :group
 					AND result.pairId IS NULL
 					AND result.aocColor IS NULL
-			WHERE 
+			WHERE
 				color.breedId = :breedId
-			ORDER BY color.name		
+			ORDER BY color.name
         ");
 		return Query::selectArray( $stmt, $args );
 	}
