@@ -73,7 +73,7 @@
 						{#if option.href}
 							<a href={option.href} title={'Zum '+option.name}>{option.name}</a>
 						{:else}
-							<a title='Jetzige Wahl'>{option.name}</a>
+							<span title='Jetzige Wahl'>{option.name}</span><!-- not happening anymore ?-->
 						{/if}
 					{/key}
 				{/each}

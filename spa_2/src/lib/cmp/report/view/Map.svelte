@@ -171,7 +171,7 @@
                             {/each}
 
                             {#each report.districts as district, index }
-                                <circle cx={map.coords[index].x} cy={map.coords[index].y} r={1+MAXBUBBLE} stroke='#7770' fill='#0000' on:click={onClick(district)}>
+                                <circle cx={map.coords[index].x} cy={map.coords[index].y} r={1+MAXBUBBLE} stroke='#7770' fill='#0000' role='button' onclick={onClick(district)}>
                                     <title>{map.labels[index]} : {map.titles[index]}</title>
                                 </circle>
                             {/each}

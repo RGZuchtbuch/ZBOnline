@@ -16,9 +16,9 @@
 
     let { token } = $props();
 
-    let decoded = null;
-    let user = null;
-    let email = null;
+    let decoded = $state( null );
+    let user = $state( null );
+    let email = $state( null );
     let password = $state( null );
 
     try {
@@ -58,10 +58,10 @@
         <h3> {email} </h3>
         <ul>
             Ein Passwort braucht wenigstens 8 Zeichen mit
-            <li> Kleine [a..z] Buchstaben
-            <li> Große [A..Z] Buchstaben
-            <li> Ziffern [0..9]
-            <li> Sonderzeichen [!@#$%^&*()-] !
+            <li> Kleine [a..z] Buchstaben</li>
+            <li> Große [A..Z] Buchstaben</li>
+            <li> Ziffern [0..9]</li>
+            <li> Sonderzeichen [!@#$%^&*()-] !</li>
         </ul>
 
         <Form class='w-96 flex flex-col gap-2' validateafter={500} onsubmit={onSubmit} >

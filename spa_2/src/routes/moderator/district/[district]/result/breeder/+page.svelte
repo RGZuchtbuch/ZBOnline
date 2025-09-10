@@ -48,7 +48,7 @@
 </script>
 
 
-{ctx.year}
+
 {#if ctx.breeders && ctx.district}
 	<main in:fade={{duration:cfg.fadeIn}}>
 		<Breeders breeders={ctx.breeders} district={ctx.district} />

@@ -6,10 +6,10 @@
 
 <section class='mt-32 flex flex-col items-center'>
 	<h2>Hallo {breeder.firstname}, wilkommen in dein Zuchtbuch</h2>
-	<p>Du kannst ier deine <a href=''>Stämme</a> verwalten und deine <a href=''>Mitgliedsdaten</a> einsehen.</p>
+	<p>Du kannst ier deine Stämme verwalten und deine Mitgliedsdaten einsehen.</p>
 	<ul class=''>
-		<li><a href={`${page.url.pathname}/pair`}>Stämme</a>
-		<li><a href={`${page.url.pathname}/profile`}>Mitgliedsdaten</a>
+		<li><a href={`${page.url.pathname}/pair`}>Stämme</a></li>
+		<li><a href={`${page.url.pathname}/profile`}>Mitgliedsdaten</a></li>
 	</ul>
 </section>
 

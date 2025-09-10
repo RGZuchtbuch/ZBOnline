@@ -2,7 +2,7 @@
     import { getContext,  onDestroy, onMount } from 'svelte';
 
 
-    let { class:classname='', disabled=false, element=$bindable(), error='Fehler', label=null, name=null, onchange=null, title=null, validator=null, value=$bindable() } = $props();
+    let { children, class:classname='', disabled=false, element=$bindable(), error='Fehler', label=null, name=null, onchange=null, title=null, validator=null, value=$bindable() } = $props();
     const form = getContext( 'form'); // store
     let valid = $state( true );
 
@@ -38,7 +38,8 @@
             bind:this={element} bind:value={value}
             {disabled} {name} {title}
     >
-        <slot /> <!-- options-->
+        {@render children()} <!-- options-->
+        <!--slot /-->
     </select>
     <label class='error' class:valid for='number'>{error}</label>
 </div>

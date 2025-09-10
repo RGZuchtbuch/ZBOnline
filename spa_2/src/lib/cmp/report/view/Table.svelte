@@ -7,15 +7,7 @@
 
     let totalledReport = $state( null );
 
-    //$effect( () => {
-        calcTotals();
-        console.log( 'Calc');
-    //} );
-    // $effect( () => {
-    //     if( table !== null ) {
-    //         //calcTotals();
-    //     }
-    // });
+    calcTotals(); // in effect makes it trigger twice, now in #key block. should be in onMount ?
 
     function addTo( sum, result ) { // count and add all up to totals of section etc
         result.broods = result.broodEggs ? result.broodEggs / 2 : null; // for pigeons

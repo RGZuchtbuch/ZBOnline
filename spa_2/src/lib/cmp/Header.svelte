@@ -10,13 +10,7 @@
 </a>
 
 <div class='flex flex-row'>
-	<!--div class='flex flex-row pl-16'>
-		<span>Crumbs</span>
-		{#each ctx.crumbs as crumb }
-			<a href={crumb.url.href}>{crumb.name}</a> .
-		{/each}
-	</div-->
-	<div class='grow font-bold pl-32 text-sm text-center' onclick={ () => ctx.dialog='test' } in:fade>
+	<div class='grow font-bold pl-32 text-sm text-center' in:fade>
 		BDRG Zuchtbuch
 	</div>
 

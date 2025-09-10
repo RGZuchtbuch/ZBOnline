@@ -1,4 +1,4 @@
-<script context='module'>
+<script module>// wa context='module' but that is depricated
     import Form from './Form.svelte';
     import CheckBox from './input/CheckBox.svelte';
     import DateInput from './input/Date.svelte';

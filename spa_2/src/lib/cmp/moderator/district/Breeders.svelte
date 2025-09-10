@@ -31,24 +31,24 @@
 	<a href={`${page.url.href}/0`}>[+]</a>
 </div>
 
-<header class='flex flex-row border-header bg-header text-header section items-end px-2 py-0 pl-0 gap-x-2'>
-	<a class='w-12' onclick={onSortByNumber}>ZbNr</a>
-	<a class='w-48' onclick={onSortByName}>Name</a>
-	<a class='w-48' onclick={onSortByClub}>Ortverein</a>
-	<a class='w-24' onclick={onSortByStart}>Seit</a>
-	<a class='w-24' onclick={onSortByEnd}>Bis</a>
-	<a class='w-12' onclick={onSortByActive}>Online</a>
+<header class='flex flex-row border-header bg-header text-header section items-end px-2 py-0 pl-6 gap-x-2'>
+	<span class='w-12' title='Sortieren' role='button' onclick={onSortByNumber}>ZbNr</span>
+	<span class='w-80' title='Sortieren' role='button' onclick={onSortByName}>Name</span>
+	<span class='w-48' title='Sortieren' role='button' onclick={onSortByClub}>Ortverein</span>
+	<span class='w-24' title='Sortieren' role='button' onclick={onSortByStart}>Seit</span>
+	<span class='w-24' title='Sortieren' role='button' onclick={onSortByEnd}>Bis</span>
+	<span class='w-12' title='Sortieren' role='button' onclick={onSortByActive}>Online</span>
 </header>
 
 {#each breeders as breeder }
 	{#key breeder}
 		<a class='flex flex-row' href={page.url.pathname+'/'+breeder.id}>
 			<span class='w-12'> {breeder.member}</span>
-			<span class='w-48'> {breeder.lastname}, {breeder.firstname} {breeder.infix}</span>
+			<span class='w-80'> {breeder.lastname}, {breeder.firstname} {breeder.infix}</span>
 			<span class='w-48'> {breeder.club}</span>
 			<span class='w-24'> {breeder.start}</span>
 			<span class='w-24'> {breeder.end}</span>
-			<span class='w-12 text-red-600 text-center' class:active={breeder.active}> {breeder.active ? '✓' : '✗'}</span>
+			<span class='w-12 text-green-600 text-center'> {breeder.active ? '✓' : '.'}</span>
 		</a>
 	{/key}
 {/each}
@@ -64,11 +64,5 @@
     }
     a {
         @apply border-b flex flex-row p-2 pl-6 gap-x-2;
-    }
-    a.disabled {
-	    @apply pointer-events-none;
-    }
-    .active {
-	    @apply text-green-600;
     }
 </style>

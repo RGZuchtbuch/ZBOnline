@@ -243,7 +243,7 @@
 										<div class='flex flex-row border border-gray-400 rounded pt-2 px-2 justify-evenly'>
 											<span class='w-8 my-6 mx-1'>{grandParent.sex}</span>
 											<RingInput class='w-36' label='Bundesring {grandParent.sex}'/>
-											<div class='grow border-0 flex flex-row gap-x-2 justify-evenly' on:input={ () => gradeBrood( grandParent.brood ) }>
+											<div class='grow border-0 flex flex-row gap-x-2 justify-evenly' oninput={ () => gradeBrood( grandParent.brood ) }>
 												<span class='w-36 mt-6 text-left'>→ Bruten</span>
 												<NumberInput class='w-24' label='Bruten' bind:value={grandParent.brood.count} validator={validate.pigeon.brood.count} />
 												<span class='w-8 mt-6'>mit</span>
@@ -264,7 +264,7 @@
 											<div class='grow flex flex-col'>
 												{#if grandParent.sex === '0.1'}
 													<!-- lay for henns -->
-													<div class='grow border-0 flex flex-row justify-evenly pt-2' on:input={ () => gradeLay( grandParent.lay ) }>
+													<div class='grow border-0 flex flex-row justify-evenly pt-2' oninput={ () => gradeLay( grandParent.lay ) }>
 														<div class='w-32 mt-6 mx-1 text-left'>→ Legen</div>
 														<NumberInput class='w-32' label='Legen e/j' bind:value={ grandParent.lay.eggs } validator={validate.layer.lay.eggs}/>
 														<div class='w-8 mt-6 mx-1 text-center'>von</div>
@@ -275,7 +275,7 @@
 												{/if}
 
 												<!-- brood for all -->
-												<div class='grow border-0 flex flex-row justify-evenly pt-2' on:input={ () => gradeBrood( grandParent.brood ) }>
+												<div class='grow border-0 flex flex-row justify-evenly pt-2' oninput={ () => gradeBrood( grandParent.brood ) }>
 													<span class='w-32 mt-6 mx-1 text-left'>→ Brut</span>
 													<NumberInput class='w-32' label='Eingelegt' bind:value={grandParent.brood.eggs} validator={ validate.layer.brood.eggs } />
 													<span class='w-8 mt-6 mx-1 text-center'>mit</span>

@@ -21,33 +21,34 @@
 	function onSortByEnd() {
 		breeders.sort( (a, b) => (''+a.end).localeCompare( b.end ) );
 	}
+	function onSortByActive() {
+		breeders.sort( (a, b) => (''+a.active).localeCompare( b.active ) );
+	}
 
 </script>
 
 
-<div class='flex flex-row justify-end gap-x-4'>
+<!--div class='flex flex-row justify-end gap-x-4'>
 	<a href={`${page.url.href}/0`}>[+]</a>
-</div>
+</div-->
 
-<header class='flex flex-row border-header bg-header text-header section items-end px-2 py-0 pl-0 gap-x-2'>
-	<a class='w-12' onclick={onSortByNumber}>ZbNr</a>
-	<a class='w-48' onclick={onSortByName}>Name</a>
-	<a class='w-48' onclick={onSortByClub}>Ortverein</a>
-	<a class='w-24' onclick={onSortByStart}>Seit</a>
-	<a class='w-24' onclick={onSortByEnd}>Bis</a>
+<h2 class='text-center'>Welcher Züchter hat gemeldet</h2>
+
+<header class='flex flex-row border-header bg-header text-header section items-end px-2 py-0 pl-6 gap-x-2 screen:sticky screen:top-1'>
+	<span class='w-12' title='Sortieren' role='button' onclick={onSortByNumber}>ZbNr</span>
+	<span class='w-80' title='Sortieren' role='button' onclick={onSortByName}>Name</span>
+	<span class='w-48' title='Sortieren' role='button' onclick={onSortByClub}>Ortverein</span>
+	<span class='w-12' title='Sortieren' role='button' onclick={onSortByActive}>Online</span>
 </header>
 
 {#each breeders as breeder }
 	<a class='flex flex-row' href={page.url.pathname+'/'+breeder.id+'/pair?year='+ctx.year}>
-		<span class='w-12'> {breeder.member}</span>
-		<span class='w-48'> {breeder.lastname}, {breeder.firstname} {breeder.infix}</span>
-		<span class='w-48'> {breeder.club}</span>
-		<span class='w-24'> {breeder.start}</span>
-		<span class='w-24'> {breeder.end}</span>
+		<span class='w-12'> {breeder.member} </span>
+		<span class='w-80'> {breeder.lastname}, {breeder.firstname} {breeder.infix} </span>
+		<span class='w-48'> {breeder.club} </span>
+		<span class='w-12 text-green-600'> {breeder.active?'✓':'.'} </span>
 	</a>
 {/each}
-
-
 
 <style>
     h3 {
@@ -59,4 +60,5 @@
     a {
         @apply border-b flex flex-row p-2 pl-6 gap-x-2;
     }
+
 </style>

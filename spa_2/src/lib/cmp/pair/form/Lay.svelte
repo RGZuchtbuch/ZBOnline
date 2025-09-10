@@ -42,7 +42,7 @@
 			<NumberInput class='w-16' label='⌀ Eier/Jahr' title='Durchschnitt Jahresleistung' bind:value={pair.lay.average} validator={validate.average} />
 			<Label label={true}> : </Label>
 			<NumberInput class='w-16' label={`⌀ Gewicht`} bind:value={ pair.lay.weight } validator={validate.weight}/>
-			<div class='grow' />
+			<div class='grow'></div>
 			<Label label={true}>→</Label>
 
 			<NumberInput class='w-16' label='Tagen' value={ days } disabled/>

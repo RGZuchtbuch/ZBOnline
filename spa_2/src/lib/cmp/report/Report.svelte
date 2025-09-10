@@ -64,7 +64,8 @@
 		</div>
 	</div>
 
-	<div class='flex flex-col break-after-page' open>
+	<hr class='mt-4'/>
+	<div class='flex flex-col break-after-page'>
 		<header class=''>Leistungsdaten im {district.name} für {report.args.year}</header>
 		<div class='flex flex-col py-4'>
 			<Table table={report.table} {district} year={report.args.year} />
@@ -76,7 +77,7 @@
 
 <style>
 	header {
-		@apply px-4 py-2 text-xl text-center font-bold screen:sticky screen:top-1;
+		@apply px-4 py-2 border-header bg-header text-header text-center text-xl font-bold screen:sticky screen:top-1;
 	}
     summary {
         @apply px-4 py-2 bg-teal-200 text-xl font-bold sticky top-0 text-center;

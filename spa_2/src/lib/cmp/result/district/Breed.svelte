@@ -39,7 +39,7 @@
 
 {#if breed}
     <div id={breed.id} class='flex flex-row p-2 gap-x-1' title='Wähle zum Eingeben'>
-        <div class='grow cursor-pointer ml-2 whitespace-nowrap' class:hasResults onclick={onOpen}>
+        <div class='grow cursor-pointer ml-2 whitespace-nowrap' role='button' class:hasResults onclick={onOpen}>
             <span class=''>{breed.name}</span>
         </div>
 

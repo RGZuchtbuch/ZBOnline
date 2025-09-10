@@ -14,7 +14,7 @@
     let hasResult = $derived( resultState.breeders > 0 );
 
     // aocColor used for purging and onsubmit adding the AOC prefix
-    let aocColor = result.aocColor ? result.aocColor.substring(4) : null; // remove the AOC prefix
+    let aocColor = $state( result.aocColor ? result.aocColor.substring(4) : null ); // remove the AOC prefix
 
     // for validators
     const validate = {
@@ -51,7 +51,6 @@
                 response = await model.Result.delete( resultState.id );
             }
         }
-        //await invalidate( 'results' ); // make results page reload data
         return response;
     }
 

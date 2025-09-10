@@ -14,9 +14,4 @@
     li {
         @apply flex flex-row p-2 italic;
     }
-
-
-    button {
-        @apply bg-inherit text-black;
-    }
 </style>
