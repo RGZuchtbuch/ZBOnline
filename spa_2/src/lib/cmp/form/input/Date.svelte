@@ -44,9 +44,6 @@
 />
 
 <style>
-    right {
-        text-align: right;
-    }
 </style>
 
 

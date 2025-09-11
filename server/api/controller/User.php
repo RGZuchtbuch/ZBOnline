@@ -104,8 +104,8 @@ class User
 				$response->getBody()->write(json_encode(['success' => $success, 'servername' => $servername], JSON_UNESCAPED_SLASHES)); // servername for debug
 				return $response;
 			}
-			throw new HttpNotFoundException($request, "Invalid credentials");
 		}
+		throw new HttpNotFoundException($request, "Invalid credentials");
 	}
 
 //	public static function resetMail( Request $request, Response $response, array $args ) : Response { // get token

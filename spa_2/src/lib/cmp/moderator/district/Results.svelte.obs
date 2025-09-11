@@ -6,7 +6,7 @@
 	import { dec, txt } from '$lib/js/tools.js';
 
 	import { Select } from '$lib/cmp/form/Form.svelte';
-	import ResultsView from './results/ResultsView.svelte';
+	import ResultsView from './results.obs/ResultsView.svelte';
 	import CheckBox from '$lib/cmp/form/input/CheckBox.svelte';
 
 	let { district, year, results } = $props();

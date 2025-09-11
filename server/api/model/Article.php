@@ -24,6 +24,7 @@ class Article
 //			');
 //			return Query::selectArray($stmt );
 //		}
+		return null;
 	}
 
     public static function create( ? int $level, string $author, string $title, string $html, $modifierId ) : ? int {

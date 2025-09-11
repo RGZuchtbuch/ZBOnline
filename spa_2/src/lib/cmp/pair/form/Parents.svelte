@@ -42,9 +42,9 @@
 <fieldset class='flex flex-col gap-x-2 border pt-2 px-2' in:slide>
 	<legend>Abstammung <Status /></legend>
 	{#if filledParents }
-		{#if pair.sectionId === 5 }
+		{#if pair.sectionId === cfg.pigeons }
 			<div transition:slide>
-				{#each pair.parents as parent, i (i) }
+				{#each pair.parents as parent, i }
 					{#key pair.parents[i]}
 						<ParentPigeon bind:parent={pair.parents[i]} {pair} {i} />
 					{/key}
@@ -52,7 +52,7 @@
 			</div>
 		{:else}
 			<div transition:slide>
-				{#each pair.parents as parent, i (i) }
+				{#each pair.parents as parent, i }
 					{#key pair.parents[i]}
 						<ParentLayer bind:parent={pair.parents[i]} {pair} {i} />
 					{/key}

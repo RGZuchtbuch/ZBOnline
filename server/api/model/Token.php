@@ -9,16 +9,16 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 
 class Token
 {
-	private ? Requester $requester = null;
-	public function __construct( Request $request ) {
-		$bearer = Token::getBearer( $request );
-		$payload = Token::decode( $bearer );
-		$this->requester = $payload ? new Requester($payload['user']) : null;
-	}
-
-	public function getRequester() : ? array {
-		return $this->payload;
-	}
+//	private ? Requester $requester = null;
+//	public function __construct( Request $request ) {
+//		$bearer = Token::getBearer( $request );
+//		$payload = Token::decode( $bearer );
+//		$this->requester = $payload ? new Requester($payload['user']) : null;
+//	}
+//
+//	public function getRequester() : ? array {
+//		return $this->payload;
+//	}
 
 	public static function encode( array $data, int $lifetime = TOKEN_EXPIRE ) : string {
 		$issuer = 'RG Zuchtbuch Online';
@@ -43,14 +43,14 @@ class Token
 		// may throw ExpiredException $e
 	}
 
-	private static function getBearer(Request $request ) : ? string {
-		$authorization = $request->getHeaderLine( 'Authorization' );
-		if( $authorization && !empty( $authorization ) ) {
-			$header = trim($authorization);
-			if (preg_match('/Bearer\s(\S+)/', $header, $matches )) { // get token from header
-				return $matches[1];
-			}
-		}
-		return null;
-	}
+//	private static function getBearer(Request $request ) : ? string {
+//		$authorization = $request->getHeaderLine( 'Authorization' );
+//		if( $authorization && !empty( $authorization ) ) {
+//			$header = trim($authorization);
+//			if (preg_match('/Bearer\s(\S+)/', $header, $matches )) { // get token from header
+//				return $matches[1];
+//			}
+//		}
+//		return null;
+//	}
 }
