@@ -7,7 +7,18 @@
 	//let authorized = $derived( ctx.user && ctx.user.admin )
 	let authorized = $derived( ctx.user && ( ( ctx.user.active && ctx.user.id === ctx.breeder.id ) || ctx.user.admin || ctx.user.moderator.includes( breeder.districtId ) ) ); // can edit
 
-
+	function onSortBy( field ) {
+		ctx.pairs.sort( (a, b) => (''+a[ field ]).localeCompare( b[ field ] ) );
+	}
+	function onSortDesBy( field ) {
+		ctx.pairs.sort( (b, a) => (''+a[ field ]).localeCompare( b[ field ] ) );
+	}
+	function onSortByBreed() {
+		ctx.pairs.sort( (a, b) => (''+a.breed.name).localeCompare( b.breed.name ) );
+	}
+	function onSortByColor() {
+		ctx.pairs.sort( (a, b) => (''+a.color.name).localeCompare( b.color.name ) );
+	}
 </script>
 
 <section>
@@ -19,11 +30,11 @@
 	<div class='flex flex-row p-2 gap-x-2 border-header bg-header text-header py-0 px-2'>
 		<span class='w-8 text-right'>#</span>
 		<span class='w-2 text-center'>:</span>
-		<span class='w-8 text-center'>Jahr</span>
-		<span class='w-20 text-center'>Stamm</span>
-		<span class='w-96 '>Rasse</span>
-		<span class='grow'>Farbenschlag</span>
-		<span class='w-8 text-center'>Ok</span>
+		<span class='w-8 text-center' title='Sortieren' role='button' onclick={() => onSortDesBy( 'year' )}>Jahr</span>
+		<span class='w-20 text-center' title='Sortieren' role='button' onclick={() => onSortBy( 'name' )}>Stamm</span>
+		<span class='w-96' title='Sortieren' role='button' onclick={onSortByBreed}>Rasse</span>
+		<span class='grow' title='Sortieren' role='button' onclick={onSortByColor}>Farbenschlag</span>
+		<span class='w-8 text-center' title='Sortieren' role='button' onclick={() => onSortDesBy( 'accepted' )}>Ok</span>
 	</div>
 	{#if ctx.pairs && ctx.pairs.length > 0}
 		{#each ctx.pairs as pair, i}
