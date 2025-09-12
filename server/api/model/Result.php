@@ -6,7 +6,7 @@ use App\util\Query;
 
 class Result
 {
-    public static function get( $id ) {
+    public static function get( $id ) : ? array {
         $args = get_defined_vars();
         $stmt = Query::prepare( '
             SELECT id, pairId, districtId, `year`, `group`, sectionId, breedId, colorId, aocColor, breeders, pairs, layDames, layEggs, broodEggs, broodFertile, broodHatched, showCount, showScore

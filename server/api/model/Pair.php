@@ -6,8 +6,7 @@ namespace App\model;
 use App\util\Query;
 
 class Pair {
-	public static function read($id)
-	{
+	public static function read($id) : ? array {
 		$args = get_defined_vars();
 		$stmt = Query::prepare('
 		SELECT id, breederId, districtId, year, `group`, sectionId, breedId, colorId, name, paired, notes, accepted
@@ -53,7 +52,7 @@ class Pair {
 
 
 	// to check before breed delete
-	public static function readForBreed(int $breedId): array {
+	public static function readForBreed(int $breedId) : array {
 		$args = get_defined_vars();
 		$stmt = Query::prepare('
 			SELECT id, breedId
@@ -64,7 +63,7 @@ class Pair {
 	}
 
 	// as check before color delete
-	public static function readForColor(int $colorId): array {
+	public static function readForColor(int $colorId) : array {
 		$args = get_defined_vars();
 		$stmt = Query::prepare('
 			SELECT id, colorId
@@ -79,7 +78,7 @@ class Pair {
 
 
 	// for breeder his pairs, all
-	public static function readForBreeder(int $breederId): array
+	public static function readForBreeder(int $breederId) : array
 	{
 		$args = get_defined_vars();
 		$stmt = Query::prepare('
@@ -105,7 +104,7 @@ class Pair {
 
 
 	// for finding parents pair
-	public static function readForBreederBreedYear(int $breederId, int $breedId, int $year): array
+	public static function readForBreederBreedYear(int $breederId, int $breedId, int $year) : array
 	{ // TODO move to pair!
 		$args = get_defined_vars();
 		$stmt = Query::prepare('
@@ -130,7 +129,7 @@ class Pair {
 		return Query::selectArray($stmt, $args);
 	}
 
-	public static function readForDistrictInYear(int $districtId, int $year): array
+	public static function readForDistrictInYear(int $districtId, int $year) : array
 	{ // TODO move to pair!
 		$args = get_defined_vars();
 		$stmt = Query::prepare('

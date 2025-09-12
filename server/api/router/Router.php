@@ -104,13 +104,13 @@ class Router {
 
 
 		// TODO New approach 2
-
 		$app->get( '/2/article', 				'App\controller\Article::filter'); // filter
 		$app->get( '/2/article/{id:[0-9]+}', 	'App\controller\Article::get'); // only accept uint
 		$app->post( '/2/article', 				'App\controller\Article::post');
 		$app->put( '/2/article/{id:[0-9]+}', 	'App\controller\Article::put'); // only accept uint
 		$app->delete( '/2/article/{id:[0-9]+}', 	'App\controller\Article::delete'); // only accept uint
 
+		// TODO are next 3 used : should be under standard ?
 		$app->get('/2/breed', 'App\controller\Breed::filter' );
 		$app->get('/2/breed/{id:[0-9]+}', 'App\controller\Breed::get' );
 		$app->get('/2/color', 'App\controller\Color::filter' );
@@ -144,18 +144,20 @@ class Router {
 		$app->delete( '/2/result/{id:[0-9]+}','App\controller\Result::delete');
 
 		$app->get( '/2/standard', 'App\controller\Standard::get' );
-		$app->post( '/2/standard/breed', 'App\controller\Breed::post');
-		$app->put( '/2/standard/breed/{id:[0-9]+}', 'App\controller\Breed::put');
-		$app->delete( '/2/standard/breed/{id:[0-9]+}', 'App\controller\Breed::delete');
-		$app->post( '/2/standard/color', 'App\controller\Color::post');
-		$app->put( '/2/standard/color/{id:[0-9]+}', 'App\controller\Color::put');
-		$app->delete( '/2/standard/color/{id:[0-9]+}', 'App\controller\Color::delete');
+
+			$app->post( '/2/standard/breed', 'App\controller\Breed::post');
+			$app->put( '/2/standard/breed/{id:[0-9]+}', 'App\controller\Breed::put');
+			$app->delete( '/2/standard/breed/{id:[0-9]+}', 'App\controller\Breed::delete');
+
+			$app->post( '/2/standard/color', 'App\controller\Color::post');
+			$app->put( '/2/standard/color/{id:[0-9]+}', 'App\controller\Color::put');
+			$app->delete( '/2/standard/color/{id:[0-9]+}', 'App\controller\Color::delete');
 
 		$app->post('/2/user/login', 'App\controller\User::newLogin' ); // post credentials, replies token!
 		$app->post('/2/user/forgot', 'App\controller\User::newForgot' ); // post forgot password email, sends email
 		$app->post('/2/user/reset', 'App\controller\User::newReset' ); // post resetToken and new password, returns loginToken
 
-		$app->get('/test', 'App\controller\Test' ); // test, query has year, district, section, breed, color and group
+		//$app->get('/test', 'App\controller\Test' ); // test, query has year, district, section, breed, color and group
     }
 };
 

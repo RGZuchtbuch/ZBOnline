@@ -31,16 +31,17 @@ class Report
 		$colorId    = $query[ 'color' ] ?? null;
 		$group      = $query[ 'group' ] ?? null;
 
-		$cached = null;
 		$report = null;
-		$rows = null;
+		//$cached = null;
+		//$rows = null;
 
-		// disabled for dev $cached = model\Cache::get('report', $request->getUri()->getPath(), $request->getUri()->getQuery());
+		$cached = model\Cache::get('report', $request->getUri()->getPath(), $request->getUri()->getQuery());
 
 		if( $cached ) {
 			$response->getBody()->write( $cached );
 			return $response;
 		}
+
 		// if no cached json
 		if( $target ) {
 			switch( $target ) {
@@ -68,7 +69,6 @@ class Report
 			}
 		}
 		if( $report ) {
-			//$json = json_encode( [ 'report' => $report, 'rows'=>$rows ], JSON_UNESCAPED_SLASHES );
 			$json = json_encode( [ 'report' => $report ], JSON_UNESCAPED_SLASHES );
 			model\Cache::set( 'report', $request->getUri()->getPath(), $request->getUri()->getQuery(), $json );
 			$response->getBody()->write( $json );
@@ -80,7 +80,6 @@ class Report
 	public static function toReportTree( $results ) : array
 	{
 		$root = [ 'sections'=>[] ];
-
 		$sectionId = 0; // last SectionId
 		$subsectionId = 0; // last subSection
 		$section = null;

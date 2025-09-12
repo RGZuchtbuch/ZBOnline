@@ -30,7 +30,7 @@ class Token
 			'iat'   => $issued->getTimestamp(),
 			'nbf'   => $issued->getTimestamp(),
 			'exp'   => $expires->getTimestamp(),
-			'user'  => (array) $data
+			'user'  => $data
 		];
 
 		return JWT::encode( $payload, TOKEN_SECRET, TOKEN_ALGORITHM );
@@ -43,6 +43,7 @@ class Token
 		// may throw ExpiredException $e
 	}
 
+// unused ?
 //	private static function getBearer(Request $request ) : ? string {
 //		$authorization = $request->getHeaderLine( 'Authorization' );
 //		if( $authorization && !empty( $authorization ) ) {

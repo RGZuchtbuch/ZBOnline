@@ -56,9 +56,9 @@ class User extends Query
         $stmt = Query::prepare( '
             SELECT id, hash, email FROM user WHERE email=:email
         ' );
-        $users = Query::selectArray( $stmt, $args );
+        $users = Query::selectArray( $stmt, $args ); // could be single select
 
-        foreach( $users as $user ) {
+        foreach( $users as $user ) { // in case email is not unique: is this acceptable ?
             if ($user && password_verify($password, $user['hash'])) {
                 return $user['id'];
             }

@@ -14,7 +14,7 @@ use Slim\Exception\HttpUnauthorizedException;
 
 class Article
 {
-	//added the all option, took out of get
+	//added the all option, took out of get, replaced by filter
 //	public static function all( Request $request, Response $response, array $args ) : Response {
 //		$articles = model\Article::get();
 //		$response->getBody()->write( json_encode( [ 'articles' => $articles ], JSON_UNESCAPED_SLASHES ) );

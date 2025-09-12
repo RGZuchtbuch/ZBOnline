@@ -78,7 +78,7 @@ class Breed
 
 	/** api version 2 */
 
-	public static function forSection( int $sectionId ) {
+	public static function forSection( int $sectionId ) : ? array {
 		$args = get_defined_vars();
 		$stmt = Query::prepare('
 			WITH RECURSIVE sections AS (

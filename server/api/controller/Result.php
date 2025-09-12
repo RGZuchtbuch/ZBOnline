@@ -28,7 +28,6 @@ class Result
 			throw new HttpBadRequestException( $request, 'Bad id' );
 		}
 		throw new HttpBadRequestException( $request, 'Cannot get all results, too many' );
-		// else could get all results but that's bogus
 	}
 
 

@@ -25,12 +25,12 @@ class Breed
 				}
 				throw new HttpNotFoundException($request, 'Breed not found');
 			}
-			throw new HttpBadRequestException( $request, 'Bad id' );
-		} else { // list
-			$breeds = model\std\Breed::get();
-			$response->getBody()->write( json_encode( [ 'breeds' => $breeds ], JSON_UNESCAPED_SLASHES ) );
-			return $response;
+//		} else { // list
+//			$breeds = model\std\Breed::get();
+//			$response->getBody()->write( json_encode( [ 'breeds' => $breeds ], JSON_UNESCAPED_SLASHES ) );
+//			return $response;
 		}
+		throw new HttpBadRequestException( $request, 'Bad or missing id' );
 	}
 
 	public static function post( Request $request, Response $response, array $args ) : Response {

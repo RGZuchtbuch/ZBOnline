@@ -105,7 +105,7 @@ class Breeder
 
 	// new svelte 5
 
-	public static function forDistrict( int $districtId ) {
+	public static function forDistrict( int $districtId ) : array {
 		$args = get_defined_vars();
 		$stmt = Query::prepare( " 
 			SELECT user.id, member, firstname, infix, lastname, districtId, district.name AS districtname, club, start, end, active

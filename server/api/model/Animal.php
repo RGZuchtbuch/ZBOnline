@@ -7,7 +7,7 @@ use App\util\Query;
 // Still work in progress, not usefull for now but prep for more aniamal based parents/chicks.
 class Animal {
 
-	public static function readParent( int $id ) {
+	public static function readParent( int $id ) : ? array {
 		$args = get_defined_vars();
 		$stmt = Query::prepare('
 			SELECT id, pairId, sex, ring, score, parentsPairId
@@ -17,7 +17,7 @@ class Animal {
 		return Query::selectArray($stmt, $args);
 	}
 
-	public static function readParentsForPair( $pairId ): ? array {
+	public static function readParentsForPair( $pairId ): array {
 		$args = get_defined_vars();
 		$stmt = Query::prepare('
 			SELECT id, pairId, sex, ring, score, parentsPairId

@@ -12,6 +12,8 @@
 	import Select from '$lib/cmp/form/input/Select.svelte';
 	import Chart from '$lib/cmp/report/view/Chart.svelte';
 
+	import Trend2 from '$lib/cmp/report/view/Trend2.svelte';
+
 	let { report } = $props();
 
 	const types = { // what to report
@@ -22,6 +24,23 @@
 		30: {id: 30, name: 'Schauleistung'}
 	};
 
+	const units = {
+		breeders     : { id:'breeders', name:'Zuchten' },
+		lay          : { id:'lay', name:'Legeleistung' },
+			'lay.eggs'   : { id:'lay.eggs', name:'Eier/Jahr %'},
+			'lay.weight' : { id:'lay.weight', name:'Eiergewicht %' },
+		brood        : { id:'brood', name:'Brutleistung' },
+			'brood.eggs'       : { id:'brood.egs', name:'Eingelegt'},
+			'brood.broods'     : { id:'brood.broods', name:'Bruten (Tauben)'},
+			'brood.fertile'    : { id:'brood.fertile', name:'Befruchtung % (Geflügel)'},
+			'brood.hatched'    : { id:'brood.hatched', name:'Schlupf % (*)'},
+			'brood.production' : { id:'brood.production', name:'Küken / Paar {Tauben)'},
+		show : { id:'show', name:'Schauleistung' },
+			'show.count'      : { id:'show.count', name:'Ausgestellten Tiere'},
+			'show.score'      : { id:'show.score', name:'Bewertung'},
+	}
+
+	let unit = $state( units[ page.url.searchParams.get( 'unit' ) ] );
 	let district = $derived( ctx.federation.districts[ ctx.report.args.district ] );
 
 	function onTypeChange( event ) {
@@ -29,6 +48,15 @@
 		url.searchParams.set( 'type', event.target.value );
 		goto( url.href );
 	}
+
+	function onUnitChange( event ) {
+		//const unit = event.target.value;
+		let url = new URL( page.url );
+		url.searchParams.set( 'unit', unit.id );
+		goto( url.href );
+	}
+
+	$inspect( 'Unit', unit );
 
 </script>
 
@@ -46,21 +74,51 @@
 					<option value={type.id}>{type.name}</option>/
 				{/each}
 			</Select>
+
+			<Select class='w-64' label='Leistung 2' bind:value={unit} onchange={onUnitChange}>
+				{#each Object.values( units ) as unit}
+					<option value={unit}>{#if unit.id.includes( '.' ) }▸&nbsp;{/if} {unit.name}</option>/
+				{/each}
+			</Select>
+
 		</div>
 
-		<div class='flex flex-row justify-evenly gap-x-2 '>
-			<div class='flex flex-col'>
-				<header>Trend für {district.name}</header>
-				{#if report.trend}
-					<Trend report={report.trend} typeId={report.args.type} />
-				{/if}
-			</div>
+
+
+		<div class='flex flex-col justify-evenly gap-x-2 '>
 			<div class='flex flex-col'>
 				<header>Verteilung in {report.args.year}</header>
 				{#if report.map}
-					<Map report={report.map} typeId={report.args.type} />
+					<div class='flex flex-row justify-center'>
+						<Map report={report.map} typeId={report.args.type} />
+					</div>
 				{/if}
 			</div>
+
+			<div class='flex flex-col'>
+				<header>Trend für {district.name}</header>
+				{#if report.trend}
+					<!--Trend report={report.trend} typeId={report.args.type} /-->
+					<Trend2 label='Zuchten'  data={report.trend.years} unit='breeders' />
+
+					<Trend2 label='Legeleistung Eier / Jahr'  data={report.trend.years} unit='layEggs' factor={100} />
+					<Trend2 label='Legeleistung Eiergewicht %'  data={report.trend.years} unit='layWeight' factor={100} />
+					<hr />
+					<Trend2 label='Brutleistung Geflügel, Eingelegte Eier'  data={report.trend.years} unit='broodLayerEggs' factor={100} />
+					<Trend2 label='Brutleistung Geflügel, Befruchtet %'  data={report.trend.years} unit='broodLayerFertile' factor={100} />
+					<Trend2 label='Brutleistung Geflügel, Geschlüpft %'  data={report.trend.years} unit='broodLayerHatched' factor={100} />
+
+					<Trend2 label='Brutleistung Tauben, Nester'  data={report.trend.years} unit='broodPigeonEggs' factor={0.5} />
+					<Trend2 label='Brutleistung Tauben, Geschlüpft %'  data={report.trend.years} unit='broodPigeonHatched' scale={{min:0, max:100}} factor={100} />
+					<Trend2 label='Brutleistung Tauben, Küken / Paar'  data={report.trend.years} unit='broodPigeonResult' />
+
+					<Trend2 label='Schauleistung, Ausgestellten Tiere'  data={report.trend.years} unit='showCount' />
+					<Trend2 label='Schauleistung, Bewertung'  data={report.trend.years} unit='showScore' scale={{min:89, max:97}}/>
+
+				{/if}
+
+			</div>
+
 		</div>
 	</div>
 

@@ -26,12 +26,12 @@ class Color
 				}
 				throw new HttpNotFoundException($request, 'Color not found');
 			}
-			throw new HttpBadRequestException($request, 'Bad id');
-		} else {
-			$colors = model\std\Color::get();
-			$response->getBody()->write( json_encode( [ 'colors' => $colors ], JSON_UNESCAPED_SLASHES ) );
-			return $response;
+//		} else {
+//			$colors = model\std\Color::get();
+//			$response->getBody()->write( json_encode( [ 'colors' => $colors ], JSON_UNESCAPED_SLASHES ) );
+//			return $response;
 		}
+		throw new HttpBadRequestException($request, 'Bad or missing id');
 	}
 
 	public static function post( Request $request, Response $response, array $args ) : Response {
