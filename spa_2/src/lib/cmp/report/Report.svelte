@@ -6,13 +6,11 @@
 	import model from '$lib/js/model.js';
 
 	import Filter from './view/Filter.svelte';
-	import Map from '$lib/cmp/report/view/Map.svelte';
+	import Map from '$lib/cmp/report/view/Map2.svelte';
 	import Table from '$lib/cmp/report/view/Table.svelte';
-	import Trend from '$lib/cmp/report/view/Trend.svelte';
+	import Trend from '$lib/cmp/report/view/Trend2.svelte';
 	import Select from '$lib/cmp/form/input/Select.svelte';
 	import Chart from '$lib/cmp/report/view/Chart.svelte';
-
-	import Trend2 from '$lib/cmp/report/view/Trend2.svelte';
 
 	let { report } = $props();
 
@@ -56,7 +54,12 @@
 		goto( url.href );
 	}
 
-	$inspect( 'Unit', unit );
+	let section = $derived( ctx.standard.sections[ +page.url.searchParams.get( 'section' ) ] );
+	let breed   = $derived( ctx.standard.breeds[ +page.url.searchParams.get( 'breed' ) ] );
+	let color   = $derived( ctx.standard.colors[ +page.url.searchParams.get( 'color' ) ] );
+	let group   = $derived( page.url.searchParams.get( 'group') );
+
+	$inspect( 'Section', section );
 
 </script>
 
@@ -88,33 +91,60 @@
 		<div class='flex flex-col justify-evenly gap-x-2 '>
 			<div class='flex flex-col'>
 				<header>Verteilung in {report.args.year}</header>
-				{#if report.map}
+				{#if report.map && report.args.type }
 					<div class='flex flex-row justify-center'>
 						<Map report={report.map} typeId={report.args.type} />
 					</div>
 				{/if}
 			</div>
+		</div>
+	</div>
 
+
+	<div class='flex flex-col break-after-page'>
+		<div>
 			<div class='flex flex-col'>
-				<header>Trend für {district.name}</header>
+				<header>
+					<span>Trend für {district.name}</span>
+				</header>
+				<div class='bg-white font-bold text-center'>
+					<span>{section ? section.name : 'Alle Sparten, Rassen und Farbenschläge'}</span>
+					<span>{breed   ? `, ${breed.name}`    : ', Alle Rassen'}</span>
+					<span>{color   ? `, ${color.name}`   : ', Alle Farbenschläge'}</span>
+					<span>{group   ? `, Zuchtbuchgruppe ${group}` : ', Alle Zuchtbuchgruppen'}</span>
+				</div>
 				{#if report.trend}
+					<div class='my-2 p-1 bg-slate-200 font-bold text-center'>Gemeldete Zuchten</div>
+					<div class='flex flex-row justify-evenly'>
 					<!--Trend report={report.trend} typeId={report.args.type} /-->
-					<Trend2 label='Zuchten'  data={report.trend.years} unit='breeders' />
+						<Trend title='Zuchten'  data={report.trend.years} unit='breeders' color={{fill:'#FAA', border:'#A44'}} width={3.0}/>
+					</div>
 
-					<Trend2 label='Legeleistung Eier / Jahr'  data={report.trend.years} unit='layEggs' factor={100} />
-					<Trend2 label='Legeleistung Eiergewicht %'  data={report.trend.years} unit='layWeight' factor={100} />
-					<hr />
-					<Trend2 label='Brutleistung Geflügel, Eingelegte Eier'  data={report.trend.years} unit='broodLayerEggs' factor={100} />
-					<Trend2 label='Brutleistung Geflügel, Befruchtet %'  data={report.trend.years} unit='broodLayerFertile' factor={100} />
-					<Trend2 label='Brutleistung Geflügel, Geschlüpft %'  data={report.trend.years} unit='broodLayerHatched' factor={100} />
+					<div class='my-2 p-1 bg-slate-200 font-bold text-center'>Legeleistung Geflügel</div>
+					<div class='flex flex-row justify-evenly'>
+						<Trend title='Eier / Jahr %'  data={report.trend.years} unit='layEggs' factor={100} color={{fill:'#FEA', border:'#A94'}} width={1.5}/>
+						<Trend title='Eiergewicht %'  data={report.trend.years} unit='layWeight' factor={100} color={{fill:'#FEA', border:'#A94'}} width={1.5} />
+					</div>
 
-					<Trend2 label='Brutleistung Tauben, Nester'  data={report.trend.years} unit='broodPigeonEggs' factor={0.5} />
-					<Trend2 label='Brutleistung Tauben, Geschlüpft %'  data={report.trend.years} unit='broodPigeonHatched' scale={{min:0, max:100}} factor={100} />
-					<Trend2 label='Brutleistung Tauben, Küken / Paar'  data={report.trend.years} unit='broodPigeonResult' />
+					<div class='my-2 p-1 bg-slate-200 font-bold text-center'>Brutleistung Geflügel</div>
+					<div class='flex flex-row justify-evenly'>
+						<Trend title='Eingelegte Eier'  data={report.trend.years} unit='broodLayerEggs' factor={100} color={{fill:'#CFD', border:'#4A5'}} />
+						<Trend title='Befruchtet %'  data={report.trend.years} unit='broodLayerFertile' scale={{min:0, max:100}} factor={100} color={{fill:'#CFD', border:'#4A5'}} />
+						<Trend title='Geschlüpft %'  data={report.trend.years} unit='broodLayerHatched' scale={{min:0, max:100}} factor={100} color={{fill:'#CFD', border:'#4A5'}} />
+					</div>
 
-					<Trend2 label='Schauleistung, Ausgestellten Tiere'  data={report.trend.years} unit='showCount' />
-					<Trend2 label='Schauleistung, Bewertung'  data={report.trend.years} unit='showScore' scale={{min:89, max:97}}/>
+					<div class='my-2 p-1 bg-slate-200 font-bold text-center'>Brutleistung Tauben</div>
+					<div class='flex flex-row justify-evenly'>
+						<Trend title='Gemeldete Nester'  data={report.trend.years} unit='broodPigeonEggs' factor={0.5} color={{fill:'#CFD', border:'#48F'}} />
+						<Trend title='Geschlüpft %'  data={report.trend.years} unit='broodPigeonHatched' scale={{min:0, max:100}} factor={100} color={{fill:'#CFD', border:'#48F'}} />
+						<Trend title='Küken / Paar'  data={report.trend.years} unit='broodPigeonResult' color={{fill:'#CFD', border:'#48F'}} />
+					</div>
 
+					<div class='my-2 p-1 bg-slate-200 font-bold text-center'>Schauleistung</div>
+					<div class='flex flex-row justify-evenly'>
+						<Trend title='Gemeldete Tiere'  data={report.trend.years} unit='showCount' color={{fill:'#ACF', border:'#44A'}} width={1.5} />
+						<Trend title='Bewertung'  data={report.trend.years} unit='showScore' scale={{min:89, max:97}} color={{fill:'#ACF', border:'#44A'}} width={1.5} />
+					</div>
 				{/if}
 
 			</div>

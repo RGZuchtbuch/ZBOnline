@@ -5,7 +5,7 @@
     import { dec, pct } from '$lib/js/tools.js';
     import { BarController, BarElement, CategoryScale, Chart, Colors, LinearScale, Tooltip } from 'chart.js';
 
-    let { label, data, scale, unit, factor=1.0 } = $props();
+    let { title, data, scale={}, unit, factor=1.0, color={fill:'#ADF', border:'#48A'}, width=1.0 } = $props();
 
     let canvas = null;
     let chart = $state( null );
@@ -27,23 +27,28 @@
                 labels:data.map( item => item.year ),
                 datasets:[
                     {
-                        label:label,
+                        //label:label,
                         data :data.map( item => factor*item[ unit ] ),
+                        backgroundColor: color.fill,
+                        borderColor: color.border,
+                        borderWidth: 1,
                     }
                 ],
             },
             options : {
+                plugins: {
+                    title: {
+                        text: title,
+                        display: true,
+                    }
+                },
                 responsive : false, // otherwise shrinking
                 scales : {
                     x : { min:2014 },
                     y : scale,
                 }
             },
-            elements : {
-
-            }
         }
-
     }
 
     Chart.register( Colors, BarController, BarElement, CategoryScale, LinearScale, Tooltip );
@@ -54,10 +59,10 @@
 
 
 <div class='flex flex-col'>
-
+    <div class='text-center font-bold'>{title}</div>
     <!--h3 class='bg-header text-center text-white'>{#if type && district } {type.name } im {district.name}{/if}</h3-->
 
-    <div class='m-0 border rounded-t-none'>
-        <canvas width='448' height='128' bind:this={canvas} ></canvas>
+    <div class='m-0 border rounded p-2'>
+        <canvas width={width*288} height='192' bind:this={canvas} ></canvas>
     </div>
 </div>
