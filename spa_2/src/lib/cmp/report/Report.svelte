@@ -23,35 +23,44 @@
 	};
 
 	const units = {
-		breeders     : { id:'breeders', name:'Zuchten' },
-		lay          : { id:'lay', name:'Legeleistung' },
-			'lay.eggs'   : { id:'lay.eggs', name:'Eier/Jahr %'},
-			'lay.weight' : { id:'lay.weight', name:'Eiergewicht %' },
-		brood        : { id:'brood', name:'Brutleistung' },
-			'brood.eggs'       : { id:'brood.egs', name:'Eingelegt'},
-			'brood.broods'     : { id:'brood.broods', name:'Bruten (Tauben)'},
-			'brood.fertile'    : { id:'brood.fertile', name:'Befruchtung % (Geflügel)'},
-			'brood.hatched'    : { id:'brood.hatched', name:'Schlupf % (*)'},
-			'brood.production' : { id:'brood.production', name:'Küken / Paar {Tauben)'},
-		show : { id:'show', name:'Schauleistung' },
-			'show.count'      : { id:'show.count', name:'Ausgestellten Tiere'},
-			'show.score'      : { id:'show.score', name:'Bewertung'},
+		breeders     : { id:'breeders', name:'Zuchten', children:[] },
+		lay          : { id:'layLayerBreeders', name:'▸ Zuchten für Legeleistung' },
+			layEggs  : {id: 'layEggs', name: '\xA0\xA0\xA0 ▸ Eier/Jahr %'},
+			layWeight: {id: 'layWeight', name: '\xA0\xA0\xA0 ▸ Eiergewicht %'},
+
+		broodLayerBreeders     : { id:'broodLayerBreeders', name:'▸ Geflügel Brutleistung, Zuchten' },
+			broodLayerEggs     : { id:'broodLayerEggs', name:'\xA0\xA0\xA0 ▸ Geflügel, Eingelegt'},
+			broodLayerFertile  : { id:'broodLayerFertile', name:'\xA0\xA0\xA0 ▸ Geflügel, Befruchtung %'},
+			broodLayerHatched  : { id:'broodLayerHatched', name:'\xA0\xA0\xA0 ▸ Geflügel, Schlupf %'},
+
+		broodPigeonBreeders    : { id:'broodPigeonBreeders', name:'▸ Tauben Brutleistung, Zuchten' },
+			broodPigeonEggs    : { id:'broodPigeonEggs', name:'\xA0\xA0\xA0 ▸ Tauben, Gelegt'},
+			broodPigeonHatched : { id:'broodPigeonHatched', name:'\xA0\xA0\xA0 ▸ Tauben, Schlupf %'},
+			broodPigeonResult  : { id:'broodPigeonResult', name:'\xA0\xA0\xA0 ▸ Tauben, Küken / Paar'},
+
+
+		show         : { id:'showBreeders', name:'▸ Zuchten für Schauleistung' },
+			showCount          : { id:'showCount', name:'\xA0\xA0\xA0 ▸ Ausgestellten Tiere'},
+			showScore          : { id:'showScore', name:'\xA0\xA0\xA0 ▸ Bewertung'},
 	}
 
-	let unit = $state( units[ page.url.searchParams.get( 'unit' ) ] );
+//	let unit = $state( units[ page.url.searchParams.get( 'unit' ) || 'breeders' ] );
+	let unitId = $state( page.url.searchParams.get( 'unit' ) || 'breeders' );
+	$inspect( 'Unit', unitId );
 	let district = $derived( ctx.federation.districts[ ctx.report.args.district ] );
 
-	function onTypeChange( event ) {
-		let url = new URL( page.url );
-		url.searchParams.set( 'type', event.target.value );
-		goto( url.href );
-	}
+	// function onTypeChange( event ) {
+	// 	let url = new URL( page.url );
+	// 	url.searchParams.set( 'type', event.target.value );
+	// 	goto( url.href );
+	// }
 
 	function onUnitChange( event ) {
-		//const unit = event.target.value;
-		let url = new URL( page.url );
-		url.searchParams.set( 'unit', unit.id );
-		goto( url.href );
+		const id = event.target.value;
+		console.log( 'Unit', id );
+		let url = new URL(page.url);
+		url.searchParams.set('unit', id);
+		goto(url.href);
 	}
 
 	let section = $derived( ctx.standard.sections[ +page.url.searchParams.get( 'section' ) ] );
@@ -59,7 +68,7 @@
 	let color   = $derived( ctx.standard.colors[ +page.url.searchParams.get( 'color' ) ] );
 	let group   = $derived( page.url.searchParams.get( 'group') );
 
-	$inspect( 'Section', section );
+	//$inspect( 'Section', section );
 
 </script>
 
@@ -72,18 +81,11 @@
 
 		<header class='border-header bg-header text-header'>Leistungen im Übersicht</header>
 		<div class='mt-2 flex flex-row justify-evenly'>
-			<Select class='w-64' label='Leistung' value={report.args.type} onchange={onTypeChange}>
-				{#each Object.values( types ) as type}
-					<option value={type.id}>{type.name}</option>/
-				{/each}
-			</Select>
-
-			<Select class='w-64' label='Leistung 2' bind:value={unit} onchange={onUnitChange}>
+			<Select class='w-64' label='Leistung 2' value={unitId} onchange={onUnitChange}>
 				{#each Object.values( units ) as unit}
-					<option value={unit}>{#if unit.id.includes( '.' ) }▸&nbsp;{/if} {unit.name}</option>/
+					<option value={unit.id}>{unit.name}</option>
 				{/each}
 			</Select>
-
 		</div>
 
 
@@ -93,7 +95,8 @@
 				<header>Verteilung in {report.args.year}</header>
 				{#if report.map && report.args.type }
 					<div class='flex flex-row justify-center'>
-						<Map report={report.map} typeId={report.args.type} />
+						<!--Map report={report.map} typeId={report.args.type} /-->
+						<Map title={units[ unitId ].name} districts={report.map.districts} unit={unitId}/>
 					</div>
 				{/if}
 			</div>

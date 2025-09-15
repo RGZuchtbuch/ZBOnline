@@ -74,8 +74,8 @@ export function gpsToPx( width, height, west, east, south, north, lon, lat ) {
 	const xFactor = width / ( east - west );
 	const yFactor = height / ( yMax - yMin );
 
-	let x = (lon-west)*xFactor;
-	let y = (yMax - mercY( lat ) )*yFactor;
+	let x = Math.round( (lon-west)*xFactor );
+	let y = Math.round( (yMax - mercY( lat ) )*yFactor );
 	return { x:x, y:y };
 }
 

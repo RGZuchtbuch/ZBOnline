@@ -39,7 +39,7 @@
                 plugins: {
                     title: {
                         text: title,
-                        display: true,
+                        display: false,
                     }
                 },
                 responsive : false, // otherwise shrinking
