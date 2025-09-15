@@ -14,39 +14,41 @@
 
 	let { report } = $props();
 
-	const types = { // what to report
-		2: {id: 2, name: 'Zuchten'},
-		10: {id: 10, name: 'Legeleistung'},
-		20: {id: 20, name: 'Brutleistung Leger'},
-		21: {id: 21, name: 'Brutleistung Tauben'},
-		30: {id: 30, name: 'Schauleistung'}
-	};
+	// const types = { // what to report
+	// 	2: {id: 2, name: 'Zuchten'},
+	// 	10: {id: 10, name: 'Legeleistung'},
+	// 	20: {id: 20, name: 'Brutleistung Leger'},
+	// 	21: {id: 21, name: 'Brutleistung Tauben'},
+	// 	30: {id: 30, name: 'Schauleistung'}
+	// };
 
 	const units = {
-		breeders     : { id:'breeders', name:'Zuchten', children:[] },
-		lay          : { id:'layLayerBreeders', name:'▸ Zuchten für Legeleistung' },
-			layEggs  : {id: 'layEggs', name: '\xA0\xA0\xA0 ▸ Eier/Jahr %'},
-			layWeight: {id: 'layWeight', name: '\xA0\xA0\xA0 ▸ Eiergewicht %'},
+		breeders               : { id:'breeders', name:'Zuchten', factor:1 },
 
-		broodLayerBreeders     : { id:'broodLayerBreeders', name:'▸ Geflügel Brutleistung, Zuchten' },
-			broodLayerEggs     : { id:'broodLayerEggs', name:'\xA0\xA0\xA0 ▸ Geflügel, Eingelegt'},
-			broodLayerFertile  : { id:'broodLayerFertile', name:'\xA0\xA0\xA0 ▸ Geflügel, Befruchtung %'},
-			broodLayerHatched  : { id:'broodLayerHatched', name:'\xA0\xA0\xA0 ▸ Geflügel, Schlupf %'},
+		layBreeders            : { id:'layBreeders', name:'▸ Zuchten für Legeleistung', factor:1 },
+			layEggs            : {id: 'layEggs', name: '\xA0\xA0\xA0 ▸ Legeleistung, Eier/Jahr %', factor:100 },
+			layWeight          : {id: 'layWeight', name: '\xA0\xA0\xA0 ▸ Legeleistung, Eiergewicht %', factor:100 },
 
-		broodPigeonBreeders    : { id:'broodPigeonBreeders', name:'▸ Tauben Brutleistung, Zuchten' },
-			broodPigeonEggs    : { id:'broodPigeonEggs', name:'\xA0\xA0\xA0 ▸ Tauben, Gelegt'},
-			broodPigeonHatched : { id:'broodPigeonHatched', name:'\xA0\xA0\xA0 ▸ Tauben, Schlupf %'},
-			broodPigeonResult  : { id:'broodPigeonResult', name:'\xA0\xA0\xA0 ▸ Tauben, Küken / Paar'},
+		broodLayerBreeders     : { id:'broodLayerBreeders', name:'▸ Geflügel Brutleistung, Zuchten', factor:1 },
+			broodLayerEggs     : { id:'broodLayerEggs', name:'\xA0\xA0\xA0 ▸ Geflügel Brutleistung, Eingelegt', factor:1},
+			broodLayerFertile  : { id:'broodLayerFertile', name:'\xA0\xA0\xA0 ▸ Geflügel Brutleistung, Befruchtung %', factor:100 },
+			broodLayerHatched  : { id:'broodLayerHatched', name:'\xA0\xA0\xA0 ▸ Geflügel Brutleistung, Schlupf %', factor:100 },
+
+		broodPigeonBreeders    : { id:'broodPigeonBreeders', name:'▸ Tauben Brutleistung, Zuchten', factor:1 },
+			broodPigeonEggs    : { id:'broodPigeonEggs', name:'\xA0\xA0\xA0 ▸ Tauben Brutleistung, Gelegt', factor:1},
+			broodPigeonHatched : { id:'broodPigeonHatched', name:'\xA0\xA0\xA0 ▸ Tauben Brutleistung, Schlupf %', factor:100 },
+			broodPigeonResult  : { id:'broodPigeonResult', name:'\xA0\xA0\xA0 ▸ Tauben Brutleistung, Küken / Paar', factor:1 },
 
 
-		show         : { id:'showBreeders', name:'▸ Zuchten für Schauleistung' },
-			showCount          : { id:'showCount', name:'\xA0\xA0\xA0 ▸ Ausgestellten Tiere'},
-			showScore          : { id:'showScore', name:'\xA0\xA0\xA0 ▸ Bewertung'},
+		showBreeders           : { id:'showBreeders', name:'▸ Schauleistung, zuchten', factor:1 },
+			showCount          : { id:'showCount', name:'\xA0\xA0\xA0 ▸ Schauleistung, Ausgestellten Tiere', factor:1 },
+			showScore          : { id:'showScore', name:'\xA0\xA0\xA0 ▸ Schauleistung, Note', factor:1 },
 	}
 
 //	let unit = $state( units[ page.url.searchParams.get( 'unit' ) || 'breeders' ] );
 	let unitId = $state( page.url.searchParams.get( 'unit' ) || 'breeders' );
-	$inspect( 'Unit', unitId );
+	let unit = $derived( units[ unitId ] ?? null );
+	$inspect( 'Unit', unit );
 	let district = $derived( ctx.federation.districts[ ctx.report.args.district ] );
 
 	// function onTypeChange( event ) {
@@ -81,7 +83,7 @@
 
 		<header class='border-header bg-header text-header'>Leistungen im Übersicht</header>
 		<div class='mt-2 flex flex-row justify-evenly'>
-			<Select class='w-64' label='Leistung 2' value={unitId} onchange={onUnitChange}>
+			<Select class='' label='Leistung' value={unitId} onchange={onUnitChange}>
 				{#each Object.values( units ) as unit}
 					<option value={unit.id}>{unit.name}</option>
 				{/each}
@@ -93,10 +95,10 @@
 		<div class='flex flex-col justify-evenly gap-x-2 '>
 			<div class='flex flex-col'>
 				<header>Verteilung in {report.args.year}</header>
-				{#if report.map && report.args.type }
+				{#if report.map && unit }
 					<div class='flex flex-row justify-center'>
 						<!--Map report={report.map} typeId={report.args.type} /-->
-						<Map title={units[ unitId ].name} districts={report.map.districts} unit={unitId}/>
+						<Map title={units[ unitId ].name} districts={report.map.districts} {unit}/>
 					</div>
 				{/if}
 			</div>
