@@ -9,6 +9,11 @@
 <section class='pl-6'>
 	<header class='p-2 border-header bg-header text-header text-center'>Standard, Sparten, Rassen und Farbenschläge</header>
 
+	<p class=' mt-2 text-center print:hidden'>
+		Dieser Auflistung der Sparten, Rasse und Farbenschläge wird noch ergänzt.<br>
+		Wenn deine Rasse, oder Daten dar zu, Fehlt, bitte benachrichtige dein Obmann.
+	</p>
+
 	{#if standard }
 		<Section section={ standard.root } unfold={true}/>
 	{/if}

@@ -17,7 +17,7 @@
 	let year     = $derived( getArgNum( page.url, 'year', activeYear() ) ); //report.args.year );
 	let group    = $derived( getArgStr( page.url, 'group', null ) );
 //	let section  = $derived( ctx.standard.rootSections.find( item => item.id === report.args.section ) );
-	let section  = $derived( ctx.standard.sections[ getArgNum( page.url, 'section', 2 ) ] );
+	let section  = $derived( ctx.standard.sections[ getArgNum( page.url, 'section', null ) ] );
 //	let section  = $derived( ctx.standard.sections[ report.args.section ] );
 //	let breed    = $state( ctx.standard.breeds[ report.args.breed ] );
 	let breed    = $derived( ctx.standard.breeds[ getArgNum( page.url, 'breed', null ) ] );
@@ -105,6 +105,12 @@
 {#if ctx.federation && ctx.standard && report.args }
 	<Form>
 		<h3 class='text-center print:hidden'>Filter</h3>
+
+		<p class='my-2 print:hidden'>
+			Die Meldungen werden ab 2024 in diesem Programm gespeichert. Nach und nach werden auch frühere Meldungen eingegeben.<br>
+			Nicht jeder Meldung enthält Jeder Leistung. Deshalb kann die Zahl der gemeldete Zuchten pro Leistung unterschiedlich sein.
+		</p>
+
 		<section class='flex flex-row gap-x-2 px-4 print:hidden' >
 			<Select class='' label='Verband' value={report.args.district} onchange={onDistrictChange}>
 				<option value={ctx.federation.id}>{ctx.federation.name}</option>
@@ -133,7 +139,7 @@
 
 		<section class='flex flex-row gap-x-2 px-4 print:hidden' >
 			<Select class='' label='Sparte' value={report.args.section} onchange={onSectionChange}>
-				<option value={ctx.standard.root.id}>*</option>
+				<option value={undefined}>*</option>
 				{#each ctx.standard.root.children as section}
 					<option value={section.id}>▸&nbsp;{section.name}</option>
 					{#each section.children as subSection}
@@ -141,13 +147,6 @@
 					{/each}
 				{/each}
 			</Select>
-
-			<!--Select class='w-56' label='Sparte' value={report.args.section} onchange={onSectionChange}>
-				<option value={undefined}>*</option>
-				{#each testSections as section}
-					<option value={section.id}>{section.name}</option>
-				{/each}
-			</Select-->
 
 			<Select class='min-w-64' label='Rasse' value={report.args.breed} onchange={onBreedChange}>
 				<option value={undefined}>*</option>
@@ -171,14 +170,14 @@
 
 		<section class='screen:hidden'>
 			<h1 class='flex flex-row mx-16 justify-center gap-x-8'>
-				<span>{year}</span>
-				<span>{district.name}</span>
-				<span>{group?group:'*'}</span>
+				<span>{ year }</span>
+				<span>{ district.name }</span>
+				<span>{ group ? 'Zuchtbuchgruppe ${group}' : 'Zuchtbuchgruppen (I,II,III)' }</span>
 			</h1>
 			<h2 class='flex flex-row mx-16 justify-center gap-x-8'>
-				<span>{section ? section.name : 'Alle Sparten, Rassen und Farbenschläge'}</span>
-				<span>{breed   ? breed.name   : 'Alle Rassen'}</span>
-				<span>{color   ? color.name   : 'Alle Farbenschläge'}</span>
+				<span>{section ? section.name : 'Alle Sparten'}</span>
+				<span>, {breed   ? breed.name   : 'Alle Rassen'}</span>
+				<span>, {color   ? color.name   : 'Alle Farbenschläge'}</span>
 			</h2>
 		</section>
 	</Form>

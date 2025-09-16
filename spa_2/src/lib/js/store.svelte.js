@@ -2,6 +2,18 @@
  * ctx store for each layout/page.svelte to store loaded objects in for children to use.
  * this is accompanied by the dirty flags, that triggers a list of object as an object has been changed. This is substituting the invalidate sveltekit load option, that did not work for this app, too little control.
  */
+
+// const initialMenuState = { // having last href for menu item
+//     '/article'   : '/article',
+//     '/federation': '/federation',
+//     '/standard'  : '/standard',
+//     '/report'    : '/report',
+//     '/tool'      : '/tool',
+//     '/breeder'   : '/breeder',
+//     '/moderator' : '/moderator',
+//     '/admin'     : '/admin',
+// }
+
 class Context {
     //args       = $state( null);
     article    = $state(null);
@@ -32,7 +44,7 @@ class Context {
     submenu = $state(null);
     crumbs = $state(null);
 
-    menustate = $state({ // having last href for menu item
+    initialMenustate = { // to allow for resetting on logout.
         '/article'   : '/article',
         '/federation': '/federation',
         '/standard'  : '/standard',
@@ -41,9 +53,9 @@ class Context {
         '/breeder'   : '/breeder',
         '/moderator' : '/moderator',
         '/admin'     : '/admin',
-    });
+    };
+    menustate = $state( { ... this.initialMenustate } );
 
-    //crumbs   = $state([]);
     dialog = $state( null );
 }
 

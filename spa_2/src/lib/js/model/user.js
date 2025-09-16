@@ -7,8 +7,6 @@ export default class User {
 	static async load() {
 		let token = browser && window.sessionStorage.getItem('token'); // encoded
 		let user = tokenToUser( token );
-//		console.log( 'User', user)
-//		let date = Date.now()/1000;
 		return user;
 	}
 	static async login ( email, password ) {
@@ -48,8 +46,10 @@ export default class User {
 	static async logout() {
 		ctx.user = null;
 		window.sessionStorage.removeItem( 'token' ); // forget token
-		return true; // always successfull
+		ctx.menustate = { ...ctx.initialMenustate }; // reset menu state
+		return true; // always successfully
 	}
+
 };
 
 
