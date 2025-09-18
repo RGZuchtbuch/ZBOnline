@@ -80,7 +80,7 @@
         @apply list-decimal;
     }
     ul {
-        @apply list-inside list-disc;
+        @apply pl-0 list-outside list-disc;
     }
     li {
         @apply ml-4 pl-2;

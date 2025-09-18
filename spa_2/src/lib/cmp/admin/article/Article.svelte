@@ -5,7 +5,7 @@
 	import model from '$lib/js/model.js';
 	import Form, { CheckBox, NumberInput, Status, TextArea, TextInput, validator } from '$lib/cmp/form/Form.svelte';
 
-	let { article } = $props();
+	let { article=$bindable() } = $props();
 
 	let edit = $state( article && article.id === 0 );
 	let remove = $state( false );

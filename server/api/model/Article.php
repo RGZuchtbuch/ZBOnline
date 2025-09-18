@@ -56,7 +56,7 @@ class Article
 		$stmt = Query::prepare('
 				SELECT id, level, author, title, modified
 				FROM article
-				ORDER BY level
+				ORDER BY level, title
 			');
 		return Query::selectArray($stmt );
 	}

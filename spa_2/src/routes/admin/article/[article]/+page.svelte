@@ -50,5 +50,5 @@
 </script>
 
 {#if ctx.article}
-	<Article article={ctx.article} />
+	<Article bind:article={ctx.article} />
 {/if}

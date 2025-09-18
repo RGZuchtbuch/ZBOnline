@@ -48,6 +48,7 @@
         console.log( 'Submit' );
         const response = await model.User.reset( token, password );
         console.log( 'Response', response)
+        await goto( '/' );
     }
 
 </script>

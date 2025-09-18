@@ -5,6 +5,7 @@
 	import model from '$lib/js/model.js';
 
 	import Article from '$lib/cmp/article/Article.svelte';
+	import Home from '$lib/cmp/Home.svelte';
 
 	$effect( async () => {
 		if( true ) await loadArticle( 1 );
@@ -20,7 +21,7 @@
 	}
 
 	function setHeader() {
-		ctx.title = 'Das BDRG Zuchtbuch';
+		ctx.title = 'Willkommen im Rassegeflügel-Zuchtbuch';
 		ctx.submenu = [];
 		ctx.crumbs = [
 			//{name: 'Gast', href: '/'}
@@ -31,7 +32,9 @@
 
 </script>
 
-<section class='pl-6' in:fade={{duration:cfg.fadeIn}}>
+<Home />
+
+<!--section class='pl-6' in:fade={{duration:cfg.fadeIn}}>
 	<h2 class='text-center'>Wilkommen im BDRG Zuchtbuch Online</h2>
 	<p>
 		Mit dem Rassegeflügelzuchtbuch wollen wir helfen die Leistungen unsere Tiere zu erhalten.  Neben die Schauleistungen vom Preisrichter in den Ausstellungen, sind auch die Legeleistung, Zahl der Eier und deren Gewicht, und Brutleistung, die Befruchtung und Schlüpf, wichtig zum Erhalt und Verbessrung unsere Rassen
@@ -52,5 +55,5 @@
 
 
 	<h2 class='text-center'>Neues vom Zuchtbuch</h2>
-	<Article article={ctx.article}/><!-- neues -->
-</section>
+	<Article article={ctx.article}/>
+</section-->
