@@ -26,10 +26,6 @@ class Color
 				}
 				throw new HttpNotFoundException($request, 'Color not found');
 			}
-//		} else {
-//			$colors = model\std\Color::get();
-//			$response->getBody()->write( json_encode( [ 'colors' => $colors ], JSON_UNESCAPED_SLASHES ) );
-//			return $response;
 		}
 		throw new HttpBadRequestException($request, 'Bad or missing id');
 	}

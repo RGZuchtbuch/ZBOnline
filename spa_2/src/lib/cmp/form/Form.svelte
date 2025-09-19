@@ -50,7 +50,6 @@
 
     async function onSubmit( event ) { // enter or submit button
         event.preventDefault();
-        console.log( 'Form manual submit' );
         await submit();
     }
 
@@ -85,14 +84,14 @@
         if( form.state === states.changed) {
             validate();
             if( form.state === states.valid ) {
-                // TODO still save if changed ?
+                // TODO still save if changed ? ignore for now
             }
         }
     })
 
 </script>
 
-<form bind:this={element} class:valid onsubmit={ ()=>console.log('Click') }>
+<form bind:this={element} class:valid >
     <fieldset class='{classname}' {disabled}> <!-- to allow disabled for all -->
         {#if legend}<legend>{legend}</legend>{/if}
         {@render children()}

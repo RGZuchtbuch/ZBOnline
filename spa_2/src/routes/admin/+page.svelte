@@ -10,8 +10,8 @@
 			{ name:'Infos', href:'/admin/article' },
 			{ name:'Verbände', href:'/admin/district' },
 			{ name:'Standard', href:'/admin/standard' },
-			{ name:'Setting', href:'/admin/setting' },
-			{ name:'Logs', href:'/admin/log' },
+//			{ name:'Setting', href:'/admin/setting' },
+//			{ name:'Logs', href:'/admin/log' },
 		];
 		ctx.crumbs = [
 			//{ name:'Start',    href:'/' },

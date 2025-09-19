@@ -50,7 +50,7 @@
     }
 
     h1 {
-        @apply pt-4 pb-2 font-bold text-xl;
+        @apply pt-2 pb-2 font-bold text-xl;
     }
     h2 {
         @apply pt-4 pb-2 font-bold text-lg;

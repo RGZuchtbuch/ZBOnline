@@ -87,14 +87,15 @@
 					{/key}
 				{/each}
 			</ul>
-
-			<ul class='pl-8' transition:slide={{duration:500}}>
-				{#each section.breeds as breed, i}
-					{#key breed}
-						<Breed {section} bind:breed={section.breeds[i]} />
-					{/key}
-				{/each}
-			</ul>
+			{#if section.children.length === 0}
+				<ul class='pl-8' transition:slide={{duration:500}}>
+					{#each section.breeds as breed, i}
+						{#key breed}
+							<Breed {section} bind:breed={section.breeds[i]} />
+						{/key}
+					{/each}
+				</ul>
+			{/if}
 		{/if}
 	{/if}
 </div>

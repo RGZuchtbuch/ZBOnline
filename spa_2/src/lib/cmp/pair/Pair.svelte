@@ -15,16 +15,10 @@
 	import Show from './form/Show.svelte';
 	import Notes from './form/Notes.svelte';
 
-	//let { breeder } = $props(); using only ctx.pair
-	//let pair = ctx.pair;
-
 	let edit = $state( ctx.pair.id === 0 );
-	//let remove = $state( false );
 	let authorized = $derived( ctx.user && ctx.pair && ( (ctx.user.id === ctx.pair.breeder.id && ctx.user.active) || ctx.user.moderator.includes( ctx.pair.districtId ) || ctx.user.admin ) ); // can edit
 
 	async function onSubmit() {
-		console.log( 'Pair Submit' );
-
 		let ok = false;
 		if( ctx.pair.breederId && ctx.pair.year && ctx.pair.name && ctx.pair.group && ctx.pair.sectionId && ctx.pair.breedId && ( ctx.pair.sectionId === 5 || ctx.pair.colorId ) ) {
 			ok = await model.Pair.save( ctx.pair );

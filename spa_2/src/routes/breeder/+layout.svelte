@@ -20,16 +20,13 @@
 	});
 
 	async function loadBreeder( id ) {
-		console.log( 'Load Breeder', authorized )
 		if( authorized ) {
-			//dirty.breeder = false;
-			//ctx.breeder = null;
 			ctx.breeder = await model.Breeder.load( id );
 		}
 	}
-	function loadDistrict( id ) {
-		ctx.district = ctx.federation.districts[ id ];
-	}
+	// function loadDistrict( id ) {
+	// 	ctx.district = ctx.federation.districts[ id ];
+	// }
 
 </script>
 

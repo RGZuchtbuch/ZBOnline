@@ -15,8 +15,6 @@
 	})
 
 	async function loadArticle( id ) {
-		console.log("load Article")
-		//ctx.article = null;
 		ctx.article = await model.Article.load( id );
 	}
 
@@ -30,21 +28,6 @@
 			{name: 'Infos', href: `${ page.url.pathname.substring( 0, page.url.pathname.lastIndexOf( "/") ) }` },//'/article'},
 			{name: ctx.article.title ? ctx.article.title.substring( 0, 20 )+'..' : '?' },
 		];
-		// ctx.header = {
-		// 	title : ctx.article.title ? ctx.article.title : '?',
-		// 	menu : {
-		// 		trail: [
-		// 			{name: 'Start', href: '/'},
-		// 			{name: 'Beiträge', href: '/article'},
-		// 			{name: ctx.article.title },
-		// 		],
-		// 		options: [
-		// 			{name: 'Verbände', href: '/federation'},
-		// 			{name: 'Standard', href: '/standard'},
-		// 			{name: 'Leistungen', href: '/report'},
-		// 		],
-		// 	},
-		// };
 	}
 
 </script>

@@ -17,29 +17,9 @@ export default class Standard {
 				standard.sections[ 5 ],
 				standard.sections[ 6 ],
 			];
-
-			console.log( 'Standard', standard );
 		}
 		return standard;
 	}
-
-
-	// const sections = [
-	// 	{ id:3,  name:'Groß u. Wassergeflügel', breeds:[] },
-	// 	{ id:11, name:'Hühner Groß', breeds:[] },
-	// 	{ id:12, name:'Zwerghühner', breeds:[] },
-	// 	{ id:13, name:'LegeWachteln', breeds:[] },
-	// 	{ id:5,  name:'Tauben', breeds:[] },
-	// 	{ id:6,  name:'Ziergeflügel', breeds:[] },
-	// ];
-
-	// static async loadRootSection( id ) {
-	// 	return standard.rootSections.find( item => item.id === id );
-	// }
-	//
-	// static async loadRootSections(){
-	// 	return standard.rootSections;
-	// }
 
 	static createBreed( sectionId ) {
 		return {

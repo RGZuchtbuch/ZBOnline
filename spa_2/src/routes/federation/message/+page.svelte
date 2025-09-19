@@ -29,7 +29,7 @@
 		];
 		ctx.crumbs = [
 			//{name: 'Start', href: '/'},
-			//{name: 'Verbände', href: '/federation'},
+			{name: 'Verbände', href: '/federation'},
 			{name: 'Nachricht' },
 		];
 	}

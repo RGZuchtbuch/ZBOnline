@@ -7,7 +7,6 @@
 
     const MAXBUBBLE = 35;
 
-    //let { report, typeId } = $props();
     let { title, districts, unit, scale=null } = $props();
 
     let canvas = null;
@@ -29,7 +28,6 @@
                 const value = district[ unit.id ] * unit.factor;
                 colors[ district.id ] = value === null || value === 0 ? '#DDD2' : calcColor( min, max, value, 0.25, 0);
             }
-            //const colors = districts.map( district => '#DDD4' );
             return { names:names, coords:coords, values:values, scale:{ min:min, max:max }, colors:colors };
         }
         return null;
@@ -38,7 +36,6 @@
     function onClick( index ) {
         return ( event ) => {
             config = null;
-            console.log( 'Click' );
             const district = districts[ index ];
             const url =new URL( page.url ); // for query changes
             url.searchParams.set( 'district', district.id );
@@ -46,8 +43,6 @@
         }
     }
 
-    // $inspect( 'Districts', districts );
-     $inspect( 'District', districts );
 </script>
 
 

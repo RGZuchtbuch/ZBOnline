@@ -47,7 +47,6 @@
 //	let unit = $state( units[ page.url.searchParams.get( 'unit' ) || 'breeders' ] );
 	let unitId = $state( page.url.searchParams.get( 'unit' ) || 'breeders' );
 	let unit = $derived( units[ unitId ] ?? null );
-	$inspect( 'Unit', unit );
 	let district = $derived( ctx.federation.districts[ ctx.report.args.district ] );
 
 	// function onTypeChange( event ) {
@@ -58,7 +57,6 @@
 
 	function onUnitChange( event ) {
 		const id = event.target.value;
-		console.log( 'Unit', id );
 		let url = new URL(page.url);
 		url.searchParams.set('unit', id);
 		goto(url.href);
@@ -68,8 +66,6 @@
 	let breed   = $derived( ctx.standard.breeds[ +page.url.searchParams.get( 'breed' ) ] );
 	let color   = $derived( ctx.standard.colors[ +page.url.searchParams.get( 'color' ) ] );
 	let group   = $derived( page.url.searchParams.get( 'group') );
-
-	//$inspect( 'Section', section );
 
 </script>
 

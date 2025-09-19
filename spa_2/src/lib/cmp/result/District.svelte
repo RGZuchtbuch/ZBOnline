@@ -9,8 +9,6 @@
 
 	let { args, results=$bindable() } = $props();
 
-	$inspect( 'Args', args );
-
 	let authorized = $derived( ctx.user && ( ctx.user.id === ctx.district.moderator.id || ctx.user.admin ) ); // can edit
 
 	let years = []; // create years array for select
@@ -25,11 +23,8 @@
 
 	function onSectionChange( event ) {
 		const sectionId = event.target.value;
-
 		let url = new URL( page.url );
 		url.searchParams.set( 'section', sectionId );
-		//url.searchParams.delete( 'breed' );
-		//url.searchParams.delete( 'color' );
 		goto( url.href );
 	}
 	function onGroupChange( event ) {

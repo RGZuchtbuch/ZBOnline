@@ -9,7 +9,6 @@
 	import Breeders from '$lib/cmp/moderator/district/Breeders.svelte';
 
 	$effect( async () => {
-		console.log('Load Breeders', dirty.breeders, page.url.href );
 		const districtId = +page.params.district;
 		if( dirty.breeders && page.url ) await loadBreeders( districtId );
 	})
@@ -19,8 +18,6 @@
 	})
 
 	async function loadBreeders( districtId ) {
-//		console.log( 'load district breeders' );
-//		ctx.breeders = null;
 		ctx.breeders = await model.Breeder.query( { district:districtId } );
 	}
 
