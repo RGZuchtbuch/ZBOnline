@@ -27,7 +27,7 @@
             weight: (v) => validator(v).number().range(1, 999).orNull().isValid(),
         },
         brood: {
-            chicks: (v) => validator(v).number().if(resultState.pairs > 0).range(0, resultState.pairs * 50).orNull().isValid(),
+            //chicks: (v) => validator(v).number().if(resultState.pairs > 0).range(0, resultState.pairs * 50).orNull().isValid(),
             eggs: (v) => validator(v).number().range(1, 99999).orNull().isValid(),
             fertile: (v) => validator(v).number().range(0, resultState.brood.eggs).orNull().isValid(),
             hatched: (v) => validator(v).number().range(0, resultState.brood.fertile === null ? resultState.brood.eggs : resultState.brood.fertile).orNull().isValid(),
@@ -48,8 +48,13 @@
             response = await model.Result.save( resultState );
         } else { // delete if no breeders count given
             if( resultState.id > 0 ) {
-                response = await model.Result.delete( resultState.id );
+                let ok = await model.Result.delete( resultState.id );
+                if( ok ) resultState.id = null;
+                return ok;
             }
+            // if( resultState.id > 0 ) {
+            //     response = await model.Result.delete( resultState.id );
+            // }
         }
         return response;
     }
