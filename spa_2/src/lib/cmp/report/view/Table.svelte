@@ -551,7 +551,7 @@
                 <tbody>
                     <tr>
                         <th>
-                            <div class='flex flex-row bg-header text-white px-2 gap-x-1 justify-evenly font-bold text-base italic border-y border-gray-600'>
+                            <div class='flex flex-row bg-header text-header px-2 gap-x-1 justify-evenly font-bold text-base italic border-y border-gray-600'>
                                 <div class='grow'>Gesamt</div>
                                 <div class='flex justify-evenly text-base gap-x-6'>
                                     {#if table.total}

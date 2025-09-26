@@ -14,17 +14,13 @@
 
     const validate = {
         breeders     : (v) => validator(v).number().range( 1, 99999 ).orNull().isValid(),
-        pairs        : (v) => validator(v).number().range( result.breeders, 99999 ).orNull().isValid(),
-
-        lay: {
-            dames: (v) => validator(v).number().range(1, 99999).orNull().isValid(),
-            eggs: (v) => validator(v).number().range(0, 366).orNull().isValid(),
-            weight: (v) => validator(v).number().range(1, 999).orNull().isValid(),
-        },
+        pairs        : (v) => validator(v).number().range( result.breeders, 99999 ).orNullIf( data.brood.broods === null &&  data.brood.hatched === null ).isValid(),
         brood: {
-//            chicks: (v) => validator(v).number().if(data.pairs > 0).range(0, data.pairs * 50).orNull().isValid(),
             broods: (v) => validator(v).number().range(0, 99).orNull().isValid(),
-            chicks: (v) => validator(v).number().if(data.brood.broods>0).range(0, data.brood.broods * 2).orNull().isValid(),
+
+//            chicks: (v) => validator(v).number().if(data.brood.broods>0).range(0, data.brood.broods * 2).orNull().isValid(),
+            chicks: (v) => validator(v).number().range(0, data.brood.broods === null ? 99999 : data.brood.broods * 2 ).orNullIf( data.brood.broods === null ).isValid(),
+
             eggs: (v) => validator(v).number().range(1, 99999).orNull().isValid(),
             fertile: (v) => validator(v).number().range(0, data.brood.eggs ).orNull().isValid(),
             hatched: (v) => validator(v).number().range(0, data.brood.fertile == null ? data.brood.eggs : data.brood.fertile).orNull().isValid(),
@@ -32,14 +28,11 @@
         show: {
 //            count    : (v) => validator(v).number().range( 1, 99999 ).orNullIf( data.show.score == null ).isValid(),
             count    : (v) => validator(v).number().range( 1, data.brood.hatched ? data.brood.hatched : 99999  ).orNullIf( data.show.score == null ).isValid(),
-            score    : (v) => validator(v).number().range( 89, 97 ).orNullIf( data.show.count == null ).isValid(),
+//            score    : (v) => validator(v).number().if( data.show.count > 0 ).range( 89, 97 ).orNullIf( data.show.count == null ).isValid(),
+            score    : (v) => validator(v).number().range( 89, 97 ).orNullIf( data.show.count === null ).isValid(),
         },
 
     }
-
-    // function onToggleExtend( event ) {
-    //     extended = ! extended;
-    // }
 
     async function onSubmit( event ) {
         console.log( 'Submit color result' );
@@ -49,16 +42,14 @@
             return await model.Result.save( data );
         } else { // delete if no breeders count given
             if( data.id > 0 ) {
-                return await model.Result.delete( data.id );
+                let ok = await model.Result.delete( data.id );
+                if( ok ) data.id = null;
+                return ok;
             }
         }
         dirty.results++; // inc to trigger
     }
 
-    // function onChange( result ) {
-    //     console.log( 'Result', result );
-    //     dispatch( 'change', result );
-    // }
 </script>
 
 <Form class='flex flex-row px-2 gap-x-1 text-sm' autosubmit onsubmit={onSubmit}>
@@ -81,7 +72,7 @@
     <div class='w-4'></div>
     <!-- show -->
     <NumberInput class='w-14' bind:value={data.show.count} error='1..99999' title='Zahl der ausgestellten Tiere' validator={validate.show.count}/>
-    <NumberInput class='w-14' bind:value={data.show.score} step={0.1} error='89..97' title='Durchschnittsbewertung u/o=89, 90..97 Punkte, braucht Zahl der ausgestellen Tiere' validator={validate.show.score}/>
+    <NumberInput class='w-14' bind:value={data.show.score} min=89 max=97 step={0.1} error='89..97' title='Durchschnittsbewertung u/o=89, 90..97 Punkte, braucht Zahl der ausgestellen Tiere' validator={validate.show.score}/>
 
 
     <Status class='w-4' />
