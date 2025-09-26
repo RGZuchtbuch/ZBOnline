@@ -84,7 +84,7 @@ class User
 
 				$link = $servername == 'localhost' ? // create reset link depending on server
 					'http://localhost:5173/user/reset?token=' . $resetToken : // dev server
-					'https://error.rgzuchtbuch.de/user/reset?token=' . $resetToken; // TODO need check
+					'https://rgzuchtbuch.de/user/reset?token=' . $resetToken; // TODO need check
 
 				$message = "
 					Für das RGZuchtbuch.de ist auf diese Emailadresse um ein neues Passwort gebeten.<br> 
@@ -137,10 +137,10 @@ class User
 			if( $token && $password && User::checkPassword( $password ) ) { // all there and valid
 				$decodedToken = model\Token::decode( $token ); // the reset token
 				if( $decodedToken ) {
-					$user = $decodedToken[ 'user' ];
+					$user = $decodedToken[ 'user' ]; // user with only email from resettoken
 					if( $user ) {
-						$tokenId = $user[ 'id' ] ?? null;
-						if( $tokenId === null ) { // should not have id
+//						$tokenId = $user[ 'id' ] ?? null; // why should i check this ?
+//						if( $tokenId === null ) { // should not have id
 							$tokenEmail = $user[ 'email' ] ?? null;
 							if( $tokenEmail ) {
 								$success = model\User::setPassword( $tokenEmail, $password );
@@ -163,7 +163,7 @@ class User
 								Logger::log( null, null, "Login reset, invalid token" );
 								throw new HttpBadRequestException( $request, 'Could not update password');
 							}
-						}
+//						}
 					}
 				}
 				Logger::log( null, null, "Login reset, invalid reset token" );

@@ -7,10 +7,11 @@
 
     const MAXBUBBLE = 35;
 
-    let { title, districts, unit, scale=null } = $props();
+    let { data, title, unit, scale=null } = $props();
 
     let canvas = null;
     let config = $state( null );
+    let districts = $derived( data.districts );
 
     $effect( () => {
         config = update( page.url );

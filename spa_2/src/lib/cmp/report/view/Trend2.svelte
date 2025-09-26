@@ -2,7 +2,7 @@
     import {onMount} from 'svelte';
     import { goto } from '$app/navigation';
     import { page } from '$app/state';
-    import { dec, pct } from '$lib/js/tools.js';
+    import {activeYear, dec, pct} from '$lib/js/tools.js';
     import { BarController, BarElement, CategoryScale, Chart, Colors, LinearScale, Tooltip } from 'chart.js';
 
     let { title, data, scale={}, unit, factor=1.0, color={fill:'#ADF', border:'#48A'}, width=1.0 } = $props();
@@ -11,13 +11,29 @@
     let chart = $state( null );
 
     $effect( () => {
-        chart = getChart();
+        if( chart ) {
+            updateChart();
+        } else {
+            chart = getChart();
+        }
     })
 
 
     function getChart() {
         const context = canvas.getContext('2d');
-        let chart = new Chart( context, getConfig() );
+        return new Chart( context, getConfig() );
+    }
+
+    function updateChart() {
+        chart.data.labels = data.map( item => item.year );
+        chart.data.datasets = [
+            { data:data.map( item => factor*item[ unit ] ), backgroundColor:color.fill, borderColor:color.border, borderWidth:1  }
+        ]
+        chart.options.scales = {
+            x : { min:activeYear()-10 },
+            y : scale,
+        }
+        chart.update();
     }
 
     function getConfig() {
@@ -36,15 +52,18 @@
                 ],
             },
             options : {
+                animation: {
+                  //easing:'linear',
+                },
                 plugins: {
-                    title: {
-                        text: title,
-                        display: false,
-                    }
+                    // title: {
+                    //     text: title,
+                    //     display: false,
+                    // }
                 },
                 responsive : false, // otherwise shrinking
                 scales : {
-                    x : { min:2014 },
+                    x : { min:activeYear()-10 },
                     y : scale,
                 }
             },

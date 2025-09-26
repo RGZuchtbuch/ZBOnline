@@ -25,8 +25,8 @@
 
 {#if ctx && ctx.title && ctx.menu }
 	<div class='flex flex-col border-header bg-header text-header print:hidden' >
-		<div class='grow flex flex-row justify-end gap-x-2 py-1 pr-8'>
-			<nav class='flex flex-row gap-x-2'>
+		<div class='grow hidden lg:flex flex-row justify-end gap-x-4 py-1 pr-8'>
+			<nav class='hidden lg:flex flex-row gap-x-1'>
 				{#each ctx.menu.options as option, i}
 					{#if i>0} • {/if}
 					{#if page.url.pathname.startsWith( option.href ) }
@@ -38,7 +38,7 @@
 			</nav>
 			{#if ctx.menu.roles.length > 0}
 				:
-				<nav class='flex flex-row gap-x-2'>
+				<nav class='hidden lg:flex flex-row gap-x-2 italic'>
 					{#each ctx.menu.roles as role, i}
 						{#if i>0} • {/if}
 						{#if page.url.pathname.startsWith( role.href ) }
@@ -50,7 +50,9 @@
 				</nav>
 			{/if}
 		</div>
-		<div class='grow flex flex-row text-sm gap-x-2'>
+
+
+		<div class='grow hidden lg:flex flex-row text-sm gap-x-2'>
 			<nav class='grow flex flex-row justify-end gap-x-1 italic'>
 				{#each ctx.crumbs as crumb, i}
 					{#key crumb.name}

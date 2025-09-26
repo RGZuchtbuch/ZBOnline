@@ -111,6 +111,7 @@ export let cfg = new Config(); // predefines stuff
 
 export let dirty = new Dirty(); // mark ctx items to be reloaded
 
+export const groups = [ 'I', 'II', 'III' ];
 // experiment
 // const usr = $state( { id:1, name:'Eelco' } )
 // export const test = {

@@ -23,6 +23,8 @@ countries = [ 'A', 'B', 'BIH', 'CH', 'CZ', 'D', 'DR', 'E', 'F', 'NPA', 'H', 'I',
 
 2020 NL-H13 12345
 
+2025-09-19 Update to RGZuchtbuch 2.0 2.41
+
  
 
 

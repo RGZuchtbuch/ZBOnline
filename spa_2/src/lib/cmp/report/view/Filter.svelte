@@ -2,7 +2,7 @@
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import { page } from '$app/state';
-	import { ctx } from '$lib/js/store.svelte.js';
+	import { ctx, groups } from '$lib/js/store.svelte.js';
 	import { activeYear, getArgNum, getArgStr } from '$lib/js/tools.js';
 	import model from '$lib/js/model.js';
 
@@ -11,19 +11,19 @@
 
 
 
-	let { report } = $props();
+	let { district, year, group, section, breed, color } = $props();
 
-	let district = $derived( ctx.federation.districts[ getArgNum( page.url, 'district', 1 ) ] ); //report.args.district ] )
-	let year     = $derived( getArgNum( page.url, 'year', activeYear() ) ); //report.args.year );
-	let group    = $derived( getArgStr( page.url, 'group', null ) );
-//	let section  = $derived( ctx.standard.rootSections.find( item => item.id === report.args.section ) );
-	let section  = $derived( ctx.standard.sections[ getArgNum( page.url, 'section', null ) ] );
-//	let section  = $derived( ctx.standard.sections[ report.args.section ] );
-//	let breed    = $state( ctx.standard.breeds[ report.args.breed ] );
-	let breed    = $derived( ctx.standard.breeds[ getArgNum( page.url, 'breed', null ) ] );
-	let color    = $derived( ctx.standard.colors[ getArgNum( page.url, 'color', null ) ] );
+// 	let district = $derived( ctx.federation.districts[ getArgNum( page.url, 'district', 1 ) ] ); //report.args.district ] )
+// 	let year     = $derived( getArgNum( page.url, 'year', activeYear() ) ); //report.args.year );
+// 	let group    = $derived( getArgStr( page.url, 'group', null ) );
+// //	let section  = $derived( ctx.standard.rootSections.find( item => item.id === report.args.section ) );
+// 	let section  = $derived( ctx.standard.sections[ getArgNum( page.url, 'section', null ) ] );
+// //	let section  = $derived( ctx.standard.sections[ report.args.section ] );
+// //	let breed    = $state( ctx.standard.breeds[ report.args.breed ] );
+// 	let breed    = $derived( ctx.standard.breeds[ getArgNum( page.url, 'breed', null ) ] );
+// 	let color    = $derived( ctx.standard.colors[ getArgNum( page.url, 'color', null ) ] );
 
-	const groups = ['I','II','III'];
+	//const groups = ['I','II','III']; from store
 	let years = [];
 	let nextYear = new Date().getFullYear()+1;
 	for( let year=nextYear; year>=1980; year-- ) { // desc from next year down to 1980. Could be refined to earliest data ?.
@@ -56,15 +56,15 @@
 		goto( url.href );
 	}
 	function onSectionChange( event ) {
-		let sectionId = +event.target.value;
-		console.log( 'Section', sectionId );
+		let id = +event.target.value;
+		console.log( 'Section', id );
 		//section = ctx.standard.rootSections.find( item => item.id === sectionId );
-		section = ctx.standard.sections[ sectionId ];
-		breed = null;
+		//section = ctx.standard.sections[ sectionId ];
+		//breed = null;
 		//color = null;
 		const url =new URL( page.url ); // for query changes
-		if( section ) {
-			url.searchParams.set( 'section', sectionId );
+		if( id ) {
+			url.searchParams.set( 'section', id );
 		} else {
 			url.searchParams.delete( 'section' );
 		}
@@ -73,12 +73,12 @@
 		goto( url.href );
 	}
 	function onBreedChange( event ) {
-		let breedId = +event.target.value;
-		breed = ctx.standard.breeds[ breedId ];
-		color = null;
+		let id = +event.target.value;
+		//breed = ctx.standard.breeds[ breedId ];
+		//color = null;
 		const url =new URL( page.url ); // for query changes
-		if( breed ) {
-			url.searchParams.set( 'breed', breedId );
+		if( id ) {
+			url.searchParams.set( 'breed', id );
 		} else {
 			url.searchParams.delete( 'breed' );
 		}
@@ -86,11 +86,11 @@
 		goto( url.href );
 	}
 	function onColorChange( event ) {
-		let colorId = +event.target.value;
-		color = ctx.standard.colors[ +event.target.value ];
+		let id = +event.target.value;
+		//color = ctx.standard.colors[ +event.target.value ];
 		const url =new URL( page.url ); // for query changes
-		if( color ) {
-			url.searchParams.set( 'color', colorId );
+		if( id ) {
+			url.searchParams.set( 'color', id );
 		} else {
 			url.searchParams.delete( 'color' );
 		}
@@ -102,7 +102,7 @@
 	const testSections = ctx.standard.root;
 </script>
 
-{#if ctx.federation && ctx.standard && report.args }
+{#if ctx.federation && ctx.standard }
 	<Form>
 		<h3 class='text-center print:hidden'>Filter</h3>
 
@@ -112,24 +112,24 @@
 		</p>
 
 		<section class='flex flex-row gap-x-2 px-4 print:hidden' >
-			<Select class='' label='Verband' value={report.args.district} onchange={onDistrictChange}>
+			<Select class='' label='Verband' value={district.id} onchange={onDistrictChange}>
 				<option value={ctx.federation.id}>{ctx.federation.name}</option>
-				{#each ctx.federation.children as district}
-					<option value={district.id}>▸&nbsp;{district.name}</option>
-					{#each district.children as district}
-						<option value={district.id}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;◦&nbsp;&nbsp;{district.name}</option>
+				{#each ctx.federation.children as child}
+					<option value={child.id}>▸&nbsp;{child.name}</option>
+					{#each child.children as child}
+						<option value={child.id}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;◦&nbsp;&nbsp;{child.name}</option>
 					{/each}
 				{/each}
 			</Select>
 
-			<Select class='' label='Jahr' value={report.args.year} onchange={onYearChange}>
+			<Select class='' label='Jahr' value={year} onchange={onYearChange}>
 				{#each years as year}
 					<option value={year}>{year}</option>
 				{/each}
 			</Select>
 
-			<Select class='' label='ZB Gruppe' value={report.args.group} onchange={onGroupChange}>
-				<option value={undefined} title='Alle Gruppen'>*</option>
+			<Select class='' label='ZB Gruppe' value={group} onchange={onGroupChange}>
+				<option value={null} title='Alle Gruppen'>*</option>
 				{#each groups as group}
 					<option value={group}>{group}</option>
 				{/each}
@@ -138,18 +138,18 @@
 
 
 		<section class='flex flex-row gap-x-2 px-4 print:hidden' >
-			<Select class='' label='Sparte' value={report.args.section} onchange={onSectionChange}>
-				<option value={undefined}>*</option>
-				{#each ctx.standard.root.children as section}
-					<option value={section.id}>▸&nbsp;{section.name}</option>
-					{#each section.children as subSection}
-						<option value={subSection.id}>&nbsp;&nbsp;&nbsp;&nbsp;◦&nbsp;&nbsp;{subSection.name}</option>
+			<Select class='' label='Sparte' value={section?section.id:null} onchange={onSectionChange}>
+				<option value={null}>*</option>
+				{#each ctx.standard.root.children as child}
+					<option value={child.id}>▸&nbsp;{child.name}</option>
+					{#each child.children as child}
+						<option value={child.id}>&nbsp;&nbsp;&nbsp;&nbsp;◦&nbsp;&nbsp;{child.name}</option>
 					{/each}
 				{/each}
 			</Select>
 
-			<Select class='min-w-64' label='Rasse' value={report.args.breed} onchange={onBreedChange}>
-				<option value={undefined}>*</option>
+			<Select class='min-w-64' label='Rasse' value={breed?breed.id:null} onchange={onBreedChange}>
+				<option value={null}>*</option>
 				{#if section}
 					{#each section.breeds as breed}
 						<option value={breed.id}>{breed.name}</option>
@@ -157,8 +157,8 @@
 				{/if}
 			</Select>
 
-			<Select class='min-w-64' label='Farbenschlag' value={report.args.color} onchange={onColorChange}>
-				<option value={undefined}>*</option>
+			<Select class='min-w-64' label='Farbenschlag' value={color?color.id:null} onchange={onColorChange}>
+				<option value={null}>*</option>
 				{#if breed}
 					{#each breed.colors as color}
 						<option value={color.id}>{color.name}</option>

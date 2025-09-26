@@ -3,11 +3,15 @@
     import { cfg } from '$lib/js/store.svelte.js';
     import { dec, pct } from '$lib/js/tools.js';
 
-    let { table, district, year } = $props();
+    let { data, district, year } = $props();
 
-    let totalledReport = $state( null );
+    //let sections = $derived( data.sections );
+    let totalled = $state( calcTotals() );
 
-    calcTotals(); // in effect makes it trigger twice, now in #key block. should be in onMount ?
+    $inspect( 'T', totalled )
+    //let totalled = $state( null );
+
+   // in effect makes it trigger twice, now in #key block. should be in onMount ?
 
     function addTo( sum, result ) { // count and add all up to totals of section etc
         result.broods = result.broodEggs ? result.broodEggs / 2 : null; // for pigeons
@@ -82,13 +86,45 @@
     function createTotal() {
         return { breeders:0, pairs:0, layDames:0, layShould:0, layBreeders:0, layEggs:0, layWeightBreeders:0, layWeightShould:0, layWeight:0, broodBreeders:0, broodLayerEggs:null, broodLayerFertile:0, broodLayerHatched:0, broodPigeonEggs:null, broodPigeonHatched:null, broodPigeonResult:0, showBreeders:0, showCount:null, showScore:0 };
     }
-    function calcTotals(  ) {
-        totalledReport = table;
-        const resultsSum = createTotal();
-        for( const section of totalledReport.sections ) {
-            const sectionSum = createTotal();
+    // function calcTotals(  ) {
+    //     totalledReport = data;
+    //     const resultsSum = createTotal();
+    //     for( const section of totalledReport.sections ) {
+    //         const sectionSum = createTotal();
+    //         for( const subsection of section.subsections ) {
+    //             const subsectionSum = createTotal();
+    //             for( const breed of subsection.breeds ) {
+    //                 if( breed.result ) { // pigeons by breed
+    //                     addTo( resultsSum, breed.result);
+    //                     addTo( sectionSum, breed.result);
+    //                     addTo( subsectionSum, breed.result);
+    //                 }
+    //                 const breedSum = createTotal();
+    //                 for( const color of breed.colors ) { // layers by color
+    //                     if( color.result ) {
+    //                         addTo( resultsSum, color.result);
+    //                         addTo( sectionSum, color.result);
+    //                         addTo( subsectionSum, color.result);
+    //                         addTo( breedSum, color.result );
+    //                     }
+    //                 }
+    //                 breed.total = avgTotal( breedSum );
+    //             }
+    //             subsection.total = avgTotal( subsectionSum );
+    //         }
+    //         section.total = avgTotal( sectionSum );
+    //     }
+    //     totalledReport.total = avgTotal( resultsSum );
+    //     //totalledReport = report;
+    // }
+
+    function calcTotals() {
+        let totalled = $state.snapshot( data ); // remove reactivity
+        const resultsSum = createTotal(); // for total over all sections
+        for( const section of totalled.sections ) {
+            const sectionSum = createTotal(); // for total per section
             for( const subsection of section.subsections ) {
-                const subsectionSum = createTotal();
+                const subsectionSum = createTotal(); // for total per subsection
                 for( const breed of subsection.breeds ) {
                     if( breed.result ) { // pigeons by breed
                         addTo( resultsSum, breed.result);
@@ -110,18 +146,19 @@
             }
             section.total = avgTotal( sectionSum );
         }
-        totalledReport.total = avgTotal( resultsSum );
-        //totalledReport = report;
+        totalled.total = avgTotal( resultsSum );
+        console.log( 'TT', totalled.total )
+        return totalled;
     }
 
 </script>
 
-<!-- comby of table and div for better printing results -->
+<!-- combi of table and div for better printing results -->
 
-{#if totalledReport !== null && totalledReport.sections.length > 0 }
-    {#key totalledReport }
+{#if data && totalled !== null && totalled.sections.length > 0 }
+    {#key totalled }
         <div class='flex flex-col' in:fade>
-            {#each totalledReport.sections as section, s}
+            {#each totalled.sections as section, s}
                 <!-- table per section for nice printing per page header-->
                 <table class='w-full px-2 break-after-page'>
                     <!-- section header -->
@@ -190,273 +227,215 @@
                             </th>
                         </tr>
                     </thead>
-                    <!--tbody>
-                        <tr>
-                            <th>
-                                <div class='flex flex-row bg-gray-300 px-2 text-center'>
-                                    <div class='grow text-left'>Gruppe, Rasse & Farbe</div>
-                                        <div class='w-1'></div>
-                                    <div class='w-12'>Zuchten</div>
-                                    <div class='w-8'></div>
-                                        <div class='w-5'></div>
-                                    <div class='w-24 text-center'> {#if section.id === 5}Legeleistung{:else}Legeleistung{/if} </div>
-                                    <div class='w-8'></div>
+
+                    {#each section.subsections as subsection}
+                        <!-- subsection header -->
+                        <tbody>
+                            <tr>
+                                <th>
+                                    <div class='flex flex-row mt-4 px-2 gap-x-4 font-bold text-xl text-left'>
+                                        Gruppe {subsection.name}
+                                    </div>
+                                </th>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <div class='flex flex-row border-b border-gray-600 bg-gray-300 px-2 text-xs text-center gap-x-1'>
+                                        <div class='grow text-left'>Rasse & Farbe</div>
+                                        <div class='w-12 th'>Zuchten</div>
+
+                                        <div class='w-8 text-gray-400'>|</div>
+
+                                        {#if section.id === 5}
+                                            <div class='w-12 th'>-</div>
+                                            <div class='w-12 th'>-</div>
+                                        {:else}
+                                            <div class='w-12 th' title='Anteil von Soll'>Legen</div>
+                                            <div class='w-12 th' title='Anteil von Soll'>Gewicht</div>
+                                        {/if}
+
+                                        <div class='w-8 text-gray-400'>|</div>
+
+                                        {#if section.id === 5}
+                                            <div class='w-12 th'>Paare</div>
+                                            <div class='w-12 th'>Bruten</div>
+                                            <div class='w-12 th'>Schl %</div>
+                                            <div class='w-12 th'>Kü/Pa</div>
+                                        {:else}
+                                            <div class='w-12 th' title='Gesamtzahl eingelegten Eier'>Eier</div>
+                                            <div class='w-12 th' title='Anteil befruchteten Eier'>Befr %</div>
+                                            <div class='w-12 th' title='Anteil geschlüpften Eier'>Schl %</div>
+                                            <div class='w-12'>-</div>
+                                        {/if}
+
+                                        <div class='w-8 text-gray-400'>|</div>
+
+                                        <div class='w-12 th'>Tiere</div>
+                                        <div class='w-12 th'>Punkte</div>
+
                                         <div class='w-2'></div>
+                                    </div>
 
-                                    <div class='w-48 text-center'>Brutleistung</div>
-                                    <div class='w-8'></div>
-                                        <div class='w-4'></div>
+                                </td>
+                            </tr>
 
-                                    <div class='w-24 text-center'>Schauleistung</div>
-                                    <div class='w-4'></div>
-                                </div>
-                                <div class='flex flex-row border-b border-gray-600 bg-gray-300 px-2 text-xs text-center gap-x-1'>
-                                    <div class='grow text-left'>Rasse & Farbe</div>
-                                    <div class='w-12 th'>Zuchten</div>
+                        </tbody>
 
-                                    <div class='w-8 text-gray-400'>|</div>
-
-                                    {#if section.id === 5}
-                                        <div class='w-12 th'>-</div>
-                                        <div class='w-12 th'>-</div>
-                                    {:else}
-                                        <div class='w-12 th'>Eier/J</div>
-                                        <div class='w-12 th'>Gewicht</div>
-                                    {/if}
-
-                                    <div class='w-8 text-gray-400'>|</div>
-
-                                    {#if section.id === 5}
-                                        <div class='w-12 th'>Paare</div>
-                                        <div class='w-12 th'>Bruten</div>
-                                        <div class='w-12 th'>Schl %</div>
-                                        <div class='w-12 th'>Kü/Pa</div>
-                                    {:else}
-                                        <div class='w-12 th'>Eier</div>
-                                        <div class='w-12 th'>Befr %</div>
-                                        <div class='w-12 th'>Schl %</div>
-                                        <div class='w-12'>-</div>
-                                    {/if}
-
-                                    <div class='w-8 text-gray-400'>|</div>
-
-                                    <div class='w-12 th'>Tiere</div>
-                                    <div class='w-12 th'>Punkte</div>
-
-                                    <div class='w-2'></div>
-                                </div>
-                            </th>
-                        </tr>
-                    </tbody-->
-
-                        {#each section.subsections as subsection}
-                            <!-- subsection header -->
-                            <tbody>
+                        <!-- Breeds -->
+                        {#each subsection.breeds as breed}
+                            <tbody class='print-no-break'>
                                 <tr>
                                     <th>
-                                        <div class='flex flex-row mt-4 px-2 gap-x-4 font-bold text-xl text-left'>
-                                            Gruppe {subsection.name}
-                                        </div>
-                                    </th>
-                                </tr>
-
-                                <tr>
-                                    <td>
-                                        <div class='flex flex-row border-b border-gray-600 bg-gray-300 px-2 text-xs text-center gap-x-1'>
-                                            <div class='grow text-left'>Rasse & Farbe</div>
-                                            <div class='w-12 th'>Zuchten</div>
-
-                                            <div class='w-8 text-gray-400'>|</div>
-
-                                            {#if section.id === 5}
-                                                <div class='w-12 th'>-</div>
-                                                <div class='w-12 th'>-</div>
-                                            {:else}
-                                                <div class='w-12 th' title='Anteil von Soll'>Legen</div>
-                                                <div class='w-12 th' title='Anteil von Soll'>Gewicht</div>
-                                            {/if}
-
-                                            <div class='w-8 text-gray-400'>|</div>
-
-                                            {#if section.id === 5}
-                                                <div class='w-12 th'>Paare</div>
-                                                <div class='w-12 th'>Bruten</div>
-                                                <div class='w-12 th'>Schl %</div>
-                                                <div class='w-12 th'>Kü/Pa</div>
-                                            {:else}
-                                                <div class='w-12 th' title='Gesamtzahl eingelegten Eier'>Eier</div>
-                                                <div class='w-12 th' title='Anteil befruchteten Eier'>Befr %</div>
-                                                <div class='w-12 th' title='Anteil geschlüpften Eier'>Schl %</div>
-                                                <div class='w-12'>-</div>
-                                            {/if}
-
-                                            <div class='w-8 text-gray-400'>|</div>
-
-                                            <div class='w-12 th'>Tiere</div>
-                                            <div class='w-12 th'>Punkte</div>
-
-                                            <div class='w-2'></div>
-                                        </div>
-
-                                    </td>
-                                </tr>
-
-                            </tbody>
-
-                            <!-- Breeds -->
-                            {#each subsection.breeds as breed}
-                                <tbody class='print-no-break'>
-                                    <tr>
-                                        <th>
-                                            <div class='flex flex-row px-2 py-1 text-right text-base font-semibold gap-x-1'>
-                                                <div class='grow text-left '>
-                                                    {breed.name}
-                                                    {#if section.id === cfg.pigeons}
-                                                        <span class='text-xs'>
-                                                            (Gesamt)
-                                                        </span>
-                                                    {/if}
-                                                </div>
-
-                                                {#if breed.result}
-                                                    <div class='w-12 td' title='Zahl der Zuchten / Züchter'>{dec( breed.result.breeders )}</div>
-                                                {:else}
-                                                    <div class='w-12 td' title='Zahl der Zuchten / Züchter'>{dec( breed.total.breeders )}</div>
+                                        <div class='flex flex-row px-2 py-1 text-right text-base font-semibold gap-x-1'>
+                                            <div class='grow text-left '>
+                                                {breed.name}
+                                                {#if section.id === cfg.pigeons}
+                                                    <span class='text-xs'>
+                                                        (Gesamt)
+                                                    </span>
                                                 {/if}
-
-                                                <div class='w-8'></div>
-
-                                                <!-- Lay-->
-                                                {#if section.id === 5 && breed.result}
-                                                    <div class='w-12'></div>
-                                                    <div class='w-12 td'></div>
-                                                {:else}
-                                                    <div class='w-12 td'
-                                                         title={`Legen ${pct(breed.total.layEggs,1)} von ${dec( breed.layEggs )} ergibt ${dec( breed.total.layEggs * breed.layEggs )} Eier im Jahr`}>
-                                                        {pct(breed.total.layEggs, 1 )}
-                                                    </div>
-                                                    <div class='w-12 td' title={`Eigewicht ${pct( breed.total.layWeight, 1 )} von ${dec( breed.layWeight )}g. ergibt ${dec( breed.total.layWeight * breed.layWeight )} g.`}>
-                                                        {pct( breed.total.layWeight, 1 )}
-                                                    </div>
-                                                {/if}
-
-                                                <div class='w-8'></div>
-                                                <!-- Brood-->
-                                                {#if section.id === 5 && breed.result} <!-- pigeons -->
-                                                    <div class='w-12 td' title='Zahl der Brutpaare'>{dec( breed.result.pairs )}</div> <!-- 2 eggs per brood -->
-                                                    <div class='w-12 td' title='Zahl der Bruten'>{dec( breed.result.broodPigeonEggs / 2 )}</div> <!-- 2 eggs per brood -->
-                                                    <div class='w-12 td' title='Anteil der geschlüpften Küken'>{ breed.result.broodPigeonEggs ? pct( breed.result.broodPigeonHatched ,1 ) : '-' }</div>
-                                                    <div class='w-12 td' title='Zahl der Küken pro Paar'>{dec( breed.result.broodPigeonResult, 1 )}</div>
-                                                {:else}
-                                                    <div class='w-12 td' title='Zahl der Eingelegte Eier'>{dec( breed.total.broodLayerEggs )}</div>
-                                                    <div class='w-12 td' title='Anteil befruchteten Eier'>{ breed.total.broodLayerEggs ? pct( breed.total.broodLayerFertile, 1 ) : '-' }</div>
-                                                    <div class='w-12 td' title='Anteil geschlüpfte Küken'>{ breed.total.broodLayerEggs ? pct( breed.total.broodLayerHatched, 1 ) : '-'}</div>
-                                                    <div class='w-12'></div>
-                                                {/if}
-
-                                                <div class='w-8'></div>
-                                                <!-- Show -->
-                                                {#if section.id === 5 && breed.result}
-                                                    <div class='w-12 td' title='Zahl der ausgestellten Tieren'>{dec( breed.result.showCount ) }</div>
-                                                    <div class='w-12 td' title='Durchschnitt Bewertungsnote'>{dec( breed.result.showScore, 1 )}</div>
-                                                {:else}
-                                                    <div class='w-12 td' title='Zahl der ausgestellten Tieren'>{dec( breed.total.showCount ) }</div>
-                                                    <div class='w-12 td' title='Durchschnitt Bewertungsnote'>{dec( breed.total.showScore, 1 )}</div>
-                                                {/if}
-
-                                                <div class='w-2'></div>
-
                                             </div>
-                                        </th>
-                                    </tr>
 
-
-                                    <!-- Colors, only for layers -->
-                                    {#each breed.colors as color}
-                                        {#if section.id !== 5 && color.result}
-                                            <tr>
-                                                <td>
-                                                    <div class='flex flex-row px-2 py-1 text-right text-base gap-x-1'>
-                                                        <div class='grow pl-4 text-left '> &#10551; {color.name || color.result.aocColor} </div>
-
-                                                        <div class='w-12 td' title='Zahl der Zuchten / Züchter'>{dec( color.result.breeders )}</div>
-
-                                                        <div class='w-8'></div>
-
-                                                        <!-- Lay-->
-                                                        <div class='w-12 td' title='Relative Legeleistung im Jahr zu Soll'>
-                                                            {pct(color.result.layEggs, 1 )}
-                                                        </div>
-                                                        <div class='w-12 td' title='Relative Eiergewichtsleistung zu Soll'>
-                                                            {pct( color.result.layWeight, 1 )}
-                                                        </div>
-
-                                                        <div class='w-8'></div>
-                                                        <!-- Brood-->
-                                                        <div class='w-12 td' title='Eingelegte Eier'>{dec( color.result.broodLayerEggs )}</div>
-                                                        <div class='w-12 td' title='Anteil befruchteten Eier'>{pct( color.result.broodLayerFertile, 1 )}</div>
-                                                        <div class='w-12 td' title='Anteil geschlüpfte Küken'>{pct( color.result.broodLayerHatched, 1 )}</div>
-                                                        <div class='w-12'></div>
-
-                                                        <div class='w-8'></div>
-
-                                                        <div class='w-12 td' title='Zahl der ausgestellten Tieren'>{dec( color.result.showCount ) }</div>
-                                                        <div class='w-12 td' title='Durchschnitt Bewertungsnote'>{dec( color.result.showScore, 1 )}</div>
-
-                                                        <div class='w-2'></div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        {/if}
-                                    {/each} <!-- color -->
-                                </tbody>
-                            {/each} <!-- breed -->
-
-                            <!-- total subsection -->
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <div class='flex flex-row border-y border-gray-600 bg-gray-300 px-2 text-right text-base italic gap-x-1'>
-                                            <div class='grow pl-4 text-left '> Gesamt {subsection.name} </div>
-
-                                            <div class='w-12 td' title='Zahl der Zuchten / Züchter'>{dec( subsection.total.breeders )}</div>
+                                            {#if breed.result}
+                                                <div class='w-12 td' title='Zahl der Zuchten / Züchter'>{dec( breed.result.breeders )}</div>
+                                            {:else}
+                                                <div class='w-12 td' title='Zahl der Zuchten / Züchter'>{dec( breed.total.breeders )}</div>
+                                            {/if}
 
                                             <div class='w-8'></div>
 
                                             <!-- Lay-->
-                                            {#if section.id === 5 }
+                                            {#if section.id === 5 && breed.result}
                                                 <div class='w-12'></div>
-                                                <div class='w-12'></div>
+                                                <div class='w-12 td'></div>
                                             {:else}
-                                                <div class='w-12 td' title='Relative Legeleistung im Jahr zu Soll'>{pct( subsection.total.layEggs, 1 )}</div>
-                                                <div class='w-12 td' title='Relative Eiergewichtsleistung im Jahr zu Soll'>{pct( subsection.total.layWeight, 1 )}</div>
+                                                <div class='w-12 td'
+                                                     title={`Legen ${pct(breed.total.layEggs,1)} von ${dec( breed.layEggs )} ergibt ${dec( breed.total.layEggs * breed.layEggs )} Eier im Jahr`}>
+                                                    {pct(breed.total.layEggs, 1 )}
+                                                </div>
+                                                <div class='w-12 td' title={`Eigewicht ${pct( breed.total.layWeight, 1 )} von ${dec( breed.layWeight )}g. ergibt ${dec( breed.total.layWeight * breed.layWeight )} g.`}>
+                                                    {pct( breed.total.layWeight, 1 )}
+                                                </div>
                                             {/if}
 
                                             <div class='w-8'></div>
                                             <!-- Brood-->
-                                            {#if section.id === 5 }
-                                                <div class='w-12 td' title='Anzahl der Paare'>{dec( subsection.total.pairs ) }</div>
-                                                <div class='w-12 td' title='Anzahl Bruten, jeder mit 2 Eier'>{dec( subsection.total.broodPigeonEggs ) / 2 }</div>
-                                                <div class='w-12 td' title='Anteil geschlüpfte Küken'>{pct( subsection.total.broodPigeonHatched, 1 )}</div>
-                                                <div class='w-12 td' title='Küken pro Paar'>{dec( subsection.total.broodPigeonResult, 1 )}</div>
+                                            {#if section.id === 5 && breed.result} <!-- pigeons -->
+                                                <div class='w-12 td' title='Zahl der Brutpaare'>{dec( breed.result.pairs )}</div> <!-- 2 eggs per brood -->
+                                                <div class='w-12 td' title='Zahl der Bruten'>{dec( breed.result.broodPigeonEggs / 2 )}</div> <!-- 2 eggs per brood -->
+                                                <div class='w-12 td' title='Anteil der geschlüpften Küken'>{ breed.result.broodPigeonEggs ? pct( breed.result.broodPigeonHatched ,1 ) : '-' }</div>
+                                                <div class='w-12 td' title='Zahl der Küken pro Paar'>{dec( breed.result.broodPigeonResult, 1 )}</div>
                                             {:else}
-                                                <div class='w-12 td' title='Eingelegte Eier'>{dec( subsection.total.broodLayerEggs )}</div>
-                                                <div class='w-12 td' title='Anteil befruchteten Eier'>{ subsection.total.broodLayerEggs ? pct( subsection.total.broodLayerFertile, 1 ) : '-' }</div>
-                                                <div class='w-12 td' title='Anteil geschlüpfte Küken'>{ subsection.total.broodLayerEggs ?pct( subsection.total.broodLayerHatched, 1 ) : '-' }</div>
+                                                <div class='w-12 td' title='Zahl der Eingelegte Eier'>{dec( breed.total.broodLayerEggs )}</div>
+                                                <div class='w-12 td' title='Anteil befruchteten Eier'>{ breed.total.broodLayerEggs ? pct( breed.total.broodLayerFertile, 1 ) : '-' }</div>
+                                                <div class='w-12 td' title='Anteil geschlüpfte Küken'>{ breed.total.broodLayerEggs ? pct( breed.total.broodLayerHatched, 1 ) : '-'}</div>
                                                 <div class='w-12'></div>
                                             {/if}
 
                                             <div class='w-8'></div>
-
-                                            <div class='w-12 td' title='Zahl der ausgestellten Tieren'>{dec( subsection.total.showCount ) }</div>
-                                            <div class='w-12 td' title='Durchschnitt Bewertungsnote'>{dec( subsection.total.showScore, 1 )}</div>
+                                            <!-- Show -->
+                                            {#if section.id === 5 && breed.result}
+                                                <div class='w-12 td' title='Zahl der ausgestellten Tieren'>{dec( breed.result.showCount ) }</div>
+                                                <div class='w-12 td' title='Durchschnitt Bewertungsnote'>{dec( breed.result.showScore, 1 )}</div>
+                                            {:else}
+                                                <div class='w-12 td' title='Zahl der ausgestellten Tieren'>{dec( breed.total.showCount ) }</div>
+                                                <div class='w-12 td' title='Durchschnitt Bewertungsnote'>{dec( breed.total.showScore, 1 )}</div>
+                                            {/if}
 
                                             <div class='w-2'></div>
+
                                         </div>
-                                    </td>
+                                    </th>
                                 </tr>
+
+
+                                <!-- Colors, only for layers -->
+                                {#each breed.colors as color}
+                                    {#if section.id !== 5 && color.result}
+                                        <tr>
+                                            <td>
+                                                <div class='flex flex-row px-2 py-1 text-right text-base gap-x-1'>
+                                                    <div class='grow pl-4 text-left '> &#10551; {color.name || color.result.aocColor} </div>
+
+                                                    <div class='w-12 td' title='Zahl der Zuchten / Züchter'>{dec( color.result.breeders )}</div>
+
+                                                    <div class='w-8'></div>
+
+                                                    <!-- Lay-->
+                                                    <div class='w-12 td' title='Relative Legeleistung im Jahr zu Soll'>
+                                                        {pct(color.result.layEggs, 1 )}
+                                                    </div>
+                                                    <div class='w-12 td' title='Relative Eiergewichtsleistung zu Soll'>
+                                                        {pct( color.result.layWeight, 1 )}
+                                                    </div>
+
+                                                    <div class='w-8'></div>
+                                                    <!-- Brood-->
+                                                    <div class='w-12 td' title='Eingelegte Eier'>{dec( color.result.broodLayerEggs )}</div>
+                                                    <div class='w-12 td' title='Anteil befruchteten Eier'>{pct( color.result.broodLayerFertile, 1 )}</div>
+                                                    <div class='w-12 td' title='Anteil geschlüpfte Küken'>{pct( color.result.broodLayerHatched, 1 )}</div>
+                                                    <div class='w-12'></div>
+
+                                                    <div class='w-8'></div>
+
+                                                    <div class='w-12 td' title='Zahl der ausgestellten Tieren'>{dec( color.result.showCount ) }</div>
+                                                    <div class='w-12 td' title='Durchschnitt Bewertungsnote'>{dec( color.result.showScore, 1 )}</div>
+
+                                                    <div class='w-2'></div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {/if}
+                                {/each} <!-- color -->
                             </tbody>
-                        {/each} <!-- subsection -->
+                        {/each} <!-- breed -->
+
+                        <!-- total subsection -->
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class='flex flex-row border-y border-gray-600 bg-gray-300 px-2 text-right text-base italic gap-x-1'>
+                                        <div class='grow pl-4 text-left '> Gesamt {subsection.name} </div>
+
+                                        <div class='w-12 td' title='Zahl der Zuchten / Züchter'>{dec( subsection.total.breeders )}</div>
+
+                                        <div class='w-8'></div>
+
+                                        <!-- Lay-->
+                                        {#if section.id === 5 }
+                                            <div class='w-12'></div>
+                                            <div class='w-12'></div>
+                                        {:else}
+                                            <div class='w-12 td' title='Relative Legeleistung im Jahr zu Soll'>{pct( subsection.total.layEggs, 1 )}</div>
+                                            <div class='w-12 td' title='Relative Eiergewichtsleistung im Jahr zu Soll'>{pct( subsection.total.layWeight, 1 )}</div>
+                                        {/if}
+
+                                        <div class='w-8'></div>
+                                        <!-- Brood-->
+                                        {#if section.id === 5 }
+                                            <div class='w-12 td' title='Anzahl der Paare'>{dec( subsection.total.pairs ) }</div>
+                                            <div class='w-12 td' title='Anzahl Bruten, jeder mit 2 Eier'>{dec( subsection.total.broodPigeonEggs ) / 2 }</div>
+                                            <div class='w-12 td' title='Anteil geschlüpfte Küken'>{pct( subsection.total.broodPigeonHatched, 1 )}</div>
+                                            <div class='w-12 td' title='Küken pro Paar'>{dec( subsection.total.broodPigeonResult, 1 )}</div>
+                                        {:else}
+                                            <div class='w-12 td' title='Eingelegte Eier'>{dec( subsection.total.broodLayerEggs )}</div>
+                                            <div class='w-12 td' title='Anteil befruchteten Eier'>{ subsection.total.broodLayerEggs ? pct( subsection.total.broodLayerFertile, 1 ) : '-' }</div>
+                                            <div class='w-12 td' title='Anteil geschlüpfte Küken'>{ subsection.total.broodLayerEggs ?pct( subsection.total.broodLayerHatched, 1 ) : '-' }</div>
+                                            <div class='w-12'></div>
+                                        {/if}
+
+                                        <div class='w-8'></div>
+
+                                        <div class='w-12 td' title='Zahl der ausgestellten Tieren'>{dec( subsection.total.showCount ) }</div>
+                                        <div class='w-12 td' title='Durchschnitt Bewertungsnote'>{dec( subsection.total.showScore, 1 )}</div>
+
+                                        <div class='w-2'></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    {/each} <!-- subsection -->
 
 
                     <tbody>
@@ -551,20 +530,20 @@
                 <tbody>
                     <tr>
                         <th>
-                            <div class='flex flex-row bg-header text-white px-2 gap-x-1 justify-evenly font-bold text-base italic border-y border-gray-600'>
+                            <div class='flex flex-row bg-header text-header px-2 gap-x-1 justify-evenly font-bold text-base italic border-y border-gray-600'>
                                 <div class='grow'>Gesamt</div>
                                 <div class='flex justify-evenly text-base gap-x-6'>
-                                    {#if table.total}
+                                    {#if totalled}
                                         <div class='flex w-14 justify-evenly'>
-                                            <div class='td' title='Zahl der Zuchten / Züchter'>{table.total.breeders}</div>
+                                            <div class='td' title='Zahl der Zuchten / Züchter'>{ totalled.total.breeders}</div>
                                         </div>
                                         <div class='w-28'></div>
                                         <div class='w-40'></div>
                                         <div class='w-12'></div>
 
                                         <div class='flex w-28 justify-evenly'>
-                                            <div class='td' title='Zahl der ausgestellten Tieren'>{dec( table.total.showCount )}</div>
-                                            <div class='td' title='Durchschnitt Bewertungsnote'>{dec( table.total.showScore, 1 )}</div>
+                                            <div class='td' title='Zahl der ausgestellten Tieren'>{dec( totalled.total.showCount )}</div>
+                                            <div class='td' title='Durchschnitt Bewertungsnote'>{dec( totalled.total.showScore, 1 )}</div>
                                         </div>
                                     {/if}
                                 </div>
