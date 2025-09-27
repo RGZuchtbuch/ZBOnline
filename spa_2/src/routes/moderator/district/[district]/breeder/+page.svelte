@@ -29,7 +29,7 @@
 		ctx.crumbs = [
 			//{name: 'Start', href: '/'},
 			{name: 'Obmann', href: '/moderator'},
-			{name: 'Verbände', href: `/moderator/district/${ctx.district.id}`},
+			{name: 'Verbände', href: `/moderator/district`},
 			{name: 'Verband', href: `/moderator/district/${ctx.district.id}`},
 			{name: 'Züchter'},
 		];
