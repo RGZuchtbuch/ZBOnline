@@ -17,6 +17,3 @@
 		<li><a href={`/admin/log`}>Logs</a></li>
 	</ul>
 </section>
-
-
-

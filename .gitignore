@@ -1,11 +1,3 @@
 /.idea/
-/archive/
-/src/public/spa/bundle.js
-/src/public/spa/bundle.js.map
-/src/public/spa/bundle.css
 
-server/_app
-server/assets
-server/index.html
-
-
+/server/_app/
