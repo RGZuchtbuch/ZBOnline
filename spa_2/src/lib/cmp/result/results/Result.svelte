@@ -21,7 +21,7 @@
 	<span class='w-2'></span>
 
 	{#if section.id === cfg.pigeons}
-		<span class='w-12 number'>{ dec( result.brood.eggs ) }</span>
+		<span class='w-12 number'>{ dec( result.brood.eggs/2 ) }</span>
 		<span class='w-12'></span>
 		<span class='w-12 number'>{ dec( result.brood.hatched ) }</span>
 		<span class='w-12 number'>{ dec( result.pairs?result.brood.hatched/result.pairs:null, 1 )}</span>
