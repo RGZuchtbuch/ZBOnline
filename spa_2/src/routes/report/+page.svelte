@@ -23,8 +23,6 @@
 	let trend = $state.raw( null );
 	let table = $state.raw( null );
 
-	console.log( district.id, year, group, section, breed, color );
-
 	let args = $derived( { district:district?district.id:null, year:year, group:group, section:section?section.id:null, breed:breed?breed.id:null, color:color?color.id:null } );
 
 	$effect( async () => chart = await model.Report.query( { target:'chart', district:district.id, year:year, group:group, section:section?section.id:null, breed:breed?breed.id:null, color:color?color.id:null } ) );

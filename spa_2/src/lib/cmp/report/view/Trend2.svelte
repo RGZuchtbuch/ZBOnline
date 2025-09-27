@@ -53,7 +53,8 @@
             },
             options : {
                 animation: {
-                  //easing:'linear',
+                    duration:0,
+                    easing:'linear',
                 },
                 plugins: {
                     // title: {

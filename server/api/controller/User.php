@@ -155,7 +155,7 @@ class User
 											$response->getBody()->write(json_encode(['token' => $token], JSON_UNESCAPED_SLASHES));
 											return $response;
 										}
-										Logger::log( null, null, "Login reset error, could not make token, ".$tokenEmail );
+										Logger::log( null, null, "Login reset error for ".$tokenEmail );
 										throw new HttpInternalServerErrorException( $request, 'could not create login token');
 									}
 								}

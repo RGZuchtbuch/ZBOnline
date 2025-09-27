@@ -4,6 +4,7 @@ namespace App\controller;
 
 use App\model;
 use App\model\Requester;
+use App\util\Logger;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpBadRequestException;
@@ -15,6 +16,7 @@ class Report
 {
 	public static function filter( Request $request, Response $response, array $args ) : Response
 	{
+		$requester = new Requester( $request );
 //		$json = model\Cache::get( 'Report', $request->getUri()->getPath(), $request->getUri()->getQuery() );
 //		if( $json ) { // in cache
 //			$response->getBody()->write( $json );
@@ -34,6 +36,7 @@ class Report
 		$report = null;
 		//$cached = null;
 		//$rows = null;
+		Logger::log( $requester, $request, "Report" );
 
 		$cached = model\Cache::get('report', $request->getUri()->getPath(), $request->getUri()->getQuery());
 

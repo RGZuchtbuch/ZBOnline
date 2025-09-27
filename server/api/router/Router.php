@@ -126,6 +126,7 @@ class Router {
 		$app->post( '/2/district',  		'App\controller\District::post');
 		$app->put( '/2/district/{id:[0-9]+}','App\controller\District::put');
 
+		$app->get( '/2/log', 'App\controller\Log::filter' );
 
 		$app->post( '/2/message', 'App\controller\Message::post' );
 
@@ -156,6 +157,8 @@ class Router {
 		$app->post('/2/user/login', 'App\controller\User::newLogin' ); // post credentials, replies token!
 		$app->post('/2/user/forgot', 'App\controller\User::newForgot' ); // post forgot password email, sends email
 		$app->post('/2/user/reset', 'App\controller\User::newReset' ); // post resetToken and new password, returns loginToken
+
+
 
 		//$app->get('/test', 'App\controller\Test' ); // test, query has year, district, section, breed, color and group
     }

@@ -14,12 +14,12 @@
 
     const validate = {
         breeders     : (v) => validator(v).number().range( 1, 99999 ).orNull().isValid(),
-        pairs        : (v) => validator(v).number().range( result.breeders, 99999 ).orNullIf( data.brood.broods === null &&  data.brood.hatched === null ).isValid(),
+        pairs        : (v) => validator(v).number().range( result.breeders, 99999 ).orNullIf( data.brood.hatched === null ).isValid(),
         brood: {
             broods: (v) => validator(v).number().range(0, 99).orNull().isValid(),
 
 //            chicks: (v) => validator(v).number().if(data.brood.broods>0).range(0, data.brood.broods * 2).orNull().isValid(),
-            chicks: (v) => validator(v).number().range(0, data.brood.broods === null ? 99999 : data.brood.broods * 2 ).orNullIf( data.brood.broods === null ).isValid(),
+            chicks: (v) => validator(v).number().range(0, data.brood.broods === null ? 99999 : data.brood.broods * 2 ).orNullIf( data.pairs === null && data.brood.broods === null ).isValid(),
 
             eggs: (v) => validator(v).number().range(1, 99999).orNull().isValid(),
             fertile: (v) => validator(v).number().range(0, data.brood.eggs ).orNull().isValid(),

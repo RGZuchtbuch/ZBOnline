@@ -14,7 +14,7 @@ use Slim\Exception\HttpUnauthorizedException;
 class Log
 {
 
-	public static function next(Request $request, Response $response, array $args): Response
+	public static function filter(Request $request, Response $response, array $args): Response
 	{
 		$requester = new Requester($request);
 		if ($requester->isAdmin()) {
@@ -30,12 +30,13 @@ class Log
 		}
 		throw new HttpUnauthorizedException($request, 'Cannot do this');
 	}
+
 	public static function clear(Request $request, Response $response, array $args): Response
 	{
 		$requester = new Requester($request);
 		if ($requester->isAdmin()) {
 			$query = $request->getQueryParams();
-			$untilDate = $query['until'] ?? $date = date('Y-m-d');// provided or until today
+			$untilDate = $query['until'] ?? date('Y-m-d');// provided or until today
 			$logs = model\Log::clear( $untilDate );
 			$response->getBody()->write(json_encode(['success' => true ], JSON_UNESCAPED_SLASHES));
 			return $response;

@@ -1,7 +1,8 @@
 <script>
 	import { ctx } from '$lib/js/store.svelte.js';
-    import Districts from '$lib/cmp/moderator/Districts.svelte';
 	import {page} from '$app/state';
+
+	import Logs from '$lib/cmp/admin/log/Logs.svelte';
 
 	$effect( async () => {
 		if( true ) await load();
@@ -46,7 +47,7 @@
 
 </script>
 
-Logs im Bild, TODO
+<Logs />
 
 
 

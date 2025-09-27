@@ -108,7 +108,7 @@
 
 		<p class='my-2 print:hidden'>
 			Die Meldungen werden ab 2024 in diesem Programm gespeichert. Nach und nach werden auch frühere Meldungen eingegeben.<br>
-			Nicht jeder Meldung enthält Jeder Leistung. Deshalb kann die Zahl der gemeldete Zuchten pro Leistung unterschiedlich sein.
+			Nicht jeder Meldung enthält jeder Leistung. Deshalb kann die Zahl der gemeldete Zuchten pro Leistung unterschiedlich sein.
 		</p>
 
 		<section class='flex flex-row gap-x-2 px-4 print:hidden' >
