@@ -1,1 +1,0 @@
-import"../chunks/Bzak7iHL.js";import{p as o,u as m,b as n}from"../chunks/BHsLMwTb.js";import{c as p}from"../chunks/CjnIaFP1.js";import{U as s}from"../chunks/CzsnwOVM.js";function f(e,t){o(t,!0),m(()=>{r()});function r(){p.header={title:"Benutzer im RGZuchtbuch",menu:{trail:[{name:"Anmeldung",href:"/user"}],options:[]}}}s(e,{}),n()}export{f as component};

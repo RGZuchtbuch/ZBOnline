@@ -52,9 +52,9 @@
 				<div class='flex flex-col'>
 					{#each results.sections as section}
 						<div class='flex flex-row bg-slate-100 border mt-4 py-1 items-end sticky top-16'>
-							<span class='grow pl-2'>{section.name}</span>
+							<span class='grow pl-2 font-bold'>{section.name}</span>
 							<span class='flex flex-col'>
-								<span class='flex flex-row text-xs text-center'>
+								<span class='flex flex-row text-sm text-center font-bold '>
 									<span class='w-24'></span>
 									<span class='w-2 text-gray-400'>|</span>
 
@@ -66,7 +66,7 @@
 
 									<span class='w-2 text-gray-400'>|</span>
 
-									<span class='w-48'>Bruten</span>
+									<span class='w-48'>Brut</span>
 
 									<span class='w-2 text-gray-400'>|</span>
 
@@ -95,7 +95,7 @@
 									<span class='w-2 text-gray-400'>|</span>
 
 									{#if section.id === 5}
-										<span class='w-12'>Gelegt</span>
+										<span class='w-12'>Bruten</span>
 										<span class='w-12'>-</span>
 										<span class='w-12'>Küken</span>
 										<span class='w-12'>Kü/Pa</span>
@@ -125,7 +125,7 @@
 								   class:not-accepted={breed.result && breed.result.pairId && !breed.result.accepted}
 								   href={breed.result.pairId
 									? `${page.url.pathname}/breeder/${breed.result.breeder.id}/pair/${breed.result.pairId}`
-								    : `/moderator/district/6/result/district?year=${breed.result.year}&section=${breed.result.rootSectionId}&breed=${breed.id}&group=${breed.result.group}#${breed.id}` }>
+								    : `/moderator/district/6/result/district?year=${breed.result.year}&section=${breed.result.rootSectionId}&breed=${breed.id}&group=${breed.result.group}#${breed.id}` }
 								>
 									<span class='w-4'></span>
 									<span class='grow'>
@@ -135,7 +135,7 @@
 										{/if}
 									</span>
 									{#if breed.result}
-										<Result section result={breed.result} />
+										<Result {section} result={breed.result} />
 									{/if}
 								</a>
 							{:else}

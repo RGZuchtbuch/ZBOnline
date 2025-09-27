@@ -16,7 +16,7 @@
         breeders     : (v) => validator(v).number().range( 1, 99999 ).orNull().isValid(),
         pairs        : (v) => validator(v).number().range( result.breeders, 99999 ).orNullIf( data.brood.hatched === null ).isValid(),
         brood: {
-            broods: (v) => validator(v).number().range(0, 99).orNull().isValid(),
+            broods: (v) => validator(v).number().range(0, 99999).orNull().isValid(),
 
 //            chicks: (v) => validator(v).number().if(data.brood.broods>0).range(0, data.brood.broods * 2).orNull().isValid(),
             chicks: (v) => validator(v).number().range(0, data.brood.broods === null ? 99999 : data.brood.broods * 2 ).orNullIf( data.pairs === null && data.brood.broods === null ).isValid(),
@@ -66,7 +66,7 @@
     <div class='w-14'></div> <div class='w-14'></div> <!-- div class='w-14' / -->
     <div class='w-4'></div>
     <!-- brood -->
-    <NumberInput class='w-14' bind:value={data.brood.broods} error='0..99' title='Bruten, jeweils 2 Eier erwarted' validator={validate.brood.broods}/>
+    <NumberInput class='w-14' bind:value={data.brood.broods} error='0..99999' title='Bruten, jeweils 2 Eier erwarted' validator={validate.brood.broods}/>
     <NumberInput class='w-14' bind:value={data.brood.hatched} error='0..99999' title='Geschlüpfte Küken, Braucht Paare' validator={validate.brood.chicks}/>
     <div class='w-14'></div>
     <div class='w-4'></div>
