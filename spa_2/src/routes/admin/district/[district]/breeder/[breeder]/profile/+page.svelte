@@ -28,7 +28,7 @@
 			{name: `${fullName(ctx.breeder)}`, href:`/admin/district/${ctx.district.id}/breeder/${ctx.breeder.id}`},
 			{name: 'Mitglied' },
 		];
-	};
+	}
 
 	onMount( () => mounted = true );
 

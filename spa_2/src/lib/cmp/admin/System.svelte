@@ -19,7 +19,7 @@
 	}
 </script>
 
-<h3 class='text-center'>Verschiedene systeem bearbeitungen</h3>
+<h3 class='text-center'>Verschiedene System bearbeitungen</h3>
 <p class='italic text-center'>Mit Vorsicht zu genießen</p>
 <div class='flex flex-col mx-auto p-4 gap-y-2'>
 	<button class='' onclick={onClearCache}>System Cache löschen</button>

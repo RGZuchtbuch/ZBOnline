@@ -27,7 +27,7 @@
 	function onModeratorChange( event ) {
 		console.log( 'Mod' );
 		district.moderator = breeders.find( ( breeder ) => breeder.id === district.moderatorId );
-	};
+	}
 
 	async function onSubmit() {
 		if( authorized ) {

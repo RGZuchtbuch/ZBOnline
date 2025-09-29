@@ -165,7 +165,7 @@ class Router {
 
 		//$app->get('/test', 'App\controller\Test' ); // test, query has year, district, section, breed, color and group
     }
-};
+}
 
 
 
