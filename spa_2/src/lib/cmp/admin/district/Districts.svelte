@@ -7,14 +7,15 @@
 	//import Text from '$lib/cmp/form/input/Text.svelte';
 	import District from './District.svelte';
 
-	let { root } = $props();
+	let { federation=$bindable() } = $props();
 
 	let authorized = $state( ctx.user && ctx.user.admin );
+
 
 </script>
 
 <section class='flex flex-col pl-4'>
-	{#if authorized && root}
+	{#if authorized && federation}
 		<header class='flex flex-row border-header bg-header text-header px-2 sticky top-1'>
 			<span class='grow'>Verbände </span>
 			<span class='w-64'>Obmann</span>
@@ -23,7 +24,7 @@
 			<span class='w-16 text-center' title='Daten bearbeiten'>Bearb.</span>
 		</header>
 
-		<District district={ root } />
+		<District bind:district={ federation } />
 	{/if}
 </section>
 

@@ -1,17 +1,19 @@
 import Article    from './model/article.js';
 import Breeder    from './model/breeder.js';
-import Federation from './model/Federation.js';
-import Log        from './model/Log.js';
-import Message    from './model/Message.js';
-import Pair       from './model/Pair.js';
+import Cache      from './model/cache.js';
+import Federation from './model/federation.js';
+import Log        from './model/log.js';
+import Message    from './model/message.js';
+import Pair       from './model/pair.js';
 import Report     from './model/report.js';
 import Result     from './model/result.js';
-import Standard   from './model/Standard.js';
-import User       from './model/User.js';
+import Standard   from './model/standard.js';
+import User       from './model/user.js';
 
 export default {
 	Article,
 	Breeder,
+	Cache,
 	Federation,
 	Log,
 	Message,

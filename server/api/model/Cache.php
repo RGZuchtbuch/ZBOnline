@@ -4,7 +4,7 @@ namespace App\model;
 
 use App\util\Query;
 
-class Cache extends Query
+class Cache
 {
 
     public static function get( string $controller, string $url, string $query ) {
@@ -30,14 +30,23 @@ class Cache extends Query
         return Query::insert($stmt, $args ); // returns success
     }
 
-    public static function del( string $controller ): bool
-    {
-        $args = get_defined_vars();
-        $stmt = Query::prepare('
+	public static function delete(string $controller ): bool
+	{
+		$args = get_defined_vars();
+		$stmt = Query::prepare('
             DELETE FROM _cache
             WHERE controller=:controller
         ');
-        return Query::delete($stmt, $args ); // returns success
-    }
+		return Query::delete($stmt, $args ); // returns success
+	}
+
+	public static function clear(): bool
+	{
+		$args = get_defined_vars();
+		$stmt = Query::prepare('
+            DELETE FROM _cache
+        ');
+		return Query::delete($stmt, $args ); // returns success
+	}
 }
 

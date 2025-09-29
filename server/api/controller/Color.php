@@ -39,9 +39,9 @@ class Color
 				if( $breed ) {
 					$id = model\std\Color::new($body['name'], $body['breedId'], null, $requester->getId() );
 					if ($id) {
-						model\Cache::del('standard');
-						model\Cache::del('result');
-						model\Cache::del('report' ); // clear cache as results changed
+						model\Cache::delete('standard');
+						model\Cache::delete('result');
+						model\Cache::delete('report' ); // clear cache as results changed
 						$response->getBody()->write(json_encode(['id' => $id], JSON_UNESCAPED_SLASHES));
 						return $response;
 					}
@@ -63,9 +63,9 @@ class Color
 				if ($body) {
 					$updated = model\std\Color::set($id, $body['name'], null, $requester->getId());
 					if ($updated) {
-						model\Cache::del('standard');
-						model\Cache::del('result');
-						model\Cache::del('report' ); // clear cache as results changed
+						model\Cache::delete('standard');
+						model\Cache::delete('result');
+						model\Cache::delete('report' ); // clear cache as results changed
 						$response->getBody()->write(json_encode(['id' => $id, 'updated'=>$updated], JSON_UNESCAPED_SLASHES));
 						return $response;
 					}
@@ -89,9 +89,9 @@ class Color
                     $pairs = model\Pair::readForColor( $id );
                     $results = model\Result::getAllWithColor( $id );
                     if( ! $pairs && ! $results ) { // not used in either
-						model\Cache::del('standard');
-						model\Cache::del('result');
-						model\Cache::del('report' ); // clear cache as results changed
+						model\Cache::delete('standard');
+						model\Cache::delete('result');
+						model\Cache::delete('report' ); // clear cache as results changed
                         $success = model\std\Color::del( $id );
                         $response->getBody()->write(json_encode(['success' => $success, 'id'=>$id], JSON_UNESCAPED_SLASHES));
                        return $response;

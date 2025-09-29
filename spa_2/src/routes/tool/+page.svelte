@@ -11,7 +11,7 @@
  	});
 
 	function setHeader() {
-		ctx.menustate[ '/tools' ] = page.url.href;
+		ctx.menustate[ '/tool' ] = page.url.href;
 
 		ctx.title = `Züchter und Obmann Toolbox`;
 		ctx.submenu = [

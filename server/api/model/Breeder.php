@@ -108,7 +108,7 @@ class Breeder
 	public static function forDistrict( int $districtId ) : array {
 		$args = get_defined_vars();
 		$stmt = Query::prepare( " 
-			SELECT user.id, member, firstname, infix, lastname, districtId, district.name AS districtname, club, start, end, active
+			SELECT user.id, member, firstname, infix, lastname, email, districtId, district.name AS districtname, club, start, end, active
 			FROM user
 			LEFT JOIN district ON district.id = user.districtId
 			WHERE districtId IN (

@@ -13,7 +13,7 @@
 		<li><a href={`/admin/article`}>Infos</a></li>
 		<li><a href={`/admin/district`}>Verbände</a></li>
 		<li><a href={`/admin/standard`}>Standard</a></li>
-		<li><a href={`/admin/setting`}>Settings</a></li>
+		<li><a href={`/admin/system`}>System Verwaltung</a></li>
 		<li><a href={`/admin/log`}>Logs</a></li>
 	</ul>
 </section>

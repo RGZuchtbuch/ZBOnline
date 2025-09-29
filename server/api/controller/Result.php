@@ -38,7 +38,7 @@ class Result
 			$requester = new Requester($request);
 			if ($requester && ($requester->isAdmin() || $requester->isModerating($result['districtId']))) { //granted
 				//model\Cache::del('result' ); // clear cache as results changed
-				model\Cache::del('report' ); // clear cache as results changed
+				model\Cache::delete('report' ); // clear cache as results changed
 				$id = model\Result::new(
 					$result['pairId'], $result['districtId'], $result['year'], $result['group'],
 					$result['sectionId'], $result['breedId'], $result['colorId'], $result['aocColor'],
@@ -67,7 +67,7 @@ class Result
 				$requester = new Requester($request);
 				if ($requester && ($requester->isAdmin() || $requester->isModerating($result['districtId']))) { //granted
 					//model\Cache::del('result' ); // clear cache as results changed
-					model\Cache::del('report' ); // clear cache as results changed
+					model\Cache::delete('report' ); // clear cache as results changed
 					$updated = model\Result::set( // change
 						$result['id'],
 						$result['pairId'], $result['districtId'], $result['year'], $result['group'],
@@ -100,7 +100,7 @@ class Result
 				$requester = new Requester($request);
 				if ($requester && ($requester->isAdmin() || $requester->isModerating($result['districtId']))) { //granted
 					//model\Cache::del('result' ); // clear cache as results changed
-					model\Cache::del('report' ); // clear cache as results changed
+					model\Cache::delete('report' ); // clear cache as results changed
 					$deleted = model\Result::delete( $id );
 					if( $deleted ) {
 						$response->getBody()->write(json_encode(['deleted' => true, 'id' => $id], JSON_UNESCAPED_SLASHES));

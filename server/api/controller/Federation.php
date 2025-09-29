@@ -13,7 +13,7 @@ use Slim\Exception\HttpInternalServerErrorException;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Exception\HttpUnauthorizedException;
 
-class District
+class Federation
 {
 
 	public static function get( Request $request, Response $response, array $args ) : Response {
@@ -36,9 +36,9 @@ class District
 		if( $requester->isAdmin() ) {
 			$body = $request->getParsedBody();
 			if( $body ) {
-				model\Cache::del('district' );
-				model\Cache::del('result' );
-				model\Cache::del('report' );
+				model\Cache::delete('district' );
+				model\Cache::delete('result' );
+				model\Cache::delete('report' );
 				$id = model\District::create( $body['parentId'], $body['name'], $body['fullname'], $body['short'], $body['url'], $body['latitude'], $body['longitude'], $body['level'], $body['moderatorId'], $requester->getId() );
 				if( $id ) {
 					$response->getBody()->write(json_encode(['id' => $id], JSON_UNESCAPED_SLASHES));
@@ -57,9 +57,9 @@ class District
 			$id = $args[ 'id' ] ?? null;
 			$body = $request->getParsedBody();
 			if( is_numeric( $id ) && $body ) {
-				model\Cache::del('district' );
-				model\Cache::del('result' );
-				model\Cache::del('report' );
+				model\Cache::delete('district' );
+				model\Cache::delete('result' );
+				model\Cache::delete('report' );
 				$updated = model\District::update($body['id'], $body['name'], $body['fullname'], $body['short'], $body['url'], $body['latitude'], $body['longitude'], $body['level'], $body['moderatorId'], $requester->getId() );
 				if( $updated ) {
 					$response->getBody()->write(json_encode(['id' => $id], JSON_UNESCAPED_SLASHES));
@@ -77,9 +77,9 @@ class District
 		if( $requester->isAdmin() ) {
 			$id = $args[ 'id' ] ?? null;
 			if( $id && is_numeric( $id ) ) {
-				model\Cache::del('district' );
-				model\Cache::del('result' );
-				model\Cache::del('report' );
+				model\Cache::delete('district' );
+				model\Cache::delete('result' );
+				model\Cache::delete('report' );
 				$deleted = model\District::delete( $id );
 				if( $deleted ) {
 					$response->getBody()->write(json_encode([ 'id'=>$id, 'success'=>true ], JSON_UNESCAPED_SLASHES));

@@ -11,10 +11,12 @@
 
 <div class='flex flex-col' open>
 	<!--header class='border-header bg-header text-header'>Gesamt Leistungen im {district.name} in {year}</header-->
-	<div class='flex flex-row justify-evenly py-4'>
+	<div class='flex flex-row flex-wrap justify-evenly py-4'>
 		<LayBar class='' report={data} />
-		<BroodBarLayers  report={data} />
-		<BroodBarPigeons report={data} />
+		<div class='flex flex-row flex-wrap justify-evenly'>
+			<BroodBarLayers  report={data} />
+			<BroodBarPigeons report={data} />
+		</div>
 		<ShowBar         report={data} />
 	</div>
 </div>

@@ -41,9 +41,9 @@ class Section
 			if( $body ) {
 				$id = model\Article::create( $body['title'], $body['html'], $requester->getId() );
 				if( $id ) {
-					model\Cache::del('standard');
-					model\Cache::del('result');
-					model\Cache::del('report' ); // clear cache as results changed
+					model\Cache::delete('standard');
+					model\Cache::delete('result');
+					model\Cache::delete('report' ); // clear cache as results changed
 					$response->getBody()->write(json_encode(['id' => $id], JSON_UNESCAPED_SLASHES));
 					return $response;
 				}
@@ -62,9 +62,9 @@ class Section
 			if( is_numeric( $id ) && $body ) {
 				$updated = model\Article::update( $id, $body['title'], $body['html'], $requester->getId() );
 				if( $updated ) {
-					model\Cache::del('standard');
-					model\Cache::del('result');
-					model\Cache::del('report' ); // clear cache as results changed
+					model\Cache::delete('standard');
+					model\Cache::delete('result');
+					model\Cache::delete('report' ); // clear cache as results changed
 					$response->getBody()->write(json_encode(['id' => $id], JSON_UNESCAPED_SLASHES));
 					return $response;
 				}
@@ -82,9 +82,9 @@ class Section
 			if( $id && is_numeric( $id ) ) {
 				$deleted = model\Article::delete( $id );
 				if( $deleted ) {
-					model\Cache::del('standard');
-					model\Cache::del('result');
-					model\Cache::del('report' ); // clear cache as results changed
+					model\Cache::delete('standard');
+					model\Cache::delete('result');
+					model\Cache::delete('report' ); // clear cache as results changed
 					$response->getBody()->write(json_encode([ 'id'=>$id, 'deleted'=>true ], JSON_UNESCAPED_SLASHES));
 					return $response;
 				}

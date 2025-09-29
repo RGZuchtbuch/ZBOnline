@@ -106,12 +106,12 @@
 	<Form>
 		<h3 class='text-center print:hidden'>Filter</h3>
 
-		<p class='my-2 print:hidden'>
+		<p class='hidden md:block my-2 print:hidden'>
 			Die Meldungen werden ab 2024 in diesem Programm gespeichert. Nach und nach werden auch frühere Meldungen eingegeben.<br>
 			Nicht jeder Meldung enthält jeder Leistung. Deshalb kann die Zahl der gemeldete Zuchten pro Leistung unterschiedlich sein.
 		</p>
 
-		<section class='flex flex-row gap-x-2 px-4 print:hidden' >
+		<section class='flex flex-row flex-wrap gap-x-2 px-4 print:hidden' >
 			<Select class='' label='Verband' value={district.id} onchange={onDistrictChange}>
 				<option value={ctx.federation.id}>{ctx.federation.name}</option>
 				{#each ctx.federation.children as child}
@@ -137,7 +137,7 @@
 		</section>
 
 
-		<section class='flex flex-row gap-x-2 px-4 print:hidden' >
+		<section class='flex flex-row flex-wrap gap-x-2 px-4 print:hidden' >
 			<Select class='' label='Sparte' value={section?section.id:null} onchange={onSectionChange}>
 				<option value={null}>*</option>
 				{#each ctx.standard.root.children as child}

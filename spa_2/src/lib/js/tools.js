@@ -178,3 +178,7 @@ export function swapHrefId( id ) {
 		const path = page.url.pathname;
 		return path.substring( 0, path.lastIndexOf( '/' ) )+'/'+id;
 }
+
+export function dateToInt( date ) {
+	return `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
+}

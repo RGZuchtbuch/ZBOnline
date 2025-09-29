@@ -38,14 +38,14 @@
 </script>
 
 {#if breed}
-    <div id={breed.id} class='flex flex-row p-2 gap-x-1' title='Wähle zum Eingeben'>
+    <div id={breed.id} class='flex flex-row my-1 p-1 bg-slate-100 bg-opacity-60 gap-x-1' title='Wähle zum Eingeben'>
         <div class='grow cursor-pointer ml-2 whitespace-nowrap' role='button' class:hasResults onclick={onOpen}>
-            <span class=''>{breed.name}</span>
+            <span class='text-xl'>{breed.name}</span>
         </div>
 
         {#if open }
             {#if breed.layer }
-                <div class='flex flex-row gap-x-1 text-xs text-center items-end'>
+                <div class='flex flex-row py-1 gap-x-1 text-xs text-center items-end'>
                     <span class='w-14'>Zuchten</span>
                     <span class='w-14'></span>
                     <span class='w-4'></span>
@@ -82,7 +82,7 @@
                     <ColorResult result={colorResult}/>
                 {/each}
             {:else}
-                <BreedResult result={results.breed}/>
+                <BreedResult bind:result={results.breed}/>
             {/if}
 
             {#if sectionId !== 5}

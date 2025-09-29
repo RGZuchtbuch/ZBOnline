@@ -4,7 +4,7 @@ namespace App\model;
 
 use App\util\Query;
 
-class Log extends Query
+class Log
 {
     public static function log( ? string $method, ? string $uri, ? string $query, ? string $body, ? int $requesterId, ? string $message ) : ? int {
         $args = get_defined_vars();
@@ -26,10 +26,10 @@ class Log extends Query
         return Query::selectArray($stmt );
     }
 
-	public static function clear( $untilDate ) : bool {
+	public static function clear() : bool {
 		$args = get_defined_vars();
 		$stmt = Query::prepare('
-            DELETE FROM _log WHERE modified < :untilDate
+            DELETE FROM _log
         ');
 		return Query::delete($stmt, $args );
 	}

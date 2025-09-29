@@ -5,13 +5,16 @@
     import {calcColor, dec, gpsToPx, pct} from '$lib/js/tools.js';
     import BdrgSVG from './BdrgSVG.svelte';
 
-    const MAXBUBBLE = 35;
+    const MAXBUBBLE = 25; //35;
 
     let { data, title, unit, scale=null } = $props();
 
     let canvas = null;
     let config = $state( null );
     let districts = $derived( data.districts );
+
+//    const size = { width:448, height:576 }
+    const size = { width:360, height:480 }
 
     $effect( () => {
         config = update( page.url );
@@ -20,7 +23,7 @@
     function update() {
         if( districts ) {
             const names = districts.map( district => district.name );
-            const coords = districts.map( district => gpsToPx( 448, 576, 5.7, 15.0, 47.5, 55.0, district.longitude, district.latitude ) );
+            const coords = districts.map( district => gpsToPx( size.width, size.height, 5.7, 15.0, 47.5, 55.0, district.longitude, district.latitude ) );
             const values = districts.map( district => district[ unit.id ] * unit.factor );
             const min = scale ? scale : 0;
             const max = scale && scale.max ? scale.max : values.reduce( ( result, value ) => Math.max( result, value ), 0 );
@@ -53,10 +56,10 @@
         <div class='relative'>
 
             {#if config}
-                <BdrgSVG colors={config.colors}/>
+                <BdrgSVG colors={config.colors} width={size.width} height={size.height} />
 
                 {#key districts}
-                    <svg class='absolute top-0 bottom-0' width='448' height='576' in:fade={{duration:1000}}>
+                    <svg class='absolute top-0 bottom-0' width={size.width} height={size.height} in:fade={{duration:1000}}>
                         <g in:fade={{duration:500}} >
                             {#each config.coords as coord, index } <!-- values -->
                                 {#if config.values[ index ] }

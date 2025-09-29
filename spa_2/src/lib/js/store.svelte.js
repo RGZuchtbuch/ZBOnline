@@ -14,6 +14,8 @@
 //     '/admin'     : '/admin',
 // }
 
+//import model from '$lib/js/model.js';
+
 class Context {
     //args       = $state( null);
     article    = $state(null);
@@ -24,11 +26,11 @@ class Context {
     breeders   = $state(null);
     district   = $state(null);
     districts  = $state(null);
-    federation = $state(null);
+    federation = $state( null );
     header     = $state( { title:null, menu:null } );
     pair       = $state(null);
     pairs      = $state(null);
-    report     = $state(null);
+    report     = $state(null); // obsolete, replaced by local vars
     result     = $state(null);
     results    = $state(null);
     resultsEdit= $state(null);
@@ -39,10 +41,11 @@ class Context {
     year       = $state(null);
 
     // for managing page title and menu with crumbs
-    title = $state(null);
-    menu = $state(null);
+    title   = $state(null);
+    menu    = $state(null);
+    menuOpen= $state(false); // for mobile menu
     submenu = $state(null);
-    crumbs = $state(null);
+    crumbs  = $state(null);
 
     initialMenustate = { // to allow for resetting on logout.
         '/article'   : '/article',
@@ -56,7 +59,7 @@ class Context {
     };
     menustate = $state( { ... this.initialMenustate } );
 
-    dialog = $state( null );
+    //dialog = $state( null );
 }
 
 /**
@@ -81,7 +84,7 @@ class Config {
     // rootSections defined in js/model/standard.js
 }
 
-class Dirty { // flag dirty, for forcing reloading in +page
+class Dirty { // flag dirty, trigger by adding 1 to use in an effect
     article  = $state( 1 );
     articles = $state( 1 );
 

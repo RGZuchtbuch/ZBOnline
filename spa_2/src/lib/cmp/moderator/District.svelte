@@ -13,8 +13,8 @@
 		</h3>
 
 		<ol class='ml-16'>
-			<li><a href={`/moderator/district/${ctx.district.id}/result`}>Leistungen</a></li>
-			<li><a href={`/moderator/district/${ctx.district.id}/breeder`}>Züchter</a></li>
+			<li><a href={`${page.url.pathname}/result`}>Leistungen</a></li>
+			<li><a href={`${page.url.pathname}/breeder`}>Züchter</a></li>
 		</ol>
 	</section>
 {/if}

@@ -33,6 +33,9 @@
                     datasets:datasets,
                 },
                 options: {
+                    animation: {
+                        delay: 500,
+                    },
                     responsive:false,
                     plugins: {
                         legend: {

@@ -86,8 +86,8 @@ class Pair
                     Pair::postResult( $id, $pair, $requester )
                 ) {
 					Query::commit();
-					model\Cache::del('result' ); // clear cache as results changed
-					model\Cache::del('report' ); // clear cache as results changed
+					model\Cache::delete('result' ); // clear cache as results changed
+					model\Cache::delete('report' ); // clear cache as results changed
 					$response->getBody()->write( json_encode([ 'id' => $id ], JSON_UNESCAPED_SLASHES) );
 					return $response;
 				} else {
@@ -116,8 +116,8 @@ class Pair
 				$requester = new Requester($request);
 				if ($requester && ($requester->isAdmin() || $requester->isModerating($pair['districtId']) || $requester->hasId($pair['breederId']))) {
 					Query::begin();
-					model\Cache::del('result' ); // clear cache as results changed
-					model\Cache::del('report' ); // clear cache as results changed
+					model\Cache::delete('result' ); // clear cache as results changed
+					model\Cache::delete('report' ); // clear cache as results changed
 					if(
 						model\Pair::delete( $id ) &&
 						model\Animal::deleteParentsForPair( $id ) &&
@@ -128,7 +128,7 @@ class Pair
 						model\Result::deleteForpair( $id )
 					) {
 						Query::commit();
-						model\Cache::del('result' ); // clear cache as results changed
+						model\Cache::delete('result' ); // clear cache as results changed
 						$response->getBody()->write(json_encode(['success' => true ], JSON_UNESCAPED_SLASHES));
 						return $response;
 					} else {

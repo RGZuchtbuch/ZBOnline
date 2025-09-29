@@ -26,8 +26,6 @@
 
 </script>
 
-{#if ctx.standard && mounted}
-	<main class='' in:fade={{duration:cfg.fadeIn}}>
-		<Standard standard={ctx.standard}/>
-	</main>
-{/if}
+<section in:fade={{duration:cfg.fadeIn}}>
+	<Standard standard={ctx.standard}/>
+</section>

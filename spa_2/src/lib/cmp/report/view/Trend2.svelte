@@ -53,7 +53,8 @@
             },
             options : {
                 animation: {
-                    duration:0,
+                    delay: 250,
+                    duration:500,
                     easing:'linear',
                 },
                 plugins: {

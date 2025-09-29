@@ -5,11 +5,7 @@
 
     let { data, district, year } = $props();
 
-    //let sections = $derived( data.sections );
     let totalled = $state( calcTotals() );
-
-    $inspect( 'T', totalled )
-    //let totalled = $state( null );
 
    // in effect makes it trigger twice, now in #key block. should be in onMount ?
 
@@ -147,7 +143,6 @@
             section.total = avgTotal( sectionSum );
         }
         totalled.total = avgTotal( resultsSum );
-        console.log( 'TT', totalled.total )
         return totalled;
     }
 

@@ -7,14 +7,14 @@
 	//import Text from '$lib/cmp/form/input/Text.svelte';
 	import District from './District.svelte';
 
-	let { root } = $props();
+	let { districtsRoot=$bindable() } = $props();
 
 	let authorized = $state( ctx.user && ctx.user.admin );
 
 </script>
 
 <section>
-	{#if root}
+	{#if districtsRoot}
 		<div class='flex flex-row header pl-4 sticky top-0'>
 			<div class='district'>Verbände </div>
 			<div class='moderator'>Obmann</div>
@@ -23,7 +23,7 @@
 		</div>
 
 		<div class=''>
-			<District district={ root } />
+			<District district={ districtsRoot } />
 		</div>
 	{/if}
 </section>

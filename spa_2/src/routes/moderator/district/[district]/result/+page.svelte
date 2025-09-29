@@ -28,8 +28,8 @@
 		ctx.menustate[ '/moderator' ] = page.url.href;
 		ctx.title = `Verband ${ctx.district.name}, Züchtermeldungen`;
 		ctx.submenu = [
-			{name: 'Verband', href:`/moderator/district/${ctx.district.id}/result/district?year=${ctx.year}`},
-			{name: 'Züchter', href: `/moderator/district/${ctx.district.id}/result/breeder?year=${ctx.year}`},
+			{name: 'Gesamt', href:`/moderator/district/${ctx.district.id}/result/district?year=${ctx.year}`},
+			{name: 'Stämme', href: `/moderator/district/${ctx.district.id}/result/breeder?year=${ctx.year}`},
 		];
 		ctx.crumbs = [
 			//{name: 'Start', href: '/'},

@@ -15,7 +15,7 @@ export function headers() {
 export async function get( url, query=null ) {
 	url += query ? '?' + new URLSearchParams( query ).toString() : '';
 	const response = await fetch( `${API_BASE}${url}`, { method:'GET', headers:headers() });
-	return response.ok ? await response.json() : null;
+	return response && response.ok ? await response.json() : null;
 }
 export async function query( url, query ) {
 	url += query ? '?' + new URLSearchParams( query ).toString() : '';

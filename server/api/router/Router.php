@@ -121,12 +121,16 @@ class Router {
 		$app->put( '/2/breeder/{id:[0-9]+}','App\controller\Breeder::put');
 		$app->delete( '/2/breeder/{id:[0-9]+}','App\controller\Breeder::delete');
 
-		$app->get('/2/district', 'App\controller\District::filter' );
-		$app->get('/2/district/{id:[0-9]+}', 'App\controller\District::get' );
-		$app->post( '/2/district',  		'App\controller\District::post');
-		$app->put( '/2/district/{id:[0-9]+}','App\controller\District::put');
+		$app->delete( '/2/cache', 'App\controller\Cache::clear');
+
+		$app->get('/2/district', 'App\controller\Federation::filter');
+		$app->get('/2/district/{id:[0-9]+}', 'App\controller\Federation::get');
+		$app->post( '/2/district', 'App\controller\Federation::post');
+		$app->put( '/2/district/{id:[0-9]+}', 'App\controller\Federation::put');
+		//district delete not implemented.... yet
 
 		$app->get( '/2/log', 'App\controller\Log::filter' );
+		$app->delete( '/2/log', 'App\controller\Log::clear');
 
 		$app->post( '/2/message', 'App\controller\Message::post' );
 
@@ -145,7 +149,6 @@ class Router {
 		$app->delete( '/2/result/{id:[0-9]+}','App\controller\Result::delete');
 
 		$app->get( '/2/standard', 'App\controller\Standard::get' );
-
 			$app->post( '/2/standard/breed', 'App\controller\Breed::post');
 			$app->put( '/2/standard/breed/{id:[0-9]+}', 'App\controller\Breed::put');
 			$app->delete( '/2/standard/breed/{id:[0-9]+}', 'App\controller\Breed::delete');

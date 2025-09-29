@@ -7,7 +7,7 @@
 <section class='py-4'>
 	{#if articles}
 		<header class='flex flex-row px-2 gap-x-2 border-header bg-header text-header'>
-			<span class='w-8 text-right'>#</span>
+			<span class='w-8 text-right'></span>
 			<span class='grow'>Titel</span>
 			<span class='w-48'>Von</span>
 		</header>
@@ -16,7 +16,7 @@
 			{#key article}
 				{#if article.level !== null }
 					<a class='grow flex flex-row gap-x-4 p-2' href={`${page.url.pathname}/${article.id}`}>
-						<span class='w-8 text-right '>{i+1}</span>
+						<span class='w-8 text-right '>•</span>
 						<span class='grow'>{article.title}</span>
 						<span class='w-48'>{article.author}</span>
 					</a>

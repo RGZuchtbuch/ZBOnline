@@ -7,7 +7,7 @@
 	import {goto} from '$app/navigation';
 	import {onDestroy} from 'svelte';
 
-	let { district } = $props();
+	let { district=$bindable() } = $props();
 
 	let authorized = $state( ctx.user && ctx.user.admin );
 	let edit = $state( false );
@@ -16,13 +16,18 @@
 
 	$effect( async () => {
 		if( edit && breeders === null ) {
-			breeders = await model.Breeder.query( {district:district.id} );
+			breeders = await model.Breeder.query( {district:district.id} ); // for moderator list
 		}
 	})
 
 	function onEdit() {
 		edit = ! edit;
 	}
+
+	function onModeratorChange( event ) {
+		console.log( 'Mod' );
+		district.moderator = breeders.find( ( breeder ) => breeder.id === district.moderatorId );
+	};
 
 	async function onSubmit() {
 		if( authorized ) {
@@ -47,7 +52,7 @@
 		</div>
 
 		<span class='w-16 text-center'>
-			<a class='px-2 border-button bg-button text-button text-center' href={`/moderator/district/${district.id}`} title='Verband verwalten als Obmann'> ⚙ </a>
+			<a class='px-2 border-button bg-button text-button text-center' href={`/admin/district/${district.id}`} title='Verband verwalten als Obmann'> ⚙ </a>
 		</span>
 
 		<div class='w-16 text-center'>
@@ -71,7 +76,7 @@
 					<NumberInput class='w-32' label='longitude' bind:value={district.longitude} />
 				</div>
 
-				<Select label='Obmann' bind:value={district.moderatorId}>
+				<Select label='Obmann' bind:value={district.moderatorId} onchange={onModeratorChange}>
 					<option value={null} >?</option>
 					{#if breeders}
 						{#each breeders as breeder}
@@ -86,10 +91,8 @@
 	{/if}
 
 	{#if district.children}
-		{#each district.children as child}
-			{#key child}
-				<District district={child} />
-			{/key}
+		{#each district.children as child, i}
+			<District bind:district={district.children[i]} />
 		{/each}
 	{/if}
 </div>

@@ -51,6 +51,7 @@
 
 </script>
 
+<section>
 	<Filter {district} {year} {group} {section} {breed} {color} />
 
 	<div class='flex flex-col break-after-page'>
@@ -100,33 +101,33 @@
 					<div class='my-2 p-1 bg-slate-200 font-bold text-center'>Gemeldete Zuchten</div>
 					<div class='flex flex-row justify-evenly'>
 						<!--Trend report={report.trend} typeId={report.args.type} /-->
-						<Trend title='Zuchten' data={trend.years} unit='breeders' color={{fill:'#FAA', border:'#A44'}} width={3.0}/>
+						<Trend title='Zuchten' data={trend.years} unit='breeders' color={{fill:'#FAA', border:'#A44'}} width={1.0}/>
 					</div>
 
 					<div class='my-2 p-1 bg-slate-200 font-bold text-center'>Legeleistung Geflügel</div>
-					<div class='flex flex-row justify-evenly'>
-						<Trend title='Eier / Jahr %'  data={trend.years} unit='layEggs' factor={100} color={{fill:'#FEA', border:'#A94'}} width={1.5}/>
-						<Trend title='Eiergewicht %'  data={trend.years} unit='layWeight' factor={100} color={{fill:'#FEA', border:'#A94'}} width={1.5} />
+					<div class='flex flex-row flex-wrap justify-evenly'>
+						<Trend title='Eier / Jahr %'  data={trend.years} unit='layEggs' factor={100} color={{fill:'#FEA', border:'#A94'}} width={1}/>
+						<Trend title='Eiergewicht %'  data={trend.years} unit='layWeight' factor={100} color={{fill:'#FEA', border:'#A94'}} width={1} />
 					</div>
 
 					<div class='my-2 p-1 bg-slate-200 font-bold text-center'>Brutleistung Geflügel</div>
-					<div class='flex flex-row justify-evenly'>
+					<div class='flex flex-row flex-wrap justify-evenly'>
 						<Trend title='Eingelegte Eier' data={trend.years} unit='broodLayerEggs' factor={100} color={{fill:'#CFD', border:'#4A5'}} />
 						<Trend title='Befruchtet %'    data={trend.years} unit='broodLayerFertile' scale={{min:0, max:100}} factor={100} color={{fill:'#CFD', border:'#4A5'}} />
 						<Trend title='Geschlüpft %'    data={trend.years} unit='broodLayerHatched' scale={{min:0, max:100}} factor={100} color={{fill:'#CFD', border:'#4A5'}} />
 					</div>
 
 					<div class='my-2 p-1 bg-slate-200 font-bold text-center'>Brutleistung Tauben</div>
-					<div class='flex flex-row justify-evenly'>
+					<div class='flex flex-row flex-wrap justify-evenly'>
 						<Trend title='Gelegte Eier' data={trend.years} unit='broodPigeonEggs' factor={1.0} color={{fill:'#CFD', border:'#48F'}} />
 						<Trend title='Geschlüpft %' data={trend.years} unit='broodPigeonHatched' scale={{min:0, max:100}} factor={100} color={{fill:'#CFD', border:'#48F'}} />
 						<Trend title='Küken / Paar' data={trend.years} unit='broodPigeonResult' color={{fill:'#CFD', border:'#48F'}} />
 					</div>
 
 					<div class='my-2 p-1 bg-slate-200 font-bold text-center'>Schauleistung</div>
-					<div class='flex flex-row justify-evenly'>
-						<Trend title='Gemeldete Tiere' data={trend.years} unit='showCount' color={{fill:'#ACF', border:'#44A'}} width={1.5} />
-						<Trend title='Bewertung'       data={trend.years} unit='showScore' scale={{min:89, max:97}} color={{fill:'#ACF', border:'#44A'}} width={1.5} />
+					<div class='flex flex-row flex-wrap justify-evenly'>
+						<Trend title='Gemeldete Tiere' data={trend.years} unit='showCount' color={{fill:'#ACF', border:'#44A'}} width={1.0} />
+						<Trend title='Bewertung'       data={trend.years} unit='showScore' scale={{min:89, max:97}} color={{fill:'#ACF', border:'#44A'}} width={1.0} />
 					</div>
 				{/key}
 			{/if}
@@ -149,7 +150,7 @@
 			</div>
 		{/if}
 	</div>
-
+</section>
 
 <style>
 	header {

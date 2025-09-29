@@ -11,20 +11,17 @@
 
 
 	$effect( async () => {
-		if ( dirty.articles || page.url ) await loadArticles();
+		if ( dirty.articles ) ctx.articles = await model.Article.query();
+		setHeader();
 	})
 
-	$effect( async () => {
-		if( ctx.articles ) setHeader();
-	})
+	// $effect( async () => {
+	// 	if( ctx.articles ) setHeader();
+	// })
 
-	async function loadArticles() {
-		//dirty.articles = false;
-
-		//ctx.article = null;
-		//ctx.articles = null;
-		ctx.articles = await model.Article.query();
-	}
+	// async function loadArticles() {
+	// 	ctx.articles = await model.Article.query();
+	// }
 
 	function setHeader() {
 		//ctx.menustate[ '/article' ] = page.url.href;
@@ -38,7 +35,7 @@
 
 </script>
 
-<main in:fade={{duration:cfg.fadeIn}}>
+<section in:fade={{duration:cfg.fadeIn}}>
 	<Articles articles={ctx.articles} />
-</main>
+</section>
 

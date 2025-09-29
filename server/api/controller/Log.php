@@ -4,6 +4,7 @@ namespace App\controller;
 
 use App\model;
 use App\model\Requester;
+use DateTime;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpBadRequestException;
@@ -35,10 +36,11 @@ class Log
 	{
 		$requester = new Requester($request);
 		if ($requester->isAdmin()) {
-			$query = $request->getQueryParams();
-			$untilDate = $query['until'] ?? date('Y-m-d');// provided or until today
-			$logs = model\Log::clear( $untilDate );
-			$response->getBody()->write(json_encode(['success' => true ], JSON_UNESCAPED_SLASHES));
+//			$query = $request->getQueryParams();
+//			$until = DateTime::createFromFormat( 'Y-m-d', $query['until'] ?? date('Y-m-d' ) );// provided or until today
+			$until = date( 'Y-m-d' );
+			$ok = model\Log::clear();
+			$response->getBody()->write(json_encode(['success' => $ok, 'until' => $until ], JSON_UNESCAPED_SLASHES));
 			return $response;
 		}
 		throw new HttpUnauthorizedException($request, 'Cannot do this');

@@ -9,18 +9,10 @@
 	import Article from '$lib/cmp/article/Article.svelte';
 
 	$effect( async () => {
-		loadArticle(+page.params.article);
+		//loadArticle(+page.params.article);
+		if( dirty.article )	ctx.article = await model.Article.load( +page.params.article );
+		setHeader();
 	});
-
-	$effect( () => {
-		if( ctx.article ) {
-			setHeader();
-		}
-	})
-
-	async function loadArticle( id ) {
-		ctx.article = await model.Article.load( id );
-	}
 
 	function setHeader() {
 		//ctx.menustate[ '/article' ] = page.url.href;
@@ -35,9 +27,9 @@
 
 </script>
 
-<main in:fade={{duration:cfg.fadeIn}}>
+<section in:fade={{duration:cfg.fadeIn}}>
 	<Article article={ctx.article} />
-</main>
+</section>
 
 <style>
 

@@ -30,8 +30,9 @@
 	$effect( async () => trend = await model.Report.query( { target:'trend', district:district.id, group:group, section:section?section.id:null, breed:breed?breed.id:null, color:color?color.id:null } ) );
 	$effect( async () => table = await model.Report.query( { target:'table', district:district.id, year:year, group:group } ) );
 
+
 	$effect( () => {
-		if (ctx.report) setHeader();
+		if (page.url) setHeader();
 	});
 
 	function setHeader() {

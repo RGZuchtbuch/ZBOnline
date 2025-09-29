@@ -42,9 +42,9 @@ class Breed
 				if( $section ) {
 					$id = model\std\Breed::new($body['name'], $body['sectionId'], $body['broodGroup'], $body['layEggs'], $body['layWeight'], $body['sireRing'], $body['dameRing'], $body['sireWeight'], $body['dameWeight'], null, $requester->getId()); // $data['info']
 					if ($id) {
-						model\Cache::del('standard');
-						model\Cache::del('result');
-						model\Cache::del('report' ); // clear cache as results changed
+						model\Cache::delete('standard');
+						model\Cache::delete('result');
+						model\Cache::delete('report' ); // clear cache as results changed
 						$response->getBody()->write(json_encode(['id' => $id], JSON_UNESCAPED_SLASHES));
 						return $response;
 					}
@@ -65,9 +65,9 @@ class Breed
 			if( is_numeric( $id ) && $body ) {
 				$success = model\std\Breed::set( $id, $body['name'], $body['sectionId'], $body['broodGroup'], $body['layEggs'], $body['layWeight'], $body['sireRing'], $body['dameRing'], $body['sireWeight'], $body['dameWeight'], null, $requester->getId() ); //$data['info']
 				if( $success ) {
-					model\Cache::del('standard');
-					model\Cache::del('result');
-					model\Cache::del('report' ); // clear cache as results changed
+					model\Cache::delete('standard');
+					model\Cache::delete('result');
+					model\Cache::delete('report' ); // clear cache as results changed
 					$response->getBody()->write(json_encode(['id' => $id], JSON_UNESCAPED_SLASHES));
 					return $response;
 				}
@@ -88,9 +88,9 @@ class Breed
                     if( ! model\std\Breed::getColors( $id ) && ! model\Pair::readForBreed( $id ) && ! model\Result::getAllWithBreed( $id ) ) { // no more color, pair of result using it
                         $success = model\std\Breed::delete( $id );
                         if( $success ) {
-							model\Cache::del('standard');
-							model\Cache::del('result');
-							model\Cache::del('report' ); // clear cache as results changed
+							model\Cache::delete('standard');
+							model\Cache::delete('result');
+							model\Cache::delete('report' ); // clear cache as results changed
                             $response->getBody()->write(json_encode(['success' => $success, 'id' => $id], JSON_UNESCAPED_SLASHES));
                             return $response;
                         }
