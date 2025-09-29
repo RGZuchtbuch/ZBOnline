@@ -205,7 +205,7 @@ class Result
 	// new approach 2
 	public static function filter( Request $request, Response $response, array $args ) : Response {
 		$requester = new Requester( $request );
-		Logger::log( $requester, $request, "Article" );
+		Logger::log( $requester, $request, "Result" );
 
 		$query = $request->getQueryParams();
 		$districtId = $query['district'] ?? null;

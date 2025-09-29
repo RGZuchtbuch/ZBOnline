@@ -69,8 +69,8 @@
 				<div class='flex flex-row justify-end'><Status /></div>
 				<TextInput class='w-128' label='Name' bind:value={district.name} />
 				<TextInput class='w-192' label='Name voll' bind:value={district.fullname} />
-				<TextInput class='w-192' label='Name abk.' bind:value={district.short} />
-				<TextInput class='w-192' label='Name voll' bind:value={district.url} />
+				<TextInput class='w-64' label='Name abk.' bind:value={district.short} />
+				<TextInput class='w-192' label='Webseite (URL)' bind:value={district.url} />
 				<div class='flex flex-row gap-x-2'>
 					<NumberInput class='w-32' label='latitude' bind:value={district.latitude} />
 					<NumberInput class='w-32' label='longitude' bind:value={district.longitude} />

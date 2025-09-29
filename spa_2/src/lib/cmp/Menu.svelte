@@ -95,7 +95,7 @@
 			</div>
 
 			<!-- Crumbs and SubMenu -->
-			<div class='grow flex flex-row text-sm gap-x-2'>
+			<div class='grow flex flex-row text-sm gap-x-4'>
 
 				<nav class='grow flex flex-row justify-end gap-x-1 italic'>
 					{#each ctx.crumbs as crumb, i}

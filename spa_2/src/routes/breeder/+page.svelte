@@ -17,6 +17,7 @@
 		ctx.menustate[ '/breeder' ] = page.url.href;
 		ctx.title = `Züchter ${fullName(ctx.breeder)}`;
 		ctx.submenu = [
+			//{name: 'Tiere', href: `/breeder/animal`},
 			{name: 'Stämme', href: `/breeder/pair`},
 			{name: 'Mitglied', href: `/breeder/profile`},
 		];

@@ -16,14 +16,6 @@ class Article
 			');
 			return Query::select($stmt, $args);
 		}
-//		else {
-//			$stmt = Query::prepare('
-//				SELECT id, level, author, title
-//				FROM article
-//				ORDER BY level
-//			');
-//			return Query::selectArray($stmt );
-//		}
 		return null;
 	}
 
