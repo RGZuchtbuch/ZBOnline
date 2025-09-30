@@ -15,6 +15,7 @@
 		if( dirty.results && page.url ) {
 			const query = page.url.searchParams;
 			const year = query.has( 'year') ? +query.get( 'year' ) : activeYear();
+			ctx.results = null;
 			ctx.year = year;
 			ctx.results = await model.Result.query( { district:+page.params.district, year:year } );
 		}

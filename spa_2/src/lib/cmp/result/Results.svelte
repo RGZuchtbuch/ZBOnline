@@ -39,8 +39,10 @@
 	</div>
 
 	<p class='grow info'>
-		Leistungen können als gesamt Leistung für einem Verband eingegeben werden, oder als einzelne Meldungen beim Züchter.<br>
-		Hier eine Liste von alle Eingaben in alle Zuchtbuchgruppen (I, II, III).
+		Leistungen können als gesamt Leistung für einem Verband eingegeben werden, oder als Züchter Stamm.<br>
+		Hier die Liste mit alle Eingaben in alle Zuchtbuchgruppen (I, II, III).<br>
+		Stamm Meldungen sind grün wenn das ok vom Obmann gegeben ist, rot wenn nicht.<br>
+		Die Buchstaben des Stamm-Züchters findet man gans Rechts.
 	</p>
 	<!--div class='flex flex-row justify-end'> <a class='pt-2' href={`/moderator/${district.id}/result/edit?year=${year}`}>[Edit]</a></div-->
 

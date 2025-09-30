@@ -11,6 +11,7 @@
 
 	let mounted = $state( false );
 
+
 	$effect( async () => {
 		if( page.params.pair ) await loadPair( +page.params.pair );
 	})
@@ -20,6 +21,7 @@
 	});
 
 	async function loadPair( id ) {
+		ctx.pair = null; // make sure previous pair is not shown first
 		ctx.pair = id === 0 ?
 			await model.Pair.new( ctx.breeder) : // new for this breeder
 			await model.Pair.load( id );
@@ -50,6 +52,6 @@
 
 {#if ctx.federation && ctx.standard && ctx.breeder && ctx.pair && mounted }
 	<main in:fade={{duration:cfg.fadeIn}}>
-	<Pair pair={ctx.pair} />
+	<Pair bind:pair={ctx.pair} user={ctx.user} standard='{ctx.standard}' />
 	</main>
 {/if}

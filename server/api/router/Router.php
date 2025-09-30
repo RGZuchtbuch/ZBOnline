@@ -3,6 +3,8 @@
 namespace App\router;
 
 use Slim\App;
+use Slim\Routing\RouteCollectorProxy;
+use Slim\Routing\GroupMiddleware;
 
 class Router {
 

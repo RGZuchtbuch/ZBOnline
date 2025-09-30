@@ -18,10 +18,10 @@
 	});
 
 	async function loadPair( id ) {
+		ctx.pair = null;
 		ctx.pair = id === 0 ?
 			await model.Pair.new( ctx.breeder) : // new for this breeder
 			await model.Pair.load( id );
-		console.log('Loaded pair');
 	}
 
 	function setHeader() {

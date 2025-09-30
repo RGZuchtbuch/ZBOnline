@@ -59,7 +59,7 @@ export default class Pair {
 				weight: null
 			};
 
-			for (let i = pair.broods.length; i < 3; i++) { // minimum of 4
+			for (let i = pair.broods.length; i < ( pair.sectionId === cfg.pigeons ? 2 : 4 ); i++) { // minimum of 4
 				pair.broods.push( Pair.newBrood(pair) );
 			}
 

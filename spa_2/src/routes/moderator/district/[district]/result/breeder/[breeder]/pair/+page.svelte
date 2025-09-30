@@ -19,6 +19,7 @@
 	})
 
 	async function loadPairs( breederId ) {
+		ctx.pairs = null;
 		ctx.pairs = await model.Pair.query( { breeder:breederId } );
 	}
 

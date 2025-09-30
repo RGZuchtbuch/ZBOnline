@@ -1,9 +1,7 @@
 <script>
-
 	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
-	import { navigating } from '$app/state';
-	import { ctx, dirty } from '$lib/js/store.svelte.js';
+	import { dirty } from '$lib/js/store.svelte.js';
 	import model from '$lib/js/model.js';
 
 	import Form, { CheckBox } from '$lib/cmp/form/Form.svelte';
@@ -15,15 +13,17 @@
 	import Show from './form/Show.svelte';
 	import Notes from './form/Notes.svelte';
 
-	let edit = $state( ctx.pair.id === 0 );
-	let authorized = $derived( ctx.user && ctx.pair && ( (ctx.user.id === ctx.pair.breeder.id && ctx.user.active) || ctx.user.moderator.includes( ctx.pair.districtId ) || ctx.user.admin ) ); // can edit
+	let { pair=$bindable(), user, standard } = $props();
+
+	let edit = $state( pair.id === 0 );
+	let authorized = $derived( user && pair && ( (user.id === pair.breeder.id && user.active) || user.moderator.includes( pair.districtId ) || user.admin ) ); // can edit
 
 	async function onSubmit() {
 		let ok = false;
-		if( ctx.pair.breederId && ctx.pair.year && ctx.pair.name && ctx.pair.group && ctx.pair.sectionId && ctx.pair.breedId && ( ctx.pair.sectionId === 5 || ctx.pair.colorId ) ) {
-			ok = await model.Pair.save( ctx.pair );
-		} else if( ctx.pair.id > 0 && ctx.pair.name === null && ctx.pair.delete ){ // name is null and delete
-			ok = model.Pair.delete( ctx.pair.id );
+		if( pair.breederId && pair.year && pair.name && pair.group && pair.sectionId && pair.breedId && ( pair.sectionId === 5 || pair.colorId ) ) {
+			ok = await model.Pair.save( pair );
+		} else if( pair.id > 0 && pair.name === null && pair.delete ){ // name is null and delete
+			ok = model.Pair.delete( pair.id );
 			if( ok ) {
 				const path = page.url.pathname;
 				await goto( path.slice( 0, path.lastIndexOf( '/' ) ) ); // loose pair id
@@ -36,42 +36,41 @@
 	}
 
 	$effect( () => {
-		if( ctx.pair ) {
-			ctx.pair.delete = ctx.pair.name ? false : ctx.pair.delete;
+		if( pair ) {
+			pair.delete = pair.name ? false : pair.delete;
 		}
 	})
 
-
 </script>
 
-{#if ctx.pair}
+{#if pair}
 	<div class='flex flex-row items-center justify-end gap-x-2 p-2 -mb-2 print:hidden'>
 		<span class='meta'></span>
 		{#if authorized }
 			<span class='print:hidden'>
-
 				<CheckBox label='Ändern' error='' bind:value={edit} />
 			</span>
 		{/if}
 	</div>
-	<Form class='flex flex-col px-4 py-0 gap-y-4' autosubmit={true} onsubmit={onSubmit} disabled={!edit}>
-		<PairHead bind:pair={ctx.pair} />
-		<Breed    bind:pair={ctx.pair} standard={ctx.standard} />
-		{#if ctx.pair.sectionId === 5 && ctx.pair.breedId > 0}
-			<Parents  bind:pair={ctx.pair} />
-			<Broods   bind:pair={ctx.pair} standard={ctx.standard} />
-			<Show     bind:pair={ctx.pair} />
-			<Notes    bind:pair={ctx.pair} />
-		{:else if ctx.pair.sectionId > 0 && ctx.pair.colorId > 0}
-			<Parents  bind:pair={ctx.pair} parents={ctx.pair.parents} />
-			<Lay      bind:pair={ctx.pair} standard={ctx.standard} />
-			<Broods   bind:pair={ctx.pair} standard={ctx.standard} />
-			<Show     bind:pair={ctx.pair} />
-			<Notes    bind:pair={ctx.pair} />
-		{:else}
-			<div>Weitere Eingaben nach Wahl der Rasse und für Hühner der Farbenschlag</div>
-		{/if}
-	</Form>
+
+		<Form class='flex flex-col px-4 py-0 gap-y-4' autosubmit={true} onsubmit={onSubmit} disabled={!edit}>
+			<PairHead bind:pair={pair} />
+			<Breed    bind:pair={pair} standard={standard} />
+			{#if pair.sectionId === 5 && pair.breedId > 0}
+				<Parents  bind:pair={pair} />
+				<Broods   bind:pair={pair} standard={standard} />
+				<Show     bind:pair={pair} />
+				<Notes    bind:pair={pair} />
+			{:else if pair.sectionId > 0 && pair.colorId > 0}
+				<Parents  bind:pair={pair} parents={pair.parents} {edit}/>
+				<Lay      bind:pair={pair} standard={standard} />
+				<Broods   bind:pair={pair} standard={standard} {edit}/>
+				<Show     bind:pair={pair} />
+				<Notes    bind:pair={pair} />
+			{:else}
+				<div>Weitere Eingaben nach Wahl der Rasse und für Hühner der Farbenschlag</div>
+			{/if}
+		</Form>
 {/if}
 
 <style>

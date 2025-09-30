@@ -11,7 +11,7 @@
 	import BroodLayer from './Brood.Layer.svelte';
 	import BroodPigeon from './Brood.Pigeon.svelte';
 
-	let { standard, pair=$bindable() } = $props();
+	let { pair=$bindable(), standard, edit } = $props();
 
 	let filledBroods = $state( 1 );
 
@@ -58,7 +58,9 @@
 			{/each}
 			<hr>
 			<div class='flex flex-row pt-1'>
-				<button class='w-6 h-6 print:hidden' type='button' onclick={onAddBrood}>+</button>
+				{#if edit}
+					<button class='w-6 h-6 print:hidden' type='button' onclick={onAddBrood}>+</button>
+				{/if}
 				<span class='grow'></span>
 				<NumberInput class='w-14 font-bold' label='G.Note' value={dec( pair.broodGrade, 1 )} title='Gesamt Brutnote' disabled/>
 			</div>

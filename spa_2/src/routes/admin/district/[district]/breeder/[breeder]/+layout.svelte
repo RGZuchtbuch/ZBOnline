@@ -13,6 +13,7 @@
 	})
 
 	async function loadBreeder( id ) {
+		ctx.breeder = null;
 		if( id === 0 ) {
 			ctx.breeder = model.Breeder.new( ctx.district.id );
 		} else {

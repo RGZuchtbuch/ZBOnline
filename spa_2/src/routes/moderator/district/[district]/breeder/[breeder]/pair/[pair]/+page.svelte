@@ -8,8 +8,10 @@
 	import {onMount} from 'svelte';
 
 	let mounted = $state( false );
+	let loaded = $state( false );
 
 	$effect( async () => {
+		console.log('Try lopad' )
 		if( page.url ) await loadPair( +page.params.pair );
 	})
 
@@ -18,10 +20,10 @@
 	});
 
 	async function loadPair( id ) {
+		ctx.pair = null;
 		ctx.pair = id === 0 ?
 			await model.Pair.new( ctx.breeder) : // new for this breeder
 			await model.Pair.load( id );
-		console.log('Loaded pair');
 	}
 
 	function setHeader() {
@@ -49,6 +51,6 @@
 
 {#if ctx.federation && ctx.standard && ctx.breeder && ctx.pair && mounted }
 	<main in:fade={{duration:cfg.fadeIn}}>
-	<Pair pair={ctx.pair} />
+		<Pair pair={ctx.pair} />
 	</main>
 {/if}

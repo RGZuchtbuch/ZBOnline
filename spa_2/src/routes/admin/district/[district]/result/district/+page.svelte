@@ -24,6 +24,7 @@
 
 	async function loadResultsForEdit( args ) {
 		//ctx.year = args.year || activeYear(); //query.has( 'year') ? +query.get( 'year' ) : activeYear();
+		ctx.resultsEdit = null;
 		ctx.resultsEdit = await model.Result.query( args );
 	}
 

@@ -18,6 +18,7 @@
 	})
 
 	async function loadBreeders( districtId ) {
+		ctx.breeders = null;
 		ctx.breeders = await model.Breeder.query( { district:districtId } );
 	}
 
