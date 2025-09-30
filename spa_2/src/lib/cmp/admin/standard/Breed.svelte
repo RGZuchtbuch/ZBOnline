@@ -59,31 +59,32 @@
 <div class='flex flex-col'>
 	{#if breed}
 		<div class='flex flex-row p-2 gap-x-1'>
-			<button class='inline' type='button' title='Farben' onclick={onToggle}>{unfold?'▽':'▷'}</button>
-			<div class='grow' title='Rasse'>{breed.name}</div>
-			<div class='w-10 text-right' title='Brutgruppe'>
-				{#if section.parentId === cfg.pigeons} {breed.broodGroup} {/if}
-			</div>
-			<div class='w-10 text-right' title='Legeleistung'>{breed.layEggs}</div>
-			<div class='w-10 text-right' title='Bruteigewicht'>{breed.layWeight}</div>
-			<div class='w-12 text-right' title='Zielgewicht der Hähne'>{breed.sireWeight}</div>
-			<div class='w-12 text-left' title='Zielgewicht der Hennen'>.{breed.dameWeight}</div>
-			<div class='w-10 text-right' title='Ringgröße Hahn'>{breed.sireRing}</div>
-			<div class='w-10 text-left' title='Ringgröße Henne'>.{breed.dameRing}</div>
+			<button class='grow flex flex-row bg-inherit text-black p-2 gap-x-1' type='button' title='Farben' onclick={onToggle}>{unfold?'▽':'▷'}
+				<span class='grow text-left' title='Rasse'>{breed.name}</span>
+				<span class='w-10 text-right' title='Brutgruppe'>
+					{#if section.parentId === cfg.pigeons} {breed.broodGroup} {/if}
+				</span>
+				<span class='w-10 text-right' title='Legeleistung'>{breed.layEggs}</span>
+				<span class='w-10 text-right' title='Bruteigewicht'>{breed.layWeight}</span>
+				<span class='w-12 text-right' title='Zielgewicht der Hähne'>{breed.sireWeight}</span>
+				<span class='w-12 text-left' title='Zielgewicht der Hennen'>.{breed.dameWeight}</span>
+				<span class='w-10 text-right' title='Ringgröße Hahn'>{breed.sireRing}</span>
+				<span class='w-10 text-left' title='Ringgröße Henne'>.{breed.dameRing}</span>
+			</button>
 
 
-			{#if authorized}
-				<button class='w-8 border-button bg-button text-button' title='Bearbeiten als Admin' onclick={onEdit}>
-					{#if edit}⯇{:else}▶{/if}
-				</button>
-				{#if unfold}
-					<button class='w-8 border-button bg-button text-button' title='Farbe hinzufügen' onclick={onAddColor}>✙</button>
+				{#if authorized}
+					<button class='w-8 border-button bg-inherit text-black' title='Bearbeiten als Admin' onclick={onEdit}>
+						{#if edit}⯇{:else}▶{/if}
+					</button>
+					{#if unfold}
+						<button class='w-8 bg-inherit text-black' title='Farbe hinzufügen' onclick={onAddColor}>✙</button>
+					{:else}
+						<div class='w-8'></div>
+					{/if}
 				{:else}
 					<div class='w-8'></div>
 				{/if}
-			{:else}
-				<div class='w-8'></div>
-			{/if}
 		</div>
 
 		{#if authorized && edit}

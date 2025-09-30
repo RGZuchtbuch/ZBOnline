@@ -17,7 +17,6 @@
 <input class='submit {classname} {form.state}'
        type='submit'
        value={ values[ form.state ] }
-       onclick={()=>console.log('Submit button pushed')}
        disabled={form.state!=='valid'}
        title={form.state}
 />

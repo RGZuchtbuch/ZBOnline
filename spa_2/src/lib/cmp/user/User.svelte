@@ -22,20 +22,15 @@
 
 
     const validate = {
-        //born:      v => validator(v).date().orNull().isValid(),
-        //age:      v => validator(v).number().range( 1, 10 ).orNull().isValid(),
         email:      v => validator(v).email().isValid(),
         password:   v => validator(v).password().isValid(),
-        logout:     v => validator(v).string().isValid(),
     }
 
     async function onLogin( event ) {
-        console.log('Logging in', email );
         let success = await model.User.login( email, password );
         if( success ) {
             state = State.LOGGEDIN;
             history.back();
-            //await goto( '/' ); // home for now
         } else {
             state = State.FAILED;
             password = null;
@@ -44,7 +39,6 @@
     }
 
     async function onForgot( event ) {
-        console.log('Send Reset', email);
         model.User.forgot( email );
         state = State.FORGOTTEN;
     }

@@ -30,29 +30,31 @@
 <div class='flex flex-col'>
 	{#if section}
 		<div class='flex flex-row p-2 gap-x-1'>
-			<button class='inline' type='button' title='Öffnen' onclick={onToggle}>{unfold?'▽':'▷'} </button>
-			<div class='grow font-bold' title='Sparte'>{section.name}</div>
+			<button class='grow flex flex-row bg-inherit text-black font-bold py-2 gap-x-2 text-left' type='button' title='Öffnen' onclick={onToggle}>
+				<span class='w-4'>{unfold?'▽':'▷'}</span>
+				<span class='grow text-left' title='Sparte'>{section.name}</span>
 
-			{#if unfold && section.breeds.length > 0}
-				<div class='w-10 text-center' title='Brutgruppe'>
-					{#if section.parentId === cfg.pigeons} B.G. {/if}
-				</div>
-				<div class='w-10 text-center' title='Legeleistung'>
-					{#if section.parentId !== cfg.pigeons} Eier {/if}
-				</div>
-				<div class='w-10 text-center' title='Bruteigewicht'>
-					{#if section.parentId !== cfg.pigeons} Gew. {/if}
-				</div>
-				<div class='w-24 text-center' title='Zielgewicht der Hähne'>Gewicht</div>
-				<div class='w-20 text-center' title='Ringgröße Hahn'>Ring</div>
-			{/if}
+				{#if unfold && section.breeds.length > 0}
+					<div class='w-10 text-center' title='Brutgruppe'>
+						{#if section.parentId === cfg.pigeons} B.G. {/if}
+					</div>
+					<div class='w-10 text-center' title='Legeleistung'>
+						{#if section.parentId !== cfg.pigeons} Eier {/if}
+					</div>
+					<div class='w-10 text-center' title='Bruteigewicht'>
+						{#if section.parentId !== cfg.pigeons} Gew. {/if}
+					</div>
+					<div class='w-24 text-center' title='Zielgewicht der Hähne'>Gewicht</div>
+					<div class='w-20 text-center' title='Ringgröße Hahn'>Ring</div>
+				{/if}
+			</button>
 
 			{#if authorized}
-				<button class='w-8 border-button bg-button text-button' title='Bearbeiten als Admin' onclick={onEdit}>
+				<button class='w-8 border-button bg-inherit text-black' title='Bearbeiten' onclick={onEdit}>
 					{#if edit}⯇{:else}▶{/if}
 				</button>
 				{#if unfold && section.children.length === 0 }
-					<button class='w-8 border-button bg-button text-button' title='Rasse hinzufügen' onclick={onAddBreed}>✙</button>
+					<button class='w-8 bg-inherit text-black' title='Rasse hinzufügen' onclick={onAddBreed}>✙</button>
 				{:else}
 					<div class='w-8'></div>
 				{/if}

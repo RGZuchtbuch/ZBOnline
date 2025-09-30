@@ -64,7 +64,6 @@
 			: parentLayGrade && parentBroodGrade && parentShowGrade ?
 				( parentLayGrade + parentBroodGrade + parentShowGrade ) / 3
 				: null
-		console.log( 'Grades', parent.score, parentBroodGrade, parentShowGrade, '=', parentTotalGrade  );
 	});
 
 	onMount( () => {

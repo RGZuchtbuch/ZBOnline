@@ -51,6 +51,6 @@
 
 {#if ctx.federation && ctx.standard && ctx.breeder && ctx.pair && mounted }
 	<main in:fade={{duration:cfg.fadeIn}}>
-	<Pair pair={ctx.pair} />
+		<Pair bind:pair={ctx.pair} standard={ctx.standard} user={ctx.user}/>
 	</main>
 {/if}

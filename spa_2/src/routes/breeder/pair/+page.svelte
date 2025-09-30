@@ -20,6 +20,7 @@
 	})
 
 	async function loadPairs( breederId ) {
+		ctx.pairs = null;
 		ctx.pairs = await model.Pair.query( { breeder:breederId } );
 	}
 
@@ -40,6 +41,6 @@
 
 {#if ctx.breeder && ctx.pairs && mounted}
 	<section in:fade={{duration:cfg.fadeIn}}>
-		<Pairs breeder={ctx.breeder} pairs={ctx.pairs}  />
+		<Pairs breeder={ctx.breeder} bind:pairs={ctx.pairs}  />
 	</section>
 {/if}

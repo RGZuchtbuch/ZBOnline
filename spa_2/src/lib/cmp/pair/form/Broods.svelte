@@ -13,8 +13,6 @@
 
 	let { pair=$bindable(), standard, edit } = $props();
 
-	let filledBroods = $state( 1 );
-
 	let breed = $derived( standard.breeds[ pair.breedId ] );
 
 	$effect( () => {

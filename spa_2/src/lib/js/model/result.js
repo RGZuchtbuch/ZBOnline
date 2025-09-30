@@ -4,7 +4,6 @@ import {invalidate} from '$app/navigation';
 
 export default class Result {
 	static async load( id ){
-		console.log( "Load result", id );
 		const data = await api.get(`/api/2/result/${id}` );
 		return data && data.result ? data.result : null;
 	}
@@ -15,8 +14,6 @@ export default class Result {
 	}
 
 	static async save( result ){
-		console.log( 'Save result', result );
-		//invalidate( 'result' ); // not here as it reloads the list, closing the colors
 		if( result.id > 0 ) { // existing
 			const data = await api.put( `/api/2/result/${result.id}`, result );
 			if( data && data.id > 0 ) {
@@ -33,20 +30,8 @@ export default class Result {
 		return false;
 	}
 	static async delete( id ){
-		console.log( 'Delete result', id );
-		//invalidate( 'result' );
 		const data = await api.delete( `/api/2/result/${id}` );
 		return data && data.deleted;
 	}
 
 }
-
-// function newResult() {
-// 	return {
-// 		id:0, breeder:null, breeders:null, districtId:district.id, group:group, pairId:null, pairs:null, year:year,
-// 		sectionId:section.id, breedId:breed.id, colorId:null, aocColor:null,
-// 		lay:{ dames:null, eggs:null, weight:null },
-// 		brood:{ eggs:null, fertile:null, hatched:null},
-// 		show:{ count:null, score:null },
-// 	}
-// }

@@ -49,7 +49,7 @@
 	{#if color}
 		<div class='flex flex-rowflex flex-row p-2 gap-x-1' title='Farbenschlag'><div class='grow italic'>• {color.name}</div>
 			{#if authorized}
-				<button class='w-8 border-button bg-button text-button' onclick={onEdit}>
+				<button class='w-8 bg-inherit text-black' onclick={onEdit}>
 					{#if edit}⯇{:else}▶{/if}
 				</button>
 			{:else}

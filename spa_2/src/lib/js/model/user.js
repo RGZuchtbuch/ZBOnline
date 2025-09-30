@@ -12,7 +12,6 @@ export default class User {
 	static async login ( email, password ) {
 		const response = await api.post( '/api/2/user/login', { email:email, password:password } );
 		if( response && response.token ) {
-			console.log( 'Got Token' );
 			ctx.user = tokenToUser( response.token );
 			browser && window.sessionStorage.setItem( 'token', response.token );
 		} else {
@@ -24,15 +23,12 @@ export default class User {
 
 	static async forgot( email ) { // forgot password
 		const response = await api.post( '/api/2/user/forgot', { email:email } );
-		console.log( response );
 		return true; // TODO
 	}
 
 	static async reset( token, password ) { // forgot password
 		const response = await api.post( '/api/2/user/reset', { token:token, password:password } );
-		console.log( 'Reset', response );
 		if( response && response.token ) {
-			console.log('Got login token')
 			ctx.user = tokenToUser( response.token );
 			browser && window.sessionStorage.setItem( 'token', response.token );
 			return true;
@@ -64,7 +60,7 @@ function tokenToUser( token ) {
 			user.token = token;
 		}
 	} catch ( error ) {
-		console.error( error );
+		console.error( error ); // TODO on faulty token ?
 	}
 	return user; // failed decode
 }

@@ -8,17 +8,12 @@
 	import Districts from '$lib/cmp/district/Districts.svelte';
 
 	let mounted = $state( false ); // to trigger transition
-	console.log( 'Districts' );
 
-	// $effect( () => {
-	// 	if( page.url ) setHeader();
-	// });
 	onMount( () => {
 		if( page.url ) setHeader();
 		mounted = true;
 	});
 
-	console.log( 'Districts' );
 	function setHeader() {
 		ctx.title = 'Landesverbände im BDRG Zuchtbuch';
 		ctx.submenu = [];

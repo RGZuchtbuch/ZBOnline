@@ -37,7 +37,6 @@
 	}
 
 	function onSectionChanged(event ) {
-		console.log('Section changed' );
 		if( section && section.id > 0 ) {
 			breed = null;
 			lay.eggs = lay.grade = null;
@@ -55,7 +54,6 @@
 	}
 
 	function gradeBrood( brood ) {
-		console.log( 'Calc brood' );
 		if( section ) {
 			if( section.id === cfg.pigeons ) {
 				if( brood && brood.count > 0 && brood.hatched !== null ) {

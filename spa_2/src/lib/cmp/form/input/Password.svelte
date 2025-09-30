@@ -14,7 +14,6 @@
         return valid;
     }
     function onInput( event ) {
-        console.log( 'PWD on input' );
         if( value === '' ) value = null;
     }
 

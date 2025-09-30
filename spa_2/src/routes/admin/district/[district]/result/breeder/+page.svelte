@@ -30,7 +30,6 @@
 		ctx.menustate[ '/admin' ] = page.url.href;
 		ctx.title = `Verband ${ctx.district.short}, Leistungen, Züchter`;
 		ctx.submenu = [
-//			{name: 'Eingaben', href: `/moderator/district/${ctx.district.id}/result?year=${ctx.year}`},
 		];
 		ctx.crumbs = [
 			//{name: 'Start', href: '/'},
