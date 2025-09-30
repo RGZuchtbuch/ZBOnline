@@ -1,6 +1,7 @@
 <script>
     import '../app.css'; // need this once on highest level
 
+
     import { onMount } from 'svelte';
     import { fade } from 'svelte/transition';
 

@@ -145,6 +145,9 @@ and
 
 The database structure has been design 
 
+### Dependencies
+ChartJS: charting lib: https://www.chartjs.org/docs/latest/
+Wysi: simple wysiwyg embedded editor: https://wysi.js.org/ (2025-09-30)
 
 ### Todo
 * Stored procedures ?
