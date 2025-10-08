@@ -4,18 +4,18 @@ Dev of Zuchtbuch Online for Poultry
 The Zuchtbuch Online is an SPA application using:
 
 Frontend:
-* Svelte: https://svelte.dev/
-* Svelte Material UI: https://sveltematerialui.com/
+* Pure Svelte runes, spa on svelte-kit: https://svelte.dev/ ( as per sept 2025 )
 * Tailwindcss for tweaking css: https://tailwindcss.com/docs/
-* Tinro router for frontend routing: https://github.com/AlexxNB/tinro
+* Sveltekit-frontend router, replacing Tinro router
  
-Backend
+Backend api
 * php 8: https://www.php.net/ using composer
 * slim 4 framework apiSvelte router: https://www.slimframework.com/
-* mysql database: https://www.mysql.com/
+* MariaDB/MySQL database: https://www.mysql.com/
 
 This is a re-engineering project based on the prototype:  
 https://kv-emsland-grafschaftbentheim.de/zuchtbuch/
+
 
 Some info on EU Rings found:
 https://www.kleindierliefhebbers.nl/57-organisatie/ringenbureau
