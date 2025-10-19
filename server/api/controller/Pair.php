@@ -50,9 +50,14 @@ class Pair
 
 					$pair['broods']  = model\pair\Brood::readForPair( $pair['id'] );
 					foreach( $pair['broods'] as & $brood ) {
-						$brood['chicks'] = model\Animal::readForBrood( $brood['id'] );
-						if( count( $brood['chicks'] ) > 0 ) {
-							$brood['ringed'] = $brood['chicks'][0]['ringed'];
+						$pair['debug'][] = $brood['id'];
+						$brood['chicks'] = [];
+						$chicks = model\Animal::readForBrood( $brood['id'] );
+						foreach( $chicks as $chick ) {
+							$brood['chicks'][] = $chick['ring'];
+						}
+						if( count( $chicks ) > 0 ) {
+							$brood['ringed'] = $chicks[0]['ringed'];
 						}
 					}
 
@@ -167,7 +172,7 @@ class Pair
 		if( $parents ) { // add if any
 			$success = true;
 			foreach ($parents as & $parent) {
-				if ($parent['ring']) { // valid
+				if( $parent['ring'] ) { // valid if has ring
 					$success = $success && model\Animal::createParent($pairId, $parent['sex'], $parent['ring'], $parent['score'], $parent['parentsPairId'], $requester->getId());
 				}
 			}
@@ -192,15 +197,20 @@ class Pair
 	}
 
 	public static function postBroods( int $pairId, array $broods, Requester $requester ) : bool {
-		model\Animal::deleteChicksForPair( $pairId );
-		model\pair\Brood::deleteForPair( $pairId );
+		model\Animal::deleteChicksForPair( $pairId ); // replacing all
+		model\pair\Brood::deleteForPair( $pairId ); // resplacing all
 		if( $broods ) {
 			$success = true; // model\Pair::delBroods($pairId) && model\Pair::delChicks($pairId); // remove old broods and chicks
 			foreach ($broods as & $brood) {
 				if ($brood['eggs'] > 0 && $brood['hatched'] !== null) { // valid
-					$success = $success &&
-						model\pair\Brood::create( $pairId, $brood['start'], $brood['eggs'], $brood['fertile'], $brood['hatched'], $requester->getId() ) &&
-						Pair::postChicks( $pairId, $brood, $requester );
+					$brood['id'] = model\pair\Brood::create( $pairId, $brood['start'], $brood['eggs'], $brood['fertile'], $brood['hatched'], $requester->getId() );
+					$success = $success && $brood['id'] >= 0;
+
+					if( $brood['id'] ) {
+						$success = $success && Pair::postChicks($pairId, $brood, $requester);
+					}
+				} else if( $brood['id'] > 0 ) { // if existing but invalid, delete
+					model\pair\Brood::delete( $brood['id'] );
 				}
 			}
 			return $success; // all is well
@@ -214,7 +224,7 @@ class Pair
 			$success = true;
 			foreach ($brood['chicks'] as & $chick) {
 				if( $chick ) { // valid
-					$id = model\Animal::createChick( $pairId, $brood['id'], $brood['ringed'], $chick, $requester->getId() );
+					$id = model\Animal::createChick( $pairId, $brood['id'], $brood['ringed'] ?? null, $chick, $requester->getId() );
 					$success = $success && $id;
 				}
 			}
@@ -309,6 +319,7 @@ class Pair
 		$query      = $request->getQueryParams();
 		$breederId  = $query[ 'breeder' ] ?? null;
 		$breedId    = $query[ 'breed' ] ?? null;
+		$chickRing  = $query[ 'chick' ] ?? null; // for finding parentPair
 		$sectionId  = $query[ 'section' ] ?? null;
 		$districtId = $query[ 'district' ] ?? null;
 		$year       = $query[ 'year' ] ?? null;
@@ -354,8 +365,25 @@ class Pair
 				return $response;
 			}
 			throw new HttpUnauthorizedException( $request, 'Cannot do this' );
+		} elseif( $chickRing ) { // find pair to chick, only breeder, meod and admin
+			$pair = model\Pair::findForChick( $chickRing );
+			if( $pair ) { // chicks parentPair found
+				$breeder = model\Breeder::read( $pair['breederId'] ); // need breeder
+				if( // authorized
+					$requester->hasId( $pair['breederId'] ) || // breeder
+					$requester->isModerating( $breeder['districtId'] ) || // moderator
+					$requester->isAdmin() // admin
+				) {
+					$pair = Pair::toParentPair( $pair ); // row to hierarchy
+					$response->getBody()->write(json_encode( [ 'pairs' => [ $pair ] ], JSON_UNESCAPED_SLASHES));
+					return $response;
+				} else {
+					throw new HttpUnauthorizedException( $request, 'Cannot do this' );
+				}
+			} // no parentPair found, a valid outcome
+			$response->getBody()->write(json_encode( [ 'pairs' => null ], JSON_UNESCAPED_SLASHES));
+			return $response;
 		}
-
 		throw new HttpBadRequestException( $request, 'Invalid query');
 	}
 
@@ -375,6 +403,14 @@ class Pair
 			$pairs[] = $pair;
 		}
 		return $pairs;
+	}
+
+	public static function toParentPair( $row ) {
+		$pair            = [ 'id'=>$row['id'], 'year'=>$row['year'], 'name'=>$row['name'], 'accepted'=>$row['accepted'] ];
+		$pair['lay']     = [ 'eggs'=>$row['layEggs'], 'weight'=>$row['layWeight'], 'eggsShould'=>$row['layEggsShould'], 'weightShould'=>$row['layWeightShould'] ];
+		$pair['brood']   = [ 'eggs'=>$row['broodEggs'], 'fertile'=>$row['broodFertile'], 'hatched'=>$row['broodHatched'], 'group'=>$row['broodGroup'] ];
+		$pair['show']    = [ 'count'=>$row['showCount'], 'score'=>$row['showScore'] ];
+		return $pair;
 	}
 
 

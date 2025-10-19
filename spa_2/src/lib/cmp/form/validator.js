@@ -82,23 +82,28 @@ export function toRing( value ) { // returns object for ring
 	if( value ) {
 		// try eu type ring  default D '23 AZ 999' or with country 'D 23 AZ 999' or 'NL 23 H 1985' with long or short year
 
+		let ring = null;
 		let match = value.match(/^(\d{2})[\ \.]*([a-zA-Z]+)[\ \.]*(\d+)$/); // 21 AZ 999
 		if (match) {
-			return {country: 'D', year: toFullYear(match[1]), code: match[2].toUpperCase(), number: match[3]}
+			ring = {country: 'D', year: toFullYear(match[1]), code: match[2].toUpperCase(), number: match[3]}
 		} else {
 			match = value.match(/^([a-zA-Z]+)[\ \.]*(\d{2})[\ \.]*([a-zA-Z]+)[\ \.]*(\d+)$/); // D 21 AZ 999
 			if (match) {
-				return { country: match[1].toUpperCase(), year: toFullYear(match[2]), code: match[3].toUpperCase(), number: match[4] }
+				ring = { country: match[1].toUpperCase(), year: toFullYear(match[2]), code: match[3].toUpperCase(), number: match[4] }
 			} else {
 				match = value.match(/^(\d{4})[\ \.]*([a-zA-Z]+)[\ \.]*(\d+)$/); // 2021 AZ 999
 				if (match) {
-					return { country: 'D', year: match[1], code: match[2].toUpperCase(), number: match[3] }
+					ring = { country: 'D', year: match[1], code: match[2].toUpperCase(), number: match[3] }
 				}
 				match = value.match(/^([a-zA-Z]+)[\ \.]*(\d{4})[\ \.]*([a-zA-Z]+)[\ \.]*(\d+)$/); // D 2021 AZ 999
 				if (match) {
-					return { country: match[1].toUpperCase(), year: match[2], code: match[3].toUpperCase(), number: match[4] }
+					ring = { country: match[1].toUpperCase(), year: match[2], code: match[3].toUpperCase(), number: match[4] }
 				}
 			}
+		}
+		if( ring ) {
+			ring.name = `${ring.country} ${ring.year % 100} ${ring.code} ${ring.number}`;
+			return ring;
 		}
 	}
 	return null;

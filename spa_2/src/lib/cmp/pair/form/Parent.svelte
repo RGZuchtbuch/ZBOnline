@@ -27,18 +27,32 @@
 	}
 
 	// should the pair hold the parentspair object
-	async function onRingInput() {
-		let newRing = toRing( parent.ring ); // decode input
-		if( newRing ) {
-			if( newRing.year !== ringYear ) {
-
-				parentPairs = await model.Pair.query({breeder: pair.breeder.id, breed:pair.breedId, year:newRing.year});
-
-				if( ! parentPairs.find( pair => pair.id === parent.parentsPairId ) ) { // not in list
+	async function onRingBlur() {
+		let ring = toRing( parent.ring ); // decode input to ring object
+		console.log( 'NewRing', ring );
+		if( ring ) { // valid ring
+			if( pair.sectionId === cfg.pigeons ) { // pigeons
+				let pairs = await model.Pair.query( { chick:ring.name } );
+				console.log( 'Pairs', pairs );
+				if( pairs && pairs.length > 0 ) {
+					parentPair = pairs[0];
+					parent.parentsPairId = parentPair.id;
+					console.log( 'Pigeons, found parents', ring.name, parentPair );
+				} else {
 					parentPair = null;
 					parent.parentsPairId = null;
+					console.log( 'Pigeons, not found parents', ring.name );
 				}
-				ringYear = newRing.year;
+			} else { // layers
+				if( ring.year !== ringYear ) {
+					parentPairs = await model.Pair.query({breeder: pair.breeder.id, breed:pair.breedId, year:ring.year});
+
+					if( ! parentPairs.find( pair => pair.id === parent.parentsPairId ) ) { // not in list
+						parentPair = null;
+						parent.parentsPairId = null;
+					}
+					ringYear = ring.year;
+				}
 			}
 		} else {
 			ringYear = null;
@@ -49,16 +63,21 @@
 	}
 
 	$effect( () => {
-		parentPair = parentPairs.find( pair => pair.id === parent.parentsPairId );
+		if( pair.sectionId === cfg.pigeons ) {
+
+		} else {
+			parentPair = parentPairs.find( pair => pair.id === parent.parentsPairId );
+		}
 		parentLayGrade = parentPair && parentPair.lay ? aab.lay(parentPair.lay.eggs, parentPair.lay.eggsShould) : null;
 		parentBroodGrade = parentPair ?
-			pair.sectionId === cfg.pigeon ?
-				aab.brood.pigeon(pair.breed.broodGroup, parentPair.brood.eggs/2, parentPair.brood.hatched )
+			pair.sectionId === cfg.pigeon
+				? aab.brood.pigeon(pair.breed.broodGroup, parentPair.brood.eggs/2, parentPair.brood.hatched )
+//				? aab.brood.pigeon(pair.breed.broodGroup, parentPair.result.broodEggs/2, parentPair.result.broodHatched )
 				: aab.brood.layer(parentPair.brood.eggs, parentPair.brood.hatched)
 			: null;
 		parentShowGrade = parentPair ? parentPair.show.score : null;
-		parent.grade = parentTotalGrade = pair.sectionId === cfg.pigeons ?
-			parentBroodGrade > 0 && parentShowGrade > 0 ?
+		parent.grade = parentTotalGrade = pair.sectionId === cfg.pigeons
+			? parentBroodGrade > 0 && parentShowGrade > 0 ?
 				( parentBroodGrade + parentShowGrade ) / 2
 				: null
 			: parentLayGrade && parentBroodGrade && parentShowGrade ?
@@ -67,7 +86,7 @@
 	});
 
 	onMount( () => {
-		onRingInput();
+		onRingBlur();
 	})
 
 </script>
@@ -75,15 +94,19 @@
 <section class='w-full flex flex-row gap-x-2 items-center'>
 	<TextInput class='w-8 px-0 border-0' label={i===0?' #':null} value={i+1} disabled />
 	<TextInput class='w-12' label={i===0?'♂.♀':null} value={parent.sex} disabled />
-	<RingInput label={i===0?'Ring':null} bind:value={parent.ring} oninput={onRingInput} validator={validate.ring}/>
+	<RingInput label={i===0?'Ring':null} bind:value={parent.ring} onblur={onRingBlur} validator={validate.ring}/>
 	<NumberInput class='w-16' label={i===0?'Bewertung':null} bind:value={parent.score} step={0.1} validator={validate.score}/>
 	<div class='w-4'></div>
-	<Select class='w-32' label={i===0?'Aus Stamm':null} bind:value={parent.parentsPairId} title={parentPairs.length > 0 ? `Bekannte Eltern Stämme` : 'Keine Eltern Stämme'} disabled={ parentPairs.length === 0 }>
-		<option value={null} ></option>
-		{#each parentPairs as parentPair, i}
-			<option value={parentPair.id} >{(parentPair.year%100)+'.'+parentPair.name}</option>
-		{/each}
-	</Select>
+	{#if pair.sectionId === cfg.pigeons}
+		<TextInput class='w-32' label={i===0?'Aus Stamm':null} value={parentPair?(parentPair.year%100)+'.'+parentPair.name:null} title='Eltern Stamm aus Kükenring' disabled />
+	{:else}
+		<Select class='w-32' label={i===0?'Aus Stamm':null} bind:value={parent.parentsPairId} title={parentPairs.length > 0 ? `Wähle den Elternstamm` : 'Keine eingegebene Elternstämme'} disabled={ parentPairs.length === 0 }>
+			<option value={null} ></option>
+			{#each parentPairs as parentPair, i}
+				<option value={parentPair.id} >{(parentPair.year%100)+'.'+parentPair.name}</option>
+			{/each}
+		</Select>
+	{/if}
 	{#if parent.parentsPairId}
 		<a href={ swapHrefId( parent.parentsPairId )} title='Zum Elternpaar'>◎</a>
 	{/if}

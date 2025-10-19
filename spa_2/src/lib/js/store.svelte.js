@@ -59,6 +59,10 @@ class Context {
     };
     menustate = $state( { ... this.initialMenustate } );
 
+    // for login timeout and alert
+    remaining = $state( 0 );
+    alerted = $state( false );
+
     //dialog = $state( null );
 }
 

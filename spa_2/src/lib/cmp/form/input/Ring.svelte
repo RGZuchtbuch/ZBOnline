@@ -5,7 +5,7 @@
 	import {toRing, toRingString} from '../validator.js';
 	import TextInput from './Text.svelte';
 
-    let { class:classname='', disabled=false, element=$bindable(), error='Fehler', label=null, name=null, oninput=null, placeholder=null, title=null, validator=null, value=$bindable() } = $props();
+    let { class:classname='', disabled=false, element=$bindable(), error='Fehler', label=null, name=null, onblur=null, oninput=null, placeholder=null, title=null, validator=null, value=$bindable() } = $props();
 
     let localValue = $state( value ); // D
     let tempValue = value; // for detecting extern change from parent on page reload oid
@@ -22,6 +22,7 @@
 
 	function onBlur( event ) { // format valid date when done
         localValue = value; // value already updated by onInput
+		if( onblur ) onblur( event ); // after formatting ring !
 	}
 
     onMount( () => {

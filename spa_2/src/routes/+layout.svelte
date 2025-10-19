@@ -20,10 +20,16 @@
         // model.User.load().then( data => ctx.user = data );
         // model.Federation.load().then( data => ctx.federation = data );
         // model.Standard.load().then( data => ctx.standard = data );
-        ctx.user = await model.User.load();
-        ctx.federation = await model.Federation.load();
-        ctx.standard   = await model.Standard.load();
-        mounted = true;
+        Promise.all( [
+            model.User.load(),
+            model.Federation.load(),
+            model.Standard.load()
+        ] ).then( values => {
+            ctx.user       = values[0];
+            ctx.federation = values[1];
+            ctx.standard   = values[2];
+            mounted = true;
+        })
     });
 
     function setHeader() {
@@ -34,31 +40,6 @@
             //{name: 'Gast', href: '/'}
         ];
     }
-
-    // let expired = setInterval( () => {
-    //     const now = Date.now() / 1000; // ms to s
-    //     if( ctx.user !== null && now - ctx.user.exp > -10 ) { // 10 s before expire
-    //         console.log( 'Threw user out, expired')
-    //         model.User.logout();
-    //         goto( '/user' );
-    //     }
-    // }, 5000 )
-
-    // async function loadFederation() {
-    //     console.log( 'Load fed', dirty.federation );
-    //     ctx.federation = await model.Federation.load();
-    // }
-    
-    // async function loadStandard() {
-    //     console.log( 'Load std', dirty.standard );
-    //     ctx.standard = await model.Standard.load();
-    // }
-    
-    // async function loadUser() {
-    //     ctx.user = await model.User.load();
-    // }
-    
-    //$inspect( 'Fedpage', ctx.federation.value ); // causes inf loop
 </script>
 
 

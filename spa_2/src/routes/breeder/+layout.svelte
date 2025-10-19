@@ -12,7 +12,7 @@
 	let authorized = $state( ctx.user !== null );//&& ( ctx.user.id === +page.params.breeder || ctx.user.admin ) );
 
 	$effect( async () => {
-		await loadBreeder( ctx.user.id );
+		if( ctx.user ) await loadBreeder( ctx.user.id );
 	});
 
 	$effect( async () => {

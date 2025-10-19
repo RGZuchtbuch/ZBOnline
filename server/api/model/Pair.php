@@ -113,8 +113,7 @@ class Pair {
 			pair.sectionId, pair.breedId, pair.colorId, pair.name, 
 			breed.name AS breedName, breed.layEggs AS layEggsShould, breed.layWeight AS layWeightShould, breed.broodGroup AS broodGroup, 
 			color.name AS colorName,
-			result.layEggs, result.layWeight, result.broodEggs, result.broodFertile, result.broodHatched, 
-			result.showCount, result.showScore,
+			result.layEggs, result.layWeight, result.broodEggs, result.broodFertile, result.broodHatched, result.showCount, result.showScore,
 			pair.accepted
 		FROM pair
 		LEFT JOIN breed ON breed.id = pair.breedId
@@ -136,7 +135,7 @@ class Pair {
 		SELECT pair.id, pair.year, pair.group, pair.districtId,
 			user.id AS breederId, user.firstname, user.infix, user.lastname, user.member,    
 			pair.sectionId, pair.breedId, pair.colorId, pair.name, breed.name AS breedName, color.name AS colorName,
-			result.layEggs, result.layWeight, result.broodEggs, result.broodFertile, result.broodHatched, result.showScore
+			result.layEggs, result.layWeight, result.broodEggs, result.broodFertile, result.broodHatched, result.showCount, result.showScore
 		FROM pair
 		LEFT JOIN breed ON breed.id = pair.breedId
 		LEFT JOIN color ON color.id = pair.colorId
@@ -146,6 +145,23 @@ class Pair {
 		ORDER BY pair.year DESC, pair.name
 	');
 		return Query::selectArray($stmt, $args);
+	}
+
+	public static function findForChick( string $chick ) : ? array
+	{
+		$args = get_defined_vars();
+		$stmt = Query::prepare('
+			SELECT pair.id, pair.year, pair.group, pair.districtId,	pair.breederId,	pair.accepted,    
+				pair.sectionId, pair.breedId, pair.colorId, pair.name, 
+				result.layEggs, result.layWeight, result.broodEggs, result.broodFertile, result.broodHatched, result.showCount, result.showScore,
+				breed.layEggs AS layEggsShould, breed.layWeight AS layWeightShould, breed.broodGroup AS broodGroup
+			FROM pair 
+			LEFT JOIN pair_chick ON pair_chick.pairId = pair.id
+			LEFT JOIN result     ON result.pairId = pair.id
+			LEFT JOIN breed      ON breed.id = pair.breedId
+			WHERE pair_chick.ring=:chick
+		');
+		return Query::select($stmt, $args); // returns pair of null
 	}
 
 }

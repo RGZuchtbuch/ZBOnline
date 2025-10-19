@@ -18,7 +18,13 @@ export async function get( url, query=null ) {
 	return response && response.ok ? await response.json() : null;
 }
 export async function query( url, query ) {
-	url += query ? '?' + new URLSearchParams( query ).toString() : '';
+	if( query ) {
+		const params =  new URLSearchParams( query );
+		const q = params.toString().replace( /\+/g, '%20' );
+		url += '?'+q;
+	}
+
+//	url += query ? '?' + new URLSearchParams( query ).toString() : '';
 	const response = await fetch( `${API_BASE}${url}`, { method:'GET', headers:headers() });
 	return response.ok ? await response.json() : null;
 }

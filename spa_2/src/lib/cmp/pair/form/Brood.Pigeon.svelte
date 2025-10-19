@@ -23,6 +23,8 @@
 			null; //dcks pair.brood.eggs ? 100 * pair.brood.hatched / pair.brood.eggs : null; // TODO
 	} );
 
+	console.log( 'Chicks', brood.chicks);
+
 </script>
 
 

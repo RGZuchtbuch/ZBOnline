@@ -3,10 +3,14 @@
 	import { ctx } from '$lib/js/store.svelte.js'
 	import { profile_icon } from '$lib/cmp/icons.svelte';
 
+	let expiring = $derived( ctx.remaining < 3600 );
+
 	function toggleMenu( event ) {
 		ctx.menuOpen = !ctx.menuOpen;
-		//console.log( 'Open', ctx.menuOpen === true );
 	}
+
+	$inspect( 'Exp', ctx.remaining, expiring )
+
 </script>
 
 
@@ -24,7 +28,7 @@
 		BDRG Zuchtbuch
 	</div>
 
-	<div class='hidden lg:flex flex-row w-32 pr-2 gap-x-2 text-sm justify-end' in:fade>
+	<div class='hidden lg:flex flex-row w-32 pr-2 gap-x-2 text-sm justify-end' class:expiring in:fade>
 		<span>{ ctx.user ? ctx.user.firstname : 'Gast' }</span>
 		<span class='screen:hidden'>{ new Date().toLocaleDateString( 'de-DE' ) }</span>
 		<a href='/user' title='An/abmelden'>{@render profile_icon()}</a>
@@ -36,3 +40,9 @@
 
 
 </div>
+
+<style>
+	.expiring {
+		@apply text-red-600;
+	}
+</style>
