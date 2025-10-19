@@ -57,12 +57,12 @@
 			<PairHead bind:pair={pair} />
 			<Breed    bind:pair={pair} standard={standard} />
 			{#if pair.sectionId === 5 && pair.breedId > 0}
-				<Parents  bind:pair={pair} />
-				<Broods   bind:pair={pair} standard={standard} />
+				<Parents  bind:pair={pair} {edit}/>
+				<Broods   bind:pair={pair} standard={standard} {edit} />
 				<Show     bind:pair={pair} />
 				<Notes    bind:pair={pair} />
 			{:else if pair.sectionId > 0 && pair.colorId > 0}
-				<Parents  bind:pair={pair} parents={pair.parents} {edit}/>
+				<Parents  bind:pair={pair} {edit}/>
 				<Lay      bind:pair={pair} standard={standard} />
 				<Broods   bind:pair={pair} standard={standard} {edit}/>
 				<Show     bind:pair={pair} />

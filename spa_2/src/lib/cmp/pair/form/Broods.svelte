@@ -48,7 +48,7 @@
 	{#if pair.broods.length >=2 }
 		<div transition:slide>
 			{#each pair.broods as brood, i }
-				{#if pair.sectionId === 5 }
+				{#if pair.sectionId === cfg.pigeons }
 					<BroodPigeon bind:brood={pair.broods[i]} bind:pair={pair} {standard} {i}/>
 				{:else}
 					<BroodLayer  bind:brood={pair.broods[i]} bind:pair={pair} {standard} {i}/>
