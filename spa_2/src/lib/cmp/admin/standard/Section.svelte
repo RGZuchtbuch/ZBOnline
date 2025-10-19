@@ -32,9 +32,9 @@
 		<div class='flex flex-row p-2 gap-x-1'>
 			<button class='grow flex flex-row bg-inherit text-black font-bold py-2 gap-x-2 text-left' type='button' title='Öffnen' onclick={onToggle}>
 				<span class='w-4'>{unfold?'▽':'▷'}</span>
-				<span class='grow text-left' title='Sparte'>{section.name}</span>
+				<span class='grow text-left' title='Sparte'>{section.name} <sup>({section.breeds.length})</sup></span>
 
-				{#if unfold && section.breeds.length > 0}
+				{#if unfold && section.children.length === 0}
 					<div class='w-10 text-center' title='Brutgruppe'>
 						{#if section.parentId === cfg.pigeons} B.G. {/if}
 					</div>

@@ -30,8 +30,8 @@
 {#if section}
 	<button class='bg-inherit text-black font-bold w-full flex flex-row py-2 gap-x-2 text-left' type='button' title='Öffnen' onclick={toggle}>
 		<span class='w-4'>{unfold?'▽':'▷'}</span>
-		<span class='grow text-left' title='Sparte'>{section.name}</span>
-		{#if unfold && section.breeds.length > 0}
+		<span class='grow text-left' title='Sparte'>{section.name} <sup>({section.breeds.length})</sup></span>
+		{#if unfold && section.children.length === 0}
 			<span class='w-16 text-right' title='Brutgruppe'>
 				{#if section.parentId === cfg.pigeons}B.G.{/if}
 			</span>
