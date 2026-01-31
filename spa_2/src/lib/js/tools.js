@@ -53,6 +53,7 @@ export function getLayResult( days, eggs, dames ) {
 }
 
 
+/* Map coordinate calculations */
 
 // for use with map
 function mercY( lat ) {
@@ -96,7 +97,7 @@ export function calcColor( min, max, value, alpha = 1, blue = 0 ) {
 	return '#'+r.toString(16)+g.toString(16)+b.toString(16)+a.toString(16); // only 1 char per color, like '#48f7' making '#4488ff77'
 }
 
-
+/** Obsolete, can it be removed ? */
 export let ArgsBuilder = {
 
 	init : () => {
@@ -157,20 +158,6 @@ export function shortName( person ) { // E.J
 		return `${person.firstname.at(0)}.${person.lastname.at(0)} `;
 	}
 	return '-';
-}
-
-// ****************** Date helpers *******************//
-
-export function completedYear( person ) { // for guests reading
-	const now = new Date();
-	const year = now.getFullYear();
-	return now.getMonth() < 2 ? year-2 : year-1;
-}
-
-export function activeYear() { // default year, after oct 1st is this year, for moderators work
-	const now = new Date();
-	const year = now.getFullYear();
-	return now.getMonth() < 2 ? year-1 : year;
 }
 
 // if current path is /breeders/15 then swap for 16 to /breeders/16. possible searchparams are lost

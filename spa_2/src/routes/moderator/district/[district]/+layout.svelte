@@ -1,7 +1,6 @@
 <script>
 
 	import { ctx, dirty } from '$lib/js/store.svelte.js';
-	import {activeYear} from '$lib/js/tools.js';
 	import {page} from '$app/state';
 
 	let { children } = $props();

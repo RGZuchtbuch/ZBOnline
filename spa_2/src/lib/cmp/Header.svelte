@@ -9,8 +9,6 @@
 		ctx.menuOpen = !ctx.menuOpen;
 	}
 
-	$inspect( 'Exp', ctx.remaining, expiring )
-
 </script>
 
 
@@ -37,7 +35,6 @@
 	<button class='lg:hidden bg-white text-black text-xl w-8 px-2 pb-0 text-right' onclick={toggleMenu}>
 		≡
 	</button>
-
 
 </div>
 

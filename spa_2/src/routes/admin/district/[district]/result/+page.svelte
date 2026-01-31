@@ -3,7 +3,6 @@
 	import { page } from '$app/state';
 	import { fade } from 'svelte/transition';
 	import {cfg, ctx, dirty} from '$lib/js/store.svelte.js';
-	import { activeYear } from '$lib/js/tools.js';
 	import model from '$lib/js/model.js';
 
 //	import Results from '$lib/cmp/moderator/district/Results.svelte';
@@ -14,7 +13,7 @@
 	$effect( async () => {
 		if( dirty.results && page.url ) {
 			const query = page.url.searchParams;
-			const year = query.has( 'year') ? +query.get( 'year' ) : activeYear();
+			const year = query.has( 'year') ? +query.get( 'year' ) : CURRENT_INPUT_YEAR;
 			ctx.results = null;
 			ctx.year = year;
 			ctx.results = await model.Result.query( { district:+page.params.district, year:year } );

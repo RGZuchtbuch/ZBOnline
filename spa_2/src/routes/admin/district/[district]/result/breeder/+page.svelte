@@ -1,17 +1,13 @@
 <script>
+	import { onMount } from 'svelte';
 	import { page } from '$app/state';
 	import { fade } from 'svelte/transition';
 	import { cfg, ctx, dirty } from '$lib/js/store.svelte.js';
 	import model from '$lib/js/model.js';
 
-	import { ArgsBuilder, activeYear } from '$lib/js/tools.js';
-	import {onMount} from 'svelte';
-
 	import Breeders from '$lib/cmp/result/Breeders.svelte'
 
 	let mounted = $state( false );
-
-//	let args = $derived( getArgs( page ) )
 
 	$effect( async () => {
 		if( dirty.breeders && page.url ) await loadBreeders( +page.params.district );

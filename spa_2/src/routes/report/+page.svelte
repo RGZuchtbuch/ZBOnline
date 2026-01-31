@@ -1,17 +1,15 @@
 <script>
+	import { onMount } from 'svelte';
 	import { page } from '$app/state';
 	import { fade } from 'svelte/transition';
-	import {cfg, ctx, dirty} from '$lib/js/store.svelte.js';
-    import Report from '$lib/cmp/report/Report.svelte';
-	import { ArgsBuilder, completedYear } from '$lib/js/tools.js';
+	import { cfg, ctx } from '$lib/js/store.svelte.js';
 	import model from '$lib/js/model.js';
-	import {onMount} from 'svelte';
+	import Report from '$lib/cmp/report/Report.svelte';
 
 	let mounted = $state( false );
 
-
 	let district = $derived( ctx.federation.districts[ page.url.searchParams.has( 'district' ) ? +page.url.searchParams.get( 'district' ) : 1 ] );
-	let year     = $derived( page.url.searchParams.has( 'year' ) ? +page.url.searchParams.get( 'year' ) : completedYear() );
+	let year     = $derived( page.url.searchParams.has( 'year' ) ? +page.url.searchParams.get( 'year' ) : CURRENT_REPORT_YEAR );
 	let group    = $derived( page.url.searchParams.has( 'group' ) ? page.url.searchParams.get( 'group' ) : null );
 
 	let section  = $derived( page.url.searchParams.has( 'section' ) ? ctx.standard.sections[ +page.url.searchParams.get( 'section' ) ] : null );

@@ -3,8 +3,6 @@
 	import { onMount } from 'svelte';
 	import { page } from '$app/state';
 	import { ctx, groups } from '$lib/js/store.svelte.js';
-	import { activeYear, getArgNum, getArgStr } from '$lib/js/tools.js';
-	import model from '$lib/js/model.js';
 
 	import Select from '$lib/cmp/form/input/Select.svelte';
 	import Form from '$lib/cmp/form/Form.svelte';
@@ -25,8 +23,8 @@
 
 	//const groups = ['I','II','III']; from store
 	let years = [];
-	let nextYear = new Date().getFullYear()+1;
-	for( let year=nextYear; year>=1980; year-- ) { // desc from next year down to 1980. Could be refined to earliest data ?.
+	let nextYear = CURRENT_INPUT_YEAR+1;
+	for( let year=nextYear; year>=START_YEAR; year-- ) { // desc from next year down to 1980. Could be refined to earliest data ?.
 		years.push( year );
 	}
 

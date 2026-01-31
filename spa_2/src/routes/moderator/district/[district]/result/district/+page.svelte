@@ -4,7 +4,7 @@
 	import { fade } from 'svelte/transition';
 
 	import { cfg, ctx, dirty } from '$lib/js/store.svelte.js';
-	import { ArgsBuilder, activeYear } from '$lib/js/tools.js';
+	import { ArgsBuilder } from '$lib/js/tools.js';
 	import model from '$lib/js/model.js';
 
 //	import ResultsEdit from '$lib/cmp/moderator/district/results/ResultsEdit.svelte';
@@ -31,7 +31,7 @@
 		let query = page.url.searchParams;
 		const args = ArgsBuilder.init();
 			args.district = +page.params.district;
-			ArgsBuilder.setNumber( args, query, 'year', activeYear() );
+			ArgsBuilder.setNumber( args, query, 'year', CURRENT_INPUT_YEAR );
 			ArgsBuilder.setNumber( args, query, 'section', 3 );
 			ArgsBuilder.setNumber( args, query, 'breed', null );
 			ArgsBuilder.setNumber( args, query, 'color', null );

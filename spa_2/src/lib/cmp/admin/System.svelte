@@ -3,6 +3,7 @@
 	import { dateToInt } from '$lib/js/tools.js';
 
 	function onClearCache() {
+		console.log( 'Clearing cache' );
 		model.Cache.delete();
 	}
 
@@ -11,6 +12,7 @@
 		// date.setDate( date.getDate() );
 		// let until = dateToInt( date );
 		// console.log( until );
+		console.log( 'Clearing logs' );
 		model.Log.delete();
 	}
 

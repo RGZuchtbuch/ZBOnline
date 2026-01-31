@@ -1,8 +1,4 @@
 <script>
-    import {onMount} from 'svelte';
-    import { goto } from '$app/navigation';
-    import { page } from '$app/state';
-    import {activeYear, dec, pct} from '$lib/js/tools.js';
     import { BarController, BarElement, CategoryScale, Chart, Colors, LinearScale, Tooltip } from 'chart.js';
 
     let { title, data, scale={}, unit, factor=1.0, color={fill:'#ADF', border:'#48A'}, width=1.0 } = $props();
@@ -29,8 +25,11 @@
         chart.data.datasets = [
             { data:data.map( item => factor*item[ unit ] ), backgroundColor:color.fill, borderColor:color.border, borderWidth:1  }
         ]
+
+        // next needed ?
+        // TODO
         chart.options.scales = {
-            x : { min:activeYear()-10 },
+            x : { min: CURRENT_INPUT_YEAR - TREND_YEARS_COUNT },
             y : scale,
         }
         chart.update();
@@ -65,7 +64,7 @@
                 },
                 responsive : false, // otherwise shrinking
                 scales : {
-                    x : { min:activeYear()-10 },
+                    x : { min:CURRENT_INPUT_YEAR - TREND_YEARS_COUNT },
                     y : scale,
                 }
             },
