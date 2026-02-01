@@ -235,9 +235,11 @@ class Pair
 
 	public static function postShow( int $pairId, array $show, Requester $requester ) : bool {
 		model\pair\Show::deleteForPair( $pairId );
-		if( $show ) {
+		if( $show && $show['scores'] ) {
 			$scores = & $show['scores'];
-			return model\pair\Show::create( $pairId, $scores['89'], $scores['90'], $scores['91'], $scores['92'], $scores['93'], $scores['94'], $scores['95'], $scores['96'], $scores['97'], $requester->getId() );
+			$id = model\pair\Show::create( $pairId, $scores['89'], $scores['90'], $scores['91'], $scores['92'], $scores['93'], $scores['94'], $scores['95'], $scores['96'], $scores['97'], $requester->getId() );
+			//print( $id.'\n' ); // TODO
+			return $id;
 		}
 		return true; // no show is ok
 	}
