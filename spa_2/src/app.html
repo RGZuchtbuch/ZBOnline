@@ -14,9 +14,11 @@
 		%sveltekit.head%
 	</head>
 	<!-- body data-sveltekit-preload-data="hover" -->
-	<body class='flex flex-row justify-center'>
+	<body class='h-full w-full flex flex-row justify-center bg-red-400'>
 		<div class='grow bg-[url("/assets/bg_bdrg_zuchtbuch.png")] bg-top bg-contain'></div>
-		<div class='relative h-full w-full lg:w-256 m-auto flex flex-col screen:border rounded bg-[url("/assets/bg_bdrg_zuchtbuch.png")] bg-top bg-contain'>%sveltekit.body%</div>
+		<div class='h-full w-full lg:w-256 m-auto flex flex-col screen:border rounded bg-[url("/assets/bg_bdrg_zuchtbuch.png")] bg-top bg-contain'>
+			%sveltekit.body%
+		</div>
 		<div class='grow bg-[url("/assets/bg_bdrg_zuchtbuch.png")] bg-top bg-contain'></div>
 	</body>
 </html>

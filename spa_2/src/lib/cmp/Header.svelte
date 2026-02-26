@@ -9,8 +9,6 @@
 		ctx.menuOpen = !ctx.menuOpen;
 	}
 
-	$inspect( 'Exp', ctx.remaining, expiring )
-
 </script>
 
 

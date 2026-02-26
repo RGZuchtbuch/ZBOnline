@@ -43,8 +43,6 @@
 {#if breeder && district }
 
     <section>
-        {authorized ? 'Y' : 'n'}
-
         <div class='text-center'>
             <h2>Mitgliedsdaten</h2>
             {#if authorized}
