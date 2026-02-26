@@ -1,4 +1,4 @@
-import { ctx } from '$lib/js/store.svelte.js';
+
 import { page } from '$app/state';
 
 export function dat( date, format='de') {
@@ -60,7 +60,6 @@ function mercY( lat ) {
 }
 // for use with map, mercator coords ( google maps ) to pixel
 export function gpsToPx( width, height, west, east, south, north, lon, lat ) {
-
 	west = west * Math.PI/180;
 	east = east * Math.PI/180;
 	south = south * Math.PI/180;
