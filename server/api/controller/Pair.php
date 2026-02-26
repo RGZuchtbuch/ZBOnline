@@ -18,7 +18,7 @@ class Pair
 	// get the whole thing
 	public static function read(Request $request, Response $response, array $args ) : Response {
 		$requester = new Requester( $request );
-		Logger::log( $requester, $request, "Reading pair" );
+		Logger::log( $requester, $request, "Read pair" );
 		$id = $args[ 'id' ] ?? null;
 		if( is_numeric( $id ) ) {
 			$pair = model\Pair::read( $id ); // get pair main data
@@ -76,10 +76,50 @@ class Pair
 	// only pair
 	public static function post( Request $request, Response $response, array $args ) : Response
 	{
+		$requester = new Requester($request);
+		Logger::log( $requester, $request, "Create pair" );
+		return Pair::store( $requester, $request, $response, $args );
+
+//		$id = $args['id'] ?? null; // case of put existing
+//		$pair = $request->getParsedBody();
+//		if ($pair) {
+//			if ( $requester && ($requester->isAdmin() || $requester->isModerating($pair['districtId']) || $requester->hasId($pair['breederId']) ) ) {
+//				Query::begin();
+//                $id = Pair::postPair( $id, $pair, $requester );
+//                if( $id &&
+//                    Pair::postParents( $id, $pair[ 'parents' ] ?? null, $requester ) &&
+//                    Pair::postLay( $id, $pair['lay'], $requester ) &&
+//                    Pair::postBroods( $id, $pair['broods'] ?? null, $requester ) &&
+//                    Pair::postShow($id, $pair['show'] ?? null, $requester ) &&
+//                    Pair::postResult( $id, $pair, $requester )
+//                ) {
+//					Query::commit();
+//					model\Cache::delete('result' ); // clear cache as results changed
+//					model\Cache::delete('report' ); // clear cache as results changed
+//					$response->getBody()->write( json_encode([ 'id' => $id ], JSON_UNESCAPED_SLASHES) );
+//					return $response;
+//				} else {
+//					Query::rollback();
+//					throw new HttpUnauthorizedException( $request, 'Cannot do this');
+//				}
+//			}
+//			throw new HttpUnauthorizedException( $request, 'Cannot do this');
+//		}
+//		throw new HttpBadRequestException( $request, 'Missing body' );
+	}
+
+	// put same as post as all data is replaced for the pair
+	public static function put( Request $request, Response $response, array $args ) : Response	{
+		$requester = new Requester($request);
+		Logger::log( $requester, $request, "Update pair" );
+		return Pair::store( $requester, $request, $response, $args );
+	}
+
+	public static function store( Requester $requester, Request $request, Response $response, array $args ) : Response
+	{
 		$id = $args['id'] ?? null; // case of put existing
 		$pair = $request->getParsedBody();
 		if ($pair) {
-			$requester = new Requester($request);
 			if ( $requester && ($requester->isAdmin() || $requester->isModerating($pair['districtId']) || $requester->hasId($pair['breederId']) ) ) {
 				Query::begin();
                 $id = Pair::postPair( $id, $pair, $requester );
@@ -105,20 +145,16 @@ class Pair
 		throw new HttpBadRequestException( $request, 'Missing body' );
 	}
 
-	// put same as post as all data is replaced for the pair
-	public static function put( Request $request, Response $response, array $args ) : Response	{
-		return Pair::post( $request, $response, $args );
-	}
-
 
 	// delete the whole struct
 	public static function delete( Request $request, Response $response, array $args ) : Response
 	{
+		$requester = new Requester($request);
+		Logger::log( $requester, $request, "Deleting pair" );
 		$id = $args['id'] ?? null;
 		if (is_numeric($id)) {
 			$pair = model\Pair::read( $id );
 			if( $pair ) {
-				$requester = new Requester($request);
 				if ($requester && ($requester->isAdmin() || $requester->isModerating($pair['districtId']) || $requester->hasId($pair['breederId']))) {
 					Query::begin();
 					model\Cache::delete('result' ); // clear cache as results changed

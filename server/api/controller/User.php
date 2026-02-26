@@ -145,7 +145,7 @@ class User
 							if( $tokenEmail ) {
 								$success = model\User::setPassword( $tokenEmail, $password );
 								if ($success) {
-									Logger::log( null, null, "Login reset ok, ".$tokenEmail );
+									Logger::log( null, null, "Login reset, ok, ".$tokenEmail );
 									$user = model\User::getByEmail($tokenEmail);
 									if ($user) { // add additional info
 										$user['fullname'] = $user['firstname'] . ' ' . ($user['infix'] ? $user['infix'] . ' ' : '') . $user['lastname'];
@@ -155,7 +155,7 @@ class User
 											$response->getBody()->write(json_encode(['token' => $token], JSON_UNESCAPED_SLASHES));
 											return $response;
 										}
-										Logger::log( null, null, "Login reset error for ".$tokenEmail );
+										Logger::log( null, null, "Login reset, error for ".$tokenEmail );
 										throw new HttpInternalServerErrorException( $request, 'could not create login token');
 									}
 								}
