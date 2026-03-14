@@ -4,6 +4,7 @@ namespace App\controller;
 
 use App\model;
 use App\model\Requester;
+use App\util\Logger;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpBadRequestException;
@@ -37,10 +38,11 @@ class Breeder // is user
 	}
 
 	public static function post( Request $request, Response $response, array $args ) : Response {
+		$requester = new Requester($request);
+		Logger::log( $requester, $request, "Create breeder" );
 		$body = $request->getParsedBody();
 		$districtId = $body[ 'districtId' ] ?? null;
 		if( $districtId ) {
-			$requester = new Requester( $request );
 			if ( $requester->isAdmin() || $requester->isModerating( $districtId ) ) { //admin or the moderator
 				$id = model\Breeder::create( $body['member'], $body['firstname'], $body['infix'], $body['lastname'], $body['email'], $body['districtId'], $body['club'], $body['start'], $body['end'], $body['active'], $body['info'], $requester->getId());
 				if ($id) {
@@ -55,11 +57,12 @@ class Breeder // is user
 	}
 
 	public static function put( Request $request, Response $response, array $args ) : Response {
+		$requester = new Requester($request);
+		Logger::log( $requester, $request, "Update breeder" );
 		$id = $args[ 'id' ] ?? null;
 		if( is_numeric( $id ) ) {
 			$body = $request->getParsedBody();
 			$districtId = $body['districtId'] ?? null;
-			$requester = new Requester( $request );
 			if( $requester->isAdmin() || $requester->isModerating( $districtId ) ) { //admin of the moderator
 				$success = model\Breeder::update($id, $body['member'], $body['firstname'], $body['infix'], $body['lastname'], $body['email'], $body['club'], $body['start'], $body['end'], $body['active'], $body['info'], $requester->getId());
 				if ($success) {
@@ -75,12 +78,13 @@ class Breeder // is user
 
 	public static function delete( Request $request, Response $response, array $args ) : Response {
 		// delete if no results/pairs or is moderator or admin
+		$requester = new Requester($request);
+		Logger::log( $requester, $request, "Delete breeder" );
 		$id = $args[ 'id' ] ?? null;
 		if( is_numeric( $id ) ) {
 			$breeder = model\Breeder::get($id);
 			if( $breeder ) {
 				$districtId = $breeder[ 'districtId' ] ?? null;
-				$requester = new Requester( $request );
 				if( ( $requester->isAdmin() || $requester->isModerating( $districtId ) ) && ! $requester->hasId( $id ) ) { //admin or moderator and not self delete
 					// check for existing pairs, then I cannot delete as its in the book
 					$pairs = model\Breeder::getPairs( $id ); // check if has pairs

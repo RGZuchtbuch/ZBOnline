@@ -97,7 +97,7 @@
 
 
 		{#if ! edit}
-			<p class='px-16 py-2'>
+			<p class='px-4 md:px-16  py-2'>
 				{@html article.html}
 			</p>
 		{/if}

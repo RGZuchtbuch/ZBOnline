@@ -6,15 +6,15 @@
 
 </script>
 
-<section class='px-1 md:px-16'>
+<section class=''>
 	{#if article}
-		<div class='flex flex-row items-center justify-end gap-x-2 p-2 text-xs italic'>
+		<div class='flex flex-row items-center justify-end gap-x-2 p-2 text-3xs italic'>
 			{article.author}, {article.modified}
 		</div>
 
-		<p class=''>
+		<div class='px-2 md:px-16'>
 			{@html article.html}
-		</p>
+		</div>
 	{/if}
 </section>
 

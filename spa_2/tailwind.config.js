@@ -25,6 +25,10 @@ export default {
         rgz: [ 'Nunito Sans', 'sans-serif' ],
         ///*    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; */
       },
+      fontSize: {
+        '2xs': '0.625rem',
+        '3xs': '0.5rem',
+      },
       spacing: {
         '104': '26rem',
         '112': '28rem',

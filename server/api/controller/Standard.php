@@ -12,7 +12,7 @@ class Standard
 
 	public static function get( Request $request, Response $response, array $args ) : Response { // get whole standard
 
-		Logger::log( null, $request, "Standard" );
+		Logger::log( null, $request, "Standard" ); // indicated site loads
 
 		$json = model\Cache::get( 'standard', $request->getUri()->getPath(), $request->getUri()->getQuery() );
 		if( $json ) { // in cache

@@ -102,14 +102,16 @@ export function toRing( value ) { // returns object for ring
 			}
 		}
 		if( ring ) {
-			ring.name = `${ring.country} ${ring.year % 100} ${ring.code} ${ring.number}`;
+//			ring.name = `${ring.country} ${ring.year % 100} ${ring.code} ${ring.number}`;
+			ring.name = toRingString( ring );
 			return ring;
 		}
 	}
 	return null;
 }
 export function toRingString( ring ) { // ring object to string
-	return ring.country+' '+ (ring.year%100) +' '+ring.code+' '+ring.number;
+//	return ring.country+' '+ (ring.year%100) +' '+ring.code+' '+ring.number;
+	return ring.country+' '+String( ring.year % 100 ).padStart( 2, '0' )+' '+ring.code+' '+ring.number;
 }
 export function toString( value ) {
 	return value !== undefined && value !== null ? String( value ) : null;

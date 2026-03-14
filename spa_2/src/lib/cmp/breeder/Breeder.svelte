@@ -4,7 +4,7 @@
 
 </script>
 
-<section class='mt-32 flex flex-col items-center'>
+<section class='mt-16 px-2 md:px-16 flex flex-col items-center'>
 	<h2>Hallo {breeder.firstname}, wilkommen in dein Zuchtbuch</h2>
 	<p>Du kannst ier deine Stämme verwalten und deine Mitgliedsdaten einsehen.</p>
 	<ul class=''>

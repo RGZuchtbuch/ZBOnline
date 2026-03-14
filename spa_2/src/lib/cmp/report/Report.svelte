@@ -112,7 +112,7 @@
 
 					<div class='my-2 p-1 bg-slate-200 font-bold text-center'>Brutleistung Geflügel</div>
 					<div class='flex flex-row flex-wrap justify-evenly'>
-						<Trend title='Eingelegte Eier' data={trend.years} unit='broodLayerEggs' factor={100} color={{fill:'#CFD', border:'#4A5'}} />
+						<Trend title='Eingelegte Eier' data={trend.years} unit='broodLayerEggs' factor={1.0} color={{fill:'#CFD', border:'#4A5'}} />
 						<Trend title='Befruchtet %'    data={trend.years} unit='broodLayerFertile' scale={{min:0, max:100}} factor={100} color={{fill:'#CFD', border:'#4A5'}} />
 						<Trend title='Geschlüpft %'    data={trend.years} unit='broodLayerHatched' scale={{min:0, max:100}} factor={100} color={{fill:'#CFD', border:'#4A5'}} />
 					</div>

@@ -29,22 +29,18 @@
 	// should the pair hold the parentspair object
 	async function onRingBlur() {
 		let ring = toRing( parent.ring ); // decode input to ring object
-		console.log( 'NewRing', ring );
 		if( ring ) { // valid ring
 			if( pair.sectionId === cfg.pigeons ) { // pigeons
 				let pairs = await model.Pair.query( { chick:ring.name } );
-				console.log( 'Pairs', pairs );
 				if( pairs && pairs.length > 0 ) {
 					parentPair = pairs[0];
 					parent.parentsPairId = parentPair.id;
-					console.log( 'Pigeons, found parents', ring.name, parentPair );
 				} else {
 					parentPair = null;
 					parent.parentsPairId = null;
-					console.log( 'Pigeons, not found parents', ring.name );
 				}
 			} else { // layers
-				if( ring.year !== ringYear ) {
+				if( ring.year !== ringYear ) { // avoid re-requesting list of possible parents
 					parentPairs = await model.Pair.query({breeder: pair.breeder.id, breed:pair.breedId, year:ring.year});
 
 					if( ! parentPairs.find( pair => pair.id === parent.parentsPairId ) ) { // not in list
@@ -64,15 +60,14 @@
 
 	$effect( () => {
 		if( pair.sectionId === cfg.pigeons ) {
-
+			// parentPair already set by onBlur !
 		} else {
 			parentPair = parentPairs.find( pair => pair.id === parent.parentsPairId );
 		}
 		parentLayGrade = parentPair && parentPair.lay ? aab.lay(parentPair.lay.eggs, parentPair.lay.eggsShould) : null;
 		parentBroodGrade = parentPair ?
-			pair.sectionId === cfg.pigeon
+			pair.sectionId === cfg.pigeons
 				? aab.brood.pigeon(pair.breed.broodGroup, parentPair.brood.eggs/2, parentPair.brood.hatched )
-//				? aab.brood.pigeon(pair.breed.broodGroup, parentPair.result.broodEggs/2, parentPair.result.broodHatched )
 				: aab.brood.layer(parentPair.brood.eggs, parentPair.brood.hatched)
 			: null;
 		parentShowGrade = parentPair ? parentPair.show.score : null;
