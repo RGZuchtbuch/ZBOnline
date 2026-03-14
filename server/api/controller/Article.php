@@ -23,7 +23,7 @@ class Article
 
 	public static function get( Request $request, Response $response, array $args ) : Response {
 		$requester = new Requester( $request );
-		Logger::log( $requester, $request, "Article" );
+		//Logger::log( $requester, $request, "Article" );
 
 		$id = $args[ 'id' ] ?? null;
 		if( $id ) { // specific article
@@ -41,6 +41,7 @@ class Article
 
 	public static function post( Request $request, Response $response, array $args ) : Response {
 		$requester = new Requester( $request );
+		Logger::log( $requester, $request, "Create article" );
 		if( $requester->isAdmin() ) {
 			$article = $request->getParsedBody();
 			if( $article ) {
@@ -58,6 +59,7 @@ class Article
 
 	public static function put( Request $request, Response $response, array $args ) : Response {
 		$requester = new Requester( $request );
+		Logger::log( $requester, $request, "Update article" );
 		if( $requester->isAdmin() ) {
 			$id = $args[ 'id' ] ?? null;
 			$article = $request->getParsedBody();
@@ -76,6 +78,7 @@ class Article
 
 	public static function delete( Request $request, Response $response, array $args ) : Response {
 		$requester = new Requester( $request );
+		Logger::log( $requester, $request, "Delete article" );
 		if( $requester->isAdmin() ) {
 			$id = $args[ 'id' ] ?? null;
 			if( $id && is_numeric( $id ) ) {

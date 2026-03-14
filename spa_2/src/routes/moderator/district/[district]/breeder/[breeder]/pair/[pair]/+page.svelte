@@ -11,7 +11,6 @@
 	let loaded = $state( false );
 
 	$effect( async () => {
-		console.log('Try lopad' )
 		if( page.url ) await loadPair( +page.params.pair );
 	})
 

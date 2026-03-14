@@ -4,6 +4,7 @@ namespace App\controller;
 
 use App\model;
 use App\model\Requester;
+use App\util\Logger;
 use App\util\ToolBox;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -56,6 +57,7 @@ class Section
 
 	public static function put( Request $request, Response $response, array $args ) : Response {
 		$requester = new Requester( $request );
+		Logger::log( $requester, $request, "Updating result" );
 		if( $requester->isAdmin() ) {
 			$id = $args[ 'id' ] ?? null;
 			$body = $request->getParsedBody();

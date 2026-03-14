@@ -34,7 +34,7 @@
 	}
 
 	function setHeader() {
-		ctx.title = 'Willkommen im Rassegeflügel-Zuchtbuch';
+		ctx.title = 'Willkommen im RG-Zuchtbuch';
 		ctx.submenu = [];
 		ctx.crumbs = [
 			{name: '.'}

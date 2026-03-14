@@ -36,7 +36,7 @@ class Report
 		$report = null;
 		//$cached = null;
 		//$rows = null;
-		Logger::log( $requester, $request, "Report" );
+		//Logger::log( $requester, $request, "Report" );
 
 		$cached = model\Cache::get('report', $request->getUri()->getPath(), $request->getUri()->getQuery());
 
