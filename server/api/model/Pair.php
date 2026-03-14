@@ -160,6 +160,7 @@ class Pair {
 			LEFT JOIN result     ON result.pairId = pair.id
 			LEFT JOIN breed      ON breed.id = pair.breedId
 			WHERE pair_chick.ring=:chick
+			ORDER BY pair_chick.ringed DESC # to get last one first as we take one only
 		');
 		return Query::select($stmt, $args); // returns pair of null
 	}
