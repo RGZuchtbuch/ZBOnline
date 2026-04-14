@@ -1,64 +1,58 @@
 <script>
-	import { page } from '$app/state';
-	import { ctx } from '$lib/js/store.svelte.js';
-	import {selectName} from '$lib/js/tools.js';
+	import Form, { NumberInput, Select } from '$lib/cmp/form/Form.svelte';
+	import { fullName } from '$lib/js/tools.js';
 
-	let {breeders, district} = $props();
+	let breederId = null;
+
+	let breeders = $state( [
+		{ id:1, firstname:'Eelco', infix:null, lastname:'Jannink', results: [ {id:1} ] },
+		{ id:2, firstname:'Jan', infix:null, lastname:'Bartels', results: [ {id:2} ] }
+	] );
 
 
-	function onSortByNumber() {
-		breeders.sort( (a, b) => a.member - b.member );
-	}
-	function onSortByName() {
-		breeders.sort( (a, b) => (''+selectName( a )).localeCompare( selectName(b) ) );
-	}
-	function onSortByClub() {
-		breeders.sort( (a, b) => (''+a.club).localeCompare( b.club ) );
-	}
-	function onSortByStart() {
-		breeders.sort( (a, b) => (''+a.start).localeCompare( b.start ) );
-	}
-	function onSortByEnd() {
-		breeders.sort( (a, b) => (''+a.end).localeCompare( b.end ) );
-	}
-	function onSortByActive() {
-		breeders.sort( (a, b) => (''+a.active).localeCompare( b.active ) );
-	}
 
+	function addResult( breeder ) {
+		return ( event ) => {
+			breeder.results.push( {id: 3} );
+		}
+	}
 </script>
 
+<main class='p-4'>
+	<section>
 
-<!--div class='flex flex-row justify-end gap-x-4'>
-	<a href={`${page.url.href}/0`}>[+]</a>
-</div-->
+		{#each breeders as breeder}
+			<details open={ true }>
+				<summary class='py-1 flex flex-row justify-between'><span>{fullName( breeder ) }</span> <button type='button' onclick={addResult( breeder )}> [ + ]</button></summary>
+				{#each breeder.results as result}
+					Take layout from verband gesamt
+					<Form class='px-4 flex flex-row gap-x-2'>
+						<Select class='w-24' label='Sparte' value='1' ><option>A</option></Select>
+						<Select class='w-48' label='Rasse' value='1' ><option>A</option></Select>
+						<Select class='w-48' label='Farbe' value='1' ><option>A</option></Select>
 
-<h2 class='text-center'>Welcher Züchter hat gemeldet</h2>
+						<span class='w-4'></span>
+						<NumberInput class='w-12' label='Eier/J' value='1' />
+						<NumberInput class='w-12' label='Gewicht' value='1' />
+						<span class='w-4'></span>
+						<NumberInput class='w-12' label='Eingelegt' value='1' />
+						<NumberInput class='w-12' label='Befruchtet' value='1' />
+						<NumberInput class='w-12' label='Geschlüpft' value='1' />
+						<span class='w-4'></span>
+						<NumberInput class='w-12' label='Tiere' value='1' />
+						<NumberInput class='w-12' label='Note' value='1' />
+					</Form>
+				{/each}
+			</details>
+		{/each}
+a		<Select value={breederId} >
+			{#each breeders as breeder}
+				<option value={breeder} >{fullName( breeder ) }</option>
+	        {/each}
+		</Select>
+	</section>
 
-<header class='flex flex-row border-header bg-header text-header section items-end px-2 py-0 pl-6 gap-x-2 screen:sticky screen:top-1'>
-	<span class='w-12' title='Sortieren' role='button' onclick={onSortByNumber}>ZbNr</span>
-	<span class='w-80' title='Sortieren' role='button' onclick={onSortByName}>Name</span>
-	<span class='w-48' title='Sortieren' role='button' onclick={onSortByClub}>Ortverein</span>
-	<span class='w-12' title='Sortieren' role='button' onclick={onSortByActive}>Online</span>
-</header>
 
-{#each breeders as breeder }
-	<a class='flex flex-row' href={page.url.pathname+'/'+breeder.id+'/pair?year='+ctx.year}>
-		<span class='w-12'> {breeder.member} </span>
-		<span class='w-80'> {breeder.lastname}, {breeder.firstname} {breeder.infix} </span>
-		<span class='w-48'> {breeder.club} </span>
-		<span class='w-12 text-green-600'> {breeder.active?'✓':'.'} </span>
-	</a>
-{/each}
+</main>
 
-<style>
-    h3 {
-        @apply text-center text-xl bg-teal-200 font-bold sticky top-0;
-    }
-    p {
-        @apply text-center italic;
-    }
-    a {
-        @apply border-b flex flex-row p-2 pl-6 gap-x-2;
-    }
-
-</style>
+List of breeders/breed/color results, add/edit breed / color in placee

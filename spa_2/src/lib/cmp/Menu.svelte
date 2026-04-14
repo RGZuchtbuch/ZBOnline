@@ -73,7 +73,8 @@
 					{#each wideMenu.options as option, i}
 						{#if i>0} • {/if}
 						{#if page.url.pathname.startsWith( option.href ) }
-							<a class='underline' href={ctx.menustate[ option.href ]} title={'Zum '+option.name}>{option.name}</a>
+							<a class='underline' href={ option.href } title={'Zum '+option.name}>{option.name}</a>
+							<!--a-- class='underline' href={ctx.menustate[ option.href ]} title={'Zum '+option.name}>{option.name}</a-->
 						{:else}
 							<a href={ctx.menustate[ option.href ]} title={'Zum '+option.name}>{option.name}</a>
 						{/if}
@@ -85,7 +86,8 @@
 						{#each wideMenu.roles as role, i}
 							{#if i>0} • {/if}
 							{#if page.url.pathname.startsWith( role.href ) }
-								<a class='underline font-bold' href={ctx.menustate[ role.href ]} title={'Zum '+role.name}>{role.name}</a>
+								<a class='underline font-bold' href={ role.href } title={'Zum '+role.name}>{role.name}</a>
+								<!--a-- class='underline font-bold' href={ctx.menustate[ role.href ]} title={'Zum '+role.name}>{role.name}</a-->
 							{:else}
 								<a href={ctx.menustate[ role.href ]} title={'Zum '+role.name}>{role.name}</a>
 							{/if}

@@ -26,8 +26,15 @@
 		ctx.menustate[ '/moderator' ] = page.url.href;
 		ctx.title = `Verband ${ctx.district.name}, eingegebene Leistungen`;
 		ctx.submenu = [
+			//{name: 'Gesamt', href:`/moderator/district/${ctx.district.id}/result/district?year=${ctx.year}`},
+			//{name: 'Stämme', href: `/moderator/district/${ctx.district.id}/result/breeder?year=${ctx.year}`},
+
+
 			{name: 'Gesamt', href:`/moderator/district/${ctx.district.id}/result/district?year=${ctx.year}`},
-			{name: 'Stämme', href: `/moderator/district/${ctx.district.id}/result/breeder?year=${ctx.year}`},
+			{name: 'Züchter', href: `/moderator/district/${ctx.district.id}/result/breeders?year=${ctx.year}`},
+			{name: 'Stamme', href: `/moderator/district/${ctx.district.id}/result/pairs?year=${ctx.year}`},
+			//{name: 'Stamme', href: `/moderator/district/${ctx.district.id}/result/breeder?year=${ctx.year}`},
+
 		];
 		ctx.crumbs = [
 			//{name: 'Start', href: '/'},

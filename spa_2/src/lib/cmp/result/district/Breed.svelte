@@ -40,7 +40,7 @@
 {#if breed}
     <div id={breed.id} class='flex flex-row my-1 p-1 bg-slate-100 bg-opacity-60 gap-x-1' title='Wähle zum Eingeben'>
         <div class='grow cursor-pointer ml-2 whitespace-nowrap' role='button' class:hasResults onclick={onOpen}>
-            <span class='text-xl'>{breed.name}</span>
+            <span class='text-xl' title={breed.id}>{breed.name}</span>
         </div>
 
         {#if open }

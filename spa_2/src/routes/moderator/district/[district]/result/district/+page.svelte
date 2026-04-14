@@ -41,7 +41,7 @@
 
 	function setHeader() {
 		ctx.menustate[ '/moderator' ] = page.url.href;
-		ctx.title = `Verband ${ctx.district.name}, Daten eingeben`;
+		ctx.title = `Verband ${ctx.district.name}, Gesamt Daten eingeben ${ctx.year}`;
 		ctx.submenu = [
 //			{name: 'Eingaben', href: `/moderator/district/${ctx.district.id}/result?year=${ctx.year}`},
 		];
@@ -51,7 +51,7 @@
 			{name: 'Verbände', href: '/moderator/district'},
 			{name: 'Verband', href:`/moderator/district/${ctx.district.id}`},
 			{name: 'Leistungen', href: `/moderator/district/${ctx.district.id}/result?year=${ctx.year}`},
-			{name: 'Verbandsmeldungen'},
+			{name: 'Gesamt'},
 		];
 	}
 

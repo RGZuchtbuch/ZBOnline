@@ -88,7 +88,14 @@
 
 <section class='w-full flex flex-row gap-x-2 items-center'>
 	<TextInput class='w-8 px-0 border-0' label={i===0?' #':null} value={i+1} disabled />
-	<TextInput class='w-12' label={i===0?'♂.♀':null} value={parent.sex} disabled />
+
+	{#if pair.sectionId === cfg.pigeons}
+		<TextInput class='w-12' label={i===0?'♂.♀':null} value={parent.sex} disabled />
+	{:else}
+		<Select class='w-16' label={i===0?'♂.♀':null}  bind:value={parent.sex} >
+			<option value='1.0'>1.0</option><option value='0.1'>0.1</option>
+		</Select>
+	{/if}
 	<RingInput label={i===0?'Ring':null} bind:value={parent.ring} onblur={onRingBlur} validator={validate.ring}/>
 	<NumberInput class='w-16' label={i===0?'Bewertung':null} bind:value={parent.score} step={0.1} validator={validate.score}/>
 	<div class='w-4'></div>
@@ -120,3 +127,6 @@
 	{/if}
 
 </section>
+
+<style>
+</style>

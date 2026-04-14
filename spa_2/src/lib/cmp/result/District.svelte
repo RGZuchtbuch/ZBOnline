@@ -1,10 +1,12 @@
 <script>
+	import { onMount } from 'svelte';
 	import { fade, slide } from 'svelte/transition';
-	import {goto, invalidate} from '$app/navigation';
+	import { goto, invalidate} from '$app/navigation';
 	import { page } from '$app/state';
 	import { cfg, ctx } from '$lib/js/store.svelte.js';
 
 	import { Select } from '$lib/cmp/form/Form.svelte';
+	import { TextInput } from '$lib/cmp/form/Form.svelte';
 	import Breed from './district/Breed.svelte';
 
 	let { args, results=$bindable() } = $props();
@@ -13,6 +15,20 @@
 
 	let years = []; // create years array for select
 	for( let year=+( new Date().getFullYear() )+1; year>=1980; year-- ) years.push( year ); // Todo, move to tools as function ?
+
+	let focus_breed_element = null;
+
+	onMount( () => {
+		console.log( 'Breed', args.breed );
+		if( args.breed ) {
+			const focus = document.getElementById( args.breed );
+			if( focus ) {
+				console.log('Found', focus);
+				focus.scrollIntoView( {behavior: 'smooth'} );
+			}
+		}
+	})
+
 
 	function onYearChange( event ) {
 		const year = event.target.value;
@@ -39,16 +55,9 @@
 </script>
 
 {#if ctx.district && args }
-	<div class='flex flex-row border-header bg-header text-header text-xl p-2 pt-1 gap-x-2 justify-center sticky top-1' in:fade>
+	<!--div class='flex flex-row border-header bg-header text-header text-xl p-2 pt-1 gap-x-2 justify-center sticky top-1' in:fade-->
+	<div class='flex flex-row border-header bg-header text-header text-xl p-2 pt-1 gap-x-2 justify-center' in:fade>
 		<span class='pt-5 font-bold'>Leistungen eingeben für </span>
-		<div class='flex flex-col'>
-			<span class='text-xs pl-2'>Jahr</span>
-			<select class='border-header bg-white' label='Jahr' value={ctx.year} onchange={onYearChange}>
-				{#each years as year}
-					<option value={year}>{year}</option>
-				{/each}
-			</select>
-		</div>
 
 		<div class='flex flex-col'>
 			<span class='text-xs pl-2'>Sparte</span>
@@ -68,6 +77,18 @@
 				{/each}
 			</select>
 		</div>
+
+		<span class='w-4'/>
+		<!--div class='flex flex-col'>
+			<span class='text-xs pl-2'>Jahr</span>
+			<TextInput class='w-20' value={ctx.year} align='right' disabled/>
+			<select class='border-header bg-white' label='Jahr' value={ctx.year} onchange={onYearChange}>
+				{#each years as year}
+					<option value={year}>{year}</option>
+				{/each}
+			</select>
+		</div-->
+
 	</div>
 
 	<div class ='flex flex-row' in:fade>
@@ -78,8 +99,8 @@
 {/if}
 
 {#if results}
-	<div>
-		{#each results as breed}
+	<div >
+		{#each results as breed, i}
 			{#key breed}
 				<Breed district={ctx.district} year={args.year} sectionId={args.section} group={args.group} {breed} />
 			{/key}

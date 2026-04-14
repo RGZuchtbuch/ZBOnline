@@ -197,7 +197,7 @@
                                             <div class='w-12 th'>Paare</div>
                                             <div class='w-12 th'>Bruten</div>
                                             <div class='w-12 th'>Schl %</div>
-                                            <div class='w-12 th'>Kü/Pa</div>
+                                            <div class='w-12 th'>⍉/Pa</div>
                                         {:else}
                                             <div class='w-12 th'>Eier</div>
                                             <div class='w-12 th'>Befr %</div>
@@ -250,7 +250,7 @@
                                             <div class='w-12 th'>Paare</div>
                                             <div class='w-12 th'>Bruten</div>
                                             <div class='w-12 th'>Schl %</div>
-                                            <div class='w-12 th'>Kü/Pa</div>
+                                            <div class='w-12 th'>⍉/Pa</div>
                                         {:else}
                                             <div class='w-12 th' title='Gesamtzahl eingelegten Eier'>Eier</div>
                                             <div class='w-12 th' title='Anteil befruchteten Eier'>Befr %</div>

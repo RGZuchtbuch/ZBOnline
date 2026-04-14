@@ -29,6 +29,8 @@
 		ctx.title = `Verband ${ctx.district.name}, Züchtermeldungen`;
 		ctx.submenu = [
 			{name: 'Gesamt', href:`/admin/district/${ctx.district.id}/result/district?year=${ctx.year}`},
+			//{name: 'Züchter', href: `/admin/district/${ctx.district.id}/result/breeders?year=${ctx.year}`},
+			//{name: 'Stamme', href: `/admin/district/${ctx.district.id}/result/pairs?year=${ctx.year}`},
 			{name: 'Stamme', href: `/admin/district/${ctx.district.id}/result/breeder?year=${ctx.year}`},
 		];
 		ctx.crumbs = [

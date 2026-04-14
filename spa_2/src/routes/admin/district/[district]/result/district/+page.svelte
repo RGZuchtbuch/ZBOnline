@@ -52,7 +52,7 @@
 			{name: 'Verbände', href: '/admin/district'},
 			{name: 'Verband', href:`/admin/district/${ctx.district.id}`},
 			{name: 'Leistungen', href: `/admin/district/${ctx.district.id}/result?year=${ctx.year}`},
-			{name: 'Verbandsmeldungen'},
+			{name: 'Gesamt'},
 		];
 	}
 

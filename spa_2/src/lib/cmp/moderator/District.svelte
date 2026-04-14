@@ -13,7 +13,7 @@
 		</h3>
 
 		<ol class='ml-16'>
-			<li><a href={`${page.url.pathname}/result`}>Leistungen</a></li>
+			<li><a href={`${page.url.pathname}/result`}>Leistungen übersicht</a></li>
 			<li><a href={`${page.url.pathname}/breeder`}>Züchter</a></li>
 		</ol>
 	</section>

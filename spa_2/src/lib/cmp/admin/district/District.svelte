@@ -52,7 +52,8 @@
 		</div>
 
 		<span class='w-16 text-center'>
-			<a class='px-2 border-button bg-button text-button text-center' href={`/admin/district/${district.id}`} title='Verband verwalten als Obmann'> ⚙ </a>
+			<a class='px-2 border-button bg-button text-button text-center' href={`/moderator/district/${district.id}`} title='Verband verwalten als Obmann'> ⚙ </a>
+			<!--a class='px-2 border-button bg-button text-button text-center' href={`/admin/district/${district.id}`} title='Verband verwalten als Obmann'> ⚙ </a-->
 		</span>
 
 		<div class='w-16 text-center'>

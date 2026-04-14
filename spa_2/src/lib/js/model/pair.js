@@ -19,11 +19,11 @@ export default class Pair {
 			accepted: true, // by moderator
 		}
 
-		for (let i = pair.parents.length; i < 2; i++) {
+		for (let i = pair.parents.length; i < ( pair.sectionId === cfg.pigeons ? 2 : 4 ); i++) {
 			pair.parents.push( Pair.newParent( pair ) );
 		}
 
-		for (let i = pair.broods.length; i < 3; i++) { // minimum of 4
+		for (let i = pair.broods.length; i < 2; i++) { // minimum of 4
 			pair.broods.push( Pair.newBrood(pair) );
 		}
 

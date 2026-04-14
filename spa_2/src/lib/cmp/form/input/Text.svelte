@@ -20,12 +20,14 @@
 
     onMount( () => { // catch input and register validator
         element.addEventListener( 'input', onInput );
-        if( validator ) form.validators.push( validate ); // add this.validate with it's context
+        if( form && validator ) form.validators.push( validate ); // add this.validate with it's context
     });
 
     onDestroy( () => { // remove validator
-        let index = form.validators.indexOf( validate );
-        if( index >= 0 ) form.validators.splice( index, 1 ); // remove this validator;
+        if( form ) { // it seams form is sometimes destroyed before TextInput when disabled
+            let index = form.validators.indexOf(validate);
+            if (index >= 0) form.validators.splice(index, 1); // remove this validator;
+        }
     });
 
 </script>

@@ -99,12 +99,12 @@
 									{#if section.id === 5}
 										<span class='w-12'>Bruten</span>
 										<span class='w-12'>-</span>
-										<span class='w-12'>Küken</span>
-										<span class='w-12'>Kü/Pa</span>
+										<span class='w-12'>Schl #</span>
+										<span class='w-12'>⍉/Paar</span>
 									{:else}
-										<span class='w-12'>Eingel.</span>
-										<span class='w-12'>Befr.</span>
-										<span class='w-12'>Geschl.</span>
+										<span class='w-12'>Eingel #</span>
+										<span class='w-12'>Befr #</span>
+										<span class='w-12'>Schl #</span>
 										<span class='w-12'>-</span>
 									{/if}
 
@@ -127,7 +127,7 @@
 								   class:not-accepted={breed.result && breed.result.pairId && !breed.result.accepted}
 								   href={breed.result.pairId
 									? `${page.url.pathname}/breeder/${breed.result.breeder.id}/pair/${breed.result.pairId}`
-								    : `/moderator/district/6/result/district?year=${breed.result.year}&section=${breed.result.rootSectionId}&breed=${breed.id}&group=${breed.result.group}#${breed.id}` }
+								    : `${page.url.pathname}/district?year=${breed.result.year}&section=${breed.result.rootSectionId}&breed=${breed.id}&group=${breed.result.group}` }
 								>
 									<span class='w-4'></span>
 									<span class='grow'>
@@ -162,7 +162,7 @@
 								    class:not-accepted="{color.result.pairId && !color.result.accepted}"
 								    href={color.result.pairId
 								        ? `${page.url.pathname}/breeder/${color.result.breeder.id}/pair/${color.result.pairId}`
-								        : `${page.url.pathname}/district?year=${color.result.year}&section=${color.result.rootSectionId}&breed=${breed.id}&color=${color.id}&group=${color.result.group}#${breed.id}` }
+								        : `${page.url.pathname}/district?year=${color.result.year}&section=${color.result.rootSectionId}&breed=${breed.id}&color=${color.id}&group=${color.result.group}` }
 								>
 									<span class='w-4'></span>
 									<span class='grow italic'>
