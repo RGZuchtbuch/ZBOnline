@@ -1,15 +1,15 @@
 <script>
-import { onMount } from 'svelte';
-import { page } from '$app/state';
-import { fade } from 'svelte/transition';
-import { cfg, ctx, dirty } from '$lib/js/store.svelte.js';
-import model from '$lib/js/model.js';
+	import { onMount } from 'svelte';
+	import { page } from '$app/state';
+	import { fade } from 'svelte/transition';
+	import { cfg, ctx, dirty } from '$lib/js/store.svelte.js';
+	import model from '$lib/js/model.js';
 
-import Breeders from '$lib/cmp/result/Breeder.svelte'
+	import Pairs from '$lib/cmp/result/Pairs.svelte'
 
-let mounted = $state( false );
+	let mounted = $state( false );
 
-let breeders = $state( [] ); // empty pairs
+	let pairs = $state( [] ); // empty pairs
 
 //	let args = $derived( getArgs( page ) )
 
@@ -22,18 +22,18 @@ let breeders = $state( [] ); // empty pairs
 		if( ctx.district && page.url ) setHeader();
 	})
 
-	async function loadBreeders( districtId ) {
-		ctx.breeders = null;
-		ctx.breeders = await model.Breeder.query( { district:districtId } );
-	}
+//	async function loadBreeders( districtId ) {
+//		ctx.breeders = null;
+//		ctx.breeders = await model.Breeder.query( { district:districtId } );
+//	}
 
 	async function loadBreedersPairs( districtId, year ) {
-		breeders = await model.Result.loadBreedersResults( districtId, year );
+		pairs = await model.Pair.query( { district:districtId, year:year } );
 	}
 
 	function setHeader() {
 		ctx.menustate[ '/moderator' ] = page.url.href;
-		ctx.title = `Verband ${ctx.district.short}, Leistungen, Zuchten pro Züchter`;
+		ctx.title = `Verband ${ctx.district.short}, Leistungen, Stämme pro Züchter`;
 		ctx.submenu = [
 //			{name: 'Eingaben', href: `/moderator/district/${ctx.district.id}/result?year=${ctx.year}`},
 		];
@@ -43,7 +43,7 @@ let breeders = $state( [] ); // empty pairs
 			{name: 'Verbände', href:`/moderator/district`},
 			{name: 'Verband', href:`/moderator/district/${ctx.district.id}`},
 			{name: 'Leistungen', href: `/moderator/district/${ctx.district.id}/result?year=${ctx.year}`},
-			{name: 'Züchter'},
+			{name: 'Stämme'},
 		];
 	}
 
@@ -52,8 +52,8 @@ let breeders = $state( [] ); // empty pairs
 </script>
 
 
-{#if ctx.district && breeders }
+{#if ctx.district && pairs}
 	<main in:fade={{duration:cfg.fadeIn}}>
-		<Breeders breeders={ breeders } district={ctx.district} />
+		<Pairs pairs={pairs} district={ctx.district} />
 	</main>
 {/if}

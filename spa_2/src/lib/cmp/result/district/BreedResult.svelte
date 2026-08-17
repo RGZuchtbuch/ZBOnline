@@ -36,6 +36,7 @@
 
     async function onSubmit( event ) {
         console.log( 'Submit color result' );
+        dirty.results++; // inc to trigger
         //await invalidate( 'results' ); // make results page reload data
         if( data.breeders ) { // valid entry
             result.brood.eggs = result.brood.broods * 2; // 2 eggs per brood expected
@@ -47,7 +48,6 @@
                 return ok;
             }
         }
-        dirty.results++; // inc to trigger
     }
 
 </script>

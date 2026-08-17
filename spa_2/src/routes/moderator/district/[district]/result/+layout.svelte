@@ -15,7 +15,7 @@
 		// 	// url.searchParams.set( 'year', year );
 		// 	//goto( url.href );
 		// }
-		ctx.year = query.has( 'year' ) ? +query.get( 'year' ) : CURRENT_INPUT_YEAR;
+		ctx.year = query.has( 'year' ) ? +query.get( 'year' ) : ctx.year ? ctx.year : CURRENT_INPUT_YEAR;
 		ctx.district = ctx.federation.districts[ page.params.district ];
 	});
 

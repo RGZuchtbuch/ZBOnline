@@ -3,11 +3,11 @@ import model from '$lib/js/model.js';
 import {cfg} from '$lib/js/store.svelte.js';
 
 export default class Pair {
-	static async new( breeder ) {
+	static async new( breeder, year = CURRENT_INPUT_YEAR ) {
 		let pair = {
 			id: 0, breederId: breeder.id, districtId: breeder.districtId,
 //			year: new Date().getFullYear(), group: 'I',
-			year: CURRENT_INPUT_YEAR, group: 'I',
+			year: year, group: 'I',
 			name: null,
 			sectionId: null, breedId: null, colorId: null,
 			paired: null, notes: null,

@@ -13,6 +13,11 @@ export default class Result {
 		return response.results; // should have for breed and for colors
 	}
 
+	static async loadBreedersResults( districtId, year ) {
+		const response = await api.get( `/api/2/result/breeder`, { district:districtId, year:year } );
+		return response.results; // all districts breeders with results per breed/color
+	}
+
 	static async save( result ){
 		if( result.id > 0 ) { // existing
 			const data = await api.put( `/api/2/result/${result.id}`, result );

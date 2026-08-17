@@ -8,18 +8,18 @@
 
 	import Breeders from '$lib/cmp/moderator/district/Breeders.svelte';
 
-	$effect( async () => {
-		const districtId = +page.params.district;
-		if( dirty.breeders && page.url ) await loadBreeders( districtId );
-	})
+//	$effect( async () => {
+//		const districtId = +page.params.district;
+//		if( dirty.breeders && page.url ) await loadBreeders( districtId );
+//	}
 
 	$effect( async () => {
 		if( ctx.district && ctx.breeders ) setHeader();
 	})
 
-	async function loadBreeders( districtId ) {
-		ctx.breeders = await model.Breeder.query( { district:districtId } );
-	}
+//	async function loadBreeders( districtId ) {
+//		ctx.breeders = await model.Breeder.query( { district:districtId } );
+//	}
 
 	function setHeader() {
 		ctx.menustate[ '/moderator' ] = page.url.href;

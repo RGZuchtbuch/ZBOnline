@@ -8,7 +8,8 @@
 
 	let mounted = $state( false );
 
-	let district = ctx.federation.districts[ +page.params.district ]; // ctx.district may not be known yet
+	//let district = ctx.federation.districts[ +page.params.district ]; // ctx.district may not be known yet
+//	const district = ctx.district;
 
 	$effect( () => {
 		if( ctx.district ) setHeader();
@@ -16,7 +17,7 @@
 
 	function setHeader() {
 		ctx.menustate[ '/moderator' ] = page.url.href;
-		ctx.title = `Verband ${ctx.district.name}`;
+		ctx.title = `Verband ${ ctx.district.name }`;
 		ctx.submenu = [
 			{name: 'Leistungen', href: `/moderator/district/${ctx.district.id}/result`},
 			{name: 'Züchter', href: `/moderator/district/${ctx.district.id}/breeder`},
@@ -33,7 +34,7 @@
 
 </script>
 
-{#if ctx.district && mounted}
+{#if mounted}
 	<main class='' in:fade={{duration:cfg.fadeIn}}>
 		<District district={ctx.district}/>
 	</main>

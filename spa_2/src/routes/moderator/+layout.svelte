@@ -9,11 +9,11 @@
 	let authorized = $state( ctx.user && ( ctx.user.moderator.length > 0 || ctx.user.admin ) );
 
 	$effect( () => {
-		if( dirty.districts || ctx.federation || ctx.user ) loadDistricts();
+		if( dirty.districts || ctx.federation || ctx.user ) setDistricts();
 	})
 
 
-	function loadDistricts() {
+	function setDistricts() {
 		//dirty.districts = false;
 		let districts = [];
 		if( ctx.federation && ctx.user ) {

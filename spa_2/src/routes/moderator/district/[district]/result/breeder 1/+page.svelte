@@ -9,6 +9,8 @@
 
 	let mounted = $state( false );
 
+//	let args = $derived( getArgs( page ) )
+
 	$effect( async () => {
 		if( dirty.breeders && page.url ) await loadBreeders( +page.params.district );
 	})
@@ -23,16 +25,17 @@
 	}
 
 	function setHeader() {
-		ctx.menustate[ '/admin' ] = page.url.href;
+		ctx.menustate[ '/moderator' ] = page.url.href;
 		ctx.title = `Verband ${ctx.district.short}, Leistungen, Züchter`;
 		ctx.submenu = [
+//			{name: 'Eingaben', href: `/moderator/district/${ctx.district.id}/result?year=${ctx.year}`},
 		];
 		ctx.crumbs = [
 			//{name: 'Start', href: '/'},
-			{name: 'Admin', href: '/admin'},
-			{name: 'Verbände', href:`/admin/district`},
-			{name: 'Verband', href:`/admin/district/${ctx.district.id}`},
-			{name: 'Leistungen', href: `/admin/district/${ctx.district.id}/result?year=${ctx.year}`},
+			{name: 'Obmann', href: '/moderator'},
+			{name: 'Verbände', href:`/moderator/district`},
+			{name: 'Verband', href:`/moderator/district/${ctx.district.id}`},
+			{name: 'Leistungen', href: `/moderator/district/${ctx.district.id}/result?year=${ctx.year}`},
 			{name: 'Züchter'},
 		];
 	}

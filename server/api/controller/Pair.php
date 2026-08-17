@@ -8,6 +8,7 @@ use App\util\Logger;
 use App\util\Query;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Log\NullLogger;
 use Slim\Exception\HttpBadRequestException;
 use Slim\Exception\HttpInternalServerErrorException;
 use Slim\Exception\HttpNotFoundException;
@@ -193,9 +194,9 @@ class Pair
 			$body['accepted'] = 0; // can only be set by mod
 		}
 		if( $id == null ) { //
-			return model\Pair::create($body['breederId'], $body['districtId'], $body['year'], $body['group'], $body['sectionId'], $body['breedId'], $body['colorId'], $body['name'], $body['paired'], $body['notes'], $body['accepted'], $requester->getId());
+			return model\Pair::create( $body['breederId'], $body['districtId'], $body['year'], $body['group'], $body['sectionId'], $body['breedId'], $body['colorId'], $body['name'], $body['paired'], $body['notes'], $body['accepted'], $requester->getId());
 		} else {
-			$success = model\Pair::update($body['id'], $body['breederId'], $body['districtId'], $body['year'], $body['group'], $body['sectionId'], $body['breedId'], $body['colorId'], $body['name'], $body['paired'], $body['notes'], $body['accepted'], $requester->getId());
+			$success = model\Pair::update( $body['id'], $body['breederId'], $body['districtId'], $body['year'], $body['group'], $body['sectionId'], $body['breedId'], $body['colorId'], $body['name'], $body['paired'], $body['notes'], $body['accepted'], $requester->getId());
 			if( $success ) {
 				return $id;
 			}
@@ -287,7 +288,7 @@ class Pair
 		//if( $pair['accepted'] ) { // only add result if moderated accepted the pair
 
 			// summarize broods
-			$broods = &$pair['broods'];
+			$broods = & $pair['broods']; // at least empty array
 			$broodEggs = null;
 			$broodFertile = null;
 			$broodHatched = null;
@@ -302,8 +303,8 @@ class Pair
 			}
 
 			// summerize show
-			$show = &$pair['show'];
-			$scores = &$show['scores'];
+			$show = & $pair['show']; // can't be null...
+			$scores = & $show['scores'];
 
 			$showCount = 0;
 			$showTotal = 0;
@@ -331,9 +332,8 @@ class Pair
 						$requester->getId()
 					);
 			} else { // layers
-				if ($pair && $pair['lay']['average']) { // avg provided
+				if ($pair && $pair['lay']['average']) { // avg provided for goose etc that do not lay year though
 					$layResult = $pair['lay']['average'];
-
 				} else {
 					$layResult = $pair['lay']['result'];//
 				}
@@ -393,16 +393,26 @@ class Pair
 				return $response;
 			}
 			throw new HttpUnauthorizedException( $request, 'Cannot do this' );
-		} elseif( is_numeric( $districtId ) && is_numeric( $year ) ) { // for district in year
+		} elseif( is_numeric( $districtId ) && is_numeric( $year ) ) { // for district in year, assuming only used by results per pair
 			if(
 				$requester->isModerating( $districtId ) ||
 				$requester->isAdmin()
 			) { //admin of the moderator or self
-				$pairs = model\Pair::readForDistrictInYear( $districtId, $year );
-				$response->getBody()->write(json_encode( [ 'pairs' => $pairs ], JSON_UNESCAPED_SLASHES));
+				$breeders = Pair::toBreedersPairsTree( model\Pair::readForDistrictInYear( $districtId, $year ) );
+				$response->getBody()->write(json_encode( [ 'pairs' => $breeders ], JSON_UNESCAPED_SLASHES));
 				return $response;
 			}
 			throw new HttpUnauthorizedException( $request, 'Cannot do this' );
+//		} elseif( is_numeric( $districtId ) && is_numeric( $year ) ) { // for district in year, assuming only used by results per pair
+//			if(
+//				$requester->isModerating( $districtId ) ||
+//				$requester->isAdmin()
+//			) { //admin of the moderator or self
+//				$pairs = []; //model\Pair::readForDistrictInYear( $districtId, $year );
+//				$response->getBody()->write(json_encode( [ 'pairs' => $pairs ], JSON_UNESCAPED_SLASHES));
+//				return $response;
+//			}
+//			throw new HttpUnauthorizedException( $request, 'Cannot do this' );
 		} elseif( $chickRing ) { // find pair to chick, only breeder, meod and admin
 			$pair = model\Pair::findForChick( $chickRing );
 			if( $pair ) { // chicks parentPair found
@@ -481,5 +491,35 @@ class Pair
 			//'avg'=>$avg,
 		];
 		return $score;
+	}
+
+	public static function toBreedersPairsTree( array $rows ) : array {
+		$breeders = [];
+		$breederId = 0;
+		$breeder = [ 'id'=> 0 ];
+		foreach( $rows as $row ) {
+			if( $row[ 'breederId' ] !== $breederId ) {
+				$breederId = $row[ 'breederId' ];
+				unset( $breeder );
+				$breeder = [ 'id'=>$row['breederId'], 'districtId'=>$row['districtId'], 'member'=>$row['member'], 'firstname'=>$row['firstname'], 'infix'=>$row['infix'], 'lastname'=>$row['lastname'], 'pairs'=>[] ];
+				$breeders[] = & $breeder;
+			}
+			if( $row['id'] !== null ) {
+				$breeder[ 'pairs' ][] = [
+					'id'=>$row['id'], 'year'=>$row['year'], 'group'=>$row['group'], 'name'=>$row['name'],
+					'sectionId'=>$row['sectionId'], 'breedId'=>$row['breedId'], 'colorId'=>$row['colorId'],
+					'lay'=> [
+						'eggs'=>$row['layEggs'], 'weight'=>$row['layWeight']
+					],
+					'brood' => [
+						'eggs'=>$row['broodEggs'], 'fertile'=>$row['broodFertile'], 'hatched'=>$row['broodHatched']
+					],
+					'show' => [
+						'count'=>$row['showCount'], 'score'=>$row['showScore']
+					]
+				];
+			}
+		}
+		return $breeders;
 	}
 }

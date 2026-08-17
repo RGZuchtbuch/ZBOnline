@@ -27,7 +27,7 @@ class Cache
             REPLACE INTO _cache ( controller, url, query, json )
             VALUES ( :controller, :url, :query, :json )
         ');
-        return Query::insert($stmt, $args ); // returns success
+        return true; //Query::insert($stmt, $args ); // returns success
     }
 
 	public static function delete(string $controller ): bool

@@ -10,6 +10,7 @@
 
 <section class='flex flex-row'>
 
+	<span class='w-16 text-center text-sm'>{ result.pairId ? 'Stamm' : result.breedingId ? 'Zucht' : 'Verband' }</span>
 	<span class='w-12 number'>{ dec( result.breeders ) }</span>
 	<span class='w-12 number'>{ dec( result.pairs ) }</span>
 
@@ -39,18 +40,26 @@
 
 	<span class='w-2'></span>
 
-	{#if result.breeder }
-		<span class='w-16 flax flex-row text-center'>
-			<a class=''
-			   href={`${page.url.pathname}/breeder/${result.breeder.id}/pair/${result.pairId}`}
-			   title={`Zur Stamm von Züchter ${fullName(result.breeder)}`}
-			>
+	{#if result.pairId }
+		<span class='flex flex-row text-center'>
+
+			<span class='w-8' title={`Zur Stamm von Züchter ${fullName(result.breeder)}`}>
 				{ shortName( result.breeder ) }
-			</a>
-			<span class='text-red-600' class:accepted={result.accepted}>{result.accepted ? '✓' : '✗'}</span>
+			</span>
+			<span class='w-4 text-red-600' class:accepted={result.accepted}>{result.accepted ? '✓' : '✗'}</span>
+		</span>
+	{:else if result.breedingId }
+		<span class='flex flex-row text-center'>
+			<span class='w-8' title={`Zur Stamm von Züchter ${fullName(result.breeder)}`}>
+				{ shortName( result.breeder ) }
+			</span>
+			<span class='w-4 text-green-600'> </span>
 		</span>
 	{:else}
-		<span class='w-16'></span>
+		<span class='flex flex-row'>
+			<span class='w-8'></span>
+			<span class='w-4'></span>
+		</span>
 	{/if}
 </section>
 

@@ -24,10 +24,11 @@
 
 	function setHeaders() {
 		ctx.menustate[ '/moderator' ] = page.url.href;
-		ctx.title = `Verband ${ctx.district.name}, eingegebene Leistungen`;
+		ctx.title = `Verband ${ctx.district.short}, Leistungen übersicht`;
 		ctx.submenu = [
-			{name: 'Gesamt', href:`/moderator/district/${ctx.district.id}/result/district?year=${ctx.year}`},
-			{name: 'Stämme', href: `/moderator/district/${ctx.district.id}/result/breeder?year=${ctx.year}`},
+			{name: 'Verband', href:`/moderator/district/${ctx.district.id}/result/district?year=${ctx.year}`},
+			{name: 'Zucht', href: `/moderator/district/${ctx.district.id}/result/breeder?year=${ctx.year}`},
+			{name: 'Stämme', href: `/moderator/district/${ctx.district.id}/result/pair?year=${ctx.year}`},
 		];
 		ctx.crumbs = [
 			//{name: 'Start', href: '/'},

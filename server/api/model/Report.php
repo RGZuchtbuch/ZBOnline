@@ -320,8 +320,10 @@ class Report extends Query
                 subsectionId, subsectionName, subsectionOrder, 
                 id AS resultId, breedId, breedName, layShould, layWeightShould, colorId, colorName, aocColor,
 #				id AS resultId, breedId, breedName, colorId, colorName, aocColor,
+
                 # breeders for district and breeder results
-                CAST( SUM( breeders ) AS UNSIGNED ) AS breeders, 
+                CAST( SUM( breeders ) AS UNSIGNED ) AS breeders,
+
                 # pairs for pigeons       
                 CAST( SUM( pairs ) AS UNSIGNED ) AS pairs,
                 # lay dames
@@ -355,7 +357,8 @@ class Report extends Query
             FROM (
                 # to group the breeders results for multiple pairs as one breeder, not per pair
                 SELECT 
-                    result.id, result.districtId, result.year, result.breeders,
+                    result.id, result.districtId, result.year,
+                    SUM( result.breeders ) AS breeders,
                     section.id AS sectionId, section.name AS sectionName, section.order AS sectionOrder, 
                     subsection.id AS subsectionId, subsection.name AS subsectionName, subsection.order AS subsectionOrder,
                     result.breedId, breed.name AS breedName, 
@@ -376,7 +379,7 @@ class Report extends Query
                 WHERE 
                     result.year = :year 
                   
-                  	AND ( pair.id IS NULL OR pair.accepted = 1 )
+                  	AND ( pair.id IS NULL OR pair.accepted = 1 ) # not pair result or accepted pair
                   
                     AND result.districtId IN ( # also get subdistricts
                         SELECT child.id FROM district AS parent
@@ -386,7 +389,7 @@ class Report extends Query
                   
                 	AND ( :group IS NULL OR result.group  = :group )
                 
-                GROUP BY result.year, result.districtId, result.breedId, result.colorId, result.aocColor, result.group, pair.breederId                                
+                GROUP BY result.year, result.districtId, result.breedId, result.colorId, result.aocColor, result.group, pair.breederId
             ) AS results            
             
             GROUP BY subsectionOrder, breedName, colorName

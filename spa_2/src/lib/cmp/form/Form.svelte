@@ -55,19 +55,23 @@
 
 
     function validate() { // all registered validators, triggered by timeout
+        console.log( 'Validating form' );
         let valid = true;
         for( const validator of form.validators ) { // all registered validators
             valid = validator() && valid; // call validator first otherwise call will be skipped when valid already false
         }
         form.state = valid ? states.valid : states.invalid;
+        console.log( 'Form state', form.state );
     }
 
     async function submit() { // triggered by timeout or submit button
         if( form.state===states.valid ) {
             if( onsubmit ) {
-                const success = await onsubmit(); // onsubmit from host !!
+                const success = await onsubmit(); // onsubmit from host, using onsubmit prop !!
+                console.log( 'OnSubmit success ', success );
                 if( success ) {
                     form.state = states.stored; // waiting
+                    console.log( 'Form.state ', form.state );
                 }
             } // let outside do the actual submit
         }

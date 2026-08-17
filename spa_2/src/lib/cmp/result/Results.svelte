@@ -38,12 +38,22 @@
 
 	</div>
 
-	<p class='grow info'>
-		Leistungen können als gesamt Leistung für einem Verband eingegeben werden, oder als Züchter Stamm.<br>
-		Hier die Liste mit alle Eingaben in alle Zuchtbuchgruppen (I, II, III).<br>
-		Stamm Meldungen sind grün wenn das ok vom Obmann gegeben ist, rot wenn nicht.<br>
-		Die Buchstaben des Stamm-Züchters findet man gans Rechts.
-	</p>
+	<div class='px-32'>
+		<p class=''>
+			Leistungen können auf drei Ebenen eingegeben werden.
+		</p>
+		<ol>
+			<li>Verband, also Leistung für Rasse ( Tauben ) unde Farbe ( Geflügel ).</li>
+			<li>NEU: Zucht, also die Leitung pro Zucht, jeder Züchter mit seiner Rasse/Farbe.</li>
+			<li>Stamm/Paar, von jeder Stamm wird einzeln die Daten eingegeben.</li>
+		</ol>
+		<hr>
+		<p>
+			Hier die Liste mit alle Eingaben, Verband/Zucht/Stamm, in alle Zuchtbuchgruppen (I, II, III).<br>
+			Stamm Meldungen sind grün wenn das ok vom Obmann gegeben ist, rot wenn nicht.<br>
+			Die Buchstaben des Stamm-Züchters findet man gans Rechts.
+		</p>
+	</div>
 	<!--div class='flex flex-row justify-end'> <a class='pt-2' href={`/moderator/${district.id}/result/edit?year=${year}`}>[Edit]</a></div-->
 
 	{#if district && year && results}
@@ -57,26 +67,21 @@
 							<span class='grow pl-2 font-bold'>{section.name}</span>
 							<span class='flex flex-col'>
 								<span class='flex flex-row text-sm text-center font-bold '>
-									<span class='w-24'></span>
+									<span class='w-24'></span><span class='w-16'></span>
 									<span class='w-2 text-gray-400'>|</span>
-
 									{#if section.id === 5}
 										<span class='w-24'>-</span>
 									{:else}
 										<span class='w-24'>Legen</span>
 									{/if}
-
 									<span class='w-2 text-gray-400'>|</span>
-
 									<span class='w-48'>Brut</span>
-
 									<span class='w-2 text-gray-400'>|</span>
-
 									<span class='w-24'>Schau</span>
-
 									<span class='w-2 text-gray-400'>|</span>
 								</span>
 								<span class='flex flex-row text-xs text-center'>
+									<span class='w-16'>V/Z/S</span>
 									<span class='w-12'>Zuchten</span>
 									{#if section.id === 5}
 										<span class='w-12'>Paare</span>
@@ -125,8 +130,9 @@
 								<a class='flex flex-row pl-4'
 								   class:accepted={breed.result && breed.result.pairId && breed.result.accepted}
 								   class:not-accepted={breed.result && breed.result.pairId && !breed.result.accepted}
-								   href={breed.result.pairId
-									? `${page.url.pathname}/breeder/${breed.result.breeder.id}/pair/${breed.result.pairId}`
+								   href={
+								   	breed.result.pairId	? `${page.url.pathname}/breeder/${breed.result.breeder.id}/pair/${breed.result.pairId}`
+								    : breed.result.breedingId ? `${page.url.pathname}/breeder?year=${breed.result.year}&breeder=${color.result.breeder.id}`
 								    : `/moderator/district/6/result/district?year=${breed.result.year}&section=${breed.result.rootSectionId}&breed=${breed.id}&group=${breed.result.group}#${breed.id}` }
 								>
 									<span class='w-4'></span>
@@ -155,13 +161,13 @@
 								</div>
 							{/if}
 
-
 							{#each breed.colors as color}
 								<a class='flex flex-row pl-10'
 									class:accepted={color.result.pairId && color.result.accepted}
 								    class:not-accepted="{color.result.pairId && !color.result.accepted}"
-								    href={color.result.pairId
-								        ? `${page.url.pathname}/breeder/${color.result.breeder.id}/pair/${color.result.pairId}`
+								    href={
+								    	color.result.pairId ? `${page.url.pathname}/pair/${color.result.pairId}`
+								   		: color.result.breedingId ? `${page.url.pathname}/breeder?year=${color.result.year}&breeder=${color.result.breeder.id}`
 								        : `${page.url.pathname}/district?year=${color.result.year}&section=${color.result.rootSectionId}&breed=${breed.id}&color=${color.id}&group=${color.result.group}#${breed.id}` }
 								>
 									<span class='w-4'></span>

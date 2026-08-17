@@ -30,7 +30,6 @@ class Result
 		throw new HttpBadRequestException( $request, 'Cannot get all results, too many' );
 	}
 
-
 	public static function post( Request $request, Response $response, array $args ) : Response
 	{
 		$requester = new Requester($request);
@@ -41,12 +40,13 @@ class Result
 				//model\Cache::del('result' ); // clear cache as results changed
 				model\Cache::delete('report' ); // clear cache as results changed
 				$id = model\Result::new(
-					$result['pairId'], $result['districtId'], $result['year'], $result['group'],
-					$result['sectionId'], $result['breedId'], $result['colorId'], $result['aocColor'],
-					$result['breeders'], $result['pairs'],
+					$result['pairId'] ?? null, $result['breedingId'] ?? null, $result['districtId'], $result['year'], $result['group'],
+					$result['sectionId'] ?? null, $result['breedId'], $result['colorId'] ?? null, $result['aocColor'] ?? null,
+					$result['breeders'], $result['pairs'] ?? null,
 					$result['lay']['dames'], $result['lay']['eggs'], $result['lay']['weight'],
 					$result['brood']['eggs'], $result['brood']['fertile'], $result['brood']['hatched'],
-					$result['show']['count'], $result['show']['score'], $requester->getId()
+					$result['show']['count'], $result['show']['score'],
+					$requester->getId()
 				);
 				if ($id) {
 					$response->getBody()->write(json_encode([ 'created'=>true, 'id' => $id], JSON_UNESCAPED_SLASHES));
@@ -58,6 +58,7 @@ class Result
 		}
 		throw  new HttpBadRequestException( $request, 'Missing body' );
 	}
+
 
 	public static function put( Request $request, Response $response, array $args ) : Response
 	{
@@ -72,12 +73,12 @@ class Result
 					model\Cache::delete('report' ); // clear cache as results changed
 					$updated = model\Result::set( // change
 						$result['id'],
-						$result['pairId'], $result['districtId'], $result['year'], $result['group'],
-						$result['sectionId'], $result['breedId'], $result['colorId'], $result['aocColor'],
+						$result['pairId'] ?? null, $result['breedingId'] ?? null, $result['districtId'], $result['year'], $result['group'],
+						$result['sectionId'] ?? null, $result['breedId'], $result['colorId'] ?? null, $result['aocColor'] ?? null,
 						$result['breeders'], $result['pairs'],
-						$result['lay']['dames'], $result['lay']['eggs'], $result['lay']['weight'],
-						$result['brood']['eggs'], $result['brood']['fertile'], $result['brood']['hatched'],
-						$result['show']['count'], $result['show']['score'],
+						$result['lay']['dames'] ?? null, $result['lay']['eggs'] ?? null, $result['lay']['weight'] ?? null,
+						$result['brood']['eggs'] ?? null, $result['brood']['fertile'] ?? null, $result['brood']['hatched'] ?? null,
+						$result['show']['count'] ?? null, $result['show']['score'] ?? null,
 						$requester->getId()
 					);
 					if( $updated ) {
@@ -136,7 +137,7 @@ class Result
 		if( ( $requester && ( $requester->isAdmin() || $requester->isModerating( $districtId ) ) ) && is_numeric( $districtId ) && is_numeric( $sectionId ) && is_numeric( $year ) && $group ) { //for edit
 			// TODO, next still valid as now aoc are not in separate section anymore
 			if( $sectionId == 9999 ) { // for editing aoc's
-				$results = self::formatResults( model\Result::forAocColors( $districtId, $year, $group ) );
+				$results = self::formatResults( model\Result::forDistrictAocs( $districtId, $year, $group ) );
 			} else { // breedlist for editings results
 				$results = model\Result::forSectionBreeds( $districtId, $sectionId, $year, $group );
 			}
@@ -146,11 +147,11 @@ class Result
 
 		else if( is_numeric( $districtId ) && is_numeric($breedId) && is_numeric( $year ) && $group ) { // per breed edit
 			// for editing opened breeds, so breed for pigeons and colors for layers
-			$breedResult = model\Result::forBreedResult( $districtId, $breedId, $year, $group );
+			$breedResult = model\Result::forDistrictBreedResult( $districtId, $breedId, $year, $group );
 			$breedResult = self::formatResult( $breedResult );
-			$colorResults = model\Result::forColorsResult($districtId, $breedId, $year, $group );
+			$colorResults = model\Result::forDistrictColorsResult($districtId, $breedId, $year, $group );
 			$colorResults = self::formatResults( $colorResults );
-			$aocColorResults = model\Result::forAocColorsResult($districtId, $breedId, $year, $group );
+			$aocColorResults = model\Result::forDistrictAocsResult($districtId, $breedId, $year, $group );
 			$aocColorResults = self::formatResults( $aocColorResults );
 			$response->getBody()->write(json_encode( [ 'results' => [ 'breed'=>$breedResult, 'colors'=>$colorResults, 'aocColors'=>$aocColorResults, 'query' => $query ] ], JSON_UNESCAPED_SLASHES));
 			return $response;
@@ -158,13 +159,31 @@ class Result
 
 		else if( is_numeric( $districtId ) && is_numeric( $year ) ) { // per district and year, moderator results view
 			$results = model\Result::forDistrictYear($districtId, $year);
-			$tree = self::treeResults($results);
+			$tree = self::toDistrictYearTree($results);
 			$response->getBody()->write(json_encode(['results' => $tree], JSON_UNESCAPED_SLASHES));
 			return $response;
 		}
 		throw new HttpBadRequestException( $request, 'Bad filter' );
 	}
 
+	public static function getBreedersResults(Request $request, Response $response, array $args ) : Response {
+		$query = $request->getQueryParams();
+		$districtId = $query[ 'district' ] ?? null;
+		$year       = $query[ 'year' ] ?? null;
+
+		if( is_numeric( $districtId ) && is_numeric( $year ) ) {
+			$results = model\Result::forDistrictBreeders( $districtId, $year );
+			$breeders = self::toBreedersResultsTree( $results );
+			$response->getBody()->write( json_encode( [ 'results' => $breeders ], JSON_UNESCAPED_SLASHES ) );
+			return $response;
+		}
+		throw new HttpBadRequestException( $request, 'Bad arguments' );
+	}
+
+
+
+
+/** private helpers **/
 	private static function formatResults( array $results ) : array {
 		$out = [];
 		foreach( $results as $result) {
@@ -189,7 +208,7 @@ class Result
 		];
 	}
 
-	public static function treeResults( array $results) : array {
+	public static function toDistrictYearTree(array $results) : array {
 		$tree = [ 'sections'=>[] ];
 		$section = [ 'id'=>NULL ];
 		$breed = [ 'id'=>NULL ];
@@ -198,13 +217,13 @@ class Result
 //			unset( $result );
 			$result = [
 				'id'=>$raw['id'], 'accepted'=>$raw['accepted'],
-				'districtId'=>$raw['districtId'], 'year'=>$raw['year'], 'group'=>$raw['group'],
+				'pairId'=>$raw['pairId'], 'breedingId'=>$raw['breedingId'], 'districtId'=>$raw['districtId'], 'year'=>$raw['year'], 'group'=>$raw['group'],
 				'rootSectionId'=>$raw['rootsectionId'], 'sectionId' => $raw['sectionId'], 'breedId'=>$raw['breedId'], 'colorId'=>$raw['colorId'], 'aocColor'=>$raw['aocColor'],
 				'breeders'=>$raw['breeders'], 'pairs'=>$raw['pairs'],
 				'lay'     =>[ 'dames'=>$raw['layDames'], 'eggs'=>$raw['layEggs'], 'weight'=>$raw['layWeight'] ],
 				'brood'   =>[ 'eggs'=>$raw['broodEggs'], 'fertile'=>$raw['broodFertile'], 'hatched'=>$raw['broodHatched'] ],
 				'show'    =>[ 'count'=>$raw['showCount'], 'score'=>$raw['showScore'] ],
-				'pairId'=>$raw['pairId'],
+
 				'breeder' => $raw['breederId'] === NULL ? NULL : [ 'id'=>$raw['breederId'], 'firstname'=>$raw['firstname'], 'infix'=>$raw['infix'], 'lastname'=>$raw['lastname'], 'short'=>$raw['short'] ],
 			];
 			if( $raw['rootsectionId'] !== $section['id'] ) {
@@ -229,5 +248,35 @@ class Result
 		return $tree;
 	}
 
+	public static function toBreedersResultsTree( array $rows ) : array {
+		$breeders = [];
+		$breederId = 0;
+		$breeder = [ 'id'=> 0 ];
+		foreach( $rows as $row ) {
+			if( $row[ 'breederId' ] !== $breederId ) {
+				$breederId = $row[ 'breederId' ];
+				unset( $breeder );
+				$breeder = [ 'id'=>$row['breederId'], 'districtId'=>$row['districtId'], 'member'=>$row['member'], 'firstname'=>$row['firstname'], 'infix'=>$row['infix'], 'lastname'=>$row['lastname'], 'results'=>[] ];
+				$breeders[] = & $breeder;
+			}
+			if( $row['resultId'] !== null ) {
+				$breeder[ 'results' ][] = [
+					'id'=>$row['resultId'], 'breederId'=>$row['breederId'], 'pairId'=>$row['pairId'], 'breedingId'=>$row['breedingId'], 'districtId'=>$row['districtId'], 'year'=>$row['year'], 'group'=>$row['group'],
+					'sectionId'=>$row['sectionId'], 'breedId'=>$row['breedId'], 'colorId'=>$row['colorId'],
+					'breeders'=>$row['breeders'], 'pairs'=>$row['pairs'],
+					'lay'=> [
+						'eggs'=>$row['layEggs'], 'weight'=>$row['layWeight']
+					],
+					'brood' => [
+						'eggs'=>$row['broodEggs'], 'fertile'=>$row['broodFertile'], 'hatched'=>$row['broodHatched']
+					],
+					'show' => [
+						'count'=>$row['showCount'], 'score'=>$row['showScore']
+					]
+				];
+			}
+		}
+		return $breeders;
+	}
 
 }
