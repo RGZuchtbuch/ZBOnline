@@ -41,7 +41,7 @@
 
 	function setHeader() {
 		ctx.menustate[ '/moderator' ] = page.url.href;
-		ctx.title = `Verband ${ctx.district.name}, Zuchtdaten eingabe`;
+		ctx.title = `Verband ${ctx.district.short}, Eingabe Verbandsleistungen ${ctx.year}`;
 		ctx.submenu = [
 //			{name: 'Eingaben', href: `/moderator/district/${ctx.district.id}/result?year=${ctx.year}`},
 		];

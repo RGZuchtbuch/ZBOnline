@@ -53,21 +53,16 @@
         console.log( 'On Breederresult submit' );
         //await invalidate( 'results' ); // make results page reload data
         if( result ) { // valid entry
-			if( result.sectionId === 5 ) { // pigeons
-				result.brood.eggs = pigeonBroods * 2; // 2 eggs per brood expected
+			if( result.sectionId === 5 ) {
+				if( result.breedId && ( result.brood.hatched !== null || result.show.score !== null ) ) { // pigeons
+					result.brood.eggs = pigeonBroods * 2; // 2 eggs per brood expected
+					return await model.Result.save( result );
+				}
+			} else if( result.colorId && ( result.lay.eggs !== null || result.brood.eggs !== null || result.show.count !== null ) ) {
 				return await model.Result.save( result );
-			} else if( result.lay.eggs != null || result.brood.eggs != null || result.show.count != null ) {
-				return await model.Result.save( result );
+			} else if( result.id > 0 && result.lay.eggs === null && result.lay.weight === null && result.brood.hatched === null && result.show.score === null ) {
+				return await model.Result.delete( result.id );
 			}
-
-			//return await model.Result.save( data );
-//        } else { // delete if no breeders count given
-//            if( result.id > 0 ) {
-//                let ok = await model.Result.delete( result.id );
-//                if( ok ) result.id = null;
-//                return ok;
-//            }
-
         }
         dirty.results++; // inc to trigger
     }

@@ -43,9 +43,9 @@ class Result
 					$result['pairId'] ?? null, $result['breedingId'] ?? null, $result['districtId'], $result['year'], $result['group'],
 					$result['sectionId'] ?? null, $result['breedId'], $result['colorId'] ?? null, $result['aocColor'] ?? null,
 					$result['breeders'], $result['pairs'] ?? null,
-					$result['lay']['dames'], $result['lay']['eggs'], $result['lay']['weight'],
-					$result['brood']['eggs'], $result['brood']['fertile'], $result['brood']['hatched'],
-					$result['show']['count'], $result['show']['score'],
+					$result['lay']['dames'] ?? null, $result['lay']['eggs'] ?? null, $result['lay']['weight'] ?? null,
+					$result['brood']['eggs'] ?? null, $result['brood']['fertile'] ?? null, $result['brood']['hatched'] ?? null,
+					$result['show']['count'] ?? null, $result['show']['score'] ?? null,
 					$requester->getId()
 				);
 				if ($id) {
@@ -75,7 +75,7 @@ class Result
 						$result['id'],
 						$result['pairId'] ?? null, $result['breedingId'] ?? null, $result['districtId'], $result['year'], $result['group'],
 						$result['sectionId'] ?? null, $result['breedId'], $result['colorId'] ?? null, $result['aocColor'] ?? null,
-						$result['breeders'], $result['pairs'],
+						$result['breeders'], $result['pairs'] ?? null,
 						$result['lay']['dames'] ?? null, $result['lay']['eggs'] ?? null, $result['lay']['weight'] ?? null,
 						$result['brood']['eggs'] ?? null, $result['brood']['fertile'] ?? null, $result['brood']['hatched'] ?? null,
 						$result['show']['count'] ?? null, $result['show']['score'] ?? null,

@@ -41,6 +41,7 @@
 	function setHeader() {
 		ctx.menustate[ '/moderator' ] = page.url.href;
 		ctx.title = `Verband ${ctx.district.short} : Stämm ${ctx.pair.year % 100}.${ctx.pair.name}`;
+		ctx.title = `Verband ${ctx.district.short}, Eingabe Stammleistungen ${ctx.year}.${ctx.pair.breeder.member}.${ctx.pair.name}`;
 		ctx.submenu = [
 //			{name: 'Stämme', href: `/moderator/${ctx.district.id}/breeder/${ctx.breeder.id}/pair`},
 //			{name: 'Mitglied', href: `/moderator/${ctx.district.id}/breeder/${ctx.breeder.id}/profile`},

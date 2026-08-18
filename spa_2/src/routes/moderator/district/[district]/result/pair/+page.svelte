@@ -33,7 +33,7 @@
 
 	function setHeader() {
 		ctx.menustate[ '/moderator' ] = page.url.href;
-		ctx.title = `Verband ${ctx.district.short}, Leistungen, Stämme pro Züchter`;
+		ctx.title = `Verband ${ctx.district.short}, Eingabe Stammleistungen ${ctx.year}`;
 		ctx.submenu = [
 //			{name: 'Eingaben', href: `/moderator/district/${ctx.district.id}/result?year=${ctx.year}`},
 		];

@@ -21,7 +21,7 @@
 
 	<div class='flex flex-row gap-x-4 '>
 		<TextInput class='w-56' label='Züchter' value={ fullName( pair.breeder ) } disabled  />
-		<NumberInput class='w-16' label='Jahr*' bind:value={pair.year} error={'Fehler'} validator={validate.year} />
+		<NumberInput class='w-16' label='Jahr*' bind:value={pair.year} error={'Fehler'} validator={validate.year} disabled/>
 		<TextInput class='w-24' label='Name*' bind:value={pair.name} error='Fehler' validator={validate.name} />
 		<Select label='Gruppe*' bind:value={pair.group}>
 			{#each [ 'I', 'II', 'III' ] as option}

@@ -43,7 +43,6 @@ export default class Pair {
 		let data= await api.get(`/api/2/pair/${id}`);
 		if( data && data.pair ) {
 			let pair = data.pair;
-
 			for (let i = pair.parents.length; i < 2; i++) {
 				pair.parents.push( Pair.newParent( pair ) );
 			}

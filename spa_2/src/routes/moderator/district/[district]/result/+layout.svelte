@@ -15,7 +15,9 @@
 		// 	// url.searchParams.set( 'year', year );
 		// 	//goto( url.href );
 		// }
-		ctx.year = query.has( 'year' ) ? +query.get( 'year' ) : ctx.year ? ctx.year : CURRENT_INPUT_YEAR;
+		console.log( 'Year type string ?', typeof ctx.year === 'string' ? 'true' : 'false');
+
+		ctx.year = query.has( 'year' ) ? +query.get( 'year' ) : ctx.year ? +ctx.year : +CURRENT_INPUT_YEAR;
 		ctx.district = ctx.federation.districts[ page.params.district ];
 	});
 

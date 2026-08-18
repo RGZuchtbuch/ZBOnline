@@ -44,8 +44,8 @@
 </div-->
 
 {#if ctx.year }
-	<div class='flex flex-row border-header bg-header text-header text-xl p-2 pt-1 gap-x-2 justify-center sticky top-1' in:fade>
-		<span class='pt-5 font-bold'>Stammleistung eingeben für </span>
+	<!--div class='flex flex-row border-header bg-header text-header text-xl p-2 pt-1 gap-x-2 justify-center sticky top-1' in:fade>
+		<span class='pt-5 font-bold'>Stammleistung eingeben für {ctx.year}</span>
 		<div class='flex flex-col'>
 			<span class='text-xs pl-2'>Jahr</span>
 			<select class='border-header bg-white' label='Jahr' value={ctx.year} onchange={onYearChange}>
@@ -54,7 +54,7 @@
 				{/each}
 			</select>
 		</div>
-	</div>
+	</div-->
 
 {/if}
 

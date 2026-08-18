@@ -41,34 +41,21 @@
 
 {#if ctx.district && args }
 	<div class='flex flex-row border-header bg-header text-header text-xl p-2 pt-1 gap-x-2 justify-center sticky top-1' in:fade>
-		<span class='pt-5 font-bold'>Leistungen eingeben für </span>
-		<div class='flex flex-col'>
-			<span class='text-xs pl-2'>Jahr</span>
-			<select class='border-header bg-white' label='Jahr' value={ctx.year} onchange={onYearChange}>
-				{#each years as year}
-					<option value={year}>{year}</option>
-				{/each}
-			</select>
-		</div>
+		<span class='pt-5 font-bold'>Leistungen eingeben für {ctx.year} </span>
 
-		<div class='flex flex-col'>
-			<span class='text-xs pl-2'>Sparte</span>
-			<select class='border-header bg-white' label="Sparte" value={args.section} onchange={onSectionChange} title='Sparte zum Eingeben'>
+
+			<Select class='border-header' label="Sparte" value={args.section} onchange={onSectionChange} title='Sparte zum Eingeben'>
 				{#each ctx.standard.rootSections as section}
 					<option value={section.id}>{section.name}</option>
 				{/each}
 				<!--option-- value={cfg.aocSection.id}>{ cfg.aocSection.name }</option-->
-			</select>
-		</div>
+			</Select>
 
-		<div class='flex flex-col'>
-			<span class='text-xs pl-2'>ZB Gruppe</span>
-			<select class='w-24 border-header bg-white'  label="ZB Gruppe" value={args.group} onchange={onGroupChange} disabled={args.section && args.section.id === 5 } title='Zuchtbuchgruppe I, II oder III'>
+			<Select class='w-24 border-header'  label="ZB Gruppe" value={args.group} onchange={onGroupChange} disabled={args.section && args.section.id === 5 } title='Zuchtbuchgruppe I, II oder III'>
 				{#each cfg.groups as group}
 					<option value={group}>{group}</option>
 				{/each}
-			</select>
-		</div>
+			</Select>
 	</div>
 
 	<div class ='flex flex-row' in:fade>

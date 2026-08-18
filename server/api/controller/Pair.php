@@ -63,7 +63,6 @@ class Pair
 					}
 
 					$pair['show'] = self::toShow( model\pair\Show::readForPair( $pair['id'] ) );
-
 					$response->getBody()->write(json_encode([ 'pair' => $pair ], JSON_UNESCAPED_SLASHES));
 					return $response;
 				}

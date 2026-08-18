@@ -110,6 +110,7 @@ class Query
             Query::$pdo->setAttribute( PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC ); // return associated array only
 //            Query::$pdo->setAttribute( PDO::ATTR_EMULATE_PREPARES, false ); // should be the default true for allowing multiple :year in prepare
             Query::$pdo->setAttribute( PDO::ATTR_STRINGIFY_FETCHES, false ); // also to get text and numbers instead of always text as template
+            //Query::$pdo->setAttribute( PDO::MYSQL_ATTR_DIRECT_QUERY  ,true ); // real types from db, NO
         }
         return Query::$pdo;
     }

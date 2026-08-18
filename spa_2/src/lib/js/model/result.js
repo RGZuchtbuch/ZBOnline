@@ -3,6 +3,7 @@ import api from '$lib/js/server.js';
 import {invalidate} from '$app/navigation';
 
 export default class Result {
+
 	static async load( id ){
 		const data = await api.get(`/api/2/result/${id}` );
 		return data && data.result ? data.result : null;

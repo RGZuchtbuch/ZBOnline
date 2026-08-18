@@ -6,6 +6,7 @@
 	import { dec, selectName } from '$lib/js/tools.js';
 	import BreedersResultForm from '$lib/cmp/result/BreederResultForm.svelte';
 
+
 	let { district, breeders } = $props();
 
 	let years = []; // create years array for select
@@ -45,8 +46,43 @@
 
 
 
-	function onAddResult( event ) {
-		console.log( 'Adding result' );
+	function onAddResult( breeder ) {
+		return ( event ) => {
+			console.log( 'Adding result' );
+			const new_breeding = newBreeding( district.id, breeder.id, ctx.year );
+			breeder.results.push( new_breeding );
+			console.log( 'Breeder after new', breeder );
+		}
+	}
+
+	function newBreeding( districtId, breederId, year ) {
+		return {
+			"id": 0,
+			"breederId": breederId,
+			"pairId": null,
+			"breedingId": breederId,
+			"districtId": districtId,
+			"year": year,
+			"group": "I",
+			"sectionId": null,
+			"breedId": null,
+			"colorId": null,
+			"breeders": 1,
+			"pairs": null,
+			"lay": {
+				"eggs": null,
+				"weight": null
+			},
+			"brood": {
+				"eggs": null,
+				"fertile": null,
+				"hatched": null
+			},
+			"show": {
+				"count": null,
+				"score": null
+			}
+		};
 	}
 
 
@@ -58,7 +94,7 @@
 	<a href={`${page.url.href}/0`}>[+]</a>
 </div-->
 
-{#if ctx.year }
+{#if false && ctx.year }
 	<div class='flex flex-row border-header bg-header text-header text-xl p-2 pt-1 gap-x-2 justify-center sticky top-1' in:fade>
 		<span class='pt-5 font-bold'>Zuchtleistungen eingeben für {ctx.year}</span>
 	</div>
@@ -77,7 +113,11 @@
 
 <main class='flex flex-col pl-2'>
 
-
+	<div class='flex flex-row pl-4'>
+		<span class='w-16'>Mitg.</span>
+		<span class='w-128'>Züchter</span>
+		<span class='w-8'>Zuchten</span>
+	</div>
 	{#if breeders}
 		{#each breeders as breeder }
 			<!--a class='flex flex-row' href={page.url.pathname+'/'+breeder.id+'/pair?year='+ctx.year}>
@@ -89,10 +129,10 @@
 			<details id={breeder.id} class=''>
 				<summary class='flex flex-row'>
 					<span class='inline-block w-16'> {breeder.member} </span>
-					<span class='inline-block w-80'> {breeder.lastname}, {breeder.firstname} {breeder.infix} </span>
+					<span class='inline-block w-128'> {breeder.lastname}, {breeder.firstname} {breeder.infix} </span>
 					<span class='inline-block w-8'> {breeder.results.length}</span>
 					<span class='inline-block grow'></span>
-					<!--span class='w-12' onclick={onAddResult}>[ + ]</span-->
+					<span class='w-12' onclick={ onAddResult( breeder ) }>[ + ]</span>
 					<!--http://localhost:5173/moderator/district/6/result/breeder/217/pair/0 -->
 				</summary>
 		  		<div class='pl-0 flex flex-col' in:fade>

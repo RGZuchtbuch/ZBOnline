@@ -19,6 +19,7 @@
 	let authorized = $derived( user && pair && ( (user.id === pair.breeder.id && user.active) || user.moderator.includes( pair.districtId ) || user.admin ) ); // can edit
 
 	async function onSubmit() {
+
 		let ok = false;
 		if( pair.breederId && pair.year && pair.name && pair.group && pair.sectionId && pair.breedId && ( pair.sectionId === 5 || pair.colorId ) ) {
 			ok = await model.Pair.save( pair );
