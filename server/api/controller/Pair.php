@@ -324,7 +324,7 @@ class Pair
 			if ($pair['sectionId'] === 5) { // pigeon, no lay, no color
 				$success = $success && model\Result::new(
 						$pairId, null, $pair['districtId'], $pair['year'], $pair['group'],
-						null, $pair['breedId'], null, null,
+						null, $pair['breedId'], $pair['colorId'], null,
 						1, 1,
 						null, null, null,
 						$broodEggs, null, $broodHatched,

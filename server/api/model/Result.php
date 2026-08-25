@@ -152,10 +152,39 @@ class Result
 				LEFT JOIN pair   ON pair.id = result.pairId
 				LEFT JOIN user   ON user.id = pair.breederId OR user.id = result.breedingId
 			WHERE result.districtId = :districtId AND result.year = :year
-			ORDER BY rootsection.order, breed.name, result.aocColor, color.name
+			ORDER BY rootsection.order, breed.name, result.aocColor, color.name, pairId, breedingId
         ');
 		return Query::selectArray($stmt, $args);
 	}
+//    public static function forDistrictYear( int $districtId, int $year ) : array {
+//		$args = get_defined_vars();
+//		$stmt = Query::prepare('
+//			SELECT
+//				result.id, result.year, result.pairId, result.breedingId, result.districtId,
+//					result.group, result.breeders, result.pairs,
+//					result.breedId, breed.name AS breedname, result.colorId, color.name AS colorname, result.aocColor,
+//					result.layDames, result.layEggs, result.layWeight,
+//					result.broodEggs, result.broodFertile, result.broodHatched,
+//					result.showCount, result.showScore,
+//				supersection.id AS supersectionId, supersection.name AS supersectionname,
+//				rootsection.id AS rootsectionId, rootsection.name AS rootsectionname,
+//				section.id AS sectionId, section.name AS sectionname,
+//				user.id AS breederId, user.firstname, user.infix, user.lastname,
+//				CONCAT(SUBSTR(user.firstname, 1, 1), ".", SUBSTR(user.lastname, 1, 1) ) AS short,
+//				pair.accepted
+//			FROM result
+//				LEFT JOIN breed  ON breed.id = result.breedId
+//				LEFT JOIN color  ON color.id = result.colorId
+//				LEFT JOIN section ON section.id = breed.sectionId
+//				LEFT JOIN section AS rootsection ON rootsection.id = section.rootId
+//				LEFT JOIN section AS supersection ON supersection.id = section.parentId
+//				LEFT JOIN pair   ON pair.id = result.pairId
+//				LEFT JOIN user   ON user.id = pair.breederId OR user.id = result.breedingId
+//			WHERE result.districtId = :districtId AND result.year = :year
+//			ORDER BY rootsection.order, breed.name, result.aocColor, color.name
+//        ');
+//		return Query::selectArray($stmt, $args);
+//	}
 	/* returns the district result for year and color, for moderator overview per year */
     // is this one used anywhere ?
 	public static function forDistrict( int $districtId ) : array {

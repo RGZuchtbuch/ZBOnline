@@ -132,7 +132,7 @@
 								   class:not-accepted={breed.result && breed.result.pairId && !breed.result.accepted}
 								   href={
 								   	breed.result.pairId	? `${page.url.pathname}/breeder/${breed.result.breeder.id}/pair/${breed.result.pairId}`
-								    : breed.result.breedingId ? `${page.url.pathname}/breeder?year=${breed.result.year}&breeder=${color.result.breeder.id}`
+								    : breed.result.breedingId ? `${page.url.pathname}/breeding?year=${breed.result.year}&breeder=${color.result.breeder.id}`
 								    : `/moderator/district/6/result/district?year=${breed.result.year}&section=${breed.result.rootSectionId}&breed=${breed.id}&group=${breed.result.group}#${breed.id}` }
 								>
 									<span class='w-4'></span>
@@ -167,7 +167,7 @@
 								    class:not-accepted="{color.result.pairId && !color.result.accepted}"
 								    href={
 								    	color.result.pairId ? `${page.url.pathname}/pair/${color.result.pairId}`
-								   		: color.result.breedingId ? `${page.url.pathname}/breeder?year=${color.result.year}&breeder=${color.result.breeder.id}`
+								   		: color.result.breedingId ? `${page.url.pathname}/breeding?year=${color.result.year}&breeder=${color.result.breeder.id}`
 								        : `${page.url.pathname}/district?year=${color.result.year}&section=${color.result.rootSectionId}&breed=${breed.id}&color=${color.id}&group=${color.result.group}#${breed.id}` }
 								>
 									<span class='w-4'></span>
@@ -206,7 +206,7 @@
 	}
 
     .accepted {
-        @apply bg-teal-100/50;
+        @apply bg-inherit;
     }
     .not-accepted {
         @apply bg-orange-200/50;

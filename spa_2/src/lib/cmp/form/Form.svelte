@@ -108,8 +108,5 @@
         margin: 0;
     }
     form > fieldset {
-        padding : 1em;
-        margin: 0;
-        border: 0;
     }
 </style>

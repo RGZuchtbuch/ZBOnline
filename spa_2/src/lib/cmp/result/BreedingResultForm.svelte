@@ -77,7 +77,7 @@
     }
 </script>
 
-<Form class='m-1 py-0 flex flex-row gap-x-0.5 text-sm bg-red-400' autosubmit onsubmit={onSubmit}>
+<Form class='flex flex-row gap-x-0.5 text-sm pt-2' autosubmit onsubmit={onSubmit}>
 	<span class='pl-0 pt-3'>⤷</span>
 	<Select class='w-28' label={'Sparte'} bind:value={ result.sectionId } onchange={ onSectionChange } validator={validate.section}>
 		<option value={null} selected={ result.sectionId === null }>

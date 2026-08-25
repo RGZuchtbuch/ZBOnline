@@ -358,7 +358,8 @@ class Report extends Query
                 # to group the breeders results for multiple pairs as one breeder, not per pair
                 SELECT 
                     result.id, result.districtId, result.year,
-                    SUM( result.breeders ) AS breeders,
+#                    SUM( result.breeders ) AS breeders,
+                    result.breeders AS breeders,
                     section.id AS sectionId, section.name AS sectionName, section.order AS sectionOrder, 
                     subsection.id AS subsectionId, subsection.name AS subsectionName, subsection.order AS subsectionOrder,
                     result.breedId, breed.name AS breedName, 

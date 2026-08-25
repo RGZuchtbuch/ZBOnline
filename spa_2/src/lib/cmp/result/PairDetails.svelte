@@ -13,15 +13,15 @@
 
     //breeder.results.push( newBreeding( ctx.district.id, breeder.id, ctx.year ) );
 
-    $effect( async () => {
-        if( breeder.pairs.length === count ) {
-            console.log( 'Added pair', breeder.pairs.length, count );
-            //breeder.results.push( newBreeding( ctx.district.id, breeder.id, ctx.year ) );
-            let newPair = newResult( breeder, ctx.district, ctx.year );
-            console.log( 'New pair', newPair );
-            breeder.pairs.push( newPair );
-        }
-    } );
+//    $effect( async () => {
+//        if( breeder.pairs.length === count ) {
+//            console.log( 'Added pair', breeder.pairs.length, count );
+//            //breeder.results.push( newBreeding( ctx.district.id, breeder.id, ctx.year ) );
+//            let newPair = newResult( breeder, ctx.district, ctx.year );
+//            console.log( 'New pair', newPair );
+//            breeder.pairs.push( newPair );
+//        }
+//    } );
 
     function countPairs( breeder ) {
         return breeder.pairs.filter( pair => pair.id > 0 ).length;
@@ -80,7 +80,7 @@
 <span class='w-48'> {breeder.club} </span>
 <span class='w-12 text-green-600'> {breeder.active?'✓':'.'} </span>
 </a -->
-<main id={breeder.id} class='flex flex-col pl-2' >
+<main id={breeder.id} class='flex flex-col pl-2 pt-2' >
     <div class='flex flex-row gap-x-4 hover:font-bold' class:open>
         <button class='flex flex-row gap-x-4 bg-inherit text-inherit'  title='öffnen/schliesen' onclick={onOpen}>
             {#if open}
@@ -101,11 +101,11 @@
     </div>
 
     {#if open}
-        <div class='flex flex-col pl-0' transition:slide>
+        <div class='flex flex-col' transition:slide>
             {#each breeder.pairs as pair, p}
                 {#key p}
                     
-                    <a class='pl-3 flex flex-row' href={page.url.pathname+'/'+pair.id}>
+                    <a class='flex flex-row pl-3 pt-2' href={page.url.pathname+'/'+pair.id}>
                         <span class='w-6'>⤷</span>
                         <span class='w-16'>{pair.name}</span>
                         <span class='w-64 whitespace-nowrap'>{ pair.breedId ? ctx.standard.breeds[ pair.breedId].name : '' }</span>
@@ -121,8 +121,8 @@
                     </a>
                 {/key}
             {/each}
-                <a class='pl-3 flex flex-row' href={page.url.pathname+'/0?breeder='+breeder.id}>
-                    <span class='grow text-center'>Neuer Stamm/Paar</span>
+                <a class='pl-3 flex flex-row bg-button text-button' href={page.url.pathname+'/0?breeder='+breeder.id}>
+                    <span class='grow text-center'>Neuer Stamm</span>
                 </a>
         </div>
     {/if}

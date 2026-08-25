@@ -1,12 +1,19 @@
 <script>
+    import { page } from '$app/state';
     import { fade, slide } from 'svelte/transition';
     import { ctx } from '$lib/js/store.svelte.js';
     import BreedersResultForm from '$lib/cmp/result/BreedingResultForm.svelte';
 
     let { breeder=$bindable() } = $props();
 
-    let open = $state( false );
+    const query = page.url.searchParams;
+    const targetBreeder = query.has( 'breeder' ) ? +query.get( 'breeder' ) : null;
+
+    let open = $state( breeder.id === targetBreeder );
     let count = $derived( countBreedings( breeder ) );
+
+
+
 
     //breeder.results.push( newBreeding( ctx.district.id, breeder.id, ctx.year ) );
 
@@ -72,7 +79,7 @@
 <span class='w-48'> {breeder.club} </span>
 <span class='w-12 text-green-600'> {breeder.active?'✓':'.'} </span>
 </a -->
-<main id={breeder.id} class='flex flex-col pl-2' >
+<main id={breeder.id} class='flex flex-col pl-2 py-1' >
     <div  class='flex flex-row gap-x-4 hover:font-bold' class:open>
         <button class='flex flex-row gap-x-4 bg-inherit text-inherit'  title='öffnen/schliesen' onclick={onOpen}>
             {#if open}
@@ -94,7 +101,7 @@
     </div>
 
     {#if open}
-        <div class='p-0' transition:slide>
+        <div class='' transition:slide>
             {#each breeder.results as result, i}
                 {#key result.id}
                     <BreedersResultForm bind:result={ breeder.results[ i ] }></BreedersResultForm>
