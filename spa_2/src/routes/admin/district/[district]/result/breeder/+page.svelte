@@ -5,7 +5,7 @@
 	import { cfg, ctx, dirty } from '$lib/js/store.svelte.js';
 	import model from '$lib/js/model.js';
 
-	import Breeders from '$lib/cmp/result/Breeder.svelte'
+	import Breeders from '$lib/cmp/result/Breeding.svelte'
 
 	let mounted = $state( false );
 

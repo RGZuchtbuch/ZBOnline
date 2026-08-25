@@ -5,7 +5,7 @@
 	import { cfg, ctx, dirty } from '$lib/js/store.svelte.js';
 	import model from '$lib/js/model.js';
 
-	import Pairs from '$lib/cmp/result/Pairs.svelte'
+	import Pairs from '$lib/cmp/result/Pair.svelte'
 
 	let mounted = $state( false );
 
@@ -54,6 +54,6 @@
 
 {#if ctx.district && pairs}
 	<main in:fade={{duration:cfg.fadeIn}}>
-		<Pairs pairs={pairs} district={ctx.district} />
+		<Pairs bind:pairs={pairs} district={ctx.district} />
 	</main>
 {/if}

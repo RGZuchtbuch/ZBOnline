@@ -123,7 +123,8 @@ class Pair
 			if ( $requester && ($requester->isAdmin() || $requester->isModerating($pair['districtId']) || $requester->hasId($pair['breederId']) ) ) {
 				Query::begin();
                 $id = Pair::postPair( $id, $pair, $requester );
-                if( $id &&
+                if(
+					$id &&
                     Pair::postParents( $id, $pair[ 'parents' ] ?? null, $requester ) &&
                     Pair::postLay( $id, $pair['lay'], $requester ) &&
                     Pair::postBroods( $id, $pair['broods'] ?? null, $requester ) &&
@@ -137,7 +138,7 @@ class Pair
 					return $response;
 				} else {
 					Query::rollback();
-					throw new HttpUnauthorizedException( $request, 'Cannot do this');
+					throw new HttpUnauthorizedException( $request, 'Cannot do this due to post problem');
 				}
 			}
 			throw new HttpUnauthorizedException( $request, 'Cannot do this');
@@ -322,7 +323,7 @@ class Pair
 			// save pigeon or layer
 			if ($pair['sectionId'] === 5) { // pigeon, no lay, no color
 				$success = $success && model\Result::new(
-						$pairId, $pair['districtId'], $pair['year'], $pair['group'],
+						$pairId, null, $pair['districtId'], $pair['year'], $pair['group'],
 						null, $pair['breedId'], null, null,
 						1, 1,
 						null, null, null,
@@ -337,7 +338,7 @@ class Pair
 					$layResult = $pair['lay']['result'];//
 				}
 				$success = $success && model\Result::new(
-					$pairId, $pair['districtId'], $pair['year'], $pair['group'],
+					$pairId, null, $pair['districtId'], $pair['year'], $pair['group'],
 					null, $pair['breedId'], $pair['colorId'], null,
 					1, 1,
 					$pair['lay']['dames'], $layResult, $pair['lay']['weight'],

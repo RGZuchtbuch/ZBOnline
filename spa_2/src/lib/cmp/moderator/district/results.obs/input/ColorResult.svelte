@@ -48,7 +48,7 @@
             response = await model.Result.save( resultState );
         } else { // delete if no breeders count given
             if( resultState.id > 0 ) {
-                response = await model.Result.delete( resultState.id );
+                response = await model.Result.delete( resultState );
             }
         }
         //await invalidate( 'results' ); // make results page reload data

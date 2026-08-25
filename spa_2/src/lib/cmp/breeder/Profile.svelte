@@ -75,7 +75,7 @@
                 <span class='pt-8'></span>
                 <CheckBox label='Online' title='Meldet selbst' bind:value={breeder.active}/>
                 <span class='grow'></span>
-                {#if authorized}
+                {#if authorized && false}
                     <CheckBox label='Löschen' title='Nur wenn Name leer ist !' bind:value={breeder.delete} disabled={ breeder.firstname || breeder.lastname }/>
                 {/if}
             </fieldset>

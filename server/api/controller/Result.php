@@ -82,7 +82,7 @@ class Result
 						$requester->getId()
 					);
 					if( $updated ) {
-						$response->getBody()->write(json_encode([ 'updated' => true, 'id' => (int)$id ], JSON_UNESCAPED_SLASHES));
+						$response->getBody()->write(json_encode([ 'updated' => $updated, 'id' => (int)$id ], JSON_UNESCAPED_SLASHES));
 						return $response;
 					}
 					throw new HttpInternalServerErrorException($request, 'Error updating result');

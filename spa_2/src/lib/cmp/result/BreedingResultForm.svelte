@@ -9,11 +9,14 @@
 	let section = $state( ctx.standard.sections[ result.sectionId ] );
 	let breed = $state( ctx.standard.breeds[ result.breedId ] );
 	let color = $state( ctx.standard.colors[ result.colorId ] );
-	let pigeonBroods = result.brood.eggs ? result.brood.eggs / 2 : null; // helper for pigeons
+	let pigeonBroods = $state( result.brood.eggs ? result.brood.eggs / 2 : null ); // helper for pigeons
 
 	const validate = {
 //        breeders     : (v) => validator(v).number().range( 1, 99999 ).orNull().isValid(),
-        pairs        : (v) => validator(v).number().range( result.breeders, 99999 ).orNullIf( result.brood.hatched === null ).isValid(),
+		section	:	 (v) => validator(v).number().orNull().isValid(),
+		breed	:	 (v) => validator(v).number().orNull().isValid(),
+		color	:	 (v) => validator(v).number().orNull().isValid(),
+		pairs        : (v) => validator(v).number().range( result.breeders, 99999 ).orNullIf( result.brood.hatched === null ).isValid(),
 		lay: {
             //dames: (v) => validator(v).number().range(1, 99999).orNull().isValid(),
             eggs: (v) => validator(v).number().range(0, 366).orNull().isValid(),
@@ -28,7 +31,7 @@
             hatched: (v) => validator(v).number().range(0, result.brood.fertile == null ? result.brood.eggs : result.brood.fertile).orNull().isValid(),
         },
         show: {
-            count    : (v) => validator(v).number().range( 1, result.brood.hatched ? result.brood.hatched : 99999  ).orNullIf( result.show.score == null ).isValid(),
+            count    : (v) => validator(v).number().range( 1, 99999  ).orNullIf( result.show.score == null ).isValid(),
             score    : (v) => validator(v).number().range( 89, 97 ).orNullIf( result.show.count === null ).isValid(),
         },
 
@@ -38,6 +41,9 @@
 		console.log( 'Section changed', result.sectionId, event.target.value );
 		section = ctx.standard.sections[ result.sectionId ];
 		result.breedId = result.colorId = null;
+		result.pairs = result.lay.eggs = result.lay.weight = null;
+		result.brood.eggs = result.brood.fertile = result.brood.hatched = pigeonBroods = null;
+		result.show.count = result.show.score = null;
 	}
 	function onBreedChange( event ) {
 		console.log( 'Breed changed', result.breedId );
@@ -52,25 +58,28 @@
 	async function onSubmit( event ) {
         console.log( 'On Breederresult submit' );
         //await invalidate( 'results' ); // make results page reload data
-        if( result ) { // valid entry
-			if( result.sectionId === 5 ) {
-				if( result.breedId && ( result.brood.hatched !== null || result.show.score !== null ) ) { // pigeons
-					result.brood.eggs = pigeonBroods * 2; // 2 eggs per brood expected
-					return await model.Result.save( result );
+        if( result && result.colorId ) { // valid entry
+			if( result.sectionId === 5 ) { // pigeons then convert broods -> eggs
+				result.brood.eggs = pigeonBroods * 2; // 2 eggs per brood expected
+			}
+			if( result.lay.eggs === null && result.lay.weight === null && result.brood.hatched === null && result.show.score === null ) {
+				console.log( 'Result delete');
+				if( result.id > 0 ) {
+					return await model.Result.delete( result );
 				}
-			} else if( result.colorId && ( result.lay.eggs !== null || result.brood.eggs !== null || result.show.count !== null ) ) {
+				return true;
+			} else {
+				console.log( 'Save result' );
 				return await model.Result.save( result );
-			} else if( result.id > 0 && result.lay.eggs === null && result.lay.weight === null && result.brood.hatched === null && result.show.score === null ) {
-				return await model.Result.delete( result.id );
 			}
         }
         dirty.results++; // inc to trigger
     }
 </script>
 
-<Form class='py-0 flex flex-row gap-x-0.5 text-sm' autosubmit onsubmit={onSubmit}>
+<Form class='m-1 py-0 flex flex-row gap-x-0.5 text-sm bg-red-400' autosubmit onsubmit={onSubmit}>
 	<span class='pl-0 pt-3'>⤷</span>
-	<Select class='w-28' label={'Sparte'} bind:value={ result.sectionId } onchange={ onSectionChange }>
+	<Select class='w-28' label={'Sparte'} bind:value={ result.sectionId } onchange={ onSectionChange } validator={validate.section}>
 		<option value={null} selected={ result.sectionId === null }>
 			Sparte ?
 		</option>
@@ -81,7 +90,7 @@
 		{/each}
 	</Select>
 
-	<Select class='w-48' label={'Rasse'} bind:value={ result.breedId } onchange={ onBreedChange } disabled={ section === null}>
+	<Select class='w-48' label={'Rasse'} bind:value={ result.breedId } onchange={ onBreedChange } disabled={ section === null} validator={validate.breed}>
 		<option value={null} selected={ result.breedId === null }>
 			Rasse ?
 		</option>
@@ -94,7 +103,7 @@
 		{/if}
 	</Select>
 
-	<Select class='w-48' label={'Farbe'} bind:value={ result.colorId } onchange={ onColorChange } disabled={ breed === null }>
+	<Select class='w-48' label={'Farbe'} bind:value={ result.colorId } onchange={ onColorChange } disabled={ breed === null } validator={validate.color}>
 		<option value={null} selected={ result.colorId === null }>
 			Farbenschlag ?
 		</option>
@@ -108,23 +117,29 @@
 	</Select>
 
 	<span class='grow'></span>
-	 {#if result.sectionId === 5 }
-	 	 <span class='w-14'></span>
-		  <Select label='Gruppe*' bind:value={pair.group}>
+
+	 {#if result.sectionId === 5 && result.colorId }
+		<Select label='Gruppe*' bind:value={result.group}>
   			{#each [ 'I', 'II', 'III' ] as option}
   				<option value={option}>{option}</option>
   			{/each}
   		</Select>
 		 <span class='w-1'></span>
+		 <span class='w-12 pt-3 text-center'>-</span>
+		 <span class='w-12 pt-3 text-center'>-</span>
+
+		 <span class='w-1'></span>
+
 		 <NumberInput class='w-14' label='Paare' bind:value={ result.pairs } validator={validate.pairs}></NumberInput>
-		 <span class='w-1'></span>
 		 <NumberInput class='w-14' label='Bruten' bind:value={ pigeonBroods } validator={validate.brood.broods}></NumberInput>
-		 <span class='w-14'></span>
 		 <NumberInput class='w-14' label='Geschlüpft' bind:value={ result.brood.hatched } validator={validate.brood.chicks}></NumberInput>
+
 		 <span class='w-1'></span>
-		 <NumberInput class='w-14' label='Tiere' bind:value={ result.show.count } validator={validate.show.count}></NumberInput>
-		 <NumberInput class='w-14' label='Notes' bind:value={ result.show.score } validator={validate.show.score}></NumberInput>
-	 {:else}
+
+		 <NumberInput class='w-12' label='Tiere' bind:value={ result.show.count } validator={validate.show.count}></NumberInput>
+		 <NumberInput class='w-14' label='Notes' bind:value={ result.show.score } min=89 max=97 step={0.1} error='89..97' validator={validate.show.score}></NumberInput>
+		 <Status class='w-2' />
+	 {:else if result.sectionId !== null && result.colorId}
 		 <Select label='Gruppe*' bind:value={result.group}>
   			{#each [ 'I', 'II', 'III' ] as option}
   				<option value={option}>{option}</option>
@@ -139,7 +154,9 @@
 		 <NumberInput class='w-14' label='Geschlüpft' bind:value={ result.brood.hatched } validator={validate.brood.hatched}></NumberInput>
 		 <span class='w-1'></span>
 		 <NumberInput class='w-12' label='Tiere' bind:value={ result.show.count } validator={validate.show.count}></NumberInput>
-		 <NumberInput class='w-12' label='Notes' bind:value={ result.show.score } validator={validate.show.score}></NumberInput>
+		 <NumberInput class='w-14' label='Notes' bind:value={ result.show.score } min=89 max=97 step={0.1} error='89..97' validator={validate.show.score}></NumberInput>
+		 <Status class='w-2' />
+	 	{:else}
+		<span class='pt-3'>Felder erscheinen solbalt Farbenschlag bekannt</span>
 	 {/if}
-	 <Status class='w-2' />
 </Form>

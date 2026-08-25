@@ -28,7 +28,7 @@
 
 
 <div class='flex flex-row justify-end gap-x-4'>
-	<a href={`${page.url.href}/0`}>[+]</a>
+	<a href={`${page.url.href}/0`} title='Züchter hinzufìgen'>[+]</a>
 </div>
 
 <header class='flex flex-row border-header bg-header text-header section items-end px-2 py-0 pl-6 gap-x-2'>

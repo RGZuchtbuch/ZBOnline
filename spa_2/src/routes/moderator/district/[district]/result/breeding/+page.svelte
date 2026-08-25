@@ -5,7 +5,7 @@ import { fade } from 'svelte/transition';
 import { cfg, ctx, dirty } from '$lib/js/store.svelte.js';
 import model from '$lib/js/model.js';
 
-import Breeders from '$lib/cmp/result/Breeder.svelte'
+import Breeders from '$lib/cmp/result/Breeding.svelte'
 
 let mounted = $state( false );
 
@@ -43,7 +43,7 @@ let breeders = $state( [] ); // empty pairs
 			{name: 'Verbände', href:`/moderator/district`},
 			{name: 'Verband', href:`/moderator/district/${ctx.district.id}`},
 			{name: 'Leistungen', href: `/moderator/district/${ctx.district.id}/result?year=${ctx.year}`},
-			{name: 'Züchter'},
+			{name: 'Zucht'},
 		];
 	}
 
@@ -54,6 +54,6 @@ let breeders = $state( [] ); // empty pairs
 
 {#if ctx.district && breeders }
 	<main in:fade={{duration:cfg.fadeIn}}>
-		<Breeders breeders={ breeders } district={ctx.district} />
+		<Breeders bind:breeders={ breeders } district={ctx.district} />
 	</main>
 {/if}

@@ -338,7 +338,7 @@ public static function forDistrictBreeders( int $districtId, int $year ) : array
             SELECT
             	user.id AS breederId, user.firstname, user.infix, user.lastname, user.member, user.club,
             	result.id AS resultId, result.pairId, result.breedingId, result.districtId, result.year, result.group, result.breeders, result.pairs,
-            	section.id AS sectionId, section.rootId AS rootId,
+            	section.rootId AS sectionId,                               # note, not subsection !
             	breed.id AS breedId, breed.name AS breedname,
             	color.id AS colorId, color.name AS colorname, result.aocColor,
 

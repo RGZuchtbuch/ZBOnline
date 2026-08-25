@@ -362,7 +362,9 @@ class Report extends Query
                     section.id AS sectionId, section.name AS sectionName, section.order AS sectionOrder, 
                     subsection.id AS subsectionId, subsection.name AS subsectionName, subsection.order AS subsectionOrder,
                     result.breedId, breed.name AS breedName, 
-                    result.colorId, IF( color.name IS NULL AND NOT section.id = 5, aocColor, color.name ) AS colorName, aocColor,
+#                    result.colorId,
+                    IF( section.id = 5, NULL, result.colorId ) AS colorId, # changed for breeding
+                    IF( color.name IS NULL AND NOT section.id = 5, aocColor, color.name ) AS colorName, aocColor,
                     result.group,                    
                     breed.layEggs AS layShould, breed.layWeight AS layWeightShould,
                     SUM( pairs ) AS pairs, SUM( layDames ) AS layDames, AVG( result.layEggs ) AS layEggs, AVG( result.layWeight ) AS layWeight, 
@@ -391,8 +393,8 @@ class Report extends Query
                 
                 GROUP BY result.year, result.districtId, result.breedId, result.colorId, result.aocColor, result.group, pair.breederId
             ) AS results            
-            
-            GROUP BY subsectionOrder, breedName, colorName
+            # changed group by to id's, not names
+            GROUP BY subsectionId, breedId, colorId
             ORDER BY subsectionOrder, breedName, MAX(aocColor), colorName
         ");
 		return Query::selectArray( $stmt, $args );

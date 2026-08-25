@@ -37,7 +37,7 @@ export default class Breeder {
 		return false;
 	}
 	static async delete( id ){
-		console.log( 'Delete breeder', id, 'TODO' );
+		console.log( 'Delete breeder', id, 'TODO' ); // not delete but anonify ?
 		return true; // TODO
 	}
 }

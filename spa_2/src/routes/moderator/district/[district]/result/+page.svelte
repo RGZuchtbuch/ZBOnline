@@ -27,7 +27,7 @@
 		ctx.title = `Verband ${ctx.district.short}, Leistungen übersicht`;
 		ctx.submenu = [
 			{name: 'Verband', href:`/moderator/district/${ctx.district.id}/result/district?year=${ctx.year}`},
-			{name: 'Zucht', href: `/moderator/district/${ctx.district.id}/result/breeder?year=${ctx.year}`},
+			{name: 'Zucht', href: `/moderator/district/${ctx.district.id}/result/breeding?year=${ctx.year}`},
 			{name: 'Stämme', href: `/moderator/district/${ctx.district.id}/result/pair?year=${ctx.year}`},
 		];
 		ctx.crumbs = [

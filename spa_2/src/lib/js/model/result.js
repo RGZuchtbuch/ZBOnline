@@ -35,9 +35,18 @@ export default class Result {
 		}
 		return false;
 	}
-	static async delete( id ){
-		const data = await api.delete( `/api/2/result/${id}` );
-		return data && data.deleted;
+//	static async delete( id ){
+//		const data = await api.delete( `/api/2/result/${id}` );
+//		return data && data.deleted;
+//	}
+
+	static async delete( result ){
+		const response = await api.delete( `/api/2/result/${result.id}` );
+		if( response && response.deleted ) {
+			result.id = 0;
+			return true;
+		}
+		return false;
 	}
 
 }

@@ -49,7 +49,7 @@
             return await model.Result.save( data );
         } else { // delete if no breeders count given
             if( data.id > 0 ) {
-                return await model.Result.delete( data.id );
+                return await model.Result.delete( data );
             }
         }
         dirty.results++; // inc to trigger

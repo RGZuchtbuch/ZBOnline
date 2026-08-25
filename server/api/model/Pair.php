@@ -140,31 +140,32 @@ class Pair {
 		LEFT JOIN pair ON pair.breederId = user.id AND pair.year=:year
 		LEFT JOIN breed ON breed.id = pair.breedId
 		LEFT JOIN color ON color.id = pair.colorId
+		LEFT JOIN section ON section.id = breed.sectionId
 		LEFT JOIN result ON result.pairId = pair.id
 		WHERE user.districtId=:districtId
-		ORDER BY user.lastName, pair.name
+		ORDER BY user.lastName, section.order, pair.name, breed.name
 	');
 		return Query::selectArray($stmt, $args);
 	}
 
-	public static function readForDistrictInYeara(int $districtId, int $year) : array
-	{ // TODO move to pair!
-		$args = get_defined_vars();
-		$stmt = Query::prepare('
-		SELECT pair.id, pair.year, pair.group, pair.districtId,
-			user.id AS breederId, user.firstname, user.infix, user.lastname, user.member,
-			pair.sectionId, pair.breedId, pair.colorId, pair.name, breed.name AS breedName, color.name AS colorName,
-			result.layEggs, result.layWeight, result.broodEggs, result.broodFertile, result.broodHatched, result.showCount, result.showScore
-		FROM pair
-		LEFT JOIN breed ON breed.id = pair.breedId
-		LEFT JOIN color ON color.id = pair.colorId
-		LEFT JOIN result ON result.pairId = pair.id
-		LEFT JOIN user ON user.id = pair.breederId
-		WHERE pair.districtId=:districtId AND pair.year=:year
-		ORDER BY user.lastName, pair.name
-	');
-		return Query::selectArray($stmt, $args);
-	}
+//	public static function readForDistrictInYeara(int $districtId, int $year) : array
+//	{ // TODO move to pair!
+//		$args = get_defined_vars();
+//		$stmt = Query::prepare('
+//		SELECT pair.id, pair.year, pair.group, pair.districtId,
+//			user.id AS breederId, user.firstname, user.infix, user.lastname, user.member,
+//			pair.sectionId, pair.breedId, pair.colorId, pair.name, breed.name AS breedName, color.name AS colorName,
+//			result.layEggs, result.layWeight, result.broodEggs, result.broodFertile, result.broodHatched, result.showCount, result.showScore
+//		FROM pair
+//		LEFT JOIN breed ON breed.id = pair.breedId
+//		LEFT JOIN color ON color.id = pair.colorId
+//		LEFT JOIN result ON result.pairId = pair.id
+//		LEFT JOIN user ON user.id = pair.breederId
+//		WHERE pair.districtId=:districtId AND pair.year=:year
+//		ORDER BY user.lastName, pair.name
+//	');
+//		return Query::selectArray($stmt, $args);
+//	}
 
 	public static function findForChick( string $chick ) : ? array
 	{
