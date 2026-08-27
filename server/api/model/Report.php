@@ -358,8 +358,11 @@ class Report extends Query
                 # to group the breeders results for multiple pairs as one breeder, not per pair
                 SELECT 
                     result.id, result.districtId, result.year,
+
 #                    SUM( result.breeders ) AS breeders,
-                    result.breeders AS breeders,
+                    #result.breeders AS breeders,
+                    SUM( IF( result.pairId IS NULL, result.breeders, 0 ) ) + COUNT( DISTINCT pair.breederId ) AS breeders, # make sure pairs count as breeding per breeder
+
                     section.id AS sectionId, section.name AS sectionName, section.order AS sectionOrder, 
                     subsection.id AS subsectionId, subsection.name AS subsectionName, subsection.order AS subsectionOrder,
                     result.breedId, breed.name AS breedName, 
@@ -395,7 +398,7 @@ class Report extends Query
                 GROUP BY result.year, result.districtId, result.breedId, result.colorId, result.aocColor, result.group, pair.breederId
             ) AS results            
             # changed group by to id's, not names
-            GROUP BY subsectionId, breedId, colorId
+            GROUP BY breedId, colorId
             ORDER BY subsectionOrder, breedName, MAX(aocColor), colorName
         ");
 		return Query::selectArray( $stmt, $args );
