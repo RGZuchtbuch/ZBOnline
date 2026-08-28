@@ -349,41 +349,56 @@ class Report extends Query
                 # breeders for district and distinct pair breeders,
                 CAST( SUM( breeders ) AS UNSIGNED ) AS breeders,
                 # lay eggs
-                CAST( SUM( IF( layEggs > 0, breeders, 0 ) ) AS UNSIGNED ) AS layBreeders,
-                CAST( SUM( IF( layEggs > 0, breeders * layShould, 0 ) ) / SUM( IF( layEggs > 0, breeders, 0 ) ) AS DOUBLE ) AS layShould,
-                CAST( SUM( IF( layEggs > 0, breeders * layEggs / layShould, 0 ) ) / SUM( IF( layEggs > 0, breeders, 0 ) ) AS DOUBLE ) AS layEggs,
+                CAST( SUM( layEggBreeders ) AS UNSIGNED ) AS layBreeders,
+                CAST( SUM( layEggBreeders * layShould ) / SUM( layEggBreeders ) AS FLOAT ) AS layShould, 
+                CAST( SUM( layEggs ) / NULLIF( SUM( layEggBreeders ), 0 ) AS FLOAT ) AS layEggs,
+
                 # lay weight
-                CAST( SUM( IF( layWeight > 0, breeders, 0 ) ) AS UNSIGNED ) AS layWeightBreeders,
-                CAST( SUM( IF( layWeight > 0, breeders * layWeightShould, 0 ) ) / SUM( IF( results.layWeight > 0, breeders, 0 ) ) AS DOUBLE ) AS layWeightShould,
-                CAST( SUM( IF( layWeight > 0, breeders * layWeight / layWeightShould, 0 ) ) / SUM( IF( layWeight > 0, breeders, 0 ) ) AS DOUBLE ) AS layWeight,
+                CAST( SUM( results.layWeightBreeders ) AS UNSIGNED ) AS layWeightBreeders,
+                CAST( SUM( layWeightBreeders * layWeightShould ) / SUM( layWeightBreeders ) AS DOUBLE ) AS layWeightShould,
+                CAST( SUM( layWeight ) / NULLIF( SUM( layWeightBreeders ), 0 ) AS FLOAT ) AS layWeight,
+
                  # brood all
-                # CAST( SUM( IF( broodEggs > 0, breeders, 0 ) ) AS UNSIGNED ) AS broodBreeders,
 
-
-                CAST( SUM( IF( broodEggs > 0, broodEggs, 0 ) ) AS UNSIGNED ) AS broodEggs,
-                CAST( SUM( IF( broodEggs > 0 AND broodFertile IS NOT NULL, breeders * broodFertile / broodEggs, 0 ) ) / SUM( IF( broodEggs > 0 AND broodFertile IS NOT NULL, breeders, 0 ) ) AS DOUBLE ) AS broodFertile,
-                CAST( SUM( IF( broodEggs > 0 AND broodHatched IS NOT NULL, breeders * broodHatched / broodEggs, 0 ) ) / SUM( IF( broodEggs > 0 AND broodHatched IS NOT NULL, breeders, 0 ) ) AS DOUBLE ) AS broodHatched,
+#                CAST( SUM( IF( broodEggs > 0, broodEggs, 0 ) ) AS UNSIGNED ) AS broodEggs,
+#                CAST( SUM( IF( broodEggs > 0 AND broodFertile IS NOT NULL, breeders * broodFertile / broodEggs, 0 ) ) / SUM( IF( broodEggs > 0 AND broodFertile IS NOT NULL, breeders, 0 ) ) AS DOUBLE ) AS broodFertile,
+#                CAST( SUM( IF( broodEggs > 0 AND broodHatched IS NOT NULL, breeders * broodHatched / broodEggs, 0 ) ) / SUM( IF( broodEggs > 0 AND broodHatched IS NOT NULL, breeders, 0 ) ) AS DOUBLE ) AS broodHatched,
 
                 # brood
-                CAST( SUM( IF( broodHatched IS NOT NULL, breeders, 0 ) ) AS UNSIGNED ) AS broodBreeders,
+                CAST( SUM( broodBreeders) AS UNSIGNED ) AS broodBreeders, # layers and pigeons
 
                 # brood layers
-                CAST( SUM( IF( layers = 1 AND broodHatched IS NOT NULL, breeders, 0 ) ) AS UNSIGNED ) AS broodLayerBreeders,
-                CAST( SUM( IF( layers = 1 AND broodEggs > 0, broodEggs, 0 ) ) AS UNSIGNED ) AS broodLayerEggs,
-                CAST( SUM( IF( layers = 1 AND broodEggs > 0 AND broodFertile IS NOT NULL, breeders * broodFertile / broodEggs, 0 ) ) / SUM( IF( layers = 1 AND broodEggs > 0 AND broodFertile IS NOT NULL, breeders, 0 ) ) AS DOUBLE ) AS broodLayerFertile,
-                CAST( SUM( IF( layers = 1 AND broodEggs > 0 AND broodHatched IS NOT NULL, breeders * broodHatched / broodEggs, 0 ) ) / SUM( IF( layers = 1 AND broodEggs > 0 AND broodHatched IS NOT NULL, breeders, 0 ) ) AS DOUBLE ) AS broodLayerHatched,
+                    #CAST( SUM( IF( layers = 1 AND broodHatched IS NOT NULL, breeders, 0 ) ) AS UNSIGNED ) AS broodLayerBreeders,
+                    #CAST( SUM( IF( layers = 1 AND broodEggs > 0, broodEggs, 0 ) ) AS UNSIGNED ) AS broodLayerEggs,
 
-                # brood pigeons
-                CAST( SUM( IF( layers = 0 AND broodHatched IS NOT NULL, breeders, 0 ) ) AS UNSIGNED ) AS broodPigeonBreeders,
-                CAST( SUM( IF( layers = 0 AND broodEggs > 0, broodEggs, 0 ) ) AS UNSIGNED ) AS broodPigeonEggs,
-                CAST( SUM( IF( layers = 0 AND broodEggs > 0 AND broodHatched IS NOT NULL, breeders * broodHatched / broodEggs, 0 ) ) / SUM( IF( layers = 0 AND broodEggs > 0 AND broodHatched IS NOT NULL, breeders, 0 ) ) AS DOUBLE ) AS broodPigeonHatched,
-#                CAST( SUM( IF( layers = 0 AND broodHatched IS NOT NULL, broodHatched, 0 ) ) AS UNSIGNED ) AS broodPigeonHatched,
-                CAST( SUM( IF( layers = 0 AND broodHatched IS NOT NULL AND pairs > 0, breeders * broodHatched / pairs, 0 ) ) / SUM( IF( layers = 0 AND pairs > 0 AND broodHatched IS NOT NULL, breeders, 0 ) ) AS DOUBLE ) AS broodPigeonResult,
+                CAST( SUM( broodLayerBreeders) AS UNSIGNED ) AS broodLayerBreeders,
+                CAST( SUM( broodLayerEggs) AS UNSIGNED ) AS broodLayerEggs,
+
+#                CAST( SUM( IF( layers = 1 AND broodEggs > 0 AND broodFertile IS NOT NULL, breeders * broodFertile / broodEggs, 0 ) ) / SUM( IF( layers = 1 AND broodEggs > 0 AND broodFertile IS NOT NULL, breeders, 0 ) ) AS DOUBLE ) AS broodLayerFertile,
+#                CAST( SUM( IF( layers = 1 AND broodEggs > 0 AND broodHatched IS NOT NULL, breeders * broodHatched / broodEggs, 0 ) ) / SUM( IF( layers = 1 AND broodEggs > 0 AND broodHatched IS NOT NULL, breeders, 0 ) ) AS DOUBLE ) AS broodLayerHatched,
+                CAST( SUM( broodLayerFertile) / NULLIF( SUM( broodLayerBreeders ),0 ) AS FLOAT ) AS broodLayerFertile,
+                CAST( SUM( broodLayerHatched) / NULLIF( SUM( broodLayerBreeders ),0 ) AS FLOAT ) AS broodLayerHatched,
+
+                # pigeons result
+                    #CAST( SUM( IF( layers = 0 AND broodHatched IS NOT NULL, breeders, 0 ) ) AS UNSIGNED ) AS broodPigeonBreeders,
+                    #CAST( SUM( IF( layers = 0 AND broodHatched IS NOT NULL AND pairs > 0, breeders * broodHatched / pairs, 0 ) ) / SUM( IF( layers = 0 AND pairs > 0 AND broodHatched IS NOT NULL, breeders, 0 ) ) AS DOUBLE ) AS broodPigeonResult,
+                CAST( SUM( broodPigeonBreeders ) AS UNSIGNED ) AS broodPigeonBreeders,
+                CAST( SUM( broodPigeonResult) / NULLIF( SUM( results.broodPigeonBreeders ),0 ) AS FLOAT ) AS broodPigeonResult,
+                # pigeon broods
+                    #CAST( SUM( IF( layers = 0 AND broodEggs > 0, broodEggs, 0 ) ) AS UNSIGNED ) AS broodPigeonEggs,
+                    #CAST( SUM( IF( layers = 0 AND broodEggs > 0 AND broodHatched IS NOT NULL, breeders * broodHatched / broodEggs, 0 ) ) / SUM( IF( layers = 0 AND broodEggs > 0 AND broodHatched IS NOT NULL, breeders, 0 ) ) AS DOUBLE ) AS broodPigeonHatched,
+                    #CAST( SUM( IF( layers = 0 AND broodHatched IS NOT NULL, broodHatched, 0 ) ) AS UNSIGNED ) AS broodPigeonHatched,
+                CAST( SUM( broodPigeonEggsBreeders) AS UNSIGNED ) AS broodPigeonEggsBreeders,
+                CAST( SUM( broodPigeonEggs ) AS UNSIGNED ) AS broodPigeonEggs,
+                CAST( SUM( broodPigeonHatched ) / NULLIF( SUM( broodPigeonBreeders ),0 ) AS FLOAT ) AS broodPigeonHatched,
 
                 # show
-                CAST( SUM( IF( showCount > 0, breeders, 0 ) ) AS UNSIGNED ) AS showBreeders,
-                CAST( SUM( showCount ) AS UNSIGNED ) AS showCount,
-                CAST( SUM( IF( showScore IS NOT NULL, breeders * showScore, 0 ) ) / SUM( IF( showScore IS NOT NULL, breeders, 0 ) ) AS DOUBLE ) AS showScore
+                    #CAST( SUM( IF( showCount > 0, breeders, 0 ) ) AS UNSIGNED ) AS showBreeders,
+                    #CAST( SUM( showCount ) AS UNSIGNED ) AS showCount,
+                    #CAST( SUM( IF( showScore IS NOT NULL, breeders * showScore, 0 ) ) / SUM( IF( showScore IS NOT NULL, breeders, 0 ) ) AS DOUBLE ) AS showScore
+                CAST( SUM( showBreeders) AS UNSIGNED ) AS showBreeders,
+                CAST( SUM( showCount) AS UNSIGNED ) AS showCount,
+                CAST( SUM( showScore ) / NULLIF( SUM( showBreeders ),0 ) AS FLOAT ) AS showScore
 
             FROM ( # generate years
                 SELECT @year:=YEAR( NOW() )+1
@@ -398,7 +413,6 @@ class Report extends Query
                     SELECT
                         result.id, result.districtId, result.year, result.group,
 
-                        #result.breeders,
                         SUM( IF( result.pairId IS NULL, result.breeders, 0 ) ) + COUNT( DISTINCT pair.breederId ) AS breeders,
 
                         section.id AS sectionId, section.name AS sectionName, section.order AS sectionOrder,
@@ -406,33 +420,56 @@ class Report extends Query
 
                         result.breedId, breed.name AS breedName,
 
-                        result.colorId,
+                        result.colorId, ## differs from table, now using pigeon color
                         IF( color.name IS NULL AND section.id <> 5, aocColor, color.name ) AS colorName, aocColor,
 
                         breed.layEggs AS layShould,
                         breed.layWeight AS layWeightShould,
-                        # lay
+
                         SUM( pairs ) AS pairs,
                         SUM( layDames ) AS layDames,
-                        SUM( IF( result.layEggs > 0, result.breeders, 0 ))  AS layBreeders,
-                        AVG( result.layEggs ) AS layEggs, # avg for one breeding
-                        # SUM( IF( result.layEggs > 0, result.breeders * result.layEggs / breed.layEggs, 0 ) ) AS layEggsWeighted,
 
+                        # lay eggs
+                        SUM( IF( result.layEggs > 0, result.breeders, 0 ))  AS layEggBreeders,
+                        SUM( result.breeders * result.layEggs ) / breed.layEggs AS layEggs,
+                        # lay weight
                         SUM( IF( result.layWeight > 0, result.breeders, 0 ) ) AS layWeightBreeders,
-                        AVG( result.layWeight ) AS layWeight,
-                        # SUM( IF( result.layWeight > 0, result.breeders * result.layWeight / breed.layWeight, 0 ) ) AS layWeightWeighted,
+                        SUM( result.breeders * result.layWeight ) / breed.layWeight AS layWeight,
 
                         # brood
+                        SUM( IF( broodHatched IS NOT NULL, result.breeders, 0 ) ) AS broodBreeders,
+
                         # layers
                         SUM( IF( subsection.layers = 1 AND broodHatched IS NOT NULL, breeders, 0 )) AS broodLayerBreeders,
-                        SUM( broodEggs ) AS broodEggs,
-                        SUM( broodFertile ) AS broodFertile,
-                        SUM( broodHatched ) AS broodHatched,
-                        # pigeons
-                        SUM( IF( subsection.layers = 0 AND broodEggs > 0 AND broodHatched IS NOT NULL, breeders, 0 )) AS broodPigeonEggsBreeders,
+#                        SUM( broodEggs ) AS broodEggs,
+#                        SUM( broodFertile ) AS broodFertile,
+#                        SUM( broodHatched ) AS broodHatched,
+                        SUM( IF( subsection.layers = 1 AND broodEggs IS NOT NULL, broodEggs, 0 )) AS broodLayerEggs,
+                        SUM( IF( subsection.layers = 1 AND broodEggs > 0 AND broodFertile IS NOT NULL, result.breeders * broodFertile / broodEggs, 0 ) ) AS broodLayerFertile,
+                        SUM( IF( subsection.layers = 1 AND broodEggs > 0 AND broodHatched IS NOT NULL, result.breeders * broodHatched / broodEggs, 0 ) ) AS broodLayerHatched,
 
-                        SUM( showCount ) AS showCount, AVG( showScore ) AS showScore,
-                        section.layers
+
+                        # pigeons
+                        #SUM( IF( subsection.layers = 0 AND broodHatched IS NOT NULL, breeders, 0 )) AS broodPigeonBreeders,
+                        #SUM( IF( subsection.layers = 0 AND broodEggs > 0 AND broodHatched IS NOT NULL, breeders, 0 )) AS broodPigeonEggsBreeders,
+
+                        # pigeon result, need pair and hatched
+                        SUM( IF( subsection.layers = 0 AND pairs > 0 AND broodHatched IS NOT NULL, breeders, 0 )) AS broodPigeonBreeders,
+                        SUM( IF( subsection.layers = 0 AND pairs > 0 AND broodHatched IS NOT NULL, result.breeders * broodHatched / pairs, 0 )) AS broodPigeonResult,
+                        # pigeon brood, need broods and hatched
+                        SUM( IF( subsection.layers = 0 AND broodEggs > 0 AND broodHatched IS NOT NULL, breeders, 0 )) AS broodPigeonEggsBreeders,
+                        SUM( IF( subsection.layers = 0 AND broodEggs > 0, broodEggs, 0 )) AS broodPigeonEggs,
+                        SUM( IF( subsection.layers = 0 AND broodHatched IS NOT NULL, result.breeders * broodHatched / broodEggs, 0 )) AS broodPigeonHatched,
+
+                        #show
+                        #SUM( showCount ) AS showCount,
+                        #AVG( showScore ) AS showScore,
+
+                        SUM( IF( showCount > 0, result.breeders, 0 ) ) AS showBreeders,
+                        SUM( showCount ) AS showCount,
+                        SUM( IF( showScore IS NOT NULL, result.breeders * showScore, 0 ) ) AS showScore,
+
+                        subsection.layers
 
                     FROM result
                         LEFT JOIN pair ON pair.id = result.pairId
@@ -481,31 +518,32 @@ class Report extends Query
                 CAST( SUM( pairs ) AS UNSIGNED ) AS pairs,
                 CAST( SUM( layDames ) AS UNSIGNED ) AS layDames,
 
-                CAST( SUM( layBreeders ) AS UNSIGNED ) AS layBreeders,
-
-                #CAST( SUM( layEggsWeighted ) / NULLIF(SUM( results.layBreeders),0) AS FLOAT ) AS layEggs,
-                CAST( SUM( layEggs ) / NULLIF( SUM( layBreeders ), 0 ) / layShould  AS FLOAT ) AS layEggs,
-
+                # lay eggs
+                CAST( SUM( layEggBreeders ) AS UNSIGNED ) AS layBreeders,
+                CAST( SUM( layEggs ) / NULLIF( SUM( layEggBreeders ), 0 )  AS FLOAT ) AS layEggs,
+                # lay weight
                 CAST( SUM( results.layWeightBreeders ) AS UNSIGNED ) AS layWeightBreeders,
-                #CAST( SUM( layWeightWeighted ) / NULLIF( SUM( layWeightBreeders ),0 ) AS FLOAT ) AS layWeight_old,
-                CAST( SUM( layWeight ) / NULLIF( SUM( layWeightBreeders ), 0 ) / layWeightShould  AS FLOAT ) AS layWeight,
+                CAST( SUM( layWeight ) / NULLIF( SUM( layWeightBreeders ), 0 ) AS FLOAT ) AS layWeight,
 
+                #brood
                 CAST( SUM( broodBreeders) AS UNSIGNED ) AS broodBreeders,
-
+                #layer
                 CAST( SUM( broodLayerBreeders) AS UNSIGNED ) AS broodLayerBreeders,
                 CAST( SUM( broodLayerEggs) AS UNSIGNED ) AS broodLayerEggs,
-                CAST( SUM( broodLayerFertileWeighted) / NULLIF( SUM( results.broodLayerBreeders ),0 ) AS FLOAT ) AS broodLayerFertile,
-                CAST( SUM( broodLayerHatchedWeighted) / NULLIF( SUM( results.broodLayerBreeders ),0 ) AS FLOAT ) AS broodLayerHatched,
+                CAST( SUM( broodLayerFertile) / NULLIF( SUM( broodLayerBreeders ),0 ) AS FLOAT ) AS broodLayerFertile,
+                CAST( SUM( broodLayerHatched) / NULLIF( SUM( broodLayerBreeders ),0 ) AS FLOAT ) AS broodLayerHatched,
 
+                # pigeon result
                 CAST( SUM( broodPigeonBreeders ) AS UNSIGNED ) AS broodPigeonBreeders,
-                CAST( SUM( results.broodPigeonEggsBreeders) AS UNSIGNED ) AS broodPigeonEggsBreeders,
+                CAST( SUM( broodPigeonResult) / NULLIF( SUM( results.broodPigeonBreeders ),0 ) AS FLOAT ) AS broodPigeonResult,
+                # pigeon broods
+                CAST( SUM( broodPigeonEggsBreeders) AS UNSIGNED ) AS broodPigeonEggsBreeders,
                 CAST( SUM( broodPigeonEggs ) AS UNSIGNED ) AS broodPigeonEggs,
-                CAST( SUM( broodPigeonHatchedWeighted ) / NULLIF( SUM( results.broodPigeonEggsBreeders ),0 ) AS FLOAT ) AS broodPigeonHatched,
-                CAST( SUM( broodPigeonResultWeighted) / NULLIF( SUM( results.broodPigeonBreeders ),0 ) AS FLOAT ) AS broodPigeonResult,
+                CAST( SUM( broodPigeonHatched ) / NULLIF( SUM( broodPigeonBreeders ),0 ) AS FLOAT ) AS broodPigeonHatched,
 
                 CAST( SUM( showBreeders) AS UNSIGNED ) AS showBreeders,
                 CAST( SUM( showCount) AS UNSIGNED ) AS showCount,
-                CAST( SUM( showScoreWeighted ) / NULLIF( SUM( showBreeders ),0 ) AS FLOAT ) AS showScore
+                CAST( SUM( showScore ) / NULLIF( SUM( showBreeders ),0 ) AS FLOAT ) AS showScore
 
             FROM (
                 SELECT
@@ -527,31 +565,34 @@ class Report extends Query
                     SUM( pairs ) AS pairs,
                     SUM( layDames ) AS layDames,
 
-                    -- Precompute weighted values once
-                    SUM( IF( result.layEggs > 0, result.breeders, 0 ))  AS layBreeders,
-                    #SUM( IF( result.layEggs > 0, result.breeders * result.layEggs / breed.layEggs, 0 ) ) AS layEggsWeighted,
-                    SUM( result.breeders * result.layEggs ) AS layEggs,
-
+                    # Lay eggs
+                    SUM( IF( result.layEggs > 0, result.breeders, 0 ))  AS layEggBreeders,
+                    SUM( result.breeders * result.layEggs ) / breed.layEggs AS layEggs,
+                    # lay weight
                     SUM( IF( result.layWeight > 0, result.breeders, 0 ) ) AS layWeightBreeders,
-                    #SUM( IF( result.layWeight > 0, result.breeders * result.layWeight / breed.layWeight, 0 ) ) AS layWeightWeighted,
-                    SUM( result.breeders * result.layWeight ) AS layWeight,
+                    SUM( result.breeders * result.layWeight ) / breed.layWeight AS layWeight,
 
+                    #brood
                     SUM( IF( broodHatched IS NOT NULL, result.breeders, 0 ) ) AS broodBreeders,
 
-                    SUM( IF( subsection.layers = 1 AND broodHatched IS NOT NULL, breeders, 0 )) AS broodLayerBreeders,
+                    #layers
+                    SUM( IF( subsection.layers = 1 AND broodHatched IS NOT NULL, breeders, 0 ) ) AS broodLayerBreeders,
                     SUM( IF( subsection.layers = 1 AND broodEggs IS NOT NULL, broodEggs, 0 )) AS broodLayerEggs,
-                    SUM( IF( subsection.layers = 1 AND broodFertile IS NOT NULL AND broodEggs > 0, result.breeders * broodFertile / broodEggs, 0 )) AS broodLayerFertileWeighted,
-                    SUM( IF( subsection.layers = 1 AND broodHatched IS NOT NULL AND broodEggs > 0, result.breeders * broodHatched / broodEggs, 0 )) AS broodLayerHatchedWeighted,
+                    SUM( IF( subsection.layers = 1 AND broodEggs > 0 AND broodFertile IS NOT NULL, result.breeders * broodFertile / broodEggs, 0 ) ) AS broodLayerFertile,
+                    SUM( IF( subsection.layers = 1 AND broodEggs > 0 AND broodHatched IS NOT NULL, result.breeders * broodHatched / broodEggs, 0 ) ) AS broodLayerHatched,
 
-                    SUM( IF( subsection.layers = 0 AND broodHatched IS NOT NULL, breeders, 0 )) AS broodPigeonBreeders,
+                    # pigeon result, need pair and hatched
+                    SUM( IF( subsection.layers = 0 AND pairs > 0 AND broodHatched IS NOT NULL, breeders, 0 )) AS broodPigeonBreeders,
+                    SUM( IF( subsection.layers = 0 AND pairs > 0 AND broodHatched IS NOT NULL, result.breeders * broodHatched / pairs, 0 )) AS broodPigeonResult,
+                    # pigeon brood, need broods and hatched
                     SUM( IF( subsection.layers = 0 AND broodEggs > 0 AND broodHatched IS NOT NULL, breeders, 0 )) AS broodPigeonEggsBreeders,
                     SUM( IF( subsection.layers = 0 AND broodEggs > 0, broodEggs, 0 )) AS broodPigeonEggs,
-                    SUM( IF( subsection.layers = 0 AND broodEggs > 0 AND broodHatched IS NOT NULL, result.breeders * broodHatched / broodEggs, 0 )) AS broodPigeonHatchedWeighted,
-                    SUM( IF( subsection.layers = 0 AND broodHatched IS NOT NULL AND pairs > 0, result.breeders * broodHatched / pairs, 0 )) AS broodPigeonResultWeighted,
+                    SUM( IF( subsection.layers = 0 AND broodHatched IS NOT NULL, result.breeders * broodHatched / broodEggs, 0 )) AS broodPigeonHatched,
 
+                    #show
                     SUM( IF( showCount > 0, result.breeders, 0 ) ) AS showBreeders,
                     SUM( showCount ) AS showCount,
-                    SUM( IF( showScore IS NOT NULL, result.breeders * showScore, 0 ) ) AS showScoreWeighted,
+                    SUM( IF( showScore IS NOT NULL, result.breeders * showScore, 0 ) ) AS showScore,
                     subsection.layers AS layers
 
                 FROM result
