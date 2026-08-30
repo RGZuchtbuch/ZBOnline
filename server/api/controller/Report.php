@@ -110,7 +110,7 @@ class Report
 				$subsection[ 'breeds' ][] = & $breed; // new Breed array
 			}
 			$result = $row;
-			$result['id'] = $row['resultId'];
+			//$result['id'] = $row['resultId'];
 			if( $row['colorId'] === null && $row['aocColor'] === null ) { // pigeon result for breed
 				$breed[ 'result' ] = $result;
 			} else { // layer or aoc

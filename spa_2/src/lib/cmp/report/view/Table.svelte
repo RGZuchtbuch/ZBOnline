@@ -29,18 +29,35 @@
             sum.layWeight         += result.layWeightBreeders * result.layWeight;
         }
 
-        if( result.broodLayerEggs ) {
-            sum.broodBreeders     += result.broodLayerBreeders;
-            sum.broodLayerEggs    += result.broodLayerEggs;
-            sum.broodLayerFertile += result.broodLayerBreeders * result.broodLayerFertile;
-            sum.broodLayerHatched += result.broodLayerBreeders * result.broodLayerHatched;
+        if( result.broodBreeders > 0 ) {
+            sum.broodBreeders      += result.broodBreeders;
         }
-        if( result.pairs && result.broodPigeonHatched ) { // TODO could jest check on eggs, like layers !!
-            sum.broodBreeders      += result.broodPigeonBreeders;
-            sum.broodPigeonEggs    += result.broodPigeonEggs;
-            sum.broodPigeonHatched += result.broodPigeonBreeders * result.broodPigeonHatched;
-            sum.broodPigeonResult  += result.broodPigeonBreeders * result.broodPigeonResult;
+        if( result.broodLayerBreeders > 0 ) {
+            sum.broodLayerBreeders += result.broodLayerBreeders;
+            sum.broodLayerEggs     += result.broodLayerEggs;
+            sum.broodLayerFertile  += result.broodLayerBreeders * result.broodLayerFertile;
+            sum.broodLayerHatched  += result.broodLayerBreeders * result.broodLayerHatched;
         }
+
+        if( result.broodPigeonResultBreeders > 0 ) { // TODO could jest check on eggs, like layers !!
+            sum.broodPigeonResultBreeders      += result.broodPigeonResultBreeders;
+            //sum.broodPigeonEggs    += result.broodPigeonEggs;
+            //sum.broodPigeonHatched += result.broodPigeonBreeders * result.broodPigeonHatched;
+            sum.broodPigeonResult  += result.broodPigeonResultBreeders * result.broodPigeonResult;
+        }
+        if( result.broodPigeonEggsBreeders > 0 ) { // TODO could jest check on eggs, like layers !!
+            sum.broodPigeonEggsBreeders += result.broodPigeonEggsBreeders;
+            sum.broodPigeonEggs         += result.broodPigeonEggs;
+            sum.broodPigeonHatched      += result.broodPigeonEggsBreeders * result.broodPigeonHatched;
+            //sum.broodPigeonResult  += result.broodPigeonBreeders * result.broodPigeonResult;
+        }
+
+//        if( result.pairs && result.broodPigeonHatched ) { // TODO could jest check on eggs, like layers !!
+//            sum.broodBreeders      += result.broodPigeonBreeders;
+//            sum.broodPigeonEggs    += result.broodPigeonEggs;
+//            sum.broodPigeonHatched += result.broodPigeonBreeders * result.broodPigeonHatched;
+//            sum.broodPigeonResult  += result.broodPigeonBreeders * result.broodPigeonResult;
+//        }
 
         if( result.showCount && result.showScore ) {
             sum.showBreeders += result.showBreeders;
@@ -64,14 +81,15 @@
             //subTotal.broodEggs = subTotal.broodEggs;
             total.broodBreeders = sum.broodBreeders; // breeders reporting brood results ( P & L )
 
-            total.broodLayerEggs = sum.broodLayerEggs;
-            total.broodLayerFertile = sum.broodBreeders ? sum.broodLayerFertile / sum.broodBreeders : null; // layer
-            total.broodLayerHatched = sum.broodBreeders ? sum.broodLayerHatched / sum.broodBreeders : null; // layer
+            //total.broodLayerBreeders = sum.broodLayerBreeders;
+            total.broodLayerEggs     = sum.broodLayerEggs;
+            total.broodLayerFertile  = sum.broodLayerBreeders ? sum.broodLayerFertile / sum.broodLayerBreeders : null; // layer
+            total.broodLayerHatched  = sum.broodLayerBreeders ? sum.broodLayerHatched / sum.broodLayerBreeders : null; // layer
 
             total.broodPigeonEggs = sum.broodPigeonEggs;
             //total.broodPigeonHatched = sum.broodPigeonHatched; // pigeon
-            total.broodPigeonHatched = sum.broodBreeders ? sum.broodPigeonHatched / sum.broodBreeders : null; // pigeon
-            total.broodPigeonResult = sum.broodBreeders ? sum.broodPigeonResult / sum.broodBreeders : null; // pigeon
+            total.broodPigeonHatched = sum.broodPigeonEggsBreeders ? sum.broodPigeonHatched / sum.broodPigeonEggsBreeders : null; // pigeon
+            total.broodPigeonResult = sum.broodPigeonResultBreeders ? sum.broodPigeonResult / sum.broodPigeonResultBreeders : null; // pigeon
 
             // showCount
             total.showBreeders = sum.showBreeders; // breeders reporting showscores
@@ -80,7 +98,20 @@
         return total;
     }
     function createTotal() {
-        return { breeders:0, pairs:0, layDames:0, layShould:0, layBreeders:0, layEggs:0, layWeightBreeders:0, layWeightShould:0, layWeight:0, broodBreeders:0, broodLayerEggs:null, broodLayerFertile:0, broodLayerHatched:0, broodPigeonEggs:null, broodPigeonHatched:null, broodPigeonResult:0, showBreeders:0, showCount:null, showScore:0 };
+        return {
+            breeders:0, pairs:0,
+            layDames:0, layShould:0, layBreeders:0, layEggs:0, layWeightBreeders:0, layWeightShould:0, layWeight:0,
+            broodBreeders:0, broodLayerEggs:null,
+            broodLayerHatchedBreeders:0, broodLayerHatched:0,
+            broodLayerFertileBreeders:0, broodLayerFertile:0,
+            broodPigeonResultBreeders:0, broodPigeonResult:0,
+            broodPigeonEggsBreeders:0, broodPigeonEggs:null, broodPigeonHatched:null,
+            showBreeders:0, showCount:null, showScore:0 };
+//        return {
+//            breeders:0, pairs:0,
+//            layDames:0, layShould:0, layBreeders:0, layEggs:0, layWeightBreeders:0, layWeightShould:0, layWeight:0,
+//            broodBreeders:0, broodLayerEggs:null, broodLayerFertile:0, broodLayerHatched:0, broodPigeonEggs:null, broodPigeonHatched:null, broodPigeonResult:0,
+//            showBreeders:0, showCount:null, showScore:0 };
     }
     // function calcTotals(  ) {
     //     totalledReport = data;
@@ -143,6 +174,7 @@
             section.total = avgTotal( sectionSum );
         }
         totalled.total = avgTotal( resultsSum );
+        console.log( totalled );
         return totalled;
     }
 

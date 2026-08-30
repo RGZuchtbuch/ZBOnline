@@ -60,7 +60,7 @@
         //await invalidate( 'results' ); // make results page reload data
         if( result && result.colorId ) { // valid entry
 			if( result.sectionId === 5 ) { // pigeons then convert broods -> eggs
-				result.brood.eggs = pigeonBroods * 2; // 2 eggs per brood expected
+				result.brood.eggs = pigeonBroods > 0 ? pigeonBroods * 2 : null; // 2 eggs per brood expected
 			}
 			if( result.lay.eggs === null && result.lay.weight === null && result.brood.hatched === null && result.show.score === null ) {
 				console.log( 'Result delete');
