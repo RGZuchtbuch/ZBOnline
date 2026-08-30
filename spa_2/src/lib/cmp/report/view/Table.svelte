@@ -35,10 +35,22 @@
         if( result.broodLayerBreeders > 0 ) {
             sum.broodLayerBreeders += result.broodLayerBreeders;
             sum.broodLayerEggs     += result.broodLayerEggs;
-            sum.broodLayerFertile  += result.broodLayerBreeders * result.broodLayerFertile;
-            sum.broodLayerHatched  += result.broodLayerBreeders * result.broodLayerHatched;
+//            sum.broodLayerFertile  += result.broodLayerBreeders * result.broodLayerFertile;
+//            sum.broodLayerHatched  += result.broodLayerBreeders * result.broodLayerHatched;
         }
-
+        if( result.broodLayerFertileBreeders > 0 ) {
+//            sum.broodLayerBreeders += result.broodLayerBreeders;
+            sum.broodLayerFertileBreeders += result.broodLayerFertileBreeders;
+            //sum.broodLayerEggs     += result.broodLayerEggs;
+            sum.broodLayerFertile  += result.broodLayerFertileBreeders * result.broodLayerFertile;
+            //sum.broodLayerHatched  += result.broodLayerFertileBreeders * result.broodLayerHatched;
+        }
+        if( result.broodLayerHatchedBreeders > 0 ) {
+            sum.broodLayerHatchedBreeders += result.broodLayerHatchedBreeders;
+            //sum.broodLayerEggs     += result.broodLayerEggs;
+            //sum.broodLayerFertile  += result.broodLayerHatchedBreeders * result.broodLayerFertile;
+            sum.broodLayerHatched  += result.broodLayerHatchedBreeders * result.broodLayerHatched;
+        }
         if( result.broodPigeonResultBreeders > 0 ) { // TODO could jest check on eggs, like layers !!
             sum.broodPigeonResultBreeders      += result.broodPigeonResultBreeders;
             //sum.broodPigeonEggs    += result.broodPigeonEggs;
@@ -83,8 +95,8 @@
 
             //total.broodLayerBreeders = sum.broodLayerBreeders;
             total.broodLayerEggs     = sum.broodLayerEggs;
-            total.broodLayerFertile  = sum.broodLayerBreeders ? sum.broodLayerFertile / sum.broodLayerBreeders : null; // layer
-            total.broodLayerHatched  = sum.broodLayerBreeders ? sum.broodLayerHatched / sum.broodLayerBreeders : null; // layer
+            total.broodLayerFertile  = sum.broodLayerFertileBreeders ? sum.broodLayerFertile / sum.broodLayerFertileBreeders : null; // layer
+            total.broodLayerHatched  = sum.broodLayerHatchedBreeders ? sum.broodLayerHatched / sum.broodLayerHatchedBreeders : null; // layer
 
             total.broodPigeonEggs = sum.broodPigeonEggs;
             //total.broodPigeonHatched = sum.broodPigeonHatched; // pigeon

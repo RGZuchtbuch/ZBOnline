@@ -626,9 +626,11 @@ class Report extends Query
                 CAST( SUM( broodBreeders) AS UNSIGNED ) AS broodBreeders,
                 #layer
                 CAST( SUM( broodLayerBreeders) AS UNSIGNED ) AS broodLayerBreeders,
+                CAST( SUM( broodLayerFertileBreeders) AS UNSIGNED ) AS broodLayerFertileBreeders,
+                CAST( SUM( broodLayerHatchedBreeders) AS UNSIGNED ) AS broodLayerHatchedBreeders,
                 CAST( SUM( broodLayerEggs) AS UNSIGNED ) AS broodLayerEggs,
-                CAST( SUM( broodLayerFertile) / NULLIF( SUM( broodLayerBreeders ),0 ) AS FLOAT ) AS broodLayerFertile,
-                CAST( SUM( broodLayerHatched) / NULLIF( SUM( broodLayerBreeders ),0 ) AS FLOAT ) AS broodLayerHatched,
+                CAST( SUM( broodLayerFertile) / NULLIF( SUM( broodLayerFertileBreeders ),0 ) AS FLOAT ) AS broodLayerFertile,
+                CAST( SUM( broodLayerHatched) / NULLIF( SUM( broodLayerHatchedBreeders ),0 ) AS FLOAT ) AS broodLayerHatched,
 
                 # pigeon result
                 CAST( SUM( broodPigeonResultBreeders ) AS UNSIGNED ) AS broodPigeonResultBreeders,
@@ -675,7 +677,9 @@ class Report extends Query
                     #layers
                     SUM( IF( subsection.layers = 1 AND broodHatched IS NOT NULL, breeders, 0 ) ) AS broodLayerBreeders,
                     SUM( IF( subsection.layers = 1 AND broodEggs IS NOT NULL, broodEggs, 0 )) AS broodLayerEggs,
+                        SUM( IF( subsection.layers = 1 AND broodEggs > 0 AND broodFertile IS NOT NULL, breeders, 0 )) AS broodLayerFertileBreeders,
                     SUM( IF( subsection.layers = 1 AND broodEggs > 0 AND broodFertile IS NOT NULL, result.breeders * broodFertile / broodEggs, 0 ) ) AS broodLayerFertile,
+                        SUM( IF( subsection.layers = 1 AND broodEggs > 0 AND broodHatched IS NOT NULL, breeders, 0 )) AS broodLayerHatchedBreeders,
                     SUM( IF( subsection.layers = 1 AND broodEggs > 0 AND broodHatched IS NOT NULL, result.breeders * broodHatched / broodEggs, 0 ) ) AS broodLayerHatched,
 
                     # pigeon result, need pair and hatched
