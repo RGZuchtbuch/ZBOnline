@@ -17,13 +17,13 @@
         sum.pairs += result.pairs;
         sum.layDames += result.layDames;
 
-        if (result.layEggs) {
+        if  (result.layBreeders > 0 ) { // should be layEggsBreeders
             sum.layBreeders += result.layBreeders;
             sum.layShould   += result.layBreeders * result.layShould; // needs div by total breeders
             sum.layEggs     += result.layBreeders * result.layEggs; // needs div by total breeders
         }
 
-        if (result.layWeight) {
+        if ( result.layWeightBreeders > 0 ) {
             sum.layWeightBreeders += result.layWeightBreeders;
             sum.layWeightShould   += result.layWeightBreeders * result.layWeightShould;
             sum.layWeight         += result.layWeightBreeders * result.layWeight;
@@ -35,41 +35,24 @@
         if( result.broodLayerBreeders > 0 ) {
             sum.broodLayerBreeders += result.broodLayerBreeders;
             sum.broodLayerEggs     += result.broodLayerEggs;
-//            sum.broodLayerFertile  += result.broodLayerBreeders * result.broodLayerFertile;
-//            sum.broodLayerHatched  += result.broodLayerBreeders * result.broodLayerHatched;
         }
         if( result.broodLayerFertileBreeders > 0 ) {
-//            sum.broodLayerBreeders += result.broodLayerBreeders;
             sum.broodLayerFertileBreeders += result.broodLayerFertileBreeders;
-            //sum.broodLayerEggs     += result.broodLayerEggs;
             sum.broodLayerFertile  += result.broodLayerFertileBreeders * result.broodLayerFertile;
-            //sum.broodLayerHatched  += result.broodLayerFertileBreeders * result.broodLayerHatched;
         }
         if( result.broodLayerHatchedBreeders > 0 ) {
             sum.broodLayerHatchedBreeders += result.broodLayerHatchedBreeders;
-            //sum.broodLayerEggs     += result.broodLayerEggs;
-            //sum.broodLayerFertile  += result.broodLayerHatchedBreeders * result.broodLayerFertile;
             sum.broodLayerHatched  += result.broodLayerHatchedBreeders * result.broodLayerHatched;
         }
         if( result.broodPigeonResultBreeders > 0 ) { // TODO could jest check on eggs, like layers !!
             sum.broodPigeonResultBreeders      += result.broodPigeonResultBreeders;
-            //sum.broodPigeonEggs    += result.broodPigeonEggs;
-            //sum.broodPigeonHatched += result.broodPigeonBreeders * result.broodPigeonHatched;
             sum.broodPigeonResult  += result.broodPigeonResultBreeders * result.broodPigeonResult;
         }
         if( result.broodPigeonEggsBreeders > 0 ) { // TODO could jest check on eggs, like layers !!
             sum.broodPigeonEggsBreeders += result.broodPigeonEggsBreeders;
             sum.broodPigeonEggs         += result.broodPigeonEggs;
             sum.broodPigeonHatched      += result.broodPigeonEggsBreeders * result.broodPigeonHatched;
-            //sum.broodPigeonResult  += result.broodPigeonBreeders * result.broodPigeonResult;
         }
-
-//        if( result.pairs && result.broodPigeonHatched ) { // TODO could jest check on eggs, like layers !!
-//            sum.broodBreeders      += result.broodPigeonBreeders;
-//            sum.broodPigeonEggs    += result.broodPigeonEggs;
-//            sum.broodPigeonHatched += result.broodPigeonBreeders * result.broodPigeonHatched;
-//            sum.broodPigeonResult  += result.broodPigeonBreeders * result.broodPigeonResult;
-//        }
 
         if( result.showCount && result.showScore ) {
             sum.showBreeders += result.showBreeders;
