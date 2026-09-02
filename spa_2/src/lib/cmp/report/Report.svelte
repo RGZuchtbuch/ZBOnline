@@ -52,6 +52,11 @@
 </script>
 
 <section>
+	<p class='hidden md:block px-4 my-2 text-center print:hidden'>
+		Die Meldungen werden ab 2024 in diesem Programm gespeichert. Nach und nach werden auch frühere Meldungen eingegeben.<br>
+		Nicht jeder Meldung enthält jeder Leistung. Leistungsdurchschnitte werder jeweils pro meldender Zucht berechnet.
+	</p>
+
 	<Filter {district} {year} {group} {section} {breed} {color} />
 
 	<div class='flex flex-col break-after-page'>

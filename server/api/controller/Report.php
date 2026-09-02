@@ -80,8 +80,7 @@ class Report
 		throw  new HttpBadRequestException($request, 'Bad arguments');
 	}
 
-	public static function toReportTree( $results ) : array
-	{
+	public static function toReportTree( $results ) : array	{
 		$root = [ 'sections'=>[] ];
 		$sectionId = 0; // last SectionId
 		$subsectionId = 0; // last subSection
@@ -106,7 +105,7 @@ class Report
 			if( $row[ 'breedId' ] !== $breedId ) { // next Breed
 				$breedId = $row[ 'breedId' ];
 				unset( $breed ); // to lose ref
-				$breed = [ 'id'=>$breedId, 'name'=>$row[ 'breedName' ], 'layEggs'=>$row['layShould'], 'layWeight'=>$row['layWeightShould'], 'colors'=>[] ];
+				$breed = [ 'id'=>$breedId, 'name'=>$row[ 'breedName' ], 'layEggs'=>$row['layEggsShould'], 'layWeight'=>$row['layWeightShould'], 'colors'=>[] ];
 				$subsection[ 'breeds' ][] = & $breed; // new Breed array
 			}
 			$result = $row;
@@ -121,5 +120,47 @@ class Report
 		}
 		return $root;
 	}
+
+//	public static function toReportTree( $results ) : array
+//	{
+//		$root = [ 'sections'=>[] ];
+//		$sectionId = 0; // last SectionId
+//		$subsectionId = 0; // last subSection
+//		$section = null;
+//		$subsection = null;
+//		$breedId = 0; // lastBreed
+//		$breed = null;
+//
+//		foreach ($results as $row) {
+//			if( $row['sectionId'] !== $sectionId ) { // next section
+//				$sectionId = $row['sectionId'];
+//				unset( $section ); // to lose ref
+//				$section = [ 'id'=>$sectionId, 'name'=>$row['sectionName'], 'subsections'=>[] ];
+//				$root[ 'sections'][] = & $section; // new section array
+//			}
+//			if( $row['subsectionId'] !== $subsectionId ) { // next section
+//				$subsectionId = $row['subsectionId'];
+//				unset( $subsection ); // to lose ref
+//				$subsection = [ 'id'=>$subsectionId, 'name'=>$row['subsectionName'], 'breeds'=>[] ];
+//				$section[ 'subsections'][] = & $subsection; // new section array
+//			}
+//			if( $row[ 'breedId' ] !== $breedId ) { // next Breed
+//				$breedId = $row[ 'breedId' ];
+//				unset( $breed ); // to lose ref
+//				$breed = [ 'id'=>$breedId, 'name'=>$row[ 'breedName' ], 'layEggs'=>$row['layShould'], 'layWeight'=>$row['layWeightShould'], 'colors'=>[] ];
+//				$subsection[ 'breeds' ][] = & $breed; // new Breed array
+//			}
+//			$result = $row;
+//			//$result['id'] = $row['resultId'];
+//			if( $row['colorId'] === null && $row['aocColor'] === null ) { // pigeon result for breed
+//				$breed[ 'result' ] = $result;
+//			} else { // layer or aoc
+//				$breed['colors'][] = [
+//					'id' => $row['colorId'], 'name' => $row['colorName'], 'result'=> $result
+//				];
+//			}
+//		}
+//		return $root;
+//	}
 
 }
