@@ -51,6 +51,7 @@ class Report
 				case 'chart':
 					if( $districtId && $year ) { // rest is optional...
 						$report = model\Report::forChart($districtId, $year, $sectionId, $breedId, $colorId, $group);
+
 					}
 					break;
 				case 'map':
@@ -71,13 +72,13 @@ class Report
 					break;
 			}
 		}
-		if( $report ) {
+//		if( $report ) {
 			$json = json_encode( [ 'report' => $report ], JSON_UNESCAPED_SLASHES );
 			model\Cache::set( 'report', $request->getUri()->getPath(), $request->getUri()->getQuery(), $json );
 			$response->getBody()->write( $json );
 			return $response;
-		}
-		throw  new HttpBadRequestException($request, 'Bad arguments');
+//		}
+//		throw  new HttpBadRequestException($request, 'Bad arguments');
 	}
 
 	public static function toReportTree( $results ) : array	{

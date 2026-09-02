@@ -2,6 +2,7 @@
     import { BarController, BarElement, CategoryScale, Chart, Colors, LinearScale, Tooltip } from 'chart.js';
 
     let { report } = $props();
+
     let canvas = null; // ref to canvas element
     let chart = null; // showing chart
 
@@ -15,7 +16,7 @@
         let labels = [ 'Befruchtet %', 'Geschlupft %' ];
         let datasets = [
             {
-                data: [ 100*report.broodLayerFertile, 100*report.broodLayerHatched ],
+                data: [ 100 * report.broodLayerFertile, 100 * report.broodLayerHatched ],
                 backgroundColor: [ '#CEC8' ],
                 borderColor: [ '#283' ],
                 borderWidth: 1,
@@ -63,7 +64,7 @@
 <div class='flex flex-col' >
     <h5 title={`Brutleistung, Befruchtung und Schlupf von alle Sparten ausser Tauben von ${report.broodLayerBreeders} Tieren`}>
         Bruten Geflügel
-        <sup>{report.broodLayerBreeders} / {report.breeders}</sup>
+        <sup>{report.broodHatchedBreeders} / {report.breeders}</sup>
     </h5>
     <canvas bind:this={canvas} width='192px' height='256px'></canvas>
 </div>
